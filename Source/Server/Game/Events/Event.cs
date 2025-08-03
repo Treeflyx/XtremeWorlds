@@ -15,8 +15,6 @@ using static Core.Global.Command;
 using static Core.Packets;
 using static Core.Type;
 using Path = Core.Path;
-using System.Text.Json;
-using Core.Common;
 
 namespace Server
 {
@@ -65,8 +63,8 @@ namespace Server
         {
             try
             {
-                var json = JsonSerializer.Serialize(Switches, Json.Options);
-                File.WriteAllText(System.IO.Path.Combine(Path.Database, "Switches.json"), json);
+                var json = new JsonSerializer<string[]>();
+                json.Write(System.IO.Path.Combine(Path.Database, "Switches.json"), Switches);
             }
             catch (Exception ex)
             {
@@ -79,8 +77,8 @@ namespace Server
         {
             try
             {
-                var json = JsonSerializer.Serialize(Switches, Core.Common.Json.Options);
-                File.WriteAllText(System.IO.Path.Combine(Path.Database, "Variables.json"), json);
+                var json = new JsonSerializer<string[]>();
+                json.Write(System.IO.Path.Combine(Path.Database, "Variables.json"), Variables);
             }
             catch (Exception ex)
             {
@@ -91,10 +89,10 @@ namespace Server
 
         public static async System.Threading.Tasks.Task LoadSwitchesAsync()
         {
-            var json = File.OpenRead(System.IO.Path.Combine(Path.Database, "Switches.json"));
+            var json = new JsonSerializer<string[]>();
             try
             {
-                Switches = await JsonSerializer.DeserializeAsync<string[]>(json, Json.Options) ?? [];
+                Switches = await System.Threading.Tasks.Task.Run(() => json.Read(System.IO.Path.Combine(Path.Database, "Switches.json")));
                 if (Switches == null || Switches.Length != Core.Constant.MaxSwitches)
                 {
                     General.Logger.LogWarning("Switches.json not found or invalid. Creating new switches.");
@@ -110,10 +108,10 @@ namespace Server
 
         public static async System.Threading.Tasks.Task LoadVariablesAsync()
         {
-            var json = File.OpenRead(System.IO.Path.Combine(Path.Database, "Variables.json"));
+            var json = new JsonSerializer<string[]>();
             try
             {
-                Variables = await JsonSerializer.DeserializeAsync<string[]>(json, Json.Options) ?? [];
+                Variables = await System.Threading.Tasks.Task.Run(() => json.Read(System.IO.Path.Combine(Path.Database, "Variables.json")));
                 if (Variables == null || Variables.Length != Core.Constant.NaxVariables)
                 {
                     General.Logger.LogWarning("Variables.json not found or invalid. Creating new variables.");
