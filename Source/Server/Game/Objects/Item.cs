@@ -199,7 +199,7 @@ namespace Server
             if (i != -1)
             {
                 Data.MapItem[mapNum, i].Num = itemNum;
-                Data.MapItem[mapNum, i].Value = ItemVal;
+                Data.MapItem[mapNum, i].Value = itemVal;
                 Data.MapItem[mapNum, i].X = x * 32;
                 Data.MapItem[mapNum, i].Y = y * 32;
 
@@ -341,15 +341,15 @@ namespace Server
 
             if (mapItemSlot != -1)
             {
-                Data.MapItem[mapNum, MapItemSlot].Num = itemNum;
-                Data.MapItem[mapNum, MapItemSlot].Value = ItemVal;
-                Data.MapItem[mapNum, MapItemSlot].X = x * 32;
-                Data.MapItem[mapNum, MapItemSlot].Y = y * 32;
+                Data.MapItem[mapNum, mapItemSlot].Num = itemNum;
+                Data.MapItem[mapNum, mapItemSlot].Value = itemVal;
+                Data.MapItem[mapNum, mapItemSlot].X = x * 32;
+                Data.MapItem[mapNum, mapItemSlot].Y = y * 32;
 
                 buffer.WriteInt32((int)ServerPackets.SSpawnItem);
                 buffer.WriteInt32(mapItemSlot);
                 buffer.WriteInt32(itemNum);
-                buffer.WriteInt32(ItemVal);
+                buffer.WriteInt32(itemVal);
                 buffer.WriteInt32(x * 32);
                 buffer.WriteInt32(y * 32);
 

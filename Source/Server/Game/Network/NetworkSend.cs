@@ -23,8 +23,8 @@ namespace Server
             buffer.WriteInt32((int)ServerPackets.SAes);
             buffer.WriteByte((byte)General.Aes[index].Key.Length);
             buffer.WriteBlock(General.Aes[index].Key);
-            buffer.WriteByte((byte)General.Aes[index].Iv.Length);
-            buffer.WriteBlock(General.Aes[index].Iv);
+            buffer.WriteByte((byte)General.Aes[index].IV.Length);
+            buffer.WriteBlock(General.Aes[index].IV);
 
             NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
