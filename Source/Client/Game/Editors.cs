@@ -583,16 +583,6 @@ namespace Client
                 frmEditor_Item.Instance.fraEvents.Visible = false;
             }
 
-            if (frmEditor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Pet)
-            {
-                frmEditor_Item.Instance.fraPet.Visible = true;
-                frmEditor_Item.Instance.cmbPet.SelectedIndex = withBlock.Data1;
-            }
-            else
-            {
-                frmEditor_Item.Instance.fraPet.Visible = false;
-            }
-
             // Projectile
             frmEditor_Item.Instance.cmbProjectile.SelectedIndex = withBlock.Projectile;
             frmEditor_Item.Instance.cmbAmmo.SelectedIndex = withBlock.Ammo;

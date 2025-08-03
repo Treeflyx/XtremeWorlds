@@ -138,8 +138,6 @@ namespace Client
             cmbAnimation = new DarkUI.Controls.DarkComboBox();
             DarkLabel10 = new DarkUI.Controls.DarkLabel();
             txtDescription = new DarkUI.Controls.DarkTextBox();
-            fraPet = new DarkUI.Controls.DarkGroupBox();
-            cmbPet = new DarkUI.Controls.DarkComboBox();
             DarkLabel13 = new DarkUI.Controls.DarkLabel();
             fraEvents = new DarkUI.Controls.DarkGroupBox();
             nudEventValue = new DarkUI.Controls.DarkNumericUpDown();
@@ -178,7 +176,6 @@ namespace Client
             ((System.ComponentModel.ISupportInitialize)picItem).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudPrice).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudItemLvl).BeginInit();
-            fraPet.SuspendLayout();
             fraEvents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudEventValue).BeginInit();
             ((System.ComponentModel.ISupportInitialize)nudEvent).BeginInit();
@@ -1023,7 +1020,7 @@ namespace Client
             // 
             cmbType.DrawMode = DrawMode.OwnerDrawFixed;
             cmbType.FormattingEnabled = true;
-            cmbType.Items.AddRange(new object[] { "Equipment", "Consumable", "Common Event", "Currency", "Skill", "Projectile", "Pet" });
+            cmbType.Items.AddRange(new object[] { "Equipment", "Consumable", "Common Event", "Currency", "Skill", "Projectile"});
             cmbType.Location = new Point(85, 46);
             cmbType.Margin = new Padding(4, 3, 4, 3);
             cmbType.Name = "cmbType";
@@ -1175,34 +1172,7 @@ namespace Client
             txtDescription.Name = "txtDescription";
             txtDescription.Size = new Size(266, 69);
             txtDescription.TabIndex = 22;
-            txtDescription.TextChanged += TxtDescription_TextChanged;
-            // 
-            // fraPet
-            // 
-            fraPet.BackColor = Color.FromArgb(45, 45, 48);
-            fraPet.BorderColor = Color.FromArgb(90, 90, 90);
-            fraPet.Controls.Add(cmbPet);
-            fraPet.Controls.Add(DarkLabel13);
-            fraPet.ForeColor = Color.Gainsboro;
-            fraPet.Location = new Point(284, 183);
-            fraPet.Margin = new Padding(4, 3, 4, 3);
-            fraPet.Name = "fraPet";
-            fraPet.Padding = new Padding(4, 3, 4, 3);
-            fraPet.Size = new Size(233, 46);
-            fraPet.TabIndex = 25;
-            fraPet.TabStop = false;
-            fraPet.Text = "Pets";
-            // 
-            // cmbPet
-            // 
-            cmbPet.DrawMode = DrawMode.OwnerDrawFixed;
-            cmbPet.FormattingEnabled = true;
-            cmbPet.Location = new Point(48, 16);
-            cmbPet.Margin = new Padding(4, 3, 4, 3);
-            cmbPet.Name = "cmbPet";
-            cmbPet.Size = new Size(178, 24);
-            cmbPet.TabIndex = 1;
-            cmbPet.SelectedIndexChanged += CmbPet_SelectedIndexChanged;
+            txtDescription.TextChanged += TxtDescription_TextChanged;       
             // 
             // DarkLabel13
             // 
@@ -1288,7 +1258,6 @@ namespace Client
             fraBasics.BackColor = Color.FromArgb(45, 45, 48);
             fraBasics.BorderColor = Color.FromArgb(90, 90, 90);
             fraBasics.Controls.Add(DarkLabel36);
-            fraBasics.Controls.Add(fraPet);
             fraBasics.Controls.Add(txtDescription);
             fraBasics.Controls.Add(DarkLabel10);
             fraBasics.Controls.Add(cmbAnimation);
@@ -1384,8 +1353,6 @@ namespace Client
             ((System.ComponentModel.ISupportInitialize)picItem).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudPrice).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudItemLvl).EndInit();
-            fraPet.ResumeLayout(false);
-            fraPet.PerformLayout();
             fraEvents.ResumeLayout(false);
             fraEvents.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudEventValue).EndInit();
@@ -1480,8 +1447,6 @@ namespace Client
         internal DarkUI.Controls.DarkComboBox cmbAnimation;
         internal DarkUI.Controls.DarkLabel DarkLabel10;
         internal DarkUI.Controls.DarkTextBox txtDescription;
-        internal DarkUI.Controls.DarkGroupBox fraPet;
-        internal DarkUI.Controls.DarkComboBox cmbPet;
         internal DarkUI.Controls.DarkLabel DarkLabel13;
         internal DarkUI.Controls.DarkGroupBox fraEvents;
         internal DarkUI.Controls.DarkNumericUpDown nudEventValue;

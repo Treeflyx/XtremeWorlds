@@ -206,16 +206,6 @@ namespace Client
                 fraProjectile.Visible = false;
             }
 
-            if (cmbType.SelectedIndex == (int)ItemCategory.Pet)
-            {
-                fraPet.Visible = true;
-                fraEquipment.Visible = true;
-            }
-            else
-            {
-                fraPet.Visible = false;
-            }
-
             if (cmbType.SelectedIndex == (int)ItemCategory.Event)
             {
                 fraEvents.Visible = true;
@@ -299,11 +289,6 @@ namespace Client
         private void NuditemLvl_ValueChanged(object sender, EventArgs e)
         {
             Core.Data.Item[GameState.EditorIndex].ItemLevel = (byte)Math.Round(nudItemLvl.Value);
-        }
-
-        private void CmbPet_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Data1 = cmbPet.SelectedIndex;
         }
 
         private void nudEvents_ValueChanged(object sender, EventArgs e)
