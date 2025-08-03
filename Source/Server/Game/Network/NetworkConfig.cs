@@ -16,36 +16,36 @@ namespace Server
 
     public class NetworkConfig
     {
-        private static NetworkServer _Socket;
+        private static NetworkServer _socket;
 
         public static NetworkServer Socket
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Socket;
+                return _socket;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Socket != null)
+                if (_socket != null)
                 {
-                    _Socket.ConnectionReceived -= Socket_ConnectionReceived;
-                    _Socket.ConnectionLost -= Socket_ConnectionLost;
-                    _Socket.CrashReport -= Socket_CrashReport;
-                    _Socket.TrafficReceived -= Socket_TrafficReceived;
-                    _Socket.PacketReceived -= Socket_PacketReceived;
+                    _socket.ConnectionReceived -= Socket_ConnectionReceived;
+                    _socket.ConnectionLost -= Socket_ConnectionLost;
+                    _socket.CrashReport -= Socket_CrashReport;
+                    _socket.TrafficReceived -= Socket_TrafficReceived;
+                    _socket.PacketReceived -= Socket_PacketReceived;
                 }
 
-                _Socket = value;
-                if (_Socket != null)
+                _socket = value;
+                if (_socket != null)
                 {
-                    _Socket.ConnectionReceived += Socket_ConnectionReceived;
-                    _Socket.ConnectionLost += Socket_ConnectionLost;
-                    _Socket.CrashReport += Socket_CrashReport;
-                    _Socket.TrafficReceived += Socket_TrafficReceived;
-                    _Socket.PacketReceived += Socket_PacketReceived;
+                    _socket.ConnectionReceived += Socket_ConnectionReceived;
+                    _socket.ConnectionLost += Socket_ConnectionLost;
+                    _socket.CrashReport += Socket_CrashReport;
+                    _socket.TrafficReceived += Socket_TrafficReceived;
+                    _socket.PacketReceived += Socket_PacketReceived;
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace Server
                 return;
 
             // Establish some Rulez
-            Socket = new NetworkServer((int)Packets.ClientPackets.Count, 8192, Core.Constant.MAX_PLAYERS)
+            Socket = new NetworkServer((int)Packets.ClientPackets.Count, 8192, Core.Constant.MaxPlayers)
             {
                 BufferLimit = 5048000, // <- this is 2mb MAX data storage
                 MinimumIndex = 0, // <- this prevents the network from giving us 0 as an index
@@ -91,7 +91,7 @@ namespace Server
                     {
                         if (Core.Data.Account[i].Login.ToLower() != login)
                         {
-                            if (Socket.ClientIP(i) == Socket.ClientIP(index))
+                            if (Socket.ClientIp(i) == Socket.ClientIp(index))
                             {
                                 return true;
                             }
@@ -196,15 +196,15 @@ namespace Server
 
         public static void Socket_ConnectionReceived(int index)
         {
-            Console.WriteLine("Connection received on index [" + index + "] - IP[" + Socket.ClientIP(index) + "]");
+            Console.WriteLine("Connection received on index [" + index + "] - IP[" + Socket.ClientIp(index) + "]");
             General.Aes.TryAdd(index, new AesEncryption());
-            NetworkSend.AesKeyIV(index);
+            NetworkSend.AesKeyIv(index);
 
         }
 
         public static void Socket_ConnectionLost(int index)
         {
-            Console.WriteLine("Connection lost on index [" + index + "] - IP[" + Socket.ClientIP(index) + "]");
+            Console.WriteLine("Connection lost on index [" + index + "] - IP[" + Socket.ClientIp(index) + "]");
             Player.LeftGame(index);
             General.Aes.Remove(index);
         }

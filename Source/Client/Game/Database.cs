@@ -19,9 +19,9 @@ namespace Client
 
         public static void ClearNpcs()
         {
-            Data.Npc = new Core.Type.Npc[Core.Constant.MAX_NPCS];
+            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
 
-            for (int i = 0; i < Constant.MAX_NPCS; i++)
+            for (int i = 0; i < Constant.MaxNpcs; i++)
                 ClearNpc(i);
 
         }
@@ -36,15 +36,15 @@ namespace Client
             Data.Npc[index].DropItem = new int[6];
             Data.Npc[index].DropItemValue = new int[6];
             Data.Npc[index].Skill = new byte[7];
-            GameState.Npc_Loaded[index] = 0;
+            GameState.NpcLoaded[index] = 0;
         }
 
-        public static void StreamNpc(int NpcNum)
+        public static void StreamNpc(int npcNum)
         {
-            if (NpcNum >= 0 && string.IsNullOrEmpty(Data.Npc[NpcNum].Name) && GameState.Npc_Loaded[NpcNum] == 0)
+            if (npcNum >= 0 && string.IsNullOrEmpty(Data.Npc[npcNum].Name) && GameState.NpcLoaded[npcNum] == 0)
             {
-                GameState.Npc_Loaded[(int)NpcNum] = 1;
-                NetworkSend.SendRequestNpc(NpcNum);
+                GameState.NpcLoaded[(int)npcNum] = 1;
+                NetworkSend.SendRequestNpc(npcNum);
             }
         }
 
@@ -53,7 +53,7 @@ namespace Client
         #region Jobs
         public static void ClearJobs()
         {
-            for (int i = 0; i < Constant.MAX_JOBS; i++)
+            for (int i = 0; i < Constant.MaxJobs; i++)
                 ClearJob(i);
         }
 
@@ -64,8 +64,8 @@ namespace Client
             Data.Job[index].Stat = new int[statCount];
             Data.Job[index].Name = "";
             Data.Job[index].Desc = "";
-            Data.Job[index].StartItem = new int[Constant.MAX_START_ITEMS];
-            Data.Job[index].StartValue = new int[Constant.MAX_START_ITEMS];
+            Data.Job[index].StartItem = new int[Constant.MaxStartItems];
+            Data.Job[index].StartValue = new int[Constant.MaxStartItems];
             Data.Job[index].MaleSprite = 1;
             Data.Job[index].FemaleSprite = 1;
         }
@@ -77,7 +77,7 @@ namespace Client
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_SKILLS; i++)
+            for (i = 0; i < Constant.MaxSkills; i++)
                 ClearSkill(i);
 
         }
@@ -87,14 +87,14 @@ namespace Client
             Data.Skill[index] = default;
             Data.Skill[index].Name = "";
             Data.Skill[index].JobReq = -1;
-            GameState.Skill_Loaded[index] = 0;
+            GameState.SkillLoaded[index] = 0;
         }
 
         public static void StreamSkill(int skillNum)
         {
-            if (skillNum >= 0 && string.IsNullOrEmpty(Data.Skill[skillNum].Name) && GameState.Skill_Loaded[skillNum] == 0)
+            if (skillNum >= 0 && string.IsNullOrEmpty(Data.Skill[skillNum].Name) && GameState.SkillLoaded[skillNum] == 0)
             {
-                GameState.Skill_Loaded[skillNum] = 1;
+                GameState.SkillLoaded[skillNum] = 1;
                 NetworkSend.SendRequestSkill(skillNum);
             }
         }

@@ -26,7 +26,7 @@ namespace Core
             return strContents;
         }
 
-        public static bool Add(string strData, string FN)
+        public static bool Add(string strData, string fn)
         {
             string fullpath;
             string contents;
@@ -40,7 +40,7 @@ namespace Core
                 Directory.CreateDirectory(Path.Logs);
             }
 
-            fullpath = System.IO.Path.Combine(Path.Logs, FN);
+            fullpath = System.IO.Path.Combine(Path.Logs, fn);
             contents = GetFileContents(fullpath);
             contents = contents + Environment.NewLine + strData;
 

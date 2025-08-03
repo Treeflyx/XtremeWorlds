@@ -12,9 +12,9 @@ namespace Client
             NetworkSend.SendCloseShop();
             Gui.HideWindow(Gui.GetWindowIndex("winShop"));
             Gui.HideWindow(Gui.GetWindowIndex("winDescription"));
-            GameState.shopSelectedSlot = 0L;
-            GameState.shopSelectedItem = 0L;
-            GameState.shopIsSelling = false;
+            GameState.ShopSelectedSlot = 0L;
+            GameState.ShopSelectedItem = 0L;
+            GameState.ShopIsSelling = false;
             GameState.InShop = -1;
         }
 
@@ -24,31 +24,31 @@ namespace Client
         {
             Data.Shop[index] = default;
             Data.Shop[index].Name = "";
-            Data.Shop[index].TradeItem = new Core.Type.TradeItem[Constant.MAX_TRADES];
-            for (int x = 0; x < Constant.MAX_TRADES; x++)
+            Data.Shop[index].TradeItem = new Core.Type.TradeItem[Constant.MaxTrades];
+            for (int x = 0; x < Constant.MaxTrades; x++)
             {            
                 Data.Shop[index].TradeItem[x].Item = -1;
                 Data.Shop[index].TradeItem[x].CostItem = - 1;
             }
-            GameState.Shop_Loaded[index] = 0;
+            GameState.ShopLoaded[index] = 0;
         }
 
         public static void ClearShops()
         {
             int i;
 
-            Data.Shop = new Core.Type.Shop[Constant.MAX_SHOPS];
+            Data.Shop = new Core.Type.Shop[Constant.MaxShops];
 
-            for (i = 0; i < Constant.MAX_SHOPS; i++)
+            for (i = 0; i < Constant.MaxShops; i++)
                 ClearShop(i);
 
         }
 
         public static void StreamShop(int shopNum)
         {
-            if (shopNum >= 0 && string.IsNullOrEmpty(Data.Shop[shopNum].Name) && GameState.Shop_Loaded[shopNum] == 0)
+            if (shopNum >= 0 && string.IsNullOrEmpty(Data.Shop[shopNum].Name) && GameState.ShopLoaded[shopNum] == 0)
             {
-                GameState.Shop_Loaded[shopNum] = 1;
+                GameState.ShopLoaded[shopNum] = 1;
                 SendRequestShop(shopNum);
             }
         }
@@ -83,7 +83,7 @@ namespace Client
             Data.Shop[shopnum].BuyRate = buffer.ReadInt32();
             Data.Shop[shopnum].Name = buffer.ReadString();
 
-            for (int i = 0; i < Constant.MAX_TRADES; i++)
+            for (int i = 0; i < Constant.MaxTrades; i++)
             {
                 Data.Shop[shopnum].TradeItem[i].CostItem = buffer.ReadInt32();
                 Data.Shop[shopnum].TradeItem[i].CostValue = buffer.ReadInt32();

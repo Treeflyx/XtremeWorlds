@@ -7,14 +7,14 @@ using System.IO.Compression;
 
 namespace Core.Serialization
 {
-    public class JsonSerializer<InputType> : ISerializer<InputType, string>
+    public class JsonSerializer<TInputType> : ISerializer<TInputType, string>
     {
-        private readonly JsonSerializerSettings serializerSettings;
-        private readonly Formatting serializerFormatting;
+        private readonly JsonSerializerSettings _serializerSettings;
+        private readonly Formatting _serializerFormatting;
 
         public JsonSerializer(JsonSerializerSettings settings = null, Formatting formatting = Formatting.Indented)
         {
-            serializerSettings = settings ?? new JsonSerializerSettings
+            _serializerSettings = settings ?? new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All,
                 Formatting = formatting,
@@ -22,16 +22,16 @@ namespace Core.Serialization
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
-            serializerFormatting = serializerSettings.Formatting;
+            _serializerFormatting = _serializerSettings.Formatting;
         }
 
         // Core Serialization Methods
 
-        public string Serialize(InputType rawObject)
+        public string Serialize(TInputType rawObject)
         {
             try
             {
-                return JsonConvert.SerializeObject(rawObject, serializerFormatting, serializerSettings);
+                return JsonConvert.SerializeObject(rawObject, _serializerFormatting, _serializerSettings);
             }
             catch (JsonException ex)
             {
@@ -39,11 +39,11 @@ namespace Core.Serialization
             }
         }
 
-        public InputType Deserialize(string serializedValue)
+        public TInputType Deserialize(string serializedValue)
         {
             try
             {
-                return JsonConvert.DeserializeObject<InputType>(serializedValue, serializerSettings);
+                return JsonConvert.DeserializeObject<TInputType>(serializedValue, _serializerSettings);
             }
             catch (JsonException ex)
             {
@@ -53,7 +53,7 @@ namespace Core.Serialization
 
         // Synchronous File Operations
 
-        public InputType Read(string filename)
+        public TInputType Read(string filename)
         {
             if (!File.Exists(filename))
                 return default;
@@ -72,7 +72,7 @@ namespace Core.Serialization
             }
         }
 
-        public void Write(string filename, InputType rawObject)
+        public void Write(string filename, TInputType rawObject)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace Core.Serialization
 
         // Asynchronous File Operations
 
-        public async System.Threading.Tasks.Task<InputType> ReadAsync(string filename)
+        public async System.Threading.Tasks.Task<TInputType> ReadAsync(string filename)
         {
             if (!File.Exists(filename))
                 return default;
@@ -114,7 +114,7 @@ namespace Core.Serialization
             }
         }
 
-        public async System.Threading.Tasks.Task WriteAsync(string filename, InputType rawObject)
+        public async System.Threading.Tasks.Task WriteAsync(string filename, TInputType rawObject)
         {
             try
             {
@@ -137,13 +137,13 @@ namespace Core.Serialization
 
         // Byte Array Support
 
-        public byte[] SerializeToByteArray(InputType rawObject)
+        public byte[] SerializeToByteArray(TInputType rawObject)
         {
             string json = Serialize(rawObject);
             return Encoding.UTF8.GetBytes(json);
         }
 
-        public InputType DeserializeFromByteArray(byte[] byteArray)
+        public TInputType DeserializeFromByteArray(byte[] byteArray)
         {
             string json = Encoding.UTF8.GetString(byteArray);
             return Deserialize(json);
@@ -151,11 +151,11 @@ namespace Core.Serialization
 
         // Custom Serialization Settings
 
-        public string SerializeWithSettings(InputType rawObject, JsonSerializerSettings customSettings)
+        public string SerializeWithSettings(TInputType rawObject, JsonSerializerSettings customSettings)
         {
             try
             {
-                return JsonConvert.SerializeObject(rawObject, serializerFormatting, customSettings);
+                return JsonConvert.SerializeObject(rawObject, _serializerFormatting, customSettings);
             }
             catch (JsonException ex)
             {
@@ -163,11 +163,11 @@ namespace Core.Serialization
             }
         }
 
-        public InputType DeserializeWithSettings(string serializedValue, JsonSerializerSettings customSettings)
+        public TInputType DeserializeWithSettings(string serializedValue, JsonSerializerSettings customSettings)
         {
             try
             {
-                return JsonConvert.DeserializeObject<InputType>(serializedValue, customSettings);
+                return JsonConvert.DeserializeObject<TInputType>(serializedValue, customSettings);
             }
             catch (JsonException ex)
             {
@@ -192,7 +192,7 @@ namespace Core.Serialization
 
         // Data Compression
 
-        public byte[] CompressSerializedData(InputType rawObject)
+        public byte[] CompressSerializedData(TInputType rawObject)
         {
             byte[] jsonBytes = SerializeToByteArray(rawObject);
             using (var memoryStream = new MemoryStream())
@@ -205,7 +205,7 @@ namespace Core.Serialization
             }
         }
 
-        public InputType DecompressAndDeserialize(byte[] compressedData)
+        public TInputType DecompressAndDeserialize(byte[] compressedData)
         {
             using (var memoryStream = new MemoryStream(compressedData))
             using (var deflateStream = new DeflateStream(memoryStream, CompressionMode.Decompress))

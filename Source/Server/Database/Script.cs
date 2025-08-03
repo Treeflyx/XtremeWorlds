@@ -363,7 +363,7 @@ public class Script
             n = Core.Data.Item[itemNum].Data1;
         }
 
-        if (n < 0 | n > Core.Constant.MAX_SKILLS)
+        if (n < 0 | n > Core.Constant.MaxSkills)
             return;
 
         // Make sure they are the right class
@@ -433,7 +433,7 @@ public class Script
                         data = PlayerData(i);
                         dataSize = data.Length;
                         NetworkConfig.Socket.SendDataTo(index, data, dataSize);
-                        SendPlayerXYTo(index, i);
+                        SendPlayerXyTo(index, i);
                         NetworkSend.SendMapEquipmentTo(index, i);
                     }
                 }
@@ -445,7 +445,7 @@ public class Script
         // Send index's player data to everyone on the map including himself
         data = PlayerData(index);
         NetworkConfig.SendDataToMap(mapNum, data, data.Length);
-        SendPlayerXYToMap(index);
+        SendPlayerXyToMap(index);
         NetworkSend.SendMapEquipment(index);
         NetworkSend.SendVitals(index);
     }
@@ -471,9 +471,9 @@ public class Script
             SetPlayerVital(index, (Core.Vital)i, GetPlayerMaxVital(index, (Core.Vital)i));
 
         // If the player the attacker killed was a pk then take it away
-        if (GetPlayerPK(index))
+        if (GetPlayerPk(index))
         {
-            SetPlayerPK(index, false);
+            SetPlayerPk(index, false);
         }
 
         ref var withBlock = ref Data.Map[GetPlayerMap(index)];
@@ -517,7 +517,7 @@ public class Script
     public void TrainStat(int index, int tmpStat)
     {
         // make sure their stats are not maxed
-        if (GetPlayerRawStat(index, (Stat)tmpStat) >= Core.Constant.MAX_STATS)
+        if (GetPlayerRawStat(index, (Stat)tmpStat) >= Core.Constant.MaxStats)
         {
             NetworkSend.PlayerMsg(index, "You cannot spend any more points on that stat.", (int)Core.Color.BrightRed);
             return;
@@ -538,7 +538,7 @@ public class Script
 
     }
 
-    public void UpdateMapAI()
+    public void UpdateMapAi()
     {
 
         long tickCount = General.GetTimeMs();
@@ -590,7 +590,7 @@ public class Script
 
                                     if (distanceX <= n && distanceY <= n)
                                     {
-                                        if (entity.Behaviour == (byte)NpcBehavior.AttackOnSight || GetPlayerPK(i))
+                                        if (entity.Behaviour == (byte)NpcBehavior.AttackOnSight || GetPlayerPk(i))
                                         {
                                             if (!string.IsNullOrEmpty(entity.AttackSay))
                                             {
@@ -762,8 +762,8 @@ public class Script
         }
 
         var now = General.GetTimeMs();
-        var itemCount = Core.Constant.MAX_MAP_ITEMS;
-        var mapCount = Core.Constant.MAX_MAPS;
+        var itemCount = Core.Constant.MaxMapItems;
+        var mapCount = Core.Constant.MaxMaps;
 
         for (int mapNum = 0; mapNum < mapCount; mapNum++)
         {

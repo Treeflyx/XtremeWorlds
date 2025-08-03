@@ -3,7 +3,7 @@ using Reoria.Engine.Container;
 
 namespace Server;
 
-public class XWContainer(IServiceCollection services) : EngineContainer(services)
+public class XwContainer(IServiceCollection services) : EngineContainer(services)
 {
 
 }

@@ -47,14 +47,14 @@ namespace Client
         public static bool EventChat;
         public static string EventText;
         public static bool ShowEventLbl;
-        public static string[] EventChoices = new string[Core.Constant.MAX_EVENT_CHOICES];
-        public static bool[] EventChoiceVisible = new bool[Core.Constant.MAX_EVENT_CHOICES];
+        public static string[] EventChoices = new string[Core.Constant.MaxEventChoices];
+        public static bool[] EventChoiceVisible = new bool[Core.Constant.MaxEventChoices];
         public static int EventChatType;
         public static int AnotherChat;
 
         // constants
-        public static string[] Switches = new string[Constant.MAX_SWITCHES];
-        public static string[] Variables = new string[Constant.NAX_VARIABLES];
+        public static string[] Switches = new string[Constant.MaxSwitches];
+        public static string[] Variables = new string[Constant.NaxVariables];
 
         public static bool EventCopy;
         public static bool EventPaste;
@@ -170,10 +170,10 @@ namespace Client
             int i;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (i = 0; i < Constant.MaxSwitches; i++)
                 Switches[i] = buffer.ReadString();
 
-            for (i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
                 Variables[i] = buffer.ReadString();
 
             buffer.Dispose();
@@ -346,7 +346,7 @@ namespace Client
             ShowEventLbl = true;
             choices = buffer.ReadInt32();
             InEvent = true;
-            for (i = 0; i < Core.Constant.MAX_EVENT_CHOICES; i++)
+            for (i = 0; i < Core.Constant.MaxEventChoices; i++)
             {
                 EventChoices[i] = "";
                 EventChoiceVisible[i] = false;
@@ -398,8 +398,8 @@ namespace Client
                 Picture.Index = 0;
                 Picture.EventId = 0;
                 Picture.SpriteType = 0;
-                Picture.xOffset = 0;
-                Picture.yOffset = 0;
+                Picture.XOffset = 0;
+                Picture.YOffset = 0;
                 return;
             }
 
@@ -410,8 +410,8 @@ namespace Client
             Picture.Index = (byte)picIndex;
             Picture.EventId = eventid;
             Picture.SpriteType = (byte)spriteType;
-            Picture.xOffset = (byte)xOffset;
-            Picture.yOffset = (byte)yOffset;
+            Picture.XOffset = (byte)xOffset;
+            Picture.YOffset = (byte)yOffset;
 
             buffer.Dispose();
 
@@ -553,10 +553,10 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CSwitchesAndVariables);
 
-            for (i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (i = 0; i < Constant.MaxSwitches; i++)
                 buffer.WriteString(Switches[i]);
 
-            for (i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
                 buffer.WriteString(Variables[i]);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -618,99 +618,99 @@ namespace Client
 
         public static object GetColorString(int color)
         {
-            object GetColorStringRet = default;
+            object getColorStringRet = default;
 
             switch (color)
             {
                 case 0:
                     {
-                        GetColorStringRet = "Black";
+                        getColorStringRet = "Black";
                         break;
                     }
                 case 1:
                     {
-                        GetColorStringRet = "Blue";
+                        getColorStringRet = "Blue";
                         break;
                     }
                 case 2:
                     {
-                        GetColorStringRet = "Green";
+                        getColorStringRet = "Green";
                         break;
                     }
                 case 3:
                     {
-                        GetColorStringRet = "Cyan";
+                        getColorStringRet = "Cyan";
                         break;
                     }
                 case 4:
                     {
-                        GetColorStringRet = "Red";
+                        getColorStringRet = "Red";
                         break;
                     }
                 case 5:
                     {
-                        GetColorStringRet = "Magenta";
+                        getColorStringRet = "Magenta";
                         break;
                     }
                 case 6:
                     {
-                        GetColorStringRet = "Brown";
+                        getColorStringRet = "Brown";
                         break;
                     }
                 case 7:
                     {
-                        GetColorStringRet = "Grey";
+                        getColorStringRet = "Grey";
                         break;
                     }
                 case 8:
                     {
-                        GetColorStringRet = "Dark Grey";
+                        getColorStringRet = "Dark Grey";
                         break;
                     }
                 case 9:
                     {
-                        GetColorStringRet = "Bright Blue";
+                        getColorStringRet = "Bright Blue";
                         break;
                     }
                 case 10:
                     {
-                        GetColorStringRet = "Bright Green";
+                        getColorStringRet = "Bright Green";
                         break;
                     }
                 case 11:
                     {
-                        GetColorStringRet = "Bright Cyan";
+                        getColorStringRet = "Bright Cyan";
                         break;
                     }
                 case 12:
                     {
-                        GetColorStringRet = "Bright Red";
+                        getColorStringRet = "Bright Red";
                         break;
                     }
                 case 13:
                     {
-                        GetColorStringRet = "Pink";
+                        getColorStringRet = "Pink";
                         break;
                     }
                 case 14:
                     {
-                        GetColorStringRet = "Yellow";
+                        getColorStringRet = "Yellow";
                         break;
                     }
                 case 15:
                     {
-                        GetColorStringRet = "White";
+                        getColorStringRet = "White";
                         break;
                     }
 
                 default:
                     {
-                        GetColorStringRet = "Black";
+                        getColorStringRet = "Black";
                         break;
                     }
             }
 
-            return GetColorStringRet;
+            return getColorStringRet;
 
         }
 
@@ -720,7 +720,7 @@ namespace Client
 
             if (AnotherChat == 1)
             {
-                for (i = 0; i < Core.Constant.MAX_EVENT_CHOICES; i++)
+                for (i = 0; i < Core.Constant.MaxEventChoices; i++)
                     EventChoiceVisible[i] = false;
                 EventText = "";
                 EventChatType = 1;
@@ -728,7 +728,7 @@ namespace Client
             }
             else if (AnotherChat == 2)
             {
-                for (i = 0; i < Core.Constant.MAX_EVENT_CHOICES; i++)
+                for (i = 0; i < Core.Constant.MaxEventChoices; i++)
                     EventChoiceVisible[i] = false;
                 EventText = "";
                 EventChatType = 1;

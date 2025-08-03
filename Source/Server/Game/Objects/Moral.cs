@@ -20,7 +20,7 @@ namespace Server
             Core.Data.Moral[moralNum].Color = 0;
             Core.Data.Moral[moralNum].CanCast = false;
             Core.Data.Moral[moralNum].CanDropItem = false;
-            Core.Data.Moral[moralNum].CanPK = false;
+            Core.Data.Moral[moralNum].CanPk = false;
             Core.Data.Moral[moralNum].CanPickupItem = false;
             Core.Data.Moral[moralNum].CanUseItem = false;
             Core.Data.Moral[moralNum].DropItems = false;
@@ -49,7 +49,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_MORALS;
+            var loopTo = Core.Constant.MaxMorals;
             for (i = 0; i < loopTo; i++)
                 await System.Threading.Tasks.Task.Run(() => LoadMoralAsync(i));
         }
@@ -72,7 +72,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_MORALS;
+            var loopTo = Core.Constant.MaxMorals;
             for (i = 0; i < loopTo; i++)
                 SaveMoral(i);
         }
@@ -90,7 +90,7 @@ namespace Server
             buffer.WriteBoolean(Core.Data.Moral[moralNum].CanCast);
             buffer.WriteBoolean(Core.Data.Moral[moralNum].CanDropItem);
             buffer.WriteBoolean(Core.Data.Moral[moralNum].CanPickupItem);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanPK);
+            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanPk);
             buffer.WriteBoolean(Core.Data.Moral[moralNum].DropItems);
             buffer.WriteBoolean(Core.Data.Moral[moralNum].LoseExp);
 
@@ -105,7 +105,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_MORALS;
+            var loopTo = Core.Constant.MaxMorals;
             for (i = 0; i < loopTo; i++)
             {
                 if (Strings.Len(Core.Data.Moral[i].Name) > 0)
@@ -185,7 +185,7 @@ namespace Server
             moralNum = buffer.ReadInt32();
 
             // Prevent hacking
-            if (moralNum < 0 | moralNum > Core.Constant.MAX_MORALS)
+            if (moralNum < 0 | moralNum > Core.Constant.MaxMorals)
                 return;
 
             {
@@ -193,7 +193,7 @@ namespace Server
                 withBlock.Name = buffer.ReadString();
                 withBlock.Color = buffer.ReadByte();
                 withBlock.CanCast = buffer.ReadBoolean();
-                withBlock.CanPK = buffer.ReadBoolean();
+                withBlock.CanPk = buffer.ReadBoolean();
                 withBlock.CanDropItem = buffer.ReadBoolean();
                 withBlock.CanPickupItem = buffer.ReadBoolean();
                 withBlock.CanUseItem = buffer.ReadBoolean();
@@ -206,7 +206,7 @@ namespace Server
             // Save it
             SendUpdateMoralToAll(moralNum);
             SaveMoral(moralNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved moral #" + moralNum + ".", Constant.ADMIN_LOG);
+            Core.Log.Add(GetAccountLogin(index) + " saved moral #" + moralNum + ".", Constant.AdminLog);
             SendMorals(index);
         }
 

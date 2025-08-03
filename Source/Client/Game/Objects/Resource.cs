@@ -16,23 +16,23 @@ namespace Client
         {
             Data.Resource[index] = default;
             Data.Resource[index].Name = "";
-            GameState.Resource_Loaded[index] = 0;
+            GameState.ResourceLoaded[index] = 0;
         }
 
         public static void ClearResources()
         {
-            Array.Resize(ref Data.Resource, Constant.MAX_RESOURCES);
+            Array.Resize(ref Data.Resource, Constant.MaxResources);
 
-            for (int i = 0; i < Constant.MAX_RESOURCES; i++)
+            for (int i = 0; i < Constant.MaxResources; i++)
                 ClearResource(i);
 
         }
 
         public static void StreamResource(int resourceNum)
         {
-            if (resourceNum >= 0 && string.IsNullOrEmpty(Data.Resource[resourceNum].Name) && GameState.Resource_Loaded[resourceNum] == 0)
+            if (resourceNum >= 0 && string.IsNullOrEmpty(Data.Resource[resourceNum].Name) && GameState.ResourceLoaded[resourceNum] == 0)
             {
-                GameState.Resource_Loaded[resourceNum] = 1;
+                GameState.ResourceLoaded[resourceNum] = 1;
                 SendRequestResource(resourceNum);
             }
         }
@@ -153,7 +153,7 @@ namespace Client
             mapResourceNum = Data.MyMap.Tile[Data.MyMapResource[resourceNum].X, Data.MyMapResource[resourceNum].Y].Data1;
 
             if (mapResourceNum == 0)
-                mapResourceNum = Data.MyMap.Tile[Data.MyMapResource[resourceNum].X, Data.MyMapResource[resourceNum].Y].Data1_2;
+                mapResourceNum = Data.MyMap.Tile[Data.MyMapResource[resourceNum].X, Data.MyMapResource[resourceNum].Y].Data12;
 
             StreamResource(mapResourceNum);
 

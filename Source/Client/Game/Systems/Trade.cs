@@ -60,7 +60,7 @@ namespace Client
 
             if (datatype == 0) // ours!
             {
-                for (int i = 0; i < Constant.MAX_INV; i++)
+                for (int i = 0; i < Constant.MaxInv; i++)
                 {
                     Data.TradeYourOffer[i].Num = buffer.ReadInt32();
                     Data.TradeYourOffer[i].Value = buffer.ReadInt32();
@@ -70,7 +70,7 @@ namespace Client
             }
             else if (datatype == 1) // theirs
             {
-                for (int i = 0; i < Constant.MAX_INV; i++)
+                for (int i = 0; i < Constant.MaxInv; i++)
                 {
                     Data.TradeTheirOffer[i].Num = buffer.ReadInt32();
                     Data.TradeTheirOffer[i].Value = buffer.ReadInt32();

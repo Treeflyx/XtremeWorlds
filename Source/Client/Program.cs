@@ -70,7 +70,7 @@ namespace Client
         // Minimum interval (in milliseconds) between repeated key inputs
         private const byte KeyRepeatInterval = 200;
 
-        static float DPIScale = 96;
+        static float _dpiScale = 96;
 
         // Lock object to ensure thread safety
         public static readonly object InputLock = new object();
@@ -78,20 +78,20 @@ namespace Client
         // Track the previous scroll value to compute delta
         private static readonly object ScrollLock = new object();
 
-        private TimeSpan elapsedTime = TimeSpan.Zero;
+        private TimeSpan _elapsedTime = TimeSpan.Zero;
 
         public static RenderTarget2D RenderTarget;
         public static Texture2D TransparentTexture;
         public static Texture2D PixelTexture;
         
         // Add a timer to prevent spam
-        private static DateTime lastInputTime = DateTime.MinValue;
-        private const int inputCooldown = 250;
+        private static DateTime _lastInputTime = DateTime.MinValue;
+        private const int InputCooldown = 250;
 
         // Handle Escape key to toggle menus
-        private static DateTime lastMouseClickTime = DateTime.MinValue;
-        private const int mouseClickCooldown = 250;
-        private static DateTime lastSearchTime = DateTime.MinValue;
+        private static DateTime _lastMouseClickTime = DateTime.MinValue;
+        private const int MouseClickCooldown = 250;
+        private static DateTime _lastSearchTime = DateTime.MinValue;
 
         // Ensure this class exists to store graphic info
         public class GfxInfo
@@ -142,14 +142,14 @@ namespace Client
 
             Graphics = new GraphicsDeviceManager(this);
             
-            DPIScale = GetDpiScale();
+            _dpiScale = GetDpiScale();
 
             // Set basic properties for GraphicsDeviceManager
             ref var withBlock = ref Graphics;
             withBlock.GraphicsProfile = GraphicsProfile.Reach;
             withBlock.IsFullScreen = SettingsManager.Instance.Fullscreen;
-            withBlock.PreferredBackBufferWidth = GameState.ResolutionWidth * (int)DPIScale;
-            withBlock.PreferredBackBufferHeight = GameState.ResolutionHeight * (int)DPIScale;
+            withBlock.PreferredBackBufferWidth = GameState.ResolutionWidth * (int)_dpiScale;
+            withBlock.PreferredBackBufferHeight = GameState.ResolutionHeight * (int)_dpiScale;
             withBlock.SynchronizeWithVerticalRetrace = SettingsManager.Instance.Vsync;
             IsFixedTimeStep = false;
             withBlock.PreferHalfPixelOffset = true;
@@ -311,7 +311,7 @@ static void LoadFonts()
             General.GetResolutionSize(SettingsManager.Instance.Resolution, ref targetWidth, ref targetHeight);
             var targetAspect = (float)targetWidth / targetHeight;
             
-            var destRect = GetAspectRatio(dX, dY, Graphics.PreferredBackBufferWidth * (int)DPIScale, Graphics.PreferredBackBufferHeight * (int)DPIScale, dW, dH, targetAspect);
+            var destRect = GetAspectRatio(dX, dY, Graphics.PreferredBackBufferWidth * (int)_dpiScale, Graphics.PreferredBackBufferHeight * (int)_dpiScale, dW, dH, targetAspect);
             var srcRect = new Rectangle(sX, sY, sW, sH);
             var color = new Color(red, green, blue, (byte)255) * alpha;
             
@@ -407,13 +407,13 @@ static void LoadFonts()
             }
 
             SetFps(_gameFps + 1);
-            elapsedTime += gameTime.ElapsedGameTime;
+            _elapsedTime += gameTime.ElapsedGameTime;
 
-            if (elapsedTime.TotalSeconds >= 1d)
+            if (_elapsedTime.TotalSeconds >= 1d)
             {
                 Console.WriteLine("FPS: " + GetFps());
                 SetFps(0);
-                elapsedTime = TimeSpan.Zero;
+                _elapsedTime = TimeSpan.Zero;
             }
 
             Loop.Game();
@@ -564,7 +564,7 @@ static void LoadFonts()
 
             if (IsKeyStateActive(Keys.F5))
             {
-                UI.Load();
+                Ui.Load();
                 Gui.Init();
 
             }
@@ -682,7 +682,7 @@ static void LoadFonts()
                     if (IsWindowVisible("winChatSmall"))
                     {
                         Gui.ShowChat();
-                        GameState.inSmallChat = false;
+                        GameState.InSmallChat = false;
                     }
                     else
                     {
@@ -710,17 +710,17 @@ static void LoadFonts()
 
         private static bool IsInputCooldownElapsed()
         {
-            return (DateTime.Now - lastInputTime).TotalMilliseconds >= inputCooldown;
+            return (DateTime.Now - _lastInputTime).TotalMilliseconds >= InputCooldown;
         }
 
         private static bool IsSeartchCooldownElapsed()
         {
-            return (DateTime.Now - lastSearchTime).TotalMilliseconds >= inputCooldown;
+            return (DateTime.Now - _lastSearchTime).TotalMilliseconds >= InputCooldown;
         }
 
         private static void UpdateLastInputTime()
         {
-            lastInputTime = DateTime.Now;
+            _lastInputTime = DateTime.Now;
         }
 
         private static void HandleWindowToggle(Keys key, string windowName, Action toggleAction)
@@ -777,10 +777,10 @@ static void LoadFonts()
         // Handles the hotbar key presses using KeyboardState
         private static void HandleHotbarInput()
         {
-            if (GameState.inSmallChat)
+            if (GameState.InSmallChat)
             {
                 // Iterate through hotbar slots and check for corresponding keys
-                for (int i = 0; i < Constant.MAX_HOTBAR; i++)
+                for (int i = 0; i < Constant.MaxHotbar; i++)
                 {
                     // Check if the corresponding hotbar key is pressed
                     if (CurrentKeyboardState.IsKeyDown((Keys)((int)Keys.D0 + i)))
@@ -974,10 +974,10 @@ static void LoadFonts()
             // Check for MouseDown event (button pressed)
             if (IsMouseButtonDown(MouseButton.Left))
             {
-                if ((DateTime.Now - lastMouseClickTime).TotalMilliseconds >= mouseClickCooldown)
+                if ((DateTime.Now - _lastMouseClickTime).TotalMilliseconds >= MouseClickCooldown)
                 {
                     Gui.HandleInterfaceEvents(ControlState.MouseDown);
-                    lastMouseClickTime = DateTime.Now; // Update last mouse click time
+                    _lastMouseClickTime = DateTime.Now; // Update last mouse click time
                     GameState.LastLeftClickTime = currentTime; // Track time for double-click detection
                     GameState.ClickCount++;
                 }
@@ -989,7 +989,7 @@ static void LoadFonts()
             }
 
             // Double-click detection for left button
-            if ((DateTime.Now - lastMouseClickTime).TotalMilliseconds >= GameState.DoubleClickTImer)
+            if ((DateTime.Now - _lastMouseClickTime).TotalMilliseconds >= GameState.DoubleClickTImer)
             {
                 GameState.ClickCount = 0;
                 GameState.Info = false;
@@ -1031,7 +1031,7 @@ static void LoadFonts()
                     {
                         Player.CheckAttack(true);
                         NetworkSend.PlayerSearch(GameState.CurX, GameState.CurY, 0);
-                        lastSearchTime = DateTime.Now;
+                        _lastSearchTime = DateTime.Now;
                     }
                 }
 
@@ -1066,7 +1066,7 @@ static void LoadFonts()
         private static void HandleRightClickMenu()
         {
             // Loop through all players and display the right-click menu for the matching one
-            for (int i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (int i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i) && GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                 {
@@ -1346,14 +1346,14 @@ static void LoadFonts()
                 rec.Width = 8;
 
                 // find out whether render blocked or not
-                bool localIsDirBlocked()
+                bool LocalIsDirBlocked()
                 {
                     byte argdir = (byte)i;
                     var ret = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[x, y].DirBlock, ref argdir);
                     return ret;
                 }
 
-                if (!localIsDirBlocked())
+                if (!LocalIsDirBlocked())
                 {
                     rec.Y = 8;
                 }
@@ -1415,7 +1415,7 @@ static void LoadFonts()
 
             // Check if Npc exists
             if (Data.MyMapNpc[(int)mapNpcNum].Num < 0 ||
-                Data.MyMapNpc[(int)mapNpcNum].Num > Core.Constant.MAX_NPCS)
+                Data.MyMapNpc[(int)mapNpcNum].Num > Core.Constant.MaxNpcs)
                 return;
 
             x = (int)Math.Floor((double)Data.MyMapNpc[(int)mapNpcNum].X / 32);
@@ -1534,7 +1534,7 @@ static void LoadFonts()
             int x;
             int y;
 
-            if (Data.MyMapItem[itemNum].Num < 0 | Data.MyMapItem[itemNum].Num > Core.Constant.MAX_ITEMS)
+            if (Data.MyMapItem[itemNum].Num < 0 | Data.MyMapItem[itemNum].Num > Core.Constant.MaxItems)
                 return;
 
             Item.StreamItem((int)Data.MyMapItem[itemNum].Num);
@@ -1564,7 +1564,7 @@ static void LoadFonts()
                 srcrec.Height);
         }
 
-        public static void DrawCharacterSprite(int sprite, int x2, int y2, Rectangle sRECT)
+        public static void DrawCharacterSprite(int sprite, int x2, int y2, Rectangle sRect)
         {
             int x;
             int y;
@@ -1576,7 +1576,7 @@ static void LoadFonts()
             y = GameLogic.ConvertMapY(y2);
 
             string argpath = System.IO.Path.Combine(Core.Path.Characters, sprite.ToString());
-            RenderTexture(ref argpath, x, y, sRECT.X, sRECT.Y, sRECT.Width, sRECT.Height, sRECT.Width, sRECT.Height);
+            RenderTexture(ref argpath, x, y, sRect.X, sRect.Y, sRect.Width, sRect.Height, sRect.Width, sRect.Height);
         }
 
         public static void DrawBlood(int index)
@@ -1612,60 +1612,60 @@ static void LoadFonts()
 
         public static void DrawBars()
         {
-            long Left;
-            long Top;
-            long Width;
-            long Height;
+            long left;
+            long top;
+            long width;
+            long height;
             long tmpX;
             long tmpY;
             var barWidth = default(long);
             long i;
-            long NpcNum;
+            long npcNum;
 
             // dynamic bar calculations
-            Width = GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Width;
-            Height = (long)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Height / 4d);
+            width = GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Width;
+            height = (long)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Height / 4d);
 
             // render Npc health bars
-            for (i = 0L; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0L; i < Constant.MaxMapNpcs; i++)
             {
-                NpcNum = (long)Data.MyMapNpc[(int)i].Num;
+                npcNum = (long)Data.MyMapNpc[(int)i].Num;
                 // exists?
-                if (NpcNum >= 0L && NpcNum <= Core.Constant.MAX_NPCS)
+                if (npcNum >= 0L && npcNum <= Core.Constant.MaxNpcs)
                 {
                     // alive?
                     if (Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] > 0 &
-                        Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] < Data.Npc[(int)NpcNum].HP)
+                        Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] < Data.Npc[(int)npcNum].Hp)
                     {
                         // lock to Npc
-                        tmpX = (long)Math.Round(Data.MyMapNpc[(int)i].X * GameState.SizeX + 16 - Width / 2d);
+                        tmpX = (long)Math.Round(Data.MyMapNpc[(int)i].X * GameState.SizeX + 16 - width / 2d);
                         tmpY = Data.MyMapNpc[(int)i].Y * GameState.SizeY + 35;
 
                         // calculate the width to fill
-                        if (Width > 0L)
-                            GameState.BarWidth_NpcHP_Max[(int)i] = (long)Math.Round(
-                                Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] / (double)Width /
-                                (Data.Npc[(int)NpcNum].HP / (double)Width) * Width);
+                        if (width > 0L)
+                            GameState.BarWidthNpcHpMax[(int)i] = (long)Math.Round(
+                                Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] / (double)width /
+                                (Data.Npc[(int)npcNum].Hp / (double)width) * width);
 
                         // draw bar background
-                        Top = Height * 3L; // HP bar background
-                        Left = 0L;
+                        top = height * 3L; // HP bar background
+                        left = 0L;
                         string argpath = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)Width, (int)Height, (int)Width, (int)Height);
+                            (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
-                        Top = 0L; // HP bar
-                        Left = 0L;
+                        top = 0L; // HP bar
+                        left = 0L;
                         string argpath1 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath1, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)GameState.BarWidth_NpcHP[(int)i], (int)Height,
-                            (int)GameState.BarWidth_NpcHP[(int)i], (int)Height);
+                            (int)left, (int)top, (int)GameState.BarWidthNpcHp[(int)i], (int)height,
+                            (int)GameState.BarWidthNpcHp[(int)i], (int)height);
                     }
                 }
             }
 
-            for (i = 0L; i < Constant.MAX_PLAYERS; i++)
+            for (i = 0L; i < Constant.MaxPlayers; i++)
             {
                 if (GetPlayerMap((int)i) == GetPlayerMap((int)i))
                 {
@@ -1674,29 +1674,29 @@ static void LoadFonts()
                     {
                         // lock to Player
                         tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX +
-                            16 - Width / 2d);
+                            16 - width / 2d);
                         tmpY = GetPlayerY((int)i) * GameState.SizeY + 35;
 
                         // calculate the width to fill
-                        if (Width > 0L)
-                            GameState.BarWidth_PlayerHP_Max[(int)i] = (long)Math.Round(
-                                GetPlayerVital((int)i, Vital.Health) / (double)Width /
-                                (GetPlayerMaxVital((int)i, Vital.Health) / (double)Width) * Width);
+                        if (width > 0L)
+                            GameState.BarWidthPlayerHpMax[(int)i] = (long)Math.Round(
+                                GetPlayerVital((int)i, Vital.Health) / (double)width /
+                                (GetPlayerMaxVital((int)i, Vital.Health) / (double)width) * width);
 
                         // draw bar background
-                        Top = Height * 3L; // HP bar background
-                        Left = 0L;
+                        top = height * 3L; // HP bar background
+                        left = 0L;
                         string argpath2 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath2, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)Width, (int)Height, (int)Width, (int)Height);
+                            (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
-                        Top = 0L; // HP bar
-                        Left = 0L;
+                        top = 0L; // HP bar
+                        left = 0L;
                         string argpath3 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath3, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)GameState.BarWidth_PlayerHP[(int)i], (int)Height,
-                            (int)GameState.BarWidth_PlayerHP[(int)i], (int)Height);
+                            (int)left, (int)top, (int)GameState.BarWidthPlayerHp[(int)i], (int)height,
+                            (int)GameState.BarWidthPlayerHp[(int)i], (int)height);
                     }
 
                     if (GetPlayerVital((int)i, Vital.Stamina) > 0 &
@@ -1704,29 +1704,29 @@ static void LoadFonts()
                     {
                         // lock to Player
                         tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX +
-                            16 - Width / 2d);
-                        tmpY = GetPlayerY((int)i) * GameState.SizeY + 35 + Height;
+                            16 - width / 2d);
+                        tmpY = GetPlayerY((int)i) * GameState.SizeY + 35 + height;
 
                         // calculate the width to fill
-                        if (Width > 0L)
-                            GameState.BarWidth_PlayerSP_Max[(int)i] = (long)Math.Round(
-                                GetPlayerVital((int)i, Vital.Stamina) / (double)Width /
-                                (GetPlayerMaxVital((int)i, Vital.Stamina) / (double)Width) * Width);
+                        if (width > 0L)
+                            GameState.BarWidthPlayerSpMax[(int)i] = (long)Math.Round(
+                                GetPlayerVital((int)i, Vital.Stamina) / (double)width /
+                                (GetPlayerMaxVital((int)i, Vital.Stamina) / (double)width) * width);
 
                         // draw bar background
-                        Top = Height * 3L; // SP bar background
-                        Left = 0L;
+                        top = height * 3L; // SP bar background
+                        left = 0L;
                         string argpath4 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath4, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)Width, (int)Height, (int)Width, (int)Height);
+                            (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
-                        Top = Height * 0L; // SP bar
-                        Left = 0L;
+                        top = height * 0L; // SP bar
+                        left = 0L;
                         string argpath5 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                         RenderTexture(ref argpath5, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
-                            (int)Left, (int)Top, (int)GameState.BarWidth_PlayerSP[(int)i], (int)Height,
-                            (int)GameState.BarWidth_PlayerSP[(int)i], (int)Height);
+                            (int)left, (int)top, (int)GameState.BarWidthPlayerSp[(int)i], (int)height,
+                            (int)GameState.BarWidthPlayerSp[(int)i], (int)height);
                     }
 
                     if (GameState.SkillBuffer >= 0)
@@ -1738,33 +1738,33 @@ static void LoadFonts()
                                 0)
                             {
                                 // lock to player
-                                tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX + 16 - Width / 2d);
+                                tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX + 16 - width / 2d);
 
                                 tmpY = GetPlayerY((int)i) * GameState.SizeY + 35 +
-                                       Height;
+                                       height;
 
                                 // calculate the width to fill
-                                if (Width > 0L)
+                                if (width > 0L)
                                     barWidth = (long)Math.Round((General.GetTickCount() - GameState.SkillBufferTimer) /
                                         (double)(Core.Data
                                             .Skill[(int)Core.Data.Player[(int)i].Skill[GameState.SkillBuffer].Num]
-                                            .CastTime * 1000) * Width);
+                                            .CastTime * 1000) * width);
 
                                 // draw bar background
-                                Top = Height * 3L; // cooldown bar background
-                                Left = 0L;
+                                top = height * 3L; // cooldown bar background
+                                left = 0L;
                                 string argpath6 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                                 RenderTexture(ref argpath6, GameLogic.ConvertMapX((int)tmpX),
-                                    GameLogic.ConvertMapY((int)tmpY), (int)Left, (int)Top, (int)Width, (int)Height,
-                                    (int)Width, (int)Height);
+                                    GameLogic.ConvertMapY((int)tmpY), (int)left, (int)top, (int)width, (int)height,
+                                    (int)width, (int)height);
 
                                 // draw the bar proper
-                                Top = Height * 2L; // cooldown bar
-                                Left = 0L;
+                                top = height * 2L; // cooldown bar
+                                left = 0L;
                                 string argpath7 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
                                 RenderTexture(ref argpath7, GameLogic.ConvertMapX((int)tmpX),
-                                    GameLogic.ConvertMapY((int)tmpY), (int)Left, (int)Top, (int)barWidth, (int)Height,
-                                    (int)barWidth, (int)Height);
+                                    GameLogic.ConvertMapY((int)tmpY), (int)left, (int)top, (int)barWidth, (int)height,
+                                    (int)barWidth, (int)height);
                             }
                         }
                     }
@@ -1881,26 +1881,26 @@ static void LoadFonts()
             RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
-        public static void DrawChatBubble(long Index)
+        public static void DrawChatBubble(long index)
         {
             var theArray = default(string[]);
             int x;
             int y;
             long i;
-            var MaxWidth = default(long);
+            var maxWidth = default(long);
             long x2;
             long y2;
-            int Color;
+            int color;
             long tmpNum;
 
             {
-                ref var withBlock = ref Data.ChatBubble[(int)Index];
+                ref var withBlock = ref Data.ChatBubble[(int)index];
 
                 // exit out early
                 if (withBlock.TargetType == 0)
                     return;
 
-                Color = withBlock.Color;
+                color = withBlock.Color;
 
                 // calculate position
                 switch (withBlock.TargetType)
@@ -1949,12 +1949,12 @@ static void LoadFonts()
                 var loopTo = tmpNum;
                 for (i = 0L; i <= loopTo; i++)
                 {
-                    if (Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia) > MaxWidth)
-                        MaxWidth = Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia);
+                    if (Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia) > maxWidth)
+                        maxWidth = Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia);
                 }
 
                 // calculate the new position 
-                x2 = x - MaxWidth / 2L;
+                x2 = x - maxWidth / 2L;
                 y2 = y - (Information.UBound(theArray) + 1) * 12;
 
                 // render bubble - top left
@@ -1963,11 +1963,11 @@ static void LoadFonts()
 
                 // top right
                 string argpath1 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath1, (int)(x2 + MaxWidth), (int)(y2 - 5L), 119, 0, 9, 5, 9, 5);
+                RenderTexture(ref argpath1, (int)(x2 + maxWidth), (int)(y2 - 5L), 119, 0, 9, 5, 9, 5);
 
                 // top
                 string argpath2 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath2, (int)x2, (int)(y2 - 5L), 9, 0, (int)MaxWidth, 5, 5, 5);
+                RenderTexture(ref argpath2, (int)x2, (int)(y2 - 5L), 9, 0, (int)maxWidth, 5, 5, 5);
 
                 // bottom left
                 string argpath3 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
@@ -1975,15 +1975,15 @@ static void LoadFonts()
 
                 // bottom right
                 string argpath4 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath4, (int)(x2 + MaxWidth), (int)y, 119, 19, 9, 6, 9, 6);
+                RenderTexture(ref argpath4, (int)(x2 + maxWidth), (int)y, 119, 19, 9, 6, 9, 6);
 
                 // bottom - left half
                 string argpath5 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath5, (int)x2, (int)y, 9, 19, (int)(MaxWidth / 2L - 5L), 6, 6, 6);
+                RenderTexture(ref argpath5, (int)x2, (int)y, 9, 19, (int)(maxWidth / 2L - 5L), 6, 6, 6);
 
                 // bottom - right half
                 string argpath6 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath6, (int)(x2 + MaxWidth / 2L + 6L), (int)y, 9, 19, (int)(MaxWidth / 2L - 5L), 6,
+                RenderTexture(ref argpath6, (int)(x2 + maxWidth / 2L + 6L), (int)y, 9, 19, (int)(maxWidth / 2L - 5L), 6,
                     9,
                     6);
 
@@ -1993,13 +1993,13 @@ static void LoadFonts()
 
                 // right
                 string argpath8 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath8, (int)(x2 + MaxWidth), (int)y2, 119, 6, 9, (Information.UBound(theArray) + 1) * 12,
+                RenderTexture(ref argpath8, (int)(x2 + maxWidth), (int)y2, 119, 6, 9, (Information.UBound(theArray) + 1) * 12,
                     9,
                     6);
 
                 // center
                 string argpath9 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
-                RenderTexture(ref argpath9, (int)x2, (int)y2, 9, 5, (int)MaxWidth, (Information.UBound(theArray) + 1) * 12, 9,
+                RenderTexture(ref argpath9, (int)x2, (int)y2, 9, 5, (int)maxWidth, (Information.UBound(theArray) + 1) * 12, 9,
                     5);
 
                 // little pointy bit
@@ -2050,7 +2050,7 @@ static void LoadFonts()
 
             spriteNum = GetPlayerSprite(index);
 
-            if (index < 0 | index > Constant.MAX_PLAYERS)
+            if (index < 0 | index > Constant.MaxPlayers)
                 return;
 
             if (spriteNum <= 0 | spriteNum > GameState.NumCharacters)
@@ -2520,7 +2520,7 @@ static void LoadFonts()
             // Draw out the items
             if (GameState.NumItems > 0)
             {
-                for (i = 0; i < Constant.MAX_MAP_ITEMS; i++)
+                for (i = 0; i < Constant.MaxMapItems; i++)
                 {
                     DrawMapItem(i);                
                 }
@@ -2548,7 +2548,7 @@ static void LoadFonts()
                 if (GameState.NumCharacters > 0)
                 {
                     // Npcs
-                    for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+                    for (i = 0; i < Constant.MaxMapNpcs; i++)
                     {
                         if (Math.Floor((decimal)Data.MyMapNpc[i].Y / 32) == y)
                         {
@@ -2557,7 +2557,7 @@ static void LoadFonts()
                     }
 
                     // Players
-                    for (i = 0; i < Constant.MAX_PLAYERS; i++)
+                    for (i = 0; i < Constant.MaxPlayers; i++)
                     {
                         if (IsPlaying(i) & GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                         {
@@ -2618,7 +2618,7 @@ static void LoadFonts()
                         }
                     }
 
-                    for (i = 0; i < Constant.MAX_PLAYERS; i++)
+                    for (i = 0; i < Constant.MaxPlayers; i++)
                     {
                         if (IsPlaying(i))
                         {
@@ -2682,7 +2682,7 @@ static void LoadFonts()
 
             if (GameState.NumProjectiles > 0)
             {
-                for (i = 0; i < Constant.MAX_PROJECTILES; i++)
+                for (i = 0; i < Constant.MaxProjectiles; i++)
                 {
                     if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, i].ProjectileNum >= 0)
                     {
@@ -2729,7 +2729,7 @@ static void LoadFonts()
                 DrawGrid();
             }
 
-            for (i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i) & GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                 {
@@ -2755,7 +2755,7 @@ static void LoadFonts()
                 }
             }
 
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 Text.DrawNpcName(i);
             }
@@ -2791,15 +2791,15 @@ static void LoadFonts()
             // draw cursor, player X and Y locations
             if (GameState.BLoc)
             {
-                string Cur = "Cur X: " + GameState.CurX + " Y: " + GameState.CurY;
-                string Loc = "loc X: " + GetPlayerX(GameState.MyIndex) + " Y: " + GetPlayerY(GameState.MyIndex);
-                string Map = " (Map #" + GetPlayerMap(GameState.MyIndex) + ")";
+                string cur = "Cur X: " + GameState.CurX + " Y: " + GameState.CurY;
+                string loc = "loc X: " + GetPlayerX(GameState.MyIndex) + " Y: " + GetPlayerY(GameState.MyIndex);
+                string map = " (Map #" + GetPlayerMap(GameState.MyIndex) + ")";
 
-                Text.RenderText(Cur, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 105f),
+                Text.RenderText(cur, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 105f),
                     Color.Yellow, Color.Black);
-                Text.RenderText(Loc, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 120f),
+                Text.RenderText(loc, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 120f),
                     Color.Yellow, Color.Black);
-                Text.RenderText(Map, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 135f),
+                Text.RenderText(map, (int)Math.Round(GameState.DrawLocX), (int)Math.Round(GameState.DrawLocY + 135f),
                     Color.Yellow, Color.Black);
             }
 
@@ -2823,7 +2823,7 @@ static void LoadFonts()
 
         public static void Render_Menu()
         {
-            Gui.DrawMenuBG();
+            Gui.DrawMenuBg();
             Gui.Render();
             string argpath = System.IO.Path.Combine(Core.Path.Misc, "Cursor");
             RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);

@@ -15,121 +15,121 @@ namespace Client
 
         public static void PacketRouter()
         {
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAes] = Packet_Aes;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAlertMsg] = Packet_AlertMsg;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SLoginOK] = Packet_LoginOk;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerChars] = Packet_PlayerChars;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateJob] = Packet_UpdateJob;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SJobData] = Packet_JobData;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SInGame] = Packet_InGame;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerInv] = Packet_PlayerInv;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerInvUpdate] = Packet_PlayerInvUpdate;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerWornEq] = Packet_PlayerWornEquipment;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerHP] = Player.Packet_PlayerHP;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerMP] = Player.Packet_PlayerMP;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerSP] = Player.Packet_PlayerSP;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerStats] = Player.Packet_PlayerStats;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerData] = Player.Packet_PlayerData;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SNpcMove] = Packet_NpcMove;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerDir] = Player.Packet_PlayerDir;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SNpcDir] = Packet_NpcDir;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerXY] = Player.Packet_PlayerXY;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAttack] = Packet_Attack;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SNpcAttack] = Packet_NpcAttack;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SCheckForMap] = Map.Packet_CheckMap;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapData] = Map.MapData;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapNpcData] = Map.Packet_MapNpcData;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapNpcUpdate] = Map.Packet_MapNpcUpdate;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SGlobalMsg] = Packet_GlobalMsg;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAdminMsg] = Packet_AdminMsg;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerMsg] = Packet_PlayerMsg;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapMsg] = Packet_MapMsg;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSpawnItem] = Packet_SpawnItem;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateItem] = Item.Packet_UpdateItem;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSpawnNpc] = Packet_SpawnNpc;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SNpcDead] = Packet_NpcDead;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateNpc] = Packet_UpdateNpc;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEditMap] = Map.Packet_EditMap;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateShop] = Shop.Packet_UpdateShop;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateSkill] = Packet_UpdateSkill;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSkills] = Packet_Skills;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SLeftMap] = Packet_LeftMap;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapResource] = MapResource.Packet_MapResource;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateResource] = MapResource.Packet_UpdateResource;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSendPing] = Packet_Ping;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SActionMsg] = Packet_ActionMessage;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayerEXP] = Player.Packet_PlayerExp;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SBlood] = Packet_Blood;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateAnimation] = Animation.Packet_UpdateAnimation;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAnimation] = Animation.Packet_Animation;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapNpcVitals] = Packet_NpcVitals;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SCooldown] = Packet_Cooldown;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SClearSkillBuffer] = Packet_ClearSkillBuffer;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSayMsg] = Packet_SayMessage;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SOpenShop] = Shop.Packet_OpenShop;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SResetShopAction] = Shop.Packet_ResetShopAction;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SStunned] = Packet_Stunned;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapWornEq] = Packet_MapWornEquipment;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SBank] = Bank.Packet_OpenBank;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SLeftGame] = Packet_LeftGame;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAes] = Packet_Aes;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAlertMsg] = Packet_AlertMsg;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLoginOk] = Packet_LoginOk;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerChars] = Packet_PlayerChars;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateJob] = Packet_UpdateJob;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SJobData] = Packet_JobData;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SInGame] = Packet_InGame;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerInv] = Packet_PlayerInv;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerInvUpdate] = Packet_PlayerInvUpdate;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerWornEq] = Packet_PlayerWornEquipment;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerHp] = Player.Packet_PlayerHP;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerMp] = Player.Packet_PlayerMP;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerSp] = Player.Packet_PlayerSP;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerStats] = Player.Packet_PlayerStats;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerData] = Player.Packet_PlayerData;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcMove] = Packet_NpcMove;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerDir] = Player.Packet_PlayerDir;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcDir] = Packet_NpcDir;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerXy] = Player.Packet_PlayerXY;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAttack] = Packet_Attack;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcAttack] = Packet_NpcAttack;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCheckForMap] = Map.Packet_CheckMap;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapData] = Map.MapData;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcData] = Map.Packet_MapNpcData;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcUpdate] = Map.Packet_MapNpcUpdate;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SGlobalMsg] = Packet_GlobalMsg;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAdminMsg] = Packet_AdminMsg;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerMsg] = Packet_PlayerMsg;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapMsg] = Packet_MapMsg;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnItem] = Packet_SpawnItem;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateItem] = Item.Packet_UpdateItem;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnNpc] = Packet_SpawnNpc;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcDead] = Packet_NpcDead;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateNpc] = Packet_UpdateNpc;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEditMap] = Map.Packet_EditMap;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateShop] = Shop.Packet_UpdateShop;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateSkill] = Packet_UpdateSkill;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSkills] = Packet_Skills;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLeftMap] = Packet_LeftMap;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapResource] = MapResource.Packet_MapResource;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateResource] = MapResource.Packet_UpdateResource;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSendPing] = Packet_Ping;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SActionMsg] = Packet_ActionMessage;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerExp] = Player.Packet_PlayerExp;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SBlood] = Packet_Blood;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateAnimation] = Animation.Packet_UpdateAnimation;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAnimation] = Animation.Packet_Animation;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcVitals] = Packet_NpcVitals;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCooldown] = Packet_Cooldown;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SClearSkillBuffer] = Packet_ClearSkillBuffer;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSayMsg] = Packet_SayMessage;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SOpenShop] = Shop.Packet_OpenShop;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SResetShopAction] = Shop.Packet_ResetShopAction;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SStunned] = Packet_Stunned;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapWornEq] = Packet_MapWornEquipment;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SBank] = Bank.Packet_OpenBank;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLeftGame] = Packet_LeftGame;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STradeInvite] = Trade.Packet_TradeInvite;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STrade] = Trade.Packet_Trade;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SCloseTrade] = Trade.Packet_CloseTrade;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STradeUpdate] = Trade.Packet_TradeUpdate;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STradeStatus] = Trade.Packet_TradeStatus;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeInvite] = Trade.Packet_TradeInvite;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STrade] = Trade.Packet_Trade;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCloseTrade] = Trade.Packet_CloseTrade;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeUpdate] = Trade.Packet_TradeUpdate;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeStatus] = Trade.Packet_TradeStatus;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapReport] = Packet_MapReport;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STarget] = Packet_Target;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapReport] = Packet_MapReport;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STarget] = Packet_Target;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAdmin] = Packet_Admin;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAdmin] = Packet_Admin;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SCritical] = Packet_Critical;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SrClick] = Packet_RClick;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCritical] = Packet_Critical;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SrClick] = Packet_RClick;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SHotbar] = Packet_Hotbar;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SHotbar] = Packet_Hotbar;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSpawnEvent] = Event.Packet_SpawnEvent;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEventMove] = Event.Packet_EventMove;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEventDir] = Event.Packet_EventDir;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEventChat] = Event.Packet_EventChat;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEventStart] = Event.Packet_EventStart;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEventEnd] = Event.Packet_EventEnd;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlayBGM] = Event.Packet_PlayBGM;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPlaySound] = Event.Packet_PlaySound;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SFadeoutBGM] = Event.Packet_FadeOutBGM;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SStopSound] = Event.Packet_StopSound;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSwitchesAndVariables] = Event.Packet_SwitchesAndVariables;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapEventData] = Event.Packet_MapEventData;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SChatBubble] = Packet_ChatBubble;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSpecialEffect] = Event.Packet_SpecialEffect;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnEvent] = Event.Packet_SpawnEvent;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventMove] = Event.Packet_EventMove;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventDir] = Event.Packet_EventDir;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventChat] = Event.Packet_EventChat;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventStart] = Event.Packet_EventStart;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventEnd] = Event.Packet_EventEnd;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayBgm] = Event.Packet_PlayBGM;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlaySound] = Event.Packet_PlaySound;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SFadeoutBgm] = Event.Packet_FadeOutBGM;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SStopSound] = Event.Packet_StopSound;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSwitchesAndVariables] = Event.Packet_SwitchesAndVariables;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapEventData] = Event.Packet_MapEventData;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SChatBubble] = Packet_ChatBubble;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpecialEffect] = Event.Packet_SpecialEffect;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPic] = Event.Packet_Picture;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SHoldPlayer] = Event.Packet_HoldPlayer;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPic] = Event.Packet_Picture;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SHoldPlayer] = Event.Packet_HoldPlayer;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateProjectile] = Projectile.HandleUpdateProjectile;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMapProjectile] = Projectile.HandleMapProjectile;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateProjectile] = Projectile.HandleUpdateProjectile;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapProjectile] = Projectile.HandleMapProjectile;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SEmote] = Packet_Emote;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEmote] = Packet_Emote;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPartyInvite] = Party.Packet_PartyInvite;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPartyUpdate] = Party.Packet_PartyUpdate;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SPartyVitals] = Party.Packet_PartyVitals;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyInvite] = Party.Packet_PartyInvite;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyUpdate] = Party.Packet_PartyUpdate;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyVitals] = Party.Packet_PartyVitals;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SClock] = Packet_Clock;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.STime] = Packet_Time;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SScriptEditor] = Script.Packet_EditScript;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SClock] = Packet_Clock;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STime] = Packet_Time;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SScriptEditor] = Script.Packet_EditScript;
 
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SItemEditor] = Packet_EditItem;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SNpcEditor] = Packet_NpcEditor;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SShopEditor] = Packet_EditShop;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SSkillEditor] = Packet_EditSkill;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SResourceEditor] = Packet_ResourceEditor;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SAnimationEditor] = Packet_AnimationEditor;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SProjectileEditor] = HandleProjectileEditor;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SJobEditor] = Packet_JobEditor;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SUpdateMoral] = Packet_UpdateMoral;
-            NetworkConfig.Socket.PacketID[(int)Packets.ServerPackets.SMoralEditor] = Packet_EditMoral;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SItemEditor] = Packet_EditItem;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcEditor] = Packet_NpcEditor;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SShopEditor] = Packet_EditShop;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSkillEditor] = Packet_EditSkill;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SResourceEditor] = Packet_ResourceEditor;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAnimationEditor] = Packet_AnimationEditor;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SProjectileEditor] = HandleProjectileEditor;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SJobEditor] = Packet_JobEditor;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateMoral] = Packet_UpdateMoral;
+            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMoralEditor] = Packet_EditMoral;
 
         }
 
@@ -233,13 +233,13 @@ namespace Client
             long I;
             long winNum;
             long conNum;
-            var isSlotEmpty = new bool[Constant.MAX_CHARS];
+            var isSlotEmpty = new bool[Constant.MaxChars];
             long x;
 
             SettingsManager.Instance.Username = Gui.Windows[Gui.GetWindowIndex("winLogin")].Controls[(int)Gui.GetControlIndex("winLogin", "txtUsername")].Text;
             SettingsManager.Save();
 
-            for (var i = 0L; i < Constant.MAX_CHARS; i++)
+            for (var i = 0L; i < Constant.MaxChars; i++)
             {
                 GameState.CharName[(int)i] = buffer.ReadString();
                 GameState.CharSprite[(int)i] = buffer.ReadInt32();
@@ -258,7 +258,7 @@ namespace Client
 
             // set GUi window up
             winNum = Gui.GetWindowIndex("winChars");
-            for (var i = 0L; i < Constant.MAX_CHARS; i++)
+            for (var i = 0L; i < Constant.MaxChars; i++)
             {
                 conNum = Gui.GetControlIndex("winChars", "lblCharName_" + (i + 1));
                 {
@@ -321,7 +321,7 @@ namespace Client
                 for (int q = 0; q < statCount; q++)
                     withBlock.Stat[q] = buffer.ReadInt32();
 
-                for (int q = 0; q < Core.Constant.MAX_START_ITEMS; q++)
+                for (int q = 0; q < Core.Constant.MaxStartItems; q++)
                 {
                     withBlock.StartItem[q] = buffer.ReadInt32();
                     withBlock.StartValue[q] = buffer.ReadInt32();
@@ -342,7 +342,7 @@ namespace Client
             int x;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_JOBS; i++)
+            for (i = 0; i < Constant.MaxJobs; i++)
             {          
                 ref var withBlock = ref Data.Job[i];
                 withBlock.Name = buffer.ReadString();
@@ -355,7 +355,7 @@ namespace Client
                 for (x = 0; x < statCount; x++)
                     withBlock.Stat[x] = buffer.ReadInt32();
 
-                for (int q = 0; q < Core.Constant.MAX_START_ITEMS; q++)
+                for (int q = 0; q < Core.Constant.MaxStartItems; q++)
                 {
                     withBlock.StartItem[q] = buffer.ReadInt32();
                     withBlock.StartValue[q] = buffer.ReadInt32();
@@ -398,7 +398,7 @@ namespace Client
             int amount;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_INV; i++)
+            for (i = 0; i < Constant.MaxInv; i++)
             {
                 itemNum = buffer.ReadInt32();
                 amount = buffer.ReadInt32();
@@ -628,7 +628,7 @@ namespace Client
             Data.Npc[i].AttackSay = buffer.ReadString();
             Data.Npc[i].Behaviour = buffer.ReadByte();
 
-            for (x = 0; x < Constant.MAX_DROP_ITEMS; x++)
+            for (x = 0; x < Constant.MaxDropItems; x++)
             {
                 Data.Npc[i].DropChance[x] = buffer.ReadInt32();
                 Data.Npc[i].DropItem[x] = buffer.ReadInt32();
@@ -637,7 +637,7 @@ namespace Client
 
             Data.Npc[i].Exp = buffer.ReadInt32();
             Data.Npc[i].Faction = buffer.ReadByte();
-            Data.Npc[i].HP = buffer.ReadInt32();
+            Data.Npc[i].Hp = buffer.ReadInt32();
             Data.Npc[i].Name = buffer.ReadString();
             Data.Npc[i].Range = buffer.ReadByte();
             Data.Npc[i].SpawnTime = buffer.ReadByte();
@@ -648,7 +648,7 @@ namespace Client
             for (x = 0; x < statCount; x++)
                 Data.Npc[i].Stat[x] = buffer.ReadByte();
 
-            for (x = 0; x < Constant.MAX_NPC_SKILLS; x++)
+            for (x = 0; x < Constant.MaxNpcSkills; x++)
                 Data.Npc[i].Skill[x] = buffer.ReadByte();
 
             Data.Npc[i].Level = buffer.ReadByte();
@@ -701,7 +701,7 @@ namespace Client
             int i;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_PLAYER_SKILLS; i++)
+            for (i = 0; i < Constant.MaxPlayerSkills; i++)
                 Core.Data.Player[GameState.MyIndex].Skill[i].Num = buffer.ReadInt32();
 
             buffer.Dispose();
@@ -771,12 +771,12 @@ namespace Client
         }
         private static void Packet_NpcVitals(ref byte[] data)
         {
-            double MapNpcNum;
+            double mapNpcNum;
             var buffer = new ByteStream(data);
 
-            MapNpcNum = buffer.ReadInt32();
+            mapNpcNum = buffer.ReadInt32();
             for (int i = 0; i < Enum.GetValues(typeof(Core.Vital)).Length; i++)
-                Data.MyMapNpc[(int)MapNpcNum].Vital[i] = buffer.ReadInt32();
+                Data.MyMapNpc[(int)mapNpcNum].Vital[i] = buffer.ReadInt32();
 
             buffer.Dispose();
         }
@@ -787,7 +787,7 @@ namespace Client
             var buffer = new ByteStream(data);
 
             slot = buffer.ReadInt32();
-            Core.Data.Player[GameState.MyIndex].Skill[slot].CD = General.GetTickCount();
+            Core.Data.Player[GameState.MyIndex].Skill[slot].Cd = General.GetTickCount();
 
             buffer.Dispose();
         }
@@ -921,7 +921,7 @@ namespace Client
             int i;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_MAPS; i++)
+            for (i = 0; i < Constant.MaxMaps; i++)
                 GameState.MapNames[i] = buffer.ReadString();
 
             GameState.InitMapReport = true;
@@ -968,14 +968,14 @@ namespace Client
             int targetType;
             int target;
             string message;
-            int Color;
+            int color;
             var buffer = new ByteStream(data);
 
             target = buffer.ReadInt32();
             targetType = buffer.ReadInt32();
             message = buffer.ReadString();
-            Color = buffer.ReadInt32();
-            GameLogic.AddChatBubble(target, (byte)targetType, message, Color);
+            color = buffer.ReadInt32();
+            GameLogic.AddChatBubble(target, (byte)targetType, message, color);
 
             buffer.Dispose();
 
@@ -1078,7 +1078,7 @@ namespace Client
             int i;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_HOTBAR; i++)
+            for (i = 0; i < Constant.MaxHotbar; i++)
             {
                 Core.Data.Player[GameState.MyIndex].Hotbar[i].Slot = buffer.ReadInt32();
                 Core.Data.Player[GameState.MyIndex].Hotbar[i].SlotType = (byte)buffer.ReadInt32();
@@ -1109,7 +1109,7 @@ namespace Client
                 withBlock.CanCast = buffer.ReadBoolean();
                 withBlock.CanDropItem = buffer.ReadBoolean();
                 withBlock.CanPickupItem = buffer.ReadBoolean();
-                withBlock.CanPK = buffer.ReadBoolean();
+                withBlock.CanPk = buffer.ReadBoolean();
                 withBlock.DropItems = buffer.ReadBoolean();
                 withBlock.LoseExp = buffer.ReadBoolean();
             }

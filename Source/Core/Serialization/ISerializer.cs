@@ -1,11 +1,11 @@
 ﻿
 namespace Core.Serialization
 {
-    public interface ISerializer<InputType, OutputType>
+    public interface ISerializer<TInputType, TOutputType>
     {
-        OutputType Serialize(InputType rawObject);
-        InputType Deserialize(OutputType serializedValue);
-        InputType Read(string filename);
-        void Write(string filename, InputType rawObject);
+        TOutputType Serialize(TInputType rawObject);
+        TInputType Deserialize(TOutputType serializedValue);
+        TInputType Read(string filename);
+        void Write(string filename, TInputType rawObject);
     }
 }

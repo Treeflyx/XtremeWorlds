@@ -6,7 +6,7 @@ namespace Core.Global
 {
     public class Command
     {
-        public static string GetAccountLogin(int index)
+public static string GetAccountLogin(int index)
         {
             return Data.Account[index].Login;
         }
@@ -15,45 +15,15 @@ namespace Core.Global
         {
             return Data.Account[index].Password;
         }
-
-        public static int GetEntityAccess(int index)
-        {
-            return Data.Player[index].Access;
-        }
-
-        public static int GetEntityX(int index)
-        {
-            return Data.Player[index].X;
-        }
-
-        public static int GetEntityY(int index)
-        {
-            return Data.Player[index].Y;
-        }
-
-        public static byte GetEntityDir(int index)
-        {
-            return Data.Player[index].Dir;
-        }
-
-        public static bool GetPlayerPk(int index)
-        {
-            return Data.Player[index].Pk;
-        }
-
-        public static int GetEntityNextLevel(int index)
-        {
-            return (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerLevel(index) + 1, 3d) - 6d * Math.Pow(GetPlayerLevel(index) + 1, 2d) + 17 * (GetPlayerLevel(index) + 1) - 12d));
-        }
-
+        
         public static int GetPlayerExp(int index)
         {
             return Data.Player[index].Exp;
         }
 
-        public static int GetPlayerRawStat(int index, Stat Stat)
+        public static int GetPlayerRawStat(int index, Stat stat)
         {
-            return Data.Player[index].Stat[(int)Stat];
+            return Data.Player[index].Stat[(int)stat];
         }
 
         public static string GetPlayerName(int index)
@@ -121,9 +91,9 @@ namespace Core.Global
             return Data.Player[index].Skill[skillSlot].Num;
         }
 
-        public static int GetPlayerSkillCD(int index, int skillSlot)
+        public static int GetPlayerSkillCd(int index, int skillSlot)
         {
-            return Data.Player[index].Skill[skillSlot].CD;
+            return Data.Player[index].Skill[skillSlot].Cd;
         }
 
         public static void SetPlayerLogin(int index, string login)
@@ -133,175 +103,175 @@ namespace Core.Global
 
         public static string GetPlayerPassword(int index)
         {
-            string GetPlayerPasswordRet = default;
-            GetPlayerPasswordRet = Data.Account[index].Password;
-            return GetPlayerPasswordRet;
+            string getPlayerPasswordRet = default;
+            getPlayerPasswordRet = Data.Account[index].Password;
+            return getPlayerPasswordRet;
         }
 
         public static void SetPlayerPassword(int index, string password)
         {
             Data.Account[index].Password = password;
         }
-        public static int GetPlayerMaxVital(int index, Vital Vital)
+        public static int GetPlayerMaxVital(int index, Vital vital)
         {
-            int GetPlayerMaxVitalRet = default;
-            switch (Vital)
+            int getPlayerMaxVitalRet = default;
+            switch (vital)
             {
                 case Vital.Health:
                     {
-                        GetPlayerMaxVitalRet = (int)Math.Round(100d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Vitality) / 2d) * 2d);
+                        getPlayerMaxVitalRet = (int)Math.Round(100d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Vitality) / 2d) * 2d);
                         break;
                     }
 
                 case Vital.Mana:
                     {
-                        GetPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Intelligence) / 2d) * 2d);
+                        getPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Intelligence) / 2d) * 2d);
                         break;
 
                     }
                 case Vital.Stamina:
                     {
-                        GetPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Spirit) / 2d) * 2d);
+                        getPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Spirit) / 2d) * 2d);
                         break;
                     }
             }
 
-            return GetPlayerMaxVitalRet;
+            return getPlayerMaxVitalRet;
         }
 
-        public static int GetPlayerStat(int index, Stat Stat)
+        public static int GetPlayerStat(int index, Stat stat)
         {
-            int GetPlayerStatRet = default;
+            int getPlayerStatRet = default;
             int x;
             int i;
 
-            x = Data.Player[index].Stat[(int)Stat];
+            x = Data.Player[index].Stat[(int)stat];
             var count = Enum.GetNames(typeof(Equipment)).Length;
 
             for (i = 0; i < count; i++)
             {
                 if (Data.Player[index].Equipment[i] >= 0)
                 {
-                    if (Data.Item[(int)Data.Player[index].Equipment[i]].Add_Stat[(int)Stat] > 0)
+                    if (Data.Item[(int)Data.Player[index].Equipment[i]].AddStat[(int)stat] > 0)
                     {
-                        x += Data.Item[(int)Data.Player[index].Equipment[i]].Add_Stat[(int)Stat];
+                        x += Data.Item[(int)Data.Player[index].Equipment[i]].AddStat[(int)stat];
                     }
                 }
             }
 
-            GetPlayerStatRet = x;
-            return GetPlayerStatRet;
+            getPlayerStatRet = x;
+            return getPlayerStatRet;
         }
 
         public static byte GetPlayerAccess(int index)
         {
-            byte GetPlayerAccessRet = default;
-            GetPlayerAccessRet = Data.Player[index].Access;
-            return GetPlayerAccessRet;
+            byte getPlayerAccessRet = default;
+            getPlayerAccessRet = Data.Player[index].Access;
+            return getPlayerAccessRet;
         }
 
         public static int GetPlayerX(int index)
         {
-            int GetPlayerXRet = default;
-            GetPlayerXRet = (int)Math.Floor((double)Data.Player[index].X / 32);
-            return GetPlayerXRet;
+            int getPlayerXRet = default;
+            getPlayerXRet = (int)Math.Floor((double)Data.Player[index].X / 32);
+            return getPlayerXRet;
         }
 
         public static int GetPlayerY(int index)
         {
-            int GetPlayerYRet = default;
-            GetPlayerYRet = (int)Math.Floor((double)Data.Player[index].Y / 32);
-            return GetPlayerYRet;
+            int getPlayerYRet = default;
+            getPlayerYRet = (int)Math.Floor((double)Data.Player[index].Y / 32);
+            return getPlayerYRet;
         }
 
         public static int GetPlayerRawX(int index)
         {
-            int GetPlayerXRet = default;
-            GetPlayerXRet = Data.Player[index].X;
-            return GetPlayerXRet;
+            int getPlayerXRet = default;
+            getPlayerXRet = Data.Player[index].X;
+            return getPlayerXRet;
         }
 
         public static int GetPlayerRawY(int index)
         {
-            int GetPlayerYRet = default;
-            GetPlayerYRet = Data.Player[index].Y;
-            return GetPlayerYRet;
+            int getPlayerYRet = default;
+            getPlayerYRet = Data.Player[index].Y;
+            return getPlayerYRet;
         }
 
         public static byte GetPlayerDir(int index)
         {
-            byte GetPlayerDirRet = default;
-            GetPlayerDirRet = Data.Player[index].Dir;
-            return GetPlayerDirRet;
+            byte getPlayerDirRet = default;
+            getPlayerDirRet = Data.Player[index].Dir;
+            return getPlayerDirRet;
         }
 
-        public static bool GetPlayerPK(int index)
+        public static bool GetPlayerPk(int index)
         {
-            bool GetPlayerPKRet = default;
-            GetPlayerPKRet = Data.Player[index].Pk;
-            return GetPlayerPKRet;
+            bool getPlayerPkRet = default;
+            getPlayerPkRet = Data.Player[index].Pk;
+            return getPlayerPkRet;
         }
 
-        public static void SetPlayerVital(int index, Vital Vital, int Value)
+        public static void SetPlayerVital(int index, Vital vital, int value)
         {
-            Data.Player[index].Vital[(int)Vital] = Value;
+            Data.Player[index].Vital[(int)vital] = value;
 
-            if (GetPlayerVital(index, Vital) > GetPlayerMaxVital(index, Vital))
+            if (GetPlayerVital(index, vital) > GetPlayerMaxVital(index, vital))
             {
-                Data.Player[index].Vital[(int)Vital] = GetPlayerMaxVital(index, Vital);
+                Data.Player[index].Vital[(int)vital] = GetPlayerMaxVital(index, vital);
             }
 
-            if (GetPlayerVital(index, Vital) < 0)
+            if (GetPlayerVital(index, vital) < 0)
             {
-                Data.Player[index].Vital[(int)Vital] = 0;
+                Data.Player[index].Vital[(int)vital] = 0;
             }
         }
 
-        public static bool IsDirBlocked(ref byte Blockvar, byte Dir)
+        public static bool IsDirBlocked(ref byte blockvar, byte dir)
         {
-            if (Dir == (byte)Direction.UpRight)
+            if (dir == (byte)Direction.UpRight)
             {
-                return Conversions.ToBoolean(Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Up)) | Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Right)));
+                return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Up)) | blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Right)));
             }
-            else if (Dir == (byte)Direction.UpLeft)
+            else if (dir == (byte)Direction.UpLeft)
             {
-                return Conversions.ToBoolean(Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Up)) | Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Left)));
+                return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Up)) | blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Left)));
             }
-            else if (Dir == (byte)Direction.DownRight)
+            else if (dir == (byte)Direction.DownRight)
             {
-                return Conversions.ToBoolean(Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Down)) | Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Right)));
+                return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Down)) | blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Right)));
             }
-            else if (Dir == (byte)Direction.DownLeft)
+            else if (dir == (byte)Direction.DownLeft)
             {
-                return Conversions.ToBoolean(Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Down)) | Blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Left)));
+                return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Down)) | blockvar & (long)Math.Round(Math.Pow(2d, (double)Direction.Left)));
             }
             else
             {
-                return Conversions.ToBoolean(Blockvar & (long)Math.Round(Math.Pow(2d, Dir)));
+                return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, dir)));
             }
         }
 
 
         public static int GetPlayerNextLevel(int index)
         {
-            int GetPlayerNextLevelRet = default;
-            GetPlayerNextLevelRet = (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerLevel(index) + 1, 3d) - 6d * Math.Pow(GetPlayerLevel(index) + 1, 2d) + 17 * (GetPlayerLevel(index) + 1) - 12d));
-            return GetPlayerNextLevelRet;
+            int getPlayerNextLevelRet = default;
+            getPlayerNextLevelRet = (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerLevel(index) + 1, 3d) - 6d * Math.Pow(GetPlayerLevel(index) + 1, 2d) + 17 * (GetPlayerLevel(index) + 1) - 12d));
+            return getPlayerNextLevelRet;
         }
 
-        public static void SetPlayerGatherSkillLvl(int index, int SkillSlot, int lvl)
+        public static void SetPlayerGatherSkillLvl(int index, int skillSlot, int lvl)
         {
-            Data.Player[index].GatherSkills[SkillSlot].SkillLevel = lvl;
+            Data.Player[index].GatherSkills[skillSlot].SkillLevel = lvl;
         }
 
-        public static void SetPlayerGatherSkillExp(int index, int SkillSlot, int Exp)
+        public static void SetPlayerGatherSkillExp(int index, int skillSlot, int exp)
         {
-            Data.Player[index].GatherSkills[SkillSlot].SkillCurExp = Exp;
+            Data.Player[index].GatherSkills[skillSlot].SkillCurExp = exp;
         }
 
-        public static void SetPlayerGatherSkillMaxExp(int index, int SkillSlot, int MaxExp)
+        public static void SetPlayerGatherSkillMaxExp(int index, int skillSlot, int maxExp)
         {
-            Data.Player[index].GatherSkills[SkillSlot].SkillNextLvlExp = MaxExp;
+            Data.Player[index].GatherSkills[skillSlot].SkillNextLvlExp = maxExp;
         }
 
         public static string GetResourceSkillName(ResourceSkill skillNum)
@@ -329,9 +299,9 @@ namespace Core.Global
             return default;
         }
 
-        public static int GetSkillNextLevel(int index, int SkillSlot)
+        public static int GetSkillNextLevel(int index, int skillSlot)
         {
-            return (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerGatherSkillLvl(index, SkillSlot) + 1, 3d) - 6d * Math.Pow(GetPlayerGatherSkillLvl(index, SkillSlot) + 1, 2d) + 17 * (GetPlayerGatherSkillLvl(index, SkillSlot) + 1) - 12d));
+            return (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerGatherSkillLvl(index, skillSlot) + 1, 3d) - 6d * Math.Pow(GetPlayerGatherSkillLvl(index, skillSlot) + 1, 2d) + 17 * (GetPlayerGatherSkillLvl(index, skillSlot) + 1) - 12d));
         }
 
         public static bool IsPlaying(int index)
@@ -404,7 +374,7 @@ namespace Core.Global
             Data.Player[index].Access = access;
         }
 
-        public static void SetPlayerPK(int index, bool pk)
+        public static void SetPlayerPk(int index, bool pk)
         {
             Data.Player[index].Pk = pk;
         }
@@ -446,7 +416,7 @@ namespace Core.Global
 
         public static string IsEditorLocked(int index, int id)
         {
-            for (int i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (int i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i))
                 {
@@ -467,7 +437,7 @@ namespace Core.Global
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_PLAYER_SKILLS; i++)
+            for (i = 0; i < Constant.MaxPlayerSkills; i++)
             {
 
                 if (GetPlayerSkill(index, i) == -1)
@@ -480,14 +450,14 @@ namespace Core.Global
             return -1;
         }
 
-        public static void SetPlayerSkillCD(int index, int skillSlot, int value)
+        public static void SetPlayerSkillCd(int index, int skillSlot, int value)
         {
-            Data.Player[index].Skill[skillSlot].CD = value;
+            Data.Player[index].Skill[skillSlot].Cd = value;
         }
 
         public static bool HasSkill(int index, double skillNum)
         {
-            for (int i = 0; i < Constant.MAX_PLAYER_SKILLS; i++)
+            for (int i = 0; i < Constant.MaxPlayerSkills; i++)
             {
 
                 if (GetPlayerSkill(index, i) == skillNum)
@@ -500,16 +470,16 @@ namespace Core.Global
             return false;
         }
 
-        public static void SetPlayerSkill(int index, int Skillslot, int skillNum)
+        public static void SetPlayerSkill(int index, int skillslot, int skillNum)
         {
-            Data.Player[index].Skill[Skillslot].Num = skillNum;
+            Data.Player[index].Skill[skillslot].Num = skillNum;
         }
 
         public static int GetBank(int index, int bankslot)
         {
-            int GetBankRet = default;
-            GetBankRet = Data.Bank[index].Item[bankslot].Num;
-            return GetBankRet;
+            int getBankRet = default;
+            getBankRet = Data.Bank[index].Item[bankslot].Num;
+            return getBankRet;
         }
 
         public static void SetBank(int index, byte bankSlot, int itemNum)
@@ -519,9 +489,9 @@ namespace Core.Global
 
         public static int GetBankValue(int index, int bankSlot)
         {
-            int GetBankValueRet = default;
-            GetBankValueRet = Data.Bank[index].Item[bankSlot].Value;
-            return GetBankValueRet;
+            int getBankValueRet = default;
+            getBankValueRet = Data.Bank[index].Item[bankSlot].Value;
+            return getBankValueRet;
         }
 
         public static void SetBankValue(int index, byte bankSlot, int itemValue)

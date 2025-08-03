@@ -47,7 +47,7 @@ namespace Client
             int i;
             int spriteLeft;
 
-            for (i = 0; i < Constant.MAX_WEATHER_PARTICLES; i++)
+            for (i = 0; i < Constant.MaxWeatherParticles; i++)
             {
                 if (Conversions.ToBoolean(GameState.WeatherParticle[i].InUse))
                 {
@@ -477,13 +477,13 @@ namespace Client
             switch ((PictureOrigin)type)
             {
                 case PictureOrigin.TopLeft:
-                    posX = 0 - Event.Picture.xOffset;
-                    posY = 0 - Event.Picture.yOffset;
+                    posX = 0 - Event.Picture.XOffset;
+                    posY = 0 - Event.Picture.YOffset;
                     break;
 
                 case PictureOrigin.CenterScreen:
-                    posX = (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Width / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Width / 2d - Event.Picture.xOffset);
-                    posY = (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Height / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Height / 2d - Event.Picture.yOffset);
+                    posX = (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Width / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Width / 2d - Event.Picture.XOffset);
+                    posY = (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Height / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Height / 2d - Event.Picture.YOffset);
                     break;
 
                 case PictureOrigin.CenterOnEvent:
@@ -493,17 +493,17 @@ namespace Client
                         Event.Picture.EventId = 0;
                         Event.Picture.Index = 0;
                         Event.Picture.SpriteType = 0;
-                        Event.Picture.xOffset = 0;
-                        Event.Picture.yOffset = 0;
+                        Event.Picture.XOffset = 0;
+                        Event.Picture.YOffset = 0;
                         return;
                     }
-                    posX = (int)Math.Round(GameLogic.ConvertMapX(Data.MapEvents[Event.Picture.EventId].X ) / 2d - Event.Picture.xOffset);
-                    posY = (int)Math.Round(GameLogic.ConvertMapY(Data.MapEvents[Event.Picture.EventId].Y) / 2d - Event.Picture.yOffset);
+                    posX = (int)Math.Round(GameLogic.ConvertMapX(Data.MapEvents[Event.Picture.EventId].X ) / 2d - Event.Picture.XOffset);
+                    posY = (int)Math.Round(GameLogic.ConvertMapY(Data.MapEvents[Event.Picture.EventId].Y) / 2d - Event.Picture.YOffset);
                     break;
 
                 case PictureOrigin.CenterOnPlayer:
-                    posX = (int)Math.Round(GameLogic.ConvertMapX(Core.Data.Player[GameState.MyIndex].X ) / 2d - Event.Picture.xOffset);
-                    posY = (int)Math.Round(GameLogic.ConvertMapY(Core.Data.Player[GameState.MyIndex].Y) / 2d - Event.Picture.yOffset);
+                    posX = (int)Math.Round(GameLogic.ConvertMapX(Core.Data.Player[GameState.MyIndex].X ) / 2d - Event.Picture.XOffset);
+                    posY = (int)Math.Round(GameLogic.ConvertMapY(Core.Data.Player[GameState.MyIndex].Y) / 2d - Event.Picture.YOffset);
                     break;
             }
 
@@ -516,8 +516,8 @@ namespace Client
             // Reset basic map properties
             Data.MyMap.Name = string.Empty;
             Data.MyMap.Tileset = 1;
-            Data.MyMap.MaxX = Constant.MAX_MAPX;
-            Data.MyMap.MaxY = Constant.MAX_MAPY;
+            Data.MyMap.MaxX = Constant.MaxMapx;
+            Data.MyMap.MaxY = Constant.MaxMapy;
             Data.MyMap.BootMap = 0;
             Data.MyMap.BootX = 0;
             Data.MyMap.BootY = 0;
@@ -530,9 +530,9 @@ namespace Client
             Data.MyMap.Up = 0;
 
             // Initialize Npc and Tile arrays
-            Data.MyMap.Npc = new int[Constant.MAX_MAP_NPCS];
+            Data.MyMap.Npc = new int[Constant.MaxMapNpcs];
 
-            for (int i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (int i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 Data.MyMap.Npc[i] = -1;
             }
@@ -582,9 +582,9 @@ namespace Client
             tile.Data1 = 0;
             tile.Data2 = 0;
             tile.Data3 = 0;
-            tile.Data1_2 = 0;
-            tile.Data2_2 = 0;
-            tile.Data3_2 = 0;
+            tile.Data12 = 0;
+            tile.Data22 = 0;
+            tile.Data32 = 0;
             tile.Type = 0;
             tile.Type2 = 0;
             tile.DirBlock = 0;
@@ -592,7 +592,7 @@ namespace Client
 
         public static void ClearMapItems()
         {
-            for (int i = 0; i < Constant.MAX_MAP_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxMapItems; i++)
                 ClearMapItem(i);
 
         }
@@ -628,7 +628,7 @@ namespace Client
 
         public static void ClearMapNpcs()
         {
-            for (int i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (int i = 0; i < Constant.MaxMapNpcs; i++)
                 ClearMapNpc(i);
 
         }
@@ -658,7 +658,7 @@ namespace Client
             GameState.GettingMap = true;
 
             // Erase all players except self
-            for (i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (i != GameState.MyIndex)
                 {
@@ -765,7 +765,7 @@ namespace Client
                     }
                 }
 
-                for (x = 0; x < Constant.MAX_MAP_NPCS; x++)
+                for (x = 0; x < Constant.MaxMapNpcs; x++)
                     Data.MyMap.Npc[x] = buffer.ReadInt32();
 
                 var loopTo = (int)Data.MyMap.MaxX;
@@ -777,9 +777,9 @@ namespace Client
                         Data.MyMap.Tile[x, y].Data1 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].Data2 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].Data3 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data1_2 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data2_2 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data3_2 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data12 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data22 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data32 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].DirBlock = (byte)buffer.ReadInt32();
 
                         for (j = 0; j < GameState.MaxTileHistory; j++)
@@ -787,9 +787,9 @@ namespace Client
                             Data.TileHistory[j].Tile[x, y].Data1 = Data.MyMap.Tile[x, y].Data1;
                             Data.TileHistory[j].Tile[x, y].Data2 = Data.MyMap.Tile[x, y].Data2;
                             Data.TileHistory[j].Tile[x, y].Data3 = Data.MyMap.Tile[x, y].Data3;
-                            Data.TileHistory[j].Tile[x, y].Data1_2 = Data.MyMap.Tile[x, y].Data1_2;
-                            Data.TileHistory[j].Tile[x, y].Data2_2 = Data.MyMap.Tile[x, y].Data2_2;
-                            Data.TileHistory[j].Tile[x, y].Data3_2 = Data.MyMap.Tile[x, y].Data3_2;
+                            Data.TileHistory[j].Tile[x, y].Data12 = Data.MyMap.Tile[x, y].Data12;
+                            Data.TileHistory[j].Tile[x, y].Data22 = Data.MyMap.Tile[x, y].Data22;
+                            Data.TileHistory[j].Tile[x, y].Data32 = Data.MyMap.Tile[x, y].Data32;
                             Data.TileHistory[j].Tile[x, y].DirBlock = Data.MyMap.Tile[x, y].DirBlock;
                             Data.TileHistory[j].Tile[x, y].Type = Data.MyMap.Tile[x, y].Type;
                             Data.TileHistory[j].Tile[x, y].Type2 = Data.MyMap.Tile[x, y].Type2;
@@ -956,7 +956,7 @@ namespace Client
                 }
             }
 
-            for (i = 0; i < Constant.MAX_MAP_ITEMS; i++)
+            for (i = 0; i < Constant.MaxMapItems; i++)
             {
                 Data.MyMapItem[i].Num = buffer.ReadInt32();
                 Data.MyMapItem[i].Value = buffer.ReadInt32();
@@ -966,7 +966,7 @@ namespace Client
 
             int vitalCount = System.Enum.GetValues(typeof(Core.Vital)).Length;
 
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 Data.MyMapNpc[i].Num = buffer.ReadInt32();
                 Data.MyMapNpc[i].X = (byte)buffer.ReadInt32();
@@ -981,7 +981,7 @@ namespace Client
                 GameState.ResourceIndex = buffer.ReadInt32();
                 GameState.ResourcesInit = false;
                 Core.Data.MapResource = new Core.Type.MapResource[GameState.ResourceIndex];
-                Data.MyMapResource = new Core.Type.MapResourceCache[Constant.MAX_RESOURCES];
+                Data.MyMapResource = new Core.Type.MapResourceCache[Constant.MaxResources];
 
                 if (GameState.ResourceIndex > 0)
                 {
@@ -1029,7 +1029,7 @@ namespace Client
             int i;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 ref var withBlock = ref Data.MyMapNpc[i];
                 withBlock.Num = buffer.ReadInt32();
@@ -1129,7 +1129,7 @@ namespace Client
             buffer.WriteBoolean(Data.MyMap.Indoors);
             buffer.WriteInt32(Data.MyMap.Shop);
 
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
                 buffer.WriteInt32(Data.MyMap.Npc[i]);
 
             var loopTo = (int)Data.MyMap.MaxX;
@@ -1141,9 +1141,9 @@ namespace Client
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data1);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data2);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data3);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data1_2);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data2_2);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data3_2);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data12);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data22);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data32);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].DirBlock);
 
                     int layerCount = System.Enum.GetValues(typeof(MapLayer)).Length;

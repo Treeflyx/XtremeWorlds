@@ -93,9 +93,9 @@ namespace Client
             CheckInterface();
             CheckGradients();
             CheckDesigns();
-            Sound.InitializeBASS();
+            Sound.InitializeBass();
             NetworkConfig.InitNetwork();
-            UI.Load();
+            Ui.Load();
             Gui.Init();
             GameState.Ping = -1;
         }
@@ -180,92 +180,92 @@ namespace Client
             GameState.NumDesigns = GetFileCount(Core.Path.Designs);
         }
 
-        public static void GetResolutionSize(byte Resolution, ref int Width, ref int Height)
+        public static void GetResolutionSize(byte resolution, ref int width, ref int height)
         {
-            switch (Resolution)
+            switch (resolution)
             {
                 case 1:
                     {
-                        Width = 1920;
-                        Height = 1080;
+                        width = 1920;
+                        height = 1080;
                         break;
                     }
                 case 2:
                     {
-                        Width = 1680;
-                        Height = 1050;
+                        width = 1680;
+                        height = 1050;
                         break;
                     }
                 case 3:
                     {
-                        Width = 1600;
-                        Height = 900;
+                        width = 1600;
+                        height = 900;
                         break;
                     }
                 case 4:
                     {
-                        Width = 1440;
-                        Height = 900;
+                        width = 1440;
+                        height = 900;
                         break;
                     }
                 case 5:
                     {
-                        Width = 1440;
-                        Height = 1050;
+                        width = 1440;
+                        height = 1050;
                         break;
                     }
                 case 6:
                     {
-                        Width = 1366;
-                        Height = 768;
+                        width = 1366;
+                        height = 768;
                         break;
                     }
                 case 7:
                     {
-                        Width = 1360;
-                        Height = 1024;
+                        width = 1360;
+                        height = 1024;
                         break;
                     }
                 case 8:
                     {
-                        Width = 1360;
-                        Height = 768;
+                        width = 1360;
+                        height = 768;
                         break;
                     }
                 case 9:
                     {
-                        Width = 1280;
-                        Height = 1024;
+                        width = 1280;
+                        height = 1024;
                         break;
                     }
                 case 10:
                     {
-                        Width = 1280;
-                        Height = 800;
+                        width = 1280;
+                        height = 800;
                         break;
                     }
                 case 11:
                     {
-                        Width = 1280;
-                        Height = 768;
+                        width = 1280;
+                        height = 768;
                         break;
                     }
                 case 12:
                     {
-                        Width = 1280;
-                        Height = 720;
+                        width = 1280;
+                        height = 720;
                         break;
                     }
                 case 13:
                     {
-                        Width = 1120;
-                        Height = 864;
+                        width = 1120;
+                        height = 864;
                         break;
                     }
                 case 14:
                     {
-                        Width = 1024;
-                        Height = 768;
+                        width = 1024;
+                        height = 768;
                         break;
                     }
             }
@@ -288,14 +288,14 @@ namespace Client
             Bank.ClearBanks();
             Party.ClearParty();
 
-            for (int i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (int i = 0; i < Constant.MaxPlayers; i++)
                 Player.ClearPlayer(i);
 
             Animation.ClearAnimInstances();
             Autotile.ClearAutotiles();
 
             // clear chat
-            for (int i = 0; i < Constant.CHAT_LINES; i++)
+            for (int i = 0; i < Constant.ChatLines; i++)
                 Data.Chat[i].Text = "";
         }
 
@@ -320,9 +320,9 @@ namespace Client
             string maxNum = Directory.GetFiles(Core.Path.Music, "*" + SettingsManager.Instance.MusicExt).Count().ToString();
             int counter = 0;
 
-            foreach (var FileName in files)
+            foreach (var fileName in files)
             {
-                Sound.MusicCache[counter] = System.IO.Path.GetFileName(FileName);
+                Sound.MusicCache[counter] = System.IO.Path.GetFileName(fileName);
                 counter = counter + 1;
             }
         }
@@ -334,9 +334,9 @@ namespace Client
             string maxNum = Directory.GetFiles(Core.Path.Sounds, "*" + SettingsManager.Instance.SoundExt).Count().ToString();
             int counter = 0;
 
-            foreach (var FileName in files)
+            foreach (var fileName in files)
             {
-                Sound.SoundCache[counter] = System.IO.Path.GetFileName(FileName);
+                Sound.SoundCache[counter] = System.IO.Path.GetFileName(fileName);
                 counter = counter + 1;
             }
         }
@@ -358,7 +358,7 @@ namespace Client
             // break out of GameLoop
             GameState.InGame = false;
             GameState.InMenu = false;
-            Sound.FreeBASS();
+            Sound.FreeBass();
             NetworkConfig.DestroyNetwork();
             Environment.Exit(0);
         }
@@ -416,9 +416,9 @@ namespace Client
             }
         }
 
-        public static long IsEq(long StartX, long StartY)
+        public static long IsEq(long startX, long startY)
         {
-            long IsEqRet = default;
+            long isEqRet = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -427,46 +427,46 @@ namespace Client
             {
                 if (GetPlayerEquipment(GameState.MyIndex, (Equipment)i) >= 0)
                 {
-                    tempRec.Top = StartY + GameState.EqTop + GameState.SizeY * (i / GameState.EqColumns);
+                    tempRec.Top = startY + GameState.EqTop + GameState.SizeY * (i / GameState.EqColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                    tempRec.Left = StartX + GameState.EqLeft + (GameState.EqOffsetX + GameState.SizeX) * (i % GameState.EqColumns);
+                    tempRec.Left = startX + GameState.EqLeft + (GameState.EqOffsetX + GameState.SizeX) * (i % GameState.EqColumns);
                     tempRec.Right = tempRec.Left + GameState.SizeX;
 
                     if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            IsEqRet = i;
-                            return IsEqRet;
+                            isEqRet = i;
+                            return isEqRet;
                         }
                     }
                 }
             }
 
-            return IsEqRet;
+            return isEqRet;
         }
 
-        public static long IsInv(long StartX, long StartY)
+        public static long IsInv(long startX, long startY)
         {
-            long IsInvRet = default;
+            long isInvRet = default;
             Core.Type.Rect tempRec;
             long i;
 
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
                 if (GetPlayerInv(GameState.MyIndex, (int)i) >= 0)
                 {
-                    tempRec.Top = StartY + GameState.InvTop + (GameState.InvOffsetY) * (i / GameState.InvColumns);
+                    tempRec.Top = startY + GameState.InvTop + (GameState.InvOffsetY) * (i / GameState.InvColumns);
                     tempRec.Bottom = tempRec.Top;
-                    tempRec.Left = StartX + GameState.InvLeft + (GameState.InvOffsetX) * (i % GameState.InvColumns);
+                    tempRec.Left = startX + GameState.InvLeft + (GameState.InvOffsetX) * (i % GameState.InvColumns);
                     tempRec.Right = tempRec.Left;
 
                     if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            IsInvRet = i;
-                            return IsInvRet;
+                            isInvRet = i;
+                            return isInvRet;
                         }
                     }
                 }
@@ -475,27 +475,27 @@ namespace Client
             return -1;
         }
 
-        public static long IsSkill(long StartX, long StartY)
+        public static long IsSkill(long startX, long startY)
         {
-            long IsSkillRet = default;
+            long isSkillRet = default;
             Core.Type.Rect tempRec;
             long i;
 
-            for (i = 0L; i < Constant.MAX_PLAYER_SKILLS; i++)
+            for (i = 0L; i < Constant.MaxPlayerSkills; i++)
             {
                 if (Core.Data.Player[GameState.MyIndex].Skill[(int)i].Num >= 0)
                 {
-                    tempRec.Top = StartY + GameState.SkillTop + (GameState.SkillOffsetY + GameState.SizeY) * (i / GameState.SkillColumns);
+                    tempRec.Top = startY + GameState.SkillTop + (GameState.SkillOffsetY + GameState.SizeY) * (i / GameState.SkillColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                    tempRec.Left = StartX + GameState.SkillLeft + (GameState.SkillOffsetX + GameState.SizeX) * (i % GameState.SkillColumns);
+                    tempRec.Left = startX + GameState.SkillLeft + (GameState.SkillOffsetX + GameState.SizeX) * (i % GameState.SkillColumns);
                     tempRec.Right = tempRec.Left + GameState.SizeX;
 
                     if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            IsSkillRet = i;
-                            return IsSkillRet;
+                            isSkillRet = i;
+                            return isSkillRet;
                         }
                     }
                 }
@@ -504,26 +504,26 @@ namespace Client
             return -1;
         }
 
-        public static long IsBank(long StartX, long StartY)
+        public static long IsBank(long startX, long startY)
         {
-            byte IsBankRet = default;
+            byte isBankRet = default;
             Core.Type.Rect tempRec;
 
-            for (byte i = 0; i < Constant.MAX_BANK; i++)
+            for (byte i = 0; i < Constant.MaxBank; i++)
             {
                 if (GetBank(GameState.MyIndex, (byte)i) >= 0)
                 {
-                    tempRec.Top = StartY + GameState.BankTop + (GameState.BankOffsetY + GameState.SizeY) * (i / GameState.BankColumns);
+                    tempRec.Top = startY + GameState.BankTop + (GameState.BankOffsetY + GameState.SizeY) * (i / GameState.BankColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                    tempRec.Left = StartX + GameState.BankLeft + (GameState.BankOffsetX + GameState.SizeX) * (i % GameState.BankColumns);
+                    tempRec.Left = startX + GameState.BankLeft + (GameState.BankOffsetX + GameState.SizeX) * (i % GameState.BankColumns);
                     tempRec.Right = tempRec.Left + GameState.SizeX;
 
                     if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            IsBankRet = i;
-                            return IsBankRet;
+                            isBankRet = i;
+                            return isBankRet;
                         }
                     }
                 }
@@ -534,25 +534,25 @@ namespace Client
 
         }
 
-        public static long IsShop(long StartX, long StartY)
+        public static long IsShop(long startX, long startY)
         {
-            long IsShopRet = default;
+            long isShopRet = default;
             Core.Type.Rect tempRec;
             long i;
 
-            for (i = 0L; i < Constant.MAX_TRADES; i++)
+            for (i = 0L; i < Constant.MaxTrades; i++)
             {
-                tempRec.Top = StartY + GameState.ShopTop + (GameState.ShopOffsetY + GameState.SizeY) * (i / GameState.ShopColumns);
+                tempRec.Top = startY + GameState.ShopTop + (GameState.ShopOffsetY + GameState.SizeY) * (i / GameState.ShopColumns);
                 tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                tempRec.Left = StartX + GameState.ShopLeft + (GameState.ShopOffsetX + GameState.SizeX) * (i % GameState.ShopColumns);
+                tempRec.Left = startX + GameState.ShopLeft + (GameState.ShopOffsetX + GameState.SizeX) * (i % GameState.ShopColumns);
                 tempRec.Right = tempRec.Left + GameState.SizeX;
 
                 if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        IsShopRet = i;
-                        return IsShopRet;
+                        isShopRet = i;
+                        return isShopRet;
                     }
                 }
             }
@@ -560,25 +560,25 @@ namespace Client
             return -1;
         }
 
-        public static long IsTrade(long StartX, long StartY)
+        public static long IsTrade(long startX, long startY)
         {
-            long IsTradeRet = default;
+            long isTradeRet = default;
             Core.Type.Rect tempRec;
             long i;
 
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
-                tempRec.Top = StartY + GameState.TradeTop + (GameState.TradeOffsetY + GameState.SizeY) * (i / GameState.TradeColumns);
+                tempRec.Top = startY + GameState.TradeTop + (GameState.TradeOffsetY + GameState.SizeY) * (i / GameState.TradeColumns);
                 tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                tempRec.Left = StartX + GameState.TradeLeft + (GameState.TradeOffsetX + GameState.SizeX) * (i % GameState.TradeColumns);
+                tempRec.Left = startX + GameState.TradeLeft + (GameState.TradeOffsetX + GameState.SizeX) * (i % GameState.TradeColumns);
                 tempRec.Right = tempRec.Left + GameState.SizeX;
 
                 if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        IsTradeRet = i;
-                        return IsTradeRet;
+                        isTradeRet = i;
+                        return isTradeRet;
                     }
                 }
             }

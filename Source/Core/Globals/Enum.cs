@@ -67,7 +67,7 @@ namespace Core
     /// Defines special attributes or data flags for a map tile, often used for map serialization.
     /// Note the explicit integer values, which differ from the logical TileType enum.
     /// </summary>
-    public enum XWTileType : byte
+    public enum XwTileType : byte
     {
         None = 0,
         Block = 1,
@@ -276,7 +276,7 @@ namespace Core
         RoofAnimation
     }
 
-    public enum SDMapLayer : byte
+    public enum SdMapLayer : byte
     {
         Ground,
         Mask,
@@ -350,12 +350,12 @@ namespace Core
         TurnRandom,
         TurnTowardPlayer,
         TurnAwayFromPlayer,
-        SetSpeed8xSlower,
-        SetSpeed4xSlower,
-        SetSpeed2xSlower,
+        SetSpeed8XSlower,
+        SetSpeed4XSlower,
+        SetSpeed2XSlower,
         SetSpeedNormal,
-        SetSpeed2xFaster,
-        SetSpeed4xFaster,
+        SetSpeed2XFaster,
+        SetSpeed4XFaster,
         SetFrequencyLowest,
         SetFrequencyLower,
         SetFrequencyNormal,

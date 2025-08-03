@@ -9,13 +9,13 @@
     {
       public sealed class NetworkServer : IDisposable
       {
-        public Dictionary<int, Socket> _socket;
-        public List<int> _unsignedIndex;
+        public Dictionary<int, Socket> Socket;
+        public List<int> UnsignedIndex;
         private Socket _listener;
         private IAsyncResult _pendingAccept;
         private int _packetCount;
         private int _packetSize;
-        public NetworkServer.DataArgs[] PacketID;
+        public NetworkServer.DataArgs[] PacketId;
 
         public int BufferLimit { get; set; }
 
@@ -27,7 +27,7 @@
 
         public int MinimumIndex { get; set; }
 
-        public List<int> ConnectionID() => this._socket == null ? new List<int>() : new List<int>((IEnumerable<int>) this._socket.Keys);
+        public List<int> ConnectionId() => this.Socket == null ? new List<int>() : new List<int>((IEnumerable<int>) this.Socket.Keys);
 
         public event NetworkServer.AccessArgs AccessCheck;
 
@@ -43,51 +43,51 @@
 
         public NetworkServer(int packetCount, int packetSize = 8192, int clientLimit = 0)
         {
-          if (this._listener != null || this._socket != null)
+          if (this._listener != null || this.Socket != null)
             return;
 
           if (packetSize < 0)
             packetSize = 8192;
 
           this._listener?.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
-          this._socket = new Dictionary<int, Socket>();
-          this._unsignedIndex = new List<int>();
+          this.Socket = new Dictionary<int, Socket>();
+          this.UnsignedIndex = new List<int>();
           this.ClientLimit = clientLimit;
           this._packetCount = packetCount;
           this._packetSize = packetSize;
-          this.PacketID = new NetworkServer.DataArgs[packetCount];
+          this.PacketId = new NetworkServer.DataArgs[packetCount];
         }
 
         public void Dispose()
         {
-          if (this._socket == null)
+          if (this.Socket == null)
             return;
           this.StopListening();
-          if (this._socket.Count > 0)
+          if (this.Socket.Count > 0)
           {
-            foreach (int key in this._socket.Keys)
+            foreach (int key in this.Socket.Keys)
               this.Disconnect(key);
           }
-          this._socket.Clear();
-          this._socket = (Dictionary<int, Socket>) null;
-          this.PacketID = (NetworkServer.DataArgs[]) null;
-          this._unsignedIndex.Clear();
-          this._unsignedIndex = (List<int>) null;
+          this.Socket.Clear();
+          this.Socket = (Dictionary<int, Socket>) null;
+          this.PacketId = (NetworkServer.DataArgs[]) null;
+          this.UnsignedIndex.Clear();
+          this.UnsignedIndex = (List<int>) null;
           this.AccessCheck = (NetworkServer.AccessArgs) null;
           this.ConnectionReceived = (NetworkServer.ConnectionArgs) null;
           this.ConnectionLost = (NetworkServer.ConnectionArgs) null;
           this.CrashReport = (NetworkServer.CrashReportArgs) null;
           this.PacketReceived = (NetworkServer.PacketInfoArgs) null;
           this.TrafficReceived = (NetworkServer.TrafficInfoArgs) null;
-          this.PacketID = (NetworkServer.DataArgs[]) null;
+          this.PacketId = (NetworkServer.DataArgs[]) null;
         }
 
         public bool IsConnected(int index)
         {
-          if (this._socket == null || !this._socket.ContainsKey(index))
+          if (this.Socket == null || !this.Socket.ContainsKey(index))
             return false;
 
-          if (this._socket[index].Connected)
+          if (this.Socket[index].Connected)
             return true;
 
           this.Disconnect(index);
@@ -96,21 +96,21 @@
 
         public string GetIPv4() => Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
 
-        public string ClientIP(int index) => !this.IsConnected(index) ? "[Null]" : ((IPEndPoint) this._socket[index].RemoteEndPoint).Address.ToString();
+        public string ClientIp(int index) => !this.IsConnected(index) ? "[Null]" : ((IPEndPoint) this.Socket[index].RemoteEndPoint).Address.ToString();
 
         public void Disconnect(int index)
         {
-            if (_socket == null || !_socket.ContainsKey(index))
+            if (Socket == null || !Socket.ContainsKey(index))
                 return;
 
             // Retrieve the socket from the dictionary
-            Socket socket = _socket[index];
+            Socket socket = Socket[index];
 
             if (socket == null)
             {
                 // Remove the entry if the socket is null
-                _socket.Remove(index);
-                _unsignedIndex.Add(index);
+                Socket.Remove(index);
+                UnsignedIndex.Add(index);
             }
             else
             {
@@ -132,7 +132,7 @@
         // Callback for handling the end of the disconnect
         private void DoDisconnect(IAsyncResult ar)
         {
-            if (_socket is null)
+            if (Socket is null)
             {
                 return;
             }
@@ -142,15 +142,15 @@
             try
             {
                 // Complete the disconnection process
-                if (_socket.ContainsKey(index) && _socket[index] != null)
+                if (Socket.ContainsKey(index) && Socket[index] != null)
                 {
-                    _socket[index].EndDisconnect(ar);
-                    _socket[index].Close();
+                    Socket[index].EndDisconnect(ar);
+                    Socket[index].Close();
                 }
 
                 // Remove the socket and mark the index as available
-                _socket.Remove(index);
-                _unsignedIndex.Add(index);
+                Socket.Remove(index);
+                UnsignedIndex.Add(index);
 
                 // Trigger the ConnectionLost event
                 NetworkServer.ConnectionArgs connectionLost = this.ConnectionLost;
@@ -168,11 +168,11 @@
         // Fallback method to forcefully remove the socket if needed
         private void ForceDisconnect(int index)
         {
-          if (_socket.ContainsKey(index))
+          if (Socket.ContainsKey(index))
           {
             try
             {
-              _socket[index]?.Close();
+              Socket[index]?.Close();
             }
             catch (Exception ex)
             {
@@ -180,14 +180,14 @@
             }
 
             // Remove the socket and mark the index as available
-            _socket.Remove(index);
-            _unsignedIndex.Add(index);
+            Socket.Remove(index);
+            UnsignedIndex.Add(index);
           }
         }
     
         private int FindEmptySlot(int startIndex)
         {
-            using (List<int>.Enumerator enumerator = this._unsignedIndex.GetEnumerator())
+            using (List<int>.Enumerator enumerator = this.UnsignedIndex.GetEnumerator())
             {
                 if (enumerator.MoveNext())
                 {
@@ -196,12 +196,12 @@
                     {
                         this.HighIndex = current;
                     }
-                    this._unsignedIndex.Remove(current);
+                    this.UnsignedIndex.Remove(current);
                     return current;
                 }
             }
 
-            if (this._socket.Count == 0)
+            if (this.Socket.Count == 0)
             {
                 this.HighIndex = startIndex + 1;
                 return startIndex;
@@ -213,7 +213,7 @@
 
         public async System.Threading.Tasks.Task StartListeningAsync(int port, int backlog)
         {
-            if (this._socket == null || this.IsListening || this._listener != null)
+            if (this.Socket == null || this.IsListening || this._listener != null)
                 return;
             this._listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this._listener.NoDelay = true;
@@ -228,7 +228,7 @@
 
         public void StopListening()
         {
-            if (!this.IsListening || this._socket == null)
+            if (!this.IsListening || this.Socket == null)
             return;
             this.IsListening = false;
             if (this._listener == null)
@@ -246,9 +246,9 @@
                 if (socket != null)
                 {
                     int emptySlot = this.FindEmptySlot(this.MinimumIndex);
-                    this._socket.TryAdd(emptySlot, socket);
-                    this._socket[emptySlot].ReceiveBufferSize = this._packetSize;
-                    this._socket[emptySlot].SendBufferSize = this._packetSize;
+                    this.Socket.TryAdd(emptySlot, socket);
+                    this.Socket[emptySlot].ReceiveBufferSize = this._packetSize;
+                    this.Socket[emptySlot].SendBufferSize = this._packetSize;
                     this.BeginReceiveData(emptySlot);
                     NetworkServer.ConnectionArgs connectionReceived = this.ConnectionReceived;
                     if (connectionReceived != null)
@@ -273,7 +273,7 @@
 
         private void ListenManager()
         {
-            if (!this.IsListening || this._listener == null || this._pendingAccept != null || this.ClientLimit > 0 && this.ClientLimit <= this._socket.Count)
+            if (!this.IsListening || this._listener == null || this._pendingAccept != null || this.ClientLimit > 0 && this.ClientLimit <= this.Socket.Count)
             return;
             this._pendingAccept = this._listener.BeginAccept(new AsyncCallback(this.DoAcceptClient), (object) null);
         }
@@ -281,12 +281,12 @@
         private void BeginReceiveData(int index)
         {
             NetworkServer.ReceiveState state = new NetworkServer.ReceiveState(index, this._packetSize);
-            this._socket[index].BeginReceive(state.Buffer, 0, this._packetSize, SocketFlags.None, new AsyncCallback(this.DoReceive), (object) state);
+            this.Socket[index].BeginReceive(state.Buffer, 0, this._packetSize, SocketFlags.None, new AsyncCallback(this.DoReceive), (object) state);
         }
 
         private void DoReceive(IAsyncResult ar)
         {
-            if (this._socket == null)
+            if (this.Socket == null)
                 return;
 
             if (!(ar.AsyncState is NetworkServer.ReceiveState asyncState))
@@ -295,7 +295,7 @@
                 return;
             }
 
-            if (!_socket.ContainsKey(asyncState.Index))
+            if (!Socket.ContainsKey(asyncState.Index))
             {
                 // Do not disconnect here, just return
                 return;
@@ -304,7 +304,7 @@
             int receivedLength;
             try
             {
-                receivedLength = _socket[asyncState.Index].EndReceive(ar);
+                receivedLength = Socket[asyncState.Index].EndReceive(ar);
             }
             catch (SocketException ex)
             {
@@ -344,7 +344,7 @@
                 return;
             }
 
-            if (!_socket[asyncState.Index].Connected)
+            if (!Socket[asyncState.Index].Connected)
             {
                 DisconnectAndDispose(asyncState.Index, asyncState);
                 return;
@@ -354,9 +354,9 @@
 
             asyncState.Buffer = new byte[this._packetSize];
 
-            if (_socket.ContainsKey(asyncState.Index) && _socket[asyncState.Index].Connected)
+            if (Socket.ContainsKey(asyncState.Index) && Socket[asyncState.Index].Connected)
             {
-                _socket[asyncState.Index].BeginReceive(
+                Socket[asyncState.Index].BeginReceive(
                     asyncState.Buffer, 0, this._packetSize, SocketFlags.None,
                     new AsyncCallback(this.DoReceive), asyncState);
             }
@@ -426,12 +426,12 @@
                             int packetId = BitConverter.ToInt32(so.RingBuffer, startIndex);
                             if (packetId >= 0 && packetId < this._packetCount)
                             {
-                                if (this.PacketID[packetId] != null)
+                                if (this.PacketId[packetId] != null)
                                 {
                                     if (this.AccessCheck != null)
                                     {
                                         this.AccessCheck(index, packetId);
-                                        if (!this._socket.ContainsKey(index))
+                                        if (!this.Socket.ContainsKey(index))
                                             break;
                                     }
                                     int dataLength = packetLength - 4;
@@ -439,7 +439,7 @@
                                     if (dataLength > 0)
                                         Buffer.BlockCopy(so.RingBuffer, startIndex + 4, data, 0, dataLength);
                                     this.PacketReceived?.Invoke(dataLength, packetId, ref data);
-                                    this.PacketID[packetId](index, ref data);
+                                    this.PacketId[packetId](index, ref data);
                                     num = startIndex + packetLength;
                                     --so.PacketCount;
                                     flag = true;
@@ -478,7 +478,7 @@
             return;
 
         NullReference:
-            if (!this._socket.ContainsKey(index))
+            if (!this.Socket.ContainsKey(index))
             {
                 so.Dispose();
                 return;
@@ -488,7 +488,7 @@
             so.Dispose();
             return;
         IndexOutofRange:
-            if (!this._socket.ContainsKey(index))
+            if (!this.Socket.ContainsKey(index))
             {
                 so.Dispose();
                 return;
@@ -498,7 +498,7 @@
             so.Dispose();
             return;
         BrokenPacket:
-            if (!this._socket.ContainsKey(index))
+            if (!this.Socket.ContainsKey(index))
             {
                 so.Dispose();
                 return;
@@ -526,35 +526,35 @@
 
         public void SendDataTo(int index, ReadOnlySpan<byte> data)
         {
-            if (this._socket == null)
+            if (this.Socket == null)
             {
                 // Initialize _socket or handle the null case appropriately
                 Console.WriteLine("Socket dictionary is null.");
                 return;
             }
 
-            if (!this._socket.ContainsKey(index))
+            if (!this.Socket.ContainsKey(index))
                 return;
 
-            if (this._socket[index] == null || !this._socket[index].Connected)
+            if (this.Socket[index] == null || !this.Socket[index].Connected)
                 this.Disconnect(index);
             else
-                this._socket[index].BeginSend(data.ToArray(), 0, data.Length, SocketFlags.None, new AsyncCallback(this.DoSend), (object)index);
+                this.Socket[index].BeginSend(data.ToArray(), 0, data.Length, SocketFlags.None, new AsyncCallback(this.DoSend), (object)index);
         }
 
         public void SendDataTo(int index, ReadOnlySpan<byte> data, int head)
         {
-            if (this._socket == null)
+            if (this.Socket == null)
             {
                 // Initialize _socket or handle the null case appropriately
                 Console.WriteLine("Socket dictionary is null.");
                 return;
             }
 
-            if (!this._socket.ContainsKey(index))
+            if (!this.Socket.ContainsKey(index))
                 return;
 
-            if (this._socket[index] == null || !this._socket[index].Connected)
+            if (this.Socket[index] == null || !this.Socket[index].Connected)
             {
                 this.Disconnect(index);
             }
@@ -565,7 +565,7 @@
                 Buffer.BlockCopy((Array)data.ToArray(), 0, (Array)numArray, 4, head);
                 try
                 {
-                    this._socket[index].BeginSend(numArray, 0, head + 4, SocketFlags.None, new AsyncCallback(this.DoSend), (object)index);
+                    this.Socket[index].BeginSend(numArray, 0, head + 4, SocketFlags.None, new AsyncCallback(this.DoSend), (object)index);
                 }
                 catch (SocketException ex)
                 {
@@ -584,7 +584,7 @@
         {
           for (int index = 0; index <= this.HighIndex; ++index)
           {
-            if (this._socket.ContainsKey(index))
+            if (this.Socket.ContainsKey(index))
               this.SendDataTo(index, data);
           }
         }
@@ -597,7 +597,7 @@
       
           for (int index = 0; index <= this.HighIndex; ++index)
           {
-            if (this._socket.ContainsKey(index))
+            if (this.Socket.ContainsKey(index))
               this.SendDataTo(index, numArray);
           }
         }
@@ -606,7 +606,7 @@
         {
           for (int index1 = 0; index1 <= this.HighIndex; ++index1)
           {
-            if (this._socket.ContainsKey(index1) && index1 != index)
+            if (this.Socket.ContainsKey(index1) && index1 != index)
               this.SendDataTo(index1, data);
           }
         }
@@ -618,7 +618,7 @@
           Buffer.BlockCopy((Array) data.ToArray(), 0, (Array) numArray, 4, head);
           for (int index1 = 0; index1 <= this.HighIndex; ++index1)
           {
-            if (this._socket.ContainsKey(index1) && index1 != index)
+            if (this.Socket.ContainsKey(index1) && index1 != index)
               this.SendDataTo(index1, numArray);
           }
         }
@@ -626,7 +626,7 @@
         private void DoSend(IAsyncResult ar)
         {
           int asyncState = (int) ar.AsyncState;
-          this._socket[asyncState].EndSend(ar);
+          this.Socket[asyncState].EndSend(ar);
         }
 
         private struct ReceiveState : IDisposable
@@ -651,7 +651,7 @@
           }
         }
 
-        public delegate void AccessArgs(int index, int packet_id);
+        public delegate void AccessArgs(int index, int packetId);
 
         public delegate void ConnectionArgs(int index);
 

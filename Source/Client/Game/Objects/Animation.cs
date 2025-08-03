@@ -128,7 +128,7 @@ namespace Client
             string sound;
 
             // if doesn't exist then exit sub
-            if (AnimInstance[index].Animation < 0 || AnimInstance[index].Animation > Constant.MAX_ANIMATIONS)
+            if (AnimInstance[index].Animation < 0 || AnimInstance[index].Animation > Constant.MaxAnimations)
                 return;
 
             StreamAnimation(AnimInstance[index].Animation);
@@ -292,36 +292,36 @@ namespace Client
             Data.Animation[index] = default;
             Data.Animation[index] = new Core.Type.Animation();
 
-            for (int X = 0; X <= 1; X++)
-                Data.Animation[index].Sprite = new int[X + 1];
+            for (int x = 0; x <= 1; x++)
+                Data.Animation[index].Sprite = new int[x + 1];
 
-            for (int X = 0; X <= 1; X++)
-                Data.Animation[index].Frames = new int[X + 1];
+            for (int x = 0; x <= 1; x++)
+                Data.Animation[index].Frames = new int[x + 1];
 
             for (int x = 0; x <= 1; x++)
                 Data.Animation[index].Frames[x] = 5;
 
-            for (int X = 0; X <= 1; X++)
-                Data.Animation[index].LoopCount = new int[X + 1];
+            for (int x = 0; x <= 1; x++)
+                Data.Animation[index].LoopCount = new int[x + 1];
 
-            for (int X = 0; X <= 1; X++)
-                Data.Animation[index].LoopTime = new int[X + 1];
+            for (int x = 0; x <= 1; x++)
+                Data.Animation[index].LoopTime = new int[x + 1];
 
             Data.Animation[index].Name = "";
             Data.Animation[index].LoopCount[0] = 1;
             Data.Animation[index].LoopCount[1] = 1;
             Data.Animation[index].LoopTime[0] = 1;
             Data.Animation[index].LoopTime[1] = 1;
-            GameState.Animation_Loaded[index] = 0;
+            GameState.AnimationLoaded[index] = 0;
         }
 
         public static void ClearAnimations()
         {
             int i;
 
-            Data.Animation = new Core.Type.Animation[Core.Constant.MAX_ANIMATIONS];
+            Data.Animation = new Core.Type.Animation[Core.Constant.MaxAnimations];
 
-            for (i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (i = 0; i < Constant.MaxAnimations; i++)
                 ClearAnimation(i);
         }
 
@@ -333,17 +333,17 @@ namespace Client
 
             for (i = 0; i < byte.MaxValue; i++)
             {
-                for (int X = 0; X <= 1; X++)
-                    AnimInstance[i].Timer = new int[X + 1];
+                for (int x = 0; x <= 1; x++)
+                    AnimInstance[i].Timer = new int[x + 1];
 
-                for (int X = 0; X <= 1; X++)
-                    AnimInstance[i].Used = new bool[X + 1];
+                for (int x = 0; x <= 1; x++)
+                    AnimInstance[i].Used = new bool[x + 1];
 
-                for (int X = 0; X <= 1; X++)
-                    AnimInstance[i].LoopIndex = new int[X + 1];
+                for (int x = 0; x <= 1; x++)
+                    AnimInstance[i].LoopIndex = new int[x + 1];
 
-                for (int X = 0; X <= 1; X++)
-                    AnimInstance[i].FrameIndex = new int[X + 1];
+                for (int x = 0; x <= 1; x++)
+                    AnimInstance[i].FrameIndex = new int[x + 1];
 
                 ClearAnimInstance(i);
             }
@@ -371,9 +371,9 @@ namespace Client
 
         public static void StreamAnimation(int animationNum)
         {
-            if (animationNum >= 0 && string.IsNullOrEmpty(Data.Animation[animationNum].Name) && GameState.Animation_Loaded[animationNum] == 0)
+            if (animationNum >= 0 && string.IsNullOrEmpty(Data.Animation[animationNum].Name) && GameState.AnimationLoaded[animationNum] == 0)
             {
-                GameState.Animation_Loaded[animationNum] = 1;
+                GameState.AnimationLoaded[animationNum] = 1;
                 SendRequestAnimation(animationNum);
             }
         }

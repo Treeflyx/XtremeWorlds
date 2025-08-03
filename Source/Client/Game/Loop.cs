@@ -11,56 +11,56 @@ namespace Client
     public class Loop
     {
         // Declare private fields
-        private static int i;
-        private static int tmr1000;
-        private static int tick;
-        private static int fogTmr;
-        private static int chatTmr;
-        private static int tmpFps;
-        private static int tmpLps;
-        private static int walkTimer;
-        private static int frameTime;
-        private static int tmrWeather;
-        private static int barTmr;
-        private static int tmr25;
-        private static int tmr500;
-        private static int tmr250;
-        private static int tmrConnect;
-        private static int TickFPS;
-        private static int fadeTmr;
-        private static int renderTmr;
-        private static int[] animationTmr = new int[2];
+        private static int _i;
+        private static int _tmr1000;
+        private static int _tick;
+        private static int _fogTmr;
+        private static int _chatTmr;
+        private static int _tmpFps;
+        private static int _tmpLps;
+        private static int _walkTimer;
+        private static int _frameTime;
+        private static int _tmrWeather;
+        private static int _barTmr;
+        private static int _tmr25;
+        private static int _tmr500;
+        private static int _tmr250;
+        private static int _tmrConnect;
+        private static int _tickFps;
+        private static int _fadeTmr;
+        private static int _renderTmr;
+        private static int[] _animationTmr = new int[2];
 
         public static void Game()
         {
-            tick = General.GetTickCount();
-            GameState.ElapsedTime = tick - frameTime; // Set the time difference for time-based movement
+            _tick = General.GetTickCount();
+            GameState.ElapsedTime = _tick - _frameTime; // Set the time difference for time-based movement
 
-            frameTime = tick;
+            _frameTime = _tick;
 
             if (GameLogic.GameStarted())
             {
-                if (tmr1000 < tick)
+                if (_tmr1000 < _tick)
                 {
                     NetworkSend.GetPing();
-                    tmr1000 = tick + 1000;
+                    _tmr1000 = _tick + 1000;
                 }
 
-                if (tmr25 < tick)
+                if (_tmr25 < _tick)
                 {
                     Sound.PlayMusic(Data.MyMap.Music);
-                    tmr25 = tick + 25;
+                    _tmr25 = _tick + 25;
                 }
 
-                if (GameState.ShowAnimTimer < tick)
+                if (GameState.ShowAnimTimer < _tick)
                 {
                     GameState.ShowAnimLayers = !GameState.ShowAnimLayers;
-                    GameState.ShowAnimTimer = tick + 500;
+                    GameState.ShowAnimTimer = _tick + 500;
                 }
 
                 for (int layer = 0; layer <= 1; layer++)
                 {
-                    if (animationTmr[layer] < tick)
+                    if (_animationTmr[layer] < _tick)
                     {
                         for (byte x = 0, loopTo = Data.MyMap.MaxX; x < loopTo; x++)
                         {
@@ -70,12 +70,12 @@ namespace Client
                                 {
                                     if (Data.MyMap.Tile[x, y].Type == TileType.Animation)
                                     {                                      
-                                        animationTmr[layer] = tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data1].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data1, x, y);
+                                        _animationTmr[layer] = _tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data1].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data1, x, y);
                                     }
 
                                     if (Data.MyMap.Tile[x, y].Type2 == TileType.Animation)
                                     {
-                                        animationTmr[layer] = tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data1_2].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data1_2, x, y);
+                                        _animationTmr[layer] = _tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data12].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data12, x, y);
                                     }
                                 }
                             }
@@ -86,15 +86,15 @@ namespace Client
                     }
                 }
 
-                for (i = 0; i < byte.MaxValue; i++)
+                for (_i = 0; _i < byte.MaxValue; _i++)
                 {
-                    Animation.CheckAnimInstance(i);
+                    Animation.CheckAnimInstance(_i);
                 }
 
                 // screenshake
                 if (GameState.ShakeTimerEnabled)
                 {
-                    if (GameState.ShakeTimer < tick)
+                    if (GameState.ShakeTimer < _tick)
                     {
                         if (GameState.ShakeCount < 10)
                         {
@@ -115,22 +115,22 @@ namespace Client
 
                         GameState.ShakeCount += 1;
 
-                        GameState.ShakeTimer = tick + 50;
+                        GameState.ShakeTimer = _tick + 50;
                     }
                 }
 
                 // check if we need to end the CD icon
                 if (GameState.NumSkills > 0)
                 {
-                    for (i = 0; i < Constant.MAX_PLAYER_SKILLS; i++)
+                    for (_i = 0; _i < Constant.MaxPlayerSkills; _i++)
                     {
-                        if (Core.Data.Player[GameState.MyIndex].Skill[i].Num >= 0)
+                        if (Core.Data.Player[GameState.MyIndex].Skill[_i].Num >= 0)
                         {
-                            if (Core.Data.Player[GameState.MyIndex].Skill[i].CD > 0)
+                            if (Core.Data.Player[GameState.MyIndex].Skill[_i].Cd > 0)
                             {
-                                if (Core.Data.Player[GameState.MyIndex].Skill[i].CD + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[i].Num].CdTime * 1000 < tick)
+                                if (Core.Data.Player[GameState.MyIndex].Skill[_i].Cd + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[_i].Num].CdTime * 1000 < _tick)
                                 {
-                                    Core.Data.Player[GameState.MyIndex].Skill[i].CD = 0;
+                                    Core.Data.Player[GameState.MyIndex].Skill[_i].Cd = 0;
                                 }
                             }
                         }
@@ -140,7 +140,7 @@ namespace Client
                 // check if we need to unlock the player's skill casting restriction
                 if (GameState.SkillBuffer >= 0)
                 {
-                    if (GameState.SkillBufferTimer + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[GameState.SkillBuffer].Num].CastTime * 1000 < tick)
+                    if (GameState.SkillBufferTimer + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[GameState.SkillBuffer].Num].CastTime * 1000 < _tick)
                     {
                         GameState.SkillBuffer = -1;
                         GameState.SkillBufferTimer = 0;
@@ -148,7 +148,7 @@ namespace Client
                 }
                 
                 // Process input before rendering, otherwise input will be behind by 1 frame
-                if (walkTimer < tick)
+                if (_walkTimer < _tick)
                 {
                     if (GameState.CanMoveNow)
                     {
@@ -157,32 +157,32 @@ namespace Client
                     }
                     
                     // Process player movements
-                    for (i = 0; i < Constant.MAX_PLAYERS; i++)
+                    for (_i = 0; _i < Constant.MaxPlayers; _i++)
                     {
-                        if (IsPlaying(i))
+                        if (IsPlaying(_i))
                         {
-                            Player.ProcessPlayerMovement(i);                            
+                            Player.ProcessPlayerMovement(_i);                            
                         }
                     }
 
                     // Process npc movements
-                    for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+                    for (_i = 0; _i < Constant.MaxMapNpcs; _i++)
                     {
-                        GameLogic.ProcessNpcMovement(i);
+                        GameLogic.ProcessNpcMovement(_i);
                         
                     }
 
                     var loopTo2 = GameState.CurrentEvents;
-                    for (i = 0; i < loopTo2; i++)
+                    for (_i = 0; _i < loopTo2; _i++)
                     {
-                        Event.ProcessEventMovement(i);
+                        Event.ProcessEventMovement(_i);
                     }
 
-                    walkTimer = tick + 10;
+                    _walkTimer = _tick + 10;
                 }
 
                 // chat timer
-                if (chatTmr < tick)
+                if (_chatTmr < _tick)
                 {
                     // scrolling
                     if (GameState.ChatButtonUp)
@@ -195,11 +195,11 @@ namespace Client
                         GameLogic.ScrollChatBox(1);
                     }
 
-                    chatTmr = tick + 50;
+                    _chatTmr = _tick + 50;
                 }
 
                 // fog scrolling
-                if (fogTmr < tick)
+                if (_fogTmr < _tick)
                 {
                     if (GameState.CurrentFogSpeed > 0)
                     {
@@ -214,11 +214,11 @@ namespace Client
                         if (GameState.FogOffsetY < -255)
                             GameState.FogOffsetY = 1;
 
-                        fogTmr = tick + 255 - GameState.CurrentFogSpeed;
+                        _fogTmr = _tick + 255 - GameState.CurrentFogSpeed;
                     }
                 }
 
-                if (tmr500 < tick)
+                if (_tmr500 < _tick)
                 {
                     // animate waterfalls
                     switch (GameState.WaterfallFrame)
@@ -270,40 +270,40 @@ namespace Client
                         GameState.ChatShowLine = "|";
                     }
 
-                    tmr500 = tick + 500;
+                    _tmr500 = _tick + 500;
                 }
 
                 // elastic bars
-                if (barTmr < tick)
+                if (_barTmr < _tick)
                 {
-                    GameLogic.SetBarWidth(ref GameState.BarWidth_GuiHP_Max, ref GameState.BarWidth_GuiHP);
-                    GameLogic.SetBarWidth(ref GameState.BarWidth_GuiSP_Max, ref GameState.BarWidth_GuiSP);
-                    GameLogic.SetBarWidth(ref GameState.BarWidth_GuiEXP_Max, ref GameState.BarWidth_GuiEXP);
-                    for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+                    GameLogic.SetBarWidth(ref GameState.BarWidthGuiHpMax, ref GameState.BarWidthGuiHp);
+                    GameLogic.SetBarWidth(ref GameState.BarWidthGuiSpMax, ref GameState.BarWidthGuiSp);
+                    GameLogic.SetBarWidth(ref GameState.BarWidthGuiExpMax, ref GameState.BarWidthGuiExp);
+                    for (_i = 0; _i < Constant.MaxMapNpcs; _i++)
                     {
-                        if (Data.MyMapNpc[i].Num >= 0)
+                        if (Data.MyMapNpc[_i].Num >= 0)
                         {
-                            GameLogic.SetBarWidth(ref GameState.BarWidth_NpcHP_Max[i], ref GameState.BarWidth_NpcHP[i]);
+                            GameLogic.SetBarWidth(ref GameState.BarWidthNpcHpMax[_i], ref GameState.BarWidthNpcHp[_i]);
                         }
                     }
 
-                    for (i = 0; i < Constant.MAX_PLAYERS; i++)
+                    for (_i = 0; _i < Constant.MaxPlayers; _i++)
                     {
-                        if (IsPlaying(i) & GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
+                        if (IsPlaying(_i) & GetPlayerMap(_i) == GetPlayerMap(GameState.MyIndex))
                         {
-                            GameLogic.SetBarWidth(ref GameState.BarWidth_PlayerHP_Max[i], ref GameState.BarWidth_PlayerHP[i]);
-                            GameLogic.SetBarWidth(ref GameState.BarWidth_PlayerSP_Max[i], ref GameState.BarWidth_PlayerSP[i]);
+                            GameLogic.SetBarWidth(ref GameState.BarWidthPlayerHpMax[_i], ref GameState.BarWidthPlayerHp[_i]);
+                            GameLogic.SetBarWidth(ref GameState.BarWidthPlayerSpMax[_i], ref GameState.BarWidthPlayerSp[_i]);
                         }
                     }
 
                     // reset timer
-                    barTmr = tick + 10;
+                    _barTmr = _tick + 10;
                 }
 
                 // Change map animation
-                if (tmr250 < tick)
+                if (_tmr250 < _tick)
                 {
-                    for (int i = 0; i < Constant.MAX_PLAYERS; i++)
+                    for (int i = 0; i < Constant.MaxPlayers; i++)
                     {
                         if (IsPlaying(i))
                         {
@@ -322,7 +322,7 @@ namespace Client
                         }
                     }
 
-                    for (int i = 0; i < Constant.MAX_MAP_NPCS; i++)
+                    for (int i = 0; i < Constant.MaxMapNpcs; i++)
                     {
                         if (Data.MyMapNpc[i].Num >= 0)
                         {
@@ -339,24 +339,24 @@ namespace Client
                     }
 
                     var loopTo = GameState.CurrentEvents;
-                    for (i = 0; i < loopTo; i++)
+                    for (_i = 0; _i < loopTo; _i++)
                     {
-                        if (Data.MapEvents[i].WalkAnim == 1)
+                        if (Data.MapEvents[_i].WalkAnim == 1)
                         {
                             // Check if completed walking over to the next tile
-                            if (Data.MyMapNpc[i].Steps == 3)
+                            if (Data.MyMapNpc[_i].Steps == 3)
                             {
-                                Data.MyMapNpc[i].Steps = 0;
+                                Data.MyMapNpc[_i].Steps = 0;
                             }
                             else
                             {
-                                Data.MyMapNpc[i].Steps++;
+                                Data.MyMapNpc[_i].Steps++;
                             }
                         }
                     }
 
                     GameState.MapAnim = !GameState.MapAnim;
-                    tmr250 = tick + 250;
+                    _tmr250 = _tick + 250;
                 }
 
                 if (Sound.FadeInSwitch == true)
@@ -371,7 +371,7 @@ namespace Client
             }
             else
             {
-                if (tmr500 < tick)
+                if (_tmr500 < _tick)
                 {
                     // animate textbox
                     if (GameState.ChatShowLine == "|")
@@ -383,23 +383,23 @@ namespace Client
                         GameState.ChatShowLine = "|";
                     }
 
-                    tmr500 = tick + 500;
+                    _tmr500 = _tick + 500;
                 }
 
-                if (tmr25 < tick)
+                if (_tmr25 < _tick)
                 {
                     Sound.PlayMusic(SettingsManager.Instance.MenuMusic);
-                    tmr25 = tick + 25;
+                    _tmr25 = _tick + 25;
                 }
             }
 
-            if (tmrWeather < tick)
+            if (_tmrWeather < _tick)
             {
                 Weather.ProcessWeather();
-                tmrWeather = tick + 50;
+                _tmrWeather = _tick + 50;
             }
 
-            if (fadeTmr < tick)
+            if (_fadeTmr < _tick)
             {
                 if (GameState.FadeType != 2)
                 {
@@ -426,10 +426,10 @@ namespace Client
                         }
                     }
                 }
-                fadeTmr = tick + 30;
+                _fadeTmr = _tick + 30;
             }
 
-            Gui.ResizeGUI();
+            Gui.ResizeGui();
         }
     }
 }

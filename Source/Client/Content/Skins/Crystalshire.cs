@@ -13,120 +13,120 @@ public class Crystalshire
     public void UpdateWindow_Login()
     {
         // Control the window
-        Client.Gui.UpdateWindow("winLogin", "Login", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 276L, 212L, 45L, true, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
+        Client.Gui.UpdateWindow("winLogin", "Login", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 276L, 212L, 45L, true, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Parchment
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 264L, 180L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 264L, 180L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, onDraw: ref argonDraw);
 
         // Shadows
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 67L, 43L, 142L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 67L, 43L, 142L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 67L, 79L, 142L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw2);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 67L, 79L, 142L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw2);
 
         // Close button
-        var argcallback_mousedown3 = new Action(Client.General.DestroyGame);
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3);
+        var argcallbackMousedown3 = new Action(Client.General.DestroyGame);
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3);
 
         // Buttons
-        var argcallback_mousedown4 = new Action(Client.NetworkSend.btnLogin_Click);
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 67L, 134L, 67L, 22L, "Accept", Core.Font.Arial, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4);
-        var argcallback_mousedown5 = new Action(Client.General.DestroyGame);
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 142L, 134L, 67L, 22L, "Exit", Core.Font.Arial, design_norm: (long)UiDesign.Red, design_hover: (long)UiDesign.RedHover, design_mousedown: (long)UiDesign.RedClick, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5);
+        var argcallbackMousedown4 = new Action(Client.NetworkSend.btnLogin_Click);
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 67L, 134L, 67L, 22L, "Accept", Core.Font.Arial, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4);
+        var argcallbackMousedown5 = new Action(Client.General.DestroyGame);
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 142L, 134L, 67L, 22L, "Exit", Core.Font.Arial, designNorm: (long)UiDesign.Red, designHover: (long)UiDesign.RedHover, designMousedown: (long)UiDesign.RedClick, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5);
 
         // Labels
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblUsername", 72L, 39L, 142L, 10L, "Username", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6, enabled: ref enabled);
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPassword", 72L, 75L, 142L, 10L, "Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblUsername", 72L, 39L, 142L, 10L, "Username", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6, enabled: ref enabled);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPassword", 72L, 75L, 142L, 10L, "Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7, enabled: ref enabled);
 
         // Textboxes
         if (SettingsManager.Instance.SaveUsername == true)
         {
-            Action argcallback_norm8 = null;
-            Action argcallback_hover8 = null;
-            Action argcallback_mousedown8 = null;
-            Action argcallback_mousemove8 = null;
-            Action argcallback_dblclick8 = null;
-            Action argcallback_enter = null;
-            Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, SettingsManager.Instance.Username, Core.Font.Arial, Alignment.Left, xOffset: 5L, yOffset: 3L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, callback_enter: ref argcallback_enter);
+            Action argcallbackNorm8 = null;
+            Action argcallbackHover8 = null;
+            Action argcallbackMousedown8 = null;
+            Action argcallbackMousemove8 = null;
+            Action argcallbackDblclick8 = null;
+            Action argcallbackEnter = null;
+            Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, SettingsManager.Instance.Username, Core.Font.Arial, Alignment.Left, xOffset: 5L, yOffset: 3L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, callbackEnter: ref argcallbackEnter);
         }
         else
         {
-            Action argcallback_norm9 = null;
-            Action argcallback_hover9 = null;
-            Action argcallback_mousedown9 = null;
-            Action argcallback_mousemove9 = null;
-            Action argcallback_dblclick9 = null;
-            Action argcallback_enter1 = null;
-            Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, xOffset: 5L, yOffset: 3L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm9, callback_hover: ref argcallback_hover9, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, callback_enter: ref argcallback_enter1);
+            Action argcallbackNorm9 = null;
+            Action argcallbackHover9 = null;
+            Action argcallbackMousedown9 = null;
+            Action argcallbackMousemove9 = null;
+            Action argcallbackDblclick9 = null;
+            Action argcallbackEnter1 = null;
+            Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, xOffset: 5L, yOffset: 3L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm9, callbackHover: ref argcallbackHover9, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, callbackEnter: ref argcallbackEnter1);
         }
-        Action argcallback_norm10 = null;
-        Action argcallback_hover10 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Action argcallback_enter2 = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtPassword", 67L, 86L, 142L, 19L, font: Core.Font.Arial, align: Alignment.Left, xOffset: 5L, yOffset: 3L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, censor: true, callback_norm: ref argcallback_norm10, callback_hover: ref argcallback_hover10, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, callback_enter: ref argcallback_enter2);
+        Action argcallbackNorm10 = null;
+        Action argcallbackHover10 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Action argcallbackEnter2 = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtPassword", 67L, 86L, 142L, 19L, font: Core.Font.Arial, align: Alignment.Left, xOffset: 5L, yOffset: 3L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, censor: true, callbackNorm: ref argcallbackNorm10, callbackHover: ref argcallbackHover10, callbackMousedown: ref argcallbackMousedown10, callbackMousemove: ref argcallbackMousemove10, callbackDblclick: ref argcallbackDblclick10, callbackEnter: ref argcallbackEnter2);
 
         // Checkbox
-        var argcallback_mousedown11 = new Action(Client.Gui.chkSaveUser_Click);
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
-        Action argcallback_norm11 = null;
-        Action argcallback_hover11 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkSaveUsername", 67L, 114L, 142L, value: Conversions.ToLong(SettingsManager.Instance.SaveUsername), text: "Save Username?", font: Core.Font.Arial, theDesign: (long)UiDesign.CheckboxNormal, callback_norm: ref argcallback_norm11, callback_hover: ref argcallback_hover11, callback_mousedown: ref argcallback_mousedown11, callback_mousemove: ref argcallback_mousemove11, callback_dblclick: ref argcallback_dblclick11);
+        var argcallbackMousedown11 = new Action(Client.Gui.chkSaveUser_Click);
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
+        Action argcallbackNorm11 = null;
+        Action argcallbackHover11 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkSaveUsername", 67L, 114L, 142L, value: Conversions.ToLong(SettingsManager.Instance.SaveUsername), text: "Save Username?", font: Core.Font.Arial, theDesign: (long)UiDesign.CheckboxNormal, callbackNorm: ref argcallbackNorm11, callbackHover: ref argcallbackHover11, callbackMousedown: ref argcallbackMousedown11, callbackMousemove: ref argcallbackMousemove11, callbackDblclick: ref argcallbackDblclick11);
 
         // Register Button
-        var argcallback_mousedown12 = new Action(Client.Gui.btnRegister_Click);
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Action argcallback_norm12 = null;
-        Action argcallback_hover12 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRegister", 12L, Client.Gui.Windows[Client.Gui.Windows.Count].Height - 35L, 252L, 22L, "Register Account", Core.Font.Arial, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm12, callback_hover: ref argcallback_hover12, callback_mousedown: ref argcallback_mousedown12, callback_mousemove: ref argcallback_mousemove12, callback_dblclick: ref argcallback_dblclick12);
+        var argcallbackMousedown12 = new Action(Client.Gui.btnRegister_Click);
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Action argcallbackNorm12 = null;
+        Action argcallbackHover12 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRegister", 12L, Client.Gui.Windows[Client.Gui.Windows.Count].Height - 35L, 252L, 22L, "Register Account", Core.Font.Arial, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm12, callbackHover: ref argcallbackHover12, callbackMousedown: ref argcallbackMousedown12, callbackMousemove: ref argcallbackMousemove12, callbackDblclick: ref argcallbackDblclick12);
 
         // Set the active control
         if (!(Strings.Len(Client.Gui.Windows[Client.Gui.GetWindowIndex("winLogin")].Controls[Client.Gui.GetControlIndex("winLogin", "txtUsername")].Text) > 0))
@@ -142,110 +142,110 @@ public class Crystalshire
     public void UpdateWindow_Register()
     {
         // Control the window
-        Client.Gui.UpdateWindow("winRegister", "Register Account", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 276L, 202L, 45L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
+        Client.Gui.UpdateWindow("winRegister", "Register Account", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 276L, 202L, 45L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnReturnMain_Click);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnReturnMain_Click);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Parchment
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 264L, 170L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 264L, 170L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
 
         // Shadows
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 67L, 43L, 142L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 67L, 43L, 142L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 67L, 79L, 142L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, onDraw: ref argonDraw2);
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 67L, 79L, 142L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, onDraw: ref argonDraw2);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 67L, 115L, 142L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw3);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 67L, 115L, 142L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw3);
         // Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_4", 67, 151, 142, 9, , , , , , , , UiDesign.BlackOval, UiDesign.BlackOval, UiDesign.BlackOval)
         // Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_5", 67, 187, 142, 9, , , , , , , , UiDesign.BlackOval, UiDesign.BlackOval, UiDesign.BlackOval)
 
         // Buttons
-        var argcallback_mousedown5 = new Action(Client.Gui.btnSendRegister_Click);
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 68L, 152L, 67L, 22L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown5, ref argcallback_mousemove5, ref argcallback_dblclick5, 0L, 0L, "", false);
+        var argcallbackMousedown5 = new Action(Client.Gui.btnSendRegister_Click);
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 68L, 152L, 67L, 22L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown5, ref argcallbackMousemove5, ref argcallbackDblclick5, 0L, 0L, "", false);
 
-        var argcallback_mousedown6 = new Action(Client.Gui.btnReturnMain_Click);
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 142L, 152L, 67L, 22L, "Back", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown6, ref argcallback_mousemove6, ref argcallback_dblclick6, 0L, 0L, "", false);
+        var argcallbackMousedown6 = new Action(Client.Gui.btnReturnMain_Click);
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 142L, 152L, 67L, 22L, "Back", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown6, ref argcallbackMousemove6, ref argcallbackDblclick6, 0L, 0L, "", false);
 
         // Labels
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblUsername", 66L, 39L, 142L, 10L, "Username", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm4, ref argcallback_hover4, ref argcallback_mousedown7, ref argcallback_mousemove7, ref argcallback_dblclick7, enabled: ref enabled);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPassword", 66L, 75L, 142L, 10L, "Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm5, ref argcallback_hover5, ref argcallback_mousedown8, ref argcallback_mousemove8, ref argcallback_dblclick8, enabled: ref enabled);
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblRetypePassword", 66L, 110L, 142L, 10L, "Retype Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm6, ref argcallback_hover6, ref argcallback_mousedown9, ref argcallback_mousemove9, ref argcallback_dblclick9, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblUsername", 66L, 39L, 142L, 10L, "Username", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm4, ref argcallbackHover4, ref argcallbackMousedown7, ref argcallbackMousemove7, ref argcallbackDblclick7, enabled: ref enabled);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPassword", 66L, 75L, 142L, 10L, "Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm5, ref argcallbackHover5, ref argcallbackMousedown8, ref argcallbackMousemove8, ref argcallbackDblclick8, enabled: ref enabled);
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblRetypePassword", 66L, 110L, 142L, 10L, "Retype Password", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm6, ref argcallbackHover6, ref argcallbackMousedown9, ref argcallbackMousemove9, ref argcallbackDblclick9, enabled: ref enabled);
         // Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCode", 66, 147, 142, 10, "Secret Code", Core.Font.Arial, Alignment.Center)
         // Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCaptcha", 66, 183, 142, 10, "Captcha", Core.Font.Arial, Alignment.Center)
 
         // Textboxes
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Action argcallback_enter = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, false, 0L, Constant.NAME_LENGTH, ref argcallback_norm7, ref argcallback_hover7, ref argcallback_mousedown10, ref argcallback_mousemove10, ref argcallback_dblclick10, ref argcallback_enter);
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown11 = null;
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
-        Action argcallback_enter1 = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtPassword", 67L, 90L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, true, 0L, Constant.NAME_LENGTH, ref argcallback_norm8, ref argcallback_hover8, ref argcallback_mousedown11, ref argcallback_mousemove11, ref argcallback_dblclick11, ref argcallback_enter1);
-        Action argcallback_norm9 = null;
-        Action argcallback_hover9 = null;
-        Action argcallback_mousedown12 = null;
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Action argcallback_enter2 = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtRetypePassword", 67L, 127L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, true, 0L, Constant.NAME_LENGTH, ref argcallback_norm9, ref argcallback_hover9, ref argcallback_mousedown12, ref argcallback_mousemove12, ref argcallback_dblclick12, ref argcallback_enter2);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Action argcallbackEnter = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtUsername", 67L, 55L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, false, 0L, Constant.NameLength, ref argcallbackNorm7, ref argcallbackHover7, ref argcallbackMousedown10, ref argcallbackMousemove10, ref argcallbackDblclick10, ref argcallbackEnter);
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown11 = null;
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
+        Action argcallbackEnter1 = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtPassword", 67L, 90L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, true, 0L, Constant.NameLength, ref argcallbackNorm8, ref argcallbackHover8, ref argcallbackMousedown11, ref argcallbackMousemove11, ref argcallbackDblclick11, ref argcallbackEnter1);
+        Action argcallbackNorm9 = null;
+        Action argcallbackHover9 = null;
+        Action argcallbackMousedown12 = null;
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Action argcallbackEnter2 = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtRetypePassword", 67L, 127L, 142L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, true, 0L, Constant.NameLength, ref argcallbackNorm9, ref argcallbackHover9, ref argcallbackMousedown12, ref argcallbackMousemove12, ref argcallbackDblclick12, ref argcallbackEnter2);
         // Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtCode", 67, 163, 142, 19, , Core.Font.Arial, , Alignment.Left, , , , , , UiDesign.TextWhite, UiDesign.TextWhite, UiDesign.TextWhite, False)
         // Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtCaptcha", 67, 235, 142, 19, , Core.Font.Arial, , Alignment.Left, , , , , , UiDesign.TextWhite, UiDesign.TextWhite, UiDesign.TextWhite, False)
 
@@ -257,117 +257,117 @@ public class Crystalshire
     public void UpdateWindow_NewChar()
     {
         // Control window
-        Client.Gui.UpdateWindow("winNewChar", "Create Character", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 290L, 172L, 17L, false, 2L, 6L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
+        Client.Gui.UpdateWindow("winNewChar", "Create Character", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 290L, 172L, 17L, false, 2L, 6L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnNewChar_Cancel);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnNewChar_Cancel);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Parchment
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 278L, 140L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown1, ref argcallback_mousemove1, ref argcallback_dblclick1, ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 278L, 140L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown1, ref argcallbackMousemove1, ref argcallbackDblclick1, ref argonDraw);
 
         // Name
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 29L, 42L, 124L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm1, ref argcallback_hover1, ref argcallback_mousedown2, ref argcallback_mousemove2, ref argcallback_dblclick2, ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 29L, 42L, 124L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm1, ref argcallbackHover1, ref argcallbackMousedown2, ref argcallbackMousemove2, ref argcallbackDblclick2, ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 29L, 39L, 124L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm2, ref argcallback_hover2, ref argcallback_mousedown3, ref argcallback_mousemove3, ref argcallback_dblclick3, ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 29L, 39L, 124L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm2, ref argcallbackHover2, ref argcallbackMousedown3, ref argcallbackMousemove3, ref argcallbackDblclick3, ref enabled);
 
         // Textbox
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Action argcallback_enter = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtName", 29L, 55L, 124L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, false, 0L, Constant.NAME_LENGTH, ref argcallback_norm3, ref argcallback_hover3, ref argcallback_mousedown4, ref argcallback_mousemove4, ref argcallback_dblclick4, ref argcallback_enter);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Action argcallbackEnter = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtName", 29L, 55L, 124L, 19L, "", Core.Font.Arial, Alignment.Left, true, 255L, true, 5L, 3L, 0L, 0L, 0L, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, (long)UiDesign.TextWhite, false, 0L, Constant.NameLength, ref argcallbackNorm3, ref argcallbackHover3, ref argcallbackMousedown4, ref argcallbackMousemove4, ref argcallbackDblclick4, ref argcallbackEnter);
 
         // Sex
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 29L, 85L, 124L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm4, ref argcallback_hover4, ref argcallback_mousedown5, ref argcallback_mousemove5, ref argcallback_dblclick5, ref argonDraw2);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblGender", 29L, 82L, 124L, 10L, "Gender", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm5, ref argcallback_hover5, ref argcallback_mousedown6, ref argcallback_mousemove6, ref argcallback_dblclick6, ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 29L, 85L, 124L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm4, ref argcallbackHover4, ref argcallbackMousedown5, ref argcallbackMousemove5, ref argcallbackDblclick5, ref argonDraw2);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblGender", 29L, 82L, 124L, 10L, "Gender", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm5, ref argcallbackHover5, ref argcallbackMousedown6, ref argcallbackMousemove6, ref argcallbackDblclick6, ref enabled);
 
         // Checkboxes
-        var argcallback_mousedown7 = new Action(Client.Gui.chkNewChar_Male);
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMale", 29L, 103L, 55L, 15L, 0L, "Male", Core.Font.Arial, Alignment.Center, true, 255L, (long)UiDesign.CheckboxNormal, 0L, false, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown7, ref argcallback_mousemove7, ref argcallback_dblclick7);
-        var argcallback_mousedown8 = new Action(Client.Gui.chkNewChar_Female);
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkFemale", 90L, 103L, 62L, 15L, 0L, "Female", Core.Font.Arial, Alignment.Center, true, 255L, (long)UiDesign.CheckboxNormal, 0L, false, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown8, ref argcallback_mousemove8, ref argcallback_dblclick8);
+        var argcallbackMousedown7 = new Action(Client.Gui.chkNewChar_Male);
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMale", 29L, 103L, 55L, 15L, 0L, "Male", Core.Font.Arial, Alignment.Center, true, 255L, (long)UiDesign.CheckboxNormal, 0L, false, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown7, ref argcallbackMousemove7, ref argcallbackDblclick7);
+        var argcallbackMousedown8 = new Action(Client.Gui.chkNewChar_Female);
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkFemale", 90L, 103L, 62L, 15L, 0L, "Female", Core.Font.Arial, Alignment.Center, true, 255L, (long)UiDesign.CheckboxNormal, 0L, false, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown8, ref argcallbackMousemove8, ref argcallbackDblclick8);
 
         // Buttons
-        var argcallback_mousedown9 = new Action(Client.Gui.btnNewChar_Accept);
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 29L, 127L, 60L, 24L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown9, ref argcallback_mousemove9, ref argcallback_dblclick9, 0L, 0L, "", false);
-        var argcallback_mousedown10 = new Action(Client.Gui.btnNewChar_Cancel);
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCancel", 93L, 127L, 60L, 24L, "Cancel", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown10, ref argcallback_mousemove10, ref argcallback_dblclick10, 0L, 0L, "", false);
+        var argcallbackMousedown9 = new Action(Client.Gui.btnNewChar_Accept);
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 29L, 127L, 60L, 24L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown9, ref argcallbackMousemove9, ref argcallbackDblclick9, 0L, 0L, "", false);
+        var argcallbackMousedown10 = new Action(Client.Gui.btnNewChar_Cancel);
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCancel", 93L, 127L, 60L, 24L, "Cancel", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown10, ref argcallbackMousemove10, ref argcallbackDblclick10, 0L, 0L, "", false);
 
         // Sprite
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown11 = null;
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown11 = null;
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 175L, 42L, 76L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm6, ref argcallback_hover6, ref argcallback_mousedown11, ref argcallback_mousemove11, ref argcallback_dblclick11, ref argonDraw3);
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown12 = null;
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSprite", 175L, 39L, 76L, 10L, "Sprite", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm7, ref argcallback_hover7, ref argcallback_mousedown12, ref argcallback_mousemove12, ref argcallback_dblclick12, ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 175L, 42L, 76L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm6, ref argcallbackHover6, ref argcallbackMousedown11, ref argcallbackMousemove11, ref argcallbackDblclick11, ref argonDraw3);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown12 = null;
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSprite", 175L, 39L, 76L, 10L, "Sprite", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm7, ref argcallbackHover7, ref argcallbackMousedown12, ref argcallbackMousemove12, ref argcallbackDblclick12, ref enabled);
 
         // Scene
         var argonDraw4 = new Action(Client.Gui.NewChar_OnDraw);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene", 165L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, ref argonDraw4);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene", 165L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, ref argonDraw4);
 
         // Buttons
-        var argcallback_mousedown13 = new Action(Client.Gui.btnNewChar_Left);
-        Action argcallback_mousemove13 = null;
-        Action argcallback_dblclick13 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnLeft", 163L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 12L, 14L, 16L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown13, ref argcallback_mousemove13, ref argcallback_dblclick13, 0L, 0L, "", false);
-        var argcallback_mousedown14 = new Action(Client.Gui.btnNewChar_Right);
-        Action argcallback_mousemove14 = null;
-        Action argcallback_dblclick14 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRight", 252L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 13L, 15L, 17L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown14, ref argcallback_mousemove14, ref argcallback_dblclick14, 0L, 0L, "", false);
+        var argcallbackMousedown13 = new Action(Client.Gui.btnNewChar_Left);
+        Action argcallbackMousemove13 = null;
+        Action argcallbackDblclick13 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnLeft", 163L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 12L, 14L, 16L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown13, ref argcallbackMousemove13, ref argcallbackDblclick13, 0L, 0L, "", false);
+        var argcallbackMousedown14 = new Action(Client.Gui.btnNewChar_Right);
+        Action argcallbackMousemove14 = null;
+        Action argcallbackDblclick14 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRight", 252L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 13L, 15L, 17L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown14, ref argcallbackMousemove14, ref argcallbackDblclick14, 0L, 0L, "", false);
 
         // Set the active control
         Client.Gui.SetActiveControl(Client.Gui.GetWindowIndex("winNewChar"), Client.Gui.GetControlIndex("winNewChar", "txtName"));
@@ -376,273 +376,273 @@ public class Crystalshire
     public void UpdateWindow_Chars()
     {
         // Control the window
-        Client.Gui.UpdateWindow("winChars", "Characters", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 364L, 229L, 62L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
+        Client.Gui.UpdateWindow("winChars", "Characters", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 364L, 229L, 62L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnCharacters_Close);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_mousedown, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnCharacters_Close);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackMousedown, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Parchment
-        Action argcallback_hover = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 352L, 197L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown1, ref argcallback_mousemove1, ref argcallback_dblclick1, ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 352L, 197L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown1, ref argcallbackMousemove1, ref argcallbackDblclick1, ref argonDraw);
 
         // Names
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
         bool enabled = false;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 22L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm1, ref argcallback_hover1, ref argcallback_mousedown2, ref argcallback_mousemove2, ref argcallback_dblclick2, ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_1", 22L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm2, ref argcallback_hover2, ref argcallback_mousedown3, ref argcallback_mousemove3, ref argcallback_dblclick3, ref enabled);
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_1", 22L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm1, ref argcallbackHover1, ref argcallbackMousedown2, ref argcallbackMousemove2, ref argcallbackDblclick2, ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_1", 22L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm2, ref argcallbackHover2, ref argcallbackMousedown3, ref argcallbackMousemove3, ref argcallbackDblclick3, ref enabled);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 132L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm3, ref argcallback_hover3, ref argcallback_mousedown4, ref argcallback_mousemove4, ref argcallback_dblclick4, ref argonDraw2);
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_2", 132L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm4, ref argcallback_hover4, ref argcallback_mousedown5, ref argcallback_mousemove5, ref argcallback_dblclick5, ref enabled);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_2", 132L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm3, ref argcallbackHover3, ref argcallbackMousedown4, ref argcallbackMousemove4, ref argcallbackDblclick4, ref argonDraw2);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_2", 132L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm4, ref argcallbackHover4, ref argcallbackMousedown5, ref argcallbackMousemove5, ref argcallbackDblclick5, ref enabled);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 242L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm5, ref argcallback_hover5, ref argcallback_mousedown6, ref argcallback_mousemove6, ref argcallback_dblclick6, ref argonDraw3);
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_3", 242L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm6, ref argcallback_hover6, ref argcallback_mousedown7, ref argcallback_mousemove7, ref argcallback_dblclick7, ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow_3", 242L, 40L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm5, ref argcallbackHover5, ref argcallbackMousedown6, ref argcallbackMousemove6, ref argcallbackDblclick6, ref argonDraw3);
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCharName_3", 242L, 37L, 98L, 10L, "Blank Slot", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm6, ref argcallbackHover6, ref argcallbackMousedown7, ref argcallbackMousemove7, ref argcallbackDblclick7, ref enabled);
 
         // Scenery Boxes
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
         Action argonDraw4 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_1", 23L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallback_norm7, ref argcallback_hover7, ref argcallback_mousedown8, ref argcallback_mousemove8, ref argcallback_dblclick8, ref argonDraw4);
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_1", 23L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallbackNorm7, ref argcallbackHover7, ref argcallbackMousedown8, ref argcallbackMousemove8, ref argcallbackDblclick8, ref argonDraw4);
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
         Action argonDraw5 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_2", 133L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallback_norm8, ref argcallback_hover8, ref argcallback_mousedown9, ref argcallback_mousemove9, ref argcallback_dblclick9, ref argonDraw5);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_2", 133L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallbackNorm8, ref argcallbackHover8, ref argcallbackMousedown9, ref argcallbackMousemove9, ref argcallbackDblclick9, ref argonDraw5);
         var argonDraw6 = new Action(Client.Gui.Chars_OnDraw);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_3", 243L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown1, ref argcallback_mousemove1, ref argcallback_dblclick1, ref argonDraw6);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picScene_3", 243L, 55L, 96L, 96L, true, false, 255L, true, 11L, 11L, 11L, 0L, 0L, 0L, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown1, ref argcallbackMousemove1, ref argcallbackDblclick1, ref argonDraw6);
 
         // Control Buttons
-        var argcallback_mousedown10 = new Action(Client.Gui.btnAcceptChar_1);
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_1", 22L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown10, ref argcallback_mousemove10, ref argcallback_dblclick10, 0L, 0L, "", false);
-        var argcallback_mousedown11 = new Action(Client.Gui.btnCreateChar_1);
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_1", 22L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown11, ref argcallback_mousemove11, ref argcallback_dblclick11, 0L, 0L, "", false);
-        var argcallback_mousedown12 = new Action(Client.Gui.btnDelChar_1);
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_1", 22L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown12, ref argcallback_mousemove12, ref argcallback_dblclick12, 0L, 0L, "", false);
-        var argcallback_mousedown13 = new Action(Client.Gui.btnAcceptChar_2);
-        Action argcallback_mousemove13 = null;
-        Action argcallback_dblclick13 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_2", 132L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown13, ref argcallback_mousemove13, ref argcallback_dblclick13, 0L, 0L, "", false);
-        var argcallback_mousedown14 = new Action(Client.Gui.btnCreateChar_2);
-        Action argcallback_mousemove14 = null;
-        Action argcallback_dblclick14 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_2", 132L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown14, ref argcallback_mousemove14, ref argcallback_dblclick14, 0L, 0L, "", false);
-        var argcallback_mousedown15 = new Action(Client.Gui.btnDelChar_2);
-        Action argcallback_mousemove15 = null;
-        Action argcallback_dblclick15 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_2", 132L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown15, ref argcallback_mousemove15, ref argcallback_dblclick15, 0L, 0L, "", false);
-        var argcallback_mousedown16 = new Action(Client.Gui.btnAcceptChar_3);
-        Action argcallback_mousemove16 = null;
-        Action argcallback_dblclick16 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_3", 242L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown16, ref argcallback_mousemove16, ref argcallback_dblclick16, 0L, 0L, "", false);
-        var argcallback_mousedown17 = new Action(Client.Gui.btnCreateChar_3);
-        Action argcallback_mousemove17 = null;
-        Action argcallback_dblclick17 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_3", 242L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown17, ref argcallback_mousemove17, ref argcallback_dblclick17, 0L, 0L, "", false);
-        var argcallback_mousedown18 = new Action(Client.Gui.btnDelChar_3);
-        Action argcallback_mousemove18 = null;
-        Action argcallback_dblclick18 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_3", 242L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown18, ref argcallback_mousemove18, ref argcallback_dblclick18, 0L, 0L, "", false);
+        var argcallbackMousedown10 = new Action(Client.Gui.btnAcceptChar_1);
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_1", 22L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown10, ref argcallbackMousemove10, ref argcallbackDblclick10, 0L, 0L, "", false);
+        var argcallbackMousedown11 = new Action(Client.Gui.btnCreateChar_1);
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_1", 22L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown11, ref argcallbackMousemove11, ref argcallbackDblclick11, 0L, 0L, "", false);
+        var argcallbackMousedown12 = new Action(Client.Gui.btnDelChar_1);
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_1", 22L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown12, ref argcallbackMousemove12, ref argcallbackDblclick12, 0L, 0L, "", false);
+        var argcallbackMousedown13 = new Action(Client.Gui.btnAcceptChar_2);
+        Action argcallbackMousemove13 = null;
+        Action argcallbackDblclick13 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_2", 132L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown13, ref argcallbackMousemove13, ref argcallbackDblclick13, 0L, 0L, "", false);
+        var argcallbackMousedown14 = new Action(Client.Gui.btnCreateChar_2);
+        Action argcallbackMousemove14 = null;
+        Action argcallbackDblclick14 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_2", 132L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown14, ref argcallbackMousemove14, ref argcallbackDblclick14, 0L, 0L, "", false);
+        var argcallbackMousedown15 = new Action(Client.Gui.btnDelChar_2);
+        Action argcallbackMousemove15 = null;
+        Action argcallbackDblclick15 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_2", 132L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown15, ref argcallbackMousemove15, ref argcallbackDblclick15, 0L, 0L, "", false);
+        var argcallbackMousedown16 = new Action(Client.Gui.btnAcceptChar_3);
+        Action argcallbackMousemove16 = null;
+        Action argcallbackDblclick16 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSelectChar_3", 242L, 155L, 98L, 24L, "Select", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown16, ref argcallbackMousemove16, ref argcallbackDblclick16, 0L, 0L, "", false);
+        var argcallbackMousedown17 = new Action(Client.Gui.btnCreateChar_3);
+        Action argcallbackMousemove17 = null;
+        Action argcallbackDblclick17 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnCreateChar_3", 242L, 155L, 98L, 24L, "Create", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown17, ref argcallbackMousemove17, ref argcallbackDblclick17, 0L, 0L, "", false);
+        var argcallbackMousedown18 = new Action(Client.Gui.btnDelChar_3);
+        Action argcallbackMousemove18 = null;
+        Action argcallbackDblclick18 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDelChar_3", 242L, 183L, 98L, 24L, "Delete", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown18, ref argcallbackMousemove18, ref argcallbackDblclick18, 0L, 0L, "", false);
     }
 
     public void UpdateWindow_Jobs()
     {
         // Control window
-        Client.Gui.UpdateWindow("winJobs", "Select Job", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 364L, 229L, 17L, false, 2L, 6L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
+        Client.Gui.UpdateWindow("winJobs", "Select Job", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 364L, 229L, 17L, false, 2L, 6L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.    Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnJobs_Close);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnJobs_Close);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Parchment
         var argonDraw = new Action(Client.Gui.Jobs_DrawFace);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 352L, 197L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 352L, 197L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.Parchment, (long)UiDesign.Parchment, (long)UiDesign.Parchment, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, ref argonDraw);
 
         // Job Name
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 183L, 42L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown1, ref argcallback_mousemove1, ref argcallback_dblclick1, ref argonDraw1);
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 183L, 42L, 98L, 9L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, (long)UiDesign.BlackOval, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown1, ref argcallbackMousemove1, ref argcallbackDblclick1, ref argonDraw1);
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJobName", 183L, 39L, 98L, 10L, "Warrior", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallback_norm1, ref argcallback_hover1, ref argcallback_mousedown2, ref argcallback_mousemove2, ref argcallback_dblclick2, ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJobName", 183L, 39L, 98L, 10L, "Warrior", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, true, 255L, false, false, ref argcallbackNorm1, ref argcallbackHover1, ref argcallbackMousedown2, ref argcallbackMousemove2, ref argcallbackDblclick2, ref enabled);
 
         // Select Buttons
-        var argcallback_mousedown3 = new Action(Client.Gui.btnJobs_Left);
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnLeft", 170L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 12L, 14L, 16L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown3, ref argcallback_mousemove3, ref argcallback_dblclick3, 0L, 0L, "", false);
+        var argcallbackMousedown3 = new Action(Client.Gui.btnJobs_Left);
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnLeft", 170L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 12L, 14L, 16L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown3, ref argcallbackMousemove3, ref argcallbackDblclick3, 0L, 0L, "", false);
 
-        var argcallback_mousedown4 = new Action(Client.Gui.btnJobs_Right);
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRight", 282L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 13L, 15L, 17L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown4, ref argcallback_mousemove4, ref argcallback_dblclick4, 0L, 0L, "", false);
+        var argcallbackMousedown4 = new Action(Client.Gui.btnJobs_Right);
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnRight", 282L, 40L, 10L, 13L, "", Core.Font.Georgia, 0L, 13L, 15L, 17L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown4, ref argcallbackMousemove4, ref argcallbackDblclick4, 0L, 0L, "", false);
 
         // Accept Button
-        var argcallback_mousedown5 = new Action(Client.Gui.btnJobs_Accept);
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 183L, 185L, 98L, 22L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown5, ref argcallback_mousemove5, ref argcallback_dblclick5, 0L, 0L, "", false);
+        var argcallbackMousedown5 = new Action(Client.Gui.btnJobs_Accept);
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 183L, 185L, 98L, 22L, "Accept", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown5, ref argcallbackMousemove5, ref argcallbackDblclick5, 0L, 0L, "", false);
 
         // Text background
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBackground", 127L, 55L, 210L, 124L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.TextBlack, (long)UiDesign.TextBlack, (long)UiDesign.TextBlack, "", ref argcallback_norm, ref argcallback_hover2, ref argcallback_mousedown6, ref argcallback_mousemove6, ref argcallback_dblclick6, ref argonDraw2);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBackground", 127L, 55L, 210L, 124L, true, false, 255L, true, 0L, 0L, 0L, (long)UiDesign.TextBlack, (long)UiDesign.TextBlack, (long)UiDesign.TextBlack, "", ref argcallbackNorm, ref argcallbackHover2, ref argcallbackMousedown6, ref argcallbackMousemove6, ref argcallbackDblclick6, ref argonDraw2);
 
         // Overlay
         var argonDraw3 = new Action(Client.Gui.Jobs_DrawText);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picOverlay", 6L, 26L, 0L, 0L, true, false, 255L, true, 0L, 0L, 0L, 0L, 0L, 0L, "", ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, ref argonDraw3);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picOverlay", 6L, 26L, 0L, 0L, true, false, 255L, true, 0L, 0L, 0L, 0L, 0L, 0L, "", ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, ref argonDraw3);
     }
 
     public void UpdateWindow_Dialogue()
     {
         // Control dialogue window
-        Client.Gui.UpdateWindow("winDialogue", "Warning", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 348L, 145L, 38L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, canDrag: false);
+        Client.Gui.UpdateWindow("winDialogue", "Warning", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 348L, 145L, 38L, false, 3L, 5L, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, (long)UiDesign.WindowNormal, canDrag: false);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnDialogue_Close);
-        Action argcallback_norm = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnDialogue_Close);
+        Action argcallbackNorm = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Parchment
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 335L, 113L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 335L, 113L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
 
         // Header
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 103L, 44L, 144L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 103L, 44L, 144L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHeader", 103L, 40L, 144L, 10L, "Header", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHeader", 103L, 40L, 144L, 10L, "Header", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, enabled: ref enabled);
 
         // Input
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Action argcallback_enter = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtInput", 93L, 75L, 162L, 18L, font: Core.Font.Arial, align: Alignment.Center, xOffset: 5L, yOffset: 2L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, callback_enter: ref argcallback_enter);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Action argcallbackEnter = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtInput", 93L, 75L, 162L, 18L, font: Core.Font.Arial, align: Alignment.Center, xOffset: 5L, yOffset: 2L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, callbackEnter: ref argcallbackEnter);
 
         // Labels
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBody_1", 15L, 60L, 314L, 10L, "Invalid username or password.", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5, enabled: ref enabled);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBody_2", 15L, 75L, 314L, 10L, "Please try again!", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6, enabled: ref enabled);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBody_1", 15L, 60L, 314L, 10L, "Invalid username or password.", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5, enabled: ref enabled);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBody_2", 15L, 75L, 314L, 10L, "Please try again!", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6, enabled: ref enabled);
 
         // Buttons
-        var argcallback_mousedown7 = new Action(Client.Gui.Dialogue_Yes);
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnYes", 104L, 98L, 68L, 24L, "Yes", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown7, ref argcallback_dblclick7, ref argcallback_mousemove7, 0L, 0L, "", false);
-        var argcallback_mousedown8 = new Action(Client.Gui.Dialogue_No);
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnNo", 180L, 98L, 68L, 24L, "No", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown8, ref argcallback_mousemove8, ref argcallback_dblclick8, 0L, 0L, "", false);
-        var argcallback_mousedown9 = new Action(Client.Gui.Dialogue_Okay);
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnOkay", 140L, 98L, 68L, 24L, "Okay", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown9, ref argcallback_mousemove9, ref argcallback_dblclick9, 0L, 0L, "", false);
+        var argcallbackMousedown7 = new Action(Client.Gui.Dialogue_Yes);
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnYes", 104L, 98L, 68L, 24L, "Yes", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown7, ref argcallbackDblclick7, ref argcallbackMousemove7, 0L, 0L, "", false);
+        var argcallbackMousedown8 = new Action(Client.Gui.Dialogue_No);
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnNo", 180L, 98L, 68L, 24L, "No", Core.Font.Arial, 0L, 0L, 0L, 0L, false, 255L, (long)UiDesign.Red, (long)UiDesign.RedHover, (long)UiDesign.RedClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown8, ref argcallbackMousemove8, ref argcallbackDblclick8, 0L, 0L, "", false);
+        var argcallbackMousedown9 = new Action(Client.Gui.Dialogue_Okay);
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnOkay", 140L, 98L, 68L, 24L, "Okay", Core.Font.Arial, 0L, 0L, 0L, 0L, true, 255L, (long)UiDesign.Green, (long)UiDesign.GreenHover, (long)UiDesign.GreenClick, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown9, ref argcallbackMousemove9, ref argcallbackDblclick9, 0L, 0L, "", false);
 
         // Set active control
         Client.Gui.SetActiveControl(Client.Gui.Windows.Count, Client.Gui.GetControlIndex("winDialogue", "txtInput"));
@@ -651,120 +651,120 @@ public class Crystalshire
     public void UpdateWindow_Party()
     {
         // Control window
-        Client.Gui.UpdateWindow("winParty", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 4L, 78L, 252L, 158L, 0L, false, design_norm: (long)UiDesign.WindowParty, design_hover: (long)UiDesign.WindowParty, design_mousedown: (long)UiDesign.WindowParty, canDrag: false);
+        Client.Gui.UpdateWindow("winParty", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 4L, 78L, 252L, 158L, 0L, false, designNorm: (long)UiDesign.WindowParty, designHover: (long)UiDesign.WindowParty, designMousedown: (long)UiDesign.WindowParty, canDrag: false);
 
         // Name labels
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName1", 60L, 20L, 173L, 10L, "Richard - Level 10", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, enabled: ref enabled);
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName2", 60L, 60L, 173L, 10L, "Anna - Level 18", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, enabled: ref enabled);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName3", 60L, 100L, 173L, 10L, "Doleo - Level 25", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName1", 60L, 20L, 173L, 10L, "Richard - Level 10", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, enabled: ref enabled);
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName2", 60L, 60L, 173L, 10L, "Anna - Level 18", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, enabled: ref enabled);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName3", 60L, 100L, 173L, 10L, "Doleo - Level 25", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, enabled: ref enabled);
 
         // Empty Bars - HP
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP1", 58L, 34L, 173L, 9L, image_norm: 62L, image_hover: 62L, image_mousedown: 62L, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, onDraw: ref argonDraw);
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP1", 58L, 34L, 173L, 9L, imageNorm: 62L, imageHover: 62L, imageMousedown: 62L, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, onDraw: ref argonDraw);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP2", 58L, 74L, 173L, 9L, image_norm: 62L, image_hover: 62L, image_mousedown: 62L, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw1);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP2", 58L, 74L, 173L, 9L, imageNorm: 62L, imageHover: 62L, imageMousedown: 62L, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw1);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP3", 58L, 114L, 173L, 9L, image_norm: 62L, image_hover: 62L, image_mousedown: 62L, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5, onDraw: ref argonDraw2);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_HP3", 58L, 114L, 173L, 9L, imageNorm: 62L, imageHover: 62L, imageMousedown: 62L, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5, onDraw: ref argonDraw2);
 
         // Empty Bars - SP
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP1", 58L, 44L, 173L, 9L, image_norm: 63L, image_hover: 63L, image_mousedown: 63L, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6, onDraw: ref argonDraw3);
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP1", 58L, 44L, 173L, 9L, imageNorm: 63L, imageHover: 63L, imageMousedown: 63L, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6, onDraw: ref argonDraw3);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
         Action argonDraw4 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP2", 58L, 84L, 173L, 9L, image_norm: 63L, image_hover: 63L, image_mousedown: 63L, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7, onDraw: ref argonDraw4);
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP2", 58L, 84L, 173L, 9L, imageNorm: 63L, imageHover: 63L, imageMousedown: 63L, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7, onDraw: ref argonDraw4);
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
         Action argonDraw5 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP3", 58L, 124L, 173L, 9L, image_norm: 63L, image_hover: 63L, image_mousedown: 63L, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, onDraw: ref argonDraw5);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEmptyBar_SP3", 58L, 124L, 173L, 9L, imageNorm: 63L, imageHover: 63L, imageMousedown: 63L, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, onDraw: ref argonDraw5);
 
         // Filled bars - HP
-        Action argcallback_norm9 = null;
-        Action argcallback_hover9 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
+        Action argcallbackNorm9 = null;
+        Action argcallbackHover9 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
         Action argonDraw6 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP1", 58L, 34L, 173L, 9L, image_norm: 64L, image_hover: 64L, image_mousedown: 64L, callback_norm: ref argcallback_norm9, callback_hover: ref argcallback_hover9, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, onDraw: ref argonDraw6);
-        Action argcallback_norm10 = null;
-        Action argcallback_hover10 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP1", 58L, 34L, 173L, 9L, imageNorm: 64L, imageHover: 64L, imageMousedown: 64L, callbackNorm: ref argcallbackNorm9, callbackHover: ref argcallbackHover9, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, onDraw: ref argonDraw6);
+        Action argcallbackNorm10 = null;
+        Action argcallbackHover10 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
         Action argonDraw7 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP2", 58L, 74L, 173L, 9L, image_norm: 64L, image_hover: 64L, image_mousedown: 64L, callback_norm: ref argcallback_norm10, callback_hover: ref argcallback_hover10, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, onDraw: ref argonDraw7);
-        Action argcallback_norm11 = null;
-        Action argcallback_hover11 = null;
-        Action argcallback_mousedown11 = null;
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP2", 58L, 74L, 173L, 9L, imageNorm: 64L, imageHover: 64L, imageMousedown: 64L, callbackNorm: ref argcallbackNorm10, callbackHover: ref argcallbackHover10, callbackMousedown: ref argcallbackMousedown10, callbackMousemove: ref argcallbackMousemove10, callbackDblclick: ref argcallbackDblclick10, onDraw: ref argonDraw7);
+        Action argcallbackNorm11 = null;
+        Action argcallbackHover11 = null;
+        Action argcallbackMousedown11 = null;
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
         Action argonDraw8 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP3", 58L, 114L, 173L, 9L, image_norm: 64L, image_hover: 64L, image_mousedown: 64L, callback_norm: ref argcallback_norm11, callback_hover: ref argcallback_hover11, callback_mousedown: ref argcallback_mousedown11, callback_mousemove: ref argcallback_mousemove11, callback_dblclick: ref argcallback_dblclick11, onDraw: ref argonDraw8);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_HP3", 58L, 114L, 173L, 9L, imageNorm: 64L, imageHover: 64L, imageMousedown: 64L, callbackNorm: ref argcallbackNorm11, callbackHover: ref argcallbackHover11, callbackMousedown: ref argcallbackMousedown11, callbackMousemove: ref argcallbackMousemove11, callbackDblclick: ref argcallbackDblclick11, onDraw: ref argonDraw8);
 
         // Filled bars - SP
-        Action argcallback_norm12 = null;
-        Action argcallback_hover12 = null;
-        Action argcallback_mousedown12 = null;
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
+        Action argcallbackNorm12 = null;
+        Action argcallbackHover12 = null;
+        Action argcallbackMousedown12 = null;
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
         Action argonDraw9 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP1", 58L, 44L, 173L, 9L, image_norm: 65L, image_hover: 65L, image_mousedown: 65L, callback_norm: ref argcallback_norm12, callback_hover: ref argcallback_hover12, callback_mousedown: ref argcallback_mousedown12, callback_mousemove: ref argcallback_mousemove12, callback_dblclick: ref argcallback_dblclick12, onDraw: ref argonDraw9);
-        Action argcallback_norm13 = null;
-        Action argcallback_hover13 = null;
-        Action argcallback_mousedown13 = null;
-        Action argcallback_mousemove13 = null;
-        Action argcallback_dblclick13 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP1", 58L, 44L, 173L, 9L, imageNorm: 65L, imageHover: 65L, imageMousedown: 65L, callbackNorm: ref argcallbackNorm12, callbackHover: ref argcallbackHover12, callbackMousedown: ref argcallbackMousedown12, callbackMousemove: ref argcallbackMousemove12, callbackDblclick: ref argcallbackDblclick12, onDraw: ref argonDraw9);
+        Action argcallbackNorm13 = null;
+        Action argcallbackHover13 = null;
+        Action argcallbackMousedown13 = null;
+        Action argcallbackMousemove13 = null;
+        Action argcallbackDblclick13 = null;
         Action argonDraw10 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP2", 58L, 84L, 173L, 9L, image_norm: 65L, image_hover: 65L, image_mousedown: 65L, callback_norm: ref argcallback_norm13, callback_hover: ref argcallback_hover13, callback_mousedown: ref argcallback_mousedown13, callback_mousemove: ref argcallback_mousemove13, callback_dblclick: ref argcallback_dblclick13, onDraw: ref argonDraw10);
-        Action argcallback_norm14 = null;
-        Action argcallback_hover14 = null;
-        Action argcallback_mousedown14 = null;
-        Action argcallback_mousemove14 = null;
-        Action argcallback_dblclick14 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP2", 58L, 84L, 173L, 9L, imageNorm: 65L, imageHover: 65L, imageMousedown: 65L, callbackNorm: ref argcallbackNorm13, callbackHover: ref argcallbackHover13, callbackMousedown: ref argcallbackMousedown13, callbackMousemove: ref argcallbackMousemove13, callbackDblclick: ref argcallbackDblclick13, onDraw: ref argonDraw10);
+        Action argcallbackNorm14 = null;
+        Action argcallbackHover14 = null;
+        Action argcallbackMousedown14 = null;
+        Action argcallbackMousemove14 = null;
+        Action argcallbackDblclick14 = null;
         Action argonDraw11 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP3", 58L, 124L, 173L, 9L, image_norm: 65L, image_hover: 65L, image_mousedown: 65L, callback_norm: ref argcallback_norm14, callback_hover: ref argcallback_hover14, callback_mousedown: ref argcallback_mousedown14, callback_mousemove: ref argcallback_mousemove14, callback_dblclick: ref argcallback_dblclick14, onDraw: ref argonDraw11);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar_SP3", 58L, 124L, 173L, 9L, imageNorm: 65L, imageHover: 65L, imageMousedown: 65L, callbackNorm: ref argcallbackNorm14, callbackHover: ref argcallbackHover14, callbackMousedown: ref argcallbackMousedown14, callbackMousemove: ref argcallbackMousemove14, callbackDblclick: ref argcallbackDblclick14, onDraw: ref argonDraw11);
 
         // Shadows
         // Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow1", 20, 24, 32, 32, , , , , Tex_Shadow, Tex_Shadow, Tex_Shadow
@@ -772,306 +772,306 @@ public class Crystalshire
         // Client.Gui.UpdatePictureBox Client.Gui.Windows.Count, "picShadow3", 20, 104, 32, 32, , , , , Tex_Shadow, Tex_Shadow, Tex_Shadow
 
         // Characters
-        Action argcallback_norm15 = null;
-        Action argcallback_hover15 = null;
-        Action argcallback_mousedown15 = null;
-        Action argcallback_mousemove15 = null;
-        Action argcallback_dblclick15 = null;
+        Action argcallbackNorm15 = null;
+        Action argcallbackHover15 = null;
+        Action argcallbackMousedown15 = null;
+        Action argcallbackMousemove15 = null;
+        Action argcallbackDblclick15 = null;
         Action argonDraw12 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar1", 20L, 20L, 32L, 32L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, texturePath: Core.Path.Characters, callback_norm: ref argcallback_norm15, callback_hover: ref argcallback_hover15, callback_mousedown: ref argcallback_mousedown15, callback_mousemove: ref argcallback_mousemove15, callback_dblclick: ref argcallback_dblclick15, onDraw: ref argonDraw12);
-        Action argcallback_norm16 = null;
-        Action argcallback_hover16 = null;
-        Action argcallback_mousedown16 = null;
-        Action argcallback_mousemove16 = null;
-        Action argcallback_dblclick16 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar1", 20L, 20L, 32L, 32L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, texturePath: Core.Path.Characters, callbackNorm: ref argcallbackNorm15, callbackHover: ref argcallbackHover15, callbackMousedown: ref argcallbackMousedown15, callbackMousemove: ref argcallbackMousemove15, callbackDblclick: ref argcallbackDblclick15, onDraw: ref argonDraw12);
+        Action argcallbackNorm16 = null;
+        Action argcallbackHover16 = null;
+        Action argcallbackMousedown16 = null;
+        Action argcallbackMousemove16 = null;
+        Action argcallbackDblclick16 = null;
         Action argonDraw13 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar2", 20L, 60L, 32L, 32L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, texturePath: Core.Path.Characters, callback_norm: ref argcallback_norm16, callback_hover: ref argcallback_hover16, callback_mousedown: ref argcallback_mousedown16, callback_mousemove: ref argcallback_mousemove16, callback_dblclick: ref argcallback_dblclick16, onDraw: ref argonDraw13);
-        Action argcallback_norm17 = null;
-        Action argcallback_hover17 = null;
-        Action argcallback_mousedown17 = null;
-        Action argcallback_mousemove17 = null;
-        Action argcallback_dblclick17 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar2", 20L, 60L, 32L, 32L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, texturePath: Core.Path.Characters, callbackNorm: ref argcallbackNorm16, callbackHover: ref argcallbackHover16, callbackMousedown: ref argcallbackMousedown16, callbackMousemove: ref argcallbackMousemove16, callbackDblclick: ref argcallbackDblclick16, onDraw: ref argonDraw13);
+        Action argcallbackNorm17 = null;
+        Action argcallbackHover17 = null;
+        Action argcallbackMousedown17 = null;
+        Action argcallbackMousemove17 = null;
+        Action argcallbackDblclick17 = null;
         Action argonDraw14 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar3", 20L, 100L, 32L, 32L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, texturePath: Core.Path.Characters, callback_norm: ref argcallback_norm17, callback_hover: ref argcallback_hover17, callback_mousedown: ref argcallback_mousedown17, callback_mousemove: ref argcallback_mousemove17, callback_dblclick: ref argcallback_dblclick17, onDraw: ref argonDraw14);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picChar3", 20L, 100L, 32L, 32L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, texturePath: Core.Path.Characters, callbackNorm: ref argcallbackNorm17, callbackHover: ref argcallbackHover17, callbackMousedown: ref argcallbackMousedown17, callbackMousemove: ref argcallbackMousemove17, callbackDblclick: ref argcallbackDblclick17, onDraw: ref argonDraw14);
     }
 
     public void UpdateWindow_Trade()
     {
         // Control window
-        Client.Gui.UpdateWindow("winTrade", "Trading with [Name]", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 412L, 386L, 112L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, onDraw: new Action(Client.Gui.DrawTrade));
+        Client.Gui.UpdateWindow("winTrade", "Trading with [Name]", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 412L, 386L, 112L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, onDraw: new Action(Client.Gui.DrawTrade));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Close Button
-        var argcallback_mousedown = new Action(Client.Gui.btnTrade_Close);
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 36L, 36L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown, callback_hover: ref argcallback_hover, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        var argcallbackMousedown = new Action(Client.Gui.btnTrade_Close);
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 36L, 36L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown, callbackHover: ref argcallbackHover, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Parchment
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 10L, 312L, 392L, 66L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 10L, 312L, 392L, 66L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
 
         // Labels
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
         bool enabled = false;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 36L, 30L, 142L, 9L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw1);
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblYourTrade", 36L, 27L, 142L, 9L, "Robin's Offer", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, enabled: ref enabled);
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 36L, 30L, 142L, 9L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw1);
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblYourTrade", 36L, 27L, 142L, 9L, "Robin's Offer", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, enabled: ref enabled);
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 36 + 200, 30L, 142L, 9L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw2);
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblTheirTrade", 36 + 200, 27L, 142L, 9L, "Richard's Offer", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5, enabled: ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 36 + 200, 30L, 142L, 9L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw2);
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblTheirTrade", 36 + 200, 27L, 142L, 9L, "Richard's Offer", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5, enabled: ref enabled);
 
         // Buttons
-        var argcallback_mousedown6 = new Action(Client.Gui.btnTrade_Accept);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 134L, 340L, 68L, 24L, "Accept", Core.Font.Georgia, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown6, callback_hover: ref argcallback_hover, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        var argcallback_mousedown7 = new Action(Client.Gui.btnTrade_Close);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDecline", 210L, 340L, 68L, 24L, "Decline", Core.Font.Georgia, design_norm: (long)UiDesign.Red, design_hover: (long)UiDesign.RedHover, design_mousedown: (long)UiDesign.RedClick, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown7, callback_hover: ref argcallback_hover, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        var argcallbackMousedown6 = new Action(Client.Gui.btnTrade_Accept);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnAccept", 134L, 340L, 68L, 24L, "Accept", Core.Font.Georgia, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown6, callbackHover: ref argcallbackHover, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        var argcallbackMousedown7 = new Action(Client.Gui.btnTrade_Close);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDecline", 210L, 340L, 68L, 24L, "Decline", Core.Font.Georgia, designNorm: (long)UiDesign.Red, designHover: (long)UiDesign.RedHover, designMousedown: (long)UiDesign.RedClick, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown7, callbackHover: ref argcallbackHover, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Labels
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStatus", 114L, 322L, 184L, 10L, "", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, enabled: ref enabled);
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStatus", 114L, 322L, 184L, 10L, "", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, enabled: ref enabled);
 
         // Amounts
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 25L, 330L, 100L, 10L, "Total Value", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, enabled: ref enabled);
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 285L, 330L, 100L, 10L, "Total Value", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, enabled: ref enabled);
-        Action argcallback_mousedown11 = null;
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblYourValue", 25L, 344L, 100L, 10L, "52,812g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown11, callback_mousemove: ref argcallback_mousemove11, callback_dblclick: ref argcallback_dblclick11, enabled: ref enabled);
-        Action argcallback_mousedown12 = null;
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblTheirValue", 285L, 344L, 100L, 10L, "12,531g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown12, callback_mousemove: ref argcallback_mousemove12, callback_dblclick: ref argcallback_dblclick12, enabled: ref enabled);
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 25L, 330L, 100L, 10L, "Total Value", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, enabled: ref enabled);
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 285L, 330L, 100L, 10L, "Total Value", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown10, callbackMousemove: ref argcallbackMousemove10, callbackDblclick: ref argcallbackDblclick10, enabled: ref enabled);
+        Action argcallbackMousedown11 = null;
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblYourValue", 25L, 344L, 100L, 10L, "52,812g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown11, callbackMousemove: ref argcallbackMousemove11, callbackDblclick: ref argcallbackDblclick11, enabled: ref enabled);
+        Action argcallbackMousedown12 = null;
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblTheirValue", 285L, 344L, 100L, 10L, "12,531g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown12, callbackMousemove: ref argcallbackMousemove12, callbackDblclick: ref argcallbackDblclick12, enabled: ref enabled);
 
         // Item Containers
-        var argcallback_mousedown13 = new Action(Client.Gui.TradeMouseMove_Your);
-        var argcallback_mousemove13 = new Action(Client.Gui.TradeMouseMove_Your);
-        var argcallback_dblclick13 = new Action(Client.Gui.TradeDoubleClick_Your);
+        var argcallbackMousedown13 = new Action(Client.Gui.TradeMouseMove_Your);
+        var argcallbackMousemove13 = new Action(Client.Gui.TradeMouseMove_Your);
+        var argcallbackDblclick13 = new Action(Client.Gui.TradeDoubleClick_Your);
         var argonDraw3 = new Action(Client.Gui.DrawYourTrade);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picYour", 14L, 46L, 184L, 260L, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown13, callback_hover: ref argcallback_hover, callback_mousemove: ref argcallback_mousemove13, callback_dblclick: ref argcallback_dblclick13, onDraw: ref argonDraw3);
-        var argcallback_mousedown14 = new Action(Client.Gui.TradeMouseMove_Their);
-        var argcallback_mousemove14 = new Action(Client.Gui.TradeMouseMove_Their);
-        var argcallback_dblclick14 = new Action(Client.Gui.TradeMouseMove_Their);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picYour", 14L, 46L, 184L, 260L, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown13, callbackHover: ref argcallbackHover, callbackMousemove: ref argcallbackMousemove13, callbackDblclick: ref argcallbackDblclick13, onDraw: ref argonDraw3);
+        var argcallbackMousedown14 = new Action(Client.Gui.TradeMouseMove_Their);
+        var argcallbackMousemove14 = new Action(Client.Gui.TradeMouseMove_Their);
+        var argcallbackDblclick14 = new Action(Client.Gui.TradeMouseMove_Their);
         var argonDraw4 = new Action(Client.Gui.DrawTheirTrade);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picTheir", 214L, 46L, 184L, 260L, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown14, callback_hover: ref argcallback_hover, callback_mousemove: ref argcallback_mousemove14, callback_dblclick: ref argcallback_dblclick14, onDraw: ref argonDraw4);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picTheir", 214L, 46L, 184L, 260L, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown14, callbackHover: ref argcallbackHover, callbackMousemove: ref argcallbackMousemove14, callbackDblclick: ref argcallbackDblclick14, onDraw: ref argonDraw4);
     }
 
     public void UpdateWindow_EscMenu()
     {
         // Control window
-        Client.Gui.UpdateWindow("winEscMenu", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 210L, 156L, 0L, false, design_norm: (long)UiDesign.WindowNoBar, design_hover: (long)UiDesign.WindowNoBar, design_mousedown: (long)UiDesign.WindowNoBar, canDrag: false, clickThrough: false);
+        Client.Gui.UpdateWindow("winEscMenu", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 210L, 156L, 0L, false, designNorm: (long)UiDesign.WindowNoBar, designHover: (long)UiDesign.WindowNoBar, designMousedown: (long)UiDesign.WindowNoBar, canDrag: false, clickThrough: false);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Parchment
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 198L, 144L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 198L, 144L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, onDraw: ref argonDraw);
 
         // Buttons
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = new Action(Client.Gui.btnEscMenu_Return);
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnReturn", 16L, 16L, 178L, 28L, "Return to Game", Core.Font.Georgia, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1);
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = new Action(Client.Gui.btnEscMenu_Return);
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnReturn", 16L, 16L, 178L, 28L, "Return to Game", Core.Font.Georgia, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1);
 
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = new Action(Client.Gui.btnEscMenu_Options);
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnOptions", 16L, 48L, 178L, 28L, "Options", Core.Font.Georgia, design_norm: (long)UiDesign.Orange, design_hover: (long)UiDesign.OrangeHover, design_mousedown: (long)UiDesign.OrangeClick, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = new Action(Client.Gui.btnEscMenu_Options);
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnOptions", 16L, 48L, 178L, 28L, "Options", Core.Font.Georgia, designNorm: (long)UiDesign.Orange, designHover: (long)UiDesign.OrangeHover, designMousedown: (long)UiDesign.OrangeClick, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2);
 
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown3 = new Action(Client.Gui.btnEscMenu_MainMenu);
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnMainMenu", 16L, 80L, 178L, 28L, "Back to Main Menu", Core.Font.Georgia, design_norm: (long)UiDesign.Blue, design_hover: (long)UiDesign.BlueHover, design_mousedown: (long)UiDesign.BlueClick, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown3 = new Action(Client.Gui.btnEscMenu_MainMenu);
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnMainMenu", 16L, 80L, 178L, 28L, "Back to Main Menu", Core.Font.Georgia, designNorm: (long)UiDesign.Blue, designHover: (long)UiDesign.BlueHover, designMousedown: (long)UiDesign.BlueClick, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3);
 
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown4 = new Action(Client.Gui.btnEscMenu_Exit);
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 16L, 112L, 178L, 28L, "Exit the Game", Core.Font.Georgia, design_norm: (long)UiDesign.Red, design_hover: (long)UiDesign.RedHover, design_mousedown: (long)UiDesign.RedClick, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown4 = new Action(Client.Gui.btnEscMenu_Exit);
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnExit", 16L, 112L, 178L, 28L, "Exit the Game", Core.Font.Georgia, designNorm: (long)UiDesign.Red, designHover: (long)UiDesign.RedHover, designMousedown: (long)UiDesign.RedClick, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4);
     }
 
     public void UpdateWindow_Bars()
     {
         // Control window
-        Client.Gui.UpdateWindow("winBars", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 10L, 10L, 239L, 77L, 0L, false, design_norm: (long)UiDesign.WindowNoBar, design_hover: (long)UiDesign.WindowNoBar, design_mousedown: (long)UiDesign.WindowNoBar, canDrag: false, clickThrough: true);
+        Client.Gui.UpdateWindow("winBars", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 10L, 10L, 239L, 77L, 0L, false, designNorm: (long)UiDesign.WindowNoBar, designHover: (long)UiDesign.WindowNoBar, designMousedown: (long)UiDesign.WindowNoBar, canDrag: false, clickThrough: true);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Parchment
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 227L, 65L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 227L, 65L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, onDraw: ref argonDraw);
 
         // Blank Bars
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picHP_Blank", 15L, 15L, 209L, 13L, image_norm: 24L, image_hover: 24L, image_mousedown: 24L, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picHP_Blank", 15L, 15L, 209L, 13L, imageNorm: 24L, imageHover: 24L, imageMousedown: 24L, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSP_Blank", 15L, 32L, 209L, 13L, image_norm: 25L, image_hover: 25L, image_mousedown: 25L, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw2);
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSP_Blank", 15L, 32L, 209L, 13L, imageNorm: 25L, imageHover: 25L, imageMousedown: 25L, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw2);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEXP_Blank", 15L, 49L, 209L, 13L, image_norm: 26L, image_hover: 26L, image_mousedown: 26L, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, onDraw: ref argonDraw3);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picEXP_Blank", 15L, 49L, 209L, 13L, imageNorm: 26L, imageHover: 26L, imageMousedown: 26L, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, onDraw: ref argonDraw3);
 
         // Bars
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         var argonDraw4 = new Action(Client.Gui.Bars_OnDraw);
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 0L, 0L, 0L, 0L, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw4);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 0L, 0L, 0L, 0L, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw4);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
         Action argonDraw5 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picHealth", 16L, 10L, 44L, 14L, image_norm: 21L, image_hover: 21L, image_mousedown: 21L, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5, onDraw: ref argonDraw5);
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picHealth", 16L, 10L, 44L, 14L, imageNorm: 21L, imageHover: 21L, imageMousedown: 21L, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5, onDraw: ref argonDraw5);
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         Action argonDraw6 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSpirit", 16L, 28L, 44L, 14L, image_norm: 22L, image_hover: 22L, image_mousedown: 22L, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6, onDraw: ref argonDraw6);
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSpirit", 16L, 28L, 44L, 14L, imageNorm: 22L, imageHover: 22L, imageMousedown: 22L, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6, onDraw: ref argonDraw6);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
         Action argonDraw7 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picExperience", 16L, 45L, 74L, 14L, image_norm: 23L, image_hover: 23L, image_mousedown: 23L, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7, onDraw: ref argonDraw7);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picExperience", 16L, 45L, 74L, 14L, imageNorm: 23L, imageHover: 23L, imageMousedown: 23L, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7, onDraw: ref argonDraw7);
 
         // Labels
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHP", 15L, 14L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, enabled: ref enabled);
-        Action argcallback_norm9 = null;
-        Action argcallback_hover9 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblMP", 15L, 30L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm9, callback_hover: ref argcallback_hover9, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, enabled: ref enabled);
-        Action argcallback_norm10 = null;
-        Action argcallback_hover10 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblEXP", 15L, 48L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm10, callback_hover: ref argcallback_hover10, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHP", 15L, 14L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, enabled: ref enabled);
+        Action argcallbackNorm9 = null;
+        Action argcallbackHover9 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblMP", 15L, 30L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm9, callbackHover: ref argcallbackHover9, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, enabled: ref enabled);
+        Action argcallbackNorm10 = null;
+        Action argcallbackHover10 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblEXP", 15L, 48L, 209L, 10L, "999/999", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm10, callbackHover: ref argcallbackHover10, callbackMousedown: ref argcallbackMousedown10, callbackMousemove: ref argcallbackMousemove10, callbackDblclick: ref argcallbackDblclick10, enabled: ref enabled);
     }
 
     public void UpdateWindow_Chat()
     {
         // Control window
-        Client.Gui.UpdateWindow("winChat", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 8L, Client.GameState.ResolutionHeight - 178, 352L, 152L, 0L, false, canDrag: false);
+        Client.Gui.UpdateWindow("winChat", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 8L, Client.GameState.ResolutionHeight - 178, 352L, 152L, 0L, false, canDrag: false);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Channel boxes
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Game);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkGame", 10L, 2L, 49L, 23L, 0L, "Game", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Map);
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMap", 60L, 2L, 49L, 23L, 0L, "Map", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Global);
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkGlobal", 110L, 2L, 49L, 23L, 0L, "Global", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Party);
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkParty", 160L, 2L, 49L, 23L, 0L, "Party", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Guild);
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkClient.Guild", 210L, 2L, 49L, 23L, 0L, "Client.Guild", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_mousedown = new Action(Client.Gui.CheckboxChat_Player);
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkPlayer", 260L, 2L, 49L, 23L, 0L, "Player", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Game);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkGame", 10L, 2L, 49L, 23L, 0L, "Game", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Map);
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMap", 60L, 2L, 49L, 23L, 0L, "Map", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Global);
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkGlobal", 110L, 2L, 49L, 23L, 0L, "Global", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Party);
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkParty", 160L, 2L, 49L, 23L, 0L, "Party", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Guild);
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkClient.Guild", 210L, 2L, 49L, 23L, 0L, "Client.Guild", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackMousedown = new Action(Client.Gui.CheckboxChat_Player);
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkPlayer", 260L, 2L, 49L, 23L, 0L, "Player", Core.Font.Arial, theDesign: (long)UiDesign.CheckboxChat, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Blank picturebox
         var argonDraw = new Action(Client.Gui.Chat_OnDraw);
-        Action argcallback_norm_pic = null;
-        Action argcallback_hover_pic = null;
-        Action argcallback_mousedown_pic = null;
-        Action argcallback_mousemove_pic = null;
-        Action argcallback_dblclick_pic = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picNull", 0L, 0L, 0L, 0L, onDraw: ref argonDraw, callback_norm: ref argcallback_norm_pic, callback_hover: ref argcallback_hover_pic, callback_mousedown: ref argcallback_mousedown_pic, callback_mousemove: ref argcallback_mousemove_pic, callback_dblclick: ref argcallback_dblclick_pic);
+        Action argcallbackNormPic = null;
+        Action argcallbackHoverPic = null;
+        Action argcallbackMousedownPic = null;
+        Action argcallbackMousemovePic = null;
+        Action argcallbackDblclickPic = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picNull", 0L, 0L, 0L, 0L, onDraw: ref argonDraw, callbackNorm: ref argcallbackNormPic, callbackHover: ref argcallbackHoverPic, callbackMousedown: ref argcallbackMousedownPic, callbackMousemove: ref argcallbackMousemovePic, callbackDblclick: ref argcallbackDblclickPic);
 
         // Chat button
-        argcallback_norm = new Action(Client.Gui.btnSay_Click);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnChat", 296L, (long)(124 + 16), 48L, 20L, "Say", Core.Font.Arial, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        argcallbackNorm = new Action(Client.Gui.btnSay_Click);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnChat", 296L, (long)(124 + 16), 48L, 20L, "Say", Core.Font.Arial, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Chat Textbox
-        Action argcallback_enter = null;
-        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtChat", 12L, 127 + 16, 352L, 25L, font: Core.Font.Georgia, visible: false, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, callback_enter: ref argcallback_enter);
+        Action argcallbackEnter = null;
+        Client.Gui.UpdateTextbox(Client.Gui.Windows.Count, "txtChat", 12L, 127 + 16, 352L, 25L, font: Core.Font.Georgia, visible: false, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, callbackEnter: ref argcallbackEnter);
 
         // Buttons
-        argcallback_norm = new Action(Client.Gui.btnChat_Up);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnUp", 328L, 28L, 10L, 13L, image_norm: 4L, image_hover: 52L, image_mousedown: 4L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
-        argcallback_norm = new Action(Client.Gui.btnChat_Down);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDown", 327L, 122L, 10L, 13L, image_norm: 5L, image_hover: 53L, image_mousedown: 5L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        argcallbackNorm = new Action(Client.Gui.btnChat_Up);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnUp", 328L, 28L, 10L, 13L, imageNorm: 4L, imageHover: 52L, imageMousedown: 4L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
+        argcallbackNorm = new Action(Client.Gui.btnChat_Down);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnDown", 327L, 122L, 10L, 13L, imageNorm: 5L, imageHover: 53L, imageMousedown: 5L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Custom Handlers for mouse up
         Client.Gui.Windows[Client.Gui.Windows.Count].Controls[Client.Gui.GetControlIndex("winChat", "btnUp")].CallBack[(int)ControlState.MouseUp] = new Action(Client.Gui.btnChat_Up_MouseUp);
@@ -1095,92 +1095,92 @@ public class Crystalshire
     public void UpdateWindow_ChatSmall()
     {
         // Control window
-        Client.Gui.UpdateWindow("winChatSmall", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 8L, 0L, 0L, 0L, 0L, false, onDraw: new Action(Client.Gui.ChatSmall_OnDraw), canDrag: false, clickThrough: true);
+        Client.Gui.UpdateWindow("winChatSmall", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 8L, 0L, 0L, 0L, 0L, false, onDraw: new Action(Client.Gui.ChatSmall_OnDraw), canDrag: false, clickThrough: true);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Chat Label
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblMsg", 12L, 140L, 286L, 25L, "Press 'Enter' to open chat", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblMsg", 12L, 140L, 286L, 25L, "Press 'Enter' to open chat", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, enabled: ref enabled);
     }
 
     public void UpdateWindow_Hotbar()
     {
         // Control window
-        Client.Gui.UpdateWindow("winHotbar", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 432L, 10L, 418L, 36L, 0L, false, callback_mousemove: new Action(Client.Gui.Hotbar_MouseMove), callback_mousedown: new Action(Client.Gui.Hotbar_MouseDown), callback_dblclick: new Action(Client.Gui.Hotbar_DoubleClick), onDraw: new Action(Client.Gui.DrawHotbar), canDrag: false, zChange: Conversions.ToByte(false));
+        Client.Gui.UpdateWindow("winHotbar", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 432L, 10L, 418L, 36L, 0L, false, callbackMousemove: new Action(Client.Gui.Hotbar_MouseMove), callbackMousedown: new Action(Client.Gui.Hotbar_MouseDown), callbackDblclick: new Action(Client.Gui.Hotbar_DoubleClick), onDraw: new Action(Client.Gui.DrawHotbar), canDrag: false, zChange: Conversions.ToByte(false));
     }
 
     public void UpdateWindow_Menu()
     {
         // Control window
-        Client.Gui.UpdateWindow("winMenu", "", Core.Font.Georgia, Client.Gui.zOrder_Win, Client.GameState.ResolutionWidth - 229, Client.GameState.ResolutionHeight - 31, 229L, 30L, 0L, false, isActive: false, canDrag: false, clickThrough: true);
+        Client.Gui.UpdateWindow("winMenu", "", Core.Font.Georgia, Client.Gui.ZOrderWin, Client.GameState.ResolutionWidth - 229, Client.GameState.ResolutionHeight - 31, 229L, 30L, 0L, false, isActive: false, canDrag: false, clickThrough: true);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Wood part
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWood", 0L, 5L, 228L, 20L, design_norm: (long)UiDesign.Wood, design_hover: (long)UiDesign.Wood, design_mousedown: (long)UiDesign.Wood, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWood", 0L, 5L, 228L, 20L, designNorm: (long)UiDesign.Wood, designHover: (long)UiDesign.Wood, designMousedown: (long)UiDesign.Wood, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, onDraw: ref argonDraw);
         // Buttons
-        var argcallback_mousedown1 = new Action(Client.Gui.btnMenu_Char);
-        Action callback_norm = null;
-        Action callback_hover = null;
-        Action callback_mousemove = null;
-        Action callback_dblclick = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnChar", 8L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 108L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Character (C)");
-        var argcallback_mousedown2 = new Action(Client.Gui.btnMenu_Inv);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnInv", 44L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 1L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Inventory (I)");
-        var argcallback_mousedown3 = new Action(Client.Gui.btnMenu_Skills);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSkills", 82L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 109L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Skills (K)");
-        var argcallback_mousedown4 = new Action(Client.Gui.btnMenu_Map);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnMap", 119L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 106L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Grey, design_hover: (long)UiDesign.Grey, design_mousedown: (long)UiDesign.Grey, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-2);
-        var argcallback_mousedown5 = new Action(Client.Gui.btnMenu_Guild);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClient.Guild", 155L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 107L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Grey, design_hover: (long)UiDesign.Grey, design_mousedown: (long)UiDesign.Grey, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-1);
-        var argcallback_mousedown6 = new Action(Client.Gui.btnMenu_Quest);
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnQuest", 190L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 23L, image_norm: 0L, image_hover: 0L, image_mousedown: 0L, visible: true, alpha: 255L, design_norm: (long)UiDesign.Grey, design_hover: (long)UiDesign.Grey, design_mousedown: (long)UiDesign.Grey, callback_norm: ref callback_norm, callback_hover: ref callback_hover, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref callback_mousemove, callback_dblclick: ref callback_dblclick, xOffset: (long)-1, yOffset: (long)-2);
+        var argcallbackMousedown1 = new Action(Client.Gui.btnMenu_Char);
+        Action callbackNorm = null;
+        Action callbackHover = null;
+        Action callbackMousemove = null;
+        Action callbackDblclick = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnChar", 8L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 108L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Character (C)");
+        var argcallbackMousedown2 = new Action(Client.Gui.btnMenu_Inv);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnInv", 44L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 1L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Inventory (I)");
+        var argcallbackMousedown3 = new Action(Client.Gui.btnMenu_Skills);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSkills", 82L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 109L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-2, tooltip: "Skills (K)");
+        var argcallbackMousedown4 = new Action(Client.Gui.btnMenu_Map);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnMap", 119L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 106L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Grey, designHover: (long)UiDesign.Grey, designMousedown: (long)UiDesign.Grey, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-2);
+        var argcallbackMousedown5 = new Action(Client.Gui.btnMenu_Guild);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClient.Guild", 155L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 107L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Grey, designHover: (long)UiDesign.Grey, designMousedown: (long)UiDesign.Grey, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-1);
+        var argcallbackMousedown6 = new Action(Client.Gui.btnMenu_Quest);
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnQuest", 190L, 0L, 29L, 29L, text: "", font: Core.Font.Georgia, icon: 23L, imageNorm: 0L, imageHover: 0L, imageMousedown: 0L, visible: true, alpha: 255L, designNorm: (long)UiDesign.Grey, designHover: (long)UiDesign.Grey, designMousedown: (long)UiDesign.Grey, callbackNorm: ref callbackNorm, callbackHover: ref callbackHover, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref callbackMousemove, callbackDblclick: ref callbackDblclick, xOffset: (long)-1, yOffset: (long)-2);
     }
 
     public void UpdateWindow_Inventory()
     {
         // Control window
-        Client.Gui.UpdateWindow("winInventory", "Inventory", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 202L, 319L, 1L, false, 2L, 7L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callback_mousemove: new Action(Client.Gui.Inventory_MouseMove), callback_mousedown: new Action(Client.Gui.Inventory_MouseDown), callback_dblclick: new Action(Client.Gui.Inventory_DoubleClick), onDraw: new Action(Client.Gui.DrawInventory));
+        Client.Gui.UpdateWindow("winInventory", "Inventory", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 202L, 319L, 1L, false, 2L, 7L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callbackMousemove: new Action(Client.Gui.Inventory_MouseMove), callbackMousedown: new Action(Client.Gui.Inventory_MouseDown), callbackDblclick: new Action(Client.Gui.Inventory_DoubleClick), onDraw: new Action(Client.Gui.DrawInventory));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnMenu_Inv);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallback_norm, ref argcallback_hover, ref argcallback_mousedown, ref argcallback_mousemove, ref argcallback_dblclick, 0L, 0L, "", false);
+        var argcallbackMousedown = new Action(Client.Gui.btnMenu_Inv);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, "", Core.Font.Georgia, 0L, 8L, 9L, 10L, true, 255L, 0L, 0L, 0L, ref argcallbackNorm, ref argcallbackHover, ref argcallbackMousedown, ref argcallbackMousemove, ref argcallbackDblclick, 0L, 0L, "", false);
 
         // Gold amount
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 8L, 293L, 186L, 18L, image_norm: 67L, image_hover: 67L, image_mousedown: 67L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 8L, 293L, 186L, 18L, imageNorm: 67L, imageHover: 67L, imageMousedown: 67L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         bool enabled = false;
         //UpdateLabel(Client.Gui.Windows.Count, "lblGold", 42L, 296L, 100L, 10L, "g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, enabled: ref enabled);
 
@@ -1191,425 +1191,425 @@ public class Crystalshire
     public void UpdateWindow_Character()
     {
         // Control window
-        Client.Gui.UpdateWindow("winCharacter", "Character", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 174L, 356L, 62L, false, 2L, 6L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callback_mousemove: new Action(Client.Gui.Character_MouseMove), callback_mousedown: new Action(Client.Gui.Character_MouseMove), callback_dblclick: new Action(Client.Gui.Character_DoubleClick), onDraw: new Action(Client.Gui.DrawCharacter));
+        Client.Gui.UpdateWindow("winCharacter", "Character", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 174L, 356L, 62L, false, 2L, 6L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callbackMousemove: new Action(Client.Gui.Character_MouseMove), callbackMousedown: new Action(Client.Gui.Character_MouseMove), callbackDblclick: new Action(Client.Gui.Character_DoubleClick), onDraw: new Action(Client.Gui.DrawCharacter));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        Action argcallback_norm = null;
-        var argcallback_mousedown = new Action(Client.Gui.btnMenu_Char);
-        Action argcallback_hover = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        Action argcallbackNorm = null;
+        var argcallbackMousedown = new Action(Client.Gui.btnMenu_Char);
+        Action argcallbackHover = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Parchment
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 162L, 287L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 26L, 162L, 287L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
 
         // White boxes
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 34L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 34L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 54L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, onDraw: ref argonDraw2);
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 54L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, onDraw: ref argonDraw2);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 74L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw3);
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 74L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw3);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
         Action argonDraw4 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 94L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5, onDraw: ref argonDraw4);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 94L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5, onDraw: ref argonDraw4);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
         Action argonDraw5 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 114L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6, onDraw: ref argonDraw5);
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 114L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6, onDraw: ref argonDraw5);
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
         Action argonDraw6 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 134L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7, onDraw: ref argonDraw6);
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 134L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7, onDraw: ref argonDraw6);
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
         Action argonDraw7 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 154L, 148L, 19L, design_norm: (long)UiDesign.TextWhite, design_hover: (long)UiDesign.TextWhite, design_mousedown: (long)UiDesign.TextWhite, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, onDraw: ref argonDraw7);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picWhiteBox", 13L, 154L, 148L, 19L, designNorm: (long)UiDesign.TextWhite, designHover: (long)UiDesign.TextWhite, designMousedown: (long)UiDesign.TextWhite, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, onDraw: ref argonDraw7);
 
         // Labels
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 18L, 36L, 147L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, enabled: ref enabled);
-        Action argcallback_norm9 = null;
-        Action argcallback_hover9 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob", 18L, 56L, 147L, 10L, "Job", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm9, callback_hover: ref argcallback_hover9, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, enabled: ref enabled);
-        Action argcallback_norm10 = null;
-        Action argcallback_hover10 = null;
-        Action argcallback_mousedown11 = null;
-        Action argcallback_mousemove11 = null;
-        Action argcallback_dblclick11 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel", 18L, 76L, 147L, 10L, "Level", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm10, callback_hover: ref argcallback_hover10, callback_mousedown: ref argcallback_mousedown11, callback_mousemove: ref argcallback_mousemove11, callback_dblclick: ref argcallback_dblclick11, enabled: ref enabled);
-        Action argcallback_norm11 = null;
-        Action argcallback_hover11 = null;
-        Action argcallback_mousedown12 = null;
-        Action argcallback_mousemove12 = null;
-        Action argcallback_dblclick12 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblClient.Guild", 18L, 96L, 147L, 10L, "Client.Guild", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm11, callback_hover: ref argcallback_hover11, callback_mousedown: ref argcallback_mousedown12, callback_mousemove: ref argcallback_mousemove12, callback_dblclick: ref argcallback_dblclick12, enabled: ref enabled);
-        Action argcallback_norm12 = null;
-        Action argcallback_hover12 = null;
-        Action argcallback_mousedown13 = null;
-        Action argcallback_mousemove13 = null;
-        Action argcallback_dblclick13 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHealth", 18L, 116L, 147L, 10L, "Health", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm12, callback_hover: ref argcallback_hover12, callback_mousedown: ref argcallback_mousedown13, callback_mousemove: ref argcallback_mousemove13, callback_dblclick: ref argcallback_dblclick13, enabled: ref enabled);
-        Action argcallback_norm13 = null;
-        Action argcallback_hover13 = null;
-        Action argcallback_mousedown14 = null;
-        Action argcallback_mousemove14 = null;
-        Action argcallback_dblclick14 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSpirit", 18L, 136L, 147L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm13, callback_hover: ref argcallback_hover13, callback_mousedown: ref argcallback_mousedown14, callback_mousemove: ref argcallback_mousemove14, callback_dblclick: ref argcallback_dblclick14, enabled: ref enabled);
-        Action argcallback_norm14 = null;
-        Action argcallback_hover14 = null;
-        Action argcallback_mousedown15 = null;
-        Action argcallback_mousemove15 = null;
-        Action argcallback_dblclick15 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblExperience", 18L, 156L, 147L, 10L, "Experience", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callback_norm: ref argcallback_norm14, callback_hover: ref argcallback_hover14, callback_mousedown: ref argcallback_mousedown15, callback_mousemove: ref argcallback_mousemove15, callback_dblclick: ref argcallback_dblclick15, enabled: ref enabled);
-        Action argcallback_norm15 = null;
-        Action argcallback_hover15 = null;
-        Action argcallback_mousedown16 = null;
-        Action argcallback_mousemove16 = null;
-        Action argcallback_dblclick16 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName2", 13L, 36L, 147L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm15, callback_hover: ref argcallback_hover15, callback_mousedown: ref argcallback_mousedown16, callback_mousemove: ref argcallback_mousemove16, callback_dblclick: ref argcallback_dblclick16, enabled: ref enabled);
-        Action argcallback_norm16 = null;
-        Action argcallback_hover16 = null;
-        Action argcallback_mousedown17 = null;
-        Action argcallback_mousemove17 = null;
-        Action argcallback_dblclick17 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob2", 13L, 56L, 147L, 10L, "", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm16, callback_hover: ref argcallback_hover16, callback_mousedown: ref argcallback_mousedown17, callback_mousemove: ref argcallback_mousemove17, callback_dblclick: ref argcallback_dblclick17, enabled: ref enabled);
-        Action argcallback_norm17 = null;
-        Action argcallback_hover17 = null;
-        Action argcallback_mousedown18 = null;
-        Action argcallback_mousemove18 = null;
-        Action argcallback_dblclick18 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel2", 13L, 76L, 147L, 10L, "Level", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm17, callback_hover: ref argcallback_hover17, callback_mousedown: ref argcallback_mousedown18, callback_mousemove: ref argcallback_mousemove18, callback_dblclick: ref argcallback_dblclick18, enabled: ref enabled);
-        Action argcallback_norm18 = null;
-        Action argcallback_hover18 = null;
-        Action argcallback_mousedown19 = null;
-        Action argcallback_mousemove19 = null;
-        Action argcallback_dblclick19 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblClient.Guild2", 13L, 96L, 147L, 10L, "Client.Guild", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm18, callback_hover: ref argcallback_hover18, callback_mousedown: ref argcallback_mousedown19, callback_mousemove: ref argcallback_mousemove19, callback_dblclick: ref argcallback_dblclick19, enabled: ref enabled);
-        Action argcallback_norm19 = null;
-        Action argcallback_hover19 = null;
-        Action argcallback_mousedown20 = null;
-        Action argcallback_mousemove20 = null;
-        Action argcallback_dblclick20 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHealth2", 13L, 116L, 147L, 10L, "Health", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm19, callback_hover: ref argcallback_hover19, callback_mousedown: ref argcallback_mousedown20, callback_mousemove: ref argcallback_mousemove20, callback_dblclick: ref argcallback_dblclick20, enabled: ref enabled);
-        Action argcallback_norm20 = null;
-        Action argcallback_hover20 = null;
-        Action argcallback_mousedown21 = null;
-        Action argcallback_mousemove21 = null;
-        Action argcallback_dblclick21 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSpirit2", 13L, 136L, 147L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm20, callback_hover: ref argcallback_hover20, callback_mousedown: ref argcallback_mousedown21, callback_mousemove: ref argcallback_mousemove21, callback_dblclick: ref argcallback_dblclick21, enabled: ref enabled);
-        Action argcallback_norm21 = null;
-        Action argcallback_hover21 = null;
-        Action argcallback_mousedown22 = null;
-        Action argcallback_mousemove22 = null;
-        Action argcallback_dblclick22 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblExperience2", 13L, 156L, 147L, 10L, "Experience", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm21, callback_hover: ref argcallback_hover21, callback_mousedown: ref argcallback_mousedown22, callback_mousemove: ref argcallback_mousemove22, callback_dblclick: ref argcallback_dblclick22, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 18L, 36L, 147L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, enabled: ref enabled);
+        Action argcallbackNorm9 = null;
+        Action argcallbackHover9 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob", 18L, 56L, 147L, 10L, "Job", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm9, callbackHover: ref argcallbackHover9, callbackMousedown: ref argcallbackMousedown10, callbackMousemove: ref argcallbackMousemove10, callbackDblclick: ref argcallbackDblclick10, enabled: ref enabled);
+        Action argcallbackNorm10 = null;
+        Action argcallbackHover10 = null;
+        Action argcallbackMousedown11 = null;
+        Action argcallbackMousemove11 = null;
+        Action argcallbackDblclick11 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel", 18L, 76L, 147L, 10L, "Level", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm10, callbackHover: ref argcallbackHover10, callbackMousedown: ref argcallbackMousedown11, callbackMousemove: ref argcallbackMousemove11, callbackDblclick: ref argcallbackDblclick11, enabled: ref enabled);
+        Action argcallbackNorm11 = null;
+        Action argcallbackHover11 = null;
+        Action argcallbackMousedown12 = null;
+        Action argcallbackMousemove12 = null;
+        Action argcallbackDblclick12 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblClient.Guild", 18L, 96L, 147L, 10L, "Client.Guild", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm11, callbackHover: ref argcallbackHover11, callbackMousedown: ref argcallbackMousedown12, callbackMousemove: ref argcallbackMousemove12, callbackDblclick: ref argcallbackDblclick12, enabled: ref enabled);
+        Action argcallbackNorm12 = null;
+        Action argcallbackHover12 = null;
+        Action argcallbackMousedown13 = null;
+        Action argcallbackMousemove13 = null;
+        Action argcallbackDblclick13 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHealth", 18L, 116L, 147L, 10L, "Health", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm12, callbackHover: ref argcallbackHover12, callbackMousedown: ref argcallbackMousedown13, callbackMousemove: ref argcallbackMousemove13, callbackDblclick: ref argcallbackDblclick13, enabled: ref enabled);
+        Action argcallbackNorm13 = null;
+        Action argcallbackHover13 = null;
+        Action argcallbackMousedown14 = null;
+        Action argcallbackMousemove14 = null;
+        Action argcallbackDblclick14 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSpirit", 18L, 136L, 147L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm13, callbackHover: ref argcallbackHover13, callbackMousedown: ref argcallbackMousedown14, callbackMousemove: ref argcallbackMousemove14, callbackDblclick: ref argcallbackDblclick14, enabled: ref enabled);
+        Action argcallbackNorm14 = null;
+        Action argcallbackHover14 = null;
+        Action argcallbackMousedown15 = null;
+        Action argcallbackMousemove15 = null;
+        Action argcallbackDblclick15 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblExperience", 18L, 156L, 147L, 10L, "Experience", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, callbackNorm: ref argcallbackNorm14, callbackHover: ref argcallbackHover14, callbackMousedown: ref argcallbackMousedown15, callbackMousemove: ref argcallbackMousemove15, callbackDblclick: ref argcallbackDblclick15, enabled: ref enabled);
+        Action argcallbackNorm15 = null;
+        Action argcallbackHover15 = null;
+        Action argcallbackMousedown16 = null;
+        Action argcallbackMousemove16 = null;
+        Action argcallbackDblclick16 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName2", 13L, 36L, 147L, 10L, "Name", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm15, callbackHover: ref argcallbackHover15, callbackMousedown: ref argcallbackMousedown16, callbackMousemove: ref argcallbackMousemove16, callbackDblclick: ref argcallbackDblclick16, enabled: ref enabled);
+        Action argcallbackNorm16 = null;
+        Action argcallbackHover16 = null;
+        Action argcallbackMousedown17 = null;
+        Action argcallbackMousemove17 = null;
+        Action argcallbackDblclick17 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob2", 13L, 56L, 147L, 10L, "", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm16, callbackHover: ref argcallbackHover16, callbackMousedown: ref argcallbackMousedown17, callbackMousemove: ref argcallbackMousemove17, callbackDblclick: ref argcallbackDblclick17, enabled: ref enabled);
+        Action argcallbackNorm17 = null;
+        Action argcallbackHover17 = null;
+        Action argcallbackMousedown18 = null;
+        Action argcallbackMousemove18 = null;
+        Action argcallbackDblclick18 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel2", 13L, 76L, 147L, 10L, "Level", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm17, callbackHover: ref argcallbackHover17, callbackMousedown: ref argcallbackMousedown18, callbackMousemove: ref argcallbackMousemove18, callbackDblclick: ref argcallbackDblclick18, enabled: ref enabled);
+        Action argcallbackNorm18 = null;
+        Action argcallbackHover18 = null;
+        Action argcallbackMousedown19 = null;
+        Action argcallbackMousemove19 = null;
+        Action argcallbackDblclick19 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblClient.Guild2", 13L, 96L, 147L, 10L, "Client.Guild", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm18, callbackHover: ref argcallbackHover18, callbackMousedown: ref argcallbackMousedown19, callbackMousemove: ref argcallbackMousemove19, callbackDblclick: ref argcallbackDblclick19, enabled: ref enabled);
+        Action argcallbackNorm19 = null;
+        Action argcallbackHover19 = null;
+        Action argcallbackMousedown20 = null;
+        Action argcallbackMousemove20 = null;
+        Action argcallbackDblclick20 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblHealth2", 13L, 116L, 147L, 10L, "Health", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm19, callbackHover: ref argcallbackHover19, callbackMousedown: ref argcallbackMousedown20, callbackMousemove: ref argcallbackMousemove20, callbackDblclick: ref argcallbackDblclick20, enabled: ref enabled);
+        Action argcallbackNorm20 = null;
+        Action argcallbackHover20 = null;
+        Action argcallbackMousedown21 = null;
+        Action argcallbackMousemove21 = null;
+        Action argcallbackDblclick21 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblSpirit2", 13L, 136L, 147L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm20, callbackHover: ref argcallbackHover20, callbackMousedown: ref argcallbackMousedown21, callbackMousemove: ref argcallbackMousemove21, callbackDblclick: ref argcallbackDblclick21, enabled: ref enabled);
+        Action argcallbackNorm21 = null;
+        Action argcallbackHover21 = null;
+        Action argcallbackMousedown22 = null;
+        Action argcallbackMousemove22 = null;
+        Action argcallbackDblclick22 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblExperience2", 13L, 156L, 147L, 10L, "Experience", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm21, callbackHover: ref argcallbackHover21, callbackMousedown: ref argcallbackMousedown22, callbackMousemove: ref argcallbackMousemove22, callbackDblclick: ref argcallbackDblclick22, enabled: ref enabled);
 
         // Attributes
-        Action argcallback_norm22 = null;
-        Action argcallback_hover22 = null;
-        Action argcallback_mousedown23 = null;
-        Action argcallback_mousemove23 = null;
-        Action argcallback_dblclick23 = null;
+        Action argcallbackNorm22 = null;
+        Action argcallbackHover22 = null;
+        Action argcallbackMousedown23 = null;
+        Action argcallbackMousemove23 = null;
+        Action argcallbackDblclick23 = null;
         Action argonDraw8 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 18L, 176L, 138L, 9L, design_norm: (long)UiDesign.BlackOval, design_hover: (long)UiDesign.BlackOval, design_mousedown: (long)UiDesign.BlackOval, callback_norm: ref argcallback_norm22, callback_hover: ref argcallback_hover22, callback_mousedown: ref argcallback_mousedown23, callback_mousemove: ref argcallback_mousemove23, callback_dblclick: ref argcallback_dblclick23, onDraw: ref argonDraw8);
-        Action argcallback_norm23 = null;
-        Action argcallback_hover23 = null;
-        Action argcallback_mousedown24 = null;
-        Action argcallback_mousemove24 = null;
-        Action argcallback_dblclick24 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 173L, 138L, 10L, "Attributes", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm23, callback_hover: ref argcallback_hover23, callback_mousedown: ref argcallback_mousedown24, callback_mousemove: ref argcallback_mousemove24, callback_dblclick: ref argcallback_dblclick24, enabled: ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picShadow", 18L, 176L, 138L, 9L, designNorm: (long)UiDesign.BlackOval, designHover: (long)UiDesign.BlackOval, designMousedown: (long)UiDesign.BlackOval, callbackNorm: ref argcallbackNorm22, callbackHover: ref argcallbackHover22, callbackMousedown: ref argcallbackMousedown23, callbackMousemove: ref argcallbackMousemove23, callbackDblclick: ref argcallbackDblclick23, onDraw: ref argonDraw8);
+        Action argcallbackNorm23 = null;
+        Action argcallbackHover23 = null;
+        Action argcallbackMousedown24 = null;
+        Action argcallbackMousemove24 = null;
+        Action argcallbackDblclick24 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 173L, 138L, 10L, "Attributes", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm23, callbackHover: ref argcallbackHover23, callbackMousedown: ref argcallbackMousedown24, callbackMousemove: ref argcallbackMousemove24, callbackDblclick: ref argcallbackDblclick24, enabled: ref enabled);
 
         // Black boxes
-        Action argcallback_norm24 = null;
-        Action argcallback_hover24 = null;
-        Action argcallback_mousedown25 = null;
-        Action argcallback_mousemove25 = null;
-        Action argcallback_dblclick25 = null;
+        Action argcallbackNorm24 = null;
+        Action argcallbackHover24 = null;
+        Action argcallbackMousedown25 = null;
+        Action argcallbackMousemove25 = null;
+        Action argcallbackDblclick25 = null;
         Action argonDraw9 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 186L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm24, callback_hover: ref argcallback_hover24, callback_mousedown: ref argcallback_mousedown25, callback_mousemove: ref argcallback_mousemove25, callback_dblclick: ref argcallback_dblclick25, onDraw: ref argonDraw9);
-        Action argcallback_norm25 = null;
-        Action argcallback_hover25 = null;
-        Action argcallback_mousedown26 = null;
-        Action argcallback_mousemove26 = null;
-        Action argcallback_dblclick26 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 186L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm24, callbackHover: ref argcallbackHover24, callbackMousedown: ref argcallbackMousedown25, callbackMousemove: ref argcallbackMousemove25, callbackDblclick: ref argcallbackDblclick25, onDraw: ref argonDraw9);
+        Action argcallbackNorm25 = null;
+        Action argcallbackHover25 = null;
+        Action argcallbackMousedown26 = null;
+        Action argcallbackMousemove26 = null;
+        Action argcallbackDblclick26 = null;
         Action argonDraw10 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 206L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm25, callback_hover: ref argcallback_hover25, callback_mousedown: ref argcallback_mousedown26, callback_mousemove: ref argcallback_mousemove26, callback_dblclick: ref argcallback_dblclick26, onDraw: ref argonDraw10);
-        Action argcallback_norm26 = null;
-        Action argcallback_hover26 = null;
-        Action argcallback_mousedown27 = null;
-        Action argcallback_mousemove27 = null;
-        Action argcallback_dblclick27 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 206L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm25, callbackHover: ref argcallbackHover25, callbackMousedown: ref argcallbackMousedown26, callbackMousemove: ref argcallbackMousemove26, callbackDblclick: ref argcallbackDblclick26, onDraw: ref argonDraw10);
+        Action argcallbackNorm26 = null;
+        Action argcallbackHover26 = null;
+        Action argcallbackMousedown27 = null;
+        Action argcallbackMousemove27 = null;
+        Action argcallbackDblclick27 = null;
         Action argonDraw11 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 226L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm26, callback_hover: ref argcallback_hover26, callback_mousedown: ref argcallback_mousedown27, callback_mousemove: ref argcallback_mousemove27, callback_dblclick: ref argcallback_dblclick27, onDraw: ref argonDraw11);
-        Action argcallback_norm27 = null;
-        Action argcallback_hover27 = null;
-        Action argcallback_mousedown28 = null;
-        Action argcallback_mousemove28 = null;
-        Action argcallback_dblclick28 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 226L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm26, callbackHover: ref argcallbackHover26, callbackMousedown: ref argcallbackMousedown27, callbackMousemove: ref argcallbackMousemove27, callbackDblclick: ref argcallbackDblclick27, onDraw: ref argonDraw11);
+        Action argcallbackNorm27 = null;
+        Action argcallbackHover27 = null;
+        Action argcallbackMousedown28 = null;
+        Action argcallbackMousemove28 = null;
+        Action argcallbackDblclick28 = null;
         Action argonDraw12 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 246L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm27, callback_hover: ref argcallback_hover27, callback_mousedown: ref argcallback_mousedown28, callback_mousemove: ref argcallback_mousemove28, callback_dblclick: ref argcallback_dblclick28, onDraw: ref argonDraw12);
-        Action argcallback_norm28 = null;
-        Action argcallback_hover28 = null;
-        Action argcallback_mousedown29 = null;
-        Action argcallback_mousemove29 = null;
-        Action argcallback_dblclick29 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 246L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm27, callbackHover: ref argcallbackHover27, callbackMousedown: ref argcallbackMousedown28, callbackMousemove: ref argcallbackMousemove28, callbackDblclick: ref argcallbackDblclick28, onDraw: ref argonDraw12);
+        Action argcallbackNorm28 = null;
+        Action argcallbackHover28 = null;
+        Action argcallbackMousedown29 = null;
+        Action argcallbackMousemove29 = null;
+        Action argcallbackDblclick29 = null;
         Action argonDraw13 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 266L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm28, callback_hover: ref argcallback_hover28, callback_mousedown: ref argcallback_mousedown29, callback_mousemove: ref argcallback_mousemove29, callback_dblclick: ref argcallback_dblclick29, onDraw: ref argonDraw13);
-        Action argcallback_norm29 = null;
-        Action argcallback_hover29 = null;
-        Action argcallback_mousedown30 = null;
-        Action argcallback_mousemove30 = null;
-        Action argcallback_dblclick30 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 266L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm28, callbackHover: ref argcallbackHover28, callbackMousedown: ref argcallbackMousedown29, callbackMousemove: ref argcallbackMousemove29, callbackDblclick: ref argcallbackDblclick29, onDraw: ref argonDraw13);
+        Action argcallbackNorm29 = null;
+        Action argcallbackHover29 = null;
+        Action argcallbackMousedown30 = null;
+        Action argcallbackMousemove30 = null;
+        Action argcallbackDblclick30 = null;
         Action argonDraw14 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 286L, 148L, 19L, design_norm: (long)UiDesign.TextBlack, design_hover: (long)UiDesign.TextBlack, design_mousedown: (long)UiDesign.TextBlack, callback_norm: ref argcallback_norm29, callback_hover: ref argcallback_hover29, callback_mousedown: ref argcallback_mousedown30, callback_mousemove: ref argcallback_mousemove30, callback_dblclick: ref argcallback_dblclick30, onDraw: ref argonDraw14);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlackBox", 13L, 286L, 148L, 19L, designNorm: (long)UiDesign.TextBlack, designHover: (long)UiDesign.TextBlack, designMousedown: (long)UiDesign.TextBlack, callbackNorm: ref argcallbackNorm29, callbackHover: ref argcallbackHover29, callbackMousedown: ref argcallbackMousedown30, callbackMousemove: ref argcallbackMousemove30, callbackDblclick: ref argcallbackDblclick30, onDraw: ref argonDraw14);
 
         // Labels
-        Action argcallback_norm30 = null;
-        Action argcallback_hover30 = null;
-        Action argcallback_mousedown31 = null;
-        Action argcallback_mousemove31 = null;
-        Action argcallback_dblclick31 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 188L, 138L, 10L, "Strength", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm30, callback_hover: ref argcallback_hover30, callback_mousedown: ref argcallback_mousedown31, callback_mousemove: ref argcallback_mousemove31, callback_dblclick: ref argcallback_dblclick3, enabled: ref enabled);
-        Action argcallback_norm31 = null;
-        Action argcallback_hover31 = null;
-        Action argcallback_mousedown32 = null;
-        Action argcallback_mousemove32 = null;
-        Action argcallback_dblclick32 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 208L, 138L, 10L, "Vitality", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm31, callback_hover: ref argcallback_hover31, callback_mousedown: ref argcallback_mousedown32, callback_mousemove: ref argcallback_mousemove32, callback_dblclick: ref argcallback_dblclick32, enabled: ref enabled);
-        Action argcallback_norm32 = null;
-        Action argcallback_hover32 = null;
-        Action argcallback_mousedown33 = null;
-        Action argcallback_mousemove33 = null;
-        Action argcallback_dblclick33 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 228L, 138L, 10L, "Intelligence", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm32, callback_hover: ref argcallback_hover32, callback_mousedown: ref argcallback_mousedown33, callback_mousemove: ref argcallback_mousemove33, callback_dblclick: ref argcallback_dblclick3, enabled: ref enabled);
-        Action argcallback_norm33 = null;
-        Action argcallback_hover33 = null;
-        Action argcallback_mousedown34 = null;
-        Action argcallback_mousemove34 = null;
-        Action argcallback_dblclick34 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 248L, 138L, 10L, "Luck", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm33, callback_hover: ref argcallback_hover33, callback_mousedown: ref argcallback_mousedown34, callback_mousemove: ref argcallback_mousemove34, callback_dblclick: ref argcallback_dblclick34, enabled: ref enabled);
-        Action argcallback_norm34 = null;
-        Action argcallback_hover34 = null;
-        Action argcallback_mousedown35 = null;
-        Action argcallback_mousemove35 = null;
-        Action argcallback_dblclick35 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 268L, 138L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callback_norm: ref argcallback_norm34, callback_hover: ref argcallback_hover34, callback_mousedown: ref argcallback_mousedown35, callback_mousemove: ref argcallback_mousemove35, callback_dblclick: ref argcallback_dblclick35, enabled: ref enabled);
-        Action argcallback_norm35 = null;
-        Action argcallback_hover35 = null;
-        Action argcallback_mousedown36 = null;
-        Action argcallback_mousemove36 = null;
-        Action argcallback_dblclick36 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 288L, 138L, 10L, "Stat Points", Core.Font.Arial, Microsoft.Xna.Framework.Color.Green, callback_norm: ref argcallback_norm35, callback_hover: ref argcallback_hover35, callback_mousedown: ref argcallback_mousedown36, callback_mousemove: ref argcallback_mousemove36, callback_dblclick: ref argcallback_dblclick36, enabled: ref enabled);
+        Action argcallbackNorm30 = null;
+        Action argcallbackHover30 = null;
+        Action argcallbackMousedown31 = null;
+        Action argcallbackMousemove31 = null;
+        Action argcallbackDblclick31 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 188L, 138L, 10L, "Strength", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callbackNorm: ref argcallbackNorm30, callbackHover: ref argcallbackHover30, callbackMousedown: ref argcallbackMousedown31, callbackMousemove: ref argcallbackMousemove31, callbackDblclick: ref argcallbackDblclick3, enabled: ref enabled);
+        Action argcallbackNorm31 = null;
+        Action argcallbackHover31 = null;
+        Action argcallbackMousedown32 = null;
+        Action argcallbackMousemove32 = null;
+        Action argcallbackDblclick32 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 208L, 138L, 10L, "Vitality", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callbackNorm: ref argcallbackNorm31, callbackHover: ref argcallbackHover31, callbackMousedown: ref argcallbackMousedown32, callbackMousemove: ref argcallbackMousemove32, callbackDblclick: ref argcallbackDblclick32, enabled: ref enabled);
+        Action argcallbackNorm32 = null;
+        Action argcallbackHover32 = null;
+        Action argcallbackMousedown33 = null;
+        Action argcallbackMousemove33 = null;
+        Action argcallbackDblclick33 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 228L, 138L, 10L, "Intelligence", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callbackNorm: ref argcallbackNorm32, callbackHover: ref argcallbackHover32, callbackMousedown: ref argcallbackMousedown33, callbackMousemove: ref argcallbackMousemove33, callbackDblclick: ref argcallbackDblclick3, enabled: ref enabled);
+        Action argcallbackNorm33 = null;
+        Action argcallbackHover33 = null;
+        Action argcallbackMousedown34 = null;
+        Action argcallbackMousemove34 = null;
+        Action argcallbackDblclick34 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 248L, 138L, 10L, "Luck", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callbackNorm: ref argcallbackNorm33, callbackHover: ref argcallbackHover33, callbackMousedown: ref argcallbackMousedown34, callbackMousemove: ref argcallbackMousemove34, callbackDblclick: ref argcallbackDblclick34, enabled: ref enabled);
+        Action argcallbackNorm34 = null;
+        Action argcallbackHover34 = null;
+        Action argcallbackMousedown35 = null;
+        Action argcallbackMousemove35 = null;
+        Action argcallbackDblclick35 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 268L, 138L, 10L, "Spirit", Core.Font.Arial, Microsoft.Xna.Framework.Color.Yellow, callbackNorm: ref argcallbackNorm34, callbackHover: ref argcallbackHover34, callbackMousedown: ref argcallbackMousedown35, callbackMousemove: ref argcallbackMousemove35, callbackDblclick: ref argcallbackDblclick35, enabled: ref enabled);
+        Action argcallbackNorm35 = null;
+        Action argcallbackHover35 = null;
+        Action argcallbackMousedown36 = null;
+        Action argcallbackMousemove36 = null;
+        Action argcallbackDblclick36 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLabel", 18L, 288L, 138L, 10L, "Stat Points", Core.Font.Arial, Microsoft.Xna.Framework.Color.Green, callbackNorm: ref argcallbackNorm35, callbackHover: ref argcallbackHover35, callbackMousedown: ref argcallbackMousedown36, callbackMousemove: ref argcallbackMousemove36, callbackDblclick: ref argcallbackDblclick36, enabled: ref enabled);
 
         // Buttons
-        var argcallback_mousedown37 = new Action(Client.Gui.Character_SpendPoint1);
-        Action argcallback_mousemove37 = null;
-        Action argcallback_dblclick37 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_1", 144L, 188L, 15L, 15L, image_norm: 48L, image_hover: 49L, image_mousedown: 50L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown37, callback_mousemove: ref argcallback_mousemove37, callback_dblclick: ref argcallback_dblclick37);
-        var argcallback_mousedown38 = new Action(Client.Gui.Character_SpendPoint2);
-        Action argcallback_mousemove38 = null;
-        Action argcallback_dblclick38 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_2", 144L, 208L, 15L, 15L, image_norm: 48L, image_hover: 49L, image_mousedown: 50L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown38, callback_mousemove: ref argcallback_mousemove38, callback_dblclick: ref argcallback_dblclick3);
-        var argcallback_mousedown39 = new Action(Client.Gui.Character_SpendPoint3);
-        Action argcallback_mousemove39 = null;
-        Action argcallback_dblclick39 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_3", 144L, 228L, 15L, 15L, image_norm: 48L, image_hover: 49L, image_mousedown: 50L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown39, callback_mousemove: ref argcallback_mousemove39, callback_dblclick: ref argcallback_dblclick39);
-        var argcallback_mousedown40 = new Action(Client.Gui.Character_SpendPoint4);
-        Action argcallback_mousemove40 = null;
-        Action argcallback_dblclick40 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_4", 144L, 248L, 15L, 15L, image_norm: 48L, image_hover: 49L, image_mousedown: 50L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown40, callback_mousemove: ref argcallback_mousemove40, callback_dblclick: ref argcallback_dblclick4);
-        var argcallback_mousedown41 = new Action(Client.Gui.Character_SpendPoint5);
-        Action argcallback_mousemove41 = null;
-        Action argcallback_dblclick41 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_5", 144L, 268L, 15L, 15L, image_norm: 48L, image_hover: 49L, image_mousedown: 50L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown41, callback_mousemove: ref argcallback_mousemove41, callback_dblclick: ref argcallback_dblclick41);
+        var argcallbackMousedown37 = new Action(Client.Gui.Character_SpendPoint1);
+        Action argcallbackMousemove37 = null;
+        Action argcallbackDblclick37 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_1", 144L, 188L, 15L, 15L, imageNorm: 48L, imageHover: 49L, imageMousedown: 50L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown37, callbackMousemove: ref argcallbackMousemove37, callbackDblclick: ref argcallbackDblclick37);
+        var argcallbackMousedown38 = new Action(Client.Gui.Character_SpendPoint2);
+        Action argcallbackMousemove38 = null;
+        Action argcallbackDblclick38 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_2", 144L, 208L, 15L, 15L, imageNorm: 48L, imageHover: 49L, imageMousedown: 50L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown38, callbackMousemove: ref argcallbackMousemove38, callbackDblclick: ref argcallbackDblclick3);
+        var argcallbackMousedown39 = new Action(Client.Gui.Character_SpendPoint3);
+        Action argcallbackMousemove39 = null;
+        Action argcallbackDblclick39 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_3", 144L, 228L, 15L, 15L, imageNorm: 48L, imageHover: 49L, imageMousedown: 50L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown39, callbackMousemove: ref argcallbackMousemove39, callbackDblclick: ref argcallbackDblclick39);
+        var argcallbackMousedown40 = new Action(Client.Gui.Character_SpendPoint4);
+        Action argcallbackMousemove40 = null;
+        Action argcallbackDblclick40 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_4", 144L, 248L, 15L, 15L, imageNorm: 48L, imageHover: 49L, imageMousedown: 50L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown40, callbackMousemove: ref argcallbackMousemove40, callbackDblclick: ref argcallbackDblclick4);
+        var argcallbackMousedown41 = new Action(Client.Gui.Character_SpendPoint5);
+        Action argcallbackMousemove41 = null;
+        Action argcallbackDblclick41 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnStat_5", 144L, 268L, 15L, 15L, imageNorm: 48L, imageHover: 49L, imageMousedown: 50L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown41, callbackMousemove: ref argcallbackMousemove41, callbackDblclick: ref argcallbackDblclick41);
 
         // fake buttons
-        Action argcallback_norm36 = null;
-        Action argcallback_hover36 = null;
-        Action argcallback_mousedown42 = null;
-        Action argcallback_mousemove42 = null;
-        Action argcallback_dblclick42 = null;
+        Action argcallbackNorm36 = null;
+        Action argcallbackHover36 = null;
+        Action argcallbackMousedown42 = null;
+        Action argcallbackMousemove42 = null;
+        Action argcallbackDblclick42 = null;
         Action argonDraw15 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_1", 144L, 188L, 15L, 15L, image_norm: 47L, image_hover: 47L, image_mousedown: 47L, callback_norm: ref argcallback_norm36, callback_hover: ref argcallback_hover36, callback_mousedown: ref argcallback_mousedown42, callback_mousemove: ref argcallback_mousemove42, callback_dblclick: ref argcallback_dblclick42, onDraw: ref argonDraw15);
-        Action argcallback_norm37 = null;
-        Action argcallback_hover37 = null;
-        Action argcallback_mousedown43 = null;
-        Action argcallback_mousemove43 = null;
-        Action argcallback_dblclick43 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_1", 144L, 188L, 15L, 15L, imageNorm: 47L, imageHover: 47L, imageMousedown: 47L, callbackNorm: ref argcallbackNorm36, callbackHover: ref argcallbackHover36, callbackMousedown: ref argcallbackMousedown42, callbackMousemove: ref argcallbackMousemove42, callbackDblclick: ref argcallbackDblclick42, onDraw: ref argonDraw15);
+        Action argcallbackNorm37 = null;
+        Action argcallbackHover37 = null;
+        Action argcallbackMousedown43 = null;
+        Action argcallbackMousemove43 = null;
+        Action argcallbackDblclick43 = null;
         Action argonDraw16 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_2", 144L, 208L, 15L, 15L, image_norm: 47L, image_hover: 47L, image_mousedown: 47L, callback_norm: ref argcallback_norm37, callback_hover: ref argcallback_hover37, callback_mousedown: ref argcallback_mousedown43, callback_mousemove: ref argcallback_mousemove43, callback_dblclick: ref argcallback_dblclick43, onDraw: ref argonDraw16);
-        Action argcallback_norm38 = null;
-        Action argcallback_hover38 = null;
-        Action argcallback_mousedown44 = null;
-        Action argcallback_mousemove44 = null;
-        Action argcallback_dblclick44 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_2", 144L, 208L, 15L, 15L, imageNorm: 47L, imageHover: 47L, imageMousedown: 47L, callbackNorm: ref argcallbackNorm37, callbackHover: ref argcallbackHover37, callbackMousedown: ref argcallbackMousedown43, callbackMousemove: ref argcallbackMousemove43, callbackDblclick: ref argcallbackDblclick43, onDraw: ref argonDraw16);
+        Action argcallbackNorm38 = null;
+        Action argcallbackHover38 = null;
+        Action argcallbackMousedown44 = null;
+        Action argcallbackMousemove44 = null;
+        Action argcallbackDblclick44 = null;
         Action argonDraw17 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_3", 144L, 228L, 15L, 15L, image_norm: 47L, image_hover: 47L, image_mousedown: 47L, callback_norm: ref argcallback_norm38, callback_hover: ref argcallback_hover38, callback_mousedown: ref argcallback_mousedown44, callback_mousemove: ref argcallback_mousemove44, callback_dblclick: ref argcallback_dblclick44, onDraw: ref argonDraw17);
-        Action argcallback_norm39 = null;
-        Action argcallback_hover39 = null;
-        Action argcallback_mousedown45 = null;
-        Action argcallback_mousemove45 = null;
-        Action argcallback_dblclick45 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_3", 144L, 228L, 15L, 15L, imageNorm: 47L, imageHover: 47L, imageMousedown: 47L, callbackNorm: ref argcallbackNorm38, callbackHover: ref argcallbackHover38, callbackMousedown: ref argcallbackMousedown44, callbackMousemove: ref argcallbackMousemove44, callbackDblclick: ref argcallbackDblclick44, onDraw: ref argonDraw17);
+        Action argcallbackNorm39 = null;
+        Action argcallbackHover39 = null;
+        Action argcallbackMousedown45 = null;
+        Action argcallbackMousemove45 = null;
+        Action argcallbackDblclick45 = null;
         Action argonDraw18 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_4", 144L, 248L, 15L, 15L, image_norm: 47L, image_hover: 47L, image_mousedown: 47L, callback_norm: ref argcallback_norm39, callback_hover: ref argcallback_hover39, callback_mousedown: ref argcallback_mousedown45, callback_mousemove: ref argcallback_mousemove45, callback_dblclick: ref argcallback_dblclick45, onDraw: ref argonDraw18);
-        Action argcallback_norm40 = null;
-        Action argcallback_hover40 = null;
-        Action argcallback_mousedown46 = null;
-        Action argcallback_mousemove46 = null;
-        Action argcallback_dblclick46 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_4", 144L, 248L, 15L, 15L, imageNorm: 47L, imageHover: 47L, imageMousedown: 47L, callbackNorm: ref argcallbackNorm39, callbackHover: ref argcallbackHover39, callbackMousedown: ref argcallbackMousedown45, callbackMousemove: ref argcallbackMousemove45, callbackDblclick: ref argcallbackDblclick45, onDraw: ref argonDraw18);
+        Action argcallbackNorm40 = null;
+        Action argcallbackHover40 = null;
+        Action argcallbackMousedown46 = null;
+        Action argcallbackMousemove46 = null;
+        Action argcallbackDblclick46 = null;
         Action argonDraw19 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_5", 144L, 268L, 15L, 15L, image_norm: 47L, image_hover: 47L, image_mousedown: 47L, callback_norm: ref argcallback_norm40, callback_hover: ref argcallback_hover40, callback_mousedown: ref argcallback_mousedown46, callback_mousemove: ref argcallback_mousemove46, callback_dblclick: ref argcallback_dblclick46, onDraw: ref argonDraw19);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "btnGreyStat_5", 144L, 268L, 15L, 15L, imageNorm: 47L, imageHover: 47L, imageMousedown: 47L, callbackNorm: ref argcallbackNorm40, callbackHover: ref argcallbackHover40, callbackMousedown: ref argcallbackMousedown46, callbackMousemove: ref argcallbackMousemove46, callbackDblclick: ref argcallbackDblclick46, onDraw: ref argonDraw19);
 
         // Labels
-        Action argcallback_norm41 = null;
-        Action argcallback_hover41 = null;
-        Action argcallback_mousedown47 = null;
-        Action argcallback_mousemove47 = null;
-        Action argcallback_dblclick47 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_1", 42L, 188L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm41, callback_hover: ref argcallback_hover41, callback_mousedown: ref argcallback_mousedown47, callback_mousemove: ref argcallback_mousemove47, callback_dblclick: ref argcallback_dblclick47, enabled: ref enabled);
-        Action argcallback_norm42 = null;
-        Action argcallback_hover42 = null;
-        Action argcallback_mousedown48 = null;
-        Action argcallback_mousemove48 = null;
-        Action argcallback_dblclick48 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_2", 42L, 208L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm42, callback_hover: ref argcallback_hover42, callback_mousedown: ref argcallback_mousedown48, callback_mousemove: ref argcallback_mousemove48, callback_dblclick: ref argcallback_dblclick48, enabled: ref enabled);
-        Action argcallback_norm43 = null;
-        Action argcallback_hover43 = null;
-        Action argcallback_mousedown49 = null;
-        Action argcallback_mousemove49 = null;
-        Action argcallback_dblclick49 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_3", 42L, 228L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm43, callback_hover: ref argcallback_hover43, callback_mousedown: ref argcallback_mousedown49, callback_mousemove: ref argcallback_mousemove49, callback_dblclick: ref argcallback_dblclick49, enabled: ref enabled);
-        Action argcallback_norm44 = null;
-        Action argcallback_hover44 = null;
-        Action argcallback_mousedown50 = null;
-        Action argcallback_mousemove50 = null;
-        Action argcallback_dblclick50 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_4", 42L, 248L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm44, callback_hover: ref argcallback_hover44, callback_mousedown: ref argcallback_mousedown50, callback_mousemove: ref argcallback_mousemove50, callback_dblclick: ref argcallback_dblclick50, enabled: ref enabled);
-        Action argcallback_norm45 = null;
-        Action argcallback_hover45 = null;
-        Action argcallback_mousedown51 = null;
-        Action argcallback_mousemove51 = null;
-        Action argcallback_dblclick51 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_5", 42L, 268L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm45, callback_hover: ref argcallback_hover45, callback_mousedown: ref argcallback_mousedown51, callback_mousemove: ref argcallback_mousemove51, callback_dblclick: ref argcallback_dblclick51, enabled: ref enabled);
-        Action argcallback_norm46 = null;
-        Action argcallback_hover46 = null;
-        Action argcallback_mousedown52 = null;
-        Action argcallback_mousemove52 = null;
-        Action argcallback_dblclick52 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPoints", 57L, 288L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callback_norm: ref argcallback_norm46, callback_hover: ref argcallback_hover46, callback_mousedown: ref argcallback_mousedown52, callback_mousemove: ref argcallback_mousemove52, callback_dblclick: ref argcallback_dblclick5, enabled: ref enabled);
+        Action argcallbackNorm41 = null;
+        Action argcallbackHover41 = null;
+        Action argcallbackMousedown47 = null;
+        Action argcallbackMousemove47 = null;
+        Action argcallbackDblclick47 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_1", 42L, 188L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm41, callbackHover: ref argcallbackHover41, callbackMousedown: ref argcallbackMousedown47, callbackMousemove: ref argcallbackMousemove47, callbackDblclick: ref argcallbackDblclick47, enabled: ref enabled);
+        Action argcallbackNorm42 = null;
+        Action argcallbackHover42 = null;
+        Action argcallbackMousedown48 = null;
+        Action argcallbackMousemove48 = null;
+        Action argcallbackDblclick48 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_2", 42L, 208L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm42, callbackHover: ref argcallbackHover42, callbackMousedown: ref argcallbackMousedown48, callbackMousemove: ref argcallbackMousemove48, callbackDblclick: ref argcallbackDblclick48, enabled: ref enabled);
+        Action argcallbackNorm43 = null;
+        Action argcallbackHover43 = null;
+        Action argcallbackMousedown49 = null;
+        Action argcallbackMousemove49 = null;
+        Action argcallbackDblclick49 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_3", 42L, 228L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm43, callbackHover: ref argcallbackHover43, callbackMousedown: ref argcallbackMousedown49, callbackMousemove: ref argcallbackMousemove49, callbackDblclick: ref argcallbackDblclick49, enabled: ref enabled);
+        Action argcallbackNorm44 = null;
+        Action argcallbackHover44 = null;
+        Action argcallbackMousedown50 = null;
+        Action argcallbackMousemove50 = null;
+        Action argcallbackDblclick50 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_4", 42L, 248L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm44, callbackHover: ref argcallbackHover44, callbackMousedown: ref argcallbackMousedown50, callbackMousemove: ref argcallbackMousemove50, callbackDblclick: ref argcallbackDblclick50, enabled: ref enabled);
+        Action argcallbackNorm45 = null;
+        Action argcallbackHover45 = null;
+        Action argcallbackMousedown51 = null;
+        Action argcallbackMousemove51 = null;
+        Action argcallbackDblclick51 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblStat_5", 42L, 268L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm45, callbackHover: ref argcallbackHover45, callbackMousedown: ref argcallbackMousedown51, callbackMousemove: ref argcallbackMousemove51, callbackDblclick: ref argcallbackDblclick51, enabled: ref enabled);
+        Action argcallbackNorm46 = null;
+        Action argcallbackHover46 = null;
+        Action argcallbackMousedown52 = null;
+        Action argcallbackMousemove52 = null;
+        Action argcallbackDblclick52 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblPoints", 57L, 288L, 100L, 15L, "255", Core.Font.Arial, Microsoft.Xna.Framework.Color.White, Alignment.Right, callbackNorm: ref argcallbackNorm46, callbackHover: ref argcallbackHover46, callbackMousedown: ref argcallbackMousedown52, callbackMousemove: ref argcallbackMousemove52, callbackDblclick: ref argcallbackDblclick5, enabled: ref enabled);
     }
 
     public void UpdateWindow_Description()
     {
         // Control window
-        Client.Gui.UpdateWindow("winDescription", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 193L, 142L, 0L, false, design_norm: (long)UiDesign.WindowDescription, design_hover: (long)UiDesign.WindowDescription, design_mousedown: (long)UiDesign.WindowDescription, canDrag: false, clickThrough: true);
+        Client.Gui.UpdateWindow("winDescription", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 193L, 142L, 0L, false, designNorm: (long)UiDesign.WindowDescription, designHover: (long)UiDesign.WindowDescription, designMousedown: (long)UiDesign.WindowDescription, canDrag: false, clickThrough: true);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Name
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 8L, 12L, 177L, 10L, "Flame Sword", Core.Font.Arial, Microsoft.Xna.Framework.Color.Blue, Alignment.Center, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 8L, 12L, 177L, 10L, "Flame Sword", Core.Font.Arial, Microsoft.Xna.Framework.Color.Blue, Alignment.Center, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, enabled: ref enabled);
 
         // Sprite box
         var argonDraw = new Action(Client.Gui.Description_OnDraw);
-        Action argcallback_norm_pic = null;
-        Action argcallback_hover_pic = null;
-        Action argcallback_mousedown_pic = null;
-        Action argcallback_mousemove_pic = null;
-        Action argcallback_dblclick_pic = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSprite", 18L, 32L, 68L, 68L, design_norm: (long)UiDesign.DescriptionPicture, design_hover: (long)UiDesign.DescriptionPicture, design_mousedown: (long)UiDesign.DescriptionPicture, callback_norm: ref argcallback_norm_pic, callback_hover: ref argcallback_hover_pic, callback_mousedown: ref argcallback_mousedown_pic, callback_mousemove: ref argcallback_mousemove_pic, callback_dblclick: ref argcallback_dblclick_pic, onDraw: ref argonDraw);
+        Action argcallbackNormPic = null;
+        Action argcallbackHoverPic = null;
+        Action argcallbackMousedownPic = null;
+        Action argcallbackMousemovePic = null;
+        Action argcallbackDblclickPic = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSprite", 18L, 32L, 68L, 68L, designNorm: (long)UiDesign.DescriptionPicture, designHover: (long)UiDesign.DescriptionPicture, designMousedown: (long)UiDesign.DescriptionPicture, callbackNorm: ref argcallbackNormPic, callbackHover: ref argcallbackHoverPic, callbackMousedown: ref argcallbackMousedownPic, callbackMousemove: ref argcallbackMousemovePic, callbackDblclick: ref argcallbackDblclickPic, onDraw: ref argonDraw);
 
         // Sep
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSep", 96L, 28L, 0L, 92L, image_norm: 44L, image_hover: 44L, image_mousedown: 44L, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw1);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picSep", 96L, 28L, 0L, 92L, imageNorm: 44L, imageHover: 44L, imageMousedown: 44L, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw1);
 
         // Requirements
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob", 5L, 102L, 92L, 10L, "Warrior", Core.Font.Georgia, Microsoft.Xna.Framework.Color.Green, Alignment.Center, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, enabled: ref enabled);
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel", 5L, 114L, 92L, 10L, "Level 20", Core.Font.Georgia, Microsoft.Xna.Framework.Color.Red, Alignment.Center, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, enabled: ref enabled);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblJob", 5L, 102L, 92L, 10L, "Warrior", Core.Font.Georgia, Microsoft.Xna.Framework.Color.Green, Alignment.Center, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, enabled: ref enabled);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblLevel", 5L, 114L, 92L, 10L, "Level 20", Core.Font.Georgia, Microsoft.Xna.Framework.Color.Red, Alignment.Center, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, enabled: ref enabled);
 
         // Bar
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar", 19L, 114L, 66L, 12L, false, image_norm: 45L, image_hover: 45L, image_mousedown: 45L, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4, onDraw: ref argonDraw2);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBar", 19L, 114L, 66L, 12L, false, imageNorm: 45L, imageHover: 45L, imageMousedown: 45L, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4, onDraw: ref argonDraw2);
     }
 
     public void UpdateWindow_RightClick()
     {
         // Control window
-        Client.Gui.UpdateWindow("winRightClickBG", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 800L, 600L, 0L, false, callback_mousedown: new Action(Client.Gui.RightClick_Close), canDrag: false);
+        Client.Gui.UpdateWindow("winRightClickBG", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 800L, 600L, 0L, false, callbackMousedown: new Action(Client.Gui.RightClick_Close), canDrag: false);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
@@ -1618,53 +1618,53 @@ public class Crystalshire
     public void UpdateWindow_PlayerMenu()
     {
         // Control window  
-        Client.Gui.UpdateWindow("winPlayerMenu", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 110L, 106L, 0L, false, design_norm: (long)UiDesign.WindowDescription, design_hover: (long)UiDesign.WindowDescription, design_mousedown: (long)UiDesign.WindowDescription, callback_mousedown: new Action(Client.Gui.RightClick_Close), canDrag: false);
+        Client.Gui.UpdateWindow("winPlayerMenu", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 110L, 106L, 0L, false, designNorm: (long)UiDesign.WindowDescription, designHover: (long)UiDesign.WindowDescription, designMousedown: (long)UiDesign.WindowDescription, callbackMousedown: new Action(Client.Gui.RightClick_Close), canDrag: false);
 
         // Centralize it  
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Name  
-        var argcallback_mousedown = new Action(Client.Gui.RightClick_Close);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnName", 8L, 8L, 94L, 18L, "[Name]", Core.Font.Georgia, design_norm: (long)UiDesign.MenuHeader, design_hover: (long)UiDesign.MenuHeader, design_mousedown: (long)UiDesign.MenuHeader, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        var argcallbackMousedown = new Action(Client.Gui.RightClick_Close);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnName", 8L, 8L, 94L, 18L, "[Name]", Core.Font.Georgia, designNorm: (long)UiDesign.MenuHeader, designHover: (long)UiDesign.MenuHeader, designMousedown: (long)UiDesign.MenuHeader, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Options  
-        var argcallback_mousedown1 = new Action(Client.Gui.PlayerMenu_Party);
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnParty", 8L, 26L, 94L, 18L, "Invite to Party", Core.Font.Georgia, design_hover: (long)UiDesign.MenuOption, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1);
+        var argcallbackMousedown1 = new Action(Client.Gui.PlayerMenu_Party);
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnParty", 8L, 26L, 94L, 18L, "Invite to Party", Core.Font.Georgia, designHover: (long)UiDesign.MenuOption, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1);
 
-        var argcallback_mousedown2 = new Action(Client.Gui.PlayerMenu_Trade);
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnTrade", 8L, 44L, 94L, 18L, "Request Trade", Core.Font.Georgia, design_hover: (long)UiDesign.MenuOption, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2);
+        var argcallbackMousedown2 = new Action(Client.Gui.PlayerMenu_Trade);
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnTrade", 8L, 44L, 94L, 18L, "Request Trade", Core.Font.Georgia, designHover: (long)UiDesign.MenuOption, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2);
 
-        var argcallback_mousedown3 = new Action(Client.Gui.PlayerMenu_Guild);
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClient.Guild", 8L, 62L, 94L, 18L, "Invite to Client.Guild", Core.Font.Georgia, design_norm: (long)UiDesign.MenuOption, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3);
+        var argcallbackMousedown3 = new Action(Client.Gui.PlayerMenu_Guild);
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClient.Guild", 8L, 62L, 94L, 18L, "Invite to Client.Guild", Core.Font.Georgia, designNorm: (long)UiDesign.MenuOption, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3);
 
-        var argcallback_mousedown4 = new Action(Client.Gui.PlayerMenu_Player);
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnPM", 8L, 80L, 94L, 18L, "Private Message", Core.Font.Georgia, design_hover: (long)UiDesign.MenuOption, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4);
+        var argcallbackMousedown4 = new Action(Client.Gui.PlayerMenu_Player);
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnPM", 8L, 80L, 94L, 18L, "Private Message", Core.Font.Georgia, designHover: (long)UiDesign.MenuOption, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4);
     }
 
     public void UpdateWindow_DragBox()
     {
         // Control window
-        Client.Gui.UpdateWindow("winDragBox", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 32L, 32L, 0L, false, onDraw: new Action(Client.Gui.DragBox_OnDraw));
+        Client.Gui.UpdateWindow("winDragBox", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 32L, 32L, 0L, false, onDraw: new Action(Client.Gui.DragBox_OnDraw));
 
         // Need to set up unique mouseup event
         Client.Gui.Windows[Client.Gui.Windows.Count].CallBack[(int)ControlState.MouseUp] = new Action(Client.Gui.DragBox_Check);
@@ -1672,88 +1672,88 @@ public class Crystalshire
 
     public void UpdateWindow_Options()
     {
-        Client.Gui.UpdateWindow("winOptions", "", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 210L, 212L, 0L, Conversions.ToBoolean(0), design_norm: (long)UiDesign.WindowNoBar, design_hover: (long)UiDesign.WindowNoBar, design_mousedown: (long)UiDesign.WindowNoBar, isActive: false, clickThrough: false);
+        Client.Gui.UpdateWindow("winOptions", "", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 210L, 212L, 0L, Conversions.ToBoolean(0), designNorm: (long)UiDesign.WindowNoBar, designHover: (long)UiDesign.WindowNoBar, designMousedown: (long)UiDesign.WindowNoBar, isActive: false, clickThrough: false);
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Parchment
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Action argcallback_mousedown = null;
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Action argcallbackMousedown = null;
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
         Action argonDraw = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 198L, 200L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick, onDraw: ref argonDraw);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 6L, 198L, 200L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick, onDraw: ref argonDraw);
 
         // General
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
         Action argonDraw1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 35L, 25L, 140L, 10L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw1);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 35L, 25L, 140L, 10L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw1);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 35L, 22L, 140L, 0L, "General Options", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 35L, 22L, 140L, 0L, "General Options", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, enabled: ref enabled);
 
         // Check boxes
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMusic", 35L, 40L, 80L, text: "Music", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3);
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Action argcallback_mousedown4 = null;
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkSound", 115L, 40L, 80L, text: "Sound", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4);
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Action argcallback_mousedown5 = null;
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkAutotile", 35L, 60L, 80L, text: "Autotile", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5);
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Action argcallback_mousedown6 = null;
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkFullscreen", 115L, 60L, 80L, text: "Fullscreen", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6);
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkMusic", 35L, 40L, 80L, text: "Music", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3);
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Action argcallbackMousedown4 = null;
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkSound", 115L, 40L, 80L, text: "Sound", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4);
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Action argcallbackMousedown5 = null;
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkAutotile", 35L, 60L, 80L, text: "Autotile", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5);
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Action argcallbackMousedown6 = null;
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "chkFullscreen", 115L, 60L, 80L, text: "Fullscreen", font: Core.Font.Georgia, theDesign: (long)UiDesign.CheckboxNormal, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6);
 
         // Resolution
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown7 = null;
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown7 = null;
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 35L, 85L, 140L, 10L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7, onDraw: ref argonDraw2);
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 35L, 92L, 140L, 10L, "Select Resolution", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, enabled: ref enabled);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picBlank", 35L, 85L, 140L, 10L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7, onDraw: ref argonDraw2);
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblBlank", 35L, 92L, 140L, 10L, "Select Resolution", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Center, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, enabled: ref enabled);
 
         // combobox
         Client.Gui.UpdateComboBox(Client.Gui.Windows.Count, "cmbRes", 30L, 100L, 150L, 18L, (long)UiDesign.ComboBoxNormal);
 
         // Button
-        Action argcallback_mousedown9 = Client.Gui.btnOptions_Confirm;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnConfirm", 65L, 168L, 80L, 22L, "Confirm", Core.Font.Georgia, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_hover: ref argcallback_hover, callback_norm: ref argcallback_norm, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9);
+        Action argcallbackMousedown9 = Client.Gui.btnOptions_Confirm;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnConfirm", 65L, 168L, 80L, 22L, "Confirm", Core.Font.Georgia, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackHover: ref argcallbackHover, callbackNorm: ref argcallbackNorm, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9);
 
         // Populate the options screen
         Client.GameLogic.SetOptionsScreen();
@@ -1762,10 +1762,10 @@ public class Crystalshire
     public void UpdateWindow_Combobox()
     {
         // background window
-        Client.Gui.UpdateWindow("winComboMenuBG", "ComboMenuBG", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 800L, 600L, 0L, false, callback_dblclick: new Action(Client.Gui.CloseComboMenu), zChange: Conversions.ToByte(false), isActive: false);
+        Client.Gui.UpdateWindow("winComboMenuBG", "ComboMenuBG", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 800L, 600L, 0L, false, callbackDblclick: new Action(Client.Gui.CloseComboMenu), zChange: Conversions.ToByte(false), isActive: false);
 
         // window
-        Client.Gui.UpdateWindow("winComboMenu", "ComboMenu", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 100L, 100L, 0L, false, design_norm: (long)UiDesign.ComboMenuNormal, isActive: false, clickThrough: false);
+        Client.Gui.UpdateWindow("winComboMenu", "ComboMenu", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 100L, 100L, 0L, false, designNorm: (long)UiDesign.ComboMenuNormal, isActive: false, clickThrough: false);
 
         // centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
@@ -1774,128 +1774,128 @@ public class Crystalshire
     public void UpdateWindow_Skills()
     {
         // Control window
-        Client.Gui.UpdateWindow("winSkills", "Skills", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 202L, 297L, 109L, false, 2L, 7L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callback_mousemove: new Action(Client.Gui.Skills_MouseMove), callback_mousedown: new Action(Client.Gui.Skills_MouseDown), callback_dblclick: new Action(Client.Gui.Skills_DoubleClick), onDraw: new Action(Client.Gui.DrawSkills));
+        Client.Gui.UpdateWindow("winSkills", "Skills", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 202L, 297L, 109L, false, 2L, 7L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callbackMousemove: new Action(Client.Gui.Skills_MouseMove), callbackMousedown: new Action(Client.Gui.Skills_MouseDown), callbackDblclick: new Action(Client.Gui.Skills_DoubleClick), onDraw: new Action(Client.Gui.DrawSkills));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
+        Client.Gui.ZOrderCon = 0L;
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnMenu_Skills);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        var argcallbackMousedown = new Action(Client.Gui.btnMenu_Skills);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
     }
 
     public void UpdateWindow_Bank()
     {
-        Client.Gui.UpdateWindow("winBank", "Bank", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 390L, 373L, 0L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callback_mousemove: new Action(Client.Gui.Bank_MouseMove), callback_mousedown: new Action(Client.Gui.Bank_MouseDown), callback_dblclick: new Action(Client.Gui.Bank_DoubleClick), onDraw: new Action(Client.Gui.DrawBank));
+        Client.Gui.UpdateWindow("winBank", "Bank", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 390L, 373L, 0L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callbackMousemove: new Action(Client.Gui.Bank_MouseMove), callbackMousedown: new Action(Client.Gui.Bank_MouseDown), callbackDblclick: new Action(Client.Gui.Bank_DoubleClick), onDraw: new Action(Client.Gui.DrawBank));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Set the index for spawning controls
-        Client.Gui.zOrder_Con = 0L;
-        var argcallback_mousedown = new Action(Client.Gui.btnMenu_Bank);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 36L, 36L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        Client.Gui.ZOrderCon = 0L;
+        var argcallbackMousedown = new Action(Client.Gui.btnMenu_Bank);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 36L, 36L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
     }
 
     public void UpdateWindow_Shop()
     {
         // Control window
-        Client.Gui.UpdateWindow("winShop", "Shop", Core.Font.Georgia, Client.Gui.zOrder_Win, 0L, 0L, 278L, 293L, 17L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callback_mousemove: new Action(Client.Gui.Shop_MouseMove), callback_mousedown: new Action(Client.Gui.Shop_MouseDown), onDraw: new Action(Client.Gui.DrawShopBackground));
+        Client.Gui.UpdateWindow("winShop", "Shop", Core.Font.Georgia, Client.Gui.ZOrderWin, 0L, 0L, 278L, 293L, 17L, false, 2L, 5L, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, (long)UiDesign.WindowEmpty, callbackMousemove: new Action(Client.Gui.Shop_MouseMove), callbackMousedown: new Action(Client.Gui.Shop_MouseDown), onDraw: new Action(Client.Gui.DrawShopBackground));
 
         // Centralize it
         Client.Gui.CentralizeWindow(Client.Gui.Windows.Count);
 
         // Close button
-        var argcallback_mousedown = new Action(Client.Gui.btnShop_Close);
-        Action argcallback_mousemove = null;
-        Action argcallback_dblclick = null;
-        Action argcallback_norm = null;
-        Action argcallback_hover = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 6L, 36L, 36L, image_norm: 8L, image_hover: 9L, image_mousedown: 10L, callback_norm: ref argcallback_norm, callback_hover: ref argcallback_hover, callback_mousedown: ref argcallback_mousedown, callback_mousemove: ref argcallback_mousemove, callback_dblclick: ref argcallback_dblclick);
+        var argcallbackMousedown = new Action(Client.Gui.btnShop_Close);
+        Action argcallbackMousemove = null;
+        Action argcallbackDblclick = null;
+        Action argcallbackNorm = null;
+        Action argcallbackHover = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 6L, 36L, 36L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm, callbackHover: ref argcallbackHover, callbackMousedown: ref argcallbackMousedown, callbackMousemove: ref argcallbackMousemove, callbackDblclick: ref argcallbackDblclick);
 
         // Parchment
         var argonDraw = new Action(Client.Gui.DrawShop);
-        Action argcallback_norm1 = null;
-        Action argcallback_hover1 = null;
-        Action argcallback_mousedown1 = null;
-        Action argcallback_mousemove1 = null;
-        Action argcallback_dblclick1 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 215L, 266L, 50L, design_norm: (long)UiDesign.Parchment, design_hover: (long)UiDesign.Parchment, design_mousedown: (long)UiDesign.Parchment, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown1, callback_mousemove: ref argcallback_mousemove1, callback_dblclick: ref argcallback_dblclick1, onDraw: ref argonDraw);
+        Action argcallbackNorm1 = null;
+        Action argcallbackHover1 = null;
+        Action argcallbackMousedown1 = null;
+        Action argcallbackMousemove1 = null;
+        Action argcallbackDblclick1 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picParchment", 6L, 215L, 266L, 50L, designNorm: (long)UiDesign.Parchment, designHover: (long)UiDesign.Parchment, designMousedown: (long)UiDesign.Parchment, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown1, callbackMousemove: ref argcallbackMousemove1, callbackDblclick: ref argcallbackDblclick1, onDraw: ref argonDraw);
 
         // Picture Box
-        Action argcallback_mousedown2 = null;
-        Action argcallback_mousemove2 = null;
-        Action argcallback_dblclick2 = null;
+        Action argcallbackMousedown2 = null;
+        Action argcallbackMousemove2 = null;
+        Action argcallbackDblclick2 = null;
         Action argonDraw2 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picItemBG", 13L, 222L, 36L, 36L, image_norm: 30L, image_hover: 30L, image_mousedown: 30L, callback_norm: ref argcallback_norm1, callback_hover: ref argcallback_hover1, callback_mousedown: ref argcallback_mousedown2, callback_mousemove: ref argcallback_mousemove2, callback_dblclick: ref argcallback_dblclick2, onDraw: ref argonDraw2);
-        Action argcallback_norm2 = null;
-        Action argcallback_hover2 = null;
-        Action argcallback_mousedown3 = null;
-        Action argcallback_mousemove3 = null;
-        Action argcallback_dblclick3 = null;
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picItemBG", 13L, 222L, 36L, 36L, imageNorm: 30L, imageHover: 30L, imageMousedown: 30L, callbackNorm: ref argcallbackNorm1, callbackHover: ref argcallbackHover1, callbackMousedown: ref argcallbackMousedown2, callbackMousemove: ref argcallbackMousemove2, callbackDblclick: ref argcallbackDblclick2, onDraw: ref argonDraw2);
+        Action argcallbackNorm2 = null;
+        Action argcallbackHover2 = null;
+        Action argcallbackMousedown3 = null;
+        Action argcallbackMousemove3 = null;
+        Action argcallbackDblclick3 = null;
         Action argonDraw3 = null;
-        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picItem", 15L, 224L, 32L, 32L, callback_norm: ref argcallback_norm2, callback_hover: ref argcallback_hover2, callback_mousedown: ref argcallback_mousedown3, callback_mousemove: ref argcallback_mousemove3, callback_dblclick: ref argcallback_dblclick3, onDraw: ref argonDraw3);
+        Client.Gui.UpdatePictureBox(Client.Gui.Windows.Count, "picItem", 15L, 224L, 32L, 32L, callbackNorm: ref argcallbackNorm2, callbackHover: ref argcallbackHover2, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3, onDraw: ref argonDraw3);
 
         // Buttons
-        var argcallback_mousedown4 = new Action(Client.Gui.btnShopBuy);
-        Action argcallback_mousemove4 = null;
-        Action argcallback_dblclick4 = null;
-        Action argcallback_norm3 = null;
-        Action argcallback_hover3 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnBuy", 190L, 228L, 70L, 24L, "Buy", Core.Font.Arial, design_norm: (long)UiDesign.Green, design_hover: (long)UiDesign.GreenHover, design_mousedown: (long)UiDesign.GreenClick, callback_norm: ref argcallback_norm3, callback_hover: ref argcallback_hover3, callback_mousedown: ref argcallback_mousedown4, callback_mousemove: ref argcallback_mousemove4, callback_dblclick: ref argcallback_dblclick4);
-        var argcallback_mousedown5 = new Action(Client.Gui.btnShopSell);
-        Action argcallback_mousemove5 = null;
-        Action argcallback_dblclick5 = null;
-        Action argcallback_norm4 = null;
-        Action argcallback_hover4 = null;
-        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSell", 190L, 228L, 70L, 24L, "Sell", Core.Font.Arial, visible: false, design_norm: (long)UiDesign.Red, design_hover: (long)UiDesign.RedHover, design_mousedown: (long)UiDesign.RedClick, callback_norm: ref argcallback_norm4, callback_hover: ref argcallback_hover4, callback_mousedown: ref argcallback_mousedown5, callback_mousemove: ref argcallback_mousemove5, callback_dblclick: ref argcallback_dblclick5);
+        var argcallbackMousedown4 = new Action(Client.Gui.BtnShopBuy);
+        Action argcallbackMousemove4 = null;
+        Action argcallbackDblclick4 = null;
+        Action argcallbackNorm3 = null;
+        Action argcallbackHover3 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnBuy", 190L, 228L, 70L, 24L, "Buy", Core.Font.Arial, designNorm: (long)UiDesign.Green, designHover: (long)UiDesign.GreenHover, designMousedown: (long)UiDesign.GreenClick, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown4, callbackMousemove: ref argcallbackMousemove4, callbackDblclick: ref argcallbackDblclick4);
+        var argcallbackMousedown5 = new Action(Client.Gui.BtnShopSell);
+        Action argcallbackMousemove5 = null;
+        Action argcallbackDblclick5 = null;
+        Action argcallbackNorm4 = null;
+        Action argcallbackHover4 = null;
+        Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnSell", 190L, 228L, 70L, 24L, "Sell", Core.Font.Arial, visible: false, designNorm: (long)UiDesign.Red, designHover: (long)UiDesign.RedHover, designMousedown: (long)UiDesign.RedClick, callbackNorm: ref argcallbackNorm4, callbackHover: ref argcallbackHover4, callbackMousedown: ref argcallbackMousedown5, callbackMousemove: ref argcallbackMousemove5, callbackDblclick: ref argcallbackDblclick5);
 
         // Buying/Selling
-        var argcallback_mousedown6 = new Action(Client.Gui.chkShopBuying);
-        Action argcallback_mousemove6 = null;
-        Action argcallback_dblclick6 = null;
-        Action argcallback_norm5 = null;
-        Action argcallback_hover5 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "CheckboxBuying", 173L, 265L, 49L, 20L, 0L, theDesign: (long)UiDesign.CheckboxBuying, callback_norm: ref argcallback_norm5, callback_hover: ref argcallback_hover5, callback_mousedown: ref argcallback_mousedown6, callback_mousemove: ref argcallback_mousemove6, callback_dblclick: ref argcallback_dblclick6);
-        var argcallback_mousedown7 = new Action(Client.Gui.chkShopSelling);
-        Action argcallback_mousemove7 = null;
-        Action argcallback_dblclick7 = null;
-        Action argcallback_norm6 = null;
-        Action argcallback_hover6 = null;
-        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "CheckboxSelling", 222L, 265L, 49L, 20L, 0L, theDesign: (long)UiDesign.CheckboxSelling, callback_norm: ref argcallback_norm6, callback_hover: ref argcallback_hover6, callback_mousedown: ref argcallback_mousedown7, callback_mousemove: ref argcallback_mousemove7, callback_dblclick: ref argcallback_dblclick7);
+        var argcallbackMousedown6 = new Action(Client.Gui.ChkShopBuying);
+        Action argcallbackMousemove6 = null;
+        Action argcallbackDblclick6 = null;
+        Action argcallbackNorm5 = null;
+        Action argcallbackHover5 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "CheckboxBuying", 173L, 265L, 49L, 20L, 0L, theDesign: (long)UiDesign.CheckboxBuying, callbackNorm: ref argcallbackNorm5, callbackHover: ref argcallbackHover5, callbackMousedown: ref argcallbackMousedown6, callbackMousemove: ref argcallbackMousemove6, callbackDblclick: ref argcallbackDblclick6);
+        var argcallbackMousedown7 = new Action(Client.Gui.ChkShopSelling);
+        Action argcallbackMousemove7 = null;
+        Action argcallbackDblclick7 = null;
+        Action argcallbackNorm6 = null;
+        Action argcallbackHover6 = null;
+        Client.Gui.UpdateCheckBox(Client.Gui.Windows.Count, "CheckboxSelling", 222L, 265L, 49L, 20L, 0L, theDesign: (long)UiDesign.CheckboxSelling, callbackNorm: ref argcallbackNorm6, callbackHover: ref argcallbackHover6, callbackMousedown: ref argcallbackMousedown7, callbackMousemove: ref argcallbackMousemove7, callbackDblclick: ref argcallbackDblclick7);
 
         // Labels
-        Action argcallback_norm7 = null;
-        Action argcallback_hover7 = null;
-        Action argcallback_mousedown8 = null;
-        Action argcallback_mousemove8 = null;
-        Action argcallback_dblclick8 = null;
+        Action argcallbackNorm7 = null;
+        Action argcallbackHover7 = null;
+        Action argcallbackMousedown8 = null;
+        Action argcallbackMousemove8 = null;
+        Action argcallbackDblclick8 = null;
         bool enabled = false;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 56L, 226L, 300L, 10L, "Test Item", Core.Font.Arial, Microsoft.Xna.Framework.Color.Black, Alignment.Left, callback_norm: ref argcallback_norm7, callback_hover: ref argcallback_hover7, callback_mousedown: ref argcallback_mousedown8, callback_mousemove: ref argcallback_mousemove8, callback_dblclick: ref argcallback_dblclick8, enabled: ref enabled);
-        Action argcallback_norm8 = null;
-        Action argcallback_hover8 = null;
-        Action argcallback_mousedown9 = null;
-        Action argcallback_mousemove9 = null;
-        Action argcallback_dblclick9 = null;
-        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCost", 56L, 240L, 300L, 10L, "1000g", Core.Font.Arial, Microsoft.Xna.Framework.Color.Black, Alignment.Left, callback_norm: ref argcallback_norm8, callback_hover: ref argcallback_hover8, callback_mousedown: ref argcallback_mousedown9, callback_mousemove: ref argcallback_mousemove9, callback_dblclick: ref argcallback_dblclick9, enabled: ref enabled);
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblName", 56L, 226L, 300L, 10L, "Test Item", Core.Font.Arial, Microsoft.Xna.Framework.Color.Black, Alignment.Left, callbackNorm: ref argcallbackNorm7, callbackHover: ref argcallbackHover7, callbackMousedown: ref argcallbackMousedown8, callbackMousemove: ref argcallbackMousemove8, callbackDblclick: ref argcallbackDblclick8, enabled: ref enabled);
+        Action argcallbackNorm8 = null;
+        Action argcallbackHover8 = null;
+        Action argcallbackMousedown9 = null;
+        Action argcallbackMousemove9 = null;
+        Action argcallbackDblclick9 = null;
+        Client.Gui.UpdateLabel(Client.Gui.Windows.Count, "lblCost", 56L, 240L, 300L, 10L, "1000g", Core.Font.Arial, Microsoft.Xna.Framework.Color.Black, Alignment.Left, callbackNorm: ref argcallbackNorm8, callbackHover: ref argcallbackHover8, callbackMousedown: ref argcallbackMousedown9, callbackMousemove: ref argcallbackMousemove9, callbackDblclick: ref argcallbackDblclick9, enabled: ref enabled);
 
         // Gold
-        Action argcallback_norm9 = null;
-        Action argcallback_hover9 = null;
-        Action argcallback_mousedown10 = null;
-        Action argcallback_mousemove10 = null;
-        Action argcallback_dblclick10 = null;
+        Action argcallbackNorm9 = null;
+        Action argcallbackHover9 = null;
+        Action argcallbackMousedown10 = null;
+        Action argcallbackMousemove10 = null;
+        Action argcallbackDblclick10 = null;
         //UpdateLabel(Client.Gui.Windows.Count, "lblGold", 44L, 269L, 300L, 10L, "g", Core.Font.Georgia, Microsoft.Xna.Framework.Color.White, Alignment.Left, callback_norm: ref argcallback_norm9, callback_hover: ref argcallback_hover9, callback_mousedown: ref argcallback_mousedown10, callback_mousemove: ref argcallback_mousemove10, callback_dblclick: ref argcallback_dblclick10, enabled: ref enabled);
     }
 }

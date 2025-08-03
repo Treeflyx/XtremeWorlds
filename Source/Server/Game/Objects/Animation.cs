@@ -33,7 +33,7 @@ namespace Server
         public static async System.Threading.Tasks.Task LoadAnimationsAsync()
         {
             int i;
-            var loopTo = Core.Constant.MAX_ANIMATIONS - 1;
+            var loopTo = Core.Constant.MaxAnimations - 1;
             for (i = 0; i < loopTo; i++)
                 await System.Threading.Tasks.Task.Run(() => LoadAnimation(i));
         }
@@ -70,29 +70,29 @@ namespace Server
 
         public static void ClearAnimations()
         {
-            for (int i = 0, loopTo = Core.Constant.MAX_ANIMATIONS; i < loopTo; i++)
+            for (int i = 0, loopTo = Core.Constant.MaxAnimations; i < loopTo; i++)
                 ClearAnimation(i);
         }
 
-        public static byte[] AnimationData(int AnimationNum)
+        public static byte[] AnimationData(int animationNum)
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32(AnimationNum);
-            for (int i = 0, loopTo = Information.UBound(Core.Data.Animation[AnimationNum].Frames); i < loopTo; i++)
-                buffer.WriteInt32(Core.Data.Animation[AnimationNum].Frames[i]);
+            buffer.WriteInt32(animationNum);
+            for (int i = 0, loopTo = Information.UBound(Core.Data.Animation[animationNum].Frames); i < loopTo; i++)
+                buffer.WriteInt32(Core.Data.Animation[animationNum].Frames[i]);
 
-            for (int i = 0, loopTo1 = Information.UBound(Core.Data.Animation[AnimationNum].LoopCount); i < loopTo1; i++)
-                buffer.WriteInt32(Core.Data.Animation[AnimationNum].LoopCount[i]);
+            for (int i = 0, loopTo1 = Information.UBound(Core.Data.Animation[animationNum].LoopCount); i < loopTo1; i++)
+                buffer.WriteInt32(Core.Data.Animation[animationNum].LoopCount[i]);
 
-            for (int i = 0, loopTo2 = Information.UBound(Core.Data.Animation[AnimationNum].LoopTime); i < loopTo2; i++)
-                buffer.WriteInt32(Core.Data.Animation[AnimationNum].LoopTime[i]);
+            for (int i = 0, loopTo2 = Information.UBound(Core.Data.Animation[animationNum].LoopTime); i < loopTo2; i++)
+                buffer.WriteInt32(Core.Data.Animation[animationNum].LoopTime[i]);
 
-            buffer.WriteString(Core.Data.Animation[AnimationNum].Name);
-            buffer.WriteString(Core.Data.Animation[AnimationNum].Sound);
+            buffer.WriteString(Core.Data.Animation[animationNum].Name);
+            buffer.WriteString(Core.Data.Animation[animationNum].Sound);
 
-            for (int i = 0, loopTo3 = Information.UBound(Core.Data.Animation[AnimationNum].Sprite); i < loopTo3; i++)
-                buffer.WriteInt32(Core.Data.Animation[AnimationNum].Sprite[i]);
+            for (int i = 0, loopTo3 = Information.UBound(Core.Data.Animation[animationNum].Sprite); i < loopTo3; i++)
+                buffer.WriteInt32(Core.Data.Animation[animationNum].Sprite[i]);
 
             return buffer.ToArray();
         }
@@ -129,33 +129,33 @@ namespace Server
 
         public static void Packet_SaveAnimation(int index, ref byte[] data)
         {
-            int AnimNum;
+            int animNum;
             var buffer = new ByteStream(data);
 
-            AnimNum = buffer.ReadInt32();
+            animNum = buffer.ReadInt32();
 
             // Update the Animation
-            for (int i = 0, loopTo = Information.UBound(Core.Data.Animation[AnimNum].Frames); i < loopTo; i++)
-                Core.Data.Animation[AnimNum].Frames[i] = buffer.ReadInt32();
+            for (int i = 0, loopTo = Information.UBound(Core.Data.Animation[animNum].Frames); i < loopTo; i++)
+                Core.Data.Animation[animNum].Frames[i] = buffer.ReadInt32();
 
-            for (int i = 0, loopTo1 = Information.UBound(Core.Data.Animation[AnimNum].LoopCount); i < loopTo1; i++)
-                Core.Data.Animation[AnimNum].LoopCount[i] = buffer.ReadInt32();
+            for (int i = 0, loopTo1 = Information.UBound(Core.Data.Animation[animNum].LoopCount); i < loopTo1; i++)
+                Core.Data.Animation[animNum].LoopCount[i] = buffer.ReadInt32();
 
-            for (int i = 0, loopTo2 = Information.UBound(Core.Data.Animation[AnimNum].LoopTime); i < loopTo2; i++)
-                Core.Data.Animation[AnimNum].LoopTime[i] = buffer.ReadInt32();
+            for (int i = 0, loopTo2 = Information.UBound(Core.Data.Animation[animNum].LoopTime); i < loopTo2; i++)
+                Core.Data.Animation[animNum].LoopTime[i] = buffer.ReadInt32();
 
-            Core.Data.Animation[AnimNum].Name = buffer.ReadString();
-            Core.Data.Animation[AnimNum].Sound = buffer.ReadString();
+            Core.Data.Animation[animNum].Name = buffer.ReadString();
+            Core.Data.Animation[animNum].Sound = buffer.ReadString();
 
-            for (int i = 0, loopTo3 = Information.UBound(Core.Data.Animation[AnimNum].Sprite); i < loopTo3; i++)
-                Core.Data.Animation[AnimNum].Sprite[i] = buffer.ReadInt32();
+            for (int i = 0, loopTo3 = Information.UBound(Core.Data.Animation[animNum].Sprite); i < loopTo3; i++)
+                Core.Data.Animation[animNum].Sprite[i] = buffer.ReadInt32();
 
             buffer.Dispose();
 
             // Save it
-            SaveAnimation(AnimNum);
-            SendUpdateAnimationToAll(AnimNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved Animation #" + AnimNum + ".", Constant.ADMIN_LOG);
+            SaveAnimation(animNum);
+            SendUpdateAnimationToAll(animNum);
+            Core.Log.Add(GetAccountLogin(index) + " saved Animation #" + animNum + ".", Constant.AdminLog);
 
         }
 
@@ -166,7 +166,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_ANIMATIONS)
+            if (n < 0 | n > Core.Constant.MaxAnimations)
                 return;
 
             SendUpdateAnimationTo(index, n);
@@ -176,15 +176,15 @@ namespace Server
 
         #region Outgoing Packets
 
-        public static void SendAnimation(int mapNum, int Anim, int X, int Y, byte LockType = 0, int Lockindex = 0)
+        public static void SendAnimation(int mapNum, int anim, int x, int y, byte lockType = 0, int lockindex = 0)
         {
             var buffer = new ByteStream(4);
             buffer.WriteInt32((int) ServerPackets.SAnimation);
-            buffer.WriteInt32(Anim);
-            buffer.WriteInt32(X);
-            buffer.WriteInt32(Y);
-            buffer.WriteInt32(LockType);
-            buffer.WriteInt32(Lockindex);
+            buffer.WriteInt32(anim);
+            buffer.WriteInt32(x);
+            buffer.WriteInt32(y);
+            buffer.WriteInt32(lockType);
+            buffer.WriteInt32(lockindex);
 
             NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
 
@@ -195,7 +195,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_ANIMATIONS - 1;
+            var loopTo = Core.Constant.MaxAnimations - 1;
             for (i = 0; i < loopTo; i++)
             {
 
@@ -208,25 +208,25 @@ namespace Server
 
         }
 
-        public static void SendUpdateAnimationTo(int index, int AnimationNum)
+        public static void SendUpdateAnimationTo(int index, int animationNum)
         {
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int) ServerPackets.SUpdateAnimation);
 
-            buffer.WriteBlock(AnimationData(AnimationNum));
+            buffer.WriteBlock(AnimationData(animationNum));
 
             NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
-        public static void SendUpdateAnimationToAll(int AnimationNum)
+        public static void SendUpdateAnimationToAll(int animationNum)
         {
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int) ServerPackets.SUpdateAnimation);
 
-            buffer.WriteBlock(AnimationData(AnimationNum));
+            buffer.WriteBlock(AnimationData(animationNum));
 
             NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();

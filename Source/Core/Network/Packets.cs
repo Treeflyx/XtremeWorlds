@@ -138,23 +138,23 @@ namespace Core
         {
             SAes,
             SAlertMsg,
-            SLoginOK,
+            SLoginOk,
             SPlayerChars,
             SJobData,
             SInGame,
             SPlayerInv,
             SPlayerInvUpdate,
             SPlayerWornEq,
-            SPlayerHP,
-            SPlayerMP,
-            SPlayerSP,
+            SPlayerHp,
+            SPlayerMp,
+            SPlayerSp,
             SPlayerStats,
             SPlayerData,
             SPlayerMove,
             SNpcMove,
             SPlayerDir,
             SNpcDir,
-            SPlayerXY,
+            SPlayerXy,
             SAttack,
             SNpcAttack,
             SCheckForMap,
@@ -185,7 +185,7 @@ namespace Core
             SUpdateResource,
             SSendPing,
             SActionMsg,
-            SPlayerEXP,
+            SPlayerExp,
             SBlood,
             SAnimationEditor,
             SUpdateAnimation,
@@ -218,9 +218,9 @@ namespace Core
             SEventChat,
             SEventStart,
             SEventEnd,
-            SPlayBGM,
+            SPlayBgm,
             SPlaySound,
-            SFadeoutBGM,
+            SFadeoutBgm,
             SStopSound,
             SSwitchesAndVariables,
             SMapEventData,
@@ -247,7 +247,7 @@ namespace Core
             SScriptEditor,
 
             // Make sure COUNT is below everything else
-            COUNT
+            Count
         }
 
     }

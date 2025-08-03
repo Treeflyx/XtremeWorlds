@@ -113,7 +113,7 @@ namespace Server
                         }
                     }
 
-                    UpdateMapAI();
+                    UpdateMapAi();
 
                     // Move the timer up 500ms.
                     tmr500 = General.GetTimeMs() + 500;
@@ -174,11 +174,11 @@ namespace Server
             // ///////////////////////////////////////////
             // // This is used for respawning map items //
             // ///////////////////////////////////////////
-            var loopTo = Core.Constant.MAX_MAPS;
+            var loopTo = Core.Constant.MaxMaps;
             for (y = 0; y < loopTo; y++)
             {
                 // Clear out unnecessary junk
-                var loopTo1 = Core.Constant.MAX_MAP_ITEMS;
+                var loopTo1 = Core.Constant.MaxMapItems;
                 for (x = 0; x < loopTo1; x++)
                     Database.ClearMapItem(x, y);
 
@@ -189,19 +189,19 @@ namespace Server
             
         }
 
-        private static void UpdateMapAI()
+        private static void UpdateMapAi()
         {
             // Clear the entity list before repopulating to avoid accumulating instances
             Core.Globals.Entity.Instances.Clear();
 
             var entities = Core.Globals.Entity.Instances;
-            var mapCount = Core.Constant.MAX_MAPS;
+            var mapCount = Core.Constant.MaxMaps;
 
             // Use entities from Entity class
             for (int mapNum = 0; mapNum < mapCount; mapNum++)
             {
                 // Add Npcs
-                for (int i = 0; i < Core.Constant.MAX_MAP_NPCS; i++)
+                for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
                 {
                     var npc = Core.Globals.Entity.FromNpc(i, Data.MapNpc[mapNum].Npc[i]);
                     if (npc.Num >= 0)
@@ -226,13 +226,13 @@ namespace Server
                 }
             }
 
-            Script.Instance?.UpdateMapAI();
+            Script.Instance?.UpdateMapAi();
 
             // Use entities from Entity class
             for (int mapNum = 0; mapNum < mapCount; mapNum++)
             {
                 // Add Npcs
-                for (int i = 0; i < Core.Constant.MAX_MAP_NPCS; i++)
+                for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
                 {
                     var npc = Core.Globals.Entity.FromNpc(i, Data.MapNpc[mapNum].Npc[i]);
                     if (npc.Num >= 0)
