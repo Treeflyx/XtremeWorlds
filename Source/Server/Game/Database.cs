@@ -1105,9 +1105,9 @@ namespace Server
                             xwMap.Tile[x, y].Data2 = reader.ReadInt16(); // 53
                             xwMap.Tile[x, y].Data3 = reader.ReadInt16(); // 55
                             xwMap.Tile[x, y].Type2 = (XwTileType)reader.ReadByte(); // 57
-                            xwMap.Tile[x, y].Data12 = reader.ReadInt16(); // 59
-                            xwMap.Tile[x, y].Data22 = reader.ReadInt16(); // 61
-                            xwMap.Tile[x, y].Data32 = reader.ReadInt16(); // 63
+                            xwMap.Tile[x, y].Data1_2 = reader.ReadInt16(); // 59
+                            xwMap.Tile[x, y].Data2_2 = reader.ReadInt16(); // 61
+                            xwMap.Tile[x, y].Data3_2 = reader.ReadInt16(); // 63
                             xwMap.Tile[x, y].Mask2 = reader.ReadInt16(); // 64
                             xwMap.Tile[x, y].Mask2Anim = reader.ReadInt16(); // 66
                             xwMap.Tile[x, y].FringeAnim = reader.ReadInt16(); // 68
@@ -1185,9 +1185,9 @@ namespace Server
             tile.Data1 = xwTile.Data1;
             tile.Data2 = xwTile.Data2;
             tile.Data3 = xwTile.Data3;
-            tile.Data12 = xwTile.Data12;
-            tile.Data22 = xwTile.Data22;
-            tile.Data32 = xwTile.Data32;
+            tile.Data1_2 = xwTile.Data1_2;
+            tile.Data2_2 = xwTile.Data2_2;
+            tile.Data3_2 = xwTile.Data3_2;
             tile.Type = ToTileType(xwTile.Type);
             tile.Type2 = ToTileType(xwTile.Type2);
 
@@ -1558,9 +1558,9 @@ namespace Server
                 }
             }
 
-            mwMap.Npc = new int[Core.Constant.MAX_MAP_NPCS];
+            mwMap.Npc = new int[Core.Constant.MaxMapNpcs];
 
-            for (int i = 0; i < Core.Constant.MAX_MAP_NPCS; i++)
+            for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
             {
                 mwMap.Npc[i] = -1;
             }

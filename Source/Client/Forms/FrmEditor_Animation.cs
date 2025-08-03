@@ -120,7 +120,7 @@ namespace Client
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Core.Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Core.Constant.MaxAnimations; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Core.Data.Animation[i].Name);
 
             // find the music we have set

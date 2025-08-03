@@ -116,12 +116,12 @@ namespace Client
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_SHOPS; i++)
+            for (int i = 0; i < Constant.MaxShops; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Core.Data.Shop[i].Name);
 
             cmbItem.Items.Clear();
             cmbCostItem.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
             {
                 cmbItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
                 cmbCostItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);

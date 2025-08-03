@@ -38,7 +38,7 @@ namespace Client
             ToolStrip.BringToFront();
 
             scrlFog.Maximum = GameState.NumFogs;
-            scrlMapItem.Maximum = Constant.MAX_ITEMS;
+            scrlMapItem.Maximum = Constant.MaxItems;
         }
 
         private static void UpdateDirBlock()
@@ -429,7 +429,7 @@ namespace Client
             pnlAttributes.Visible = true;
             fraMapWarp.Visible = true;
 
-            scrlMapWarpMap.Maximum = Constant.MAX_MAPS;
+            scrlMapWarpMap.Maximum = Constant.MaxMaps;
             scrlMapWarpMap.Value = 1;
             scrlMapWarpX.Maximum = byte.MaxValue;
             scrlMapWarpY.Maximum = byte.MaxValue;
@@ -520,7 +520,7 @@ namespace Client
 
             lstNpc.Items.Clear();
 
-            for (n = 0; n < Constant.MAX_MAP_NPCS; n++)
+            for (n = 0; n < Constant.MaxMapNpcs; n++)
             {
                 if (Data.MyMap.Npc[n] > 0)
                 {
@@ -818,7 +818,7 @@ namespace Client
             // find the shop we have set
             Instance.lstShop.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_SHOPS; i++)
+            for (i = 0; i < Constant.MaxShops; i++)
                 Instance.lstShop.Items.Add(Data.Shop[i].Name);
 
             Instance.lstShop.SelectedIndex = 0;
@@ -836,7 +836,7 @@ namespace Client
             // find the shop we have set
             Instance.lstMoral.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_MORALS; i++)
+            for (i = 0; i < Constant.MaxMorals; i++)
                 Instance.lstMoral.Items.Add(Data.Moral[i].Name);
 
             Instance.lstMoral.SelectedIndex = 0;
@@ -867,7 +867,7 @@ namespace Client
 
             Instance.lstMapNpc.Items.Clear();
 
-            for (x = 0; x < Constant.MAX_MAP_NPCS; x++)
+            for (x = 0; x < Constant.MaxMapNpcs; x++)
             {
                 if (x == 0)
                 {
@@ -875,7 +875,7 @@ namespace Client
                     continue;
                 }
 
-                if (Data.MyMap.Npc[x] >= 0 && Data.MyMap.Npc[x] <= Core.Constant.MAX_NPCS)
+                if (Data.MyMap.Npc[x] >= 0 && Data.MyMap.Npc[x] <= Core.Constant.MaxNpcs)
                 {
                     Instance.lstMapNpc.Items.Add(x + ": " + Strings.Trim(Data.Npc[Data.MyMap.Npc[x]].Name));
                 }
@@ -887,14 +887,14 @@ namespace Client
 
             Instance.lstMapNpc.SelectedIndex = 0;
 
-            for (y = 0; y < Constant.MAX_NPCS; y++)
+            for (y = 0; y < Constant.MaxNpcs; y++)
                 Instance.cmbNpcList.Items.Add(y + 1 + ": " + Strings.Trim(Data.Npc[y].Name));
 
             Instance.cmbNpcList.SelectedIndex = 0;
 
             Instance.cmbAnimation.Items.Clear();
 
-            for (y = 0; y < Constant.MAX_ANIMATIONS; y++)
+            for (y = 0; y < Constant.MaxAnimations; y++)
                 Instance.cmbAnimation.Items.Add(y + 1 + ": " + Data.Animation[y].Name);
 
             Instance.cmbAnimation.SelectedIndex = 0;
@@ -951,7 +951,7 @@ namespace Client
             GameState.CurTileset = Data.MyMap.Tileset;
 
             // set shops for the shop attribute
-            for (int i = 0; i < Constant.MAX_SHOPS; i++)
+            for (int i = 0; i < Constant.MaxShops; i++)
                 Instance.cmbShop.Items.Add(i + 1 + ": " + Data.Shop[i].Name);
 
             // we're not in a shop

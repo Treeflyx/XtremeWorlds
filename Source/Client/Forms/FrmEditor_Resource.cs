@@ -119,16 +119,16 @@ namespace Client
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_RESOURCES; i++)
+            for (int i = 0; i < Constant.MaxResources; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Core.Data.Resource[i].Name);
 
             // populate combo boxes
             cmbRewardItem.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
                 cmbRewardItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
 
             cmbAnimation.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Constant.MaxAnimations; i++)
                 cmbAnimation.Items.Add(i + 1 + ": " + Core.Data.Animation[i].Name);
 
             nudExhaustedPic.Maximum = GameState.NumResources;

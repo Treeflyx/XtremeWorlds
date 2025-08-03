@@ -188,27 +188,27 @@ namespace Client
             nudIcon.Maximum = GameState.NumSkills;
             nudAoE.Maximum = byte.MaxValue;
             nudRange.Maximum = byte.MaxValue;
-            nudMap.Maximum = Constant.MAX_MAPS;
+            nudMap.Maximum = Constant.MaxMaps;
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_SKILLS; i++)
+            for (int i = 0; i < Constant.MaxSkills; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Strings.Trim(Core.Data.Skill[i].Name));
 
             cmbAnimCast.Items.Clear();
             cmbAnim.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Constant.MaxAnimations; i++)
             {
                 cmbAnimCast.Items.Add(i + 1 + ": " + Core.Data.Animation[i].Name);
                 cmbAnim.Items.Add(i + 1 + ": " + Core.Data.Animation[i].Name);
             }
 
             cmbProjectile.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Constant.MaxAnimations; i++)
                 cmbProjectile.Items.Add(i + 1 + ": " + Core.Data.Projectile[i].Name);
 
             cmbJob.Items.Clear();
-            for (int i = 0; i < Constant.MAX_JOBS; i++)
+            for (int i = 0; i < Constant.MaxJobs; i++)
                 cmbJob.Items.Add(i + 1 + ": " + Core.Data.Job[i].Name.Trim());
         }
 

@@ -23,12 +23,12 @@ namespace Client
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_NPCS; i++)
+            for (int i = 0; i < Constant.MaxNpcs; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Strings.Trim(Data.Npc[i].Name));
 
             // populate combo boxes
             cmbAnimation.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Constant.MaxAnimations; i++)
                 cmbAnimation.Items.Add(i + 1 + ": " + Data.Animation[i].Name);
 
             cmbSkill1.Items.Clear();
@@ -37,7 +37,7 @@ namespace Client
             cmbSkill4.Items.Clear();
             cmbSkill5.Items.Clear();
             cmbSkill6.Items.Clear();
-            for (int i = 0; i < Constant.MAX_SKILLS; i++)
+            for (int i = 0; i < Constant.MaxSkills; i++)
             {
                 cmbSkill1.Items.Add(i + 1 + ": " + Data.Skill[i].Name);
                 cmbSkill2.Items.Add(i + 1 + ": " + Data.Skill[i].Name);
@@ -48,7 +48,7 @@ namespace Client
             }
 
             cmbItem.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
                 cmbItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
         }
 
@@ -176,7 +176,7 @@ namespace Client
 
         private void NudHp_ValueChanged(object sender, EventArgs e)
         {
-            Data.Npc[GameState.EditorIndex].HP = (int)Math.Round(nudHp.Value);
+            Data.Npc[GameState.EditorIndex].Hp = (int)Math.Round(nudHp.Value);
         }
 
         private void NudExp_ValueChanged(object sender, EventArgs e)

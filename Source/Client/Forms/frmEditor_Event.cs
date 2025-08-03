@@ -24,7 +24,7 @@ namespace Client
             cmbCondition_PlayerVarIndex.Enabled = false;
             cmbCondition_PlayerVarIndex.Items.Clear();
 
-            for (i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (i = 0; i < Core.Constant.NaxVariables; i++)
                 cmbCondition_PlayerVarIndex.Items.Add(i + 1 + ". " + Event.Variables[i]);
             cmbCondition_PlayerVarIndex.SelectedIndex = 0;
             cmbCondition_PlayerVarCompare.SelectedIndex = 0;
@@ -34,7 +34,7 @@ namespace Client
             cmbCondition_PlayerSwitch.Enabled = false;
             cmbCondition_PlayerSwitch.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (i = 0; i < Constant.MaxSwitches; i++)
                 cmbCondition_PlayerSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
             cmbCondition_PlayerSwitch.SelectedIndex = 0;
             cmbCondtion_PlayerSwitchCondition.Enabled = false;
@@ -42,7 +42,7 @@ namespace Client
             cmbCondition_HasItem.Enabled = false;
             cmbCondition_HasItem.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_ITEMS; i++)
+            for (i = 0; i < Constant.MaxItems; i++)
                 cmbCondition_HasItem.Items.Add(i + 1 + ". " + Core.Data.Item[i].Name);
             cmbCondition_HasItem.SelectedIndex = 0;
             nudCondition_HasItem.Enabled = false;
@@ -50,13 +50,13 @@ namespace Client
             cmbCondition_JobIs.Enabled = false;
             cmbCondition_JobIs.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_JOBS; i++)
+            for (i = 0; i < Constant.MaxJobs; i++)
                 cmbCondition_JobIs.Items.Add(i + 1 + ". " + Data.Job[i].Name);
             cmbCondition_JobIs.SelectedIndex = 0;
             cmbCondition_LearntSkill.Enabled = false;
             cmbCondition_LearntSkill.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_SKILLS; i++)
+            for (i = 0; i < Constant.MaxSkills; i++)
                 cmbCondition_LearntSkill.Items.Add(i + 1 + ". " + Strings.Trim(Data.Skill[i].Name));
             cmbCondition_LearntSkill.SelectedIndex = 0;
             cmbCondition_LevelCompare.Enabled = false;
@@ -89,35 +89,35 @@ namespace Client
             Event.CurPageNum = 0;
 
             cmbSwitch.Items.Clear();
-            for (i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (i = 0; i < Constant.MaxSwitches; i++)
                 cmbSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
             cmbSwitch.SelectedIndex = 0;
             cmbVariable.Items.Clear();
 
-            for (i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
                 cmbVariable.Items.Add(i + 1 + ". " + Event.Variables[i]);
             cmbVariable.SelectedIndex = 0;
             cmbChangeItemIndex.Items.Clear();
-            for (i = 0; i < Constant.MAX_ITEMS; i++)
+            for (i = 0; i < Constant.MaxItems; i++)
                 cmbChangeItemIndex.Items.Add(Core.Data.Item[i].Name);
             cmbChangeItemIndex.SelectedIndex = 0;
             nudChangeLevel.Minimum = 1m;
-            nudChangeLevel.Maximum = Constant.MAX_LEVEL;
+            nudChangeLevel.Maximum = Constant.MaxLevel;
             nudChangeLevel.Value = 1m;
             cmbChangeSkills.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_SKILLS; i++)
+            for (i = 0; i < Constant.MaxSkills; i++)
                 cmbChangeSkills.Items.Add(Data.Skill[i].Name);
             cmbChangeSkills.SelectedIndex = 0;
             cmbChangeJob.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_JOBS; i++)
+            for (i = 0; i < Constant.MaxJobs; i++)
                 cmbChangeJob.Items.Add(Strings.Trim(Data.Job[i].Name));
             cmbChangeJob.SelectedIndex = 0;
             nudChangeSprite.Maximum = GameState.NumCharacters;
             cmbPlayAnim.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (i = 0; i < Constant.MaxAnimations; i++)
                 cmbPlayAnim.Items.Add(i + 1 + ". " + Data.Animation[i].Name);
             cmbPlayAnim.SelectedIndex = 0;
 
@@ -137,12 +137,12 @@ namespace Client
             cmbPlaySound.SelectedIndex = 0;
             cmbOpenShop.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_SHOPS; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
                 cmbOpenShop.Items.Add(i + 1 + ". " + Data.Shop[i].Name);
             cmbOpenShop.SelectedIndex = 0;
             cmbSpawnNpc.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
             {
                 if (Data.MyMap.Npc[i] > 0)
                 {
@@ -156,7 +156,7 @@ namespace Client
 
             cmbSpawnNpc.SelectedIndex = 0;
             nudFogData0.Maximum = GameState.NumFogs;
-            nudWPMap.Maximum = Constant.MAX_MAPS;
+            nudWPMap.Maximum = Core.Constant.NaxVariables;
 
             fraDialogue.Width = Width;
             fraDialogue.Height = Height;
@@ -180,16 +180,16 @@ namespace Client
 
             // items
             cmbHasItem.Items.Clear();
-            for (i = 0; i < Constant.MAX_ITEMS; i++)
+            for (i = 0; i < Constant.MaxItems; i++)
                 cmbHasItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
 
             // variables
             cmbPlayerVar.Items.Clear();
-            for (i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (i = 0; i < Constant.NaxVariables; i++)
                 cmbPlayerVar.Items.Add(i + 1 + ". " + Event.Variables[i]);
             // switches
             cmbPlayerSwitch.Items.Clear();
-            for (i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (i = 0; i < Constant.MaxSwitches; i++)
                 cmbPlayerSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
             cmbSelfSwitch.SelectedIndex = 0;
 
@@ -699,13 +699,13 @@ namespace Client
                 // Change Job
                 case "Change Job":
                     {
-                        if (Constant.MAX_JOBS > 0)
+                        if (Constant.MaxJobs > 0)
                         {
                             if (cmbChangeJob.Items.Count == 0)
                             {
                                 cmbChangeJob.Items.Clear();
 
-                                for (int i = 0; i < Constant.MAX_JOBS; i++)
+                                for (int i = 0; i < Constant.MaxJobs; i++)
                                     cmbChangeJob.Items.Add(Strings.Trim(Data.Job[i].Name));
                                 cmbChangeJob.SelectedIndex = 0;
                             }
@@ -819,7 +819,7 @@ namespace Client
                     {
                         // lets populate the combobox
                         cmbSpawnNpc.Items.Clear();
-                        for (int i = 0; i < Constant.MAX_NPCS; i++)
+                        for (int i = 0; i < Core.Constant.NaxVariables; i++)
                             cmbSpawnNpc.Items.Add(Strings.Trim(Core.Data.Npc[i].Name));
                         cmbSpawnNpc.SelectedIndex = 0;
                         fraDialogue.Visible = true;
@@ -1809,11 +1809,11 @@ namespace Client
             pnlVariableSwitches.Height = Height;
             lstSwitches.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (int i = 0; i < Constant.MaxSwitches; i++)
                 lstSwitches.Items.Add((i + 1).ToString()  + ". " + Event.Switches[i]);
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (int i = 0; i < Constant.NaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Event.Variables[i]);
 
         }
@@ -1828,7 +1828,7 @@ namespace Client
                 case 1:
                     {
                         // Variable
-                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.NAX_VARIABLES)
+                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.NaxVariables)
                         {
                             Event.Variables[Event.RenameIndex] = txtRename.Text;
                             FraRenaming.Visible = false;
@@ -1842,7 +1842,7 @@ namespace Client
                 case 2:
                     {
                         // Switch
-                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.MAX_SWITCHES)
+                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.MaxSwitches)
                         {
                             Event.Switches[Event.RenameIndex] = txtRename.Text;
                             FraRenaming.Visible = false;
@@ -1855,12 +1855,12 @@ namespace Client
                     }
             }
             lstSwitches.Items.Clear();
-            for (int i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (int i = 0; i < Constant.MaxSwitches; i++)
                 lstSwitches.Items.Add((i + 1).ToString() + ". " + Strings.Trim(Event.Switches[i]));
             lstSwitches.SelectedIndex = 0;
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (int i = 0; i < Constant.NaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Strings.Trim(Event.Variables[i]));
             lstVariables.SelectedIndex = 0;
         }
@@ -1874,12 +1874,12 @@ namespace Client
             Event.RenameIndex = 0;
             lstSwitches.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_SWITCHES; i++)
+            for (int i = 0; i < Constant.MaxSwitches; i++)
                 lstSwitches.Items.Add((i + 1).ToString() + ". " + Event.Switches[i]);
             lstSwitches.SelectedIndex = 0;
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NAX_VARIABLES; i++)
+            for (int i = 0; i < Constant.NaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Event.Variables[i]);
             lstVariables.SelectedIndex = 0;
         }
@@ -1891,7 +1891,7 @@ namespace Client
 
         private void LstVariables_DoubleClick(object sender, EventArgs e)
         {
-            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NAX_VARIABLES)
+            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
@@ -1904,7 +1904,7 @@ namespace Client
 
         private void LstSwitches_DoubleClick(object sender, EventArgs e)
         {
-            if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MAX_SWITCHES)
+            if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MaxSwitches)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
@@ -1917,7 +1917,7 @@ namespace Client
 
         private void BtnRenameVariable_Click(object sender, EventArgs e)
         {
-            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NAX_VARIABLES)
+            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
@@ -1930,7 +1930,7 @@ namespace Client
 
         private void BtnRenameSwitch_Click(object sender, EventArgs e)
         {
-            if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MAX_SWITCHES)
+            if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MaxSwitches)
             {
                 FraRenaming.Visible = true;
                 lblEditing.Text = "Editing Switch: " + lstSwitches.SelectedIndex.ToString();
@@ -2457,7 +2457,7 @@ namespace Client
                 cmbChatBubbleTarget.Visible = true;
                 cmbChatBubbleTarget.Items.Clear();
 
-                for (int i = 0; i < Constant.MAX_MAP_NPCS; i++)
+                for (int i = 0; i < Constant.MaxNpcs; i++)
                 {
                     if (Data.MyMap.Npc[i] < 0)
                     {

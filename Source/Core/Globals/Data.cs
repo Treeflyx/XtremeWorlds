@@ -39,7 +39,6 @@ namespace Core
         public static Party MyParty;
         public static Resource[] Resource = new Resource[Constant.MaxResources];
         public static CharList Char;
-        public static Pet[] Pet = new Pet[Constant.MaxPets];
         public static ChatBubble[] ChatBubble = new ChatBubble[byte.MaxValue];
         public static Script Script = new Script();
 

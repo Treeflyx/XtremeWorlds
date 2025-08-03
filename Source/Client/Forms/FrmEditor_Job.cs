@@ -24,17 +24,17 @@ namespace Client
 
             cmbItems.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
                 cmbItems.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
 
             lstIndex.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_JOBS; i++)
+            for (int i = 0; i < Constant.MaxJobs; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Data.Job[i].Name);
 
             lstStartItems.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_DROP_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxDropItems; i++)
                 lstStartItems.Items.Add(Core.Data.Item[Data.Job[GameState.EditorIndex].StartItem[i]].Name + " X " + Data.Job[GameState.EditorIndex].StartValue[i]);
 
             lstStartItems.SelectedIndex = 0;
@@ -172,7 +172,7 @@ namespace Client
             Data.Job[GameState.EditorIndex].StartValue[lstStartItems.SelectedIndex] = (int)Math.Round(nudItemAmount.Value);
 
             lstStartItems.Items.Clear();
-            for (int i = 0; i < Constant.MAX_DROP_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxDropItems; i++)
                 lstStartItems.Items.Add(Core.Data.Item[Data.Job[GameState.EditorIndex].StartItem[i]].Name + " X " + Data.Job[GameState.EditorIndex].StartValue[i]);
             lstStartItems.SelectedIndex = 0;
         }

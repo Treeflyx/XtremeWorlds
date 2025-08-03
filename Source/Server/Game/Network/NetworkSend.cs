@@ -23,8 +23,8 @@ namespace Server
             buffer.WriteInt32((int)ServerPackets.SAes);
             buffer.WriteByte((byte)General.Aes[index].Key.Length);
             buffer.WriteBlock(General.Aes[index].Key);
-            buffer.WriteByte((byte)General.Aes[index].Iv.Length);
-            buffer.WriteBlock(General.Aes[index].Iv);
+            buffer.WriteByte((byte)General.Aes[index].IV.Length);
+            buffer.WriteBlock(General.Aes[index].IV);
 
             NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -609,9 +609,9 @@ namespace Server
                         buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1);
                         buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2);
                         buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data12);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data22);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data32);
+                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1_2);
+                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2_2);
+                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3_2);
                         buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].DirBlock);
                         for (int i = 0, loopTo3 = (int)Enum.GetValues(typeof(MapLayer)).Length; i < loopTo3; i++)
                         {

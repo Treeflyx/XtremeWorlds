@@ -51,16 +51,16 @@ namespace Client
                 Data.Animation[GameState.EditorIndex].LoopTime[1] = 1;
             frmEditor_Animation.Instance.nudLoopTime1.Value = withBlock.LoopTime[1];
 
-            GameState.Animation_Changed[GameState.EditorIndex] = true;
+            GameState.AnimationChanged[GameState.EditorIndex] = true;
         }
 
         public static void AnimationEditorOK()
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (i = 0; i < Constant.MaxAnimations; i++)
             {
-                if (GameState.Animation_Changed[i])
+                if (GameState.AnimationChanged[i])
                 {
                     NetworkSend.SendSaveAnimation(i);
                 }
@@ -81,8 +81,8 @@ namespace Client
 
         public static void ClearChanged_Animation()
         {
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
-                GameState.Animation_Changed[i] = false;
+            for (int i = 0; i < Constant.MaxAnimations; i++)
+                GameState.AnimationChanged[i] = false;
         }
 
         #endregion
@@ -108,7 +108,7 @@ namespace Client
 
             withBlock.nudAmount.Value = Data.Npc[GameState.EditorIndex].DropItemValue[frmEditor_Npc.Instance.cmbDropSlot.SelectedIndex];
 
-            withBlock.nudHp.Value = Data.Npc[GameState.EditorIndex].HP;
+            withBlock.nudHp.Value = Data.Npc[GameState.EditorIndex].Hp;
             withBlock.nudExp.Value = Data.Npc[GameState.EditorIndex].Exp;
             withBlock.nudLevel.Value = Data.Npc[GameState.EditorIndex].Level;
             withBlock.nudDamage.Value = Data.Npc[GameState.EditorIndex].Damage;
@@ -132,14 +132,14 @@ namespace Client
 
             frmEditor_Npc.Instance.DrawSprite();
 
-            GameState.Npc_Changed[GameState.EditorIndex] = true;
+            GameState.NpcChanged[GameState.EditorIndex] = true;
         }
 
         public static void NpcEditorOK()
         {
-            for (int i = 0; i < Constant.MAX_NPCS; i++)
+            for (int i = 0; i < Constant.MaxNpcs; i++)
             {
-                if (GameState.Npc_Changed[i])
+                if (GameState.NpcChanged[i])
                 {
                     NetworkSend.SendSaveNpc(i);
                 }
@@ -160,8 +160,8 @@ namespace Client
 
         public static void ClearChanged_Npc()
         {
-            for (int i = 0; i < Constant.MAX_NPCS; i++)
-                GameState.Npc_Changed[i] = false;
+            for (int i = 0; i < Constant.MaxNpcs; i++)
+                GameState.NpcChanged[i] = false;
         }
 
         #endregion
@@ -169,7 +169,7 @@ namespace Client
         #region Resource Editor
         public static void ClearChanged_Resource()
         {
-            GameState.Resource_Changed = new bool[Constant.MAX_RESOURCES];
+            GameState.ResourceChanged = new bool[Constant.MaxResources];
         }
 
         public static void ResourceEditorInit()
@@ -195,16 +195,16 @@ namespace Client
             
             frmEditor_Resource.Instance.Visible = true;
 
-            GameState.Resource_Changed[GameState.EditorIndex] = true;
+            GameState.ResourceChanged[GameState.EditorIndex] = true;
         }
 
         public static void ResourceEditorOK()
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_RESOURCES; i++)
+            for (i = 0; i < Constant.MaxResources; i++)
             {
-                if (GameState.Resource_Changed[i])
+                if (GameState.ResourceChanged[i])
                 {
                     NetworkSend.SendSaveResource(i);
                 }
@@ -283,16 +283,16 @@ namespace Client
 
             frmEditor_Skill.Instance.DrawIcon();
           
-            GameState.Skill_Changed[GameState.EditorIndex] = true;
+            GameState.SkillChanged[GameState.EditorIndex] = true;
         }
 
         public static void SkillEditorOK()
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_SKILLS; i++)
+            for (i = 0; i < Constant.MaxSkills; i++)
             {
-                if (GameState.Skill_Changed[i])
+                if (GameState.SkillChanged[i])
                 {
                     NetworkSend.SendSaveSkill(i);
                 }
@@ -313,8 +313,8 @@ namespace Client
 
         public static void ClearChanged_Skill()
         {
-            for (int i = 0; i < Constant.MAX_SKILLS; i++)
-                GameState.Skill_Changed[i] = false;
+            for (int i = 0; i < Constant.MaxSkills; i++)
+                GameState.SkillChanged[i] = false;
         }
 
         #endregion
@@ -340,7 +340,7 @@ namespace Client
             withBlock.cmbCostItem.SelectedIndex = 0;
             
             UpdateShopTrade();
-            GameState.Shop_Changed[GameState.EditorIndex] = true;
+            GameState.ShopChanged[GameState.EditorIndex] = true;
         }
 
         public static void UpdateShopTrade()
@@ -349,7 +349,7 @@ namespace Client
 
             frmEditor_Shop.Instance.lstTradeItem.Items.Clear();
 
-            for (i = 0; i < Constant.MAX_TRADES; i++)
+            for (i = 0; i < Constant.MaxTrades; i++)
             {
                 {
                     ref var withBlock = ref Data.Shop[GameState.EditorIndex].TradeItem[i];
@@ -372,9 +372,9 @@ namespace Client
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_SHOPS; i++)
+            for (i = 0; i < Constant.MaxShops; i++)
             {
-                if (GameState.Shop_Changed[i])
+                if (GameState.ShopChanged[i])
                 {
                     NetworkSend.SendSaveShop(i);
                 }
@@ -395,8 +395,8 @@ namespace Client
 
         public static void ClearChanged_Shop()
         {
-            for (int i = 0; i < Constant.MAX_SHOPS; i++)
-                GameState.Shop_Changed[i] = false;
+            for (int i = 0; i < Constant.MaxShops; i++)
+                GameState.ShopChanged[i] = false;
         }
 
         #endregion
@@ -404,9 +404,9 @@ namespace Client
         #region Job Editor
         public static void JobEditorOK()
         {
-            for (int i = 0; i < Constant.MAX_JOBS; i++)
+            for (int i = 0; i < Constant.MaxJobs; i++)
             {
-                if (GameState.Job_Changed[i])
+                if (GameState.JobChanged[i])
                 {
                     NetworkSend.SendSaveJob(i);
                 }
@@ -462,14 +462,14 @@ namespace Client
             withBlock.nudStartX.Value = Data.Job[GameState.EditorIndex].StartX;
             withBlock.nudStartY.Value = Data.Job[GameState.EditorIndex].StartY;
 
-            GameState.Job_Changed[GameState.EditorIndex] = true;
+            GameState.JobChanged[GameState.EditorIndex] = true;
             withBlock.DrawPreview();
         }
 
         public static void ClearChanged_Job()
         {
-            for (int i = 0; i < Constant.MAX_JOBS; i++)
-                GameState.Job_Changed[i] = false;
+            for (int i = 0; i < Constant.MaxJobs; i++)
+                GameState.JobChanged[i] = false;
         }
 
 
@@ -511,11 +511,11 @@ namespace Client
                     withBlock.Speed = (int)Math.Round(frmEditor_Item.Instance.nudSpeed.Maximum);
                 frmEditor_Item.Instance.nudSpeed.Value = withBlock.Speed;
 
-                frmEditor_Item.Instance.nudStrength.Value = withBlock.Add_Stat[(int)Core.Stat.Strength];
-                frmEditor_Item.Instance.nudIntelligence.Value = withBlock.Add_Stat[(int)Core.Stat.Intelligence];
-                frmEditor_Item.Instance.nudVitality.Value = withBlock.Add_Stat[(int)Core.Stat.Vitality];
-                frmEditor_Item.Instance.nudLuck.Value = withBlock.Add_Stat[(int)Core.Stat.Luck];
-                frmEditor_Item.Instance.nudSpirit.Value = withBlock.Add_Stat[(int)Core.Stat.Spirit];
+                frmEditor_Item.Instance.nudStrength.Value = withBlock.AddStat[(int)Core.Stat.Strength];
+                frmEditor_Item.Instance.nudIntelligence.Value = withBlock.AddStat[(int)Core.Stat.Intelligence];
+                frmEditor_Item.Instance.nudVitality.Value = withBlock.AddStat[(int)Core.Stat.Vitality];
+                frmEditor_Item.Instance.nudLuck.Value = withBlock.AddStat[(int)Core.Stat.Luck];
+                frmEditor_Item.Instance.nudSpirit.Value = withBlock.AddStat[(int)Core.Stat.Spirit];
 
                 if (withBlock.KnockBack == 1)
                 {
@@ -601,15 +601,15 @@ namespace Client
             frmEditor_Item.Instance.cmbAccessReq.SelectedIndex = withBlock.AccessReq;
             frmEditor_Item.Instance.nudLevelReq.Value = withBlock.LevelReq;
 
-            frmEditor_Item.Instance.nudStrReq.Value = withBlock.Stat_Req[(int)Core.Stat.Strength];
-            frmEditor_Item.Instance.nudVitReq.Value = withBlock.Stat_Req[(int)Core.Stat.Vitality];
-            frmEditor_Item.Instance.nudLuckReq.Value = withBlock.Stat_Req[(int)Core.Stat.Luck];
-            frmEditor_Item.Instance.nudIntReq.Value = withBlock.Stat_Req[(int)Core.Stat.Intelligence];
-            frmEditor_Item.Instance.nudSprReq.Value = withBlock.Stat_Req[(int)Core.Stat.Spirit];
+            frmEditor_Item.Instance.nudStrReq.Value = withBlock.StatReq[(int)Core.Stat.Strength];
+            frmEditor_Item.Instance.nudVitReq.Value = withBlock.StatReq[(int)Core.Stat.Vitality];
+            frmEditor_Item.Instance.nudLuckReq.Value = withBlock.StatReq[(int)Core.Stat.Luck];
+            frmEditor_Item.Instance.nudIntReq.Value = withBlock.StatReq[(int)Core.Stat.Intelligence];
+            frmEditor_Item.Instance.nudSprReq.Value = withBlock.StatReq[(int)Core.Stat.Spirit];
 
             // Build cmbJobReq
             frmEditor_Item.Instance.cmbJobReq.Items.Clear();
-            for (i = 0; i < Constant.MAX_JOBS; i++)
+            for (i = 0; i < Constant.MaxJobs; i++)
                 frmEditor_Item.Instance.cmbJobReq.Items.Add(Data.Job[i].Name);
 
             frmEditor_Item.Instance.cmbJobReq.SelectedIndex = withBlock.JobReq;
@@ -629,7 +629,7 @@ namespace Client
 
             frmEditor_Item.Instance.DrawIcon();
 
-            GameState.Item_Changed[GameState.EditorIndex] = true;
+            GameState.ItemChanged[GameState.EditorIndex] = true;
         }
 
         public static void ItemEditorCancel()
@@ -644,9 +644,9 @@ namespace Client
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_ITEMS; i++)
+            for (i = 0; i < Constant.MaxItems; i++)
             {
-                if (GameState.Item_Changed[i])
+                if (GameState.ItemChanged[i])
                 {
                     NetworkSend.SendSaveItem(i);
                 }
@@ -662,9 +662,9 @@ namespace Client
         #region Moral Editor
         public static void MoralEditorOK()
         {
-            for (int i = 0; i < Constant.MAX_MORALS; i++)
+            for (int i = 0; i < Constant.MaxMorals; i++)
             {
-                if (GameState.Moral_Changed[i])
+                if (GameState.MoralChanged[i])
                 {
                     NetworkSend.SendSaveMoral(i);
                 }
@@ -691,7 +691,7 @@ namespace Client
             withBlock.txtName.Text = Data.Moral[GameState.EditorIndex].Name;
             withBlock.cmbColor.SelectedIndex = Data.Moral[GameState.EditorIndex].Color;
             withBlock.chkCanCast.Checked = Data.Moral[GameState.EditorIndex].CanCast;
-            withBlock.chkCanPK.Checked = Data.Moral[GameState.EditorIndex].CanPK;
+            withBlock.chkCanPK.Checked = Data.Moral[GameState.EditorIndex].CanPk;
             withBlock.chkCanPickupItem.Checked = Data.Moral[GameState.EditorIndex].CanPickupItem;
             withBlock.chkCanDropItem.Checked = Data.Moral[GameState.EditorIndex].CanDropItem;
             withBlock.chkCanUseItem.Checked = Data.Moral[GameState.EditorIndex].CanUseItem;
@@ -700,13 +700,13 @@ namespace Client
             withBlock.chkPlayerBlock.Checked = Data.Moral[GameState.EditorIndex].PlayerBlock;
             withBlock.chkNpcBlock.Checked = Data.Moral[GameState.EditorIndex].NpcBlock;
 
-            GameState.Moral_Changed[GameState.EditorIndex] = true;
+            GameState.MoralChanged[GameState.EditorIndex] = true;
         }
 
         public static void ClearChanged_Moral()
         {
-            for (int i = 0; i < Constant.MAX_MORALS; i++)
-                GameState.Moral_Changed[i] = false;
+            for (int i = 0; i < Core.Constant.MaxMorals; i++)
+                GameState.MoralChanged[i] = false;
         }
         #endregion
 
@@ -730,7 +730,7 @@ namespace Client
 
         public static void ProjectileEditorOK()
         {
-            for (int i = 0; i < Constant.MAX_PROJECTILES;  i++)
+            for (int i = 0; i < Constant.MaxProjectiles;  i++)
             {
                 if (GameState.ProjectileChanged[i])
                 {
@@ -753,7 +753,7 @@ namespace Client
 
         public static void ClearChanged_Projectile()
         {
-            for (int i = 0; i < Constant.MAX_PROJECTILES;  i++)
+            for (int i = 0; i < Constant.MaxProjectiles;  i++)
                 GameState.ProjectileChanged[i] = false;
 
         }

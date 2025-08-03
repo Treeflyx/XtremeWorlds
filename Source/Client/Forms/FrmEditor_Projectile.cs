@@ -19,7 +19,7 @@ namespace Client
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_PROJECTILES;  i++)
+            for (int i = 0; i < Constant.MaxProjectiles;  i++)
                 lstIndex.Items.Add(i + 1 + ": " + Core.Data.Projectile[i].Name);
 
             nudPic.Maximum = GameState.NumProjectiles;

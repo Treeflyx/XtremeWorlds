@@ -75,7 +75,7 @@ namespace Client
         {
             lstIndex.Items.Clear();
 
-            for (int i = 0; i < Constant.MAX_MORALS; i++)
+            for (int i = 0; i < Constant.MaxMorals; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Data.Moral[i].Name);
         }
 
@@ -97,7 +97,7 @@ namespace Client
 
         private void chkCanPK_CheckedChanged(object sender, EventArgs e)
         {
-            Data.Moral[GameState.EditorIndex].CanPK = chkCanPK.Checked;
+            Data.Moral[GameState.EditorIndex].CanPk = chkCanPK.Checked;
         }
 
         private void chkCanPickupItem_CheckedChanged(object sender, EventArgs e)

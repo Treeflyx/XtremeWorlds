@@ -54,29 +54,25 @@ namespace Client
 
             // populate combo boxes
             cmbAnimation.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ANIMATIONS; i++)
+            for (int i = 0; i < Constant.MaxAnimations; i++)
                 cmbAnimation.Items.Add(i + 1 + ": " + Data.Animation[i].Name);
 
             cmbAmmo.Items.Clear();
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
                 cmbAmmo.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
 
             cmbProjectile.Items.Clear();
-            for (int i = 0; i < Constant.MAX_PROJECTILES; i++)
+            for (int i = 0; i < Core.Constant.NaxVariables; i++)
                 cmbProjectile.Items.Add(i + 1 + ": " + Data.Projectile[i].Name);
 
             cmbSkills.Items.Clear();
-            for (int i = 0; i < Constant.MAX_SKILLS; i++)
+            for (int i = 0; i < Constant.MaxSkills; i++)
                 cmbSkills.Items.Add(i + 1 + ": " + Data.Skill[i].Name);
-
-            cmbPet.Items.Clear();
-            for (int i = 0; i < Constant.MAX_PETS; i++)
-                cmbPet.Items.Add(i + 1 + ": " + Data.Pet[i].Name);
 
             lstIndex.Items.Clear();
 
             // Add the names
-            for (int i = 0; i < Constant.MAX_ITEMS; i++)
+            for (int i = 0; i < Constant.MaxItems; i++)
                 lstIndex.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
             nudPaperdoll.Maximum = GameState.NumPaperdolls;
             nudSpanwAmount.Maximum = int.MaxValue;
@@ -336,27 +332,27 @@ namespace Client
 
         private void NudStrReq_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Stat_Req[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrReq.Value);
+            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrReq.Value);
         }
 
         private void NudVitReq_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Stat_Req[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitReq.Value);
+            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitReq.Value);
         }
 
         private void NudLuckReq_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Stat_Req[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuckReq.Value);
+            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuckReq.Value);
         }
 
         private void NudIntReq_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Stat_Req[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntReq.Value);
+            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntReq.Value);
         }
 
         private void NudSprReq_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Stat_Req[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSprReq.Value);
+            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSprReq.Value);
         }
 
         #endregion
@@ -388,27 +384,27 @@ namespace Client
 
         private void NudStrength_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Add_Stat[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrength.Value);
+            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrength.Value);
         }
 
         private void NudLuck_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Add_Stat[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuck.Value);
+            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuck.Value);
         }
 
         private void NudIntelligence_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Add_Stat[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntelligence.Value);
+            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntelligence.Value);
         }
 
         private void NudVitality_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Add_Stat[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitality.Value);
+            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitality.Value);
         }
 
         private void NudSpirit_ValueChanged(object sender, EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Add_Stat[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSpirit.Value);
+            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSpirit.Value);
         }
 
         private void ChkKnockBack_CheckedChanged(object sender, EventArgs e)
