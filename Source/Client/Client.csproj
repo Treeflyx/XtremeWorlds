@@ -143,7 +143,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UserSecretsId>e1a83a62-5587-413f-8a1a-f277ec156c75</UserSecretsId>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
   </PropertyGroup>
   <Target Name="EnsureContentFolderExists" BeforeTargets="Build">
     <MakeDir Directories="$(OutputPath)Content" />
