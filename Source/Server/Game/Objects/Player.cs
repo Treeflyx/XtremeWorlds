@@ -436,9 +436,9 @@ namespace Server
 
                 if (withBlock.Type2 == TileType.Warp)
                 {
-                    mapNum = withBlock.Data12;
-                    x = withBlock.Data22;
-                    y = withBlock.Data32;
+                    mapNum = withBlock.Data1_2;
+                    x = withBlock.Data2_2;
+                    y = withBlock.Data3_2;
                 }
 
                 if (mapNum >= 0)
@@ -460,7 +460,7 @@ namespace Server
 
                 if (withBlock.Type2 == TileType.Shop)
                 {
-                    x = withBlock.Data12;
+                    x = withBlock.Data1_2;
                 }
 
                 if (x >= 0) // shop exists?
@@ -489,8 +489,8 @@ namespace Server
 
                 if (withBlock.Type2 == TileType.Heal)
                 {
-                    vital = withBlock.Data12;
-                    amount += withBlock.Data22;
+                    vital = withBlock.Data1_2;
+                    amount += withBlock.Data2_2;
                 }
 
                 if (vital > 0)
@@ -522,7 +522,7 @@ namespace Server
 
                 if (withBlock.Type2 == TileType.Trap)
                 {
-                    amount += withBlock.Data12;
+                    amount += withBlock.Data1_2;
                 }
 
                 if (amount > 0)

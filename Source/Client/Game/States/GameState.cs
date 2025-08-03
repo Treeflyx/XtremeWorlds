@@ -217,7 +217,6 @@ namespace Client
         public static int[] AnimationLoaded = new int[Core.Constant.MaxResources];
         public static int[] SkillLoaded = new int[Core.Constant.MaxSkills];
         public static int[] ShopLoaded = new int[Core.Constant.MaxShops];
-        public static int[] PetLoaded = new int[Core.Constant.MaxPets];
         public static int[] MoralLoaded = new int[(Core.Constant.MaxMorals)];
         public static int[] ProjectileLoaded = new int[(Core.Constant.MaxProjectiles)];
 
@@ -412,7 +411,6 @@ namespace Client
         public static bool[] AnimationChanged = new bool[Core.Constant.MaxAnimations];
         public static bool[] SkillChanged = new bool[Core.Constant.MaxSkills];
         public static bool[] ShopChanged = new bool[Core.Constant.MaxShops];
-        public static bool[] PetChanged = new bool[Core.Constant.MaxPets];
         public static bool[] JobChanged = new bool[(Core.Constant.MaxJobs)];
         public static bool[] MoralChanged = new bool[(Core.Constant.MaxMorals)];
         public static bool[] ProjectileChanged = new bool[Core.Constant.MaxProjectiles];

@@ -201,7 +201,6 @@ namespace Server
             Data.Resource = new Core.Type.Resource[Core.Constant.MaxResources];
             Data.Projectile = new Core.Type.Projectile[Core.Constant.MaxProjectiles];
             Data.Animation = new Core.Type.Animation[Core.Constant.MaxAnimations];
-            Data.Pet = new Core.Type.Pet[Core.Constant.MaxPets];
             Data.Shop = new Core.Type.Shop[Core.Constant.MaxShops];
             Core.Data.Player = new Core.Type.Player[Core.Constant.MaxPlayers];
             Data.Party = new Core.Type.Party[Core.Constant.MaxParty];

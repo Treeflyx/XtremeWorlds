@@ -126,9 +126,9 @@ namespace Core
             public int Data2;
             public int Data3;
             public TileType Type2;
-            public int Data12;
-            public int Data22;
-            public int Data32;
+            public int Data1_2;
+            public int Data2_2;
+            public int Data3_2;
             public byte DirBlock;
         }
         public struct TileHistory
@@ -826,9 +826,9 @@ namespace Core
             public short Data1;
             public short Data2;
             public short Data3;
-            public short Data12;
-            public short Data22;
-            public short Data32;
+            public short Data1_2;
+            public short Data2_2;
+            public short Data3_2;
         }
 
         public struct Moral

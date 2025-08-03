@@ -582,9 +582,9 @@ namespace Client
             tile.Data1 = 0;
             tile.Data2 = 0;
             tile.Data3 = 0;
-            tile.Data12 = 0;
-            tile.Data22 = 0;
-            tile.Data32 = 0;
+            tile.Data1_2 = 0;
+            tile.Data2_2 = 0;
+            tile.Data3_2 = 0;
             tile.Type = 0;
             tile.Type2 = 0;
             tile.DirBlock = 0;
@@ -777,9 +777,9 @@ namespace Client
                         Data.MyMap.Tile[x, y].Data1 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].Data2 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].Data3 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data12 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data22 = buffer.ReadInt32();
-                        Data.MyMap.Tile[x, y].Data32 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data1_2 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data2_2 = buffer.ReadInt32();
+                        Data.MyMap.Tile[x, y].Data3_2 = buffer.ReadInt32();
                         Data.MyMap.Tile[x, y].DirBlock = (byte)buffer.ReadInt32();
 
                         for (j = 0; j < GameState.MaxTileHistory; j++)
@@ -787,9 +787,9 @@ namespace Client
                             Data.TileHistory[j].Tile[x, y].Data1 = Data.MyMap.Tile[x, y].Data1;
                             Data.TileHistory[j].Tile[x, y].Data2 = Data.MyMap.Tile[x, y].Data2;
                             Data.TileHistory[j].Tile[x, y].Data3 = Data.MyMap.Tile[x, y].Data3;
-                            Data.TileHistory[j].Tile[x, y].Data12 = Data.MyMap.Tile[x, y].Data12;
-                            Data.TileHistory[j].Tile[x, y].Data22 = Data.MyMap.Tile[x, y].Data22;
-                            Data.TileHistory[j].Tile[x, y].Data32 = Data.MyMap.Tile[x, y].Data32;
+                            Data.TileHistory[j].Tile[x, y].Data1_2 = Data.MyMap.Tile[x, y].Data1_2;
+                            Data.TileHistory[j].Tile[x, y].Data2_2 = Data.MyMap.Tile[x, y].Data2_2;
+                            Data.TileHistory[j].Tile[x, y].Data3_2 = Data.MyMap.Tile[x, y].Data3_2;
                             Data.TileHistory[j].Tile[x, y].DirBlock = Data.MyMap.Tile[x, y].DirBlock;
                             Data.TileHistory[j].Tile[x, y].Type = Data.MyMap.Tile[x, y].Type;
                             Data.TileHistory[j].Tile[x, y].Type2 = Data.MyMap.Tile[x, y].Type2;
@@ -1141,9 +1141,9 @@ namespace Client
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data1);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data2);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].Data3);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data12);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data22);
-                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data32);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data1_2);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data2_2);
+                    buffer.WriteInt32(Data.MyMap.Tile[x, y].Data3_2);
                     buffer.WriteInt32(Data.MyMap.Tile[x, y].DirBlock);
 
                     int layerCount = System.Enum.GetValues(typeof(MapLayer)).Length;

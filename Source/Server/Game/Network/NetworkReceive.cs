@@ -1030,9 +1030,9 @@ namespace Server
                         withBlock.Tile[x, y].Data1 = buffer.ReadInt32();
                         withBlock.Tile[x, y].Data2 = buffer.ReadInt32();
                         withBlock.Tile[x, y].Data3 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data12 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data22 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data32 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data1_2 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data2_2 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data3_2 = buffer.ReadInt32();
                         withBlock.Tile[x, y].DirBlock = (byte)buffer.ReadInt32();
                         var loopTo3 = System.Enum.GetValues(typeof(MapLayer)).Length;
 						withBlock.Tile[x, y].Layer = new Core.Type.Layer[loopTo3];

@@ -76,7 +76,7 @@ namespace Client
 
                                     if (Data.MyMap.Tile[x, y].Type2 == TileType.Animation)
                                     {
-                                        _animationTmr[layer] = _tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data12].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data12, x, y);
+                                        _animationTmr[layer] = _tick + Animation.PlayAnimation(Data.Animation[Data.MyMap.Tile[x, y].Data1_2].Sprite[layer], layer, Data.MyMap.Tile[x, y].Data1_2, x, y);
                                     }
                                 }
                             }
@@ -92,7 +92,7 @@ namespace Client
                     Animation.CheckAnimInstance(_i);
                 }
 
-                if (tick > Event.EventChatTimer)
+                if (_tick > Event.EventChatTimer)
                 {
                     if (string.IsNullOrEmpty(Event.EventText))
                     {

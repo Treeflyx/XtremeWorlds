@@ -294,20 +294,20 @@ namespace Server
                     if (Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Item)
                     {
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically  
-                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)Core.ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1)
+                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)Core.ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1)
                         {
-                            if (Data.Map[mapNum].Tile[x, y].Data22 < 1)
+                            if (Data.Map[mapNum].Tile[x, y].Data2_2 < 1)
                             {
-                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, 1, mapNum, x, y);
+                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, 1, mapNum, x, y);
                             }
                             else
                             {
-                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
+                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
                             }
                         }
                         else
                         {
-                            await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
+                            await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
                         }
                     }
                 }
@@ -403,20 +403,20 @@ namespace Server
                     if (Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Item)
                     {
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically
-                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1)
+                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1)
                         {
-                            if (Data.Map[mapNum].Tile[x, y].Data22 < 1)
+                            if (Data.Map[mapNum].Tile[x, y].Data2_2 < 1)
                             {
-                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, 1, mapNum, x, y);
+                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, 1, mapNum, x, y);
                             }
                             else
                             {
-                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
+                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
                             }
                         }
                         else
                         {
-                            SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
+                            SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
                         }
                     }
                 }
