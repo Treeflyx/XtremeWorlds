@@ -10,6 +10,7 @@ using static Core.Global.Command;
 using static Core.Packets;
 using Mirage.Sharp.Asfw;
 using System.Reflection.Metadata.Ecma335;
+using Server.Game;
 
 namespace Server
 {
@@ -190,7 +191,7 @@ namespace Server
                                         buffer.WriteInt32(Core.Data.Map[mapNum].Event[id].Pages[page].WalkThrough);
                                         buffer.WriteInt32(Core.Data.Map[mapNum].Event[id].Pages[page].ShowName);
 
-                                        NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                        NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                     }
                                 }
                             }
@@ -203,7 +204,7 @@ namespace Server
         public static void SpawnNewEvents()
         {
             // Use Parallel.For for potential performance gains on multi-core systems.
-            Parallel.For(0, NetworkConfig.Socket.HighIndex, i =>
+            Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
             {
                 int mapNum = GetPlayerMap(i);
 
@@ -412,7 +413,7 @@ namespace Server
                                 buffer.WriteInt32(Core.Data.Map[mapNum].Event[id].Pages[z].WalkThrough);
                                 buffer.WriteInt32(Core.Data.Map[mapNum].Event[id].Pages[z].ShowName);
 
-                                NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                             }
                         }
                     }
@@ -872,7 +873,7 @@ namespace Server
         public static void ProcessLocalEventMovement()
         {
             // Parallel processing for each player.
-            Parallel.For(0, NetworkConfig.Socket.HighIndex + 1, i =>
+            Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
             {
                 if (Core.Data.TempPlayer[i].EventMap.CurrentEvents <= 0) return;
 
@@ -1290,7 +1291,7 @@ namespace Server
                                                 buffer.WriteInt32(withBlock1.FixedDir);
                                                 buffer.WriteInt32(withBlock1.WalkThrough);
                                                 buffer.WriteInt32(withBlock1.ShowName);
-                                                NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                             }
                                         }
                                     }
@@ -1318,7 +1319,7 @@ namespace Server
         public static void ProcessEventCommands()
         {
             // Parallel processing for each player.
-            Parallel.For(0, NetworkConfig.Socket.HighIndex, i =>
+            Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
             {
                 if (!NetworkConfig.IsPlaying(i) || Core.Data.TempPlayer[i].GettingMap || Core.Data.TempPlayer[i].EventMap.CurrentEvents <= 0) return;
 
@@ -1367,7 +1368,7 @@ namespace Server
             });
 
             // Process active event commands for each player.
-            Parallel.For(0, NetworkConfig.Socket.HighIndex + 1, i =>
+            Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
             {
                 if (!NetworkConfig.IsPlaying((int)i) || Core.Data.TempPlayer[i].EventProcessingCount <= 0 || Core.Data.TempPlayer[i].GettingMap) return;
 
@@ -1552,7 +1553,7 @@ namespace Server
                                                         nextCommandType = 2;
 
                                                     buffer.WriteInt32(nextCommandType);
-                                                    NetworkConfig.Socket.SendDataTo((int)i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo((int)i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 withBlock1.WaitingForResponse = 0; // No response needed.
                                                 break;
@@ -1617,7 +1618,7 @@ namespace Server
                                                         nextCommandType = 2;
 
                                                     buffer.WriteInt32(nextCommandType);
-                                                    NetworkConfig.Socket.SendDataTo((int)i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo((int)i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 withBlock1.WaitingForResponse = 0; // No response needed (choices handled separately).
                                                 break;
@@ -1950,7 +1951,7 @@ namespace Server
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SPlayBgm);
                                                     buffer.WriteString(command.Text1);
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -1959,7 +1960,7 @@ namespace Server
                                                 using (var buffer = new ByteStream(4))
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SFadeoutBgm);
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -1972,7 +1973,7 @@ namespace Server
                                                     buffer.WriteString(command.Text1);
                                                     buffer.WriteInt32(Core.Data.Map[mapNum].Event[withBlock1.EventId].X);
                                                     buffer.WriteInt32(Core.Data.Map[mapNum].Event[withBlock1.EventId].Y);
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -1982,7 +1983,7 @@ namespace Server
                                                 using (var buffer = new ByteStream(4))
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SStopSound);
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -2080,7 +2081,7 @@ namespace Server
                                                     buffer.WriteByte((byte)command.Data2); // X
                                                     buffer.WriteByte((byte)command.Data3); // Y
                                                     buffer.WriteByte((byte)command.Data4); // Transparency
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -2090,7 +2091,7 @@ namespace Server
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SPic);
                                                     buffer.WriteByte(0); // Hide picture.
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -2124,7 +2125,7 @@ namespace Server
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SHoldPlayer);
                                                     buffer.WriteInt32(0); // Hold
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -2134,7 +2135,7 @@ namespace Server
                                                 {
                                                     buffer.WriteInt32((int)ServerPackets.SHoldPlayer);
                                                     buffer.WriteInt32(1); // Release
-                                                    NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                                                    NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
                                             }
@@ -2934,14 +2935,14 @@ namespace Server
                     buffer.WriteInt32(Data.Map[mapNum].Event[eventPage.EventId].Pages[eventPage.PageId].ShowName);
                 }
 
-                NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+                NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             }
         }
 
         public static bool TriggerEvent(int playerIndex, int eventId, byte triggerType, int targetX, int targetY)
         {
             // 1. Validate player and map
-            if (playerIndex < 0 || playerIndex > NetworkConfig.Socket.HighIndex)
+            if (playerIndex < 0)
                 return false;
 
             int mapNum = GetPlayerMap(playerIndex);

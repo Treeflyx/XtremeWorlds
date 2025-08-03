@@ -8,6 +8,8 @@ using static Core.Type;
 using static Core.Global.Command;
 using static Core.Packets;
 using Core;
+using Server.Game.Net;
+using Server.Net;
 
 namespace Server
 {
@@ -83,41 +85,41 @@ namespace Server
 
         #region Incoming
 
-        public static void HandleRequestEditProjectile(int index, ref byte[] data)
+        public static void HandleRequestEditProjectile(GameSession session, ReadOnlySpan<byte> bytes)
         {
             var buffer = new ByteStream(4);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte)AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte)AccessLevel.Developer)
                 return;
 
             string user;
 
-            user = IsEditorLocked(index, (byte)EditorType.Projectile);
+            user = IsEditorLocked(session.Id, (byte)EditorType.Projectile);
 
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
                 return;
             }
 
-            SendProjectiles(index);
+            SendProjectiles(session.Id);
 
-            Core.Data.TempPlayer[index].Editor = (byte)EditorType.Projectile;
+            Core.Data.TempPlayer[session.Id].Editor = (byte)EditorType.Projectile;
 
             buffer.WriteInt32((int) ServerPackets.SProjectileEditor);
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
 
-        public static void HandleSaveProjectile(int index, ref byte[] data)
+        public static void HandleSaveProjectile(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int projectileNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
-            if (GetPlayerAccess(index) < (byte)AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte)AccessLevel.Developer)
                 return;
 
             projectileNum = buffer.ReadInt32();
@@ -137,23 +139,20 @@ namespace Server
             // Save it
             SendUpdateProjectileToAll(projectileNum);
             SaveProjectile(projectileNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved Projectile #" + projectileNum + ".", Constant.AdminLog);
-            buffer.Dispose();
-
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved Projectile #" + projectileNum + ".", Constant.AdminLog);
         }
 
-        public static void HandleRequestProjectile(int index, ref byte[] data)
+        public static void HandleRequestProjectile(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int projectileNum;
 
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
             projectileNum = buffer.ReadInt32();
-            buffer.Dispose();
 
-            SendProjectile(index, projectileNum);
+            SendProjectile(session.Id, projectileNum);
         }
 
-        public static void HandleClearProjectile(int index, ref byte[] data)
+        public static void HandleClearProjectile(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int projectileNum;
             int targetindex;
@@ -163,14 +162,13 @@ namespace Server
             int damage;
             int armor;
             int npcNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
             projectileNum = buffer.ReadInt32();
             targetindex = buffer.ReadInt32();
             targetType = (Core.TargetType)buffer.ReadInt32();
             targetZone = buffer.ReadInt32();
-            buffer.Dispose();
 
-            mapNum = GetPlayerMap(index);
+            mapNum = GetPlayerMap(session.Id);
 
             ClearMapProjectile(mapNum, projectileNum);
 
@@ -213,7 +211,7 @@ namespace Server
             buffer.WriteInt32(Data.Projectile[projectileNum].Speed);
             buffer.WriteInt32(Data.Projectile[projectileNum].Damage);
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }

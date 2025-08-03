@@ -1,21 +1,20 @@
 ﻿using System.Reflection;
+using System.Security.Cryptography;
 using Core;
 using static Core.Global.Command;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-
 using Mirage.Sharp.Asfw;
 
 namespace Client
 {
-
     public class NetworkSend
     {
         public static void SendAddChar(string name, int sexNum, int jobNum)
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAddChar);
+            buffer.WriteInt32((int) Packets.ClientPackets.CAddChar);
             buffer.WriteByte(GameState.CharNum);
             buffer.WriteString(name);
             buffer.WriteInt32(sexNum);
@@ -29,7 +28,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CUseChar);
+            buffer.WriteInt32((int) Packets.ClientPackets.CUseChar);
             buffer.WriteByte(slot);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
 
@@ -40,28 +39,46 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CDelChar);
+            buffer.WriteInt32((int) Packets.ClientPackets.CDelChar);
             buffer.WriteByte(slot);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
 
+        private static byte[] Encrypt(byte[] data)
+        {
+            using var aes = Aes.Create();
+
+            aes.Key = General.AesKey;
+            aes.IV = General.AesIV;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+
+            using var memoryStream = new MemoryStream();
+            using var cryptoStream = new CryptoStream(memoryStream, aes.CreateEncryptor(), CryptoStreamMode.Write);
+
+            cryptoStream.Write(data, 0, data.Length);
+            cryptoStream.FlushFinalBlock();
+
+            return memoryStream.ToArray();
+        }
+
         public static void SendLogin(string name, string pass)
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CLogin);
+            buffer.WriteInt32((int) Packets.ClientPackets.CLogin);
 
-            byte[] encryptedName = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(name));
-            byte[] encryptedPass = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(pass));
+            byte[] encryptedName = Encrypt(System.Text.Encoding.UTF8.GetBytes(name));
+            byte[] encryptedPass = Encrypt(System.Text.Encoding.UTF8.GetBytes(pass));
 
             // Get the current executing assembly
             var assembly = Assembly.GetExecutingAssembly();
 
             // Retrieve the version information
             var version = assembly?.GetName()?.Version;
-            byte[] encryptedVersion = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(version?.ToString()));
+            byte[] encryptedVersion = Encrypt(System.Text.Encoding.UTF8.GetBytes(version?.ToString()));
 
             buffer.WriteBytes(encryptedName);
             buffer.WriteBytes(encryptedPass);
@@ -75,17 +92,17 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRegister);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRegister);
 
-            byte[] encryptedName = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(name));
-            byte[] encryptedPass = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(pass));
+            byte[] encryptedName = Encrypt(System.Text.Encoding.UTF8.GetBytes(name));
+            byte[] encryptedPass = Encrypt(System.Text.Encoding.UTF8.GetBytes(pass));
 
             // Get the current executing assembly
             var assembly = Assembly.GetExecutingAssembly();
 
             // Retrieve the version information
             var version = assembly?.GetName()?.Version;
-            byte[] encryptedVersion = General.Aes.Encrypt(System.Text.Encoding.UTF8.GetBytes(version?.ToString()));
+            byte[] encryptedVersion = Encrypt(System.Text.Encoding.UTF8.GetBytes(version?.ToString()));
 
             buffer.WriteBytes(encryptedName);
             buffer.WriteBytes(encryptedPass);
@@ -102,8 +119,8 @@ namespace Client
 
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winLogin")];
-                user = withBlock.Controls[(int)Gui.GetControlIndex("winLogin", "txtUsername")].Text;
-                pass = withBlock.Controls[(int)Gui.GetControlIndex("winLogin", "txtPassword")].Text;
+                user = withBlock.Controls[(int) Gui.GetControlIndex("winLogin", "txtUsername")].Text;
+                pass = withBlock.Controls[(int) Gui.GetControlIndex("winLogin", "txtPassword")].Text;
 
                 if (NetworkConfig.Socket?.IsConnected == true)
                 {
@@ -111,7 +128,7 @@ namespace Client
                 }
                 else
                 {
-                    GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte)DialogueType.Alert);
+                    GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte) DialogueType.Alert);
                 }
             }
         }
@@ -121,7 +138,7 @@ namespace Client
             var buffer = new ByteStream(4);
             GameState.PingStart = General.GetTickCount();
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CCheckPing);
+            buffer.WriteInt32((int) Packets.ClientPackets.CCheckPing);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
@@ -131,7 +148,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CPlayerMove);
+            buffer.WriteInt32((int) Packets.ClientPackets.CPlayerMove);
             buffer.WriteByte(GetPlayerDir(GameState.MyIndex));
             buffer.WriteByte(Core.Data.Player[GameState.MyIndex].Moving);
             buffer.WriteInt32(Core.Data.Player[GameState.MyIndex].X);
@@ -140,14 +157,14 @@ namespace Client
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
-        
+
         public static void SendStopPlayerMove()
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CStopPlayerMove);
+            buffer.WriteInt32((int) Packets.ClientPackets.CStopPlayerMove);
             buffer.WriteByte(GetPlayerDir(GameState.MyIndex));
-            
+
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -156,7 +173,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSayMsg);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSayMsg);
             buffer.WriteString(text);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -167,7 +184,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CKickPlayer);
+            buffer.WriteInt32((int) Packets.ClientPackets.CKickPlayer);
             buffer.WriteString(name);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -178,7 +195,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CBanPlayer);
+            buffer.WriteInt32((int) Packets.ClientPackets.CBanPlayer);
             buffer.WriteString(name);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -189,7 +206,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CWarpMeTo);
+            buffer.WriteInt32((int) Packets.ClientPackets.CWarpMeTo);
             buffer.WriteString(name);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -200,7 +217,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CWarpToMe);
+            buffer.WriteInt32((int) Packets.ClientPackets.CWarpToMe);
             buffer.WriteString(name);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -211,7 +228,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CWarpTo);
+            buffer.WriteInt32((int) Packets.ClientPackets.CWarpTo);
             buffer.WriteInt32(mapNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -222,7 +239,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestLevelUp);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestLevelUp);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -232,7 +249,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSpawnItem);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSpawnItem);
             buffer.WriteInt32(tmpItem);
             buffer.WriteInt32(tmpAmount);
 
@@ -244,7 +261,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSetSprite);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSetSprite);
             buffer.WriteInt32(spriteNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -255,7 +272,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSetAccess);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSetAccess);
             buffer.WriteString(name);
             buffer.WriteInt32(access);
 
@@ -267,7 +284,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAttack);
+            buffer.WriteInt32((int) Packets.ClientPackets.CAttack);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -277,7 +294,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CPlayerDir);
+            buffer.WriteInt32((int) Packets.ClientPackets.CPlayerDir);
             buffer.WriteInt32(GetPlayerDir(GameState.MyIndex));
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -288,7 +305,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestNpc);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestNpc);
             buffer.WriteDouble(npcNum);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -298,7 +315,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestSkill);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestSkill);
             buffer.WriteInt32(skillNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -309,7 +326,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CTrainStat);
+            buffer.WriteInt32((int) Packets.ClientPackets.CTrainStat);
             buffer.WriteInt32(statNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -320,7 +337,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestPlayerData);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestPlayerData);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -330,7 +347,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CBroadcastMsg);
+            buffer.WriteInt32((int) Packets.ClientPackets.CBroadcastMsg);
             buffer.WriteString(text);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -341,7 +358,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CPlayerMsg);
+            buffer.WriteInt32((int) Packets.ClientPackets.CPlayerMsg);
             buffer.WriteString(msgTo);
             buffer.WriteString(text);
 
@@ -353,7 +370,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAdminMsg);
+            buffer.WriteInt32((int) Packets.ClientPackets.CAdminMsg);
             buffer.WriteString(text);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -364,7 +381,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CWhosOnline);
+            buffer.WriteInt32((int) Packets.ClientPackets.CWhosOnline);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -374,7 +391,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CPlayerInfoRequest);
+            buffer.WriteInt32((int) Packets.ClientPackets.CPlayerInfoRequest);
             buffer.WriteString(name);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -385,7 +402,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSetMotd);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSetMotd);
             buffer.WriteString(welcome);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -396,7 +413,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CBanList);
+            buffer.WriteInt32((int) Packets.ClientPackets.CBanList);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -406,7 +423,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CBanDestroy);
+            buffer.WriteInt32((int) Packets.ClientPackets.CBanDestroy);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -416,7 +433,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSwapInvSlots);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSwapInvSlots);
             buffer.WriteInt32(oldSlot);
             buffer.WriteInt32(newSlot);
 
@@ -428,7 +445,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSwapSkillSlots);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSwapSkillSlots);
             buffer.WriteInt32(oldSlot);
             buffer.WriteInt32(newSlot);
 
@@ -440,7 +457,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CUseItem);
+            buffer.WriteInt32((int) Packets.ClientPackets.CUseItem);
             buffer.WriteInt32(invNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -461,13 +478,13 @@ namespace Client
             if (Core.Data.Player[GameState.MyIndex].Inv[invNum].Num < 0 | Core.Data.Player[GameState.MyIndex].Inv[invNum].Num > Constant.MaxItems)
                 return;
 
-            if (Core.Data.Item[(int)GetPlayerInv(GameState.MyIndex, invNum)].Type == (byte)ItemCategory.Currency | Core.Data.Item[(int)GetPlayerInv(GameState.MyIndex, invNum)].Stackable == 1)
+            if (Core.Data.Item[(int) GetPlayerInv(GameState.MyIndex, invNum)].Type == (byte) ItemCategory.Currency | Core.Data.Item[(int) GetPlayerInv(GameState.MyIndex, invNum)].Stackable == 1)
             {
                 if (amount < 0 | amount > Core.Data.Player[GameState.MyIndex].Inv[invNum].Value)
                     return;
             }
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CMapDropItem);
+            buffer.WriteInt32((int) Packets.ClientPackets.CMapDropItem);
             buffer.WriteInt32(invNum);
             buffer.WriteInt32(amount);
 
@@ -481,7 +498,7 @@ namespace Client
 
             if (GameLogic.IsInBounds())
             {
-                buffer.WriteInt32((int)Packets.ClientPackets.CSearch);
+                buffer.WriteInt32((int) Packets.ClientPackets.CSearch);
                 buffer.WriteInt32(GameState.CurX);
                 buffer.WriteInt32(GameState.CurY);
                 buffer.WriteInt32(rClick);
@@ -495,7 +512,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAdminWarp);
+            buffer.WriteInt32((int) Packets.ClientPackets.CAdminWarp);
             buffer.WriteInt32(x);
             buffer.WriteInt32(y);
 
@@ -507,7 +524,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CUnequip);
+            buffer.WriteInt32((int) Packets.ClientPackets.CUnequip);
             buffer.WriteInt32(eqNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -525,26 +542,26 @@ namespace Client
             // dont let them forget a skill which is in CD
             if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
             {
-                Text.AddText("Cannot forget a skill which is cooling down!", (int)Core.Color.Red);
+                Text.AddText("Cannot forget a skill which is cooling down!", (int) Core.Color.Red);
                 return;
             }
 
             // dont let them forget a skill which is buffered
             if (GameState.SkillBuffer == skillSlot)
             {
-                Text.AddText("Cannot forget a skill which you are casting!", (int)Core.Color.Red);
+                Text.AddText("Cannot forget a skill which you are casting!", (int) Core.Color.Red);
                 return;
             }
 
             if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Num >= 0)
             {
-                buffer.WriteInt32((int)Packets.ClientPackets.CForgetSkill);
+                buffer.WriteInt32((int) Packets.ClientPackets.CForgetSkill);
                 buffer.WriteInt32(skillSlot);
                 NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             }
             else
             {
-                Text.AddText("No skill found.", (int)Core.Color.Red);
+                Text.AddText("No skill found.", (int) Core.Color.Red);
             }
 
             buffer.Dispose();
@@ -554,7 +571,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CMapReport);
+            buffer.WriteInt32((int) Packets.ClientPackets.CMapReport);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -562,12 +579,12 @@ namespace Client
 
         public static void SendRequestAdmin()
         {
-            if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
+            if (GetPlayerAccess(GameState.MyIndex) < (int) AccessLevel.Moderator)
                 return;
 
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAdmin);
+            buffer.WriteInt32((int) Packets.ClientPackets.CAdmin);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -577,7 +594,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CEmote);
+            buffer.WriteInt32((int) Packets.ClientPackets.CEmote);
             buffer.WriteInt32(emote);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -588,7 +605,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditResource);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditResource);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -597,7 +614,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveResource);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveResource);
 
             buffer.WriteInt32(resourceNum);
             buffer.WriteInt32(Data.Resource[resourceNum].Animation);
@@ -623,7 +640,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditNpc);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditNpc);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -633,38 +650,38 @@ namespace Client
             var buffer = new ByteStream(4);
             int i;
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveNpc);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveNpc);
             buffer.WriteInt32(npcNum);
 
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Animation);
-            buffer.WriteString(Data.Npc[(int)npcNum].AttackSay);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Behaviour);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Animation);
+            buffer.WriteString(Data.Npc[(int) npcNum].AttackSay);
+            buffer.WriteByte(Data.Npc[(int) npcNum].Behaviour);
 
             for (i = 0; i < Constant.MaxDropItems; i++)
             {
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropChance[i]);
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItem[i]);
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItemValue[i]);
+                buffer.WriteInt32(Data.Npc[(int) npcNum].DropChance[i]);
+                buffer.WriteInt32(Data.Npc[(int) npcNum].DropItem[i]);
+                buffer.WriteInt32(Data.Npc[(int) npcNum].DropItemValue[i]);
             }
 
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Exp);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Faction);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Hp);
-            buffer.WriteString(Data.Npc[(int)npcNum].Name);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Range);
-            buffer.WriteByte(Data.Npc[(int)npcNum].SpawnTime);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].SpawnSecs);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Sprite);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Exp);
+            buffer.WriteByte(Data.Npc[(int) npcNum].Faction);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Hp);
+            buffer.WriteString(Data.Npc[(int) npcNum].Name);
+            buffer.WriteByte(Data.Npc[(int) npcNum].Range);
+            buffer.WriteByte(Data.Npc[(int) npcNum].SpawnTime);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].SpawnSecs);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Sprite);
 
             var statCount = System.Enum.GetValues(typeof(Stat)).Length;
             for (i = 0; i < statCount; i++)
-                buffer.WriteByte(Data.Npc[(int)npcNum].Stat[i]);
+                buffer.WriteByte(Data.Npc[(int) npcNum].Stat[i]);
 
             for (i = 0; i < Constant.MaxNpcSkills; i++)
-                buffer.WriteByte(Data.Npc[(int)npcNum].Skill[i]);
+                buffer.WriteByte(Data.Npc[(int) npcNum].Skill[i]);
 
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Level);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Damage);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Level);
+            buffer.WriteInt32(Data.Npc[(int) npcNum].Damage);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -674,7 +691,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditSkill);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditSkill);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -683,7 +700,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveSkill);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveSkill);
             buffer.WriteInt32(skillNum);
 
             buffer.WriteInt32(Data.Skill[skillNum].AccessReq);
@@ -724,7 +741,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveShop);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveShop);
             buffer.WriteInt32(shopNum);
 
             buffer.WriteInt32(Data.Shop[shopNum].BuyRate);
@@ -740,14 +757,13 @@ namespace Client
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
-
         }
 
         public static void SendRequestEditShop()
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditShop);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditShop);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -756,7 +772,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveAnimation);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveAnimation);
             buffer.WriteInt32(animationNum);
 
             for (int i = 0, loopTo = Information.UBound(Data.Animation[animationNum].Frames); i < loopTo; i++)
@@ -782,7 +798,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditAnimation);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditAnimation);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -791,7 +807,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditJob);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditJob);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -802,7 +818,7 @@ namespace Client
             int q;
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveJob);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveJob);
 
             buffer.WriteInt32(jobNum);
 
@@ -836,7 +852,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveItem);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveItem);
             buffer.WriteInt32(itemNum);
             buffer.WriteInt32(Core.Data.Item[itemNum].AccessReq);
 
@@ -884,7 +900,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditItem);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditItem);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -893,7 +909,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CCloseEditor);
+            buffer.WriteInt32((int) Packets.ClientPackets.CCloseEditor);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -902,7 +918,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSetHotbarSlot);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSetHotbarSlot);
 
             buffer.WriteInt32(type);
             buffer.WriteInt32(newSlot);
@@ -917,7 +933,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CDeleteHotbarSlot);
+            buffer.WriteInt32((int) Packets.ClientPackets.CDeleteHotbarSlot);
 
             buffer.WriteInt32(slot);
 
@@ -929,16 +945,16 @@ namespace Client
         {
             switch (Core.Data.Player[GameState.MyIndex].Hotbar[slot].SlotType)
             {
-                case (byte)DraggablePartType.Skill:
-                    {
-                        Player.PlayerCastSkill(Player.FindSkill((int)Core.Data.Player[GameState.MyIndex].Hotbar[slot].Slot));
-                        return;
-                    }
+                case (byte) DraggablePartType.Skill:
+                {
+                    Player.PlayerCastSkill(Player.FindSkill((int) Core.Data.Player[GameState.MyIndex].Hotbar[slot].Slot));
+                    return;
+                }
             }
 
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CUseHotbarSlot);
+            buffer.WriteInt32((int) Packets.ClientPackets.CUseHotbarSlot);
 
             buffer.WriteInt32(slot);
 
@@ -950,7 +966,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSkillLearn);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSkillLearn);
             buffer.WriteInt32(tmpSkill);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -961,7 +977,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CCast);
+            buffer.WriteInt32((int) Packets.ClientPackets.CCast);
             buffer.WriteInt32(skillSlot);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -975,7 +991,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestMoral);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestMoral);
             buffer.WriteInt32(moralNum);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
@@ -986,7 +1002,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditMoral);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditMoral);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -995,7 +1011,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveMoral);
+            buffer.WriteInt32((int) Packets.ClientPackets.CSaveMoral);
             buffer.WriteInt32(moralNum);
 
             {
@@ -1021,7 +1037,7 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CCloseShop);
+            buffer.WriteInt32((int) Packets.ClientPackets.CCloseShop);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -1030,10 +1046,9 @@ namespace Client
         {
             var buffer = new ByteStream(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditScript);
+            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditScript);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
-
     }
 }

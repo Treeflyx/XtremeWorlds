@@ -11,6 +11,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Server.Game;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Global.Command;
 using static Core.Packets;
 using static Core.Type;
@@ -141,7 +144,7 @@ namespace Server
 
         private static bool IsPlayerBlocking(int index, int mapNum, int x, int y, int eventId)
         {
-            for (int i = 0; i <= NetworkConfig.Socket.HighIndex; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (NetworkConfig.IsPlaying(i) && GetPlayerMap(i) == mapNum && GetPlayerX(i) == x && GetPlayerY(i) == y)
                 {
@@ -311,7 +314,7 @@ namespace Server
             if (index == -1)
                 NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
             else
-                NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+                PlayerService.Instance.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -545,14 +548,13 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_EventChatReply(int index, ref byte[] data)
+        public static void Packet_EventChatReply(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
             int eventId = buffer.ReadInt32(), pageId = buffer.ReadInt32(), reply = buffer.ReadInt32();
-            buffer.Dispose();
 
-            General.Logger.LogInformation($"Player {index} responded to event {eventId} with reply {reply}");
-            ProcessEventReply(index, eventId, pageId, reply);
+            General.Logger.LogInformation($"Player {session.Id} responded to event {eventId} with reply {reply}");
+            ProcessEventReply(session.Id, eventId, pageId, reply);
         }
 
         private static void ProcessEventReply(int index, int eventId, int pageId, int reply)
@@ -586,22 +588,20 @@ namespace Server
             proc.WaitingForResponse = 0;
         }
 
-        public static void Packet_Event(int index, ref byte[] data)
+        public static void Packet_Event(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
             int eventId = buffer.ReadInt32();
-            buffer.Dispose();
-            EventLogic.TriggerEvent(index, eventId, 0, GetPlayerX(index), GetPlayerY(index));
+            EventLogic.TriggerEvent(session.Id, eventId, 0, GetPlayerX(session.Id), GetPlayerY(session.Id));
         }
 
-        public static void Packet_RequestSwitchesAndVariables(int index, ref byte[] data) => SendSwitchesAndVariables(index);
+        public static void Packet_RequestSwitchesAndVariables(GameSession session, ReadOnlySpan<byte> bytes) => SendSwitchesAndVariables(session.Id);
 
-        public static void Packet_SwitchesAndVariables(int index, ref byte[] data)
+        public static void Packet_SwitchesAndVariables(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
             for (int i = 0; i < Core.Constant.MaxSwitches; i++) Switches[i] = buffer.ReadString();
             for (int i = 0; i < Core.Constant.NaxVariables; i++) Variables[i] = buffer.ReadString();
-            buffer.Dispose();
 
             SaveSwitches();
             SaveVariables();
@@ -648,7 +648,7 @@ namespace Server
                     return;
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -662,7 +662,7 @@ namespace Server
             if (everyone)
                 NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
             else
-                NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+                NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -678,7 +678,7 @@ namespace Server
                 SerializeMapEvents(buffer, mapNum);
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
             SendSwitchesAndVariables(index);
         }
@@ -858,7 +858,7 @@ namespace Server
 
         private static void TriggerScheduledEvent(ScheduledEvent ev)
         {
-            for (int i = 0; i <= NetworkConfig.Socket.HighIndex; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (NetworkConfig.IsPlaying(i) && GetPlayerMap(i) == ev.MapNum)
                     EventLogic.TriggerEvent(i, ev.EventId, 0, TempEventMap[ev.MapNum].Event[ev.EventId].X, TempEventMap[ev.MapNum].Event[ev.EventId].Y);
@@ -889,7 +889,7 @@ namespace Server
         // Environment Effects
         public static void ChangeMapWeather(int mapNum, int weatherType, int intensity)
         {
-            for (int i = 0; i <= NetworkConfig.Socket.HighIndex; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (NetworkConfig.IsPlaying(i) && GetPlayerMap(i) == mapNum)
                     SendSpecialEffect(i, EffectTypeWeather, weatherType, intensity);

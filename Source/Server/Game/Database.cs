@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Server.Game;
 using static Core.Global.Command;
 using static Core.Type;
 using static System.Net.Mime.MediaTypeNames;
@@ -32,6 +33,8 @@ namespace Server
     {
         private static readonly SemaphoreSlim ConnectionSemaphore = new SemaphoreSlim(SettingsManager.Instance.MaxSqlClients, SettingsManager.Instance.MaxSqlClients);
 
+        public static string ConnectionString { get; set; } = string.Empty;
+
         public static async System.Threading.Tasks.Task CreateDatabaseAsync(string databaseName)
         {
             await ConnectionSemaphore.WaitAsync();
@@ -40,7 +43,7 @@ namespace Server
                 string checkDbExistsSql = $"SELECT 1 FROM pg_database WHERE datname = '{databaseName}'";
                 string createDbSql = $"CREATE DATABASE {databaseName}";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value.Replace("Database=mirage", "Database=postgres")))
+                using (var connection = new NpgsqlConnection(ConnectionString.Replace("Database=mirage", "Database=postgres")))
                 {
                     await connection.OpenAsync();
 
@@ -54,7 +57,7 @@ namespace Server
                             {
                                 await createCommand.ExecuteNonQueryAsync();
 
-                                using (var dbConnection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                                using (var dbConnection = new NpgsqlConnection(ConnectionString))
                                 {
                                     await dbConnection.CloseAsync();
                                 }
@@ -76,7 +79,7 @@ namespace Server
             {
                 string sql = $"SELECT EXISTS (SELECT 1 FROM {tableName} WHERE {columnName} = @value);";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -102,7 +105,7 @@ namespace Server
             {
                 string sqlCheck = $"SELECT column_name FROM information_schema.columns WHERE table_name='{table}' AND column_name='{columnName}';";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -147,7 +150,7 @@ namespace Server
 
                 newValue = newValue.Replace(@"\u0000", "");
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -195,7 +198,7 @@ namespace Server
             await ConnectionSemaphore.WaitAsync();
             try
             {
-                using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var conn = new NpgsqlConnection(ConnectionString))
                 {
                     await conn.OpenAsync();
 
@@ -218,7 +221,7 @@ namespace Server
             await ConnectionSemaphore.WaitAsync();
             try
             {
-                using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var conn = new NpgsqlConnection(ConnectionString))
                 {
                     await conn.OpenAsync();
 
@@ -252,7 +255,7 @@ namespace Server
             {
                 string sql = $"SELECT EXISTS (SELECT 1 FROM {table} WHERE id = @id);";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -285,7 +288,7 @@ namespace Server
             await ConnectionSemaphore.WaitAsync();
             try
             {
-                using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var conn = new NpgsqlConnection(ConnectionString))
                 {
                     await conn.OpenAsync();
 
@@ -311,7 +314,7 @@ namespace Server
             await ConnectionSemaphore.WaitAsync();
             try
             {
-                using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var conn = new NpgsqlConnection(ConnectionString))
                 {
                     await conn.OpenAsync();
 
@@ -346,7 +349,7 @@ namespace Server
                     ON CONFLICT ({idColumn}) 
                     DO UPDATE SET {dataColumn} = @data::jsonb;";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -372,7 +375,7 @@ namespace Server
             {
                 string sql = $"SELECT {columnName} FROM {tableName} WHERE id = @id;";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -409,7 +412,7 @@ namespace Server
             {
                 string sql = $"SELECT {dataColumn} FROM {tableName} WHERE {columnName} = @value;";
 
-                using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+                using (var connection = new NpgsqlConnection(ConnectionString))
                 {
                     await connection.OpenAsync();
 
@@ -452,7 +455,7 @@ namespace Server
         {
             string sql = $"SELECT EXISTS (SELECT 1 FROM {tableName} WHERE {columnName} = @value);";
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -470,7 +473,7 @@ namespace Server
         {
             string sqlCheck = $"SELECT column_name FROM information_schema.columns WHERE table_name='{table}' AND column_name='{columnName}';";
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -536,7 +539,7 @@ namespace Server
 
             newValue = newValue.Replace(@"\u0000", "");
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -554,7 +557,7 @@ namespace Server
         {
             string sql = $"SELECT EXISTS (SELECT 1 FROM {table} WHERE id = @id);";
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -579,7 +582,7 @@ namespace Server
 
         public static void InsertRow(long id, string data, string tableName)
         {
-            using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var conn = new NpgsqlConnection(ConnectionString))
             {
                 conn.Open();
 
@@ -597,7 +600,7 @@ namespace Server
 
         public static void InsertRow(long id, string data, string tableName, string columnName)
         {
-            using (var conn = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var conn = new NpgsqlConnection(ConnectionString))
             {
                 conn.Open();
 
@@ -624,7 +627,7 @@ namespace Server
             ON CONFLICT ({idColumn}) 
             DO UPDATE SET {dataColumn} = @data::jsonb;";
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -641,7 +644,7 @@ namespace Server
         {
             string sql = $"SELECT {dataColumn} FROM {tableName} WHERE {columnName} = @value;";
 
-            using (var connection = new NpgsqlConnection(General.GetConfig.GetSection("Database:ConnectionString").Value))
+            using (var connection = new NpgsqlConnection(ConnectionString))
             {
                 connection.Open();
 
@@ -1729,7 +1732,7 @@ namespace Server
 
         public static async System.Threading.Tasks.Task SaveAllPlayersOnlineAsync()
         {
-            for (int i = 0, loopTo = NetworkConfig.Socket.HighIndex; i <= loopTo; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (!NetworkConfig.IsPlaying(i))
                     continue;
@@ -2053,7 +2056,7 @@ namespace Server
             }
 
             // Cut off last portion of ip
-            ip = NetworkConfig.Socket.ClientIp(banPlayerindex);
+            ip = PlayerService.Instance.ClientIp(banPlayerindex);
 
             for (i = Strings.Len(ip); i >= 0; i -= 1)
             {
@@ -2071,7 +2074,7 @@ namespace Server
             Core.Log.AddTextToFile(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerindex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + "the Server" + "!");
             Core.Log.Add("The Server" + " has banned " + GetPlayerName(banPlayerindex) + ".", Constant.AdminLog);
-            NetworkSend.AlertMsg(banPlayerindex, (int)SystemMessage.Banned);
+            NetworkSend.AlertMsg(banPlayerindex, SystemMessage.Banned);
         }
 
         public static bool IsBanned(int index, string ip)
@@ -2134,7 +2137,7 @@ namespace Server
                 System.IO.File.Create(filename).Dispose();
 
             // Cut off last portion of ip
-            ip = NetworkConfig.Socket.ClientIp(banPlayerindex);
+            ip = PlayerService.Instance.ClientIp(banPlayerindex);
 
             for (i = Strings.Len(ip); i >= 0; i -= 1)
             {
@@ -2152,7 +2155,7 @@ namespace Server
             Core.Log.AddTextToFile(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerindex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByindex) + "!");
             Core.Log.Add(GetPlayerName(bannedByindex) + " has banned " + GetPlayerName(banPlayerindex) + ".", Constant.AdminLog);
-            NetworkSend.AlertMsg(banPlayerindex, (int)SystemMessage.Banned);
+            NetworkSend.AlertMsg(banPlayerindex, SystemMessage.Banned);
         }
 
         #endregion

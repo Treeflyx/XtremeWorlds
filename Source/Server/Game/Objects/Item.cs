@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Global.Command;
 using static Core.Packets;
 
@@ -141,7 +143,7 @@ namespace Server
                 buffer.WriteInt32(Data.MapItem[mapNum, i].Y);
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
@@ -428,57 +430,53 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_RequestItem(int index, ref byte[] data)
+        public static void Packet_RequestItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
-            int n;
-
-            n = buffer.ReadInt32();
+            var buffer = new PacketReader(bytes);
+            var n = buffer.ReadInt32();
 
             if (n < 0 | n > Core.Constant.MaxItems)
                 return;
 
-            SendUpdateItemTo(index, n);
+            SendUpdateItemTo(session.Id, n);
         }
 
-        public static void Packet_RequestEditItem(int index, ref byte[] data)
+        public static void Packet_RequestEditItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Mapper)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
                 return;
 
-            string user;
-
-            user = IsEditorLocked(index, (byte) Core.EditorType.Item);
+            var user = IsEditorLocked(session.Id, (byte) Core.EditorType.Item);
 
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
                 return;
             }
 
-            Core.Data.TempPlayer[index].Editor = (byte) Core.EditorType.Item;
+            Core.Data.TempPlayer[session.Id].Editor = (byte) Core.EditorType.Item;
 
-            Animation.SendAnimations(index);
-            Projectile.SendProjectiles(index);
-            NetworkSend.SendJobs(index);
-            SendItems(index);
+            Animation.SendAnimations(session.Id);
+            Projectile.SendProjectiles(session.Id);
+            NetworkSend.SendJobs(session);
+            SendItems(session.Id);
 
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int) ServerPackets.SItemEditor);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
 
-        public static void Packet_SaveItem(int index, ref byte[] data)
+        public static void Packet_SaveItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int n;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
                 return;
 
             n = buffer.ReadInt32();
@@ -528,43 +526,42 @@ namespace Server
             // Save it
             SaveItem(n);
             SendUpdateItemToAll(n);
-            Core.Log.Add(GetAccountLogin(index) + " saved item #" + n + ".", Constant.AdminLog);
-            buffer.Dispose();
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved item #" + n + ".", Constant.AdminLog);
         }
 
-        public static void Packet_GetItem(int index, ref byte[] data)
+        public static void Packet_GetItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            Player.PlayerMapGetItem(index);
+            Player.PlayerMapGetItem(session.Id);
         }
 
-        public static void Packet_DropItem(int index, ref byte[] data)
+        public static void Packet_DropItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int invNum;
             int amount;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
             invNum = buffer.ReadInt32();
             amount = buffer.ReadInt32();
-            buffer.Dispose();
 
-            if (Core.Data.TempPlayer[index].InBank | Core.Data.TempPlayer[index].InShop >= 0)
+            if (Core.Data.TempPlayer[session.Id].InBank | Core.Data.TempPlayer[session.Id].InShop >= 0)
                 return;
 
             // Prevent hacking
             if (invNum < 0 | invNum > Core.Constant.MaxInv)
                 return;
 
-            if (GetPlayerInv(index, invNum) < 0 | GetPlayerInv(index, invNum) > Core.Constant.MaxItems)
+            if (GetPlayerInv(session.Id, invNum) < 0 | GetPlayerInv(session.Id, invNum) > Core.Constant.MaxItems)
                 return;
 
-            if (Core.Data.Item[(int)GetPlayerInv(index, invNum)].Type == (byte)ItemCategory.Currency | Core.Data.Item[(int)GetPlayerInv(index, invNum)].Stackable == 1)
+            if (Core.Data.Item[(int)GetPlayerInv(session.Id, invNum)].Type == (byte)ItemCategory.Currency || 
+                Core.Data.Item[(int)GetPlayerInv(session.Id, invNum)].Stackable == 1)
             {
-                if (amount < 0 | amount > GetPlayerInvValue(index, invNum))
+                if (amount < 0 | amount > GetPlayerInvValue(session.Id, invNum))
                     return;
             }
 
             // everything worked out fine
-            Player.PlayerMapDropItem(index, invNum, amount);
+            Player.PlayerMapDropItem(session.Id, invNum, amount);
         }
 
         #endregion
@@ -594,7 +591,7 @@ namespace Server
             buffer.WriteInt32((int) ServerPackets.SUpdateItem);
             buffer.WriteBlock(ItemData(itemNum));
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

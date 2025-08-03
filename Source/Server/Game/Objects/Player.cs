@@ -11,6 +11,9 @@ using System.Reflection;
 using System.Text;
 using Autofac.Features.Indexed;
 using Microsoft.Xna.Framework.Input;
+using Server.Game;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Global.Command;
 using static Core.Packets;
 using static Core.Type;
@@ -38,18 +41,22 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void HandleUseChar(int index)
+        public static void HandleUseChar(GameSession session)
         {
-            // Set the flag so we know the person is in the game
-            Core.Data.TempPlayer[index].InGame = true;
-
-            // Send an ok to client to start receiving in game data
-            NetworkSend.SendLoginOk(index);
-            JoinGame(index);
-            string text = string.Format("{0} | {1} has began playing {2}.", GetAccountLogin(index), GetPlayerName(index), SettingsManager.Instance.GameName);
-            Core.Log.Add(text, Constant.PlayerLog);
-            Console.WriteLine(text);
+            PlayerService.Instance.AddPlayer(session.Id, session.Channel);
             
+            // Set the flag so we know the person is in the game
+            Core.Data.TempPlayer[session.Id].InGame = true;
+            
+            // Send an ok to client to start receiving in game data
+            NetworkSend.SendLoginOk(session.Id);
+            
+            JoinGame(session.Id);
+
+            General.Logger.LogInformation("{AccountName} | {PlayerName} has began player {GameName}",
+                GetAccountLogin(session.Id),
+                GetPlayerName(session.Id),
+                SettingsManager.Instance.GameName);
         }
 
         #endregion
@@ -73,7 +80,6 @@ namespace Server
         public static void PlayerWarp(int index, int mapNum, int x, int y, int dir)
         {
             int oldMap;
-            int i;
             ByteStream buffer;
 
             // Check for subscript out of range
@@ -128,8 +134,7 @@ namespace Server
             // send equipment of all people on new map
             if (GameLogic.GetTotalMapPlayers(mapNum) > 0)
             {
-                var loopTo = NetworkConfig.Socket.HighIndex;
-                for (i = 0; i < loopTo; i++)
+                foreach (var i in PlayerService.Instance.PlayerIds)
                 {
                     if (NetworkConfig.IsPlaying(i))
                     {
@@ -146,7 +151,7 @@ namespace Server
             {
                 // Regenerate all Npcs' health
                 var loopTo1 = Core.Constant.MaxMapNpcs;
-                for (i = 0; i < loopTo1; i++)
+                for (var i = 0; i < loopTo1; i++)
                 {
                     if (Data.MapNpc[oldMap].Npc[i].Num >= 0)
                     {
@@ -165,7 +170,7 @@ namespace Server
             buffer.WriteInt32((int) ServerPackets.SCheckForMap);
             buffer.WriteInt32(mapNum);
             buffer.WriteInt32(Data.Map[mapNum].Revision);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
 
@@ -613,8 +618,7 @@ namespace Server
         public static bool IsTileBlocked(int index, int mapNum, int x, int y, Direction dir)
         {      
             // Check for Npc and player blocking  
-            var loopTo = NetworkConfig.Socket.HighIndex;
-            for (int i = 0; i < loopTo; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (Data.Moral[Data.Map[mapNum].Moral].PlayerBlock)
                 {
@@ -1387,6 +1391,8 @@ namespace Server
             }
 
             Database.ClearPlayer(index);
+
+            PlayerService.Instance.RemovePlayer(index);
 
             General.UpdateCaption();
         }

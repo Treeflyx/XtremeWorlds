@@ -3,57 +3,30 @@ using Core.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reoria.Engine.Common.Security.Encryption;
-using Reoria.Engine.Container;
-using Reoria.Engine.Container.Configuration;
-using Reoria.Engine.Container.Configuration.Interfaces;
-using Reoria.Engine.Container.Interfaces;
-using Reoria.Engine.Container.Logging;
-using Reoria.Engine.Container.Logging.Interfaces;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
 using System.Text.RegularExpressions;
+using Server.Game;
 using static Core.Type;
 
 namespace Server
 {
     public class General
     {
-        public static Dictionary<int, AesEncryption> Aes = new Dictionary<int, AesEncryption>();
         private static readonly RandomUtility Random = new RandomUtility();
-        private static readonly IEngineContainer? Container;
-        private static readonly IConfiguration? Configuration;
         private static bool _serverDestroyed;
         private static string _myIpAddress = string.Empty;
         private static readonly Stopwatch MyStopwatch = new Stopwatch();
-        public static readonly ILogger Logger;
+        public static ILogger Logger;
         private static readonly object SyncLock = new object();
         private static readonly CancellationTokenSource Cts = new CancellationTokenSource();
         private static Timer? _saveTimer;
-        private static Timer? _announcementTimer;
         private static Stopwatch _shutDownTimer = new Stopwatch();
         private static int _shutDownLastTimer = 0;
         private static readonly ConcurrentDictionary<int, PlayerStats> PlayerStatistics = new();
-        private static TimeManager? _timeManager;
-
-        static General()
-        {
-            IServiceCollection services = new ServiceCollection()
-                .AddTransient<IEngineConfigurationSources, EngineConfigurationSources>()
-                .AddTransient<IEngineConfigurationProvider, EngineConfigurationProvider>()
-                .AddTransient<IEngineLoggerFactory, SerilogLoggerFactory>();
-
-            Container = new EngineContainer(services);
-
-            Configuration = Container?.Provider.GetRequiredService<IConfiguration>() 
-                ?? throw new NullReferenceException("Failed to initialize configuration");
-
-            Logger = Container?.Provider.GetRequiredService<ILogger<General>>() ??
-                throw new NullReferenceException("Failed to initialize logger");
-        }
-
+        
         #region Utility Methods
 
         /// <summary>
@@ -70,18 +43,7 @@ namespace Server
         /// Retrieves the random number generator utility.
         /// </summary>
         public static RandomUtility GetRandom => Random;
-
-        /// <summary>
-        /// Retrieves the server configuration instance.
-        /// </summary>
-        public static IConfiguration GetConfig => Configuration ?? throw new NullReferenceException("Configuration not initialized");
-
-        /// <summary>
-        /// Retrieves a logger instance for the specified type.
-        /// </summary>
-        public static ILogger<T> GetLogger<T>() where T : class =>
-            Container?.Provider.GetRequiredService<Logger<T>>() ?? throw new NullReferenceException("Container not initialized");
-
+        
         /// <summary>
         /// Gets the elapsed time in milliseconds since the server started.
         /// </summary>
@@ -130,13 +92,13 @@ namespace Server
         /// <summary>
         /// Initializes the game server asynchronously with enhanced features.
         /// </summary>
-        public static async System.Threading.Tasks.Task InitServerAsync()
+        public static async System.Threading.Tasks.Task InitServerAsync(IConfiguration configuration)
         {
             if (!System.Diagnostics.Debugger.IsAttached)
             {
                 try
                 {
-                    await ServerStartAsync();
+                    await ServerStartAsync(configuration);
                 }
                 catch (Exception ex)
                 {
@@ -146,25 +108,25 @@ namespace Server
             }
             else
             {
-                await ServerStartAsync();
+                await ServerStartAsync(configuration);
             }
         }
 
-        private static async System.Threading.Tasks.Task ServerStartAsync()
+        private static async System.Threading.Tasks.Task ServerStartAsync(IConfiguration configuration)
         {
             MyStopwatch.Start();
             int startTime = GetTimeMs();
 
-            await InitializeCoreComponentsAsync();
+            await InitializeCoreComponentsAsync(configuration);
             await LoadGameDataAsync();
             await StartGameLoopAsync(startTime);
-            _timeManager = new TimeManager();
+            new TimeManager();
         }
 
-        private static async System.Threading.Tasks.Task InitializeCoreComponentsAsync()
+        private static async System.Threading.Tasks.Task InitializeCoreComponentsAsync(IConfiguration configuration)
         {
             await System.Threading.Tasks.Task.WhenAll(LoadConfigurationAsync(), InitializeNetworkAsync(), InitializeChatSystemAsync());
-            await InitializeDatabaseWithRetryAsync();
+            await InitializeDatabaseWithRetryAsync(configuration);
         }
 
         public static void InitalizeCoreData()
@@ -233,10 +195,8 @@ namespace Server
         private static async System.Threading.Tasks.Task StartGameLoopAsync(int startTime)
         {
             InitializeSaveTimer();
-            InitializeAnnouncementTimer();
             DisplayServerBanner(startTime);
             UpdateCaption();
-            await NetworkConfig.Socket.StartListeningAsync(SettingsManager.Instance.Port, 5);
 
             if (!System.Diagnostics.Debugger.IsAttached)
             {
@@ -266,8 +226,6 @@ namespace Server
             _serverDestroyed = true;
             Cts.Cancel();
             _saveTimer?.Dispose();
-            _announcementTimer?.Dispose();
-            NetworkConfig.Socket.StopListening();
 
             Logger.LogInformation("Server shutdown initiated...");
 
@@ -285,8 +243,7 @@ namespace Server
             {
                 Logger.LogWarning("Server shutdown tasks were canceled.");
             }
-
-            NetworkConfig.DestroyNetwork();
+            
             Logger.LogInformation("Server shutdown completed.");
             Environment.Exit(0);
         }
@@ -318,13 +275,12 @@ namespace Server
 
         private static async System.Threading.Tasks.Task InitializeNetworkAsync()
         {
-            NetworkConfig.InitNetwork();
         }
 
-        private static async System.Threading.Tasks.Task InitializeDatabaseWithRetryAsync()
+        private static async System.Threading.Tasks.Task InitializeDatabaseWithRetryAsync(IConfiguration configuration)
         {
-            int maxRetries = Configuration.GetValue<int>("Database:MaxRetries", 3);
-            int retryDelayMs = Configuration.GetValue<int>("Database:RetryDelayMs", 1000);
+            int maxRetries = configuration.GetValue<int>("Database:MaxRetries", 3);
+            int retryDelayMs = configuration.GetValue<int>("Database:RetryDelayMs", 1000);
             Logger.LogInformation("Initializing database...");
             for (int attempt = 1; attempt <= maxRetries; attempt++)
             {
@@ -461,8 +417,7 @@ namespace Server
         {
             lock (SyncLock)
             {
-                return Enumerable.Range(0, NetworkConfig.Socket.HighIndex)
-                    .Count(i => NetworkConfig.IsPlaying(i));
+                return PlayerService.Instance.PlayerIds.Count(NetworkConfig.IsPlaying);
             }
         }
 
@@ -490,7 +445,7 @@ namespace Server
         {
             try
             {
-                bool networkActive = NetworkConfig.Socket.IsListening;
+                bool networkActive = true; // NetworkConfig.Socket.IsListening;
                 if (!networkActive) Logger.LogWarning("Network socket is not listening.");
                 return networkActive && !Cts.IsCancellationRequested;
             }
@@ -509,13 +464,6 @@ namespace Server
         {
             int intervalMinutes = SettingsManager.Instance.SaveInterval;
             _saveTimer = new Timer(async _ => await SavePlayersPeriodicallyAsync(), null,
-                TimeSpan.FromMinutes(intervalMinutes), TimeSpan.FromMinutes(intervalMinutes));
-        }
-
-        private static void InitializeAnnouncementTimer()
-        {
-            int intervalMinutes = Configuration?.GetValue<int>("Events:AnnouncementIntervalMinutes", 60) ?? 60;
-            _announcementTimer = new Timer(async _ => await SendServerAnnouncementAsync(""), null,
                 TimeSpan.FromMinutes(intervalMinutes), TimeSpan.FromMinutes(intervalMinutes));
         }
 
@@ -688,9 +636,7 @@ namespace Server
         {
             try
             {
-                bool isHealthy = await PerformHealthCheckAsync();
-                string status = $"Server Status: {(isHealthy ? "Healthy" : "Unhealthy")}\n" +
-                                $"Players Online: {CountPlayersOnline()}\n" +
+                string status = $"Players Online: {CountPlayersOnline()}\n" +
                                 $"Uptime: {MyStopwatch.Elapsed}\n" +
                                 $"Errors: {Global.ErrorCount}";
                 NetworkSend.PlayerMsg(playerIndex, status, (int)Core.Color.BrightGreen);

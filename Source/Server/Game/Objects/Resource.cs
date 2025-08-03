@@ -5,15 +5,15 @@ using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Global.Command;
 using static Core.Packets;
 
 namespace Server
 {
-
     public class Resource
     {
-
         #region Database
 
         public static void SaveResource(int resourceNum)
@@ -162,46 +162,42 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_RequestEditResource(int index, ref byte[] data)
+        public static void Packet_RequestEditResource(GameSession session, ReadOnlySpan<byte> bytes)
         {
             var buffer = new ByteStream(4);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
                 return;
 
-            string user;
-
-            user = IsEditorLocked(index, (byte) EditorType.Resource);
-
+            var user = IsEditorLocked(session.Id, (byte) EditorType.Resource);
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
                 return;
             }
 
-            Core.Data.TempPlayer[index].Editor = (byte) EditorType.Resource;
+            Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Resource;
 
-            Item.SendItems(index);
-            Animation.SendAnimations(index);
-            SendResources(index);
+            Item.SendItems(session.Id);
+            Animation.SendAnimations(session.Id);
+            SendResources(session.Id);
 
             buffer.WriteInt32((int) ServerPackets.SResourceEditor);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
 
-        public static void Packet_SaveResource(int index, ref byte[] data)
+        public static void Packet_SaveResource(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            int resourcenum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
                 return;
 
-            resourcenum = buffer.ReadInt32();
+            var resourcenum = buffer.ReadInt32();
 
             // Prevent hacking
             if (resourcenum < 0 | resourcenum > Core.Constant.MaxResources)
@@ -226,22 +222,19 @@ namespace Server
             SendUpdateResourceToAll(resourcenum);
             SaveResource(resourcenum);
 
-            Core.Log.Add(GetAccountLogin(index) + " saved Resource #" + resourcenum + ".", Constant.AdminLog);
-
-            buffer.Dispose();
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved Resource #" + resourcenum + ".", Constant.AdminLog);
         }
 
-        public static void Packet_RequestResource(int index, ref byte[] data)
+        public static void Packet_RequestResource(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
-            int n;
+            var buffer = new PacketReader(bytes);
 
-            n = buffer.ReadInt32();
+            var n = buffer.ReadInt32();
 
             if (n < 0 | n > Core.Constant.MaxResources)
                 return;
 
-            SendUpdateResourceTo(index, n);
+            SendUpdateResourceTo(session.Id, n);
         }
 
         #endregion
@@ -271,7 +264,7 @@ namespace Server
 
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -321,7 +314,7 @@ namespace Server
 
             buffer.WriteBlock(ResourceData(resourceNum));
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
