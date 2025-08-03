@@ -102,7 +102,7 @@ namespace Core
         public struct PlayerSkill
         {
             public int Num;
-            public int CD;
+            public int Cd;
         }
 
         public struct Bank
@@ -126,9 +126,9 @@ namespace Core
             public int Data2;
             public int Data3;
             public TileType Type2;
-            public int Data1_2;
-            public int Data2_2;
-            public int Data3_2;
+            public int Data12;
+            public int Data22;
+            public int Data32;
             public byte DirBlock;
         }
         public struct TileHistory
@@ -151,11 +151,11 @@ namespace Core
             public int LevelReq;
             public byte Mastery;
             public int Price;
-            public byte[] Add_Stat;
+            public byte[] AddStat;
             public byte Rarity;
             public int Speed;
             public byte BindType;
-            public byte[] Stat_Req;
+            public byte[] StatReq;
             public int Animation;
             public int Paperdoll;
             public byte Stackable;
@@ -193,7 +193,7 @@ namespace Core
             public int[] DropItemValue;
             public byte[] Stat;
             public byte Faction;
-            public int HP;
+            public int Hp;
             public int Exp;
             public int Animation;
             public byte[] Skill;
@@ -302,7 +302,7 @@ namespace Core
             public bool GettingMap;
             public double SkillBuffer;
             public int SkillBufferTimer;
-            public int[] SkillCD;
+            public int[] SkillCd;
             public double InShop;
             public int StunTimer;
             public int StunDuration;
@@ -327,7 +327,7 @@ namespace Core
             public int PetStunTimer;
             public int PetStunDuration;
             public int PetAttackTimer;
-            public int[] PetSkillCD;
+            public int[] PetSkillCd;
             public SkillBuffer PetSkillBuffer;
             public DoT[] PetDoT;
             public DoT[] PetHoT;
@@ -404,7 +404,7 @@ namespace Core
             public int StunTimer;
             public int SkillBuffer;
             public int SkillBufferTimer;
-            public int[] SkillCD;
+            public int[] SkillCd;
             public byte StopRegen;
             public int StopRegenTimer;
             public byte Moving;
@@ -722,8 +722,8 @@ namespace Core
         {
             public byte Index;
             public byte SpriteType;
-            public byte xOffset;
-            public byte yOffset;
+            public byte XOffset;
+            public byte YOffset;
             public int EventId;
         }
 
@@ -735,15 +735,15 @@ namespace Core
             public long Slot;
         }
 
-        public struct CSMap
+        public struct CsMap
         {
-            public CSMapData MapData;
-            public CSTile[,] Tile;
+            public CsMapData MapData;
+            public CsTile[,] Tile;
         }
 
-        public struct CSTile
+        public struct CsTile
         {
-            public CSTileType[] Layer;
+            public CsTileType[] Layer;
             public byte[] Autotile;
             public byte Type;
             public int Data1;
@@ -754,14 +754,14 @@ namespace Core
             public byte DirBlock;
         }
 
-        public struct CSTileType
+        public struct CsTileType
         {
-            public int x;
-            public int y;
+            public int X;
+            public int Y;
             public int TileSet;
         }
 
-        public struct CSMapData
+        public struct CsMapData
         {
             public string Name;
             public string Music;
@@ -788,7 +788,7 @@ namespace Core
             public int[] Npc;
         }
 
-        public struct XWMap
+        public struct XwMap
         {
             public string Name;
             public long Revision;
@@ -803,14 +803,14 @@ namespace Core
             public byte BootY;
             public int Shop;
             public byte Indoors;
-            public XWTile[,] Tile;
+            public XwTile[,] Tile;
             public long[] Npc;
             public bool Server;
             public byte Respawn;
             public byte Weather;
         }
 
-        public struct XWTile
+        public struct XwTile
         {
             public short Ground;
             public short Mask;
@@ -821,14 +821,14 @@ namespace Core
             public short FringeAnim;
             public short Roof;
             public short Fringe2Anim;
-            public XWTileType Type;
-            public XWTileType Type2;
+            public XwTileType Type;
+            public XwTileType Type2;
             public short Data1;
             public short Data2;
             public short Data3;
-            public short Data1_2;
-            public short Data2_2;
-            public short Data3_2;
+            public short Data12;
+            public short Data22;
+            public short Data32;
         }
 
         public struct Moral
@@ -836,7 +836,7 @@ namespace Core
             public string Name;
             public byte Color;
             public bool CanCast;
-            public bool CanPK;
+            public bool CanPk;
             public bool CanUseItem;
             public bool DropItems;
             public bool LoseExp;
@@ -846,47 +846,47 @@ namespace Core
             public bool NpcBlock;
         }
 
-        public struct SDLayer
+        public struct SdLayer
         {
-            public List<SDMapLayer> MapLayer;
+            public List<SdMapLayer> MapLayer;
         }
 
-        public struct SDMapLayer
+        public struct SdMapLayer
         {
             public string Name;
-            public SDTile Tiles;
+            public SdTile Tiles;
         }
 
-        public struct SDTile
+        public struct SdTile
         {
-            public List<SDMapTile> ArrayOfMapTile;
+            public List<SdMapTile> ArrayOfMapTile;
         }
 
-        public struct SDMapTile
+        public struct SdMapTile
         {
             public int TileIndex;
         }
 
-        public struct SDWarpPos
+        public struct SdWarpPos
         {
             public int X;
             public int Y;
         }
 
-        public struct SDWarpDes
+        public struct SdWarpDes
         {
             public int X;
             public int Y;
         }
 
-        public struct SDWarpData
+        public struct SdWarpData
         {
-            public SDWarpPos Pos;
-            public SDWarpDes WarpDes;
-            public int MapID;
+            public SdWarpPos Pos;
+            public SdWarpDes WarpDes;
+            public int MapId;
         }
 
-        public struct SDMap
+        public struct SdMap
         {
             public string Name;
             public string Music;
@@ -898,8 +898,8 @@ namespace Core
             public int Tileset;
             public int MaxX;
             public int MaxY;
-            public SDWarpData Warp;
-            public SDLayer MapLayer;
+            public SdWarpData Warp;
+            public SdLayer MapLayer;
         }
         
         public struct Quest
@@ -979,7 +979,7 @@ namespace Core
 
         public struct SkillAnim
         {
-            public int skillNum;
+            public int SkillNum;
             public int Timer;
             public int FramePointer;
         }
@@ -1034,7 +1034,7 @@ namespace Core
             public string[] Code;
         }
 
-        public struct UI
+        public struct Ui
         {
             public string[] Code;
         }

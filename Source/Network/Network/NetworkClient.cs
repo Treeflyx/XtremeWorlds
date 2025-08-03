@@ -17,7 +17,7 @@ namespace Mirage.Sharp.Asfw.Network
         private int _packetCount;
         private int _packetSize;
         private bool _connecting;
-        public NetworkClient.DataArgs[] PacketID;
+        public NetworkClient.DataArgs[] PacketId;
         private const int ReconnectInterval = 5000; // 5 seconds
         private const int MaxReconnectDuration = 30000; // 30 seconds
 
@@ -44,7 +44,7 @@ namespace Mirage.Sharp.Asfw.Network
             this._socket.NoDelay = true;
             this._packetCount = packetCount;
             this._packetSize = packetSize;
-            this.PacketID = new NetworkClient.DataArgs[packetCount];
+            this.PacketId = new NetworkClient.DataArgs[packetCount];
         }
 
         public void Dispose()
@@ -55,14 +55,14 @@ namespace Mirage.Sharp.Asfw.Network
             this._socket?.Close();
             this._socket?.Dispose();
             this._socket = (Socket)null;
-            this.PacketID = (NetworkClient.DataArgs[])null;
+            this.PacketId = (NetworkClient.DataArgs[])null;
             this.ConnectionSuccess = (NetworkClient.ConnectionArgs)null;
             this.ConnectionFailed = (NetworkClient.ConnectionArgs)null;
             this.ConnectionLost = (NetworkClient.ConnectionArgs)null;
             this.CrashReport = (NetworkClient.CrashReportArgs)null;
             this.PacketReceived = (NetworkClient.PacketInfoArgs)null;
             this.TrafficReceived = (NetworkClient.TrafficInfoArgs)null;
-            this.PacketID = (NetworkClient.DataArgs[])null;
+            this.PacketId = (NetworkClient.DataArgs[])null;
         }
 
         public void Connect(string ip, int port)
@@ -301,27 +301,27 @@ namespace Mirage.Sharp.Asfw.Network
                     count = length1 - num;
                     if (count >= 4)
                     {
-                        int int32_1 = BitConverter.ToInt32(this._packetRing, num);
-                        if (int32_1 >= 4)
+                        int int321 = BitConverter.ToInt32(this._packetRing, num);
+                        if (int321 >= 4)
                         {
                             try
                             {
-                                if (int32_1 <= count)
+                                if (int321 <= count)
                                 {
                                     int startIndex = num + 4;
-                                    int int32_2 = BitConverter.ToInt32(this._packetRing, startIndex);
-                                    if (int32_2 >= 0 && int32_2 < this._packetCount)
+                                    int int322 = BitConverter.ToInt32(this._packetRing, startIndex);
+                                    if (int322 >= 0 && int322 < this._packetCount)
                                     {
-                                        if (processedPacketIds.Contains(int32_2))
+                                        if (processedPacketIds.Contains(int322))
                                         {
-                                            Console.WriteLine("[PacketHandler] Duplicate packet id {0} detected in the same loop, skipping.", int32_2);
+                                            Console.WriteLine("[PacketHandler] Duplicate packet id {0} detected in the same loop, skipping.", int322);
                                             // Skip this packet, move to next
-                                            num = startIndex + int32_1;
+                                            num = startIndex + int321;
                                             continue;
                                         }
-                                        if (this.PacketID[int32_2] != null)
+                                        if (this.PacketId[int322] != null)
                                         {
-                                            int length2 = int32_1 - 4;
+                                            int length2 = int321 - 4;
                                             byte[] data = new byte[length2];
                                             if (startIndex + 4 + length2 <= this._packetRing.Length)
                                             {
@@ -335,24 +335,24 @@ namespace Mirage.Sharp.Asfw.Network
                                             }
                                             NetworkClient.PacketInfoArgs packetReceived = this.PacketReceived;
                                             if (packetReceived != null)
-                                                packetReceived(length2, int32_2, ref data);
+                                                packetReceived(length2, int322, ref data);
 
-                                            if (this.PacketID == null)
+                                            if (this.PacketId == null)
                                                 break;
 
-                                            this.PacketID[int32_2](ref data);
-                                            processedPacketIds.Add(int32_2);
-                                            num = startIndex + int32_1;
+                                            this.PacketId[int322](ref data);
+                                            processedPacketIds.Add(int322);
+                                            num = startIndex + int321;
                                         }
                                         else
                                         {
-                                            Console.WriteLine("[PacketHandler] PacketID[{0}] is null.", int32_2);
+                                            Console.WriteLine("[PacketHandler] PacketID[{0}] is null.", int322);
                                             break;
                                         }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("[PacketHandler] Packet header index out of range: {0}", int32_2);
+                                        Console.WriteLine("[PacketHandler] Packet header index out of range: {0}", int322);
                                         this.Disconnect();
                                         return;
                                     }
@@ -372,7 +372,7 @@ namespace Mirage.Sharp.Asfw.Network
                         }
                         else
                         {
-                            Console.WriteLine("[PacketHandler] Broken packet: int32_1={0}", int32_1);
+                            Console.WriteLine("[PacketHandler] Broken packet: int32_1={0}", int321);
                             this.Disconnect();
                             return;
                         }

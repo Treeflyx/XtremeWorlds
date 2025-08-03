@@ -25,18 +25,18 @@ namespace Server
         private static readonly RandomUtility Random = new RandomUtility();
         private static readonly IEngineContainer? Container;
         private static readonly IConfiguration? Configuration;
-        private static bool ServerDestroyed;
-        private static string MyIPAddress = string.Empty;
+        private static bool _serverDestroyed;
+        private static string _myIpAddress = string.Empty;
         private static readonly Stopwatch MyStopwatch = new Stopwatch();
         public static readonly ILogger Logger;
         private static readonly object SyncLock = new object();
         private static readonly CancellationTokenSource Cts = new CancellationTokenSource();
-        private static Timer? SaveTimer;
-        private static Timer? AnnouncementTimer;
-        private static Stopwatch ShutDownTimer = new Stopwatch();
-        private static int ShutDownLastTimer = 0;
+        private static Timer? _saveTimer;
+        private static Timer? _announcementTimer;
+        private static Stopwatch _shutDownTimer = new Stopwatch();
+        private static int _shutDownLastTimer = 0;
         private static readonly ConcurrentDictionary<int, PlayerStats> PlayerStatistics = new();
-        private static TimeManager? TimeManager;
+        private static TimeManager? _timeManager;
 
         static General()
         {
@@ -59,12 +59,12 @@ namespace Server
         /// <summary>
         /// Retrieves the shutdown timer for server destruction.
         /// </summary>
-        public static Stopwatch? GetShutDownTimer => ShutDownTimer;
+        public static Stopwatch? GetShutDownTimer => _shutDownTimer;
 
         /// <summary>
         /// Gets the current server destruction status.
         /// </summary>
-        public static bool IsServerDestroyed => ServerDestroyed;
+        public static bool IsServerDestroyed => _serverDestroyed;
 
         /// <summary>
         /// Retrieves the random number generator utility.
@@ -90,7 +90,7 @@ namespace Server
         /// <summary>
         /// Retrieves the local IP address of the server.
         /// </summary>
-        public static string GetLocalIPAddress()
+        public static string GetLocalIpAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             return host.AddressList
@@ -106,7 +106,7 @@ namespace Server
             if (string.IsNullOrWhiteSpace(username))
                 return -1;
 
-            if (username.Length < Core.Constant.MIN_NAME_LENGTH || username.Length > Core.Constant.NAME_LENGTH)
+            if (username.Length < Core.Constant.MinNameLength || username.Length > Core.Constant.NameLength)
                 return 0;
 
             return Regex.IsMatch(username, @"^[a-zA-Z0-9_ ]+$") ? 1 : -1;
@@ -158,7 +158,7 @@ namespace Server
             await InitializeCoreComponentsAsync();
             await LoadGameDataAsync();
             await StartGameLoopAsync(startTime);
-            TimeManager = new TimeManager();
+            _timeManager = new TimeManager();
         }
 
         private static async System.Threading.Tasks.Task InitializeCoreComponentsAsync()
@@ -169,57 +169,57 @@ namespace Server
 
         public static void InitalizeCoreData()
         {
-            Data.Job = new Core.Type.Job[Core.Constant.MAX_JOBS];
-            Data.Moral = new Core.Type.Moral[Core.Constant.MAX_MORALS];
-            Data.Map = new Core.Type.Map[Core.Constant.MAX_MAPS];
-            Core.Data.Item = new Core.Type.Item[Core.Constant.MAX_ITEMS];
-            Data.Npc = new Core.Type.Npc[Core.Constant.MAX_NPCS];
-            Data.Resource = new Core.Type.Resource[Core.Constant.MAX_RESOURCES];
-            Data.Projectile = new Core.Type.Projectile[Core.Constant.MAX_PROJECTILES];
-            Data.Animation = new Core.Type.Animation[Core.Constant.MAX_ANIMATIONS];
-            Data.Pet = new Core.Type.Pet[Core.Constant.MAX_PETS];
-            Data.Shop = new Core.Type.Shop[Core.Constant.MAX_SHOPS];
-            Core.Data.Player = new Core.Type.Player[Core.Constant.MAX_PLAYERS];
-            Data.Party = new Core.Type.Party[Core.Constant.MAX_PARTY];
-            Data.MapItem = new Core.Type.MapItem[Core.Constant.MAX_MAPS, Core.Constant.MAX_MAP_ITEMS];
-            Data.Npc = new Core.Type.Npc[Core.Constant.MAX_NPCS];
-            Data.MapNpc = new MapData[Core.Constant.MAX_MAPS];
+            Data.Job = new Core.Type.Job[Core.Constant.MaxJobs];
+            Data.Moral = new Core.Type.Moral[Core.Constant.MaxMorals];
+            Data.Map = new Core.Type.Map[Core.Constant.MaxMaps];
+            Core.Data.Item = new Core.Type.Item[Core.Constant.MaxItems];
+            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
+            Data.Resource = new Core.Type.Resource[Core.Constant.MaxResources];
+            Data.Projectile = new Core.Type.Projectile[Core.Constant.MaxProjectiles];
+            Data.Animation = new Core.Type.Animation[Core.Constant.MaxAnimations];
+            Data.Pet = new Core.Type.Pet[Core.Constant.MaxPets];
+            Data.Shop = new Core.Type.Shop[Core.Constant.MaxShops];
+            Core.Data.Player = new Core.Type.Player[Core.Constant.MaxPlayers];
+            Data.Party = new Core.Type.Party[Core.Constant.MaxParty];
+            Data.MapItem = new Core.Type.MapItem[Core.Constant.MaxMaps, Core.Constant.MaxMapItems];
+            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
+            Data.MapNpc = new MapData[Core.Constant.MaxMaps];
 
-            for (int i = 0; i < Core.Constant.MAX_MAPS; i++)
+            for (int i = 0; i < Core.Constant.MaxMaps; i++)
             {
-                Data.MapNpc[i].Npc = new MapNpc[Core.Constant.MAX_MAP_NPCS];
-                for (int x = 0; x < Core.Constant.MAX_MAP_NPCS; x++)
+                Data.MapNpc[i].Npc = new MapNpc[Core.Constant.MaxMapNpcs];
+                for (int x = 0; x < Core.Constant.MaxMapNpcs; x++)
                 {
                     Data.MapNpc[i].Npc[x].Vital = new int[Enum.GetValues(typeof(Core.Vital)).Length];
-                    Data.MapNpc[i].Npc[x].SkillCD = new int[Core.Constant.MAX_NPC_SKILLS];
+                    Data.MapNpc[i].Npc[x].SkillCd = new int[Core.Constant.MaxNpcSkills];
                     Data.MapNpc[i].Npc[x].Num = -1;
                     Data.MapNpc[i].Npc[x].SkillBuffer = -1;
                 }
 
-                for (int x = 0; x < Core.Constant.MAX_MAP_ITEMS; x++)
+                for (int x = 0; x < Core.Constant.MaxMapItems; x++)
                 {
                     Data.MapItem[i, x].Num = -1;
                 }
             }
 
-            Data.Shop = new Core.Type.Shop[Core.Constant.MAX_SHOPS];
-            Data.Skill = new Skill[Core.Constant.MAX_SKILLS];
-            Data.MapResource = new Core.Type.MapResource[Core.Constant.MAX_MAPS];
-            Core.Data.TempPlayer = new Core.Type.TempPlayer[Core.Constant.MAX_PLAYERS];
-            Core.Data.Account = new Core.Type.Account[Core.Constant.MAX_PLAYERS];
+            Data.Shop = new Core.Type.Shop[Core.Constant.MaxShops];
+            Data.Skill = new Skill[Core.Constant.MaxSkills];
+            Data.MapResource = new Core.Type.MapResource[Core.Constant.MaxMaps];
+            Core.Data.TempPlayer = new Core.Type.TempPlayer[Core.Constant.MaxPlayers];
+            Core.Data.Account = new Core.Type.Account[Core.Constant.MaxPlayers];
 
-            for (int i = 0; i < Core.Constant.MAX_PLAYERS; i++)
+            for (int i = 0; i < Core.Constant.MaxPlayers; i++)
             {
                 Database.ClearPlayer(i);
             }
 
-            for (int i = 0; i < Core.Constant.MAX_PARTY_MEMBERS; i++)
+            for (int i = 0; i < Core.Constant.MaxPartyMembers; i++)
             {
                 Party.ClearParty(i);
             }
 
-            Event.TempEventMap = new Core.Type.GlobalEvents[Core.Constant.MAX_MAPS];
-            Data.MapProjectile = new Core.Type.MapProjectile[Core.Constant.MAX_MAPS, Core.Constant.MAX_PROJECTILES];
+            Event.TempEventMap = new Core.Type.GlobalEvents[Core.Constant.MaxMaps];
+            Data.MapProjectile = new Core.Type.MapProjectile[Core.Constant.MaxMaps, Core.Constant.MaxProjectiles];
         }
 
         private static async System.Threading.Tasks.Task LoadGameDataAsync()
@@ -263,11 +263,11 @@ namespace Server
         /// </summary>
         public static async System.Threading.Tasks.Task DestroyServerAsync()
         {
-            if (ServerDestroyed) return;
-            ServerDestroyed = true;
+            if (_serverDestroyed) return;
+            _serverDestroyed = true;
             Cts.Cancel();
-            SaveTimer?.Dispose();
-            AnnouncementTimer?.Dispose();
+            _saveTimer?.Dispose();
+            _announcementTimer?.Dispose();
             NetworkConfig.Socket.StopListening();
 
             Logger.LogInformation("Server shutdown initiated...");
@@ -276,7 +276,7 @@ namespace Server
 
             try
             {
-                await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MAX_PLAYERS), Cts.Token, async (i, ct) =>
+                await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                 {
                     NetworkSend.SendLeftGame(i);
                     await Player.LeftGame(i);
@@ -304,7 +304,7 @@ namespace Server
                 ValidateConfiguration();
                 Clock.Instance.GameSpeed = SettingsManager.Instance.TimeSpeed;
                 Console.Title = "XtremeWorlds Server";
-                MyIPAddress = GetLocalIPAddress();
+                _myIpAddress = GetLocalIpAddress();
             });
         }
 
@@ -362,7 +362,7 @@ namespace Server
                 await semaphore.WaitAsync(Cts.Token);
                 try
                 {
-                    for (int i = 0; i < Core.Constant.MAX_CHARS; i++)
+                    for (int i = 0; i < Core.Constant.MaxChars; i++)
                     {
                         var data = await Database.SelectRowByColumnAsync("id", id, "account", $"character{i + 1}");
                         if (data != null && data["Name"] != null)
@@ -474,7 +474,7 @@ namespace Server
         {
             try
             {
-                Console.Title = $"{SettingsManager.Instance.GameName} <IP {MyIPAddress}:{SettingsManager.Instance.Port}> " +
+                Console.Title = $"{SettingsManager.Instance.GameName} <IP {_myIpAddress}:{SettingsManager.Instance.Port}> " +
                     $"({CountPlayersOnline()} Players Online) - Errors: {Global.ErrorCount} - Time: {Clock.Instance}";
             }
             catch (Exception ex)
@@ -509,14 +509,14 @@ namespace Server
         private static void InitializeSaveTimer()
         {
             int intervalMinutes = SettingsManager.Instance.SaveInterval;
-            SaveTimer = new Timer(async _ => await SavePlayersPeriodicallyAsync(), null,
+            _saveTimer = new Timer(async _ => await SavePlayersPeriodicallyAsync(), null,
                 TimeSpan.FromMinutes(intervalMinutes), TimeSpan.FromMinutes(intervalMinutes));
         }
 
         private static void InitializeAnnouncementTimer()
         {
             int intervalMinutes = Configuration?.GetValue<int>("Events:AnnouncementIntervalMinutes", 60) ?? 60;
-            AnnouncementTimer = new Timer(async _ => await SendServerAnnouncementAsync(""), null,
+            _announcementTimer = new Timer(async _ => await SendServerAnnouncementAsync(""), null,
                 TimeSpan.FromMinutes(intervalMinutes), TimeSpan.FromMinutes(intervalMinutes));
         }
 
@@ -535,7 +535,7 @@ namespace Server
 
         private static async System.Threading.Tasks.Task SendServerAnnouncementAsync(string message)
         {
-            await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MAX_PLAYERS), Cts.Token, async (i, ct) =>
+            await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
             {
                 if (NetworkConfig.IsPlaying(i))
                     NetworkSend.PlayerMsg(i, message, (int)Core.Color.Yellow);
@@ -626,7 +626,7 @@ namespace Server
 
                 player.X = x;
                 player.Y = y;
-                NetworkSend.SendPlayerXYToMap(playerIndex);
+                NetworkSend.SendPlayerXyToMap(playerIndex);
                 Logger.LogInformation($"Player {playerIndex} teleported to ({x}, {y})");
             }
             catch (Exception ex)
@@ -836,7 +836,7 @@ namespace Server
 
         private static async System.Threading.Tasks.Task<int> FindPlayerByNameAsync(string name)
         {
-            for (int i = 0; i < Core.Constant.MAX_PLAYERS; i++)
+            for (int i = 0; i < Core.Constant.MaxPlayers; i++)
             {
                 if (NetworkConfig.IsPlaying(i) && Core.Data.Player[i].Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
@@ -864,7 +864,7 @@ namespace Server
                 }
                 else if (channel == "party" && Core.Data.TempPlayer[senderIndex].InParty != 0)
                 {
-                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MAX_PLAYERS), Cts.Token, async (i, ct) =>
+                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                     {
                         if (NetworkConfig.IsPlaying(i) && Core.Data.TempPlayer[i].InParty == Core.Data.TempPlayer[senderIndex].InParty)
                             NetworkSend.PlayerMsg(i, $"[Party] {Core.Data.Player[senderIndex].Name}: {message}", (int)color);
@@ -872,7 +872,7 @@ namespace Server
                 }
                 else if (channel == "global")
                 {
-                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MAX_PLAYERS), Cts.Token, async (i, ct) =>
+                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                     {
                         if (NetworkConfig.IsPlaying(i))
                             NetworkSend.PlayerMsg(i, message, (int)color);
@@ -971,10 +971,10 @@ namespace Server
 
         public static async System.Threading.Tasks.Task CheckShutDownCountDownAsync()
         {
-            if (ShutDownTimer.ElapsedTicks <= 0) return;
+            if (_shutDownTimer.ElapsedTicks <= 0) return;
 
-            int time = ShutDownTimer.Elapsed.Seconds;
-            if (ShutDownLastTimer != time)
+            int time = _shutDownTimer.Elapsed.Seconds;
+            if (_shutDownLastTimer != time)
             {
                 if (SettingsManager.Instance.ServerShutdown - time <= 10)
                 {
@@ -985,7 +985,7 @@ namespace Server
                         await DestroyServerAsync();
                     }
                 }
-                ShutDownLastTimer = time;
+                _shutDownLastTimer = time;
             }
         }
 

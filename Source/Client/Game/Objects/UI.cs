@@ -11,7 +11,7 @@ using static Core.Packets;
 
 namespace Client.Game.Objects
 {
-    public class UI
+    public class Ui
     {
         public static dynamic? Instance { get; private set; }
 
@@ -24,19 +24,19 @@ namespace Client.Game.Objects
                 var lines = File.ReadLines(scriptPath, Encoding.UTF8).ToArray();
                 if (lines.Length > 0)
                 {
-                    Core.Data.UI.Code = lines;
+                    Core.Data.Ui.Code = lines;
                 }
                 else
                 {
-                    Core.Data.UI.Code = Array.Empty<string>();
+                    Core.Data.Ui.Code = Array.Empty<string>();
                 }
             }
             else
             {
-                Core.Data.UI.Code = Array.Empty<string>();
+                Core.Data.Ui.Code = Array.Empty<string>();
             }
 
-            string code = (Core.Data.UI.Code != null && Core.Data.UI.Code.Length > 0) ? string.Join(Environment.NewLine, Core.Data.UI.Code) : string.Empty;
+            string code = (Core.Data.Ui.Code != null && Core.Data.Ui.Code.Length > 0) ? string.Join(Environment.NewLine, Core.Data.Ui.Code) : string.Empty;
 
             try
             {

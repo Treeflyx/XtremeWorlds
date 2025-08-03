@@ -13,37 +13,37 @@ namespace Client
 {
     public class GameLogic
     {
-        public static void ProcessNpcMovement(double MapNpcNum)
+        public static void ProcessNpcMovement(double mapNpcNum)
         {        
-            if (MapNpcNum < 0 || MapNpcNum > Constant.MAX_MAP_NPCS)
+            if (mapNpcNum < 0 || mapNpcNum > Constant.MaxMapNpcs)
             {
                 return;
             }
 
             // Check if Npc is walking, and if so process moving them over
-            if (Data.MyMapNpc[(int)MapNpcNum].Moving == (byte)MovementState.Walking)
+            if (Data.MyMapNpc[(int)mapNpcNum].Moving == (byte)MovementState.Walking)
             {
-                switch (Data.MyMapNpc[(int)MapNpcNum].Dir)
+                switch (Data.MyMapNpc[(int)mapNpcNum].Dir)
                 {
                     case (int)Direction.Up:
                         {
-                            Core.Data.MyMapNpc[(int)MapNpcNum].Y -= 1;
+                            Core.Data.MyMapNpc[(int)mapNpcNum].Y -= 1;
 
                             break;
                         }
                     case (int)Direction.Down:
                         {
-                            Core.Data.MyMapNpc[(int)MapNpcNum].Y += 1;
+                            Core.Data.MyMapNpc[(int)mapNpcNum].Y += 1;
                             break;
                         }
                     case (int)Direction.Left:
                         {
-                            Core.Data.MyMapNpc[(int)MapNpcNum].X -= 1;
+                            Core.Data.MyMapNpc[(int)mapNpcNum].X -= 1;
                             break;
                         }
                     case (int)Direction.Right:
                         {
-                            Core.Data.MyMapNpc[(int)MapNpcNum].X += 1;
+                            Core.Data.MyMapNpc[(int)mapNpcNum].X += 1;
                             break;
                         }
                 }
@@ -52,29 +52,29 @@ namespace Client
 
         public static bool IsInBounds()
         {
-            bool IsInBoundsRet = false;
+            bool isInBoundsRet = false;
 
             if (GameState.CurX >= 0 & GameState.CurX <= Data.MyMap.MaxX)
             {
                 if (GameState.CurY >= 0 & GameState.CurY <= Data.MyMap.MaxY)
                 {
-                    IsInBoundsRet = true;
+                    isInBoundsRet = true;
                 }
             }
 
-            return IsInBoundsRet;
+            return isInBoundsRet;
 
         }
 
         public static bool GameStarted()
         {
-            bool GameStartedRet = false;
+            bool gameStartedRet = false;
 
             if (GameState.InGame == false || GameState.MapData == false || GameState.PlayerData == false)
-                return GameStartedRet;
+                return gameStartedRet;
 
-            GameStartedRet = true;
-            return GameStartedRet;
+            gameStartedRet = true;
+            return gameStartedRet;
         }
 
         public static void CreateActionMsg(string message, int color, byte msgType, int x, int y)
@@ -133,26 +133,26 @@ namespace Client
 
         public static string ConvertCurrency(int amount)
         {
-            string ConvertCurrencyRet = default;
+            string convertCurrencyRet = default;
 
             if (Conversion.Int(amount) < 10000)
             {
-                ConvertCurrencyRet = amount.ToString();
+                convertCurrencyRet = amount.ToString();
             }
             else if (Conversion.Int(amount) < 999999)
             {
-                ConvertCurrencyRet = Conversion.Int(amount / 1000d) + "k";
+                convertCurrencyRet = Conversion.Int(amount / 1000d) + "k";
             }
             else if (Conversion.Int(amount) < 999999999)
             {
-                ConvertCurrencyRet = Conversion.Int(amount / 1000000d) + "m";
+                convertCurrencyRet = Conversion.Int(amount / 1000000d) + "m";
             }
             else
             {
-                ConvertCurrencyRet = Conversion.Int(amount / 1000000000d) + "b";
+                convertCurrencyRet = Conversion.Int(amount / 1000000000d) + "b";
             }
 
-            return ConvertCurrencyRet;
+            return convertCurrencyRet;
 
         }
 
@@ -528,7 +528,7 @@ namespace Client
                             n = Conversions.ToInteger(command[1]);
 
                             // Check to make sure its a valid map #
-                            if (n >= 0 & n < Constant.MAX_MAPS)
+                            if (n >= 0 & n < Constant.MaxMaps)
                             {
                                 NetworkSend.WarpTo(n);
                             }
@@ -875,7 +875,7 @@ namespace Client
             }
         }
 
-        public static void AddChatBubble(int target, byte targetType, string msg, int Color)
+        public static void AddChatBubble(int target, byte targetType, string msg, int color)
         {
             int i;
             int index;
@@ -912,7 +912,7 @@ namespace Client
                 withBlock.Target = target;
                 withBlock.TargetType = targetType;
                 withBlock.Msg = msg;
-                withBlock.Color = Color;
+                withBlock.Color = color;
                 withBlock.Timer = General.GetTickCount();
                 withBlock.Active = true;
             }
@@ -935,14 +935,14 @@ namespace Client
             }
         }
 
-        public static void DialogueAlert(byte Index)
+        public static void DialogueAlert(byte index)
         {
             var header = default(string);
             var body = default(string);
             var body2 = default(string);
 
             // find the body/header
-            switch (Index)
+            switch (index)
             {
                 case (byte)SystemMessage.Connection:
                     {
@@ -1099,7 +1099,7 @@ namespace Client
             Gui.HideWindow(Gui.GetWindowIndex("winDialogue"));
         }
 
-        public static void Dialogue(string header, string body, string body2, byte Index, byte style = 0, long Data1 = 0L, long Data2 = 0L, long Data3 = 0L, long Data4 = 0L, long Data5 = 0L)
+        public static void Dialogue(string header, string body, string body2, byte index, byte style = 0, long data1 = 0L, long data2 = 0L, long data3 = 0L, long data4 = 0L, long data5 = 0L)
         {
             if (Gui.Windows[Gui.GetWindowIndex("winDialogue")].Visible == true)
                 return;
@@ -1140,13 +1140,13 @@ namespace Client
             }
 
             // set it all up
-            GameState.diaIndex = Index;
-            GameState.diaData1 = Data1;
-            GameState.diaData2 = Data2;
-            GameState.diaData3 = Data3;
-            GameState.diaData4 = Data4;
-            GameState.diaData5 = Data5;
-            GameState.diaStyle = style;
+            GameState.DiaIndex = index;
+            GameState.DiaData1 = data1;
+            GameState.DiaData2 = data2;
+            GameState.DiaData3 = data3;
+            GameState.DiaData4 = data4;
+            GameState.DiaData5 = data5;
+            GameState.DiaStyle = style;
 
             try
             {
@@ -1174,33 +1174,33 @@ namespace Client
             if (index == 1L) // Okay button
             {
                 // Dialogue index
-                switch (GameState.diaIndex)
+                switch (GameState.DiaIndex)
                 {
                     case (long)DialogueType.TradeAmount:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
-                            Trade.TradeItem((int)GameState.diaData1, (int)value);
+                            Trade.TradeItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
                     case (long)DialogueType.DepositItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
-                            Bank.DepositItem((int)GameState.diaData1, (int)value);
+                            Bank.DepositItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
                     case (long)DialogueType.WithdrawItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
-                            Bank.WithdrawItem((byte)(int)GameState.diaData1, (int)value);
+                            Bank.WithdrawItem((byte)(int)GameState.DiaData1, (int)value);
                             break;
                         }
 
                     case (long)DialogueType.DropItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
-                            NetworkSend.SendDropItem((int)GameState.diaData1, (int)value);
+                            NetworkSend.SendDropItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
@@ -1215,7 +1215,7 @@ namespace Client
             else if (index == 2L) // Yes button
             {
                 // Dialogue index
-                switch (GameState.diaIndex)
+                switch (GameState.DiaIndex)
                 {
                     case (long)DialogueType.Trade:
                         {
@@ -1225,7 +1225,7 @@ namespace Client
 
                     case (long)DialogueType.ForgetSkill:
                         {
-                            NetworkSend.ForgetSkill((int)GameState.diaData1);
+                            NetworkSend.ForgetSkill((int)GameState.DiaData1);
                             break;
                         }
 
@@ -1243,13 +1243,13 @@ namespace Client
 
                     case (long)DialogueType.DeleteCharacter:
                         {
-                            NetworkSend.SendDelChar((byte)GameState.diaData1);
+                            NetworkSend.SendDelChar((byte)GameState.DiaData1);
                             break;
                         }
 
                     case (long)DialogueType.FillLayer:
                         {
-                            if (GameState.diaData2 > 0L)
+                            if (GameState.DiaData2 > 0L)
                             {
                                 var loopTo = (int)Data.MyMap.MaxX;
                                 for (x = 0; x < loopTo; x++)
@@ -1257,11 +1257,11 @@ namespace Client
                                     var loopTo1 = (int)Data.MyMap.MaxY;
                                     for (y = 0; y < loopTo1; y++)
                                     {
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].X = (int)GameState.diaData3;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].Y = (int)GameState.diaData4;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].Tileset = (int)GameState.diaData5;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].AutoTile = (byte)GameState.diaData2;
-                                        Autotile.CacheRenderState(x, y, (int)GameState.diaData1);
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].X = (int)GameState.DiaData3;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].Y = (int)GameState.DiaData4;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].Tileset = (int)GameState.DiaData5;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].AutoTile = (byte)GameState.DiaData2;
+                                        Autotile.CacheRenderState(x, y, (int)GameState.DiaData1);
                                     }
                                 }
 
@@ -1276,11 +1276,11 @@ namespace Client
                                     var loopTo3 = (int)Data.MyMap.MaxY;
                                     for (y = 0; y < loopTo3; y++)
                                     {
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].X = (int)GameState.diaData3;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].Y = (int)GameState.diaData4;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].Tileset = (int)GameState.diaData5;
-                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.diaData1].AutoTile = 0;
-                                        Autotile.CacheRenderState(x, y, (int)GameState.diaData1);
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].X = (int)GameState.DiaData3;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].Y = (int)GameState.DiaData4;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].Tileset = (int)GameState.DiaData5;
+                                        Data.MyMap.Tile[x, y].Layer[(int)GameState.DiaData1].AutoTile = 0;
+                                        Autotile.CacheRenderState(x, y, (int)GameState.DiaData1);
                                     }
                                 }
                             }
@@ -1298,11 +1298,11 @@ namespace Client
                                 {
                                     {
                                         ref var withBlock = ref Data.MyMap.Tile[x, y];
-                                        withBlock.Layer[(int)GameState.diaData1].X = 0;
-                                        withBlock.Layer[(int)GameState.diaData1].Y = 0;
-                                        withBlock.Layer[(int)GameState.diaData1].Tileset = 0;
-                                        withBlock.Layer[(int)GameState.diaData1].AutoTile = 0;
-                                        Autotile.CacheRenderState(x, y, (int)GameState.diaData1);
+                                        withBlock.Layer[(int)GameState.DiaData1].X = 0;
+                                        withBlock.Layer[(int)GameState.DiaData1].Y = 0;
+                                        withBlock.Layer[(int)GameState.DiaData1].Tileset = 0;
+                                        withBlock.Layer[(int)GameState.DiaData1].AutoTile = 0;
+                                        Autotile.CacheRenderState(x, y, (int)GameState.DiaData1);
                                     }
                                 }
                             }
@@ -1438,7 +1438,7 @@ namespace Client
             else if (index == 3L) // No button
             {
                 // Dialogue index
-                switch (GameState.diaIndex)
+                switch (GameState.DiaIndex)
                 {
                     case (long)DialogueType.Trade:
                         {
@@ -1455,7 +1455,7 @@ namespace Client
             }
 
             CloseDialogue();
-            GameState.diaIndex = 0L;
+            GameState.DiaIndex = 0L;
             diaInput = "";
         }
 
@@ -1481,14 +1481,14 @@ namespace Client
             }
         }
 
-        public static void SetChatHeight(long Height)
+        public static void SetChatHeight(long height)
         {
-            GameState.actChatHeight = Height;
+            GameState.ActChatHeight = height;
         }
 
-        public static void SetChatWidth(long Width)
+        public static void SetChatWidth(long width)
         {
-            GameState.actChatWidth = Width;
+            GameState.ActChatWidth = width;
         }
 
         public static void ScrollChatBox(byte direction)
@@ -1497,7 +1497,7 @@ namespace Client
             {
                 if (Strings.Len(Data.Chat[(int)(GameState.ChatScroll + 7L)].Text) > 0)
                 {
-                    if (GameState.ChatScroll < Constant.CHAT_LINES)
+                    if (GameState.ChatScroll < Constant.ChatLines)
                     {
                         GameState.ChatScroll = GameState.ChatScroll + 1L;
                     }
@@ -1509,16 +1509,16 @@ namespace Client
             }
         }
 
-        public static long IsHotbar(long StartX, long StartY)
+        public static long IsHotbar(long startX, long startY)
         {
-            long IsHotbarRet = default;
+            long isHotbarRet = default;
             Core.Type.Rectangle tempRec;
             long i;
 
-            for (i = 0L; i < Constant.MAX_HOTBAR; i++)
+            for (i = 0L; i < Constant.MaxHotbar; i++)
             {
-                tempRec.Top = (int)(StartY + GameState.HotbarTop);
-                tempRec.Left = (int)(StartX + i * GameState.HotbarOffsetX);
+                tempRec.Top = (int)(startY + GameState.HotbarTop);
+                tempRec.Left = (int)(startX + i * GameState.HotbarOffsetX);
                 tempRec.Right = tempRec.Left + GameState.SizeX;
                 tempRec.Bottom = tempRec.Top + GameState.SizeY;
 
@@ -1528,8 +1528,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            IsHotbarRet = i;
-                            return IsHotbarRet;
+                            isHotbarRet = i;
+                            return isHotbarRet;
                         }
                     }
                 }
@@ -1542,7 +1542,7 @@ namespace Client
         {
             bool soulBound;
 
-            if (invNum < 0L | invNum > Constant.MAX_INV)
+            if (invNum < 0L | invNum > Constant.MaxInv)
                 return;
 
             // show
@@ -1556,15 +1556,15 @@ namespace Client
 
         public static void ShowItemDesc(long x, long y, long itemNum)
         {
-            var Color = default(Microsoft.Xna.Framework.Color);
+            var color = default(Microsoft.Xna.Framework.Color);
             string theName;
             string jobName;
             string levelTxt;
             long i;
 
             // set globals
-            GameState.descType = (byte)DraggablePartType.Item; // inventory
-            GameState.descItem = itemNum;
+            GameState.DescType = (byte)DraggablePartType.Item; // inventory
+            GameState.DescItem = itemNum;
 
             // set position
             Gui.Windows[Gui.GetWindowIndex("winDescription")].Left = x;
@@ -1574,12 +1574,12 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
 
             // exit out early if last is same
-            if (GameState.descLastType == GameState.descType & GameState.descLastItem == GameState.descItem)
+            if (GameState.DescLastType == GameState.DescType & GameState.DescLastItem == GameState.DescItem)
                 return;
 
             // set last to this
-            GameState.descLastType = GameState.descType;
-            GameState.descLastItem = GameState.descItem;
+            GameState.DescLastType = GameState.DescType;
+            GameState.DescLastItem = GameState.DescItem;
 
             // show req. labels
             Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
@@ -1600,36 +1600,36 @@ namespace Client
                 {
                     case 0: // white
                         {
-                            Color = Microsoft.Xna.Framework.Color.White;
+                            color = Microsoft.Xna.Framework.Color.White;
                             break;
                         }
                     case 1: // green
                         {
-                            Color = Microsoft.Xna.Framework.Color.Green;
+                            color = Microsoft.Xna.Framework.Color.Green;
                             break;
                         }
                     case 2: // blue
                         {
-                            Color = Microsoft.Xna.Framework.Color.Blue;
+                            color = Microsoft.Xna.Framework.Color.Blue;
                             break;
                         }
                     case 3: // maroon
                         {
-                            Color = Microsoft.Xna.Framework.Color.Red;
+                            color = Microsoft.Xna.Framework.Color.Red;
                             break;
                         }
                     case 4: // purple
                         {
-                            Color = Microsoft.Xna.Framework.Color.Magenta;
+                            color = Microsoft.Xna.Framework.Color.Magenta;
                             break;
                         }
                     case 5: // cyan
                         {
-                            Color = Microsoft.Xna.Framework.Color.Cyan;
+                            color = Microsoft.Xna.Framework.Color.Cyan;
                             break;
                         }
                 }
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Color = Color;
+                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Color = color;
 
                 // class req
                 if (Core.Data.Item[(int)itemNum].JobReq > 0)
@@ -1638,21 +1638,21 @@ namespace Client
                     // do we match it?
                     if (GetPlayerJob(GameState.MyIndex) == Core.Data.Item[(int)itemNum].JobReq)
                     {
-                        Color = Microsoft.Xna.Framework.Color.Green;
+                        color = Microsoft.Xna.Framework.Color.Green;
                     }
                     else
                     {
-                        Color = Microsoft.Xna.Framework.Color.Red;
+                        color = Microsoft.Xna.Framework.Color.Red;
                     }
                 }
                 else
                 {
                     jobName = "No Job Req.";
-                    Color = Microsoft.Xna.Framework.Color.Green;
+                    color = Microsoft.Xna.Framework.Color.Green;
                 }
 
                 withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Text = jobName;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Color = Color;
+                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Color = color;
 
                 // level
                 if (Core.Data.Item[(int)itemNum].LevelReq > 0)
@@ -1661,20 +1661,20 @@ namespace Client
                     // do we match it?
                     if (GetPlayerLevel(GameState.MyIndex) >= Core.Data.Item[(int)itemNum].LevelReq)
                     {
-                        Color = Microsoft.Xna.Framework.Color.Green;
+                        color = Microsoft.Xna.Framework.Color.Green;
                     }
                     else
                     {
-                        Color = Microsoft.Xna.Framework.Color.Red;
+                        color = Microsoft.Xna.Framework.Color.Red;
                     }
                 }
                 else
                 {
                     levelTxt = "No Level Req.";
-                    Color = Microsoft.Xna.Framework.Color.Green;
+                    color = Microsoft.Xna.Framework.Color.Green;
                 }
                 withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Text = levelTxt;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Color = Color;
+                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Color = color;
             }
 
             // clear
@@ -1792,58 +1792,58 @@ namespace Client
                         AddDescInfo("Value: " + Core.Data.Item[(int)itemNum].Price + " G", Microsoft.Xna.Framework.Color.Yellow);
 
                         // stat bonuses
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Strength] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Strength] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Strength] + " Str", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Strength] + " Str", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] + " End", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] + " End", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Spirit] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Spirit] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Spirit] + " Spi", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Spirit] + " Spi", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] + " Luc", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] + " Luc", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Intelligence] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Intelligence] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Intelligence] + " Int", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Intelligence] + " Int", Microsoft.Xna.Framework.Color.White);
                         }
 
                         break;
                     }
                 case (byte)ItemCategory.Consumable:
                     {
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Strength] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Strength] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Strength] + " Str", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Strength] + " Str", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] + " End", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] + " End", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Spirit] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Spirit] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Spirit] + " Spi", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Spirit] + " Spi", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Luck] + " Luc", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Luck] + " Luc", Microsoft.Xna.Framework.Color.White);
                         }
 
-                        if (Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Intelligence] > 0)
+                        if (Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Intelligence] > 0)
                         {
-                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].Add_Stat[(int)Core.Stat.Intelligence] + " Int", Microsoft.Xna.Framework.Color.White);
+                            AddDescInfo("+" + Core.Data.Item[(int)itemNum].AddStat[(int)Core.Stat.Intelligence] + " Int", Microsoft.Xna.Framework.Color.White);
                         }
 
                         if (Core.Data.Item[(int)itemNum].Data1 > 0)
@@ -1885,21 +1885,21 @@ namespace Client
             }
         }
 
-        public static void ShowSkillDesc(long x, long y, long skillNum, long SkillSlot)
+        public static void ShowSkillDesc(long x, long y, long skillNum, long skillSlot)
         {
-            long Color;
+            long color;
             string theName;
             string sUse;
             long i;
             long barWidth;
             long tmpWidth;
 
-            if (skillNum < 0 || skillNum > Core.Constant.MAX_SKILLS)
+            if (skillNum < 0 || skillNum > Core.Constant.MaxSkills)
                 return;
 
             // set globals
-            GameState.descType = 2; // Skill
-            GameState.descItem = skillNum;
+            GameState.DescType = 2; // Skill
+            GameState.DescItem = skillNum;
 
             // set position
             Gui.Windows[Gui.GetWindowIndex("winDescription")].Left = x;
@@ -1909,7 +1909,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
 
             // exit out early if last is same
-            if (GameState.descLastType == GameState.descType & GameState.descLastItem == GameState.descItem)
+            if (GameState.DescLastType == GameState.DescType & GameState.DescLastItem == GameState.DescItem)
                 return;
 
             // clear
@@ -1927,7 +1927,7 @@ namespace Client
                 withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Color = Microsoft.Xna.Framework.Color.White;
 
                 // find ranks
-                if (SkillSlot >= 0L)
+                if (skillSlot >= 0L)
                 {
                     // draw the rank bar
                     barWidth = 66L;
@@ -1939,7 +1939,7 @@ namespace Client
                     withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Value = tmpWidth;
                     // does it rank up?
                     // If Type.Skill(skillNum).NextRank > 0 Then
-                    Color = (long)Core.Color.White;
+                    color = (long)Core.Color.White;
                     // sUse = "Uses: " & PlayerSkills(SkillSlot).Uses & "/" & Type.Skill(skillNum).NextUses
                     // If PlayerSkills(SkillSlot).Uses = Type.Skill(skillNum).NextUses Then
                     // If Not GetPlayerLevel(GameState.MyIndex) >= Skill(Type.Skill(skillNum).NextRank).LevelReq Then
@@ -1948,7 +1948,7 @@ namespace Client
                     // End If
                     // End If
                     // Else
-                    Color = (long)Core.Color.Gray;
+                    color = (long)Core.Color.Gray;
                     sUse = "Max Rank";
                     // End If
                     // show controls
@@ -2040,7 +2040,7 @@ namespace Client
 
         public static void ShowShopDesc(long x, long y, long itemNum)
         {
-            if (itemNum < 0L | itemNum > Constant.MAX_ITEMS)
+            if (itemNum < 0L | itemNum > Constant.MaxItems)
                 return;
             // show
             ShowItemDesc(x, y, itemNum);
@@ -2055,7 +2055,7 @@ namespace Client
             if (eqNum < 0L || eqNum >= equipmentCount)
                 return;
 
-            if (Core.Data.Player[GameState.MyIndex].Equipment[(int)eqNum] < 0 || Core.Data.Player[GameState.MyIndex].Equipment[(int)eqNum] > Constant.MAX_ITEMS)
+            if (Core.Data.Player[GameState.MyIndex].Equipment[(int)eqNum] < 0 || Core.Data.Player[GameState.MyIndex].Equipment[(int)eqNum] > Constant.MaxItems)
                 return;
 
             // show
@@ -2118,13 +2118,13 @@ namespace Client
         {
             // set globals
             GameState.InShop = (int)shopNum;
-            GameState.shopSelectedSlot = 0L;
-            GameState.shopSelectedItem = Data.Shop[GameState.InShop].TradeItem[1].Item;
+            GameState.ShopSelectedSlot = 0L;
+            GameState.ShopSelectedItem = Data.Shop[GameState.InShop].TradeItem[1].Item;
             Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "CheckboxSelling")].Value = 0L;
             Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "CheckboxBuying")].Value = 0L;
             Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "btnSell")].Visible = false;
             Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "btnBuy")].Visible = true;
-            GameState.shopIsSelling = false;
+            GameState.ShopIsSelling = false;
 
             // set the current item
             Gui.UpdateShop();
@@ -2138,7 +2138,7 @@ namespace Client
             long i;
             long pIndex;
             long barWidth;
-            long Width;
+            long width;
 
             // unload it if we're not in a party
             if (Data.MyParty.Leader == 0)
@@ -2166,8 +2166,8 @@ namespace Client
                                 // get their health
                                 if (GetPlayerVital((int)pIndex, Core.Vital.Health) > 0 & GetPlayerMaxVital((int)pIndex, Core.Vital.Health) > 0)
                                 {
-                                    Width = (long)Math.Round(GetPlayerVital((int)pIndex, Core.Vital.Health) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Core.Vital.Health) / (double)barWidth) * barWidth);
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = Width;
+                                    width = (long)Math.Round(GetPlayerVital((int)pIndex, Core.Vital.Health) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Core.Vital.Health) / (double)barWidth) * barWidth);
+                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = width;
                                 }
                                 else
                                 {
@@ -2176,8 +2176,8 @@ namespace Client
                                 // get their spirit
                                 if (GetPlayerVital((int)pIndex, Core.Vital.Stamina) > 0 & GetPlayerMaxVital((int)pIndex, Core.Vital.Stamina) > 0)
                                 {
-                                    Width = (long)Math.Round(GetPlayerVital((int)pIndex, Core.Vital.Stamina) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Core.Vital.Stamina) / (double)barWidth) * barWidth);
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = Width;
+                                    width = (long)Math.Round(GetPlayerVital((int)pIndex, Core.Vital.Stamina) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Core.Vital.Stamina) / (double)barWidth) * barWidth);
+                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = width;
                                 }
                                 else
                                 {
@@ -2207,9 +2207,9 @@ namespace Client
             }
         }
 
-        public static void ShowPlayerMenu(long Index, long x, long y)
+        public static void ShowPlayerMenu(long index, long x, long y)
         {
-            GameState.PlayerMenuIndex = Index;
+            GameState.PlayerMenuIndex = index;
             if (GameState.PlayerMenuIndex == 0L | GameState.PlayerMenuIndex == GameState.MyIndex)
                 return;
             Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Left = x - 5L;
@@ -2219,60 +2219,60 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winPlayerMenu"));
         }
 
-        public static void SetBarWidth(ref long MaxWidth, ref long Width)
+        public static void SetBarWidth(ref long maxWidth, ref long width)
         {
             long barDifference;
 
-            if (MaxWidth <  Width)
+            if (maxWidth <  width)
             {
                 // find out the amount to increase per loop
-                barDifference = (long)Math.Round((double)(Width - MaxWidth) / 100L) * 10L;
+                barDifference = (long)Math.Round((double)(width - maxWidth) / 100L) * 10L;
 
                 // if it's less than 1 then default to 1
                 if (barDifference < 0L)
                     barDifference = 0L;
                 
-                if (Width != MaxWidth && barDifference == 0L)
+                if (width != maxWidth && barDifference == 0L)
                 {
-                    barDifference = Math.Clamp(Width - MaxWidth, 1, Width);
+                    barDifference = Math.Clamp(width - maxWidth, 1, width);
                 }
                 
                 // set the width
-                Width -= barDifference;
+                width -= barDifference;
             }
-            else if (MaxWidth > Width)
+            else if (maxWidth > width)
             {
                 // find out the amount to increase per loop
-                barDifference = (long)Math.Round((double)(MaxWidth - Width) / 100) * 10L;
+                barDifference = (long)Math.Round((double)(maxWidth - width) / 100) * 10L;
 
                 // if it's less than 1 then default to 1
                 if (barDifference < 0L)
                     barDifference = 0L;
 
-                if (MaxWidth != Width && barDifference == 0L)
+                if (maxWidth != width && barDifference == 0L)
                 {
-                    barDifference = Math.Clamp(MaxWidth - Width, 1, MaxWidth);
+                    barDifference = Math.Clamp(maxWidth - width, 1, maxWidth);
                 }
 
                 // set the width
-                Width += barDifference;
+                width += barDifference;
             }
         }
 
         public static void SetGoldLabel()
         {
             long i;
-            var Amount = default(long);
+            var amount = default(long);
 
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
                 if (GetPlayerInv(GameState.MyIndex, (int)i) == 1)
                 {
-                    Amount = GetPlayerInvValue(GameState.MyIndex, (int)i);
+                    amount = GetPlayerInvValue(GameState.MyIndex, (int)i);
                 }
             }
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "lblGold")].Text = Strings.Format(Amount, "#,###,###,###") + "g";
-            Gui.Windows[Gui.GetWindowIndex("winInventory")].Controls[(int)Gui.GetControlIndex("winInventory", "lblGold")].Text = Strings.Format(Amount, "#,###,###,###") + "g";
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
+            Gui.Windows[Gui.GetWindowIndex("winInventory")].Controls[(int)Gui.GetControlIndex("winInventory", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
         }
 
         public static int Clamp(int value, int min, int max)
@@ -2282,16 +2282,16 @@ namespace Client
 
         public static int ConvertMapX(int x)
         {
-            int ConvertMapXRet = default;
-            ConvertMapXRet = (int)Math.Round(x - GameState.TileView.Left - GameState.Camera.Left);
-            return ConvertMapXRet;
+            int convertMapXRet = default;
+            convertMapXRet = (int)Math.Round(x - GameState.TileView.Left - GameState.Camera.Left);
+            return convertMapXRet;
         }
 
         public static int ConvertMapY(int y)
         {
-            int ConvertMapYRet = default;
-            ConvertMapYRet = (int)Math.Round(y - GameState.TileView.Top - GameState.Camera.Top);
-            return ConvertMapYRet;
+            int convertMapYRet = default;
+            convertMapYRet = (int)Math.Round(y - GameState.TileView.Top - GameState.Camera.Top);
+            return convertMapYRet;
         }
 
         public static bool IsValidMapPoint(int x, int y)
@@ -2387,7 +2387,7 @@ namespace Client
             return litTiles;
         }
 
-        private static void PostProcessFovQuadrant(ref List<Microsoft.Xna.Framework.Vector2> _inFov, int x, int y, Core.Quadrant quadrant)
+        private static void PostProcessFovQuadrant(ref List<Microsoft.Xna.Framework.Vector2> inFov, int x, int y, Core.Quadrant quadrant)
         {
             int x1 = x;
             int y1 = y;
@@ -2425,12 +2425,12 @@ namespace Client
             }
 
             // Check if the position is already in the field of view and is not transparent
-            if (!_inFov.Contains(pos) && !IsTransparent(x, y))
+            if (!inFov.Contains(pos) && !IsTransparent(x, y))
             {
                 // Check neighboring cells to determine visibility
-                if (IsTransparent(x1, y1) && _inFov.Contains(new Microsoft.Xna.Framework.Vector2(x1, y1)) || IsTransparent(x2, y2) && _inFov.Contains(new Microsoft.Xna.Framework.Vector2(x2, y2)) || IsTransparent(x2, y1) && _inFov.Contains(new Microsoft.Xna.Framework.Vector2(x2, y1)))
+                if (IsTransparent(x1, y1) && inFov.Contains(new Microsoft.Xna.Framework.Vector2(x1, y1)) || IsTransparent(x2, y2) && inFov.Contains(new Microsoft.Xna.Framework.Vector2(x2, y2)) || IsTransparent(x2, y1) && inFov.Contains(new Microsoft.Xna.Framework.Vector2(x2, y1)))
                 {
-                    _inFov.Add(pos);
+                    inFov.Add(pos);
                 }
             }
         }
@@ -2528,17 +2528,17 @@ namespace Client
             GameState.Camera.Top = Math.Max(0, Math.Min(GameState.Camera.Top, mapHeight - GameState.ResolutionHeight));
 
             // Calculate the visible tile range (in tiles)  
-            long StartX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1));
-            long StartY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1));
-            long EndX = Math.Min(Data.MyMap.MaxX, StartX + (long)(GameState.ResolutionWidth) + 1);
-            long EndY = Math.Min(Data.MyMap.MaxY, StartY + (long)(GameState.ResolutionHeight) + 1);
+            long startX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1));
+            long startY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1));
+            long endX = Math.Min(Data.MyMap.MaxX, startX + (long)(GameState.ResolutionWidth) + 1);
+            long endY = Math.Min(Data.MyMap.MaxY, startY + (long)(GameState.ResolutionHeight) + 1);
 
             // Update the tile view  
             ref var withBlock = ref GameState.TileView;
-            withBlock.Top = StartY;
-            withBlock.Bottom = EndY;
-            withBlock.Left = StartX;
-            withBlock.Right = EndX;
+            withBlock.Top = startY;
+            withBlock.Bottom = endY;
+            withBlock.Left = startX;
+            withBlock.Right = endX;
 
             // Update the camera bounds  
             ref var withBlock1 = ref GameState.Camera;

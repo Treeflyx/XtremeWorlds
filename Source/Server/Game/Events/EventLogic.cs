@@ -220,10 +220,10 @@ namespace Server
                         // Basic bounds check.
                         if (id < 0 || id >= eventPagesList.Count) continue;
 
-                        int PageId = eventPagesList[x].PageId;
+                        int pageId = eventPagesList[x].PageId;
 
                         if (!eventPagesList[x].Visible)
-                            PageId = 0;
+                            pageId = 0;
 
                         // Another bounds check.
                         if (Core.Data.Map[mapNum].Event == null)
@@ -423,7 +423,7 @@ namespace Server
         public static void ProcessEventMovement()
         {
             // Iterate through all maps.
-            for (int i = 0; i < Core.Constant.MAX_MAPS; i++)
+            for (int i = 0; i < Core.Constant.MaxMaps; i++)
             {
                 // Process global events on this map.
                 for (int x = 0; x < Event.TempEventMap[i].EventCount; x++)
@@ -467,11 +467,11 @@ namespace Server
                         case 2: // Custom Move Route
                             {
                                 ref var withBlock = ref Event.TempEventMap[i].Event[x];
-                                bool IsGlobal = true;
+                                bool isGlobal = true;
                                 int mapNum = i;
-                                int playerID = 0;
-                                int EventId = x;
-                                int WalkThrough = withBlock.WalkThrough;
+                                int playerId = 0;
+                                int eventId = x;
+                                int walkThrough = withBlock.WalkThrough;
                                 bool doNotProcessMoveRoute = false;
 
                                 if (withBlock.MoveRouteCount > 0)
@@ -522,9 +522,9 @@ namespace Server
                                         switch (nextMove.Index)
                                         {
                                             case 1: // Move Up
-                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Up, IsGlobal))
+                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Up, isGlobal))
                                                 {
-                                                    Event.EventMove(playerID, mapNum, EventId, (int)Direction.Up, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(playerId, mapNum, eventId, (int)Direction.Up, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -532,9 +532,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 2: // Move Down
-                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Down, IsGlobal))
+                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Down, isGlobal))
                                                 {
-                                                    Event.EventMove(playerID, mapNum, EventId, (int)Direction.Down, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(playerId, mapNum, eventId, (int)Direction.Down, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -542,9 +542,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 3: // Move Left
-                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Left, IsGlobal))
+                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Left, isGlobal))
                                                 {
-                                                    Event.EventMove(playerID, mapNum, EventId, (int)Direction.Left, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(playerId, mapNum, eventId, (int)Direction.Left, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -552,9 +552,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 4: // Move Right
-                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Right, IsGlobal))
+                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Right, isGlobal))
                                                 {
-                                                    Event.EventMove(playerID, mapNum, EventId, (int)Direction.Right, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(playerId, mapNum, eventId, (int)Direction.Right, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -564,9 +564,9 @@ namespace Server
                                             case 5: // Move Random
                                                 {
                                                     int z = (int)Math.Floor((double)General.GetRandom.NextInt(0, 4)); // 0-3
-                                                    if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                    if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                     {
-                                                        Event.EventMove(playerID, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                        Event.EventMove(playerId, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                     }
                                                     else if (withBlock.IgnoreIfCannotMove == 0)
                                                     {
@@ -577,13 +577,13 @@ namespace Server
 
                                             case 6: // Move Toward Player
                                                 {
-                                                    if (!IsGlobal) //should never be global.
+                                                    if (!isGlobal) //should never be global.
                                                     {
                                                         // Determine if the event is one block away from the player.
-                                                        if (Event.IsOneBlockAway(withBlock.X, withBlock.Y, GetPlayerX(playerID), GetPlayerY(playerID)))
+                                                        if (Event.IsOneBlockAway(withBlock.X, withBlock.Y, GetPlayerX(playerId), GetPlayerY(playerId)))
                                                         {
                                                             // Face the player.
-                                                            Event.EventDir(playerID, GetPlayerMap(playerID), EventId, Event.GetDirToPlayer(playerID, GetPlayerMap(playerID), EventId), false);
+                                                            Event.EventDir(playerId, GetPlayerMap(playerId), eventId, Event.GetDirToPlayer(playerId, GetPlayerMap(playerId), eventId), false);
                                                             if (withBlock.IgnoreIfCannotMove == 0)
                                                             {
                                                                 withBlock.MoveRouteStep--;
@@ -592,12 +592,12 @@ namespace Server
                                                         else
                                                         {
                                                             // Try to move towards the player.
-                                                            int z = Event.CanEventMoveTowardsPlayer(playerID, mapNum, EventId);
+                                                            int z = Event.CanEventMoveTowardsPlayer(playerId, mapNum, eventId);
                                                             if (z < 4)  // Valid direction (0-3).
                                                             {
-                                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                                 {
-                                                                    Event.EventMove(playerID, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                                    Event.EventMove(playerId, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                                 }
                                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                                 {
@@ -615,14 +615,14 @@ namespace Server
 
                                             case 7: // Move Away from Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.CanEventMoveAwayFromPlayer(playerID, mapNum, EventId);
+                                                        int z = Event.CanEventMoveAwayFromPlayer(playerId, mapNum, eventId);
                                                         if (z < 5)
                                                         {
-                                                            if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                            if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                             {
-                                                                Event.EventMove(playerID, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                                Event.EventMove(playerId, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                             }
                                                             else if (withBlock.IgnoreIfCannotMove == 0)
                                                             {
@@ -634,9 +634,9 @@ namespace Server
                                                 }
 
                                             case 8: // Move Forward
-                                                if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)withBlock.Dir, IsGlobal))
+                                                if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)withBlock.Dir, isGlobal))
                                                 {
-                                                    Event.EventMove(playerID, mapNum, EventId, withBlock.Dir, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(playerId, mapNum, eventId, withBlock.Dir, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -653,9 +653,9 @@ namespace Server
                                                         (byte)Direction.Right => (byte)Direction.Left,
                                                         _ => withBlock.Dir // Invalid direction, keep current.
                                                     };
-                                                    if (Event.CanEventMove(playerID, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                    if (Event.CanEventMove(playerId, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                     {
-                                                        Event.EventMove(playerID, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                        Event.EventMove(playerId, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                     }
                                                     else if (withBlock.IgnoreIfCannotMove == 0)
                                                     {
@@ -668,10 +668,10 @@ namespace Server
                                             case 11: withBlock.MoveTimer = General.GetTimeMs() + 500; break;
                                             case 12: withBlock.MoveTimer = General.GetTimeMs() + 1000; break;
 
-                                            case 13: Event.EventDir(playerID, mapNum, EventId, (byte)Direction.Up, IsGlobal); break;
-                                            case 14: Event.EventDir(playerID, mapNum, EventId, (byte)Direction.Down, IsGlobal); break;
-                                            case 15: Event.EventDir(playerID, mapNum, EventId, (byte)Direction.Left, IsGlobal); break;
-                                            case 16: Event.EventDir(playerID, mapNum, EventId, (byte)Direction.Right, IsGlobal); break;
+                                            case 13: Event.EventDir(playerId, mapNum, eventId, (byte)Direction.Up, isGlobal); break;
+                                            case 14: Event.EventDir(playerId, mapNum, eventId, (byte)Direction.Down, isGlobal); break;
+                                            case 15: Event.EventDir(playerId, mapNum, eventId, (byte)Direction.Left, isGlobal); break;
+                                            case 16: Event.EventDir(playerId, mapNum, eventId, (byte)Direction.Right, isGlobal); break;
 
                                             // Turn 90 degrees clockwise, counter-clockwise, 180 degrees, or at random
                                             case 17: // Turn Right 90 Degrees
@@ -684,7 +684,7 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Left,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 18: // Turn Left 90 Degrees
@@ -697,7 +697,7 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Right,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 19: // Turn 180 Degrees
@@ -710,31 +710,31 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Up,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 20: // Turn Random
                                                 {
                                                     int z = (int)(int)Math.Floor((double)General.GetRandom.NextInt(0, 4));
-                                                    Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 21: // Turn Toward Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.GetDirToPlayer(playerID, mapNum, EventId);
-                                                        Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                        int z = Event.GetDirToPlayer(playerId, mapNum, eventId);
+                                                        Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     }
                                                     break;
                                                 }
 
                                             case 22: // Turn Away from Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.GetDirAwayFromPlayer(playerID, mapNum, EventId);
-                                                        Event.EventDir(playerID, mapNum, EventId, z, IsGlobal);
+                                                        int z = Event.GetDirAwayFromPlayer(playerId, mapNum, eventId);
+                                                        Event.EventDir(playerId, mapNum, eventId, z, isGlobal);
                                                     }
                                                     break;
                                                 }
@@ -823,7 +823,7 @@ namespace Server
                                             {
                                                 buffer.WriteInt32((int)ServerPackets.SSpawnEvent);
                                                 buffer.WriteInt32(Core.Data.TempPlayer[i].EventMap.CurrentEvents);
-                                                buffer.WriteInt32(EventId); // Event ID.
+                                                buffer.WriteInt32(eventId); // Event ID.
 
                                                 ref var withBlock1 = ref Event.TempEventMap[i].Event[x];
                                                 buffer.WriteString(Core.Data.Map[i].Event[x].Name); // Global event, use map index
@@ -930,10 +930,10 @@ namespace Server
                         case 2: // Custom Move Route
                             {
                                 ref var withBlock = ref Core.Data.TempPlayer[i].EventMap.EventPages[x];
-                                bool IsGlobal = false;
+                                bool isGlobal = false;
                                 bool sendUpdate = false;
-                                int EventId = x;
-                                int WalkThrough = withBlock.WalkThrough;
+                                int eventId = x;
+                                int walkThrough = withBlock.WalkThrough;
                                 bool doNotProcessMoveRoute = false;
 
                                 if (withBlock.MoveRouteCount > 0)
@@ -984,9 +984,9 @@ namespace Server
                                         switch (nextMove.Index)
                                         {
                                             case 1: // Move Up
-                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Up, IsGlobal))
+                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Up, isGlobal))
                                                 {
-                                                    Event.EventMove(i, mapNum, EventId, (int)Direction.Up, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(i, mapNum, eventId, (int)Direction.Up, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -994,9 +994,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 2: // Move Down
-                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Down, IsGlobal))
+                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Down, isGlobal))
                                                 {
-                                                    Event.EventMove(i, mapNum, EventId, (int)Direction.Down, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(i, mapNum, eventId, (int)Direction.Down, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -1004,9 +1004,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 3: // Move Left
-                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Left, IsGlobal))
+                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Left, isGlobal))
                                                 {
-                                                    Event.EventMove(i, mapNum, EventId, (int)Direction.Left, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(i, mapNum, eventId, (int)Direction.Left, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -1014,9 +1014,9 @@ namespace Server
                                                 }
                                                 break;
                                             case 4: // Move Right
-                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)Direction.Right, IsGlobal))
+                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)Direction.Right, isGlobal))
                                                 {
-                                                    Event.EventMove(i, mapNum, EventId, (int)Direction.Right, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(i, mapNum, eventId, (int)Direction.Right, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -1026,9 +1026,9 @@ namespace Server
                                             case 5: // Move Random
                                                 {
                                                     int z = (int)(int)Math.Floor((double)General.GetRandom.NextInt(0, 4));
-                                                    if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                    if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                     {
-                                                        Event.EventMove(i, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                        Event.EventMove(i, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                     }
                                                     else if (withBlock.IgnoreIfCannotMove == 0)
                                                     {
@@ -1039,25 +1039,25 @@ namespace Server
 
                                             case 6: // Move Toward Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
                                                         if (Event.IsOneBlockAway(withBlock.X, withBlock.Y, GetPlayerX(i), GetPlayerY(i)))
                                                         {
-                                                            Event.EventDir(i, mapNum, EventId, Event.GetDirToPlayer(i, mapNum, EventId), false);
+                                                            Event.EventDir(i, mapNum, eventId, Event.GetDirToPlayer(i, mapNum, eventId), false);
 
                                                             // Activate event if triggered by player action.
-                                                            if (Core.Data.Map[mapNum].Event[EventId].Pages[Core.Data.TempPlayer[i].EventMap.EventPages[EventId].PageId].Trigger == 1)
+                                                            if (Core.Data.Map[mapNum].Event[eventId].Pages[Core.Data.TempPlayer[i].EventMap.EventPages[eventId].PageId].Trigger == 1)
                                                             {
-                                                                if (Core.Data.Map[mapNum].Event[EventId].Pages[Core.Data.TempPlayer[i].EventMap.EventPages[EventId].PageId].CommandListCount > 0)
+                                                                if (Core.Data.Map[mapNum].Event[eventId].Pages[Core.Data.TempPlayer[i].EventMap.EventPages[eventId].PageId].CommandListCount > 0)
                                                                 {
                                                                     // Start event processing.
-                                                                    ref var eventProcessing = ref Core.Data.TempPlayer[i].EventProcessing[EventId]; // Use EventId (local index)
+                                                                    ref var eventProcessing = ref Core.Data.TempPlayer[i].EventProcessing[eventId]; // Use EventId (local index)
                                                                     eventProcessing.Active = 1;
                                                                     eventProcessing.ActionTimer = General.GetTimeMs();
                                                                     eventProcessing.CurList = 0;
                                                                     eventProcessing.CurSlot = 0;
-                                                                    eventProcessing.EventId = EventId; // This should be the *map* event ID
-                                                                    eventProcessing.PageId = Core.Data.TempPlayer[i].EventMap.EventPages[EventId].PageId; // Local page ID.
+                                                                    eventProcessing.EventId = eventId; // This should be the *map* event ID
+                                                                    eventProcessing.PageId = Core.Data.TempPlayer[i].EventMap.EventPages[eventId].PageId; // Local page ID.
                                                                     eventProcessing.WaitingForResponse = 0;
                                                                 }
                                                             }
@@ -1068,12 +1068,12 @@ namespace Server
                                                         }
                                                         else
                                                         {
-                                                            int z = Event.CanEventMoveTowardsPlayer(i, mapNum, EventId);
+                                                            int z = Event.CanEventMoveTowardsPlayer(i, mapNum, eventId);
                                                             if (z < 4)
                                                             {
-                                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                                 {
-                                                                    Event.EventMove(i, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                                    Event.EventMove(i, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                                 }
                                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                                 {
@@ -1090,14 +1090,14 @@ namespace Server
                                                 }
                                             case 7: // Move Away From Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.CanEventMoveAwayFromPlayer(i, mapNum, EventId);
+                                                        int z = Event.CanEventMoveAwayFromPlayer(i, mapNum, eventId);
                                                         if (z < 5) // Valid direction.
                                                         {
-                                                            if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                            if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                             {
-                                                                Event.EventMove(i, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                                Event.EventMove(i, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                             }
                                                             else if (withBlock.IgnoreIfCannotMove == 0)
                                                             {
@@ -1108,9 +1108,9 @@ namespace Server
                                                     break;
                                                 }
                                             case 8: // Move Forward
-                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)withBlock.Dir, IsGlobal))
+                                                if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)withBlock.Dir, isGlobal))
                                                 {
-                                                    Event.EventMove(i, mapNum, EventId, withBlock.Dir, actualmovespeed, IsGlobal);
+                                                    Event.EventMove(i, mapNum, eventId, withBlock.Dir, actualmovespeed, isGlobal);
                                                 }
                                                 else if (withBlock.IgnoreIfCannotMove == 0)
                                                 {
@@ -1128,9 +1128,9 @@ namespace Server
                                                         (byte)Direction.Right => (byte)Direction.Left,
                                                         _ => withBlock.Dir
                                                     };
-                                                    if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, EventId, WalkThrough, (byte)z, IsGlobal))
+                                                    if (Event.CanEventMove(i, mapNum, withBlock.X, withBlock.Y, eventId, walkThrough, (byte)z, isGlobal))
                                                     {
-                                                        Event.EventMove(i, mapNum, EventId, z, actualmovespeed, IsGlobal);
+                                                        Event.EventMove(i, mapNum, eventId, z, actualmovespeed, isGlobal);
                                                     }
                                                     else if (withBlock.IgnoreIfCannotMove == 0)
                                                     {
@@ -1142,10 +1142,10 @@ namespace Server
                                             case 11: withBlock.MoveTimer = General.GetTimeMs() + 500; break;
                                             case 12: withBlock.MoveTimer = General.GetTimeMs() + 1000; break;
 
-                                            case 13: Event.EventDir(i, mapNum, EventId, (byte)Direction.Up, IsGlobal); break;
-                                            case 14: Event.EventDir(i, mapNum, EventId, (byte)Direction.Down, IsGlobal); break;
-                                            case 15: Event.EventDir(i, mapNum, EventId, (byte)Direction.Left, IsGlobal); break;
-                                            case 16: Event.EventDir(i, mapNum, EventId, (byte)Direction.Right, IsGlobal); break;
+                                            case 13: Event.EventDir(i, mapNum, eventId, (byte)Direction.Up, isGlobal); break;
+                                            case 14: Event.EventDir(i, mapNum, eventId, (byte)Direction.Down, isGlobal); break;
+                                            case 15: Event.EventDir(i, mapNum, eventId, (byte)Direction.Left, isGlobal); break;
+                                            case 16: Event.EventDir(i, mapNum, eventId, (byte)Direction.Right, isGlobal); break;
 
                                             // Turn 90 degrees clockwise, counter-clockwise, 180 degrees
                                             case 17: // Turn Right 90 Degrees
@@ -1158,7 +1158,7 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Left,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 18: // Turn Left 90 Degrees
@@ -1171,7 +1171,7 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Right,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 19: // Turn 180 Degrees
@@ -1184,30 +1184,30 @@ namespace Server
                                                         (byte)Direction.Down => (byte)Direction.Up,
                                                         _ => withBlock.Dir
                                                     };
-                                                    Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 20: // Turn Random
                                                 {
                                                     int z = (int)(int)Math.Floor((double)General.GetRandom.NextInt(0, 4));
-                                                    Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                    Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     break;
                                                 }
                                             case 21: // Turn Toward Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.GetDirToPlayer(i, mapNum, EventId);
-                                                        Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                        int z = Event.GetDirToPlayer(i, mapNum, eventId);
+                                                        Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     }
                                                     break;
                                                 }
                                             case 22: // Turn Away from Player
                                                 {
-                                                    if (!IsGlobal)
+                                                    if (!isGlobal)
                                                     {
-                                                        int z = Event.GetDirAwayFromPlayer(i, mapNum, EventId);
-                                                        Event.EventDir(i, mapNum, EventId, z, IsGlobal);
+                                                        int z = Event.GetDirAwayFromPlayer(i, mapNum, eventId);
+                                                        Event.EventDir(i, mapNum, eventId, z, isGlobal);
                                                     }
                                                     break;
                                                 }
@@ -1264,15 +1264,15 @@ namespace Server
                                         }
 
                                         // Send update if necessary.
-                                        if (sendUpdate && Core.Data.TempPlayer[i].EventMap.EventPages[EventId].EventId >= 0)
+                                        if (sendUpdate && Core.Data.TempPlayer[i].EventMap.EventPages[eventId].EventId >= 0)
                                         {
                                             using (var buffer = new ByteStream(4))
                                             {
                                                 buffer.WriteInt32((int)ServerPackets.SSpawnEvent);
                                                 buffer.WriteInt32(Core.Data.TempPlayer[i].EventMap.CurrentEvents);
-                                                buffer.WriteInt32(Core.Data.TempPlayer[i].EventMap.EventPages[EventId].EventId); // Use map event ID
+                                                buffer.WriteInt32(Core.Data.TempPlayer[i].EventMap.EventPages[eventId].EventId); // Use map event ID
 
-                                                ref var withBlock1 = ref Core.Data.TempPlayer[i].EventMap.EventPages[EventId];
+                                                ref var withBlock1 = ref Core.Data.TempPlayer[i].EventMap.EventPages[eventId];
                                                 buffer.WriteString(Core.Data.Map[mapNum].Event[withBlock1.EventId].Name);  //use map event Id
                                                 buffer.WriteInt32(withBlock1.Dir);
                                                 buffer.WriteByte(withBlock1.GraphicType);
@@ -1822,7 +1822,7 @@ namespace Server
                                                 }
                                                 else if (command.Data2 == 1) // Forget
                                                 {
-                                                    for (int p = 0; p < Core.Constant.MAX_PLAYER_SKILLS; p++)
+                                                    for (int p = 0; p < Core.Constant.MaxPlayerSkills; p++)
                                                     {
                                                         if (Core.Data.Player[i].Skill[p].Num == command.Data1)
                                                         {
@@ -1948,7 +1948,7 @@ namespace Server
                                             {
                                                 using (var buffer = new ByteStream(4))
                                                 {
-                                                    buffer.WriteInt32((int)ServerPackets.SPlayBGM);
+                                                    buffer.WriteInt32((int)ServerPackets.SPlayBgm);
                                                     buffer.WriteString(command.Text1);
                                                     NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
@@ -1958,7 +1958,7 @@ namespace Server
                                             {
                                                 using (var buffer = new ByteStream(4))
                                                 {
-                                                    buffer.WriteInt32((int)ServerPackets.SFadeoutBGM);
+                                                    buffer.WriteInt32((int)ServerPackets.SFadeoutBgm);
                                                     NetworkConfig.Socket.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
                                                 }
                                                 break;
@@ -2229,33 +2229,33 @@ namespace Server
             return sb.ToString();
         }
 
-        public static void FindEventLabel(string Label, int mapNum, int EventId, int PageId, ref int CurSlot, ref int CurList, ref int[] ListLeftOff)
+        public static void FindEventLabel(string label, int mapNum, int eventId, int pageId, ref int curSlot, ref int curList, ref int[] listLeftOff)
         {
 
             // Check for valid map, event, and page.
-            if (mapNum < 0 || mapNum >= Data.Map.Length || EventId < 0 || EventId >= Data.Map[mapNum].Event.Length ||
-                PageId < 0 || PageId >= Data.Map[mapNum].Event[EventId].Pages.Length)
+            if (mapNum < 0 || mapNum >= Data.Map.Length || eventId < 0 || eventId >= Data.Map[mapNum].Event.Length ||
+                pageId < 0 || pageId >= Data.Map[mapNum].Event[eventId].Pages.Length)
             {
                 //invalid event, don't do anything.
                 return;
             }
 
-            int tmpCurSlot = CurSlot;
-            int tmpCurList = CurList;
-            int[] tmpListLeftOff = ListLeftOff;
+            int tmpCurSlot = curSlot;
+            int tmpCurList = curList;
+            int[] tmpListLeftOff = listLeftOff;
 
             // Initialize data structures.
-            var commandList = Core.Data.Map[mapNum].Event[EventId].Pages[PageId].CommandList;
+            var commandList = Core.Data.Map[mapNum].Event[eventId].Pages[pageId].CommandList;
 
             // Check if commandList is null
             if (commandList == null)
                 return;
 
-            ListLeftOff = new int[commandList.Length];
-            int[] CurrentListOption = new int[commandList.Length];
+            listLeftOff = new int[commandList.Length];
+            int[] currentListOption = new int[commandList.Length];
 
-            CurList = 0;
-            CurSlot = 0;
+            curList = 0;
+            curSlot = 0;
 
             bool removeEventProcess = false;
             bool restartlist;
@@ -2265,29 +2265,29 @@ namespace Server
                 restartlist = false;
 
                 // Restore position if returning from a nested list.
-                if (ListLeftOff[CurList] > 0)
+                if (listLeftOff[curList] > 0)
                 {
-                    CurSlot = ListLeftOff[CurList];
-                    ListLeftOff[CurList] = 0;
+                    curSlot = listLeftOff[curList];
+                    listLeftOff[curList] = 0;
                 }
 
                 // Check for out-of-bounds conditions.
-                if (CurList >= commandList.Length)
+                if (curList >= commandList.Length)
                 {
                     removeEventProcess = true; // Invalid list index.
                     continue;
                 }
 
-                if (CurSlot >= commandList[CurList].CommandCount)
+                if (curSlot >= commandList[curList].CommandCount)
                 {
-                    if (CurList == commandList[CurList].ParentList) //should be itself
+                    if (curList == commandList[curList].ParentList) //should be itself
                     {
                         removeEventProcess = true; // Reached the end of a top-level list.
                     }
                     else
                     {
-                        CurList = commandList[CurList].ParentList;
-                        CurSlot = 0;
+                        curList = commandList[curList].ParentList;
+                        curSlot = 0;
                         restartlist = true;
                     }
                     continue;
@@ -2296,7 +2296,7 @@ namespace Server
                 if (!restartlist && !removeEventProcess)
                 {
                     // Get the current command.
-                    var command = commandList[CurList].Commands[CurSlot];
+                    var command = commandList[curList].Commands[curSlot];
 
                     switch (command.Index)
                     {
@@ -2322,24 +2322,24 @@ namespace Server
 
                                 if (w > 0)
                                 {
-                                    if (CurrentListOption[CurList] < w)
+                                    if (currentListOption[curList] < w)
                                     {
-                                        CurrentListOption[CurList]++;
-                                        ListLeftOff[CurList] = CurSlot; // Save current position.
+                                        currentListOption[curList]++;
+                                        listLeftOff[curList] = curSlot; // Save current position.
 
                                         // Jump to the appropriate choice's command list.
-                                        switch (CurrentListOption[CurList])
+                                        switch (currentListOption[curList])
                                         {
-                                            case 1: CurList = command.Data1; break;
-                                            case 2: CurList = command.Data2; break;
-                                            case 3: CurList = command.Data3; break;
-                                            case 4: CurList = command.Data4; break;
+                                            case 1: curList = command.Data1; break;
+                                            case 2: curList = command.Data2; break;
+                                            case 3: curList = command.Data3; break;
+                                            case 4: curList = command.Data4; break;
                                         }
-                                        CurSlot = 0; // Start at the beginning of the new list.
+                                        curSlot = 0; // Start at the beginning of the new list.
                                     }
                                     else
                                     {
-                                        CurrentListOption[CurList] = 0; // Reset for next time.
+                                        currentListOption[curList] = 0; // Reset for next time.
                                     }
                                 }
                                 break;
@@ -2347,50 +2347,50 @@ namespace Server
                         case (byte)Core.EventCommand.ConditionalBranch:
                             {
                                 // Handle conditional branches (simplified logic).
-                                if (CurrentListOption[CurList] == 0)
+                                if (currentListOption[curList] == 0)
                                 {
                                     // First visit: Execute the "if" branch.
-                                    ListLeftOff[CurList] = CurSlot;
-                                    CurList = command.ConditionalBranch.CommandList;
-                                    CurSlot = 0;
+                                    listLeftOff[curList] = curSlot;
+                                    curList = command.ConditionalBranch.CommandList;
+                                    curSlot = 0;
                                 }
-                                else if (CurrentListOption[CurList] == 1)
+                                else if (currentListOption[curList] == 1)
                                 {
                                     // Second visit: Execute the "else" branch (if it exists).
-                                    ListLeftOff[CurList] = CurSlot;
-                                    CurList = command.ConditionalBranch.ElseCommandList;
-                                    CurSlot = 0;
+                                    listLeftOff[curList] = curSlot;
+                                    curList = command.ConditionalBranch.ElseCommandList;
+                                    curSlot = 0;
                                 }
                                 //else currentlistoption = 2, so continue on.
-                                CurrentListOption[CurList] = (CurrentListOption[CurList] + 1) % 3; //prepare for next visit
+                                currentListOption[curList] = (currentListOption[curList] + 1) % 3; //prepare for next visit
 
                                 break;
                             }
                         case (byte)Core.EventCommand.Label:
                             {
                                 // Check if this is the target label.
-                                if (command.Text1 == Label)
+                                if (command.Text1 == label)
                                 {
                                     return; // Found the label, return to the caller.
                                 }
                                 break;
                             }
                     }
-                    CurSlot++; // Move to the next command.
+                    curSlot++; // Move to the next command.
                 }
             }
 
             // Label not found, restore original values.
-            CurList = tmpCurList;
-            CurSlot = tmpCurSlot;
-            ListLeftOff = tmpListLeftOff;
+            curList = tmpCurList;
+            curSlot = tmpCurSlot;
+            listLeftOff = tmpListLeftOff;
         }
 
-        public static int FindNpcPath(int mapNum, double MapNpcNum, int targetx, int targety)
+        public static int FindNpcPath(int mapNum, double mapNpcNum, int targetx, int targety)
         {
 
             // Check for valid map and Npc.
-            if (mapNum < 0 || mapNum >= Data.Map.Length || MapNpcNum < 0 || MapNpcNum >= Data.MapNpc[mapNum].Npc.Length)
+            if (mapNum < 0 || mapNum >= Data.Map.Length || mapNpcNum < 0 || mapNpcNum >= Data.MapNpc[mapNum].Npc.Length)
             {
                 return 4; // Return a default value indicating failure.
             }
@@ -2401,36 +2401,36 @@ namespace Server
             int[,] pos;
             bool reachable;
             int j;
-            var LastSum = default(int);
-            int Sum;
-            int FX;
-            int FY;
+            var lastSum = default(int);
+            int sum;
+            int fx;
+            int fy;
             int i;
             Core.Type.Point[] path;
-            int LastX;
-            int LastY;
+            int lastX;
+            int lastY;
             bool did;
 
             // Initialization phase
 
             tim = 0;
 
-            sX = Data.MapNpc[mapNum].Npc[(int)MapNpcNum].X;
-            sY = Data.MapNpc[mapNum].Npc[(int)MapNpcNum].Y;
+            sX = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].X;
+            sY = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].Y;
 
-            FX = targetx;
-            FY = targety;
+            fx = targetx;
+            fy = targety;
 
-            if (FX == -1)
-                FX = 0;
-            if (FY == -1)
-                FY = 0;
+            if (fx == -1)
+                fx = 0;
+            if (fy == -1)
+                fy = 0;
 
             pos = new int[(Data.Map[mapNum].MaxX + 1), (Core.Data.Map[mapNum].MaxY + 1)]; //+1 to prevent errors
             // pos = MapBlocks(mapNum).Blocks
 
             pos[sX, sY] = 100 + tim;
-            pos[FX, FY] = 2;
+            pos[fx, fy] = 2;
 
             // reset reachable
             reachable = false;
@@ -2515,23 +2515,23 @@ namespace Server
                 if (!reachable)
                 {
                     // reset sum
-                    Sum = 0;
+                    sum = 0;
                     for (j = 0; j <= Core.Data.Map[mapNum].MaxY; j++) //changed to <=
                     {
                         for (i = 0; i <= Core.Data.Map[mapNum].MaxX; i++) //changed to <=
                             // we add up ALL the squares
-                            Sum = Sum + pos[i, j];
+                            sum = sum + pos[i, j];
                     }
 
                     // Now if the sum is euqal to the last sum, its not reachable, if it isnt, then we store
                     // sum to lastsum
-                    if (Sum == LastSum)
+                    if (sum == lastSum)
                     {
                         return 4; // Indicate no path found.
                     }
                     else
                     {
-                        LastSum = Sum;
+                        lastSum = sum;
                     }
                 }
 
@@ -2540,8 +2540,8 @@ namespace Server
             }
 
             // We work backwards to find the way...
-            LastX = FX;
-            LastY = FY;
+            lastX = fx;
+            lastY = fy;
 
             path = new Core.Type.Point[tim + 1 + 1];
 
@@ -2549,7 +2549,7 @@ namespace Server
             // We are working backwards to find ONE of the shortest ways back to Start.
             // So we repeat the loop until the LastX and LastY arent in start. Look in the code to see
             // how LastX and LasY change
-            while (LastX != sX | LastY != sY)
+            while (lastX != sX | lastY != sY)
             {
                 // We decrease tim by one, and then we are finding any adjacent square to the final one, that
                 // has that value. So lets say the tim would be 5, because it takes 5 steps to get to the target.
@@ -2560,13 +2560,13 @@ namespace Server
                 did = false;
 
                 // If we arent on edge
-                if (LastX < Data.Map[mapNum].MaxX) //changed to <
+                if (lastX < Data.Map[mapNum].MaxX) //changed to <
                 {
                     // check the square on the right of the solution. Is it a tim-1 one? or just a blank one
-                    if (pos[LastX + 1, LastY] == 100 + tim)
+                    if (pos[lastX + 1, lastY] == 100 + tim)
                     {
                         // if it, then make it yellow, and change did to true
-                        LastX = LastX + 1;
+                        lastX = lastX + 1;
                         did = true;
                     }
                 }
@@ -2575,11 +2575,11 @@ namespace Server
                 // we want to check another square, the on left. Is it a tim-1 one ?
                 if (!did)
                 {
-                    if (LastX > 0)
+                    if (lastX > 0)
                     {
-                        if (pos[LastX - 1, LastY] == 100 + tim)
+                        if (pos[lastX - 1, lastY] == 100 + tim)
                         {
-                            LastX = LastX - 1;
+                            lastX = lastX - 1;
                             did = true;
                         }
                     }
@@ -2588,11 +2588,11 @@ namespace Server
                 // We check the one below it
                 if (!did)
                 {
-                    if (LastY < Core.Data.Map[mapNum].MaxY) //changed to <
+                    if (lastY < Core.Data.Map[mapNum].MaxY) //changed to <
                     {
-                        if (pos[LastX, LastY + 1] == 100 + tim)
+                        if (pos[lastX, lastY + 1] == 100 + tim)
                         {
-                            LastY = LastY + 1;
+                            lastY = lastY + 1;
                             did = true;
                         }
                     }
@@ -2602,17 +2602,17 @@ namespace Server
                 // there is a way back.
                 if (!did)
                 {
-                    if (LastY > 0)
+                    if (lastY > 0)
                     {
-                        if (pos[LastX, LastY - 1] == 100 + tim)
+                        if (pos[lastX, lastY - 1] == 100 + tim)
                         {
-                            LastY = LastY - 1;
+                            lastY = lastY - 1;
                         }
                     }
                 }
 
-                path[tim].X = LastX;
-                path[tim].Y = LastY;
+                path[tim].X = lastX;
+                path[tim].Y = lastY;
             }
 
             // Ok we got a Core.Path. Now, lets look at the first step and see what direction we should take.
@@ -2641,7 +2641,7 @@ namespace Server
             // Use Task.Run to avoid blocking the main thread.
             await System.Threading.Tasks.Task.Run(() =>
             {
-                for (int i = 0; i < Core.Constant.MAX_MAPS; i++)
+                for (int i = 0; i < Core.Constant.MaxMaps; i++)
                 {
                     SpawnGlobalEvents(i).ConfigureAwait(false);
                 }

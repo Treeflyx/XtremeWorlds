@@ -8,38 +8,38 @@ namespace Client
 
     public class NetworkConfig
     {
-        private static NetworkClient _Socket;
+        private static NetworkClient _socket;
 
         public static NetworkClient Socket
         {
             [MethodImpl(MethodImplOptions.Synchronized)]
             get
             {
-                return _Socket;
+                return _socket;
             }
 
             [MethodImpl(MethodImplOptions.Synchronized)]
             set
             {
-                if (_Socket != null)
+                if (_socket != null)
                 {
-                    _Socket.ConnectionSuccess -= Socket_ConnectionSuccess;
-                    _Socket.ConnectionFailed -= Socket_ConnectionFailed;
-                    _Socket.ConnectionLost -= Socket_ConnectionLost;
-                    _Socket.CrashReport -= Socket_CrashReport;
-                    _Socket.TrafficReceived -= Socket_TrafficReceived;
-                    _Socket.PacketReceived -= Socket_PacketReceived;
+                    _socket.ConnectionSuccess -= Socket_ConnectionSuccess;
+                    _socket.ConnectionFailed -= Socket_ConnectionFailed;
+                    _socket.ConnectionLost -= Socket_ConnectionLost;
+                    _socket.CrashReport -= Socket_CrashReport;
+                    _socket.TrafficReceived -= Socket_TrafficReceived;
+                    _socket.PacketReceived -= Socket_PacketReceived;
                 }
 
-                _Socket = value;
-                if (_Socket != null)
+                _socket = value;
+                if (_socket != null)
                 {
-                    _Socket.ConnectionSuccess += Socket_ConnectionSuccess;
-                    _Socket.ConnectionFailed += Socket_ConnectionFailed;
-                    _Socket.ConnectionLost += Socket_ConnectionLost;
-                    _Socket.CrashReport += Socket_CrashReport;
-                    _Socket.TrafficReceived += Socket_TrafficReceived;
-                    _Socket.PacketReceived += Socket_PacketReceived;
+                    _socket.ConnectionSuccess += Socket_ConnectionSuccess;
+                    _socket.ConnectionFailed += Socket_ConnectionFailed;
+                    _socket.ConnectionLost += Socket_ConnectionLost;
+                    _socket.CrashReport += Socket_CrashReport;
+                    _socket.TrafficReceived += Socket_TrafficReceived;
+                    _socket.PacketReceived += Socket_PacketReceived;
                 }
             }
         }
@@ -49,12 +49,12 @@ namespace Client
             try
             {
                 // Initialize the network client with packet count and buffer size.
-                Socket = new NetworkClient((int)Packets.ServerPackets.COUNT, 8192);
+                Socket = new NetworkClient((int)Packets.ServerPackets.Count, 8192);
 
                 // Start the connection attempt.
                 Socket.ConnectionSuccess += OnConnectionSuccess;
 
-                Socket.Connect(SettingsManager.Instance.IP, SettingsManager.Instance.Port); // Adjust IP and port as needed
+                Socket.Connect(SettingsManager.Instance.Ip, SettingsManager.Instance.Port); // Adjust IP and port as needed
             }
             catch (Exception ex)
             {

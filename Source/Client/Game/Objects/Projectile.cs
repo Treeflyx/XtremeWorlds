@@ -22,20 +22,20 @@ namespace Client
 
         }
 
-        public static void SendSaveProjectile(int ProjectileNum)
+        public static void SendSaveProjectile(int projectileNum)
         {
             ByteStream buffer;
 
             buffer = new ByteStream(4);
 
             buffer.WriteInt32((int)Packets.ClientPackets.CSaveProjectile);
-            buffer.WriteInt32(ProjectileNum);
+            buffer.WriteInt32(projectileNum);
 
-            buffer.WriteString(Data.Projectile[ProjectileNum].Name);
-            buffer.WriteInt32(Core.Data.Projectile[ProjectileNum].Sprite);
-            buffer.WriteInt32(Core.Data.Projectile[ProjectileNum].Range);
-            buffer.WriteInt32(Core.Data.Projectile[ProjectileNum].Speed);
-            buffer.WriteInt32(Core.Data.Projectile[ProjectileNum].Damage);
+            buffer.WriteString(Data.Projectile[projectileNum].Name);
+            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Sprite);
+            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Range);
+            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Speed);
+            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Damage);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -119,7 +119,7 @@ namespace Client
         {
             int i;
 
-            for (i = 0; i < Constant.MAX_PROJECTILES;  i++)
+            for (i = 0; i < Constant.MaxProjectiles;  i++)
                 ClearProjectile(i);
 
         }
@@ -148,9 +148,9 @@ namespace Client
 
         public static void StreamProjectile(int projectileNum)
         {
-            if (projectileNum >= 0 & string.IsNullOrEmpty(Core.Data.Projectile[projectileNum].Name) && GameState.Projectile_Loaded[projectileNum] == 0)
+            if (projectileNum >= 0 & string.IsNullOrEmpty(Core.Data.Projectile[projectileNum].Name) && GameState.ProjectileLoaded[projectileNum] == 0)
             {
-                GameState.Projectile_Loaded[projectileNum] = 1;
+                GameState.ProjectileLoaded[projectileNum] = 1;
                 SendRequestProjectile(projectileNum);
             }
         }
@@ -227,7 +227,7 @@ namespace Client
             }
 
             // Check for Npc collision
-            for (i = 0; i < Constant.MAX_MAP_NPCS; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 if (Data.MyMapNpc[i].X == x & Data.MyMapNpc[i].Y == y)
                 {
@@ -240,7 +240,7 @@ namespace Client
             }
 
             // Check for player collision
-            for (i = 0; i < Constant.MAX_PLAYERS; i++)
+            for (i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i) & GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                 {

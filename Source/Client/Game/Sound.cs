@@ -75,7 +75,7 @@ namespace Client
             }
         }
 
-        public static void InitializeBASS()
+        public static void InitializeBass()
         {
             // Initialize BASS with the default output device
             if (!Bass.Init(-1, 44100, DeviceInitFlags.Default))
@@ -267,21 +267,21 @@ namespace Client
 
         public static double CalculateSoundVolume(ref int x, ref int y)
         {
-            double CalculateSoundVolumeRet = default;
+            double calculateSoundVolumeRet = default;
             int x1, x2, y1, y2;
-            double Distance;
+            double distance;
 
             if (!(GameState.InGame == true))
             {
-                CalculateSoundVolumeRet = 1d;
-                return CalculateSoundVolumeRet;
+                calculateSoundVolumeRet = 1d;
+                return calculateSoundVolumeRet;
             }
 
             if (GameState.InGame && x == GetPlayerX(GameState.MyIndex) && y == GetPlayerY(GameState.MyIndex))
             {
-                CalculateSoundVolumeRet = 1d;
-                CalculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
-                return CalculateSoundVolumeRet;
+                calculateSoundVolumeRet = 1d;
+                calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
+                return calculateSoundVolumeRet;
             }
 
             if (x > -1 || y > -1)
@@ -297,43 +297,43 @@ namespace Client
 
                 if ((int)Math.Round(Math.Pow(x2 - x1, 2d)) + (int)Math.Round(Math.Pow(y2 - y1, 2d)) < 0)
                 {
-                    Distance = Math.Sqrt((int)Math.Round(Math.Pow(x2 - x1, 2d)) + (int)Math.Round(Math.Pow(y2 - y1, 2d)) * -1);
+                    distance = Math.Sqrt((int)Math.Round(Math.Pow(x2 - x1, 2d)) + (int)Math.Round(Math.Pow(y2 - y1, 2d)) * -1);
                 }
                 else
                 {
-                    Distance = Math.Sqrt((int)Math.Round(Math.Pow(x2 - x1, 2d)) + (int)Math.Round(Math.Pow(y2 - y1, 2d)));
+                    distance = Math.Sqrt((int)Math.Round(Math.Pow(x2 - x1, 2d)) + (int)Math.Round(Math.Pow(y2 - y1, 2d)));
                 }
 
                 // If the range is greater than 32, do not send a sound
-                if (Distance / 32d > 32d)
+                if (distance / 32d > 32d)
                 {
-                    CalculateSoundVolumeRet = 0d;
+                    calculateSoundVolumeRet = 0d;
                 }
                 else
                 {
-                    CalculateSoundVolumeRet = 1d / (Distance / 32d);
+                    calculateSoundVolumeRet = 1d / (distance / 32d);
 
-                    if (CalculateSoundVolumeRet > 1d)
+                    if (calculateSoundVolumeRet > 1d)
                     {
-                        CalculateSoundVolumeRet = 1d;
+                        calculateSoundVolumeRet = 1d;
                     }
-                    else if (CalculateSoundVolumeRet < 0d)
+                    else if (calculateSoundVolumeRet < 0d)
                     {
-                        CalculateSoundVolumeRet *= -1;
+                        calculateSoundVolumeRet *= -1;
                     }
                 }
             }
             else
             {
-                CalculateSoundVolumeRet = 1d;
+                calculateSoundVolumeRet = 1d;
             }
 
-            CalculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
+            calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
 
-            return CalculateSoundVolumeRet;
+            return calculateSoundVolumeRet;
         }
 
-        public static void FreeBASS()
+        public static void FreeBass()
         {
             if (SoundFontHandle != 0)
             {

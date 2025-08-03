@@ -10,7 +10,7 @@ namespace Server
     {
         public static int GetTotalMapPlayers(int mapNum)
         {
-            int GetTotalMapPlayersRet = default;
+            int getTotalMapPlayersRet = default;
             int i;
             int n;
             n = 0;
@@ -24,80 +24,80 @@ namespace Server
                 }
             }
 
-            GetTotalMapPlayersRet = n;
-            return GetTotalMapPlayersRet;
+            getTotalMapPlayersRet = n;
+            return getTotalMapPlayersRet;
         }
 
-        public static int GetNpcMaxVital(double NpcNum, Core.Vital Vital)
+        public static int GetNpcMaxVital(double npcNum, Core.Vital vital)
         {
-            int GetNpcMaxVitalRet = default;
+            int getNpcMaxVitalRet = default;
             // Prevent subscript out of range
-            if (NpcNum < 0 | NpcNum > Core.Constant.MAX_NPCS)
-                return GetNpcMaxVitalRet;
+            if (npcNum < 0 | npcNum > Core.Constant.MaxNpcs)
+                return getNpcMaxVitalRet;
 
-            switch (Vital)
+            switch (vital)
             {
                 case Core.Vital.Health:
                     {
-                        GetNpcMaxVitalRet = Core.Data.Npc[(int)NpcNum].HP;
+                        getNpcMaxVitalRet = Core.Data.Npc[(int)npcNum].Hp;
                         break;
                     }
                 case Core.Vital.Stamina:
                     {
-                        GetNpcMaxVitalRet = (int)Core.Data.Npc[(int)NpcNum].Stat[(byte)Core.Stat.Intelligence] * 2;
+                        getNpcMaxVitalRet = (int)Core.Data.Npc[(int)npcNum].Stat[(byte)Core.Stat.Intelligence] * 2;
                         break;
                     }
             }
 
-            return GetNpcMaxVitalRet;
+            return getNpcMaxVitalRet;
 
         }
 
-        public static int FindPlayer(string Name)
+        public static int FindPlayer(string name)
         {
-            int FindPlayerRet = default;
+            int findPlayerRet = default;
             int i;
 
             var loopTo = NetworkConfig.Socket.HighIndex;
             for (i = 0; i <= loopTo; i++)
             {
                 // Trim and convert both names to uppercase for case-insensitive comparison
-                if (Strings.UCase(GetPlayerName(i)) == Strings.UCase(Name))
+                if (Strings.UCase(GetPlayerName(i)) == Strings.UCase(name))
                 {
-                    FindPlayerRet = i;
-                    return FindPlayerRet;
+                    findPlayerRet = i;
+                    return findPlayerRet;
                 }
             }
 
-            FindPlayerRet = -1;
-            return FindPlayerRet;
+            findPlayerRet = -1;
+            return findPlayerRet;
         }
 
-        public static string CheckGrammar(string Word, byte Caps = 0)
+        public static string CheckGrammar(string word, byte caps = 0)
         {
-            string CheckGrammarRet = default;
-            string FirstLetter;
+            string checkGrammarRet = default;
+            string firstLetter;
 
-            FirstLetter = Strings.LCase(Strings.Left(Word, 1));
+            firstLetter = Strings.LCase(Strings.Left(word, 1));
 
-            if (FirstLetter == "$")
+            if (firstLetter == "$")
             {
-                CheckGrammarRet = Strings.Mid(Word, 2, Strings.Len(Word) - 1);
-                return CheckGrammarRet;
+                checkGrammarRet = Strings.Mid(word, 2, Strings.Len(word) - 1);
+                return checkGrammarRet;
             }
 
-            if (LikeOperator.LikeString(FirstLetter, "*[aeiou]*", CompareMethod.Binary))
+            if (LikeOperator.LikeString(firstLetter, "*[aeiou]*", CompareMethod.Binary))
             {
-                if (Conversions.ToBoolean(Caps))
-                    CheckGrammarRet = "An " + Word;
+                if (Conversions.ToBoolean(caps))
+                    checkGrammarRet = "An " + word;
                 else
-                    CheckGrammarRet = "an " + Word;
+                    checkGrammarRet = "an " + word;
             }
-            else if (Conversions.ToBoolean(Caps))
-                CheckGrammarRet = "A " + Word;
+            else if (Conversions.ToBoolean(caps))
+                checkGrammarRet = "A " + word;
             else
-                CheckGrammarRet = "a " + Word;
-            return CheckGrammarRet;
+                checkGrammarRet = "a " + word;
+            return checkGrammarRet;
         }
 
     }

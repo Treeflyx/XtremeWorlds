@@ -11,51 +11,51 @@ namespace Core
     public class Data
     {
         // Common data structure arrays with improved initialization
-        public static Job[] Job = new Job[Constant.MAX_JOBS];
-        public static Moral[] Moral = new Moral[Constant.MAX_MORALS];
-        public static Item[] Item = new Item[Constant.MAX_ITEMS];
-        public static Npc[] Npc = new Npc[Constant.MAX_NPCS];
-        public static Shop[] Shop = new Shop[Constant.MAX_SHOPS];
-        public static Skill[] Skill = new Skill[Constant.MAX_SKILLS];
-        public static MapResource[] MapResource = new MapResource[Constant.MAX_RESOURCES];
-        public static MapResourceCache[] MyMapResource = new MapResourceCache[Constant.MAX_RESOURCES];
-        public static Animation[] Animation = new Animation[Constant.MAX_ANIMATIONS];
-        public static Map[] Map = new Map[Constant.MAX_MAPS];
+        public static Job[] Job = new Job[Constant.MaxJobs];
+        public static Moral[] Moral = new Moral[Constant.MaxMorals];
+        public static Item[] Item = new Item[Constant.MaxItems];
+        public static Npc[] Npc = new Npc[Constant.MaxNpcs];
+        public static Shop[] Shop = new Shop[Constant.MaxShops];
+        public static Skill[] Skill = new Skill[Constant.MaxSkills];
+        public static MapResource[] MapResource = new MapResource[Constant.MaxResources];
+        public static MapResourceCache[] MyMapResource = new MapResourceCache[Constant.MaxResources];
+        public static Animation[] Animation = new Animation[Constant.MaxAnimations];
+        public static Map[] Map = new Map[Constant.MaxMaps];
         public static Map MyMap;
         public static Tile[,] TempTile;
-        public static MapItem[,] MapItem = new MapItem[Constant.MAX_MAPS, Constant.MAX_MAP_ITEMS];
-        public static MapItem[] MyMapItem = new MapItem[Constant.MAX_MAP_ITEMS];
-        public static MapData[] MapNpc = new MapData[Constant.MAX_MAPS];
-        public static MapNpc[] MyMapNpc = new MapNpc[Constant.MAX_MAP_NPCS];
-        public static Bank[] Bank = new Bank[Constant.MAX_PLAYERS];
-        public static TempPlayer[] TempPlayer = new TempPlayer[Constant.MAX_PLAYERS];
-        public static Account[] Account = new Account[Constant.MAX_PLAYERS];
-        public static Player[] Player = new Player[Constant.MAX_PLAYERS];
-        public static Projectile[] Projectile = new Projectile[Constant.MAX_PROJECTILES];
-        public static MapProjectile[,] MapProjectile = new MapProjectile[Constant.MAX_MAPS, Constant.MAX_PROJECTILES];
-        public static PlayerInv[] TradeYourOffer = new PlayerInv[Constant.MAX_INV];
-        public static PlayerInv[] TradeTheirOffer = new PlayerInv[Constant.MAX_INV];
-        public static Party[] Party = new Party[Constant.MAX_PARTY];
+        public static MapItem[,] MapItem = new MapItem[Constant.MaxMaps, Constant.MaxMapItems];
+        public static MapItem[] MyMapItem = new MapItem[Constant.MaxMapItems];
+        public static MapData[] MapNpc = new MapData[Constant.MaxMaps];
+        public static MapNpc[] MyMapNpc = new MapNpc[Constant.MaxMapNpcs];
+        public static Bank[] Bank = new Bank[Constant.MaxPlayers];
+        public static TempPlayer[] TempPlayer = new TempPlayer[Constant.MaxPlayers];
+        public static Account[] Account = new Account[Constant.MaxPlayers];
+        public static Player[] Player = new Player[Constant.MaxPlayers];
+        public static Projectile[] Projectile = new Projectile[Constant.MaxProjectiles];
+        public static MapProjectile[,] MapProjectile = new MapProjectile[Constant.MaxMaps, Constant.MaxProjectiles];
+        public static PlayerInv[] TradeYourOffer = new PlayerInv[Constant.MaxInv];
+        public static PlayerInv[] TradeTheirOffer = new PlayerInv[Constant.MaxInv];
+        public static Party[] Party = new Party[Constant.MaxParty];
         public static Party MyParty;
-        public static Resource[] Resource = new Resource[Constant.MAX_RESOURCES];
+        public static Resource[] Resource = new Resource[Constant.MaxResources];
         public static CharList Char;
-        public static Pet[] Pet = new Pet[Constant.MAX_PETS];
+        public static Pet[] Pet = new Pet[Constant.MaxPets];
         public static ChatBubble[] ChatBubble = new ChatBubble[byte.MaxValue];
         public static Script Script = new Script();
 
-        public static Quest[] Quests = new Quest[Constant.MAX_QUESTS];
-        public static Event[] Events = new Event[Constant.MAX_EVENTS];
-        public static Guild[] Guilds = new Guild[Constant.MAX_GUILDS];
+        public static Quest[] Quests = new Quest[Constant.MaxQuests];
+        public static Event[] Events = new Event[Constant.MaxEvents];
+        public static Guild[] Guilds = new Guild[Constant.MaxGuilds];
         public static Weather Weather = new Weather();
 
         public static ActionMsg[] ActionMsg = new ActionMsg[byte.MaxValue];
         public static Blood[] Blood = new Blood[byte.MaxValue];
-        public static Chat[] Chat = new Chat[Constant.CHAT_LINES];
+        public static Chat[] Chat = new Chat[Constant.ChatLines];
         public static Tile[,] MapTile;
         public static TileHistory[] TileHistory;
         public static Autotile[,] Autotile;
         public static MapEvent[] MapEvents;
 
-        public static UI UI;
+        public static Ui Ui;
     }
 }

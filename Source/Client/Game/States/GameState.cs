@@ -18,31 +18,31 @@ namespace Client
         public static bool MapAnim;
 
         // Global dialogue index
-        public static string diaHeader;
-        public static string diaBody;
-        public static string diaBody2;
-        public static long diaIndex;
-        public static long diaData1;
-        public static long diaData2;
-        public static long diaData3;
-        public static long diaData4;
-        public static long diaData5;
-        public static string diaDataString;
-        public static byte diaStyle;
+        public static string DiaHeader;
+        public static string DiaBody;
+        public static string DiaBody2;
+        public static long DiaIndex;
+        public static long DiaData1;
+        public static long DiaData2;
+        public static long DiaData3;
+        public static long DiaData4;
+        public static long DiaData5;
+        public static string DiaDataString;
+        public static byte DiaStyle;
 
         // shop
-        public static long shopSelectedSlot;
-        public static long shopSelectedItem;
-        public static bool shopIsSelling;
+        public static long ShopSelectedSlot;
+        public static long ShopSelectedItem;
+        public static bool ShopIsSelling;
 
         // right click menu
         public static long PlayerMenuIndex;
 
         // description
-        public static byte descType;
-        public static long descItem;
-        public static byte descLastType;
-        public static long descLastItem;
+        public static byte DescType;
+        public static long DescItem;
+        public static byte DescLastType;
+        public static long DescLastItem;
         public static Core.Type.Text[] Description;
 
         // New char
@@ -51,25 +51,25 @@ namespace Client
         public static long NewCnarGender;
 
         // chars
-        public static string[] CharName = new string[(Core.Constant.MAX_CHARS)];
-        public static long[] CharSprite = new long[(Core.Constant.MAX_CHARS)];
-        public static long[] CharAccess = new long[(Core.Constant.MAX_CHARS)];
-        public static long[] CharJob = new long[(Core.Constant.MAX_CHARS)];
+        public static string[] CharName = new string[(Core.Constant.MaxChars)];
+        public static long[] CharSprite = new long[(Core.Constant.MaxChars)];
+        public static long[] CharAccess = new long[(Core.Constant.MaxChars)];
+        public static long[] CharJob = new long[(Core.Constant.MaxChars)];
         public static byte CharNum;
 
         // elastic bars
-        public static long[] BarWidth_NpcHP = new long[(Core.Constant.MAX_MAP_NPCS)];
-        public static long[] BarWidth_PlayerHP = new long[Core.Constant.MAX_PLAYERS];
-        public static long[] BarWidth_PlayerSP = new long[Core.Constant.MAX_PLAYERS];
-        public static long[] BarWidth_NpcHP_Max = new long[(Core.Constant.MAX_MAP_NPCS)];
-        public static long[] BarWidth_PlayerHP_Max = new long[Core.Constant.MAX_PLAYERS];
-        public static long[] BarWidth_PlayerSP_Max = new long[Core.Constant.MAX_PLAYERS];
-        public static long BarWidth_GuiHP;
-        public static long BarWidth_GuiSP;
-        public static long BarWidth_GuiEXP;
-        public static long BarWidth_GuiHP_Max;
-        public static long BarWidth_GuiSP_Max;
-        public static long BarWidth_GuiEXP_Max;
+        public static long[] BarWidthNpcHp = new long[(Core.Constant.MaxMapNpcs)];
+        public static long[] BarWidthPlayerHp = new long[Core.Constant.MaxPlayers];
+        public static long[] BarWidthPlayerSp = new long[Core.Constant.MaxPlayers];
+        public static long[] BarWidthNpcHpMax = new long[(Core.Constant.MaxMapNpcs)];
+        public static long[] BarWidthPlayerHpMax = new long[Core.Constant.MaxPlayers];
+        public static long[] BarWidthPlayerSpMax = new long[Core.Constant.MaxPlayers];
+        public static long BarWidthGuiHp;
+        public static long BarWidthGuiSp;
+        public static long BarWidthGuiExp;
+        public static long BarWidthGuiHpMax;
+        public static long BarWidthGuiSpMax;
+        public static long BarWidthGuiExpMax;
 
         public static int CurrentEvents;
 
@@ -91,16 +91,16 @@ namespace Client
 
         public static string ChatShowLine;
 
-        public static string[] MapNames = new string[Core.Constant.MAX_MAPS];
+        public static string[] MapNames = new string[Core.Constant.MaxMaps];
 
         // chat
-        public static bool inSmallChat;
-        public static long actChatHeight;
-        public static long actChatWidth;
+        public static bool InSmallChat;
+        public static long ActChatHeight;
+        public static long ActChatWidth;
         public static bool ChatButtonUp;
         public static bool ChatButtonDown;
         public static long ChatScroll;
-        public static long Chat_HighIndex;
+        public static long ChatHighIndex;
 
         public static int EditorTileX;
         public static int EditorTileY;
@@ -211,15 +211,15 @@ namespace Client
         public static int ShowAnimTimer;
 
         // Stream Content
-        public static int[] Item_Loaded = new int[Core.Constant.MAX_ITEMS];
-        public static int[] Npc_Loaded = new int[Core.Constant.MAX_NPCS];
-        public static int[] Resource_Loaded = new int[Core.Constant.MAX_RESOURCES];
-        public static int[] Animation_Loaded = new int[Core.Constant.MAX_RESOURCES];
-        public static int[] Skill_Loaded = new int[Core.Constant.MAX_SKILLS];
-        public static int[] Shop_Loaded = new int[Core.Constant.MAX_SHOPS];
-        public static int[] Pet_Loaded = new int[Core.Constant.MAX_PETS];
-        public static int[] Moral_Loaded = new int[(Core.Constant.MAX_MORALS)];
-        public static int[] Projectile_Loaded = new int[(Core.Constant.MAX_PROJECTILES)];
+        public static int[] ItemLoaded = new int[Core.Constant.MaxItems];
+        public static int[] NpcLoaded = new int[Core.Constant.MaxNpcs];
+        public static int[] ResourceLoaded = new int[Core.Constant.MaxResources];
+        public static int[] AnimationLoaded = new int[Core.Constant.MaxResources];
+        public static int[] SkillLoaded = new int[Core.Constant.MaxSkills];
+        public static int[] ShopLoaded = new int[Core.Constant.MaxShops];
+        public static int[] PetLoaded = new int[Core.Constant.MaxPets];
+        public static int[] MoralLoaded = new int[(Core.Constant.MaxMorals)];
+        public static int[] ProjectileLoaded = new int[(Core.Constant.MaxProjectiles)];
 
         public static int[] AnimEditorFrame = new int[2];
         public static int[] AnimEditorTimer = new int[2];
@@ -259,7 +259,7 @@ namespace Client
 
         public const int ChatBubbleWidth = 300;
 
-        public const long Chat_Timer = 20000L;
+        public const long ChatTimer = 20000L;
 
         public const int EffectTypeFadein = 1;
         public const int EffectTypeFadeout = 2;
@@ -365,7 +365,7 @@ namespace Client
         public static int ResourceIndex;
         public static bool ResourcesInit;
 
-        public static Core.Type.WeatherParticle[] WeatherParticle = new Core.Type.WeatherParticle[Core.Constant.MAX_WEATHER_PARTICLES];
+        public static Core.Type.WeatherParticle[] WeatherParticle = new Core.Type.WeatherParticle[Core.Constant.MaxWeatherParticles];
 
         public static int FogOffsetX;
         public static int FogOffsetY;
@@ -406,15 +406,15 @@ namespace Client
         public static bool InitScriptEditor;
 
         // Editor edited items array
-        public static bool[] Item_Changed = new bool[Core.Constant.MAX_ITEMS];
-        public static bool[] Npc_Changed = new bool[Core.Constant.MAX_NPCS];
-        public static bool[] Resource_Changed = new bool[Core.Constant.MAX_RESOURCES];
-        public static bool[] Animation_Changed = new bool[Core.Constant.MAX_ANIMATIONS];
-        public static bool[] Skill_Changed = new bool[Core.Constant.MAX_SKILLS];
-        public static bool[] Shop_Changed = new bool[Core.Constant.MAX_SHOPS];
-        public static bool[] Pet_Changed = new bool[Core.Constant.MAX_PETS];
-        public static bool[] Job_Changed = new bool[(Core.Constant.MAX_JOBS)];
-        public static bool[] Moral_Changed = new bool[(Core.Constant.MAX_MORALS)];
-        public static bool[] ProjectileChanged = new bool[Core.Constant.MAX_PROJECTILES];
+        public static bool[] ItemChanged = new bool[Core.Constant.MaxItems];
+        public static bool[] NpcChanged = new bool[Core.Constant.MaxNpcs];
+        public static bool[] ResourceChanged = new bool[Core.Constant.MaxResources];
+        public static bool[] AnimationChanged = new bool[Core.Constant.MaxAnimations];
+        public static bool[] SkillChanged = new bool[Core.Constant.MaxSkills];
+        public static bool[] ShopChanged = new bool[Core.Constant.MaxShops];
+        public static bool[] PetChanged = new bool[Core.Constant.MaxPets];
+        public static bool[] JobChanged = new bool[(Core.Constant.MaxJobs)];
+        public static bool[] MoralChanged = new bool[(Core.Constant.MaxMorals)];
+        public static bool[] ProjectileChanged = new bool[Core.Constant.MaxProjectiles];
     }
 }

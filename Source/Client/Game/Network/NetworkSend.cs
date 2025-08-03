@@ -284,12 +284,12 @@ namespace Client
             buffer.Dispose();
         }
 
-        public static void SendRequestNpc(int NpcNum)
+        public static void SendRequestNpc(int npcNum)
         {
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestNpc);
-            buffer.WriteDouble(NpcNum);
+            buffer.WriteDouble(npcNum);
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
@@ -455,10 +455,10 @@ namespace Client
                 return;
 
             // do basic checks
-            if (invNum < 0 | invNum > Constant.MAX_INV)
+            if (invNum < 0 | invNum > Constant.MaxInv)
                 return;
 
-            if (Core.Data.Player[GameState.MyIndex].Inv[invNum].Num < 0 | Core.Data.Player[GameState.MyIndex].Inv[invNum].Num > Constant.MAX_ITEMS)
+            if (Core.Data.Player[GameState.MyIndex].Inv[invNum].Num < 0 | Core.Data.Player[GameState.MyIndex].Inv[invNum].Num > Constant.MaxItems)
                 return;
 
             if (Core.Data.Item[(int)GetPlayerInv(GameState.MyIndex, invNum)].Type == (byte)ItemCategory.Currency | Core.Data.Item[(int)GetPlayerInv(GameState.MyIndex, invNum)].Stackable == 1)
@@ -475,7 +475,7 @@ namespace Client
             buffer.Dispose();
         }
 
-        public static void PlayerSearch(int CurX, int CurY, byte rClick)
+        public static void PlayerSearch(int curX, int curY, byte rClick)
         {
             var buffer = new ByteStream(4);
 
@@ -519,11 +519,11 @@ namespace Client
             var buffer = new ByteStream(4);
 
             // Check for subscript out of range
-            if (skillSlot < 0 | skillSlot > Constant.MAX_PLAYER_SKILLS)
+            if (skillSlot < 0 | skillSlot > Constant.MaxPlayerSkills)
                 return;
 
             // dont let them forget a skill which is in CD
-            if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].CD > 0)
+            if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
             {
                 Text.AddText("Cannot forget a skill which is cooling down!", (int)Core.Color.Red);
                 return;
@@ -593,27 +593,27 @@ namespace Client
             buffer.Dispose();
         }
 
-        public static void SendSaveResource(int ResourceNum)
+        public static void SendSaveResource(int resourceNum)
         {
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int)Packets.ClientPackets.CSaveResource);
 
-            buffer.WriteInt32(ResourceNum);
-            buffer.WriteInt32(Data.Resource[ResourceNum].Animation);
-            buffer.WriteString(Data.Resource[ResourceNum].EmptyMessage);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ExhaustedImage);
-            buffer.WriteInt32(Data.Resource[ResourceNum].Health);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ExpReward);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ItemReward);
-            buffer.WriteString(Data.Resource[ResourceNum].Name);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ResourceImage);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ResourceType);
-            buffer.WriteInt32(Data.Resource[ResourceNum].RespawnTime);
-            buffer.WriteString(Data.Resource[ResourceNum].SuccessMessage);
-            buffer.WriteInt32(Data.Resource[ResourceNum].LvlRequired);
-            buffer.WriteInt32(Data.Resource[ResourceNum].ToolRequired);
-            buffer.WriteInt32(Conversions.ToInteger(Data.Resource[ResourceNum].Walkthrough));
+            buffer.WriteInt32(resourceNum);
+            buffer.WriteInt32(Data.Resource[resourceNum].Animation);
+            buffer.WriteString(Data.Resource[resourceNum].EmptyMessage);
+            buffer.WriteInt32(Data.Resource[resourceNum].ExhaustedImage);
+            buffer.WriteInt32(Data.Resource[resourceNum].Health);
+            buffer.WriteInt32(Data.Resource[resourceNum].ExpReward);
+            buffer.WriteInt32(Data.Resource[resourceNum].ItemReward);
+            buffer.WriteString(Data.Resource[resourceNum].Name);
+            buffer.WriteInt32(Data.Resource[resourceNum].ResourceImage);
+            buffer.WriteInt32(Data.Resource[resourceNum].ResourceType);
+            buffer.WriteInt32(Data.Resource[resourceNum].RespawnTime);
+            buffer.WriteString(Data.Resource[resourceNum].SuccessMessage);
+            buffer.WriteInt32(Data.Resource[resourceNum].LvlRequired);
+            buffer.WriteInt32(Data.Resource[resourceNum].ToolRequired);
+            buffer.WriteInt32(Conversions.ToInteger(Data.Resource[resourceNum].Walkthrough));
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -628,43 +628,43 @@ namespace Client
             buffer.Dispose();
         }
 
-        public static void SendSaveNpc(int NpcNum)
+        public static void SendSaveNpc(int npcNum)
         {
             var buffer = new ByteStream(4);
             int i;
 
             buffer.WriteInt32((int)Packets.ClientPackets.CSaveNpc);
-            buffer.WriteInt32(NpcNum);
+            buffer.WriteInt32(npcNum);
 
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].Animation);
-            buffer.WriteString(Data.Npc[(int)NpcNum].AttackSay);
-            buffer.WriteByte(Data.Npc[(int)NpcNum].Behaviour);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Animation);
+            buffer.WriteString(Data.Npc[(int)npcNum].AttackSay);
+            buffer.WriteByte(Data.Npc[(int)npcNum].Behaviour);
 
-            for (i = 0; i < Constant.MAX_DROP_ITEMS; i++)
+            for (i = 0; i < Constant.MaxDropItems; i++)
             {
-                buffer.WriteInt32(Data.Npc[(int)NpcNum].DropChance[i]);
-                buffer.WriteInt32(Data.Npc[(int)NpcNum].DropItem[i]);
-                buffer.WriteInt32(Data.Npc[(int)NpcNum].DropItemValue[i]);
+                buffer.WriteInt32(Data.Npc[(int)npcNum].DropChance[i]);
+                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItem[i]);
+                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItemValue[i]);
             }
 
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].Exp);
-            buffer.WriteByte(Data.Npc[(int)NpcNum].Faction);
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].HP);
-            buffer.WriteString(Data.Npc[(int)NpcNum].Name);
-            buffer.WriteByte(Data.Npc[(int)NpcNum].Range);
-            buffer.WriteByte(Data.Npc[(int)NpcNum].SpawnTime);
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].SpawnSecs);
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].Sprite);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Exp);
+            buffer.WriteByte(Data.Npc[(int)npcNum].Faction);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Hp);
+            buffer.WriteString(Data.Npc[(int)npcNum].Name);
+            buffer.WriteByte(Data.Npc[(int)npcNum].Range);
+            buffer.WriteByte(Data.Npc[(int)npcNum].SpawnTime);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].SpawnSecs);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Sprite);
 
             var statCount = System.Enum.GetValues(typeof(Stat)).Length;
             for (i = 0; i < statCount; i++)
-                buffer.WriteByte(Data.Npc[(int)NpcNum].Stat[i]);
+                buffer.WriteByte(Data.Npc[(int)npcNum].Stat[i]);
 
-            for (i = 0; i < Constant.MAX_NPC_SKILLS; i++)
-                buffer.WriteByte(Data.Npc[(int)NpcNum].Skill[i]);
+            for (i = 0; i < Constant.MaxNpcSkills; i++)
+                buffer.WriteByte(Data.Npc[(int)npcNum].Skill[i]);
 
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].Level);
-            buffer.WriteInt32(Data.Npc[(int)NpcNum].Damage);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Level);
+            buffer.WriteInt32(Data.Npc[(int)npcNum].Damage);
 
             NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -730,7 +730,7 @@ namespace Client
             buffer.WriteInt32(Data.Shop[shopNum].BuyRate);
             buffer.WriteString(Data.Shop[shopNum].Name);
 
-            for (int i = 0; i < Constant.MAX_TRADES; i++)
+            for (int i = 0; i < Constant.MaxTrades; i++)
             {
                 buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
                 buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
@@ -816,7 +816,7 @@ namespace Client
             for (i = 0; i < statCount; i++)
                 buffer.WriteInt32(Data.Job[jobNum].Stat[i]);
 
-            for (q = 0; q < Core.Constant.MAX_START_ITEMS; q++)
+            for (q = 0; q < Core.Constant.MaxStartItems; q++)
             {
                 buffer.WriteInt32(Data.Job[jobNum].StartItem[q]);
                 buffer.WriteInt32(Data.Job[jobNum].StartValue[q]);
@@ -842,7 +842,7 @@ namespace Client
 
             int statCount = System.Enum.GetValues(typeof(Stat)).Length;
             for (int i = 0; i < statCount; i++)
-                buffer.WriteInt32(Core.Data.Item[itemNum].Add_Stat[i]);
+                buffer.WriteInt32(Core.Data.Item[itemNum].AddStat[i]);
 
             buffer.WriteInt32(Core.Data.Item[itemNum].Animation);
             buffer.WriteInt32(Core.Data.Item[itemNum].BindType);
@@ -863,7 +863,7 @@ namespace Client
             buffer.WriteString(Core.Data.Item[itemNum].Description);
 
             for (int i = 0; i < statCount; i++)
-                buffer.WriteInt32(Core.Data.Item[itemNum].Stat_Req[i]);
+                buffer.WriteInt32(Core.Data.Item[itemNum].StatReq[i]);
 
             buffer.WriteInt32(Core.Data.Item[itemNum].Type);
             buffer.WriteInt32(Core.Data.Item[itemNum].SubType);
@@ -1003,7 +1003,7 @@ namespace Client
                 buffer.WriteString(withBlock.Name);
                 buffer.WriteByte(withBlock.Color);
                 buffer.WriteBoolean(withBlock.CanCast);
-                buffer.WriteBoolean(withBlock.CanPK);
+                buffer.WriteBoolean(withBlock.CanPk);
                 buffer.WriteBoolean(withBlock.CanDropItem);
                 buffer.WriteBoolean(withBlock.CanPickupItem);
                 buffer.WriteBoolean(withBlock.CanUseItem);

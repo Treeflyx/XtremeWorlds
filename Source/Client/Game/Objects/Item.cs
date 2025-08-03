@@ -14,35 +14,35 @@ namespace Client
             int statCount = System.Enum.GetValues(typeof(Stat)).Length;
                 
             Core.Data.Item[index] = default;
-            Array.Resize(ref Core.Data.Item[index].Add_Stat, statCount);
-            Array.Resize(ref Core.Data.Item[index].Stat_Req, statCount);
+            Array.Resize(ref Core.Data.Item[index].AddStat, statCount);
+            Array.Resize(ref Core.Data.Item[index].StatReq, statCount);
 
             Core.Data.Item[index].Name = "";
             Core.Data.Item[index].Description = "";
-            GameState.Item_Loaded[index] = 0;
+            GameState.ItemLoaded[index] = 0;
         }
 
         public static void ClearItems()
         {
             int i;
 
-            Core.Data.Item = new Core.Type.Item[Core.Constant.MAX_ITEMS];
+            Core.Data.Item = new Core.Type.Item[Core.Constant.MaxItems];
 
-            for (i = 0; i < Constant.MAX_ITEMS; i++)
+            for (i = 0; i < Constant.MaxItems; i++)
                 ClearItem(i);
 
         }
 
         public static void ClearChangedItem()
         {
-            GameState.Item_Changed = new bool[Core.Constant.MAX_ITEMS];
+            GameState.ItemChanged = new bool[Core.Constant.MaxItems];
         }
 
         public static void StreamItem(int itemNum)
         {
-            if (itemNum >= 0 && string.IsNullOrEmpty(Core.Data.Item[itemNum].Name) && GameState.Item_Loaded[itemNum] == 0)
+            if (itemNum >= 0 && string.IsNullOrEmpty(Core.Data.Item[itemNum].Name) && GameState.ItemLoaded[itemNum] == 0)
             {
-                GameState.Item_Loaded[itemNum] = 1;
+                GameState.ItemLoaded[itemNum] = 1;
                 SendRequestItem(itemNum);
             }
         }
@@ -64,7 +64,7 @@ namespace Client
 
             int statCount = System.Enum.GetValues(typeof(Stat)).Length;
             for (i = 0; i < statCount; i++)
-                Core.Data.Item[n].Add_Stat[i] = (byte)buffer.ReadInt32();
+                Core.Data.Item[n].AddStat[i] = (byte)buffer.ReadInt32();
 
             Core.Data.Item[n].Animation = buffer.ReadInt32();
             Core.Data.Item[n].BindType = (byte)buffer.ReadInt32();
@@ -85,7 +85,7 @@ namespace Client
             Core.Data.Item[n].Description = buffer.ReadString();
 
             for (i = 0; i < statCount; i++)
-                Core.Data.Item[n].Stat_Req[i] = (byte)buffer.ReadInt32();
+                Core.Data.Item[n].StatReq[i] = (byte)buffer.ReadInt32();
 
             Core.Data.Item[n].Type = (byte)buffer.ReadInt32();
             Core.Data.Item[n].SubType = (byte)buffer.ReadInt32();
@@ -96,10 +96,10 @@ namespace Client
             Core.Data.Item[n].Projectile = buffer.ReadInt32();
             Core.Data.Item[n].Ammo = buffer.ReadInt32();
 
-            if (n == GameState.descLastItem)
+            if (n == GameState.DescLastItem)
             {
-                GameState.descLastType = 0;
-                GameState.descLastItem = 0L;
+                GameState.DescLastType = 0;
+                GameState.DescLastItem = 0L;
             }
 
             buffer.Dispose();

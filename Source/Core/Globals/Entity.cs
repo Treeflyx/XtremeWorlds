@@ -92,7 +92,7 @@ namespace Core.Globals
         public byte Behaviour { get; set; }
         public byte Range { get; set; }
         public int Animation { get; set; }
-        public int HP { get; set; }
+        public int Hp { get; set; }
         public int Damage { get; set; }
         public int[] Skill { get; set; }
         public byte Faction { get; set; }
@@ -171,7 +171,7 @@ namespace Core.Globals
                 StunTimer = npc.StunTimer,
                 SkillBuffer = npc.SkillBuffer,
                 SkillBufferTimer = npc.SkillBufferTimer,
-                Skill = npc.SkillCD != null ? (int[])npc.SkillCD.Clone() : null,
+                Skill = npc.SkillCd != null ? (int[])npc.SkillCd.Clone() : null,
                 Attacking = npc.Attacking,
             };
             return entity;
@@ -200,7 +200,7 @@ namespace Core.Globals
                 StunTimer = entity.StunTimer,
                 SkillBuffer = entity.SkillBuffer,
                 SkillBufferTimer = entity.SkillBufferTimer,
-                SkillCD = entity.Skill != null ? (int[])entity.Skill.Clone() : new int[0],
+                SkillCd = entity.Skill != null ? (int[])entity.Skill.Clone() : new int[0],
                 StopRegen = entity.StopRegen,
                 StopRegenTimer = 0, 
                 Moving = entity.Moving,

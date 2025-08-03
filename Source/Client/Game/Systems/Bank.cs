@@ -16,11 +16,11 @@ namespace Client
             int i;
             int x;
 
-            for (x = 0; x < Constant.MAX_PLAYERS; x++)
+            for (x = 0; x < Constant.MaxPlayers; x++)
             {
-                Core.Data.Bank[x].Item = new Core.Type.PlayerInv[(Constant.MAX_BANK + 1)];
+                Core.Data.Bank[x].Item = new Core.Type.PlayerInv[(Constant.MaxBank + 1)];
 
-                for (i = 0; i < Constant.MAX_BANK; i++)
+                for (i = 0; i < Constant.MaxBank; i++)
                 {
                     Core.Data.Bank[x].Item[i].Num = -1;
                     Core.Data.Bank[x].Item[i].Value = 0;
@@ -38,7 +38,7 @@ namespace Client
             int x;
             var buffer = new ByteStream(data);
 
-            for (i = 0; i < Constant.MAX_BANK; i++)
+            for (i = 0; i < Constant.MaxBank; i++)
             {
                 SetBank(GameState.MyIndex, (byte)i, buffer.ReadInt32());
                 SetBankValue(GameState.MyIndex, (byte)i, buffer.ReadInt32());

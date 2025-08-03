@@ -9,7 +9,7 @@ namespace Server
 
     public class Server
     {
-        private static bool consoleExit;
+        private static bool _consoleExit;
 
         public static async System.Threading.Tasks.Task Main()
         {
@@ -34,7 +34,7 @@ namespace Server
                 Player.LeftGame(i);
             }
             
-            consoleExit = true;
+            _consoleExit = true;
         }
 
         private static async System.Threading.Tasks.Task ConsoleThreadAsync()
@@ -44,7 +44,7 @@ namespace Server
 
             Console.WriteLine("Initializing Console Loop");
 
-            while (!consoleExit)
+            while (!_consoleExit)
             {
                 try
                 {
@@ -120,63 +120,63 @@ namespace Server
                             if (parts.Length < 3)
                                 continue;
 
-                            string Name = parts[1];
-                            int Pindex = GameLogic.FindPlayer(Name);
-                            byte Access;
-                            byte.TryParse(parts[2], out Access);
+                            string name = parts[1];
+                            int pindex = GameLogic.FindPlayer(name);
+                            byte access;
+                            byte.TryParse(parts[2], out access);
 
-                            if (Pindex == -1)
+                            if (pindex == -1)
                             {
                                 Console.WriteLine("Player name is empty or invalid. [Name not found]");
                             }
                             else
                             {
-                                switch (Access)
+                                switch (access)
                                 {
                                     case (byte)AccessLevel.Player:
                                         {
-                                            SetPlayerAccess(Pindex, Access);
-                                            NetworkSend.SendPlayerData(Pindex);
-                                            NetworkSend.PlayerMsg(Pindex, "Your access has been set to Player!", (int)Core.Color.Yellow);
-                                            Console.WriteLine("Successfully set the access level to " + Access + " for player " + Name);
+                                            SetPlayerAccess(pindex, access);
+                                            NetworkSend.SendPlayerData(pindex);
+                                            NetworkSend.PlayerMsg(pindex, "Your access has been set to Player!", (int)Core.Color.Yellow);
+                                            Console.WriteLine("Successfully set the access level to " + access + " for player " + name);
                                             break;
                                         }
                                     case (byte)AccessLevel.Moderator:
                                         {
-                                            SetPlayerAccess(Pindex, Access);
-                                            NetworkSend.SendPlayerData(Pindex);
-                                            NetworkSend.PlayerMsg(Pindex, "Your access has been set to Moderator!", (int)Core.Color.Yellow);
-                                            Console.WriteLine("Successfully set the access level to " + Access + " for player " + Name);
+                                            SetPlayerAccess(pindex, access);
+                                            NetworkSend.SendPlayerData(pindex);
+                                            NetworkSend.PlayerMsg(pindex, "Your access has been set to Moderator!", (int)Core.Color.Yellow);
+                                            Console.WriteLine("Successfully set the access level to " + access + " for player " + name);
                                             break;
                                         }
                                     case (byte)AccessLevel.Mapper:
                                         {
-                                            SetPlayerAccess(Pindex, Access);
-                                            NetworkSend.SendPlayerData(Pindex);
-                                            NetworkSend.PlayerMsg(Pindex, "Your access has been set to Mapper!", (int)Core.Color.Yellow);
-                                            Console.WriteLine("Successfully set the access level to " + Access + " for player " + Name);
+                                            SetPlayerAccess(pindex, access);
+                                            NetworkSend.SendPlayerData(pindex);
+                                            NetworkSend.PlayerMsg(pindex, "Your access has been set to Mapper!", (int)Core.Color.Yellow);
+                                            Console.WriteLine("Successfully set the access level to " + access + " for player " + name);
                                             break;
                                         }
                                     case (byte)AccessLevel.Developer:
                                         {
-                                            SetPlayerAccess(Pindex, Access);
-                                            NetworkSend.SendPlayerData(Pindex);
-                                            NetworkSend.PlayerMsg(Pindex, "Your access has been set to Developer!", (int)Core.Color.Yellow);
-                                            Console.WriteLine("Successfully set the access level to " + Access + " for player " + Name);
+                                            SetPlayerAccess(pindex, access);
+                                            NetworkSend.SendPlayerData(pindex);
+                                            NetworkSend.PlayerMsg(pindex, "Your access has been set to Developer!", (int)Core.Color.Yellow);
+                                            Console.WriteLine("Successfully set the access level to " + access + " for player " + name);
                                             break;
                                         }
                                     case (byte)AccessLevel.Owner:
                                         {
-                                            SetPlayerAccess(Pindex, Access);
-                                            NetworkSend.SendPlayerData(Pindex);
-                                            NetworkSend.PlayerMsg(Pindex, "Your access has been set to Owner!", (int)Core.Color.Yellow);
-                                            Console.WriteLine("Successfully set the access level to " + Access + " for player " + Name);
+                                            SetPlayerAccess(pindex, access);
+                                            NetworkSend.SendPlayerData(pindex);
+                                            NetworkSend.PlayerMsg(pindex, "Your access has been set to Owner!", (int)Core.Color.Yellow);
+                                            Console.WriteLine("Successfully set the access level to " + access + " for player " + name);
                                             break;
                                         }
 
                                     default:
                                         {
-                                            Console.WriteLine("Failed to set the access level to " + Access + " for player " + Name);
+                                            Console.WriteLine("Failed to set the access level to " + access + " for player " + name);
                                             break;
                                         }
                                 }
@@ -193,16 +193,16 @@ namespace Server
                             if (parts.Length < 2)
                                 continue;
 
-                            string Name = parts[1];
-                            int Pindex = GameLogic.FindPlayer(Name);
-                            if (Pindex == -1)
+                            string name = parts[1];
+                            int pindex = GameLogic.FindPlayer(name);
+                            if (pindex == -1)
                             {
                                 Console.WriteLine("Player name is empty or invalid.");
                             }
                             else
                             {
-                                NetworkSend.AlertMsg(Pindex, (int)SystemMessage.Kicked);
-                                await Player.LeftGame(Pindex);
+                                NetworkSend.AlertMsg(pindex, (int)SystemMessage.Kicked);
+                                await Player.LeftGame(pindex);
                             }
 
                             break;
@@ -215,15 +215,15 @@ namespace Server
                             if (parts.Length < 2)
                                 continue;
 
-                            string Name = parts[1];
-                            int Pindex = GameLogic.FindPlayer(Name);
-                            if (Pindex == -1)
+                            string name = parts[1];
+                            int pindex = GameLogic.FindPlayer(name);
+                            if (pindex == -1)
                             {
                                 Console.WriteLine("Player name is empty or invalid. [Name not found]");
                             }
                             else
                             {
-                                Database.ServerBanindex(Pindex);
+                                Database.ServerBanindex(pindex);
                             }
 
                             break;

@@ -13,24 +13,24 @@ namespace Client
             Data.Moral[index] = default;
 
             Data.Moral[index].Name = "";
-            GameState.Moral_Loaded[index] = 0;
+            GameState.MoralLoaded[index] = 0;
         }
 
         public static void ClearMorals()
         {
             int i;
 
-            Data.Moral = new Core.Type.Moral[(Constant.MAX_MORALS)];
+            Data.Moral = new Core.Type.Moral[(Constant.MaxMorals)];
 
-            for (i = 0; i < Constant.MAX_MORALS; i++)
+            for (i = 0; i < Constant.MaxMorals; i++)
                 ClearMoral(i);
         }
 
         public static void StreamMoral(int moralNum)
         {
-            if (moralNum >= 0 & string.IsNullOrEmpty(Data.Moral[moralNum].Name) && GameState.Moral_Loaded[moralNum] == 0)
+            if (moralNum >= 0 & string.IsNullOrEmpty(Data.Moral[moralNum].Name) && GameState.MoralLoaded[moralNum] == 0)
             {
-                GameState.Moral_Loaded[moralNum] = 1;
+                GameState.MoralLoaded[moralNum] = 1;
                 NetworkSend.SendRequestMoral(moralNum);
             }
         }

@@ -1117,50 +1117,50 @@ namespace Client
 
         private static bool CheckTileMatch(int layerNum, int x1, int y1, int x2, int y2)
         {
-            bool CheckTileMatchRet = default;
-            CheckTileMatchRet = true;
+            bool checkTileMatchRet = default;
+            checkTileMatchRet = true;
 
             // if it's off the map then set it as autotile and exit out early
             if (x2 < 0 | x2 > Data.MyMap.MaxX | y2 < 0 | y2 > Data.MyMap.MaxY)
             {
-                CheckTileMatchRet = true;
-                return CheckTileMatchRet;
+                checkTileMatchRet = true;
+                return checkTileMatchRet;
             }
 
             // fakes ALWAYS return true
             if (Data.MyMap.Tile[x2, y2].Layer[layerNum].AutoTile == GameState.AutotileFake)
             {
-                CheckTileMatchRet = true;
-                return CheckTileMatchRet;
+                checkTileMatchRet = true;
+                return checkTileMatchRet;
             }
 
             // check neighbour is an autotile
             if (Data.MyMap.Tile[x2, y2].Layer[layerNum].AutoTile == 0)
             {
-                CheckTileMatchRet = false;
-                return CheckTileMatchRet;
+                checkTileMatchRet = false;
+                return checkTileMatchRet;
             }
 
             // check we're a matching
             if (Data.MyMap.Tile[x1, y1].Layer[layerNum].Tileset != Data.MyMap.Tile[x2, y2].Layer[layerNum].Tileset)
             {
-                CheckTileMatchRet = false;
-                return CheckTileMatchRet;
+                checkTileMatchRet = false;
+                return checkTileMatchRet;
             }
 
             // check tiles match
             if (Data.MyMap.Tile[x1, y1].Layer[layerNum].X != Data.MyMap.Tile[x2, y2].Layer[layerNum].X)
             {
-                CheckTileMatchRet = false;
-                return CheckTileMatchRet;
+                checkTileMatchRet = false;
+                return checkTileMatchRet;
             }
             else if (Data.MyMap.Tile[x1, y1].Layer[layerNum].Y != Data.MyMap.Tile[x2, y2].Layer[layerNum].Y)
             {
-                CheckTileMatchRet = false;
-                return CheckTileMatchRet;
+                checkTileMatchRet = false;
+                return checkTileMatchRet;
             }
 
-            return CheckTileMatchRet;
+            return checkTileMatchRet;
         }
 
     }

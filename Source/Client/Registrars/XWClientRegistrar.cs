@@ -3,7 +3,7 @@ using Reoria.Engine.Container.Registrars;
 
 namespace Client.Registrars;
 
-public class XWClientRegistrar : IConfigurationRegistrar
+public class XwClientRegistrar : IConfigurationRegistrar
 {
     public void RegisterSources(IEngineConfigurationSources sources)
     {

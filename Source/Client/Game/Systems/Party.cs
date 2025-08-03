@@ -54,7 +54,7 @@ namespace Client
 
             // carry on otherwise
             Data.MyParty.Leader = buffer.ReadInt32();
-            for (i = 0; i < Constant.MAX_PARTY_MEMBERS; i++)
+            for (i = 0; i < Constant.MaxPartyMembers; i++)
                 Data.MyParty.Member[i] = buffer.ReadInt32();
             Data.MyParty.MemberCount = buffer.ReadInt32();
 
@@ -73,7 +73,7 @@ namespace Client
             playerNum = buffer.ReadInt32();
 
             // find the party number
-            for (int i = 0; i < Constant.MAX_PARTY_MEMBERS; i++)
+            for (int i = 0; i < Constant.MaxPartyMembers; i++)
             {
                 if (Data.MyParty.Member[i] == playerNum)
                 {
@@ -82,7 +82,7 @@ namespace Client
             }
 
             // exit out if wrong data
-            if (partyindex < 0 | partyindex >= Constant.MAX_PARTY_MEMBERS)
+            if (partyindex < 0 | partyindex >= Constant.MaxPartyMembers)
                 return;
 
             // set vitals

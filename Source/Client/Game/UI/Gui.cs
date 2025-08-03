@@ -28,14 +28,14 @@ namespace Client
         public static Core.Type.ControlPart DragBox;
 
         // Used for automatically the zOrder
-        public static long zOrder_Win;
-        public static long zOrder_Con;
+        public static long ZOrderWin;
+        public static long ZOrderCon;
 
         // Declare a timer to control when dragging can begin
-        private static Stopwatch dragTimer = new Stopwatch();
-        private const double dragInterval = 100d; // Set the interval in milliseconds to start dragging
-        private static bool canDrag = false;  // Flag to control when dragging is allowed
-        private static bool isDragging = false;
+        private static Stopwatch _dragTimer = new Stopwatch();
+        private const double DragInterval = 100d; // Set the interval in milliseconds to start dragging
+        private static bool _canDrag = false;  // Flag to control when dragging is allowed
+        private static bool _isDragging = false;
 
         public class Window
         {
@@ -53,14 +53,14 @@ namespace Client
             public bool CanDrag { get; set; }
             public Core.Font Font { get; set; }
             public string Text { get; set; }
-            public long xOffset { get; set; }
-            public long yOffset { get; set; }
+            public long XOffset { get; set; }
+            public long YOffset { get; set; }
             public long Icon { get; set; }
             public bool Enabled { get; set; }
             public long Value { get; set; }
             public long Group { get; set; }
-            public byte zChange { get; set; }
-            public long zOrder { get; set; }
+            public byte ZChange { get; set; }
+            public long ZOrder { get; set; }
             public Action OnDraw { get; set; }
             public bool Censor { get; set; }
             public bool ClickThrough { get; set; }
@@ -105,10 +105,10 @@ namespace Client
             public Color Color { get; set; }
             public long Alpha { get; set; }
             public bool ClickThrough { get; set; }
-            public long xOffset { get; set; }
-            public long yOffset { get; set; }
-            public byte zChange { get; set; }
-            public long zOrder { get; set; }
+            public long XOffset { get; set; }
+            public long YOffset { get; set; }
+            public byte ZChange { get; set; }
+            public long ZOrder { get; set; }
             public bool Enabled { get; set; }
             public Action OnDraw { get; set; }
             public string Tooltip { get; set; }
@@ -125,7 +125,7 @@ namespace Client
             public List<Action> CallBack { get; set; }
         }
 
-        public static void UpdateControl(long winNum, long zOrder, string name, Color color, ControlType tType, List<long> design, List<long> image, List<string> texture, List<Action> callback, long left = 0L, long top = 0L, long width = 0L, long height = 0L, bool visible = true, bool canDrag = false, long Max = 0L, long Min = 0L, long value = 0L, string text = "", Alignment align = 0, Core.Font font = Core.Font.Georgia, long alpha = 255L, bool clickThrough = false, long xOffset = 0L, long yOffset = 0L, byte zChange = 0, bool censor = false, long icon = 0L, Action onDraw = null, bool isActive = true, string tooltip = "", long @group = 0L, byte length = Constant.NAME_LENGTH, bool enabled = true)
+        public static void UpdateControl(long winNum, long zOrder, string name, Color color, ControlType tType, List<long> design, List<long> image, List<string> texture, List<Action> callback, long left = 0L, long top = 0L, long width = 0L, long height = 0L, bool visible = true, bool canDrag = false, long max = 0L, long min = 0L, long value = 0L, string text = "", Alignment align = 0, Core.Font font = Core.Font.Georgia, long alpha = 255L, bool clickThrough = false, long xOffset = 0L, long yOffset = 0L, byte zChange = 0, bool censor = false, long icon = 0L, Action onDraw = null, bool isActive = true, string tooltip = "", long @group = 0L, byte length = Constant.NameLength, bool enabled = true)
         {
 
             // Ensure the window exists in the Windows collection
@@ -145,8 +145,8 @@ namespace Client
                 Height = (long)(height * SettingsManager.Instance.Scale),
                 Visible = visible,
                 CanDrag = canDrag,
-                Max = Max,
-                Min = Min,
+                Max = max,
+                Min = min,
                 Value = value,
                 Text = text,
                 Length = length,
@@ -155,10 +155,10 @@ namespace Client
                 Color = color,
                 Alpha = alpha,
                 ClickThrough = clickThrough,
-                xOffset = xOffset,
-                yOffset = yOffset,
-                zChange = zChange,
-                zOrder = zOrder,
+                XOffset = xOffset,
+                YOffset = yOffset,
+                ZChange = zChange,
+                ZOrder = zOrder,
                 Enabled = enabled,
                 OnDraw = onDraw,
                 Tooltip = tooltip,
@@ -184,7 +184,7 @@ namespace Client
                 Windows[winNum].ActiveControl = Windows[winNum].Controls.Count - 1;
 
             // set the zOrder
-            zOrder_Con = zOrder_Con + 1L;
+            ZOrderCon = ZOrderCon + 1L;
         }
 
         public static void UpdateZOrder(long winNum, bool forced = false)
@@ -197,25 +197,25 @@ namespace Client
 
                 if (!forced)
                 {
-                    if (withBlock.zChange == 0)
+                    if (withBlock.ZChange == 0)
                         return;
                 }
 
-                if (withBlock.zOrder == Gui.Windows.Count - 1)
+                if (withBlock.ZOrder == Gui.Windows.Count - 1)
                     return;
 
-                oldZOrder = withBlock.zOrder;
+                oldZOrder = withBlock.ZOrder;
 
                 var loopTo = Gui.Windows.Count;
                 for (i = 1L; i <= loopTo; i++)
                 {
 
-                    if (Windows[i].zOrder > oldZOrder)
+                    if (Windows[i].ZOrder > oldZOrder)
                     {
-                        Windows[i].zOrder = Windows[i].zOrder - 1L;
+                        Windows[i].ZOrder = Windows[i].ZOrder - 1L;
                     }
                 }
-                withBlock.zOrder = Gui.Windows.Count - 1;
+                withBlock.ZOrder = Gui.Windows.Count - 1;
             }
         }
 
@@ -231,7 +231,7 @@ namespace Client
                 var loopTo = Gui.Windows.Count - 1;
                 for (i = 1L; i <= loopTo; i++)
                 {
-                    if (Windows[i].zOrder > Windows[i + 1L].zOrder)
+                    if (Windows[i].ZOrder > Windows[i + 1L].ZOrder)
                     {
                         tempWindow = Windows[i];
                         Windows[i] = Windows[i + 1L];
@@ -252,7 +252,7 @@ namespace Client
             Windows[Conversions.ToLong(winName)].Controls[(int)controlIndex].List.Add(text);
         }
 
-        public static void UpdateWindow(string name, string caption, Core.Font font, long zOrder, long left, long top, long width, long height, long icon, bool visible = true, long xOffset = 0L, long yOffset = 0L, long design_norm = 0L, long design_hover = 0L, long design_mousedown = 0L, long image_norm = 0L, long image_hover = 0L, long image_mousedown = 0L, Action callback_norm = null, Action callback_hover = null, Action callback_mousemove = null, Action callback_mousedown = null, Action callback_dblclick = null, Action onDraw = null, bool canDrag = true, byte zChange = 1, bool isActive = true, bool clickThrough = false)
+        public static void UpdateWindow(string name, string caption, Core.Font font, long zOrder, long left, long top, long width, long height, long icon, bool visible = true, long xOffset = 0L, long yOffset = 0L, long designNorm = 0L, long designHover = 0L, long designMousedown = 0L, long imageNorm = 0L, long imageHover = 0L, long imageMousedown = 0L, Action callbackNorm = null, Action callbackHover = null, Action callbackMousemove = null, Action callbackMousedown = null, Action callbackDblclick = null, Action onDraw = null, bool canDrag = true, byte zChange = 1, bool isActive = true, bool clickThrough = false)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount));
@@ -261,17 +261,17 @@ namespace Client
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount));
 
             // Assign specific values for each state
-            design[(int)ControlState.Normal] = design_norm;
-            design[(int)ControlState.Hover] = design_hover;
-            design[(int)ControlState.MouseDown] = design_mousedown;
-            image[(int)ControlState.Normal] = image_norm;
-            image[(int)ControlState.Hover] = image_hover;
-            image[(int)ControlState.MouseDown] = image_mousedown;
-            callback[(int)ControlState.Normal] = callback_norm;
-            callback[(int)ControlState.Hover] = callback_hover;
-            callback[(int)ControlState.MouseDown] = callback_mousedown;
-            callback[(int)ControlState.MouseMove] = callback_mousemove;
-            callback[(int)ControlState.DoubleClick] = callback_dblclick;
+            design[(int)ControlState.Normal] = designNorm;
+            design[(int)ControlState.Hover] = designHover;
+            design[(int)ControlState.MouseDown] = designMousedown;
+            image[(int)ControlState.Normal] = imageNorm;
+            image[(int)ControlState.Hover] = imageHover;
+            image[(int)ControlState.MouseDown] = imageMousedown;
+            callback[(int)ControlState.Normal] = callbackNorm;
+            callback[(int)ControlState.Hover] = callbackHover;
+            callback[(int)ControlState.MouseDown] = callbackMousedown;
+            callback[(int)ControlState.MouseMove] = callbackMousemove;
+            callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
             // Create a new instance of Window and populate it
             var newWindow = new Window()
@@ -288,12 +288,12 @@ namespace Client
                 CanDrag = canDrag,
                 Font = font,
                 Text = caption,
-                xOffset = xOffset,
-                yOffset = yOffset,
+                XOffset = xOffset,
+                YOffset = yOffset,
                 Icon = icon,
                 Enabled = true,
-                zChange = zChange,
-                zOrder = zOrder,
+                ZChange = zChange,
+                ZOrder = zOrder,
                 OnDraw = onDraw,
                 ClickThrough = clickThrough,
                 Design = design,
@@ -309,7 +309,7 @@ namespace Client
                 ActiveWindow = Gui.Windows.Count;
         }
 
-        public static void UpdateTextbox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool isActive, [Optional, DefaultParameterValue(0L)] long xOffset, [Optional, DefaultParameterValue(0L)] long yOffset, [Optional, DefaultParameterValue(0L)] long image_norm, [Optional, DefaultParameterValue(0L)] long image_hover, [Optional, DefaultParameterValue(0L)] long image_mousedown, [Optional, DefaultParameterValue(0L)] long design_norm, [Optional, DefaultParameterValue(0L)] long design_hover, [Optional, DefaultParameterValue(0L)] long design_mousedown, [Optional, DefaultParameterValue(false)] bool censor, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(Constant.NAME_LENGTH)] byte length, [Optional] ref Action callback_norm, [Optional] ref Action callback_hover, [Optional] ref Action callback_mousedown, [Optional] ref Action callback_mousemove, [Optional] ref Action callback_dblclick, [Optional] ref Action callback_enter)
+        public static void UpdateTextbox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool isActive, [Optional, DefaultParameterValue(0L)] long xOffset, [Optional, DefaultParameterValue(0L)] long yOffset, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional, DefaultParameterValue(false)] bool censor, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(Constant.NameLength)] byte length, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref Action callbackEnter)
         {
             var stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
@@ -318,25 +318,25 @@ namespace Client
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
             // Assign specific values for each state
-            design[(int)ControlState.Normal] = design_norm;
-            design[(int)ControlState.Hover] = design_hover;
-            design[(int)ControlState.MouseDown] = design_mousedown;
-            image[(int)ControlState.Normal] = image_norm;
-            image[(int)ControlState.Hover] = image_hover;
-            image[(int)ControlState.MouseDown] = image_mousedown;
-            callback[(int)ControlState.Normal] = callback_norm;
-            callback[(int)ControlState.Hover] = callback_hover;
-            callback[(int)ControlState.MouseDown] = callback_mousedown;
-            callback[(int)ControlState.MouseMove] = callback_mousemove;
-            callback[(int)ControlState.DoubleClick] = callback_dblclick;
-            callback[(int)ControlState.FocusEnter] = callback_enter;
+            design[(int)ControlState.Normal] = designNorm;
+            design[(int)ControlState.Hover] = designHover;
+            design[(int)ControlState.MouseDown] = designMousedown;
+            image[(int)ControlState.Normal] = imageNorm;
+            image[(int)ControlState.Hover] = imageHover;
+            image[(int)ControlState.MouseDown] = imageMousedown;
+            callback[(int)ControlState.Normal] = callbackNorm;
+            callback[(int)ControlState.Hover] = callbackHover;
+            callback[(int)ControlState.MouseDown] = callbackMousedown;
+            callback[(int)ControlState.MouseMove] = callbackMousemove;
+            callback[(int)ControlState.DoubleClick] = callbackDblclick;
+            callback[(int)ControlState.FocusEnter] = callbackEnter;
 
             // Control the textbox
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.TextBox, design, image, texture, callback, left, top, width, height, visible, text: text, align: align, font: font, alpha: alpha, xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, isActive: isActive, length: length);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.TextBox, design, image, texture, callback, left, top, width, height, visible, text: text, align: align, font: font, alpha: alpha, xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, isActive: isActive, length: length);
         }
 
 
-        public static void UpdatePictureBox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(false)] bool canDrag, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool clickThrough, [Optional, DefaultParameterValue(0L)] long image_norm, [Optional, DefaultParameterValue(0L)] long image_hover, [Optional, DefaultParameterValue(0L)] long image_mousedown, [Optional, DefaultParameterValue(0L)] long design_norm, [Optional, DefaultParameterValue(0L)] long design_hover, [Optional, DefaultParameterValue(0L)] long design_mousedown, [Optional, DefaultParameterValue("")] string texturePath, [Optional] ref Action callback_norm, [Optional] ref Action callback_hover, [Optional] ref Action callback_mousedown, [Optional] ref Action callback_mousemove, [Optional] ref Action callback_dblclick, [Optional] ref Action onDraw)
+        public static void UpdatePictureBox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(false)] bool canDrag, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool clickThrough, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional, DefaultParameterValue("")] string texturePath, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref Action onDraw)
         {
             var stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount));
@@ -350,27 +350,27 @@ namespace Client
             }
 
             // fill temp arrays
-            design[(int)ControlState.Normal] = design_norm;
-            design[(int)ControlState.Hover] = design_hover;
-            design[(int)ControlState.MouseDown] = design_mousedown;
-            image[(int)ControlState.Normal] = image_norm;
-            image[(int)ControlState.Hover] = image_hover;
-            image[(int)ControlState.MouseDown] = image_mousedown;
+            design[(int)ControlState.Normal] = designNorm;
+            design[(int)ControlState.Hover] = designHover;
+            design[(int)ControlState.MouseDown] = designMousedown;
+            image[(int)ControlState.Normal] = imageNorm;
+            image[(int)ControlState.Hover] = imageHover;
+            image[(int)ControlState.MouseDown] = imageMousedown;
             texture[(int)ControlState.Normal] = texturePath;
             texture[(int)ControlState.Hover] = texturePath;
             texture[(int)ControlState.MouseDown] = texturePath;
 
-            callback[(int)ControlState.Normal] = callback_norm;
-            callback[(int)ControlState.Hover] = callback_hover;
-            callback[(int)ControlState.MouseDown] = callback_mousedown;
-            callback[(int)ControlState.MouseMove] = callback_mousemove;
-            callback[(int)ControlState.DoubleClick] = callback_dblclick;
+            callback[(int)ControlState.Normal] = callbackNorm;
+            callback[(int)ControlState.Hover] = callbackHover;
+            callback[(int)ControlState.MouseDown] = callbackMousedown;
+            callback[(int)ControlState.MouseMove] = callbackMousemove;
+            callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
             // Control the box
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.PictureBox, design, image, texture, callback, left, top, width, height, visible, canDrag, alpha: alpha, clickThrough: clickThrough, xOffset: 0L, yOffset: 0L, onDraw: onDraw);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.PictureBox, design, image, texture, callback, left, top, width, height, visible, canDrag, alpha: alpha, clickThrough: clickThrough, xOffset: 0L, yOffset: 0L, onDraw: onDraw);
         }
 
-        public static void UpdateButton(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(0L)] long image_norm, [Optional, DefaultParameterValue(0L)] long image_hover, [Optional, DefaultParameterValue(0L)] long image_mousedown, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long design_norm, [Optional, DefaultParameterValue(0L)] long design_hover, [Optional, DefaultParameterValue(0L)] long design_mousedown, [Optional] ref Action callback_norm, [Optional] ref Action callback_hover, [Optional] ref Action callback_mousedown, [Optional] ref Action callback_mousemove, [Optional] ref Action callback_dblclick, long xOffset = 0L, long yOffset = 0L, string tooltip = "", bool censor = false)
+        public static void UpdateButton(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, long xOffset = 0L, long yOffset = 0L, string tooltip = "", bool censor = false)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
@@ -379,26 +379,26 @@ namespace Client
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
             // fill temp arrays
-            design[(int)ControlState.Normal] = design_norm;
-            design[(int)ControlState.Hover] = design_hover;
-            design[(int)ControlState.MouseDown] = design_mousedown;
-            image[(int)ControlState.Normal] = image_norm;
-            image[(int)ControlState.Hover] = image_hover;
-            image[(int)ControlState.MouseDown] = image_mousedown;
+            design[(int)ControlState.Normal] = designNorm;
+            design[(int)ControlState.Hover] = designHover;
+            design[(int)ControlState.MouseDown] = designMousedown;
+            image[(int)ControlState.Normal] = imageNorm;
+            image[(int)ControlState.Hover] = imageHover;
+            image[(int)ControlState.MouseDown] = imageMousedown;
             texture[(int)ControlState.Normal] = Path.Gui;
             texture[(int)ControlState.Hover] = Path.Gui;
             texture[(int)ControlState.MouseDown] = Path.Gui;
-            callback[(int)ControlState.Normal] = callback_norm;
-            callback[(int)ControlState.Hover] = callback_hover;
-            callback[(int)ControlState.MouseDown] = callback_mousedown;
-            callback[(int)ControlState.MouseMove] = callback_mousemove;
-            callback[(int)ControlState.DoubleClick] = callback_dblclick;
+            callback[(int)ControlState.Normal] = callbackNorm;
+            callback[(int)ControlState.Hover] = callbackHover;
+            callback[(int)ControlState.MouseDown] = callbackMousedown;
+            callback[(int)ControlState.MouseMove] = callbackMousemove;
+            callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
             // Control the button 
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.Button, design, image, texture, callback, left, top, width, height, visible, text: text, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, tooltip: tooltip);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.Button, design, image, texture, callback, left, top, width, height, visible, text: text, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, tooltip: tooltip);
         }
 
-        public static void UpdateLabel(long winNum, string name, long left, long top, long width, long height, string text, Core.Font font, Color color, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(false)] bool clickThrough, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callback_norm, [Optional] ref Action callback_hover, [Optional] ref Action callback_mousedown, [Optional] ref Action callback_mousemove, [Optional] ref Action callback_dblclick, [Optional] ref bool enabled)
+        public static void UpdateLabel(long winNum, string name, long left, long top, long width, long height, string text, Core.Font font, Color color, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(false)] bool clickThrough, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref bool enabled)
         {
             int controlStateCount = Enum.GetValues(typeof(ControlState)).Length;
             var designLabel = new List<long>(Enumerable.Repeat(0L, controlStateCount).ToList());
@@ -407,17 +407,17 @@ namespace Client
             var callbackLabel = new List<Action>(Enumerable.Repeat((Action)null, controlStateCount).ToList());
 
             // fill temp arrays
-            callbackLabel[(int)ControlState.Normal] = callback_norm;
-            callbackLabel[(int)ControlState.Hover] = callback_hover;
-            callbackLabel[(int)ControlState.MouseDown] = callback_mousedown;
-            callbackLabel[(int)ControlState.MouseMove] = callback_mousemove;
-            callbackLabel[(int)ControlState.DoubleClick] = callback_dblclick;
+            callbackLabel[(int)ControlState.Normal] = callbackNorm;
+            callbackLabel[(int)ControlState.Hover] = callbackHover;
+            callbackLabel[(int)ControlState.MouseDown] = callbackMousedown;
+            callbackLabel[(int)ControlState.MouseMove] = callbackMousemove;
+            callbackLabel[(int)ControlState.DoubleClick] = callbackDblclick;
 
             // Control the label
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.Label, designLabel, imageLabel, textureLabel, callbackLabel, left, top, width, height, visible, text: text, align: align, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: Conversions.ToLong(clickThrough), censor: censor, enabled: enabled);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.Label, designLabel, imageLabel, textureLabel, callbackLabel, left, top, width, height, visible, text: text, align: align, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: Conversions.ToLong(clickThrough), censor: censor, enabled: enabled);
         }
 
-        public static void UpdateCheckBox(long winNum, string name, long left, long top, long width, [Optional, DefaultParameterValue(15L)] long height, [Optional, DefaultParameterValue(0L)] long value, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long theDesign, [Optional, DefaultParameterValue(0L)] long @group, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callback_norm, [Optional] ref Action callback_hover, [Optional] ref Action callback_mousedown, [Optional] ref Action callback_mousemove, [Optional] ref Action callback_dblclick)
+        public static void UpdateCheckBox(long winNum, string name, long left, long top, long width, [Optional, DefaultParameterValue(15L)] long height, [Optional, DefaultParameterValue(0L)] long value, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long theDesign, [Optional, DefaultParameterValue(0L)] long @group, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
@@ -429,14 +429,14 @@ namespace Client
             texture[0] = Path.Gui;
 
             // fill temp arrays
-            callback[(int)ControlState.Normal] = callback_norm;
-            callback[(int)ControlState.Hover] = callback_hover;
-            callback[(int)ControlState.MouseDown] = callback_mousedown;
-            callback[(int)ControlState.MouseMove] = callback_mousemove;
-            callback[(int)ControlState.DoubleClick] = callback_dblclick;
+            callback[(int)ControlState.Normal] = callbackNorm;
+            callback[(int)ControlState.Hover] = callbackHover;
+            callback[(int)ControlState.MouseDown] = callbackMousedown;
+            callback[(int)ControlState.MouseMove] = callbackMousemove;
+            callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
             // Control the box
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.Checkbox, design, image, texture, callback, left, top, width, height, visible, value: value, text: text, align: align, font: font, clickThrough: Conversions.ToBoolean(alpha), censor: censor, @group: group);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.Checkbox, design, image, texture, callback, left, top, width, height, visible, value: value, text: text, align: align, font: font, clickThrough: Conversions.ToBoolean(alpha), censor: censor, @group: group);
         }
 
         public static void UpdateComboBox(long winNum, string name, long left, long top, long width, long height, long design)
@@ -455,20 +455,20 @@ namespace Client
             texture[0] = Path.Gui;
 
             // Update the control in the window using the updated lists
-            UpdateControl(winNum, zOrder_Con, name, Color.White, ControlType.ComboMenu, theDesign, image, texture, callback, left, top, width, height);
+            UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.ComboMenu, theDesign, image, texture, callback, left, top, width, height);
         }
 
         public static int GetWindowIndex(string winName)
         {
-            int GetWindowIndexRet = default;
+            int getWindowIndexRet = default;
 
             var loopTo = Gui.Windows.Count - 1;
             for (int i = 0; i <= loopTo; i++)
             {
                 if ((Strings.LCase(Windows[i + 1].Name) ?? "") == (Strings.LCase(winName) ?? ""))
                 {
-                    GetWindowIndexRet = i + 1;
-                    return GetWindowIndexRet;
+                    getWindowIndexRet = i + 1;
+                    return getWindowIndexRet;
                 }
 
             }
@@ -479,7 +479,7 @@ namespace Client
 
         public static int GetControlIndex(string winName, string controlName)
         {
-            int GetControlIndexRet = default;
+            int getControlIndexRet = default;
             int winIndex;
 
             winIndex = GetWindowIndex(winName);
@@ -490,8 +490,8 @@ namespace Client
 
                 if ((Strings.LCase(Windows[winIndex].Controls[(int)i].Name) ?? "") == (Strings.LCase(controlName) ?? ""))
                 {
-                    GetControlIndexRet = i;
-                    return GetControlIndexRet;
+                    getControlIndexRet = i;
+                    return getControlIndexRet;
                 }
 
             }
@@ -502,7 +502,7 @@ namespace Client
 
         public static bool SetActiveControl(long curWindow, long curControl)
         {
-            bool SetActiveControlRet = default;
+            bool setActiveControlRet = default;
             // make sure it's something which CAN be active
             switch (Windows[curWindow].Controls[(int)curControl].Type)
             {
@@ -510,12 +510,12 @@ namespace Client
                     {
                         Windows[curWindow].LastControl = Windows[curWindow].ActiveControl;
                         Windows[curWindow].ActiveControl = (int)curControl;
-                        SetActiveControlRet = true;
+                        setActiveControlRet = true;
                         break;
                     }
             }
 
-            return SetActiveControlRet;
+            return setActiveControlRet;
         }
 
         public static int ActivateControl(int startIndex = 0, bool skipLast = true)
@@ -598,7 +598,7 @@ namespace Client
                 UpdateZOrder(curWindow, forced);
                 ActiveWindow = curWindow;
             }
-            else if (Conversions.ToBoolean(Windows[curWindow].zChange))
+            else if (Conversions.ToBoolean(Windows[curWindow].ZChange))
             {
                 UpdateZOrder(curWindow);
                 ActiveWindow = curWindow;
@@ -623,7 +623,7 @@ namespace Client
             // find next window to set as active
             for (i = Gui.Windows.Count - 1; i >= 1L; i += -1)
             {
-                if (Windows[i].Visible == true & Windows[i].zChange == 1)
+                if (Windows[i].Visible == true & Windows[i].ZChange == 1)
                 {
                     ActiveWindow = i;
                     break;
@@ -638,11 +638,11 @@ namespace Client
             Gui.Windows = new ConcurrentDictionary<long, Window>();
 
             // Starter values
-            zOrder_Win = 0L;
-            zOrder_Con = 0L;
+            ZOrderWin = 0L;
+            ZOrderCon = 0L;
 
             // Menu (dynamic UI initialization via Script.Instance)
-            dynamic ui = UI.Instance;
+            dynamic ui = Ui.Instance;
             ui?.UpdateWindow_Menu();
             ui?.UpdateWindow_Register();
             ui?.UpdateWindow_Login();
@@ -681,25 +681,25 @@ namespace Client
             // Check for MouseDown to start the drag timer
             if (GameClient.IsMouseButtonDown(MouseButton.Left) && GameClient.PreviousMouseState.LeftButton == Microsoft.Xna.Framework.Input.ButtonState.Released)
             {
-                dragTimer.Restart(); // Start the timer on initial mouse down
-                canDrag = false; // Reset drag flag to ensure it doesn't drag immediately
+                _dragTimer.Restart(); // Start the timer on initial mouse down
+                _canDrag = false; // Reset drag flag to ensure it doesn't drag immediately
             }
 
             // Check for MouseUp to reset dragging
             if (GameClient.IsMouseButtonUp(MouseButton.Left))
             {
-                isDragging = false;
-                dragTimer.Reset(); // Stop the timer on mouse up
+                _isDragging = false;
+                _dragTimer.Reset(); // Stop the timer on mouse up
             }
 
             // Enable dragging if the mouse has been held down for the specified interval
-            if (dragTimer.ElapsedMilliseconds >= dragInterval)
+            if (_dragTimer.ElapsedMilliseconds >= DragInterval)
             {
-                canDrag = true;
+                _canDrag = true;
             }
             else
             {
-                canDrag = false;
+                _canDrag = false;
             }
 
             lock (GameClient.InputLock)
@@ -730,10 +730,10 @@ namespace Client
                             }
 
                             // Track the top-most window
-                            if (curWindow == 0L || withBlock.zOrder > Windows[curWindow].zOrder)
+                            if (curWindow == 0L || withBlock.ZOrder > Windows[curWindow].ZOrder)
                             {
                                 curWindow = i;
-                                isDragging = true;
+                                _isDragging = true;
                             }
 
                             if (ActiveWindow > 0)
@@ -751,10 +751,10 @@ namespace Client
                         // Handle window dragging only if dragging is enabled
                         if (entState == ControlState.MouseMove && GameClient.IsMouseButtonDown(MouseButton.Left))
                         {
-                            if (ActiveWindow > 0 && isDragging)
+                            if (ActiveWindow > 0 && _isDragging)
                             {
                                 withBlock = Windows[ActiveWindow];
-                                if (canDrag && withBlock.CanDrag && withBlock.Enabled && withBlock.Visible)
+                                if (_canDrag && withBlock.CanDrag && withBlock.Enabled && withBlock.Visible)
                                 {
                                     withBlock.Left = GameLogic.Clamp((int)(withBlock.Left + (GameState.CurMouseX - withBlock.Left - withBlock.MovedX)), 0, (int)(GameState.ResolutionWidth - withBlock.Width));
                                     withBlock.Top = GameLogic.Clamp((int)(withBlock.Top + (GameState.CurMouseY - withBlock.Top - withBlock.MovedY)), 0, (int)(GameState.ResolutionHeight - withBlock.Height));
@@ -785,16 +785,16 @@ namespace Client
                             {
                                 if (GameState.CurMouseX >= withBlock1.Left + Windows[curWindow].Left && GameState.CurMouseX <= withBlock1.Left + withBlock1.Width + Windows[curWindow].Left && GameState.CurMouseY >= withBlock1.Top + Windows[curWindow].Top && GameState.CurMouseY <= withBlock1.Top + withBlock1.Height + Windows[curWindow].Top)
                                 {
-                                    if (curControl == 0L || withBlock1.zOrder > Windows[curWindow].Controls[(int)curControl].zOrder)
+                                    if (curControl == 0L || withBlock1.ZOrder > Windows[curWindow].Controls[(int)curControl].ZOrder)
                                     {
                                         curControl = i;
                                     }
                                 }
 
-                                if (isDragging)
+                                if (_isDragging)
                                 {
                                     // Handle control dragging only if dragging is enabled
-                                    if (entState == ControlState.MouseMove && withBlock1.CanDrag && canDrag && GameClient.IsMouseButtonDown(MouseButton.Left))
+                                    if (entState == ControlState.MouseMove && withBlock1.CanDrag && _canDrag && GameClient.IsMouseButtonDown(MouseButton.Left))
                                     {
                                         withBlock1.Left = GameLogic.Clamp((int)(withBlock1.Left + (GameState.CurMouseX - withBlock1.Left - withBlock1.MovedX)), 0, (int)(Windows[curWindow].Width - withBlock1.Width));
                                         withBlock1.Top = GameLogic.Clamp((int)(withBlock1.Top + (GameState.CurMouseY - withBlock1.Top - withBlock1.MovedY)), 0, (int)(Windows[curWindow].Height - withBlock1.Height));
@@ -968,7 +968,7 @@ namespace Client
             {
                 for (int i = 1, loopTo1 = Gui.Windows.Count; i <= loopTo1; i++)
                 {
-                    if (curZOrder == Windows[i].zOrder && Windows[i].Visible)
+                    if (curZOrder == Windows[i].ZOrder && Windows[i].Visible)
                     {
                         // Render the window
                         RenderWindow(i);
@@ -990,8 +990,8 @@ namespace Client
         {
             long xO;
             long yO;
-            double hor_centre;
-            double ver_centre;
+            double horCentre;
+            double verCentre;
             double height;
             double width;
             var textArray = default(string[]);
@@ -1065,8 +1065,8 @@ namespace Client
                             float actualHeight = actualSize.Y;
 
                             // Apply padding and calculate position
-                            left = withBlock.Left + xO + withBlock.xOffset;
-                            double top = withBlock.Top + yO + withBlock.yOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
+                            left = withBlock.Left + xO + withBlock.XOffset;
+                            double top = withBlock.Top + yO + withBlock.YOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
 
                             // Render the final text
                             Text.RenderText(finalText, (int)left, (int)Math.Round(top), withBlock.Color, Color.Black, withBlock.Font);
@@ -1098,7 +1098,7 @@ namespace Client
                                 int iconHeight = gfxInfo.Height;
 
                                 string argpath3 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
-                                GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + xO + withBlock.xOffset), (int)(withBlock.Top + yO + withBlock.yOffset), 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
+                                GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + xO + withBlock.XOffset), (int)(withBlock.Top + yO + withBlock.YOffset), 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
                             }
 
                             // Measure button text size and apply padding
@@ -1108,9 +1108,9 @@ namespace Client
 
                             // Calculate horizontal and vertical centers with padding
                             double padding = (double)actualWidth / 6.0d;
-                            double horCentre = withBlock.Left + xO + withBlock.xOffset + (double)(withBlock.Width - actualWidth) / 2.0d + padding - 4d;
+                            horCentre = withBlock.Left + xO + withBlock.XOffset + (double)(withBlock.Width - actualWidth) / 2.0d + padding - 4d;
                             padding = (double)actualHeight / 6.0d;
-                            double verCentre = withBlock.Top + yO + withBlock.yOffset + (double)(withBlock.Height - actualHeight) / 2.0d + padding;
+                            verCentre = withBlock.Top + yO + withBlock.YOffset + (double)(withBlock.Height - actualHeight) / 2.0d + padding;
 
                             // Render the button's text
                             Text.RenderText(withBlock.Text, (int)Math.Round(horCentre), (int)Math.Round(verCentre), withBlock.Color, Color.Black, withBlock.Font);
@@ -1135,9 +1135,9 @@ namespace Client
                                                     var actualSize = Text.Fonts[withBlock.Font].MeasureString(FilterUnsupportedCharacters(textArray[(int)i], withBlock.Font));
                                                     float actualWidth = actualSize.X;
                                                     double padding = (double)actualWidth / 6.0d;
-                                                    left = (long)Math.Round(withBlock.Left + xO + withBlock.xOffset + padding);
+                                                    left = (long)Math.Round(withBlock.Left + xO + withBlock.XOffset + padding);
 
-                                                    Text.RenderText(textArray[(int)i], (int)left, (int)(withBlock.Top + yO + withBlock.yOffset + yOffset), withBlock.Color, Color.Black, withBlock.Font);
+                                                    Text.RenderText(textArray[(int)i], (int)left, (int)(withBlock.Top + yO + withBlock.YOffset + yOffset), withBlock.Color, Color.Black, withBlock.Font);
                                                     yOffset += 14L;
                                                 }
                                             }
@@ -1145,9 +1145,9 @@ namespace Client
                                             {
                                                 var actualSize = Text.Fonts[withBlock.Font].MeasureString(withBlock.Text);
                                                 float actualWidth = actualSize.X;
-                                                left = withBlock.Left + xO + withBlock.xOffset;
+                                                left = withBlock.Left + xO + withBlock.XOffset;
 
-                                                Text.RenderText(withBlock.Text, (int)left, (int)(withBlock.Top + yO + withBlock.yOffset), withBlock.Color, Color.Black, withBlock.Font);
+                                                Text.RenderText(withBlock.Text, (int)left, (int)(withBlock.Top + yO + withBlock.YOffset), withBlock.Color, Color.Black, withBlock.Font);
                                             }
 
                                             break;
@@ -1165,9 +1165,9 @@ namespace Client
                                                     var actualSize = Text.Fonts[withBlock.Font].MeasureString(textArray[(int)i]);
                                                     float actualWidth = actualSize.X;
                                                     double padding = (double)actualWidth / 6.0d;
-                                                    left = (long)Math.Round((double)(withBlock.Left + withBlock.Width - actualWidth + xO + withBlock.xOffset) + padding);
+                                                    left = (long)Math.Round((double)(withBlock.Left + withBlock.Width - actualWidth + xO + withBlock.XOffset) + padding);
 
-                                                    Text.RenderText(textArray[(int)i], (int)left, (int)(withBlock.Top + yO + withBlock.yOffset + yOffset), withBlock.Color, Color.Black, withBlock.Font);
+                                                    Text.RenderText(textArray[(int)i], (int)left, (int)(withBlock.Top + yO + withBlock.YOffset + yOffset), withBlock.Color, Color.Black, withBlock.Font);
                                                     yOffset += 14L;
                                                 }
                                             }
@@ -1175,9 +1175,9 @@ namespace Client
                                             {
                                                 var actualSize = Text.Fonts[withBlock.Font].MeasureString(FilterUnsupportedCharacters(withBlock.Text, withBlock.Font));
                                                 float actualWidth = actualSize.X;
-                                                left = (long)Math.Round(withBlock.Left + withBlock.Width - actualSize.X + xO + withBlock.xOffset);
+                                                left = (long)Math.Round(withBlock.Left + withBlock.Width - actualSize.X + xO + withBlock.XOffset);
 
-                                                Text.RenderText(withBlock.Text, (int)left, (int)(withBlock.Top + yO + withBlock.yOffset), withBlock.Color, Color.Black, withBlock.Font);
+                                                Text.RenderText(withBlock.Text, (int)left, (int)(withBlock.Top + yO + withBlock.YOffset), withBlock.Color, Color.Black, withBlock.Font);
                                             }
 
                                             break;
@@ -1197,8 +1197,8 @@ namespace Client
                                                     float actualWidth = actualSize.X;
                                                     float actualHeight = actualSize.Y;
                                                     double padding = (double)actualWidth / 8.0d;
-                                                    left = (long)Math.Round(withBlock.Left + (double)(withBlock.Width - actualWidth) / 2.0d + xO + withBlock.xOffset + padding - 4d);
-                                                    double top = withBlock.Top + yO + withBlock.yOffset + yOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
+                                                    left = (long)Math.Round(withBlock.Left + (double)(withBlock.Width - actualWidth) / 2.0d + xO + withBlock.XOffset + padding - 4d);
+                                                    double top = withBlock.Top + yO + withBlock.YOffset + yOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
 
                                                     Text.RenderText(textArray[(int)i], (int)left, (int)Math.Round(top), withBlock.Color, Color.Black, withBlock.Font);
                                                     yOffset += 14L;
@@ -1210,8 +1210,8 @@ namespace Client
                                                 float actualWidth = actualSize.X;
                                                 float actualHeight = actualSize.Y;
                                                 double padding = (double)actualWidth / 8.0d;
-                                                left = (long)Math.Round(withBlock.Left + (double)(withBlock.Width - actualWidth) / 2.0d + xO + withBlock.xOffset + padding - 4d);
-                                                double top = withBlock.Top + yO + withBlock.yOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
+                                                left = (long)Math.Round(withBlock.Left + (double)(withBlock.Width - actualWidth) / 2.0d + xO + withBlock.XOffset + padding - 4d);
+                                                double top = withBlock.Top + yO + withBlock.YOffset + (double)(withBlock.Height - actualHeight) / 2.0d;
 
                                                 Text.RenderText(withBlock.Text, (int)left, (int)Math.Round(top), withBlock.Color, Color.Black, withBlock.Font);
                                             }
@@ -1414,7 +1414,7 @@ namespace Client
                             RenderDesign((long)UiDesign.Wood, withBlock.Left, withBlock.Top, withBlock.Width, withBlock.Height);
                             RenderDesign((long)UiDesign.Green, withBlock.Left, withBlock.Top, withBlock.Width, 23L);
                             string argpath3 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
-                            GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + withBlock.xOffset), (int)(withBlock.Top - 16L + withBlock.yOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
+                            GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + withBlock.XOffset), (int)(withBlock.Top - 16L + withBlock.YOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
                             Text.RenderText(withBlock.Text, (int)(withBlock.Left + 32L), (int)(withBlock.Top + 4L), Color.White, Color.Black);
                             break;
                         }
@@ -1430,7 +1430,7 @@ namespace Client
                             RenderDesign((long)UiDesign.WoodEmpty, withBlock.Left, withBlock.Top, withBlock.Width, withBlock.Height);
                             RenderDesign((long)UiDesign.Green, withBlock.Left, withBlock.Top, withBlock.Width, 23L);
                             string argpath4 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
-                            GameClient.RenderTexture(ref argpath4, (int)(withBlock.Left + withBlock.xOffset), (int)(withBlock.Top - 16L + withBlock.yOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
+                            GameClient.RenderTexture(ref argpath4, (int)(withBlock.Left + withBlock.XOffset), (int)(withBlock.Top - 16L + withBlock.YOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
                             Text.RenderText(withBlock.Text, (int)(withBlock.Left + 32L), (int)(withBlock.Top + 4L), Color.White, Color.Black);
                             break;
                         }
@@ -1757,7 +1757,7 @@ namespace Client
 
         }
 
-        public static void RenderControl_Square(int sprite, long x, long y, long width, long height, long borderSize, long alpha = 255L, int windowID = 0)
+        public static void RenderControl_Square(int sprite, long x, long y, long width, long height, long borderSize, long alpha = 255L, int windowId = 0)
         {
             long bs;
 
@@ -1935,7 +1935,7 @@ namespace Client
 
         public static void ShowComboMenu(long curWindow, long curControl)
         {
-            long Top;
+            long top;
 
             {
                 var withBlock = Windows[curWindow].Controls[(int)curControl];
@@ -1947,12 +1947,12 @@ namespace Client
                 // Set the size
                 Windows[comboMenuIndex].Height = 2 + withBlock.List.Count * 16;  // Assumes .List is a collection
                 Windows[comboMenuIndex].Left = Windows[curWindow].Left + withBlock.Left + 2L;
-                Top = Windows[curWindow].Top + withBlock.Top + withBlock.Height;
-                if (Top + Windows[comboMenuIndex].Height > GameState.ResolutionHeight)
+                top = Windows[curWindow].Top + withBlock.Top + withBlock.Height;
+                if (top + Windows[comboMenuIndex].Height > GameState.ResolutionHeight)
                 {
-                    Top = GameState.ResolutionHeight - Windows[comboMenuIndex].Height;
+                    top = GameState.ResolutionHeight - Windows[comboMenuIndex].Height;
                 }
-                Windows[comboMenuIndex].Top = Top;
+                Windows[comboMenuIndex].Top = top;
                 Windows[comboMenuIndex].Width = withBlock.Width - 4L;
 
                 // Set the values
@@ -2072,19 +2072,19 @@ namespace Client
 
         public static void btnSendRegister_Click()
         {
-            string User;
-            string Pass;
+            string user;
+            string pass;
             string pass2; // Code As String, Captcha As String
 
             {
                 var withBlock = Windows[GetWindowIndex("winRegister")];
-                User = withBlock.Controls[GetControlIndex("winRegister", "txtUsername")].Text;
-                Pass = withBlock.Controls[GetControlIndex("winRegister", "txtPassword")].Text;
+                user = withBlock.Controls[GetControlIndex("winRegister", "txtUsername")].Text;
+                pass = withBlock.Controls[GetControlIndex("winRegister", "txtPassword")].Text;
                 pass2 = withBlock.Controls[GetControlIndex("winRegister", "txtRetypePassword")].Text;
                 // Code = .Controls(GetControlIndex("winRegister", "txtCode")).Text
                 // Captcha = .Controls(GetControlIndex("winRegister", "txtCaptcha")).Text
 
-                if ((Pass ?? "") != (pass2 ?? ""))
+                if ((pass ?? "") != (pass2 ?? ""))
                 {
                     GameLogic.Dialogue("Register", "Passwords don't match.", "Please try again.", (byte)DialogueType.Alert);
                     ClearPasswordTexts();
@@ -2093,7 +2093,7 @@ namespace Client
 
                 if (NetworkConfig.Socket?.IsConnected == true)
                 {
-                    NetworkSend.SendRegister(User, Pass);
+                    NetworkSend.SendRegister(user, pass);
                 }
                 else
                 {
@@ -2263,18 +2263,18 @@ namespace Client
         {
             long xO;
             long yO;
-            long Width;
+            long width;
 
             xO = Windows[GetWindowIndex("winBars")].Left;
             yO = Windows[GetWindowIndex("winBars")].Top;
 
             // Bars
             string argpath = System.IO.Path.Combine(Path.Gui, 27.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(xO + 15L), (int)(yO + 15L), 0, 0, (int)GameState.BarWidth_GuiHP, 13, (int)GameState.BarWidth_GuiHP, 13);
+            GameClient.RenderTexture(ref argpath, (int)(xO + 15L), (int)(yO + 15L), 0, 0, (int)GameState.BarWidthGuiHp, 13, (int)GameState.BarWidthGuiHp, 13);
             string argpath1 = System.IO.Path.Combine(Path.Gui, 28.ToString());
-            GameClient.RenderTexture(ref argpath1, (int)(xO + 15L), (int)(yO + 32L), 0, 0, (int)GameState.BarWidth_GuiSP, 13, (int)GameState.BarWidth_GuiSP, 13);
+            GameClient.RenderTexture(ref argpath1, (int)(xO + 15L), (int)(yO + 32L), 0, 0, (int)GameState.BarWidthGuiSp, 13, (int)GameState.BarWidthGuiSp, 13);
             string argpath2 = System.IO.Path.Combine(Path.Gui, 29.ToString());
-            GameClient.RenderTexture(ref argpath2, (int)(xO + 15L), (int)(yO + 49L), 0, 0, (int)GameState.BarWidth_GuiEXP, 13, (int)GameState.BarWidth_GuiEXP, 13);
+            GameClient.RenderTexture(ref argpath2, (int)(xO + 15L), (int)(yO + 49L), 0, 0, (int)GameState.BarWidthGuiExp, 13, (int)GameState.BarWidthGuiExp, 13);
         }
 
         // #######################
@@ -2296,7 +2296,7 @@ namespace Client
             x = xO + 24L;
 
             // Loop through all characters and render them if they exist
-            for (i = 0L; i <= Constant.MAX_CHARS - 1; i++)
+            for (i = 0L; i <= Constant.MaxChars - 1; i++)
             {
                 if (!string.IsNullOrEmpty(GameState.CharName[(int)i])) // Ensure character name exists
                 {
@@ -2440,7 +2440,7 @@ namespace Client
         public static void btnJobs_Right()
         {
             // Exit if the job is invalid or exceeds limits
-            if (GameState.NewCharJob >= Constant.MAX_JOBS - 1 || string.IsNullOrEmpty(Data.Job[(int)GameState.NewCharJob ].Desc) & GameState.NewCharJob >= Constant.MAX_JOBS)
+            if (GameState.NewCharJob >= Constant.MaxJobs - 1 || string.IsNullOrEmpty(Data.Job[(int)GameState.NewCharJob ].Desc) & GameState.NewCharJob >= Constant.MaxJobs)
                 return;
 
             // Move to the next job
@@ -2502,10 +2502,10 @@ namespace Client
 
             winIndex = GetWindowIndex("winChatSmall");
 
-            if (GameState.actChatWidth < 160L)
-                GameState.actChatWidth = 160L;
-            if (GameState.actChatHeight < 10L)
-                GameState.actChatHeight = 10L;
+            if (GameState.ActChatWidth < 160L)
+                GameState.ActChatWidth = 160L;
+            if (GameState.ActChatHeight < 10L)
+                GameState.ActChatHeight = 10L;
 
             xO = Windows[winIndex].Left + 10L;
             yO = GameState.ResolutionHeight - 10;
@@ -2699,11 +2699,11 @@ namespace Client
         // #####################
         public static void btnDialogue_Close()
         {
-            if (GameState.diaStyle == (int)DialogueStyle.Okay)
+            if (GameState.DiaStyle == (int)DialogueStyle.Okay)
             {
                 GameLogic.DialogueHandler(1L);
             }
-            else if (GameState.diaStyle == (int)DialogueStyle.YesNo)
+            else if (GameState.DiaStyle == (int)DialogueStyle.YesNo)
             {
                 GameLogic.DialogueHandler(3L);
             }
@@ -2775,7 +2775,7 @@ namespace Client
                 // exit out if we're offering that item
                 if (Trade.InTrade >= 0)
                 {
-                    for (i = 0L; i < Constant.MAX_INV; i++)
+                    for (i = 0L; i < Constant.MaxInv; i++)
                     {
                         if (Data.TradeYourOffer[(int)i].Num == invNum)
                         {
@@ -2830,7 +2830,7 @@ namespace Client
                 // exit out if we're offering that item
                 if (Trade.InTrade >= 0)
                 {
-                    for (i = 0L; i < Constant.MAX_INV; i++)
+                    for (i = 0L; i < Constant.MaxInv; i++)
                     {
                         if (Data.TradeYourOffer[(int)i].Num == itemNum)
                         {
@@ -3061,7 +3061,7 @@ namespace Client
                                     if (curWindow == 0L)
                                         curWindow = i;
 
-                                    if (withBlock.zOrder > Windows[curWindow].zOrder)
+                                    if (withBlock.ZOrder > Windows[curWindow].ZOrder)
                                         curWindow = i;
                                 }
                             }
@@ -3082,7 +3082,7 @@ namespace Client
                                 if (DragBox.Type == DraggablePartType.Item)
                                 {
                                     // find the slot to switch with
-                                    for (i = 0L; i <= Constant.MAX_BANK; i++)
+                                    for (i = 0L; i <= Constant.MaxBank; i++)
                                     {
                                         tmpRec.Top = Windows[curWindow].Top + GameState.BankTop + (GameState.BankOffsetY + 32L) * (i / GameState.BankColumns);
                                         tmpRec.Bottom = tmpRec.Top + 32d;
@@ -3133,7 +3133,7 @@ namespace Client
                                 if (DragBox.Type == DraggablePartType.Item)
                                 {
                                     // find the slot to switch with
-                                    for (i = 0L; i < Constant.MAX_INV; i++)
+                                    for (i = 0L; i < Constant.MaxInv; i++)
                                     {
                                         tmpRec.Top = Windows[curWindow].Top + GameState.InvTop + (GameState.InvOffsetY + 32L) * (i / GameState.InvColumns);
                                         tmpRec.Bottom = tmpRec.Top + 32d;
@@ -3181,7 +3181,7 @@ namespace Client
                                 if (DragBox.Type == DraggablePartType.Skill)
                                 {
                                     // find the slot to switch with
-                                    for (i = 0L; i < Constant.MAX_PLAYER_SKILLS; i++)
+                                    for (i = 0L; i < Constant.MaxPlayerSkills; i++)
                                     {
                                         tmpRec.Top = Windows[curWindow].Top + GameState.SkillTop + (GameState.SkillOffsetY + 32L) * (i / GameState.SkillColumns);
                                         tmpRec.Bottom = tmpRec.Top + 32d;
@@ -3212,7 +3212,7 @@ namespace Client
                                 if (DragBox.Type != DraggablePartType.None)
                                 {
                                     // find the slot
-                                    for (i = 0L; i < Constant.MAX_HOTBAR; i++)
+                                    for (i = 0L; i < Constant.MaxHotbar; i++)
                                     {
                                         tmpRec.Top = Windows[curWindow].Top + GameState.HotbarTop;
                                         tmpRec.Bottom = tmpRec.Top + 32d;
@@ -3534,14 +3534,14 @@ namespace Client
         {
             long xO;
             long yO;
-            long Width;
-            long Height;
+            long width;
+            long height;
             long i;
             long sprite;
             long itemNum;
             var itemIcon = default(long);
 
-            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MAX_PLAYERS)
+            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MaxPlayers)
                 return;
 
             xO = Windows[GetWindowIndex("winCharacter")].Left;
@@ -3672,48 +3672,48 @@ namespace Client
         {
             long xO;
             long yO;
-            long Width;
-            long Height;
+            long width;
+            long height;
             long i;
             long y;
             long itemNum;
             long itemIcon;
             long x;
-            long Top;
-            long Left;
-            string Amount;
-            var Color = default(Color);
+            long top;
+            long left;
+            string amount;
+            var color = default(Color);
             var skipItem = default(bool);
             long amountModifier;
             long tmpItem;
 
-            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MAX_PLAYERS)
+            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MaxPlayers)
                 return;
 
             xO = Windows[GetWindowIndex("winInventory")].Left;
             yO = Windows[GetWindowIndex("winInventory")].Top;
-            Width = Windows[GetWindowIndex("winInventory")].Width;
-            Height = Windows[GetWindowIndex("winInventory")].Height;
+            width = Windows[GetWindowIndex("winInventory")].Width;
+            height = Windows[GetWindowIndex("winInventory")].Height;
 
             // render green
             string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(Width - 8L), (int)(Height - 27L), 4, 4);
+            GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
-            Width = 76L;
-            Height = 76L;
+            width = 76L;
+            height = 76L;
 
             y = yO + 23L;
             // render grid - row
             for (i = 0L; i <= 3L; i++)
             {
                 if (i == 3L)
-                    Height = 38L;
+                    height = 38L;
                 string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)Height, 42, (int)Height);
+                GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
 
@@ -3722,11 +3722,11 @@ namespace Client
             GameClient.RenderTexture(ref argpath4, (int)(xO + 4L), (int)(yO + 289L), 100, 100, 194, 26, 194, 26);
 
             // actually draw the icons
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
                 itemNum = (long)GetPlayerInv(GameState.MyIndex, (int)i); 
 
-                if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                if (itemNum >= 0L & itemNum < Constant.MaxItems)
                 {
                     Item.StreamItem((int)itemNum);
 
@@ -3739,7 +3739,7 @@ namespace Client
                         amountModifier = 0L;
                         if (Trade.InTrade >= 0)
                         {
-                            for (x = 0L; x < Constant.MAX_INV; x++)
+                            for (x = 0L; x < Constant.MaxInv; x++)
                             {
                                 if (Data.TradeYourOffer[(int)x].Num >= 0)
                                 { 
@@ -3771,35 +3771,35 @@ namespace Client
                         {
                             if (itemIcon > 0L & itemIcon <= GameState.NumItems)
                             {
-                                Top = yO + GameState.InvTop + (GameState.InvOffsetY + 32L) * (i / GameState.InvColumns);
-                                Left = xO + GameState.InvLeft + (GameState.InvOffsetX + 32L) * (i % GameState.InvColumns);
+                                top = yO + GameState.InvTop + (GameState.InvOffsetY + 32L) * (i / GameState.InvColumns);
+                                left = xO + GameState.InvLeft + (GameState.InvOffsetX + 32L) * (i % GameState.InvColumns);
 
                                 // draw icon
                                 string argpath5 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
-                                GameClient.RenderTexture(ref argpath5, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                                GameClient.RenderTexture(ref argpath5, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                                 // If item is a stack - draw the amount you have
                                 if (GetPlayerInvValue(GameState.MyIndex, (int)i) > 1)
                                 {
-                                    y = Top + 20L;
-                                    x = Left + 1L;
-                                    Amount = (GetPlayerInvValue(GameState.MyIndex, (int)i) - amountModifier).ToString();
+                                    y = top + 20L;
+                                    x = left + 1L;
+                                    amount = (GetPlayerInvValue(GameState.MyIndex, (int)i) - amountModifier).ToString();
 
                                     // Draw currency but with k, m, b etc. using a convertion function
-                                    if (Conversions.ToLong(Amount) < 1000000L)
+                                    if (Conversions.ToLong(amount) < 1000000L)
                                     {
-                                        Color = GameClient.QbColorToXnaColor((int)Core.Color.White);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Color.White);
                                     }
-                                    else if (Conversions.ToLong(Amount) > 1000000L & Conversions.ToLong(Amount) < 10000000L)
+                                    else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                                     {
-                                        Color = GameClient.QbColorToXnaColor((int)Core.Color.Yellow);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Color.Yellow);
                                     }
-                                    else if (Conversions.ToLong(Amount) > 10000000L)
+                                    else if (Conversions.ToLong(amount) > 10000000L)
                                     {
-                                        Color = GameClient.QbColorToXnaColor((int)Core.Color.BrightGreen);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Color.BrightGreen);
                                     }
 
-                                    Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(Amount)), (int)x, (int)y, Color, Color, Core.Font.Georgia);
+                                    Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, color, color, Core.Font.Georgia);
                                 }
                             }
                         }
@@ -3824,17 +3824,17 @@ namespace Client
             long count;
 
             // exit out if we don't have a num
-            if (GameState.descItem == -1L | GameState.descType == 0)
+            if (GameState.DescItem == -1L | GameState.DescType == 0)
                 return;
 
             xO = Windows[GetWindowIndex("winDescription")].Left;
             yO = Windows[GetWindowIndex("winDescription")].Top;
 
-            switch (GameState.descType)
+            switch (GameState.DescType)
             {
                 case 1: // Inventory Item
                     {
-                        texNum = Core.Data.Item[(int)GameState.descItem].Icon;
+                        texNum = Core.Data.Item[(int)GameState.DescItem].Icon;
 
                         // render sprite
                         string argpath = System.IO.Path.Combine(Path.Items, texNum.ToString());
@@ -3844,7 +3844,7 @@ namespace Client
 
                 case 2: // Skill Icon
                     {
-                        texNum = Data.Skill[(int)GameState.descItem].Icon;
+                        texNum = Data.Skill[(int)GameState.DescItem].Icon;
 
                         // render bar
                         {
@@ -3880,7 +3880,7 @@ namespace Client
             Shop.CloseShop();
         }
 
-        public static void chkShopBuying()
+        public static void ChkShopBuying()
         {
             {
                 var withBlock = Windows[GetWindowIndex("winShop")];
@@ -3904,12 +3904,12 @@ namespace Client
             }
 
             // update the shop
-            GameState.shopIsSelling = false;
-            GameState.shopSelectedSlot = 0L;
+            GameState.ShopIsSelling = false;
+            GameState.ShopSelectedSlot = 0L;
             UpdateShop();
         }
 
-        public static void chkShopSelling()
+        public static void ChkShopSelling()
         {
             {
                 var withBlock = Windows[GetWindowIndex("winShop")];
@@ -3933,19 +3933,19 @@ namespace Client
             }
 
             // update the shop
-            GameState.shopIsSelling = true;
-            GameState.shopSelectedSlot = 0L;
+            GameState.ShopIsSelling = true;
+            GameState.ShopSelectedSlot = 0L;
             UpdateShop();
         }
 
-        public static void btnShopBuy()
+        public static void BtnShopBuy()
         {
-            Shop.BuyItem((int)GameState.shopSelectedSlot);
+            Shop.BuyItem((int)GameState.ShopSelectedSlot);
         }
 
-        public static void btnShopSell()
+        public static void BtnShopSell()
         {
-            Shop.SellItem((int)GameState.shopSelectedSlot);
+            Shop.SellItem((int)GameState.ShopSelectedSlot);
         }
 
         public static void Shop_MouseDown()
@@ -3956,12 +3956,12 @@ namespace Client
             shopNum = General.IsShop(Windows[GetWindowIndex("winShop")].Left, Windows[GetWindowIndex("winShop")].Top);
             if (shopNum >= 0L)
             {
-                if (GameState.shopIsSelling)
+                if (GameState.ShopIsSelling)
                 {
                     if (GetPlayerInv(GameState.MyIndex, (int)shopNum) >= 0)
                     {
                         // set the active slot
-                        GameState.shopSelectedSlot = shopNum;
+                        GameState.ShopSelectedSlot = shopNum;
                         UpdateShop();
                     }
                 }
@@ -3970,7 +3970,7 @@ namespace Client
                     if (Data.Shop[GameState.InShop].TradeItem[shopNum].Item >= 0)
                     {
                         // set the active slot
-                        GameState.shopSelectedSlot = shopNum;
+                        GameState.ShopSelectedSlot = shopNum;
                         UpdateShop();
                     }
                 }
@@ -3985,7 +3985,7 @@ namespace Client
             long x;
             long y;
 
-            if (GameState.InShop < 0 | GameState.InShop > Constant.MAX_SHOPS)
+            if (GameState.InShop < 0 | GameState.InShop > Constant.MaxShops)
                 return;
 
             shopSlot = General.IsShop(Windows[GetWindowIndex("winShop")].Left, Windows[GetWindowIndex("winShop")].Top);
@@ -4004,7 +4004,7 @@ namespace Client
                 }
 
                 // selling/buying
-                if (!GameState.shopIsSelling)
+                if (!GameState.ShopIsSelling)
                 {
                     // get the itemnum
                     itemNum = Data.Shop[GameState.InShop].TradeItem[(int)shopSlot].Item;
@@ -4027,9 +4027,9 @@ namespace Client
             }
         }
 
-        public static void ResizeGUI()
+        public static void ResizeGui()
         {
-            long Top;
+            long top;
 
             // move Hotbar
             Windows[GetWindowIndex("winHotbar")].Left = GameState.ResolutionWidth - 432;
@@ -4043,7 +4043,7 @@ namespace Client
             Windows[GetWindowIndex("winMenu")].Top = GameState.ResolutionHeight - 42;
 
             // loop through
-            Top = -80;
+            top = -80;
 
             // re-size right-click background
             Windows[GetWindowIndex("winRightClickBG")].Width = GameState.ResolutionWidth;
@@ -4058,67 +4058,67 @@ namespace Client
         {
             long xO;
             long yO;
-            long Width;
-            long Height;
+            long width;
+            long height;
             long i;
             long y;
             var skillNum = default(long);
-            long SkillPic;
+            long skillPic;
             long x;
-            long Top;
-            long Left;
+            long top;
+            long left;
 
-            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MAX_PLAYERS)
+            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MaxPlayers)
                 return;
 
             xO = Windows[GetWindowIndex("winSkills")].Left;
             yO = Windows[GetWindowIndex("winSkills")].Top;
 
-            Width = Windows[GetWindowIndex("winSkills")].Width;
-            Height = Windows[GetWindowIndex("winSkills")].Height;
+            width = Windows[GetWindowIndex("winSkills")].Width;
+            height = Windows[GetWindowIndex("winSkills")].Height;
 
             // render green
             string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(Width - 8L), (int)(Height - 27L), 4, 4);
+            GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
-            Width = 76L;
-            Height = 76L;
+            width = 76L;
+            height = 76L;
 
             y = yO + 23L;
             // render grid - row
             for (i = 0L; i <= 3L; i++)
             {
                 if (i == 3L)
-                    Height = 42L;
+                    height = 42L;
                 string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)Height, 42, (int)Height);
+                GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
 
             // actually draw the icons
-            for (i = 0L; i < Constant.MAX_PLAYER_SKILLS; i++)
+            for (i = 0L; i < Constant.MaxPlayerSkills; i++)
             {
                 skillNum = (long)Core.Data.Player[GameState.MyIndex].Skill[(int)i].Num;
-                if (skillNum >= 0L & skillNum < Constant.MAX_SKILLS)
+                if (skillNum >= 0L & skillNum < Constant.MaxSkills)
                 {
                     Database.StreamSkill((int)skillNum);
 
                     // not dragging?
                     if (!(DragBox.Origin == PartOrigin.SkillTree & DragBox.Slot == i))
                     {
-                        SkillPic = Data.Skill[(int)skillNum].Icon;
+                        skillPic = Data.Skill[(int)skillNum].Icon;
 
-                        if (SkillPic > 0L & SkillPic <= GameState.NumSkills)
+                        if (skillPic > 0L & skillPic <= GameState.NumSkills)
                         {
-                            Top = yO + GameState.SkillTop + (GameState.SkillOffsetY + 32L) * (i / GameState.SkillColumns);
-                            Left = xO + GameState.SkillLeft + (GameState.SkillOffsetX + 32L) * (i % GameState.SkillColumns);
+                            top = yO + GameState.SkillTop + (GameState.SkillOffsetY + 32L) * (i / GameState.SkillColumns);
+                            left = xO + GameState.SkillLeft + (GameState.SkillOffsetX + 32L) * (i % GameState.SkillColumns);
 
-                            string argpath4 = System.IO.Path.Combine(Path.Skills, SkillPic.ToString());
-                            GameClient.RenderTexture(ref argpath4, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                            string argpath4 = System.IO.Path.Combine(Path.Skills, skillPic.ToString());
+                            GameClient.RenderTexture(ref argpath4, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                         }
                     }
                 }
@@ -4135,20 +4135,20 @@ namespace Client
         public static void btnOptions_Confirm()
         {
             long i;
-            long Value;
-            long Width;
-            long Height;
+            long value;
+            long width;
+            long height;
             var message = default(bool);
             string musicFile;
 
             // music
-            Value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkMusic")].Value;
-            if (Conversions.ToLong(SettingsManager.Instance.Music) != Value)
+            value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkMusic")].Value;
+            if (Conversions.ToLong(SettingsManager.Instance.Music) != value)
             {
-                SettingsManager.Instance.Music = Conversions.ToBoolean(Value);
+                SettingsManager.Instance.Music = Conversions.ToBoolean(value);
 
                 // let them know
-                if (Value == 0L)
+                if (value == 0L)
                 {
                     Text.AddText("Music turned off.", (int)Core.Color.BrightGreen);
                     Sound.StopMusic();
@@ -4173,12 +4173,12 @@ namespace Client
             }
 
             // sound
-            Value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkSound")].Value;
-            if (Conversions.ToLong(SettingsManager.Instance.Sound) != Value)
+            value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkSound")].Value;
+            if (Conversions.ToLong(SettingsManager.Instance.Sound) != value)
             {
-                SettingsManager.Instance.Sound = Conversions.ToBoolean(Value);
+                SettingsManager.Instance.Sound = Conversions.ToBoolean(value);
                 // let them know
-                if (Value == 0L)
+                if (value == 0L)
                 {
                     Text.AddText("Sound turned off.", (int)Core.Color.BrightGreen);
                 }
@@ -4189,12 +4189,12 @@ namespace Client
             }
 
             // autotiles
-            Value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkAutotile")].Value;
-            if (Conversions.ToLong(SettingsManager.Instance.Autotile) != Value)
+            value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkAutotile")].Value;
+            if (Conversions.ToLong(SettingsManager.Instance.Autotile) != value)
             {
-                SettingsManager.Instance.Autotile = Conversions.ToBoolean(Value);
+                SettingsManager.Instance.Autotile = Conversions.ToBoolean(value);
                 // let them know
-                if (Value == 0L)
+                if (value == 0L)
                 {
                     if (GameState.InGame)
                     {
@@ -4210,10 +4210,10 @@ namespace Client
             }
 
             // fullscreen
-            Value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkFullscreen")].Value;
-            if (Conversions.ToLong(SettingsManager.Instance.Fullscreen) != Value)
+            value = Windows[GetWindowIndex("winOptions")].Controls[GetControlIndex("winOptions", "chkFullscreen")].Value;
+            if (Conversions.ToLong(SettingsManager.Instance.Fullscreen) != value)
             {
-                SettingsManager.Instance.Fullscreen = Conversions.ToBoolean(Value);
+                SettingsManager.Instance.Fullscreen = Conversions.ToBoolean(value);
                 message = true;
             }
 
@@ -4276,7 +4276,7 @@ namespace Client
         public static void UpdateShop()
         {
             long i;
-            long CostValue;
+            long costValue;
 
             if (GameState.InShop < 0)
                 return;
@@ -4284,33 +4284,33 @@ namespace Client
             {
                 var withBlock = Windows[GetWindowIndex("winShop")];
                 // buying items
-                if (!GameState.shopIsSelling)
+                if (!GameState.ShopIsSelling)
                 {
-                    GameState.shopSelectedItem = Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].Item;
+                    GameState.ShopSelectedItem = Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].Item;
                     // labels
-                    if (GameState.shopSelectedItem >= 0L)
+                    if (GameState.ShopSelectedItem >= 0L)
                     {
-                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.shopSelectedItem].Name;
+                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.ShopSelectedItem].Name;
                         // check if it's gold
-                        if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostItem == 0)
+                        if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem == 0)
                         {
                             // it's gold
-                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostValue + "g";
+                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue + "g";
                         }
                         // if it's one then just print the name
-                        else if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostValue == 1)
+                        else if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue == 1)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostItem].Name;
+                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
                         }
                         else
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostValue + " " + Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.shopSelectedSlot].CostItem].Name;
+                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue + " " + Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
                         }
 
                         // draw the item
                         for (i = 0L; i <= 4L; i++)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.shopSelectedItem].Icon;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.ShopSelectedItem].Icon;
                             withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = Path.Items;
                         }
                     }
@@ -4329,19 +4329,19 @@ namespace Client
                 }
                 else
                 {
-                    GameState.shopSelectedItem = (long)GetPlayerInv(GameState.MyIndex, (int)GameState.shopSelectedSlot);
+                    GameState.ShopSelectedItem = (long)GetPlayerInv(GameState.MyIndex, (int)GameState.ShopSelectedSlot);
                     // labels
-                    if (GameState.shopSelectedItem >= 0L)
+                    if (GameState.ShopSelectedItem >= 0L)
                     {
-                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.shopSelectedItem].Name;
+                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.ShopSelectedItem].Name;
                         // calc cost
-                        CostValue = (long)Math.Round(Core.Data.Item[(int)GameState.shopSelectedItem].Price / 100d * Data.Shop[GameState.InShop].BuyRate);
-                        withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = CostValue + "g";
+                        costValue = (long)Math.Round(Core.Data.Item[(int)GameState.ShopSelectedItem].Price / 100d * Data.Shop[GameState.InShop].BuyRate);
+                        withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = costValue + "g";
 
                         // draw the item
                         for (i = 0L; i <= 4L; i++)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.shopSelectedItem].Icon;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.ShopSelectedItem].Icon;
                             withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = Path.Items;
                         }
                     }
@@ -4367,7 +4367,7 @@ namespace Client
             var image = new long[6];
             long x;
             long pIndex;
-            var Height = default(long);
+            var height = default(long);
             long cIn;
 
             // unload it if we're not in a party
@@ -4443,25 +4443,25 @@ namespace Client
                 {
                     case 2:
                         {
-                            Height = 78L;
+                            height = 78L;
                             break;
                         }
                     case 3:
                         {
-                            Height = 118L;
+                            height = 118L;
                             break;
                         }
                     case 4:
                         {
-                            Height = 158L;
+                            height = 158L;
                             break;
                         }
                 }
-                withBlock.Height = Height;
+                withBlock.Height = height;
             }
         }
 
-        public static void DrawMenuBG()
+        public static void DrawMenuBg()
         {
             // row 1
             string argpath = System.IO.Path.Combine(Path.Pictures, "1");
@@ -4498,13 +4498,13 @@ namespace Client
         {
             long xO;
             long yO;
-            long Width;
-            long Height;
+            long width;
+            long height;
             long i;
             long t;
             string sS;
 
-            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MAX_PLAYERS)
+            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MaxPlayers)
                 return;
 
             xO = Windows[GetWindowIndex("winHotbar")].Left;
@@ -4515,15 +4515,15 @@ namespace Client
             GameClient.RenderTexture(ref argpath, (int)(xO - 1L), (int)(yO + 3L), 0, 0, 11, 26, 11, 26);
             string argpath1 = System.IO.Path.Combine(Path.Gui, 31.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(xO + 407L), (int)(yO + 3L), 0, 0, 11, 26, 11, 26);
-            for (i = 0L; i < Constant.MAX_HOTBAR; i++)
+            for (i = 0L; i < Constant.MaxHotbar; i++)
             {
                 xO = Windows[GetWindowIndex("winHotbar")].Left + GameState.HotbarLeft + i * GameState.HotbarOffsetX;
                 yO = Windows[GetWindowIndex("winHotbar")].Top + GameState.HotbarTop;
-                Width = 36L;
-                Height = 36L;
+                width = 36L;
+                height = 36L;
 
                 // Don't render last one
-                if (i != Constant.MAX_HOTBAR)
+                if (i != Constant.MaxHotbar)
                 {
                     // Render wood
                     string argpath2 = System.IO.Path.Combine(Path.Gui, 32.ToString());
@@ -4532,7 +4532,7 @@ namespace Client
 
                 // Render box
                 string argpath3 = System.IO.Path.Combine(Path.Gui, 30.ToString());
-                GameClient.RenderTexture(ref argpath3, (int)(xO - 2L), (int)(yO - 2L), 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath3, (int)(xO - 2L), (int)(yO - 2L), 0, 0, (int)width, (int)height, (int)width, (int)height);
 
                 // Render icon
                 if (!(DragBox.Origin == PartOrigin.Hotbar & DragBox.Slot == i))
@@ -4558,11 +4558,11 @@ namespace Client
                                 {
                                     string argpath5 = System.IO.Path.Combine(Path.Skills, Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
                                     GameClient.RenderTexture(ref argpath5, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
-                                    for (t = 0L; t < Constant.MAX_PLAYER_SKILLS; t++)
+                                    for (t = 0L; t < Constant.MaxPlayerSkills; t++)
                                     {
                                         if (GetPlayerSkill(GameState.MyIndex, (int)t) >= 0)
                                         {
-                                            if (GetPlayerSkill(GameState.MyIndex, (int)t) == Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot & GetPlayerSkillCD(GameState.MyIndex, (int)t) > 0)
+                                            if (GetPlayerSkill(GameState.MyIndex, (int)t) == Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot & GetPlayerSkillCd(GameState.MyIndex, (int)t) > 0)
                                             {
                                                 string argpath6 = System.IO.Path.Combine(Path.Skills, Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
                                                 GameClient.RenderTexture(ref argpath6, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32, 255, 100, 100, 100);
@@ -4578,7 +4578,7 @@ namespace Client
 
                 // Draw the numbers
                 sS = Conversion.Str(i);
-                if (i == Constant.MAX_HOTBAR)
+                if (i == Constant.MaxHotbar)
                     sS = "0";
                 Text.RenderText(sS, (int)(xO + 4L), (int)(yO + 19L), Color.White, Color.White);
             }
@@ -4586,45 +4586,45 @@ namespace Client
 
         public static void DrawShop()
         {
-            long Xo;
-            long Yo;
+            long xo;
+            long yo;
             long itemIcon;
             long itemNum;
-            long Amount;
+            long amount;
             long i;
-            long Top;
-            long Left;
-            long Y;
-            long X;
-            var Color = default(long);
+            long top;
+            long left;
+            long y;
+            long x;
+            var color = default(long);
 
-            if (GameState.InShop < 0 | GameState.InShop > Constant.MAX_SHOPS)
+            if (GameState.InShop < 0 | GameState.InShop > Constant.MaxShops)
                 return;
 
             Shop.StreamShop(GameState.InShop);
 
-            Xo = Windows[GetWindowIndex("winShop")].Left;
-            Yo = Windows[GetWindowIndex("winShop")].Top;
+            xo = Windows[GetWindowIndex("winShop")].Left;
+            yo = Windows[GetWindowIndex("winShop")].Top;
 
-            if (!GameState.shopIsSelling)
+            if (!GameState.ShopIsSelling)
             {
                 // render the shop items
-                for (i = 0L; i < Constant.MAX_TRADES; i++)
+                for (i = 0L; i < Constant.MaxTrades; i++)
                 {
                     itemNum = Data.Shop[GameState.InShop].TradeItem[(int)i].Item;
 
                     // draw early
-                    Top = Yo + GameState.ShopTop + (GameState.ShopOffsetY + 32L) * (i / GameState.ShopColumns);
-                    Left = Xo + GameState.ShopLeft + (GameState.ShopOffsetX + 32L) * (i % GameState.ShopColumns);
+                    top = yo + GameState.ShopTop + (GameState.ShopOffsetY + 32L) * (i / GameState.ShopColumns);
+                    left = xo + GameState.ShopLeft + (GameState.ShopOffsetX + 32L) * (i % GameState.ShopColumns);
 
                     // draw selected square
-                    if (GameState.shopSelectedSlot == i)
+                    if (GameState.ShopSelectedSlot == i)
                     {
                         string argpath = System.IO.Path.Combine(Path.Gui, 61.ToString());
-                        GameClient.RenderTexture(ref argpath, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                        GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                     }
 
-                    if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                    if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
                         itemIcon = Core.Data.Item[(int)itemNum].Icon;
@@ -4632,7 +4632,7 @@ namespace Client
                         {
                             // draw item
                             string argpath1 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
-                            GameClient.RenderTexture(ref argpath1, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                            GameClient.RenderTexture(ref argpath1, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                         }
                     }
                 }
@@ -4640,22 +4640,22 @@ namespace Client
             else
             {
                 // render the shop items
-                for (i = 0L; i < Constant.MAX_TRADES; i++)
+                for (i = 0L; i < Constant.MaxTrades; i++)
                 {
                     itemNum = (long)GetPlayerInv(GameState.MyIndex, (int)i);
 
                     // draw early
-                    Top = Yo + GameState.ShopTop + (GameState.ShopOffsetY + 32L) * (i / GameState.ShopColumns);
-                    Left = Xo + GameState.ShopLeft + (GameState.ShopOffsetX + 32L) * (i % GameState.ShopColumns);
+                    top = yo + GameState.ShopTop + (GameState.ShopOffsetY + 32L) * (i / GameState.ShopColumns);
+                    left = xo + GameState.ShopLeft + (GameState.ShopOffsetX + 32L) * (i % GameState.ShopColumns);
 
                     // draw selected square
-                    if (GameState.shopSelectedSlot == i)
+                    if (GameState.ShopSelectedSlot == i)
                     {
                         string argpath2 = System.IO.Path.Combine(Path.Gui, 61.ToString());
-                        GameClient.RenderTexture(ref argpath2, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                        GameClient.RenderTexture(ref argpath2, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                     }
 
-                    if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                    if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
                         itemIcon = Core.Data.Item[(int)itemNum].Icon;
@@ -4663,30 +4663,30 @@ namespace Client
                         {
                             // draw item
                             string argpath3 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
-                            GameClient.RenderTexture(ref argpath3, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                            GameClient.RenderTexture(ref argpath3, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
                             if (GetPlayerInvValue(GameState.MyIndex, (int)i) > 1)
                             {
-                                Y = Top + 20L;
-                                X = Left + 1L;
-                                Amount = Conversions.ToLong(GetPlayerInvValue(GameState.MyIndex, (int)i).ToString());
+                                y = top + 20L;
+                                x = left + 1L;
+                                amount = Conversions.ToLong(GetPlayerInvValue(GameState.MyIndex, (int)i).ToString());
 
                                 // Draw currency but with k, m, b etc. using a conversion function
-                                if (Amount < 1000000L)
+                                if (amount < 1000000L)
                                 {
-                                    Color = (long)Core.Color.White;
+                                    color = (long)Core.Color.White;
                                 }
-                                else if (Amount > 1000000L & Amount < 10000000L)
+                                else if (amount > 1000000L & amount < 10000000L)
                                 {
-                                    Color = (long)Core.Color.Yellow;
+                                    color = (long)Core.Color.Yellow;
                                 }
-                                else if (Amount > 10000000L)
+                                else if (amount > 10000000L)
                                 {
-                                    Color = (long)Core.Color.BrightGreen;
+                                    color = (long)Core.Color.BrightGreen;
                                 }
 
-                                Text.RenderText(GameLogic.ConvertCurrency((int)Amount), (int)X, (int)Y, GameClient.QbColorToXnaColor((int)Color), GameClient.QbColorToXnaColor((int)Color));
+                                Text.RenderText(GameLogic.ConvertCurrency((int)amount), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                             }
                         }
                     }
@@ -4696,106 +4696,106 @@ namespace Client
 
         public static void DrawShopBackground()
         {
-            long Xo;
-            long Yo;
-            long Width;
-            long Height;
+            long xo;
+            long yo;
+            long width;
+            long height;
             long i;
-            long Y;
+            long y;
 
-            Xo = Windows[GetWindowIndex("winShop")].Left;
-            Yo = Windows[GetWindowIndex("winShop")].Top;
-            Width = Windows[GetWindowIndex("winShop")].Width;
-            Height = Windows[GetWindowIndex("winShop")].Height;
+            xo = Windows[GetWindowIndex("winShop")].Left;
+            yo = Windows[GetWindowIndex("winShop")].Top;
+            width = Windows[GetWindowIndex("winShop")].Width;
+            height = Windows[GetWindowIndex("winShop")].Height;
 
             // render green
             string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(Xo + 4L), (int)(Yo + 23L), 0, 0, (int)(Width - 8L), (int)(Height - 27L), 4, 4);
+            GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
-            Width = 76L;
-            Height = 76L;
+            width = 76L;
+            height = 76L;
 
-            Y = Yo + 23L;
+            y = yo + 23L;
             // render grid - row
             for (i = 0L; i < 3L; i++)
             {
                 if (i == 3L)
-                    Height = 42L;
+                    height = 42L;
                 string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath1, (int)(Xo + 4L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath2, (int)(Xo + 80L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath2, (int)(xo + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath3, (int)(Xo + 156L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath3, (int)(xo + 156L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath4 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath4, (int)(Xo + 232L), (int)Y, 0, 0, 42, (int)Height, 42, (int)Height);
-                Y = Y + 76L;
+                GameClient.RenderTexture(ref argpath4, (int)(xo + 232L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
+                y = y + 76L;
             }
 
             // render bottom wood
             string argpath5 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath5, (int)(Xo + 4L), (int)(Y - 34L), 0, 0, 270, 72, 270, 72);
+            GameClient.RenderTexture(ref argpath5, (int)(xo + 4L), (int)(y - 34L), 0, 0, 270, 72, 270, 72);
         }
 
         public static void DrawBank()
         {
-            long X;
-            long Y;
-            long Xo;
-            long Yo;
+            long x;
+            long y;
+            long xo;
+            long yo;
             long width;
             long height;
             long i;
             long itemNum;
             long itemIcon;
 
-            long Left;
+            long left;
             long top;
             var color = default(long);
             bool skipItem;
             long amount;
             long tmpItem;
 
-            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MAX_PLAYERS)
+            if (GameState.MyIndex < 0| GameState.MyIndex > Constant.MaxPlayers)
                 return;
 
-            Xo = Windows[GetWindowIndex("winBank")].Left;
-            Yo = Windows[GetWindowIndex("winBank")].Top;
+            xo = Windows[GetWindowIndex("winBank")].Left;
+            yo = Windows[GetWindowIndex("winBank")].Top;
             width = Windows[GetWindowIndex("winBank")].Width;
             height = Windows[GetWindowIndex("winBank")].Height;
 
             // render green
             string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(Xo + 4L), (int)(Yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
+            GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             width = 76L;
             height = 76L;
 
-            Y = Yo + 23L;
+            y = yo + 23L;
             // render grid - row
             for (i = 0L; i <= 4L; i++)
             {
                 if (i == 4L)
                     height = 42L;
                 string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath1, (int)(Xo + 4L), (int)Y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+                GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath2, (int)(Xo + 80L), (int)Y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+                GameClient.RenderTexture(ref argpath2, (int)(xo + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath3, (int)(Xo + 156L), (int)Y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+                GameClient.RenderTexture(ref argpath3, (int)(xo + 156L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath4 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath4, (int)(Xo + 232L), (int)Y, 0, 0, (int)width, (int)height, (int)width, (int)height);
+                GameClient.RenderTexture(ref argpath4, (int)(xo + 232L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath5 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath5, (int)(Xo + 308L), (int)Y, 0, 0, 79, (int)height, 79, (int)height);
-                Y = Y + 76L;
+                GameClient.RenderTexture(ref argpath5, (int)(xo + 308L), (int)y, 0, 0, 79, (int)height, 79, (int)height);
+                y = y + 76L;
             }
 
             // actually draw the icons
-            for (i = 0L; i < Constant.MAX_BANK; i++)
+            for (i = 0L; i < Constant.MaxBank; i++)
             {
                 itemNum = (long)GetBank(GameState.MyIndex, (byte)i);
 
-                if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                if (itemNum >= 0L & itemNum < Constant.MaxItems)
                 {
                     Item.StreamItem((int)itemNum);
 
@@ -4806,18 +4806,18 @@ namespace Client
 
                         if (itemIcon > 0L & itemIcon <= GameState.NumItems)
                         {
-                            top = Yo + GameState.BankTop + (GameState.BankOffsetY + 32L) * (i / GameState.BankColumns);
-                            Left = Xo + GameState.BankLeft + (GameState.BankOffsetX + 32L) * (i % GameState.BankColumns);
+                            top = yo + GameState.BankTop + (GameState.BankOffsetY + 32L) * (i / GameState.BankColumns);
+                            left = xo + GameState.BankLeft + (GameState.BankOffsetX + 32L) * (i % GameState.BankColumns);
 
                             // draw icon
                             string argpath6 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
-                            GameClient.RenderTexture(ref argpath6, (int)Left, (int)top, 0, 0, 32, 32, 32, 32);
+                            GameClient.RenderTexture(ref argpath6, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
                             if (GetBankValue(GameState.MyIndex, (byte)i) > 1)
                             {
-                                Y = top + 20L;
-                                X = Left + 1L;
+                                y = top + 20L;
+                                x = left + 1L;
                                 amount = GetBankValue(GameState.MyIndex, (byte)i);
 
                                 // Draw currency but with k, m, b etc. using a convertion function
@@ -4834,7 +4834,7 @@ namespace Client
                                     color = (long)Core.Color.BrightGreen;
                                 }
 
-                                Text.RenderText(GameLogic.ConvertCurrency((int)amount), (int)X, (int)Y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
+                                Text.RenderText(GameLogic.ConvertCurrency((int)amount), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                             }
                         }
                     }
@@ -4845,76 +4845,76 @@ namespace Client
 
         public static void DrawTrade()
         {
-            long Xo;
-            long Yo;
-            long Width;
-            long Height;
+            long xo;
+            long yo;
+            long width;
+            long height;
             long i;
-            long Y;
-            long X;
+            long y;
+            long x;
 
-            Xo = Windows[GetWindowIndex("winTrade")].Left;
-            Yo = Windows[GetWindowIndex("winTrade")].Top;
-            Width = Windows[GetWindowIndex("winTrade")].Width;
-            Height = Windows[GetWindowIndex("winTrade")].Height;
+            xo = Windows[GetWindowIndex("winTrade")].Left;
+            yo = Windows[GetWindowIndex("winTrade")].Top;
+            width = Windows[GetWindowIndex("winTrade")].Width;
+            height = Windows[GetWindowIndex("winTrade")].Height;
 
             // render green
             string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
-            GameClient.RenderTexture(ref argpath, (int)(Xo + 4L), (int)(Yo + 23L), 0, 0, (int)(Width - 8L), (int)(Height - 27L), 4, 4);
+            GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             // top wood
             string argpath1 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath1, (int)(Xo + 4L), (int)(Yo + 23L), 100, 100, (int)(Width - 8L), 18, (int)(Width - 8L), 18);
+            GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)(yo + 23L), 100, 100, (int)(width - 8L), 18, (int)(width - 8L), 18);
 
             // left wood
             string argpath2 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath2, (int)(Xo + 4L), (int)(Yo + 40L), 350, 0, 5, (int)(Height - 45L), 5, (int)(Height - 45L));
+            GameClient.RenderTexture(ref argpath2, (int)(xo + 4L), (int)(yo + 40L), 350, 0, 5, (int)(height - 45L), 5, (int)(height - 45L));
 
             // right wood
             string argpath3 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath3, (int)(Xo + Width - 9L), (int)(Yo + 40L), 350, 0, 5, (int)(Height - 45L), 5, (int)(Height - 45L));
+            GameClient.RenderTexture(ref argpath3, (int)(xo + width - 9L), (int)(yo + 40L), 350, 0, 5, (int)(height - 45L), 5, (int)(height - 45L));
 
             // centre wood
             string argpath4 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath4, (int)(Xo + 203L), (int)(Yo + 40L), 350, 0, 6, (int)(Height - 45L), 6, (int)(Height - 45L));
+            GameClient.RenderTexture(ref argpath4, (int)(xo + 203L), (int)(yo + 40L), 350, 0, 6, (int)(height - 45L), 6, (int)(height - 45L));
 
             // bottom wood
             string argpath5 = System.IO.Path.Combine(Path.Gui, 1.ToString());
-            GameClient.RenderTexture(ref argpath5, (int)(Xo + 4L), (int)(Yo + 307L), 100, 100, (int)(Width - 8L), 75, (int)(Width - 8L), 75);
+            GameClient.RenderTexture(ref argpath5, (int)(xo + 4L), (int)(yo + 307L), 100, 100, (int)(width - 8L), 75, (int)(width - 8L), 75);
 
             // left
-            Width = 76L;
-            Height = 76L;
-            Y = Yo + 40L;
+            width = 76L;
+            height = 76L;
+            y = yo + 40L;
             for (i = 0L; i <= 4L; i++)
             {
                 if (i == 4L)
-                    Height = 38L;
+                    height = 38L;
                 string argpath6 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath6, (int)(Xo + 4L + 5L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath6, (int)(xo + 4L + 5L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath7 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath7, (int)(Xo + 80L + 5L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath7, (int)(xo + 80L + 5L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath8 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath8, (int)(Xo + 156L + 5L), (int)Y, 0, 0, 42, (int)Height, 42, (int)Height);
-                Y = Y + 76L;
+                GameClient.RenderTexture(ref argpath8, (int)(xo + 156L + 5L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
+                y = y + 76L;
             }
 
             // right
-            Width = 76L;
-            Height = 76L;
-            Y = Yo + 40L;
+            width = 76L;
+            height = 76L;
+            y = yo + 40L;
             for (i = 0L; i <= 4L; i++)
             {
                 if (i == 4L)
-                    Height = 38L;
+                    height = 38L;
                 string argpath9 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath9, (int)(Xo + 4L + 205L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath9, (int)(xo + 4L + 205L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath10 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath10, (int)(Xo + 80L + 205L), (int)Y, 0, 0, (int)Width, (int)Height, (int)Width, (int)Height);
+                GameClient.RenderTexture(ref argpath10, (int)(xo + 80L + 205L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
                 string argpath11 = System.IO.Path.Combine(Path.Gui, 35.ToString());
-                GameClient.RenderTexture(ref argpath11, (int)(Xo + 156L + 205L), (int)Y, 0, 0, 42, (int)Height, 42, (int)Height);
+                GameClient.RenderTexture(ref argpath11, (int)(xo + 156L + 205L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
 
-                Y = Y + 76L;
+                y = y + 76L;
             }
         }
 
@@ -4922,61 +4922,61 @@ namespace Client
         {
             long i;
             long itemNum;
-            long ItemPic;
-            long Top;
-            long Left;
-            var Color = default(long);
-            string Amount;
-            long X;
-            long Y;
-            long Xo;
-            long Yo;
+            long itemPic;
+            long top;
+            long left;
+            var color = default(long);
+            string amount;
+            long x;
+            long y;
+            long xo;
+            long yo;
 
-            Xo = Windows[GetWindowIndex("winTrade")].Left + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].Left;
-            Yo = Windows[GetWindowIndex("winTrade")].Top + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].Top;
+            xo = Windows[GetWindowIndex("winTrade")].Left + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].Left;
+            yo = Windows[GetWindowIndex("winTrade")].Top + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].Top;
 
             // your items
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
                 if (Data.TradeYourOffer[(int)i].Num >= 0)
                 {
                     itemNum = (long)GetPlayerInv(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num);
-                    if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                    if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
-                        ItemPic = Core.Data.Item[(int)itemNum].Icon;
+                        itemPic = Core.Data.Item[(int)itemNum].Icon;
 
-                        if (ItemPic > 0L & ItemPic <= GameState.NumItems)
+                        if (itemPic > 0L & itemPic <= GameState.NumItems)
                         {
-                            Top = Yo + GameState.TradeTop + (GameState.TradeOffsetY + 32L) * (i / GameState.TradeColumns);
-                            Left = Xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
+                            top = yo + GameState.TradeTop + (GameState.TradeOffsetY + 32L) * (i / GameState.TradeColumns);
+                            left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                             // draw icon
-                            string argpath = System.IO.Path.Combine(Path.Items, ItemPic.ToString());
-                            GameClient.RenderTexture(ref argpath, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                            string argpath = System.IO.Path.Combine(Path.Items, itemPic.ToString());
+                            GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
                             if (Data.TradeYourOffer[(int)i].Value > 1)
                             {
-                                Y = Top + 20L;
-                                X = Left + 1L;
-                                Amount = Data.TradeYourOffer[(int)i].Value.ToString();
+                                y = top + 20L;
+                                x = left + 1L;
+                                amount = Data.TradeYourOffer[(int)i].Value.ToString();
 
                                 // Draw currency but with k, m, b etc. using a convertion function
-                                if (Conversions.ToLong(Amount) < 1000000L)
+                                if (Conversions.ToLong(amount) < 1000000L)
                                 {
-                                    Color = (long)Core.Color.White;
+                                    color = (long)Core.Color.White;
                                 }
-                                else if (Conversions.ToLong(Amount) > 1000000L & Conversions.ToLong(Amount) < 10000000L)
+                                else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                                 {
-                                    Color = (long)Core.Color.Yellow;
+                                    color = (long)Core.Color.Yellow;
                                 }
-                                else if (Conversions.ToLong(Amount) > 10000000L)
+                                else if (Conversions.ToLong(amount) > 10000000L)
                                 {
-                                    Color = (long)Core.Color.BrightGreen;
+                                    color = (long)Core.Color.BrightGreen;
                                 }
 
-                                Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(Amount)), (int)X, (int)Y, GameClient.QbColorToXnaColor((int)Color), GameClient.QbColorToXnaColor((int)Color));
+                                Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                             }
                         }
                     }
@@ -4988,59 +4988,59 @@ namespace Client
         {
             long i;
             long itemNum;
-            long ItemPic;
-            long Top;
-            long Left;
-            var Color = default(long);
-            string Amount;
-            long X;
-            long Y;
-            long Xo;
-            long Yo;
+            long itemPic;
+            long top;
+            long left;
+            var color = default(long);
+            string amount;
+            long x;
+            long y;
+            long xo;
+            long yo;
 
-            Xo = Windows[GetWindowIndex("winTrade")].Left + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].Left;
-            Yo = Windows[GetWindowIndex("winTrade")].Top + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].Top;
+            xo = Windows[GetWindowIndex("winTrade")].Left + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].Left;
+            yo = Windows[GetWindowIndex("winTrade")].Top + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].Top;
 
             // their items
-            for (i = 0L; i < Constant.MAX_INV; i++)
+            for (i = 0L; i < Constant.MaxInv; i++)
             {
                 itemNum = (long)Data.TradeTheirOffer[(int)i].Num;
-                if (itemNum >= 0L & itemNum < Constant.MAX_ITEMS)
+                if (itemNum >= 0L & itemNum < Constant.MaxItems)
                 {
                     Item.StreamItem((int)itemNum);
-                    ItemPic = Core.Data.Item[(int)itemNum].Icon;
+                    itemPic = Core.Data.Item[(int)itemNum].Icon;
 
-                    if (ItemPic > 0L & ItemPic <= GameState.NumItems)
+                    if (itemPic > 0L & itemPic <= GameState.NumItems)
                     {
-                        Top = Yo + GameState.TradeTop + (GameState.TradeOffsetY + 32L) * (i / GameState.TradeColumns);
-                        Left = Xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
+                        top = yo + GameState.TradeTop + (GameState.TradeOffsetY + 32L) * (i / GameState.TradeColumns);
+                        left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                         // draw icon
-                        string argpath = System.IO.Path.Combine(Path.Items, ItemPic.ToString());
-                        GameClient.RenderTexture(ref argpath, (int)Left, (int)Top, 0, 0, 32, 32, 32, 32);
+                        string argpath = System.IO.Path.Combine(Path.Items, itemPic.ToString());
+                        GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                         // If item is a stack - draw the amount you have
                         if (Data.TradeTheirOffer[(int)i].Value > 1)
                         {
-                            Y = Top + 20L;
-                            X = Left + 1L;
-                            Amount = Data.TradeTheirOffer[(int)i].Value.ToString();
+                            y = top + 20L;
+                            x = left + 1L;
+                            amount = Data.TradeTheirOffer[(int)i].Value.ToString();
 
                             // Draw currency but with k, m, b etc. using a convertion function
-                            if (Conversions.ToLong(Amount) < 1000000L)
+                            if (Conversions.ToLong(amount) < 1000000L)
                             {
-                                Color = (long)Core.Color.White;
+                                color = (long)Core.Color.White;
                             }
-                            else if (Conversions.ToLong(Amount) > 1000000L & Conversions.ToLong(Amount) < 10000000L)
+                            else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                             {
-                                Color = (long)Core.Color.Yellow;
+                                color = (long)Core.Color.Yellow;
                             }
-                            else if (Conversions.ToLong(Amount) > 10000000L)
+                            else if (Conversions.ToLong(amount) > 10000000L)
                             {
-                                Color = (long)Core.Color.BrightGreen;
+                                color = (long)Core.Color.BrightGreen;
                             }
 
-                            Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(Amount)), (int)X, (int)Y, GameClient.QbColorToXnaColor((int)Color), GameClient.QbColorToXnaColor((int)Color));
+                            Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                         }
                     }
                 }
@@ -5078,7 +5078,7 @@ namespace Client
             ActiveWindow = GetWindowIndex("winChat");
             SetActiveControl(GetWindowIndex("winChat"), GetControlIndex("winChat", "txtChat"));
             Windows[GetWindowIndex("winChat")].Controls[GetControlIndex("winChat", "txtChat")].Visible = true;
-            GameState.inSmallChat = false;
+            GameState.InSmallChat = false;
             GameState.ChatScroll = 0L;
         }
 
@@ -5092,7 +5092,7 @@ namespace Client
             SetActiveControl(GetWindowIndex("winChat"), GetControlIndex("winChat", "txtChat"));
             Windows[GetWindowIndex("winChat")].Controls[GetControlIndex("winChat", "txtChat")].Visible = false;
 
-            GameState.inSmallChat = true;
+            GameState.InSmallChat = true;
             GameState.ChatScroll = 0L;
         }
 

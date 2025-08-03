@@ -26,128 +26,128 @@ namespace Server
     {
         public static void PacketRouter()
         {
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCheckPing] = Packet_Ping;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CLogin] = Packet_Login;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRegister] = Packet_Register;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAddChar] = Packet_AddChar;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CUseChar] = Packet_UseChar;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CDelChar] = Packet_DelChar;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSayMsg] = Packet_SayMessage;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CBroadcastMsg] = Packet_BroadCastMsg;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CPlayerMsg] = Packet_PlayerMsg;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAdminMsg] = Packet_AdminMsg;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CPlayerMove] = Packet_PlayerMove;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CStopPlayerMove] = Packet_StopPlayerMove;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CPlayerDir] = Packet_PlayerDirection;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CUseItem] = Packet_UseItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAttack] = Packet_Attack;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CPlayerInfoRequest] = Packet_PlayerInfo;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CWarpMeTo] = Packet_WarpMeTo;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CWarpToMe] = Packet_WarpToMe;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CWarpTo] = Packet_WarpTo;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSetSprite] = Packet_SetSprite;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CGetStats] = Packet_GetStats;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestNewMap] = Packet_RequestNewMap;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveMap] = Packet_MapData;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CNeedMap] = Packet_NeedMap;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CMapGetItem] = Item.Packet_GetItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CMapDropItem] = Item.Packet_DropItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CMapRespawn] = Packet_RespawnMap;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CMapReport] = Packet_MapReport;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CKickPlayer] = Packet_KickPlayer;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CBanList] = Packet_Banlist;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CBanDestroy] = Packet_DestroyBans;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CBanPlayer] = Packet_BanPlayer;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCheckPing] = Packet_Ping;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CLogin] = Packet_Login;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRegister] = Packet_Register;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAddChar] = Packet_AddChar;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CUseChar] = Packet_UseChar;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CDelChar] = Packet_DelChar;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSayMsg] = Packet_SayMessage;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CBroadcastMsg] = Packet_BroadCastMsg;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CPlayerMsg] = Packet_PlayerMsg;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAdminMsg] = Packet_AdminMsg;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CPlayerMove] = Packet_PlayerMove;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CStopPlayerMove] = Packet_StopPlayerMove;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CPlayerDir] = Packet_PlayerDirection;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CUseItem] = Packet_UseItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAttack] = Packet_Attack;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CPlayerInfoRequest] = Packet_PlayerInfo;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CWarpMeTo] = Packet_WarpMeTo;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CWarpToMe] = Packet_WarpToMe;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CWarpTo] = Packet_WarpTo;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSetSprite] = Packet_SetSprite;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CGetStats] = Packet_GetStats;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestNewMap] = Packet_RequestNewMap;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveMap] = Packet_MapData;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CNeedMap] = Packet_NeedMap;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CMapGetItem] = Item.Packet_GetItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CMapDropItem] = Item.Packet_DropItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CMapRespawn] = Packet_RespawnMap;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CMapReport] = Packet_MapReport;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CKickPlayer] = Packet_KickPlayer;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CBanList] = Packet_Banlist;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CBanDestroy] = Packet_DestroyBans;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CBanPlayer] = Packet_BanPlayer;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditMap] = Packet_RequestEditMap;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditMap] = Packet_RequestEditMap;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSetAccess] = Packet_SetAccess;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CWhosOnline] = Packet_WhosOnline;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSetMotd] = Packet_SetMotd;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSearch] = Packet_PlayerSearch;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSkills] = Packet_Skills;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCast] = Packet_Cast;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSwapInvSlots] = Packet_SwapInvSlots;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSwapSkillSlots] = Packet_SwapSkillSlots;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSetAccess] = Packet_SetAccess;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CWhosOnline] = Packet_WhosOnline;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSetMotd] = Packet_SetMotd;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSearch] = Packet_PlayerSearch;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSkills] = Packet_Skills;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCast] = Packet_Cast;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSwapInvSlots] = Packet_SwapInvSlots;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSwapSkillSlots] = Packet_SwapSkillSlots;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCheckPing] = Packet_CheckPing;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CUnequip] = Packet_Unequip;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestPlayerData] = Packet_RequestPlayerData;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestItem] = Item.Packet_RequestItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestNpc] = Packet_RequestNpc;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestResource] = Resource.Packet_RequestResource;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSpawnItem] = Packet_SpawnItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CTrainStat] = Packet_TrainStat;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCheckPing] = Packet_CheckPing;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CUnequip] = Packet_Unequip;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestPlayerData] = Packet_RequestPlayerData;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestItem] = Item.Packet_RequestItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestNpc] = Packet_RequestNpc;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestResource] = Resource.Packet_RequestResource;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSpawnItem] = Packet_SpawnItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CTrainStat] = Packet_TrainStat;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestAnimation] = Animation.Packet_RequestAnimation;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestSkill] = Packet_RequestSkill;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestShop] = Packet_RequestShop;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestLevelUp] = Packet_RequestLevelUp;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CForgetSkill] = Packet_ForgetSkill;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCloseShop] = Packet_CloseShop;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CBuyItem] = Packet_BuyItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSellItem] = Packet_SellItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CChangeBankSlots] = Packet_ChangeBankSlots;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CDepositItem] = Packet_DepositItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CWithdrawItem] = Packet_WithdrawItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCloseBank] = Packet_CloseBank;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAdminWarp] = Packet_AdminWarp;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestAnimation] = Animation.Packet_RequestAnimation;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestSkill] = Packet_RequestSkill;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestShop] = Packet_RequestShop;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestLevelUp] = Packet_RequestLevelUp;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CForgetSkill] = Packet_ForgetSkill;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCloseShop] = Packet_CloseShop;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CBuyItem] = Packet_BuyItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSellItem] = Packet_SellItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CChangeBankSlots] = Packet_ChangeBankSlots;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CDepositItem] = Packet_DepositItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CWithdrawItem] = Packet_WithdrawItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCloseBank] = Packet_CloseBank;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAdminWarp] = Packet_AdminWarp;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CTradeInvite] = Packet_TradeInvite;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CHandleTradeInvite] = Packet_HandleTradeInvite;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAcceptTrade] = Packet_AcceptTrade;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CDeclineTrade] = Packet_DeclineTrade;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CTradeItem] = Packet_TradeItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CUntradeItem] = Packet_UntradeItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CTradeInvite] = Packet_TradeInvite;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CHandleTradeInvite] = Packet_HandleTradeInvite;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAcceptTrade] = Packet_AcceptTrade;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CDeclineTrade] = Packet_DeclineTrade;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CTradeItem] = Packet_TradeItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CUntradeItem] = Packet_UntradeItem;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAdmin] = Packet_Admin;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAdmin] = Packet_Admin;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSetHotbarSlot] = Packet_SetHotbarSlot;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CDeleteHotbarSlot] = Packet_DeleteHotbarSlot;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CUseHotbarSlot] = Packet_UseHotbarSlot;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSetHotbarSlot] = Packet_SetHotbarSlot;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CDeleteHotbarSlot] = Packet_DeleteHotbarSlot;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CUseHotbarSlot] = Packet_UseHotbarSlot;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSkillLearn] = Packet_SkillLearn;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSkillLearn] = Packet_SkillLearn;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CEventChatReply] = Event.Packet_EventChatReply;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CEvent] = Event.Packet_Event;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestSwitchesAndVariables] = Event.Packet_RequestSwitchesAndVariables;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSwitchesAndVariables] = Event.Packet_SwitchesAndVariables;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CEventChatReply] = Event.Packet_EventChatReply;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CEvent] = Event.Packet_Event;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestSwitchesAndVariables] = Event.Packet_RequestSwitchesAndVariables;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSwitchesAndVariables] = Event.Packet_SwitchesAndVariables;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestProjectile] = Projectile.HandleRequestProjectile;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CClearProjectile] = Projectile.HandleClearProjectile;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestProjectile] = Projectile.HandleRequestProjectile;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CClearProjectile] = Projectile.HandleClearProjectile;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CEmote] = Packet_Emote;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CEmote] = Packet_Emote;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestParty] = Party.Packet_PartyRquest;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CAcceptParty] = Party.Packet_AcceptParty;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CDeclineParty] = Party.Packet_DeclineParty;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CLeaveParty] = Party.Packet_LeaveParty;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CPartyChatMsg] = Party.Packet_PartyChatMsg;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditItem] = Item.Packet_RequestEditItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveItem] = Item.Packet_SaveItem;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditNpc] = Npc.Packet_RequestEditNpc;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveNpc] = Npc.Packet_SaveNpc;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditShop] = Packet_RequestEditShop;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveShop] = Packet_SaveShop;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditSkill] = Packet_RequestEditSkill;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveSkill] = Packet_SaveSkill;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditResource] = Resource.Packet_RequestEditResource;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveResource] = Resource.Packet_SaveResource;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditAnimation] = Animation.Packet_RequestEditAnimation;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveAnimation] = Animation.Packet_SaveAnimation;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditProjectile] = Projectile.HandleRequestEditProjectile;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveProjectile] = Projectile.HandleSaveProjectile;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditJob] = Packet_RequestEditJob;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveJob] = Packet_SaveJob;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestParty] = Party.Packet_PartyRquest;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CAcceptParty] = Party.Packet_AcceptParty;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CDeclineParty] = Party.Packet_DeclineParty;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CLeaveParty] = Party.Packet_LeaveParty;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CPartyChatMsg] = Party.Packet_PartyChatMsg;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditItem] = Item.Packet_RequestEditItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveItem] = Item.Packet_SaveItem;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditNpc] = Npc.Packet_RequestEditNpc;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveNpc] = Npc.Packet_SaveNpc;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditShop] = Packet_RequestEditShop;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveShop] = Packet_SaveShop;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditSkill] = Packet_RequestEditSkill;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveSkill] = Packet_SaveSkill;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditResource] = Resource.Packet_RequestEditResource;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveResource] = Resource.Packet_SaveResource;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditAnimation] = Animation.Packet_RequestEditAnimation;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveAnimation] = Animation.Packet_SaveAnimation;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditProjectile] = Projectile.HandleRequestEditProjectile;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveProjectile] = Projectile.HandleSaveProjectile;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditJob] = Packet_RequestEditJob;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveJob] = Packet_SaveJob;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestMoral] = Moral.Packet_RequestMoral;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditMoral] = Moral.Packet_RequestEditMoral;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveMoral] = Moral.Packet_SaveMoral;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestMoral] = Moral.Packet_RequestMoral;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditMoral] = Moral.Packet_RequestEditMoral;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveMoral] = Moral.Packet_SaveMoral;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CRequestEditScript] = Script.Packet_RequestEditScript;
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CSaveScript] = Script.Packet_SaveScript;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CRequestEditScript] = Script.Packet_RequestEditScript;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CSaveScript] = Script.Packet_SaveScript;
 
-            NetworkConfig.Socket.PacketID[(int)ClientPackets.CCloseEditor] = Packet_CloseEditor;
+            NetworkConfig.Socket.PacketId[(int)ClientPackets.CCloseEditor] = Packet_CloseEditor;
 
         }
 
@@ -159,7 +159,7 @@ namespace Server
         private static void Packet_Login(int index, ref byte[] data)
         {
             string username;
-            string IP;
+            string ip;
             string password;
             int i;
             var buffer = new ByteStream(data);
@@ -170,7 +170,7 @@ namespace Server
                 {
                     // check if its banned
                     // Cut off last portion of ip
-                    IP = NetworkConfig.Socket.ClientIP(index);
+                    ip = NetworkConfig.Socket.ClientIp(index);
 
                     if (General.GetShutDownTimer != null && General.GetShutDownTimer.IsRunning)
                     {
@@ -203,7 +203,7 @@ namespace Server
                         return;
                     }
 
-                    if (username.Length > Core.Constant.NAME_LENGTH | username.Length < Core.Constant.MIN_NAME_LENGTH)
+                    if (username.Length > Core.Constant.NameLength | username.Length < Core.Constant.MinNameLength)
                     {
                         NetworkSend.AlertMsg(index, (byte)SystemMessage.NameLengthInvalid);
                         return;
@@ -227,7 +227,7 @@ namespace Server
                         return;
                     }
 
-                    if (Database.IsBanned(index, IP))
+                    if (Database.IsBanned(index, ip))
                     {
                         NetworkSend.AlertMsg(index, (byte)SystemMessage.Banned, (byte)Menu.Login);
                         return;
@@ -240,8 +240,8 @@ namespace Server
                     }
 
                     // Show the player up on the socket status
-                    Log.Add(GetAccountLogin(index) + " has logged in from " + NetworkConfig.Socket.ClientIP(index) + ".", Constant.PLAYER_LOG);
-                    Console.WriteLine(GetAccountLogin(index) + " has logged in from " + NetworkConfig.Socket.ClientIP(index) + ".");
+                    Log.Add(GetAccountLogin(index) + " has logged in from " + NetworkConfig.Socket.ClientIp(index) + ".", Constant.PlayerLog);
+                    Console.WriteLine(GetAccountLogin(index) + " has logged in from " + NetworkConfig.Socket.ClientIp(index) + ".");
 
                     // send them to the character portal
                     NetworkSend.SendPlayerChars(index);
@@ -257,7 +257,7 @@ namespace Server
         private static void Packet_Register(int index, ref byte[] data)
         {
             string username;
-            string IP;
+            string ip;
             string password;
             int i;
             int n;
@@ -270,9 +270,9 @@ namespace Server
                 {
                     // check if its banned
                     // Cut off last portion of ip
-                    IP = NetworkConfig.Socket.ClientIP(index);
+                    ip = NetworkConfig.Socket.ClientIp(index);
 
-                    if (Database.IsBanned(index, IP))
+                    if (Database.IsBanned(index, ip))
                     {
                         NetworkSend.AlertMsg(index, (byte)SystemMessage.Banned, (byte)Menu.Register);
                         return;
@@ -362,7 +362,7 @@ namespace Server
                 {
                     slot = buffer.ReadByte();
 
-                    if (slot < 1 | slot > Core.Constant.MAX_CHARS)
+                    if (slot < 1 | slot > Core.Constant.MaxChars)
                     {
                         NetworkSend.AlertMsg(index, (byte)SystemMessage.MaxCharactersReached, (byte)Menu.CharacterSelect);
                         return;
@@ -395,7 +395,7 @@ namespace Server
                 sexNum = buffer.ReadInt32();
                 jobNum = buffer.ReadInt32();
 
-                if (slot < 1 | slot > Core.Constant.MAX_CHARS)
+                if (slot < 1 | slot > Core.Constant.MaxChars)
                 {
                     NetworkSend.AlertMsg(index, (byte)SystemMessage.MaxCharactersReached, (byte)Menu.CharacterSelect);
                     return;
@@ -431,7 +431,7 @@ namespace Server
                 if (sexNum < (byte) Sex.Male | sexNum > (byte) Sex.Female)
                     return;
 
-                if (jobNum < 0 | jobNum > Core.Constant.MAX_JOBS)
+                if (jobNum < 0 | jobNum > Core.Constant.MaxJobs)
                     return;
 
                 if (sexNum == (byte) Sex.Male)
@@ -455,7 +455,7 @@ namespace Server
                 if (Data.Char.Count == 1)
                     SetPlayerAccess(index, (int)AccessLevel.Owner);
 
-                Log.Add("Character " + name + " added to " + GetAccountLogin(index) + "'s account.", Constant.PLAYER_LOG);
+                Log.Add("Character " + name + " added to " + GetAccountLogin(index) + "'s account.", Constant.PlayerLog);
                 Player.HandleUseChar(index);
 
                 buffer.Dispose();
@@ -471,7 +471,7 @@ namespace Server
             {
                 slot = buffer.ReadByte();
 
-                if (slot < 1 | slot > Core.Constant.MAX_CHARS)
+                if (slot < 1 | slot > Core.Constant.MaxChars)
                 {
                     NetworkSend.AlertMsg(index, (byte)SystemMessage.MaxCharactersReached, (byte)Menu.CharacterSelect);
                     return;
@@ -500,7 +500,7 @@ namespace Server
 
             msg = buffer.ReadString();
 
-            Log.Add("Map #" + GetPlayerMap(index) + ": " + GetPlayerName(index) + " says, '" + msg + "'", Constant.PLAYER_LOG);
+            Log.Add("Map #" + GetPlayerMap(index) + ": " + GetPlayerName(index) + " says, '" + msg + "'", Constant.PlayerLog);
 
             NetworkSend.SayMsg_Map(GetPlayerMap(index), index, msg, (int) Color.White);
             NetworkSend.SendChatBubble(GetPlayerMap(index), index, (int)TargetType.Player, msg, (int) Color.White);
@@ -518,7 +518,7 @@ namespace Server
 
             s = "[Global] " + GetPlayerName(index) + ": " + msg;
             NetworkSend.SayMsg_Global(index, msg, (int) Color.White);
-            Log.Add(s, Constant.PLAYER_LOG);
+            Log.Add(s, Constant.PlayerLog);
             Console.WriteLine(s);
 
             buffer.Dispose();
@@ -526,23 +526,23 @@ namespace Server
 
         public static void Packet_PlayerMsg(int index, ref byte[] data)
         {
-            string OtherPlayer;
-            string Msg;
-            int OtherPlayerindex;
+            string otherPlayer;
+            string msg;
+            int otherPlayerindex;
             var buffer = new ByteStream(data);
 
-            OtherPlayer = buffer.ReadString();
-            Msg = buffer.ReadString();
+            otherPlayer = buffer.ReadString();
+            msg = buffer.ReadString();
             buffer.Dispose();
 
-            OtherPlayerindex = GameLogic.FindPlayer(OtherPlayer);
-            if (OtherPlayerindex != index)
+            otherPlayerindex = GameLogic.FindPlayer(otherPlayer);
+            if (otherPlayerindex != index)
             {
-                if (OtherPlayerindex >= 0)
+                if (otherPlayerindex >= 0)
                 {
-                    Log.Add(GetPlayerName(index) + " tells " + GetPlayerName(index) + ", '" + Msg + "'", Constant.PLAYER_LOG);
-                    NetworkSend.PlayerMsg(OtherPlayerindex, GetPlayerName(index) + " tells you, '" + Msg + "'", (int) Color.Pink);
-                    NetworkSend.PlayerMsg(index, "You tell " + GetPlayerName(OtherPlayerindex) + ", '" + Msg + "'", (int) Color.Pink);
+                    Log.Add(GetPlayerName(index) + " tells " + GetPlayerName(index) + ", '" + msg + "'", Constant.PlayerLog);
+                    NetworkSend.PlayerMsg(otherPlayerindex, GetPlayerName(index) + " tells you, '" + msg + "'", (int) Color.Pink);
+                    NetworkSend.PlayerMsg(index, "You tell " + GetPlayerName(otherPlayerindex) + ", '" + msg + "'", (int) Color.Pink);
                 }
                 else
                 {
@@ -564,7 +564,7 @@ namespace Server
             msg = buffer.ReadString();
 
             NetworkSend.AdminMsg(GetPlayerMap(index), msg, (int) Color.BrightCyan);
-            Log.Add(s, Constant.PLAYER_LOG);
+            Log.Add(s, Constant.PlayerLog);
             Console.WriteLine(s);
 
             buffer.Dispose();
@@ -572,7 +572,7 @@ namespace Server
 
         private static void Packet_PlayerMove(int index, ref byte[] data)
         {
-            byte Dir;
+            byte dir;
             byte movement;
             int tmpX;
             int tmpY;
@@ -581,13 +581,13 @@ namespace Server
             if (Core.Data.TempPlayer[index].GettingMap)
                 return;
 
-            Dir = buffer.ReadByte();
+            dir = buffer.ReadByte();
             movement = buffer.ReadByte();
             tmpX = buffer.ReadInt32();
             tmpY = buffer.ReadInt32();
             buffer.Dispose();
 
-            SetPlayerDir(index, Dir);
+            SetPlayerDir(index, dir);
             Core.Data.Player[index].Moving = movement;
 
             buffer.Dispose();
@@ -647,7 +647,7 @@ namespace Server
         public static void Packet_Attack(int index, ref byte[] data)
         {
             int i;
-            int Tempindex;
+            int tempindex;
             var x = default(int);
             var y = default(int);
             var buffer = new ByteStream(data);
@@ -841,7 +841,7 @@ namespace Server
                     Player.PlayerWarp(index, GetPlayerMap(n), GetPlayerX(n), GetPlayerY(n), (byte)Direction.Down);
                     NetworkSend.PlayerMsg(n, GetPlayerName(index) + " has warped to you.", (int) Color.Yellow);
                     NetworkSend.PlayerMsg(index, "You have been warped to " + GetPlayerName(n) + ".", (int) Color.Yellow);
-                    Log.Add(GetPlayerName(index) + " has warped to " + GetPlayerName(n) + ", map #" + GetPlayerMap(n) + ".", Constant.ADMIN_LOG);
+                    Log.Add(GetPlayerName(index) + " has warped to " + GetPlayerName(n) + ", map #" + GetPlayerMap(n) + ".", Constant.AdminLog);
                 }
                 else
                 {
@@ -875,7 +875,7 @@ namespace Server
                     Player.PlayerWarp(n, GetPlayerMap(index), GetPlayerX(index), GetPlayerY(index), (byte)Direction.Down);
                     NetworkSend.PlayerMsg(n, "You have been summoned by " + GetPlayerName(index) + ".", (int) Color.Yellow);
                     NetworkSend.PlayerMsg(index, GetPlayerName(n) + " has been summoned.", (int) Color.Yellow);
-                    Log.Add(GetPlayerName(index) + " has warped " + GetPlayerName(n) + " to self, map #" + GetPlayerMap(index) + ".", Constant.ADMIN_LOG);
+                    Log.Add(GetPlayerName(index) + " has warped " + GetPlayerName(n) + " to self, map #" + GetPlayerMap(index) + ".", Constant.AdminLog);
                 }
                 else
                 {
@@ -903,12 +903,12 @@ namespace Server
             buffer.Dispose();
 
             // Prevent hacking
-            if (n < 0 | n > Core.Constant.MAX_MAPS)
+            if (n < 0 | n > Core.Constant.MaxMaps)
                 return;
 
             Player.PlayerWarp(index, n, GetPlayerX(index), GetPlayerY(index), (byte)Direction.Down);
             NetworkSend.PlayerMsg(index, "You have been warped to map #" + n, (int) Color.Yellow);
-            Log.Add(GetPlayerName(index) + " warped to map #" + n + ".", Constant.ADMIN_LOG);
+            Log.Add(GetPlayerName(index) + " warped to map #" + n + ".", Constant.AdminLog);
         }
 
         public static void Packet_SetSprite(int index, ref byte[] data)
@@ -1012,7 +1012,7 @@ namespace Server
 
             Data.Map[mapNum].Tile = new Core.Type.Tile[(Data.Map[mapNum].MaxX), (Data.Map[mapNum].MaxY)];
 
-            var loopTo = Core.Constant.MAX_MAP_NPCS;
+            var loopTo = Core.Constant.MaxMapNpcs;
             for (x = 0; x < loopTo; x++)
             {
                 Database.ClearMapNpc(x, mapNum);
@@ -1030,9 +1030,9 @@ namespace Server
                         withBlock.Tile[x, y].Data1 = buffer.ReadInt32();
                         withBlock.Tile[x, y].Data2 = buffer.ReadInt32();
                         withBlock.Tile[x, y].Data3 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data1_2 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data2_2 = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Data3_2 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data12 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data22 = buffer.ReadInt32();
+                        withBlock.Tile[x, y].Data32 = buffer.ReadInt32();
                         withBlock.Tile[x, y].DirBlock = (byte)buffer.ReadInt32();
                         var loopTo3 = System.Enum.GetValues(typeof(MapLayer)).Length;
 						withBlock.Tile[x, y].Layer = new Core.Type.Layer[loopTo3];
@@ -1222,7 +1222,7 @@ namespace Server
             }
 
             // Clear it all out
-            var loopTo11 = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo11 = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo11; i++)
             {
                 Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(index), Data.MapItem[GetPlayerMap(index), i].X, Data.MapItem[GetPlayerMap(index), i].Y);
@@ -1266,7 +1266,7 @@ namespace Server
                 NetworkSend.SendMapData(index, GetPlayerMap(index), false);
             }
 
-            if (Data.Map[GetPlayerMap(index)].Shop >= 0 && Data.Map[GetPlayerMap(index)].Shop < Core.Constant.MAX_SHOPS)
+            if (Data.Map[GetPlayerMap(index)].Shop >= 0 && Data.Map[GetPlayerMap(index)].Shop < Core.Constant.MaxShops)
             {
                 if (!string.IsNullOrEmpty(Data.Shop[Data.Map[GetPlayerMap(index)].Shop].Name))
                 {
@@ -1288,7 +1288,7 @@ namespace Server
                 return;
 
             // Clear out it all
-            var loopTo = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo; i++)
             {
                 Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(index), Data.MapItem[GetPlayerMap(index), i].X, Data.MapItem[GetPlayerMap(index), i].Y);
@@ -1299,7 +1299,7 @@ namespace Server
             Item.SpawnMapItems(GetPlayerMap(index));
 
             // Respawn NpcS
-            var loopTo1 = Core.Constant.MAX_MAP_NPCS;
+            var loopTo1 = Core.Constant.MaxMapNpcs;
             for (i = 0; i < loopTo1; i++)
                 Npc.SpawnNpc(i, GetPlayerMap(index));
 
@@ -1307,7 +1307,7 @@ namespace Server
 
             Resource.CacheResources(GetPlayerMap(index));
             NetworkSend.PlayerMsg(index, "Map respawned.", (int) Color.BrightGreen);
-            Log.Add(GetPlayerName(index) + " has respawned map #" + GetPlayerMap(index), Constant.ADMIN_LOG);
+            Log.Add(GetPlayerName(index) + " has respawned map #" + GetPlayerMap(index), Constant.AdminLog);
 
             buffer.Dispose();
         }
@@ -1334,7 +1334,7 @@ namespace Server
                     if (GetPlayerAccess(n) < GetPlayerAccess(index))
                     {
                         NetworkSend.GlobalMsg(GetPlayerName(n) + " has been kicked from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(index) + "!");
-                        Log.Add(GetPlayerName(index) + " has kicked " + GetPlayerName(n) + ".", Constant.ADMIN_LOG);
+                        Log.Add(GetPlayerName(index) + " has kicked " + GetPlayerName(n) + ".", Constant.AdminLog);
                         NetworkSend.AlertMsg(n, (byte)SystemMessage.Kicked, (byte)Menu.Login);
                     }
                     else
@@ -1481,36 +1481,36 @@ namespace Server
 
         public static void Packet_SaveShop(int index, ref byte[] data)
         {
-            int ShopNum;
+            int shopNum;
             var buffer = new ByteStream(data);
 
             // Prevent hacking
             if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
                 return;
 
-            ShopNum = buffer.ReadInt32();
+            shopNum = buffer.ReadInt32();
 
             // Prevent hacking
-            if (ShopNum < 0 | ShopNum > Core.Constant.MAX_SHOPS)
+            if (shopNum < 0 | shopNum > Core.Constant.MaxShops)
                 return;
 
-            Data.Shop[ShopNum].BuyRate = buffer.ReadInt32();
-            Data.Shop[ShopNum].Name = buffer.ReadString();
+            Data.Shop[shopNum].BuyRate = buffer.ReadInt32();
+            Data.Shop[shopNum].Name = buffer.ReadString();
 
-            for (int i = 0, loopTo = Core.Constant.MAX_TRADES; i < loopTo; i++)
+            for (int i = 0, loopTo = Core.Constant.MaxTrades; i < loopTo; i++)
             {
-                Data.Shop[ShopNum].TradeItem[i].CostItem = buffer.ReadInt32();
-                Data.Shop[ShopNum].TradeItem[i].CostValue = buffer.ReadInt32();
-                Data.Shop[ShopNum].TradeItem[i].Item = buffer.ReadInt32();
-                Data.Shop[ShopNum].TradeItem[i].ItemValue = buffer.ReadInt32();
+                Data.Shop[shopNum].TradeItem[i].CostItem = buffer.ReadInt32();
+                Data.Shop[shopNum].TradeItem[i].CostValue = buffer.ReadInt32();
+                Data.Shop[shopNum].TradeItem[i].Item = buffer.ReadInt32();
+                Data.Shop[shopNum].TradeItem[i].ItemValue = buffer.ReadInt32();
             }
 
             buffer.Dispose();
 
             // Save it
-            NetworkSend.SendUpdateShopToAll(ShopNum);
-            Database.SaveShop(ShopNum);
-            Log.Add(GetAccountLogin(index) + " saving shop #" + ShopNum + ".", Constant.ADMIN_LOG);
+            NetworkSend.SendUpdateShopToAll(shopNum);
+            Database.SaveShop(shopNum);
+            Log.Add(GetAccountLogin(index) + " saving shop #" + shopNum + ".", Constant.AdminLog);
         }
 
         public static void Packet_RequestEditSkill(int index, ref byte[] data)
@@ -1551,7 +1551,7 @@ namespace Server
             skillNum = buffer.ReadInt32();
 
             // Prevent hacking
-            if (skillNum < 0 | skillNum > Core.Constant.MAX_SKILLS)
+            if (skillNum < 0 | skillNum > Core.Constant.MaxSkills)
                 return;
 
             Data.Skill[skillNum].AccessReq = buffer.ReadInt32();
@@ -1587,7 +1587,7 @@ namespace Server
             // Save it
             NetworkSend.SendUpdateSkillToAll(skillNum);
             Database.SaveSkill(skillNum);
-            Log.Add(GetAccountLogin(index) + " saved Skill #" + skillNum + ".", Constant.ADMIN_LOG);
+            Log.Add(GetAccountLogin(index) + " saved Skill #" + skillNum + ".", Constant.AdminLog);
 
             buffer.Dispose();
         }
@@ -1631,7 +1631,7 @@ namespace Server
 
                     SetPlayerAccess(n, (byte)i);
                     NetworkSend.SendPlayerData(n);
-                    Log.Add(GetPlayerName(index) + " has modified " + GetPlayerName(n) + "'s access.", Constant.ADMIN_LOG);
+                    Log.Add(GetPlayerName(index) + " has modified " + GetPlayerName(n) + "'s access.", Constant.AdminLog);
                 }
                 else
                 {
@@ -1663,7 +1663,7 @@ namespace Server
             SettingsManager.Save();
 
             NetworkSend.GlobalMsg("Welcome changed to: " + SettingsManager.Instance.Welcome);
-            Log.Add(GetPlayerName(index) + " changed welcome to: " + SettingsManager.Instance.Welcome, Constant.ADMIN_LOG);
+            Log.Add(GetPlayerName(index) + " changed welcome to: " + SettingsManager.Instance.Welcome, Constant.AdminLog);
 
             buffer.Dispose();
         }
@@ -1752,7 +1752,7 @@ namespace Server
             }
 
             // Check for an item
-            var loopTo1 = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo1 = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo1; i++)
             {
                 if (Data.MapItem[GetPlayerMap(index), i].Num >= 0)
@@ -1772,7 +1772,7 @@ namespace Server
             }
 
             // Check for an npc
-            var loopTo2 = Core.Constant.MAX_MAP_NPCS;
+            var loopTo2 = Core.Constant.MaxMapNpcs;
             for (i = 0; i < loopTo2; i++)
             {
                 if (Data.MapNpc[GetPlayerMap(index)].Npc[i].Num >= 0)
@@ -1908,7 +1908,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_NPCS)
+            if (n < 0 | n > Core.Constant.MaxNpcs)
                 return;
 
             Npc.SendUpdateNpcTo(index, n);
@@ -1962,7 +1962,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_SKILLS)
+            if (n < 0 | n > Core.Constant.MaxSkills)
                 return;
 
             NetworkSend.SendUpdateSkillTo(index, n);
@@ -1975,7 +1975,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_SHOPS)
+            if (n < 0 | n > Core.Constant.MaxShops)
                 return;
 
             NetworkSend.SendUpdateShopTo(index, n);
@@ -1993,30 +1993,30 @@ namespace Server
 
         public static void Packet_ForgetSkill(int index, ref byte[] data)
         {
-            int SkillSlot;
+            int skillSlot;
             var buffer = new ByteStream(data);
 
-            SkillSlot = buffer.ReadInt32();
+            skillSlot = buffer.ReadInt32();
 
             // Check for subscript out of range
-            if (SkillSlot < 0 | SkillSlot > Core.Constant.MAX_PLAYER_SKILLS)
+            if (skillSlot < 0 | skillSlot > Core.Constant.MaxPlayerSkills)
                 return;
 
             // dont let them forget a skill which is in CD
-            if (Core.Data.TempPlayer[index].SkillCD[SkillSlot] > 0)
+            if (Core.Data.TempPlayer[index].SkillCd[skillSlot] > 0)
             {
                 NetworkSend.PlayerMsg(index, "Cannot forget a skill which is cooling down!", (int) Color.BrightRed);
                 return;
             }
 
             // dont let them forget a skill which is buffered
-            if (Core.Data.TempPlayer[index].SkillBuffer == SkillSlot)
+            if (Core.Data.TempPlayer[index].SkillBuffer == skillSlot)
             {
                 NetworkSend.PlayerMsg(index, "Cannot forget a skill which you are casting!", (int) Color.BrightRed);
                 return;
             }
 
-            Core.Data.Player[index].Skill[SkillSlot].Num = -1;
+            Core.Data.Player[index].Skill[skillSlot].Num = -1;
             NetworkSend.SendPlayerSkills(index);
 
             buffer.Dispose();
@@ -2039,7 +2039,7 @@ namespace Server
             // not in shop, exit out
             shopMum = Core.Data.TempPlayer[index].InShop;
 
-            if (shopMum < 0 | shopMum > Core.Constant.MAX_SHOPS)
+            if (shopMum < 0 | shopMum > Core.Constant.MaxShops)
                 return;
 
             ref var withBlock = ref Data.Shop[(int)shopMum].TradeItem[shopSlot];
@@ -2081,18 +2081,18 @@ namespace Server
             invSlot = buffer.ReadInt32();
 
             // if invalid, exit out
-            if (invSlot < 0 | invSlot > Core.Constant.MAX_INV)
+            if (invSlot < 0 | invSlot > Core.Constant.MaxInv)
                 return;
 
             // has item?
-            if (GetPlayerInv(index, invSlot) < 0 | GetPlayerInv(index, invSlot) > Core.Constant.MAX_ITEMS)
+            if (GetPlayerInv(index, invSlot) < 0 | GetPlayerInv(index, invSlot) > Core.Constant.MaxItems)
                 return;
 
             // seems to be valid
             itemNum = GetPlayerInv(index, invSlot);
             shopNum = Core.Data.TempPlayer[index].InShop;
 
-            if (shopNum < 0 || shopNum > Core.Constant.MAX_SHOPS)
+            if (shopNum < 0 || shopNum > Core.Constant.MaxShops)
             {
                 return;
             }
@@ -2190,7 +2190,7 @@ namespace Server
                 SetPlayerX(index, x);
                 SetPlayerY(index, y);
                 SetPlayerDir(index, (byte)Direction.Down);
-                NetworkSend.SendPlayerXYToMap(index);
+                NetworkSend.SendPlayerXyToMap(index);
             }
 
             buffer.Dispose();
@@ -2198,18 +2198,18 @@ namespace Server
 
         public static void Packet_TradeInvite(int index, ref byte[] data)
         {
-            string Name;
+            string name;
             int tradeTarget;
             var buffer = new ByteStream(data);
 
-            Name = buffer.ReadString();
+            name = buffer.ReadString();
 
             buffer.Dispose();
 
             // Check for a player
-            tradeTarget = GameLogic.FindPlayer(Name);
+            tradeTarget = GameLogic.FindPlayer(name);
 
-            if (tradeTarget < 0 | tradeTarget >= Core.Constant.MAX_PLAYERS)
+            if (tradeTarget < 0 | tradeTarget >= Core.Constant.MaxPlayers)
                 return;
 
             // can't trade with yourself..
@@ -2241,7 +2241,7 @@ namespace Server
 
             tradeTarget = Core.Data.TempPlayer[index].TradeRequest;
 
-            if (tradeTarget < 0 | tradeTarget >= Core.Constant.MAX_PLAYERS)
+            if (tradeTarget < 0 | tradeTarget >= Core.Constant.MaxPlayers)
                 return;
 
             if (status == 0)
@@ -2269,10 +2269,10 @@ namespace Server
                 // clear out their trade offers
                 Core.Data.TempPlayer[tradeTarget].InTrade = index;
                 ;
-                Array.Resize(ref Core.Data.TempPlayer[index].TradeOffer, Core.Constant.MAX_INV);
-                Array.Resize(ref Core.Data.TempPlayer[tradeTarget].TradeOffer, Core.Constant.MAX_INV);
+                Array.Resize(ref Core.Data.TempPlayer[index].TradeOffer, Core.Constant.MaxInv);
+                Array.Resize(ref Core.Data.TempPlayer[tradeTarget].TradeOffer, Core.Constant.MaxInv);
 
-                for (int i = 0, loopTo = Core.Constant.MAX_INV; i < loopTo; i++)
+                for (int i = 0, loopTo = Core.Constant.MaxInv; i < loopTo; i++)
                 {
                     Core.Data.TempPlayer[index].TradeOffer[i].Num = -1;
                     Core.Data.TempPlayer[index].TradeOffer[i].Value = 0;
@@ -2302,8 +2302,8 @@ namespace Server
             int itemNum;
             int tradeTarget;
             int i;
-            var tmpTradeItem = new PlayerInv[Core.Constant.MAX_INV];
-            var tmpTradeItem2 = new PlayerInv[Core.Constant.MAX_INV];
+            var tmpTradeItem = new PlayerInv[Core.Constant.MaxInv];
+            var tmpTradeItem2 = new PlayerInv[Core.Constant.MaxInv];
 
             Core.Data.TempPlayer[index].AcceptTrade = true;
 
@@ -2318,7 +2318,7 @@ namespace Server
             }
 
             // take their items
-            var loopTo = Core.Constant.MAX_INV;
+            var loopTo = Core.Constant.MaxInv;
             for (i = 0; i < loopTo; i++)
             {
                 tmpTradeItem[i].Num = -1;
@@ -2353,7 +2353,7 @@ namespace Server
             }
 
             // taken all items. now they can't not get items because of no inventory space.
-            var loopTo1 = Core.Constant.MAX_INV;
+            var loopTo1 = Core.Constant.MaxInv;
             for (i = 0; i < loopTo1; i++)
             {
                 // player
@@ -2374,7 +2374,7 @@ namespace Server
             NetworkSend.SendInventory(tradeTarget);
 
             // they now have all the items. Clear out values + let them out of the trade.
-            var loopTo2 = Core.Constant.MAX_INV;
+            var loopTo2 = Core.Constant.MaxInv;
             for (i = 0; i < loopTo2; i++)
             {
                 Core.Data.TempPlayer[index].TradeOffer[i].Num = -1;
@@ -2399,7 +2399,7 @@ namespace Server
 
             tradeTarget = (int)Core.Data.TempPlayer[index].InTrade;
 
-            for (int i = 0, loopTo = Core.Constant.MAX_INV; i < loopTo; i++)
+            for (int i = 0, loopTo = Core.Constant.MaxInv; i < loopTo; i++)
             {
                 Core.Data.TempPlayer[index].TradeOffer[i].Num = -1;
                 Core.Data.TempPlayer[index].TradeOffer[i].Value = 0;
@@ -2431,12 +2431,12 @@ namespace Server
 
             buffer.Dispose();
 
-            if (invslot < 0 | invslot > Core.Constant.MAX_INV)
+            if (invslot < 0 | invslot > Core.Constant.MaxInv)
                 return;
 
             itemnum = GetPlayerInv(index, invslot);
 
-            if (itemnum < 0 | itemnum > Core.Constant.MAX_ITEMS)
+            if (itemnum < 0 | itemnum > Core.Constant.MaxItems)
                 return;
 
             // make sure they have the amount they offer
@@ -2447,7 +2447,7 @@ namespace Server
             {
 
                 // check if already offering same currency item
-                var loopTo = Core.Constant.MAX_INV;
+                var loopTo = Core.Constant.MaxInv;
                 for (i = 0; i < loopTo; i++)
                 {
 
@@ -2480,7 +2480,7 @@ namespace Server
             else
             {
                 // make sure they're not already offering it
-                var loopTo1 = Core.Constant.MAX_INV;
+                var loopTo1 = Core.Constant.MaxInv;
                 for (i = 0; i < loopTo1; i++)
                 {
                     if (Core.Data.TempPlayer[index].TradeOffer[i].Num == invslot)
@@ -2492,7 +2492,7 @@ namespace Server
             }
 
             // not already offering - find earliest empty slot
-            var loopTo2 = Core.Constant.MAX_INV;
+            var loopTo2 = Core.Constant.MaxInv;
             for (i = 0; i < loopTo2; i++)
             {
                 if (Core.Data.TempPlayer[index].TradeOffer[i].Num == -1)
@@ -2526,7 +2526,7 @@ namespace Server
 
             buffer.Dispose();
 
-            if (tradeslot < 0 | tradeslot > Core.Constant.MAX_INV)
+            if (tradeslot < 0 | tradeslot > Core.Constant.MaxInv)
                 return;
 
             if (Core.Data.TempPlayer[index].TradeOffer[tradeslot].Num < 0)
@@ -2547,12 +2547,12 @@ namespace Server
             NetworkSend.SendTradeUpdate((int)Core.Data.TempPlayer[index].InTrade, 1);
         }
 
-        public static void HackingAttempt(int index, string Reason)
+        public static void HackingAttempt(int index, string reason)
         {
 
             if (index > 0 & NetworkConfig.IsPlaying(index))
             {
-                NetworkSend.GlobalMsg(GetAccountLogin(index) + "/" + GetPlayerName(index) + " has been booted for (" + Reason + ")");
+                NetworkSend.GlobalMsg(GetAccountLogin(index) + "/" + GetPlayerName(index) + " has been booted for (" + reason + ")");
 
                 NetworkSend.AlertMsg(index, (byte)SystemMessage.Connection, (byte)Menu.Login);
             }
@@ -2590,12 +2590,12 @@ namespace Server
             oldSlot = buffer.ReadInt32();
             skill = buffer.ReadInt32();
 
-            if (newSlot < 0 | newSlot > Core.Constant.MAX_HOTBAR)
+            if (newSlot < 0 | newSlot > Core.Constant.MaxHotbar)
                 return;
 
             if (type == (byte)PartOrigin.Hotbar)
             {
-                if (oldSlot < 0 | oldSlot > Core.Constant.MAX_HOTBAR)
+                if (oldSlot < 0 | oldSlot > Core.Constant.MaxHotbar)
                     return;
 
                 int oldItem = Core.Data.Player[index].Hotbar[oldSlot].Slot;
@@ -2627,7 +2627,7 @@ namespace Server
 
             slot = buffer.ReadInt32();
 
-            if (slot < 0 | slot > Core.Constant.MAX_HOTBAR)
+            if (slot < 0 | slot > Core.Constant.MaxHotbar)
                 return;
 
             Core.Data.Player[index].Hotbar[slot].Slot = -1;
@@ -2646,7 +2646,7 @@ namespace Server
             slot = buffer.ReadInt32();
             buffer.Dispose();
 
-            if (slot < 0 | slot > Core.Constant.MAX_HOTBAR)
+            if (slot < 0 | slot > Core.Constant.MaxHotbar)
                 return;
 
             if (Core.Data.Player[index].Hotbar[slot].Slot >= 0)
@@ -2734,7 +2734,7 @@ namespace Server
                 for (x = 0; x < loopTo; x++)
                     withBlock.Stat[x] = buffer.ReadInt32();
 
-                for (int q = 0; q < Core.Constant.MAX_START_ITEMS; q++)
+                for (int q = 0; q < Core.Constant.MaxStartItems; q++)
                 {
                     withBlock.StartItem[q] = buffer.ReadInt32();
                     withBlock.StartValue[q] = buffer.ReadInt32();
@@ -2754,12 +2754,12 @@ namespace Server
 
         private static void Packet_Emote(int index, ref byte[] data)
         {
-            int Emote;
+            int emote;
             var buffer = new ByteStream(data);
 
-            Emote = buffer.ReadInt32();
+            emote = buffer.ReadInt32();
 
-            NetworkSend.SendEmote(index, Emote);
+            NetworkSend.SendEmote(index, emote);
 
             buffer.Dispose();
         }

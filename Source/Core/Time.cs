@@ -97,37 +97,37 @@ namespace Core
             }
         }
 
-        private int mSyncInterval;
+        private int _mSyncInterval;
 
         public int SyncInterval
         {
             get
             {
-                return mSyncInterval;
+                return _mSyncInterval;
             }
             set
             {
-                mSyncInterval = value;
+                _mSyncInterval = value;
 
                 _mTimer.Stop();
-                _mTimer.Interval = mSyncInterval;
+                _mTimer.Interval = _mSyncInterval;
                 _mTimer.Start();
                 var argsource = this;
                 OnTimeSync?.Invoke(ref argsource);
             }
         }
 
-        private TimeOfDay mTimeOfDay;
+        private TimeOfDay _mTimeOfDay;
 
         public TimeOfDay TimeOfDay
         {
             get
             {
-                return mTimeOfDay;
+                return _mTimeOfDay;
             }
             set
             {
-                mTimeOfDay = value;
+                _mTimeOfDay = value;
                 var argsource = this;
                 OnTimeOfDayChanged?.Invoke(ref argsource);
             }
@@ -135,7 +135,7 @@ namespace Core
 
         public Clock()
         {
-            mSyncInterval = (int)Math.Round(6000.0);
+            _mSyncInterval = (int)Math.Round(6000.0);
 
             _mTimer = new Timer(SyncInterval);
 

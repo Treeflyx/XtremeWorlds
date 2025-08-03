@@ -21,7 +21,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_ITEMS - 1;
+            var loopTo = Core.Constant.MaxItems - 1;
             for (i = 0; i < loopTo; i++)
                 SaveItem(i);
 
@@ -43,7 +43,7 @@ namespace Server
 
         public static async System.Threading.Tasks.Task LoadItemsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MAX_ITEMS).Select(i => Task.Run(() => LoadItemAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Constant.MaxItems).Select(i => Task.Run(() => LoadItemAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
@@ -70,10 +70,10 @@ namespace Server
             Core.Data.Item[index].Stackable = 1;
 
             var statCount = Enum.GetNames(typeof(Stat)).Length;
-            for (int i = 0, loopTo = Core.Constant.MAX_ITEMS; i < loopTo; i++)
+            for (int i = 0, loopTo = Core.Constant.MaxItems; i < loopTo; i++)
             {
-                Core.Data.Item[(i)].Add_Stat = new byte[statCount];
-                Core.Data.Item[i].Stat_Req = new byte[statCount];
+                Core.Data.Item[(i)].AddStat = new byte[statCount];
+                Core.Data.Item[i].StatReq = new byte[statCount];
             }
         }
 
@@ -86,7 +86,7 @@ namespace Server
 
             var statCount = Enum.GetNames(typeof(Stat)).Length;
             for (int i = 0, loopTo = statCount; i < loopTo; i++)
-                buffer.WriteInt32(Core.Data.Item[itemNum].Add_Stat[i]);
+                buffer.WriteInt32(Core.Data.Item[itemNum].AddStat[i]);
 
             buffer.WriteInt32(Core.Data.Item[itemNum].Animation);
             buffer.WriteInt32(Core.Data.Item[itemNum].BindType);
@@ -107,7 +107,7 @@ namespace Server
             buffer.WriteString(Core.Data.Item[itemNum].Description);
 
             for (int i = 0, loopTo1 = statCount; i < loopTo1; i++)
-                buffer.WriteInt32(Core.Data.Item[itemNum].Stat_Req[i]);
+                buffer.WriteInt32(Core.Data.Item[itemNum].StatReq[i]);
 
             buffer.WriteInt32(Core.Data.Item[itemNum].Type);
             buffer.WriteInt32(Core.Data.Item[itemNum].SubType);
@@ -132,7 +132,7 @@ namespace Server
 
             buffer.WriteInt32((int) ServerPackets.SMapItemData);
 
-            var loopTo = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo; i++)
             {
                 buffer.WriteInt32((int)Data.MapItem[mapNum, i].Num);
@@ -154,7 +154,7 @@ namespace Server
 
             buffer.WriteInt32((int) ServerPackets.SMapItemData);
 
-            var loopTo = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo; i++)
             {
                 buffer.WriteInt32((int)Data.MapItem[mapNum, i].Num);
@@ -168,12 +168,12 @@ namespace Server
             buffer.Dispose();
         }
 
-        public static void SpawnItem(int itemNum, int ItemVal, int mapNum, int x, int y)
+        public static void SpawnItem(int itemNum, int itemVal, int mapNum, int x, int y)
         {
             int i;
 
             // Check for subscript out of range
-            if (itemNum < 0 | itemNum > Core.Constant.MAX_ITEMS | mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
+            if (itemNum < 0 | itemNum > Core.Constant.MaxItems | mapNum < 0 | mapNum > Core.Constant.MaxMaps)
                 return;
 
             // Find open map item slot
@@ -182,19 +182,19 @@ namespace Server
             if (i == -1)
                 return;
 
-            SpawnItemSlot(i, itemNum, ItemVal, mapNum, x, y);
+            SpawnItemSlot(i, itemNum, itemVal, mapNum, x, y);
         }
 
-        public static void SpawnItemSlot(int MapItemSlot, int itemNum, int ItemVal, int mapNum, int x, int y)
+        public static void SpawnItemSlot(int mapItemSlot, int itemNum, int itemVal, int mapNum, int x, int y)
         {
             int i;
             var buffer = new ByteStream(4);
 
             // Check for subscript out of range
-            if (MapItemSlot < 0 | MapItemSlot > Core.Constant.MAX_MAP_ITEMS | itemNum > Core.Constant.MAX_ITEMS | mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
+            if (mapItemSlot < 0 | mapItemSlot > Core.Constant.MaxMapItems | itemNum > Core.Constant.MaxItems | mapNum < 0 | mapNum > Core.Constant.MaxMaps)
                 return;
 
-            i = MapItemSlot;
+            i = mapItemSlot;
 
             if (i != -1)
             {
@@ -206,7 +206,7 @@ namespace Server
                 buffer.WriteInt32((int) ServerPackets.SSpawnItem);
                 buffer.WriteInt32(i);
                 buffer.WriteInt32(itemNum);
-                buffer.WriteInt32(ItemVal);
+                buffer.WriteInt32(itemVal);
                 buffer.WriteInt32(x);
                 buffer.WriteInt32(y);
 
@@ -218,26 +218,26 @@ namespace Server
 
         public static int FindOpenMapItemSlot(int mapNum)
         {
-            int FindOpenMapItemSlotRet = default;
+            int findOpenMapItemSlotRet = default;
             int i;
 
             // Check for subscript out of range
-            if (mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
-                return FindOpenMapItemSlotRet;
+            if (mapNum < 0 | mapNum > Core.Constant.MaxMaps)
+                return findOpenMapItemSlotRet;
 
-            FindOpenMapItemSlotRet = -1;
+            findOpenMapItemSlotRet = -1;
 
-            var loopTo = Core.Constant.MAX_MAP_ITEMS;
+            var loopTo = Core.Constant.MaxMapItems;
             for (i = 0; i < loopTo; i++)
             {
                 if (Data.MapItem[mapNum, i].Num == -1)
                 {
-                    FindOpenMapItemSlotRet = i;
-                    return FindOpenMapItemSlotRet;
+                    findOpenMapItemSlotRet = i;
+                    return findOpenMapItemSlotRet;
                 }
             }
 
-            return FindOpenMapItemSlotRet;
+            return findOpenMapItemSlotRet;
 
         }
 
@@ -245,7 +245,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_MAPS;
+            var loopTo = Core.Constant.MaxMaps;
             for (i = 0; i < loopTo; i++)
                 await SpawnMapItemsAsync(i);
         }
@@ -256,7 +256,7 @@ namespace Server
             int y;
 
             // Check for subscript out of range  
-            if (mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
+            if (mapNum < 0 | mapNum > Core.Constant.MaxMaps)
                 return;
 
             if (Data.Map[mapNum].NoRespawn)
@@ -294,32 +294,32 @@ namespace Server
                     if (Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Item)
                     {
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically  
-                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)Core.ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1)
+                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)Core.ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1)
                         {
-                            if (Data.Map[mapNum].Tile[x, y].Data2_2 < 1)
+                            if (Data.Map[mapNum].Tile[x, y].Data22 < 1)
                             {
-                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, 1, mapNum, x, y);
+                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, 1, mapNum, x, y);
                             }
                             else
                             {
-                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
+                                await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
                             }
                         }
                         else
                         {
-                            await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
+                            await SpawnItemAsync(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
                         }
                     }
                 }
             }
         }
 
-        public static async System.Threading.Tasks.Task SpawnItemAsync(int itemNum, int ItemVal, int mapNum, int x, int y)
+        public static async System.Threading.Tasks.Task SpawnItemAsync(int itemNum, int itemVal, int mapNum, int x, int y)
         {
             int i;
 
             // Check for subscript out of range  
-            if (itemNum < 0 | itemNum > Core.Constant.MAX_ITEMS | mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
+            if (itemNum < 0 | itemNum > Core.Constant.MaxItems | mapNum < 0 | mapNum > Core.Constant.MaxMaps)
                 return;
 
             // Find open map item slot  
@@ -328,18 +328,18 @@ namespace Server
             if (i == -1)
                 return;
 
-            await SpawnItemSlotAsync(i, itemNum, ItemVal, mapNum, x, y);
+            await SpawnItemSlotAsync(i, itemNum, itemVal, mapNum, x, y);
         }
 
-        public static async System.Threading.Tasks.Task SpawnItemSlotAsync(int MapItemSlot, int itemNum, int ItemVal, int mapNum, int x, int y)
+        public static async System.Threading.Tasks.Task SpawnItemSlotAsync(int mapItemSlot, int itemNum, int itemVal, int mapNum, int x, int y)
         {
             var buffer = new ByteStream(4);
 
             // Check for subscript out of range  
-            if (MapItemSlot < 0 || MapItemSlot > Core.Constant.MAX_MAP_ITEMS || itemNum > Core.Constant.MAX_ITEMS || mapNum < 0 || mapNum > Core.Constant.MAX_MAPS)
+            if (mapItemSlot < 0 || mapItemSlot > Core.Constant.MaxMapItems || itemNum > Core.Constant.MaxItems || mapNum < 0 || mapNum > Core.Constant.MaxMaps)
                 return;
 
-            if (MapItemSlot != -1)
+            if (mapItemSlot != -1)
             {
                 Data.MapItem[mapNum, MapItemSlot].Num = itemNum;
                 Data.MapItem[mapNum, MapItemSlot].Value = ItemVal;
@@ -347,7 +347,7 @@ namespace Server
                 Data.MapItem[mapNum, MapItemSlot].Y = y * 32;
 
                 buffer.WriteInt32((int)ServerPackets.SSpawnItem);
-                buffer.WriteInt32(MapItemSlot);
+                buffer.WriteInt32(mapItemSlot);
                 buffer.WriteInt32(itemNum);
                 buffer.WriteInt32(ItemVal);
                 buffer.WriteInt32(x * 32);
@@ -365,7 +365,7 @@ namespace Server
             int y;
 
             // Check for subscript out of range
-            if (mapNum < 0 | mapNum > Core.Constant.MAX_MAPS)
+            if (mapNum < 0 | mapNum > Core.Constant.MaxMaps)
                 return;
 
             if (Data.Map[mapNum].NoRespawn)
@@ -403,20 +403,20 @@ namespace Server
                     if (Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Item)
                     {
                         // Check to see if its a currency and if they set the value to 0 set it to 1 automatically
-                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data1_2].Stackable == 1)
+                        if (Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1 | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Type == (byte)ItemCategory.Currency | Core.Data.Item[Data.Map[mapNum].Tile[x, y].Data12].Stackable == 1)
                         {
-                            if (Data.Map[mapNum].Tile[x, y].Data2_2 < 1)
+                            if (Data.Map[mapNum].Tile[x, y].Data22 < 1)
                             {
-                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, 1, mapNum, x, y);
+                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, 1, mapNum, x, y);
                             }
                             else
                             {
-                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
+                                SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
                             }
                         }
                         else
                         {
-                            SpawnItem(Data.Map[mapNum].Tile[x, y].Data1_2, Data.Map[mapNum].Tile[x, y].Data2_2, mapNum, x, y);
+                            SpawnItem(Data.Map[mapNum].Tile[x, y].Data12, Data.Map[mapNum].Tile[x, y].Data22, mapNum, x, y);
                         }
                     }
                 }
@@ -435,7 +435,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_ITEMS)
+            if (n < 0 | n > Core.Constant.MaxItems)
                 return;
 
             SendUpdateItemTo(index, n);
@@ -483,7 +483,7 @@ namespace Server
 
             n = buffer.ReadInt32();
 
-            if (n < 0 | n > Core.Constant.MAX_ITEMS)
+            if (n < 0 | n > Core.Constant.MaxItems)
                 return;
 
             // Update the item
@@ -491,7 +491,7 @@ namespace Server
 
             var statCount = Enum.GetNames(typeof(Stat)).Length;
             for (int i = 0, loopTo = statCount; i < loopTo; i++)
-                Core.Data.Item[n].Add_Stat[i] = (byte)buffer.ReadInt32();
+                Core.Data.Item[n].AddStat[i] = (byte)buffer.ReadInt32();
 
             Core.Data.Item[n].Animation = buffer.ReadInt32();
             Core.Data.Item[n].BindType = (byte)buffer.ReadInt32();
@@ -512,7 +512,7 @@ namespace Server
             Core.Data.Item[n].Description = buffer.ReadString();
 
             for (int i = 0, loopTo1 = statCount; i < loopTo1; i++)
-                Core.Data.Item[n].Stat_Req[i] = (byte)buffer.ReadInt32();
+                Core.Data.Item[n].StatReq[i] = (byte)buffer.ReadInt32();
 
             Core.Data.Item[n].Type = (byte)buffer.ReadInt32();
             Core.Data.Item[n].SubType = (byte)buffer.ReadInt32();
@@ -528,7 +528,7 @@ namespace Server
             // Save it
             SaveItem(n);
             SendUpdateItemToAll(n);
-            Core.Log.Add(GetAccountLogin(index) + " saved item #" + n + ".", Constant.ADMIN_LOG);
+            Core.Log.Add(GetAccountLogin(index) + " saved item #" + n + ".", Constant.AdminLog);
             buffer.Dispose();
         }
 
@@ -551,10 +551,10 @@ namespace Server
                 return;
 
             // Prevent hacking
-            if (invNum < 0 | invNum > Core.Constant.MAX_INV)
+            if (invNum < 0 | invNum > Core.Constant.MaxInv)
                 return;
 
-            if (GetPlayerInv(index, invNum) < 0 | GetPlayerInv(index, invNum) > Core.Constant.MAX_ITEMS)
+            if (GetPlayerInv(index, invNum) < 0 | GetPlayerInv(index, invNum) > Core.Constant.MaxItems)
                 return;
 
             if (Core.Data.Item[(int)GetPlayerInv(index, invNum)].Type == (byte)ItemCategory.Currency | Core.Data.Item[(int)GetPlayerInv(index, invNum)].Stackable == 1)
@@ -575,7 +575,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_ITEMS - 1;
+            var loopTo = Core.Constant.MaxItems - 1;
             for (i = 0; i < loopTo; i++)
             {
                 if (Strings.Len(Core.Data.Item[i].Name) > 0)

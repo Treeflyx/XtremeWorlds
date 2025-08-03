@@ -34,7 +34,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MAX_PROJECTILES;
+            var loopTo = Core.Constant.MaxProjectiles;
             for (i = 0; i < loopTo; i++)
                 await LoadProjectile(i);
         }
@@ -114,65 +114,65 @@ namespace Server
 
         public static void HandleSaveProjectile(int index, ref byte[] data)
         {
-            int ProjectileNum;
+            int projectileNum;
             var buffer = new ByteStream(data);
 
             if (GetPlayerAccess(index) < (byte)AccessLevel.Developer)
                 return;
 
-            ProjectileNum = buffer.ReadInt32();
+            projectileNum = buffer.ReadInt32();
 
             // Prevent hacking
-            if (ProjectileNum < 0 | ProjectileNum > Core.Constant.MAX_PROJECTILES)
+            if (projectileNum < 0 | projectileNum > Core.Constant.MaxProjectiles)
             {
                 return;
             }
 
-            Data.Projectile[ProjectileNum].Name = buffer.ReadString();
-            Data.Projectile[ProjectileNum].Sprite = buffer.ReadInt32();
-            Data.Projectile[ProjectileNum].Range = (byte)buffer.ReadInt32();
-            Data.Projectile[ProjectileNum].Speed = buffer.ReadInt32();
-            Data.Projectile[ProjectileNum].Damage = buffer.ReadInt32();
+            Data.Projectile[projectileNum].Name = buffer.ReadString();
+            Data.Projectile[projectileNum].Sprite = buffer.ReadInt32();
+            Data.Projectile[projectileNum].Range = (byte)buffer.ReadInt32();
+            Data.Projectile[projectileNum].Speed = buffer.ReadInt32();
+            Data.Projectile[projectileNum].Damage = buffer.ReadInt32();
 
             // Save it
-            SendUpdateProjectileToAll(ProjectileNum);
-            SaveProjectile(ProjectileNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved Projectile #" + ProjectileNum + ".", Constant.ADMIN_LOG);
+            SendUpdateProjectileToAll(projectileNum);
+            SaveProjectile(projectileNum);
+            Core.Log.Add(GetAccountLogin(index) + " saved Projectile #" + projectileNum + ".", Constant.AdminLog);
             buffer.Dispose();
 
         }
 
         public static void HandleRequestProjectile(int index, ref byte[] data)
         {
-            int ProjectileNum;
+            int projectileNum;
 
             var buffer = new ByteStream(data);
-            ProjectileNum = buffer.ReadInt32();
+            projectileNum = buffer.ReadInt32();
             buffer.Dispose();
 
-            SendProjectile(index, ProjectileNum);
+            SendProjectile(index, projectileNum);
         }
 
         public static void HandleClearProjectile(int index, ref byte[] data)
         {
-            int ProjectileNum;
-            int Targetindex;
-            Core.TargetType TargetType;
-            int TargetZone;
+            int projectileNum;
+            int targetindex;
+            Core.TargetType targetType;
+            int targetZone;
             int mapNum;
-            int Damage;
+            int damage;
             int armor;
-            int NpcNum;
+            int npcNum;
             var buffer = new ByteStream(data);
-            ProjectileNum = buffer.ReadInt32();
-            Targetindex = buffer.ReadInt32();
-            TargetType = (Core.TargetType)buffer.ReadInt32();
-            TargetZone = buffer.ReadInt32();
+            projectileNum = buffer.ReadInt32();
+            targetindex = buffer.ReadInt32();
+            targetType = (Core.TargetType)buffer.ReadInt32();
+            targetZone = buffer.ReadInt32();
             buffer.Dispose();
 
             mapNum = GetPlayerMap(index);
 
-            ClearMapProjectile(mapNum, ProjectileNum);
+            ClearMapProjectile(mapNum, projectileNum);
 
         }
 
@@ -180,38 +180,38 @@ namespace Server
 
         #region Outgoing
 
-        public static void SendUpdateProjectileToAll(int ProjectileNum)
+        public static void SendUpdateProjectileToAll(int projectileNum)
         {
             ByteStream buffer;
 
             buffer = new ByteStream(4);
 
             buffer.WriteInt32((int) ServerPackets.SUpdateProjectile);
-            buffer.WriteInt32(ProjectileNum);
-            buffer.WriteString(Data.Projectile[ProjectileNum].Name);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Sprite);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Range);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Speed);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Damage);
+            buffer.WriteInt32(projectileNum);
+            buffer.WriteString(Data.Projectile[projectileNum].Name);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Sprite);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Range);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Speed);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Damage);
 
             NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
 
-        public static void SendUpdateProjectileTo(int index, int ProjectileNum)
+        public static void SendUpdateProjectileTo(int index, int projectileNum)
         {
             ByteStream buffer;
 
             buffer = new ByteStream(4);
 
             buffer.WriteInt32((int) ServerPackets.SUpdateProjectile);
-            buffer.WriteInt32(ProjectileNum);
-            buffer.WriteString(Data.Projectile[ProjectileNum].Name);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Sprite);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Range);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Speed);
-            buffer.WriteInt32(Data.Projectile[ProjectileNum].Damage);
+            buffer.WriteInt32(projectileNum);
+            buffer.WriteString(Data.Projectile[projectileNum].Name);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Sprite);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Range);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Speed);
+            buffer.WriteInt32(Data.Projectile[projectileNum].Damage);
 
             NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
@@ -225,7 +225,7 @@ namespace Server
 
         public static void SendProjectiles(int index)
         {
-            var loopTo = Core.Constant.MAX_PROJECTILES;
+            var loopTo = Core.Constant.MaxProjectiles;
             for (int i = 0; i < loopTo; i++)
             {
                 if (Strings.Len(Data.Projectile[i].Name) > 0)
@@ -236,15 +236,15 @@ namespace Server
 
         }
 
-        public static void SendProjectileToMap(int mapNum, int ProjectileNum)
+        public static void SendProjectileToMap(int mapNum, int projectileNum)
         {
             ByteStream buffer;
 
             buffer = new ByteStream(4);
             buffer.WriteInt32((int) ServerPackets.SMapProjectile);
 
-            var withBlock = Data.MapProjectile[mapNum, ProjectileNum];
-            buffer.WriteInt32(ProjectileNum);
+            var withBlock = Data.MapProjectile[mapNum, projectileNum];
+            buffer.WriteInt32(projectileNum);
             buffer.WriteInt32(withBlock.ProjectileNum);
             buffer.WriteInt32(withBlock.Owner);
             buffer.WriteByte(withBlock.OwnerType);
@@ -261,42 +261,42 @@ namespace Server
 
         #region Functions
 
-        public static void PlayerFireProjectile(int index, int IsSkill = 0)
+        public static void PlayerFireProjectile(int index, int isSkill = 0)
         {
-            var ProjectileSlot = default(int);
-            int ProjectileNum;
+            var projectileSlot = default(int);
+            int projectileNum;
             int mapNum;
             int i;
 
             mapNum = GetPlayerMap(index);
 
             // Find a free projectile
-            var loopTo = Core.Constant.MAX_PROJECTILES;
+            var loopTo = Core.Constant.MaxProjectiles;
             for (i = 0; i < loopTo; i++)
             {
                 if (Data.MapProjectile[mapNum, i].ProjectileNum == -1) // Free Projectile
                 {
-                    ProjectileSlot = i;
+                    projectileSlot = i;
                     break;
                 }
             }
 
             // Check for skill, if so then load data acordingly
-            if (IsSkill > 0)
+            if (isSkill > 0)
             {
-                ProjectileNum = Data.Skill[IsSkill].Projectile;
+                projectileNum = Data.Skill[isSkill].Projectile;
             }
             else
             {
-                ProjectileNum = Core.Data.Item[(int)GetPlayerEquipment(index, Equipment.Weapon)].Projectile;
+                projectileNum = Core.Data.Item[(int)GetPlayerEquipment(index, Equipment.Weapon)].Projectile;
             }
 
-            if (ProjectileNum == -1)
+            if (projectileNum == -1)
                 return;
 
             {
-                var withBlock = Data.MapProjectile[mapNum, ProjectileSlot];
-                withBlock.ProjectileNum = ProjectileNum;
+                var withBlock = Data.MapProjectile[mapNum, projectileSlot];
+                withBlock.ProjectileNum = projectileNum;
                 withBlock.Owner = index;
                 withBlock.OwnerType = (byte)TargetType.Player;
                 withBlock.Dir = GetPlayerDir(index);
@@ -305,87 +305,87 @@ namespace Server
                 withBlock.Timer = General.GetTimeMs() + 60000;
             }
 
-            SendProjectileToMap(mapNum, ProjectileSlot);
+            SendProjectileToMap(mapNum, projectileSlot);
 
         }
 
-        public static float Engine_GetAngle(int CenterX, int CenterY, int targetX, int targetY)
+        public static float Engine_GetAngle(int centerX, int centerY, int targetX, int targetY)
         {
-            float Engine_GetAngleRet = default;
+            float engineGetAngleRet = default;
             // ************************************************************
             // Gets the angle between two points in a 2d plane
             // ************************************************************
-            float SideA;
-            float SideC;
+            float sideA;
+            float sideC;
             try
             {
 
                 // Check for horizontal lines (90 or 270 degrees)
-                if (CenterY == targetY)
+                if (centerY == targetY)
                 {
                     // Check for going right (90 degrees)
-                    if (CenterX < targetX)
+                    if (centerX < targetX)
                     {
-                        Engine_GetAngleRet = 90f;
+                        engineGetAngleRet = 90f;
                     }
                     // Check for going left (270 degrees)
                     else
                     {
-                        Engine_GetAngleRet = 270f;
+                        engineGetAngleRet = 270f;
                     }
 
                     // Exit the function
-                    return Engine_GetAngleRet;
+                    return engineGetAngleRet;
                 }
 
                 // Check for horizontal lines (360 or 180 degrees)
-                if (CenterX == targetX)
+                if (centerX == targetX)
                 {
                     // Check for going up (360 degrees)
-                    if (CenterY > targetY)
+                    if (centerY > targetY)
                     {
-                        Engine_GetAngleRet = 360f;
+                        engineGetAngleRet = 360f;
                     }
 
                     // Check for going down (180 degrees)
                     else
                     {
-                        Engine_GetAngleRet = 180f;
+                        engineGetAngleRet = 180f;
                     }
 
                     // Exit the function
-                    return Engine_GetAngleRet;
+                    return engineGetAngleRet;
                 }
 
                 // Calculate Side C
-                SideC = (float)Math.Sqrt(Math.Pow(Math.Abs(targetX - CenterX), 2d) + Math.Pow(Math.Abs(targetY - CenterY), 2d));
+                sideC = (float)Math.Sqrt(Math.Pow(Math.Abs(targetX - centerX), 2d) + Math.Pow(Math.Abs(targetY - centerY), 2d));
 
                 // Side B = CenterY
 
                 // Calculate Side A
-                SideA = (float)Math.Sqrt(Math.Pow(Math.Abs(targetX - CenterX), 2d) + Math.Pow(targetY, 2d));
+                sideA = (float)Math.Sqrt(Math.Pow(Math.Abs(targetX - centerX), 2d) + Math.Pow(targetY, 2d));
 
                 // Calculate the angle
-                Engine_GetAngleRet = (float)((Math.Pow((double)SideA, 2d) - Math.Pow(CenterY, 2d) - Math.Pow((double)SideC, 2d)) / (double)(CenterY * SideC * -2));
-                Engine_GetAngleRet = (float)((Math.Atan((double)-Engine_GetAngleRet / Math.Sqrt((double)(-Engine_GetAngleRet * Engine_GetAngleRet + 1f))) + 1.5708d) * 57.29583d);
+                engineGetAngleRet = (float)((Math.Pow((double)sideA, 2d) - Math.Pow(centerY, 2d) - Math.Pow((double)sideC, 2d)) / (double)(centerY * sideC * -2));
+                engineGetAngleRet = (float)((Math.Atan((double)-engineGetAngleRet / Math.Sqrt((double)(-engineGetAngleRet * engineGetAngleRet + 1f))) + 1.5708d) * 57.29583d);
 
                 // If the angle is >180, subtract from 360
-                if (targetX < CenterX)
-                    Engine_GetAngleRet = 360f - Engine_GetAngleRet;
+                if (targetX < centerX)
+                    engineGetAngleRet = 360f - engineGetAngleRet;
 
                 // Exit function
 
                 // Check for error
-                return Engine_GetAngleRet;
+                return engineGetAngleRet;
             }
             catch
             {
 
 
                 // Return a 0 saying there was an error
-                Engine_GetAngleRet = 0f;
+                engineGetAngleRet = 0f;
 
-                return Engine_GetAngleRet;
+                return engineGetAngleRet;
             }
         }
 

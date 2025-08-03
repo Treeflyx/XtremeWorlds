@@ -22,9 +22,9 @@ namespace Server
     {
         #region Globals
 
-        public static GlobalEvents[] TempEventMap = new GlobalEvents[Core.Constant.MAX_MAPS + 1];
-        public static string[] Switches = new string[Core.Constant.MAX_SWITCHES];
-        public static string[] Variables = new string[Core.Constant.NAX_VARIABLES];
+        public static GlobalEvents[] TempEventMap = new GlobalEvents[Core.Constant.MaxMaps + 1];
+        public static string[] Switches = new string[Core.Constant.MaxSwitches];
+        public static string[] Variables = new string[Core.Constant.NaxVariables];
         private static readonly ConcurrentBag<ScheduledEvent> ScheduledEvents = new ConcurrentBag<ScheduledEvent>();
         private static readonly object TempEventLock = new object();
 
@@ -45,7 +45,7 @@ namespace Server
 
         public static void CreateSwitches()
         {
-            Switches = new string[Core.Constant.MAX_SWITCHES];
+            Switches = new string[Core.Constant.MaxSwitches];
             Array.Fill(Switches, string.Empty);
             SaveSwitches();
             General.Logger.LogInformation("Switches initialized and saved.");
@@ -53,7 +53,7 @@ namespace Server
 
         public static void CreateVariables()
         {
-            Variables = new string[Core.Constant.NAX_VARIABLES];
+            Variables = new string[Core.Constant.NaxVariables];
             Array.Fill(Variables, string.Empty);
             SaveVariables();
             General.Logger.LogInformation("Variables initialized and saved.");
@@ -93,7 +93,7 @@ namespace Server
             try
             {
                 Switches = await System.Threading.Tasks.Task.Run(() => json.Read(System.IO.Path.Combine(Path.Database, "Switches.json")));
-                if (Switches == null || Switches.Length != Core.Constant.MAX_SWITCHES)
+                if (Switches == null || Switches.Length != Core.Constant.MaxSwitches)
                 {
                     General.Logger.LogWarning("Switches.json not found or invalid. Creating new switches.");
                     CreateSwitches();
@@ -112,7 +112,7 @@ namespace Server
             try
             {
                 Variables = await System.Threading.Tasks.Task.Run(() => json.Read(System.IO.Path.Combine(Path.Database, "Variables.json")));
-                if (Variables == null || Variables.Length != Core.Constant.NAX_VARIABLES)
+                if (Variables == null || Variables.Length != Core.Constant.NaxVariables)
                 {
                     General.Logger.LogWarning("Variables.json not found or invalid. Creating new variables.");
                     CreateVariables();
@@ -173,7 +173,7 @@ namespace Server
 
         private static bool IsNpcBlocking(int mapNum, int x, int y)
         {
-            for (int i = 0; i < Core.Constant.MAX_MAP_NPCS; i++)
+            for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
             {
                 if (Data.MapNpc[mapNum].Npc[i].X == x && Data.MapNpc[mapNum].Npc[i].Y == y)
                     return true;
@@ -208,7 +208,7 @@ namespace Server
         }
 
         private static bool IsValidMapAndDirection(int mapNum, byte dir) =>
-            mapNum >= 0 && mapNum <= Core.Constant.MAX_MAPS && dir >= (byte)Direction.Up && dir <= (byte)Direction.DownRight;
+            mapNum >= 0 && mapNum <= Core.Constant.MaxMaps && dir >= (byte)Direction.Up && dir <= (byte)Direction.DownRight;
 
         public static void EventDir(int playerIndex, int mapNum, int eventId, int dir, bool globalEvent = false)
         {
@@ -345,15 +345,15 @@ namespace Server
             return PathfindingType switch
             {
                 1 => RandomMoveTowardsPlayer(playerId, mapNum, eventId, ex, ey, px, py, walkThrough),
-                2 => BFSMoveTowardsPlayer(playerId, mapNum, eventId, ex, ey, px, py, walkThrough),
+                2 => BfsMoveTowardsPlayer(playerId, mapNum, eventId, ex, ey, px, py, walkThrough),
                 3 => AStarMoveTowardsPlayer(playerId, mapNum, eventId, ex, ey, px, py, walkThrough), // New A* pathfinding
                 _ => RandomDirection()
             };
         }
 
         private static bool IsValidPlayerEvent(int playerId, int mapNum, int eventId) =>
-            playerId >= 0 && playerId < Core.Constant.MAX_PLAYERS &&
-            mapNum >= 0 && mapNum <= Core.Constant.MAX_MAPS &&
+            playerId >= 0 && playerId < Core.Constant.MaxPlayers &&
+            mapNum >= 0 && mapNum <= Core.Constant.MaxMaps &&
             eventId >= 0 && eventId < Core.Data.TempPlayer[playerId].EventMap.CurrentEvents;
 
         private static (int px, int py, int ex, int ey, int walkThrough) GetPlayerAndEventPositions(int playerId, int mapNum, int eventId)
@@ -388,7 +388,7 @@ namespace Server
                 _ => false
             };
 
-        private static int BFSMoveTowardsPlayer(int playerId, int mapNum, int eventId, int ex, int ey, int px, int py, int walkThrough)
+        private static int BfsMoveTowardsPlayer(int playerId, int mapNum, int eventId, int ex, int ey, int px, int py, int walkThrough)
         {
             // Existing BFS implementation (simplified here for brevity)
             var queue = new Queue<(int x, int y)>();
@@ -548,21 +548,21 @@ namespace Server
         public static void Packet_EventChatReply(int index, ref byte[] data)
         {
             var buffer = new ByteStream(data);
-            int eventId = buffer.ReadInt32(), PageId = buffer.ReadInt32(), reply = buffer.ReadInt32();
+            int eventId = buffer.ReadInt32(), pageId = buffer.ReadInt32(), reply = buffer.ReadInt32();
             buffer.Dispose();
 
             General.Logger.LogInformation($"Player {index} responded to event {eventId} with reply {reply}");
-            ProcessEventReply(index, eventId, PageId, reply);
+            ProcessEventReply(index, eventId, pageId, reply);
         }
 
-        private static void ProcessEventReply(int index, int eventId, int PageId, int reply)
+        private static void ProcessEventReply(int index, int eventId, int pageId, int reply)
         {
             for (int i = 0; i < Core.Data.TempPlayer[index].EventProcessingCount; i++)
             {
                 var proc = Core.Data.TempPlayer[index].EventProcessing[i];
-                if (proc.EventId != eventId || proc.PageId != PageId || proc.WaitingForResponse != 1) continue;
+                if (proc.EventId != eventId || proc.PageId != pageId || proc.WaitingForResponse != 1) continue;
 
-                var cmd = Data.Map[GetPlayerMap(index)].Event[eventId].Pages[PageId].CommandList[proc.CurList].Commands[proc.CurSlot - 1];
+                var cmd = Data.Map[GetPlayerMap(index)].Event[eventId].Pages[pageId].CommandList[proc.CurList].Commands[proc.CurSlot - 1];
                 if (reply == 0 && cmd.Index == (byte)Core.EventCommand.ShowText)
                     proc.WaitingForResponse = 0;
                 else if (reply > 0 && cmd.Index == (byte)Core.EventCommand.ShowChoices)
@@ -599,8 +599,8 @@ namespace Server
         public static void Packet_SwitchesAndVariables(int index, ref byte[] data)
         {
             var buffer = new ByteStream(data);
-            for (int i = 0; i < Core.Constant.MAX_SWITCHES; i++) Switches[i] = buffer.ReadString();
-            for (int i = 0; i < Core.Constant.NAX_VARIABLES; i++) Variables[i] = buffer.ReadString();
+            for (int i = 0; i < Core.Constant.MaxSwitches; i++) Switches[i] = buffer.ReadString();
+            for (int i = 0; i < Core.Constant.NaxVariables; i++) Variables[i] = buffer.ReadString();
             buffer.Dispose();
 
             SaveSwitches();
@@ -654,10 +654,10 @@ namespace Server
 
         public static void SendSwitchesAndVariables(int index, bool everyone = false)
         {
-            var buffer = new ByteStream(4 + (Core.Constant.MAX_SWITCHES + Core.Constant.NAX_VARIABLES) * 256);
+            var buffer = new ByteStream(4 + (Core.Constant.MaxSwitches + Core.Constant.NaxVariables) * 256);
             buffer.WriteInt32((int)ServerPackets.SSwitchesAndVariables);
-            for (int i = 0; i < Core.Constant.MAX_SWITCHES; i++) buffer.WriteString(Switches[i]);
-            for (int i = 0; i < Core.Constant.NAX_VARIABLES; i++) buffer.WriteString(Variables[i]);
+            for (int i = 0; i < Core.Constant.MaxSwitches; i++) buffer.WriteString(Switches[i]);
+            for (int i = 0; i < Core.Constant.NaxVariables; i++) buffer.WriteString(Variables[i]);
 
             if (everyone)
                 NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
@@ -903,23 +903,23 @@ namespace Server
         // Simple Priority Queue for A* Pathfinding
         private class PriorityQueue<T>
         {
-            private readonly List<T> items = new List<T>();
-            private readonly IComparer<T> comparer;
+            private readonly List<T> _items = new List<T>();
+            private readonly IComparer<T> _comparer;
 
-            public PriorityQueue(IComparer<T> comparer) => this.comparer = comparer;
-            public int Count => items.Count;
+            public PriorityQueue(IComparer<T> comparer) => this._comparer = comparer;
+            public int Count => _items.Count;
 
             public void Enqueue(T item)
             {
-                items.Add(item);
-                items.Sort(comparer);
+                _items.Add(item);
+                _items.Sort(_comparer);
             }
 
             public T Dequeue()
             {
-                if (items.Count == 0) throw new InvalidOperationException("Queue is empty");
-                var item = items[0];
-                items.RemoveAt(0);
+                if (_items.Count == 0) throw new InvalidOperationException("Queue is empty");
+                var item = _items[0];
+                _items.RemoveAt(0);
                 return item;
             }
         }
