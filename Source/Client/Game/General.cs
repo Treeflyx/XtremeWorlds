@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Client.Game.Objects;
+﻿using Client.Game.Objects;
 using Core;
 using Core.Localization;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +43,22 @@ namespace Client
             {
                 string configDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     "XtremeWorlds");
+                string targetFile = System.IO.Path.Combine(configDir, "appsettings.json");
+
+                if (!File.Exists(targetFile))
+                {
+                    string bundledFile = System.IO.Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+                    if (File.Exists(bundledFile))
+                    {
+                        Directory.CreateDirectory(configDir);
+                        File.Copy(bundledFile, targetFile);
+                    }
+                }
+            }
+            
+            if (OperatingSystem.IsLinux())
+            {
+                string configDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
                 string targetFile = System.IO.Path.Combine(configDir, "appsettings.json");
 
                 if (!File.Exists(targetFile))

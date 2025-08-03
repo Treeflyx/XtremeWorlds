@@ -1,4 +1,5 @@
 ﻿using Core;
+using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
 using static Core.Global.Command;
@@ -89,6 +90,17 @@ namespace Client
                 for (_i = 0; _i < byte.MaxValue; _i++)
                 {
                     Animation.CheckAnimInstance(_i);
+                }
+
+                if (tick > Event.EventChatTimer)
+                {
+                    if (string.IsNullOrEmpty(Event.EventText))
+                    {
+                        if (Event.EventChat)
+                        {
+                            Event.EventChat = false;
+                        }
+                    }
                 }
 
                 // screenshake

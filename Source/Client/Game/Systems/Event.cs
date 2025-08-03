@@ -108,7 +108,6 @@ namespace Client
                 withBlock.ShowName = buffer.ReadInt32();
             }
             
-
             buffer.Dispose();
 
         }

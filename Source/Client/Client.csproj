@@ -41,6 +41,9 @@
 	  <Compile Remove="Content\UI.cs" />
 	  <Content Remove="Content\Crystalshire.cs" />
 	  <Content Remove="Content\UI.cs" />
+    <EmbeddedResource Include="Icon.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
