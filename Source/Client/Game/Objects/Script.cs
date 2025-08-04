@@ -19,7 +19,6 @@ namespace Client
             ByteStream buffer;
             buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(data.ToArray()));
 
-
             // Read the number of lines first
             int lineCount = buffer.ReadInt32();
             var lines = new string[lineCount];

@@ -36,8 +36,6 @@ namespace Server
 
             Core.Data.TempPlayer[session.Id].Editor = (byte)Core.EditorType.Script;
 
-            buffer.WriteInt32((int)ServerPackets.SScriptEditor);
-
             // Ensure Code is not null
             var codeLines = Core.Data.Script.Code ?? Array.Empty<string>();
             buffer.WriteInt32(codeLines.Length);
@@ -48,6 +46,7 @@ namespace Server
             }
             var data = Compression.CompressBytes(buffer.ToArray());
             buffer = new ByteStream(4);
+            buffer.WriteInt32((int)ServerPackets.SScriptEditor);
             buffer.WriteBlock(data);
 
             NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
