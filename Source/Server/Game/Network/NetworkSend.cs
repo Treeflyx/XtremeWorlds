@@ -27,21 +27,6 @@ public class NetworkSend
         Player.LeftGame(session.Id);
     }
 
-    public static void AlertMsg(int index, SystemMessage menuNo, Menu menuReset = 0, bool kick = true)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SAlertMsg);
-        buffer.WriteByte((byte) menuNo);
-        buffer.WriteInt32((byte) menuReset);
-        buffer.WriteInt32(kick ? 1 : 0);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
-
-        Player.LeftGame(index);
-    }
-
     public static void GlobalMsg(string msg)
     {
         var buffer = new ByteStream(4);

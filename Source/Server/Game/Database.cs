@@ -2118,7 +2118,7 @@ namespace Server
             Core.Log.AddTextToFile(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
             Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
-            NetworkSend.AlertMsg(banPlayerIndex, SystemMessage.Banned);
+            PlayerService.Instance.RemovePlayer(banPlayerIndex);
         }
 
         #endregion
