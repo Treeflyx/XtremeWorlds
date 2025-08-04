@@ -2040,43 +2040,6 @@ namespace Server
 
         #region Ban
 
-        public static void ServerBanindex(int banPlayerindex)
-        {
-            string filename;
-            string ip;
-            int f;
-            int i;
-
-            filename = Path.Combine(Core.Path.Database, "banlist.txt");
-
-            // Make sure the file exists
-            if (!System.IO.File.Exists(filename))
-            {
-                f = FileSystem.FreeFile();
-            }
-
-            // Cut off last portion of ip
-            ip = PlayerService.Instance.ClientIp(banPlayerindex);
-
-            for (i = Strings.Len(ip); i >= 0; i -= 1)
-            {
-
-                if (Strings.Mid(ip, i, 1) == ".")
-                {
-                    break;
-                }
-
-            }
-
-            Core.Data.Account[banPlayerindex].Banned = true;
-
-            ip = Strings.Mid(ip, 1, i);
-            Core.Log.AddTextToFile(ip, "banlist.txt");
-            NetworkSend.GlobalMsg(GetPlayerName(banPlayerindex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + "the Server" + "!");
-            Core.Log.Add("The Server" + " has banned " + GetPlayerName(banPlayerindex) + ".", Constant.AdminLog);
-            NetworkSend.AlertMsg(banPlayerindex, SystemMessage.Banned);
-        }
-
         public static bool IsBanned(int index, string ip)
         {
             bool isBannedRet = default;
@@ -2126,7 +2089,7 @@ namespace Server
 
         }
 
-        public static void BanPlayer(int banPlayerindex, int bannedByindex)
+        public static void BanPlayer(int banPlayerIndex, int bannedByIndex)
         {
             string filename = Path.Combine(Core.Path.Database, "banlist.txt");
             string ip;
@@ -2137,7 +2100,7 @@ namespace Server
                 System.IO.File.Create(filename).Dispose();
 
             // Cut off last portion of ip
-            ip = PlayerService.Instance.ClientIp(banPlayerindex);
+            ip = PlayerService.Instance.ClientIp(banPlayerIndex);
 
             for (i = Strings.Len(ip); i >= 0; i -= 1)
             {
@@ -2149,13 +2112,13 @@ namespace Server
 
             }
 
-            Core.Data.Account[banPlayerindex].Banned = true;
+            Core.Data.Account[banPlayerIndex].Banned = true;
 
             ip = Strings.Mid(ip, 1, i);
             Core.Log.AddTextToFile(ip, "banlist.txt");
-            NetworkSend.GlobalMsg(GetPlayerName(banPlayerindex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByindex) + "!");
-            Core.Log.Add(GetPlayerName(bannedByindex) + " has banned " + GetPlayerName(banPlayerindex) + ".", Constant.AdminLog);
-            NetworkSend.AlertMsg(banPlayerindex, SystemMessage.Banned);
+            NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
+            Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
+            NetworkSend.AlertMsg(banPlayerIndex, SystemMessage.Banned);
         }
 
         #endregion
