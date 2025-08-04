@@ -18,8 +18,6 @@ public sealed class ConsoleInputService : BackgroundService
 
     public static async Task ConsoleThreadAsync(CancellationToken cancellationToken)
     {
-        Console.WriteLine("Initializing Console Loop");
-
         await using var stream = Console.OpenStandardInput();
 
         using var streamReader = new StreamReader(stream);
@@ -37,6 +35,8 @@ public sealed class ConsoleInputService : BackgroundService
             {
                 continue;
             }
+
+            await General.HandlePlayerCommandAsync(GameLogic.FindPlayer(parts[1]), parts[0]);
 
             switch (parts[0].ToLower() ?? "")
             {
