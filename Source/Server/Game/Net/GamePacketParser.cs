@@ -958,7 +958,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 if (Data.Map[mapNum].Event[i].PageCount > 0)
                 {
                     Data.Map[mapNum].Event[i].Pages = new Core.Type.EventPage[Data.Map[mapNum].Event[i].PageCount];
-                    ;
                     Array.Resize(ref Core.Data.TempPlayer[i].EventMap.EventPages, Data.Map[mapNum].Event[i].PageCount);
 
                     var loopTo5 = Data.Map[mapNum].Event[i].PageCount;
@@ -1082,13 +1081,24 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
 
         var loopTo13 = Data.Map[mapNum].EventCount;
-        for (var i = 0; i < loopTo13 - 1; i++)
+        for (var i = 0; i < loopTo13; i++)
         {
             if (Data.Map[mapNum].Event[i].PageCount == 0)
             {
                 Data.Map[mapNum].Event[i] = Data.Map[mapNum].Event[i + 1];
                 Data.Map[mapNum].Event[i + 1] = default;
                 Data.Map[mapNum].EventCount = Data.Map[mapNum].EventCount - 1;
+            }
+        }
+
+        // Hide all events to respawn
+        int loopTo15 = Core.Data.TempPlayer[index].EventMap[i].CurrentEvents;
+        for (int i = 0; i < loopTo13; i++)
+        {
+            int loopTo14 = Core.Data.TempPlayer[i].EventMap[i].CurrentEvents;
+            for (int n = 0; n < loopTo14; n++)
+            {
+                Data.Map[mapNum].Event[i].Pages[n].Visible = false;
             }
         }
 

@@ -238,6 +238,8 @@ namespace Server
                         for (int z = 0; z < Core.Data.Map[mapNum].Event[id].PageCount; z++)
                         {
                             bool spawnEvent = true;
+                            if (Core.Data.Map[mapNum].Event[id].Pages == null)
+                                break;
                             Core.Type.EventPage page = Core.Data.Map[mapNum].Event[id].Pages[z];
 
                             // Check conditions (Item, Self Switch, Variable, Switch).
