@@ -68,13 +68,6 @@ namespace Server
             Core.Data.Item[index].Name = "";
             Core.Data.Item[index].Description = "";
             Core.Data.Item[index].Stackable = 1;
-
-            var statCount = Enum.GetNames(typeof(Stat)).Length;
-            for (int i = 0, loopTo = Core.Constant.MaxItems; i < loopTo; i++)
-            {
-                Core.Data.Item[(i)].AddStat = new byte[statCount];
-                Core.Data.Item[i].StatReq = new byte[statCount];
-            }
         }
 
         public static byte[] ItemData(int itemNum)
@@ -86,8 +79,9 @@ namespace Server
 
             var statCount = Enum.GetNames(typeof(Stat)).Length;
             for (int i = 0, loopTo = statCount; i < loopTo; i++)
+            {
                 buffer.WriteInt32(Core.Data.Item[itemNum].AddStat[i]);
-
+            }
             buffer.WriteInt32(Core.Data.Item[itemNum].Animation);
             buffer.WriteInt32(Core.Data.Item[itemNum].BindType);
             buffer.WriteInt32(Core.Data.Item[itemNum].JobReq);
@@ -575,7 +569,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MaxItems - 1;
+            var loopTo = Core.Constant.MaxItems;
             for (i = 0; i < loopTo; i++)
             {
                 if (Strings.Len(Core.Data.Item[i].Name) > 0)

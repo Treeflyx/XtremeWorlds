@@ -10,12 +10,12 @@ namespace Client
 
         #region Database
         public static void ClearItem(int index)
-        {
-            int statCount = System.Enum.GetValues(typeof(Stat)).Length;
-                
+        {   
             Core.Data.Item[index] = default;
-            Array.Resize(ref Core.Data.Item[index].AddStat, statCount);
-            Array.Resize(ref Core.Data.Item[index].StatReq, statCount);
+
+            var statCount = Enum.GetNames(typeof(Stat)).Length;
+            Core.Data.Item[index].AddStat = new byte[statCount];
+            Core.Data.Item[index].StatReq = new byte[statCount];          
 
             Core.Data.Item[index].Name = "";
             Core.Data.Item[index].Description = "";
