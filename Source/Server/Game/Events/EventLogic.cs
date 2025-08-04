@@ -1394,7 +1394,7 @@ namespace Server
                         switch (withBlock1.WaitingForResponse)
                         {
                             case 2: // Waiting for shop to close.
-                                if (Core.Data.TempPlayer[i].InShop == 0)
+                                if (Core.Data.TempPlayer[i].InShop == -1)
                                 {
                                     withBlock1.WaitingForResponse = 0;
                                 }
