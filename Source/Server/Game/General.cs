@@ -3,13 +3,15 @@ using Core.Database;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Server.Game;
 using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using Server.Game;
 using static Core.Type;
+using static Core.Global.Command;
 
 namespace Server
 {
@@ -506,50 +508,44 @@ namespace Server
         /// <summary>
         /// Handles player commands with expanded functionality.
         /// </summary>
-        public static async System.Threading.Tasks.Task HandlePlayerCommandAsync(int playerIndex, string command)
+        public static async System.Threading.Tasks.Task HandlePlayerCommandAsync(string[] command)
         {
-            if (string.IsNullOrWhiteSpace(command)) return;
+            // Defensive: command[1] may not exist for some commands
+            int playerIndex = -1;
+            if (command.Length > 1)
+                playerIndex = GameLogic.FindPlayer(command[1]);
 
-            var parts = command.Trim().Split(' ');
-            switch (parts[0].ToLower())
+            if (command.Length == 1)
+            {
+                if (command[0] == "/help")
+                    await SendHelpMessageAsync();
+            } 
+
+            if (playerIndex == -1 || !NetworkConfig.IsPlaying(playerIndex))
+            {
+                return;
+            }
+            switch (command[0].ToLower())
             {
                 case "/teleport":
-                    if (parts.Length == 3 && int.TryParse(parts[1], out int x) && int.TryParse(parts[2], out int y))
+                    if (int.TryParse(command[1], out int x) && int.TryParse(command[2], out int y))
                         await TeleportPlayerAsync(playerIndex, x, y);
-                    else
-                        NetworkSend.PlayerMsg(playerIndex, "Usage: /teleport <x> <y>", (int)Core.Color.BrightRed);
                     break;
 
-                case "/kick":
-                    if (parts.Length == 2 && int.TryParse(parts[1], out int targetIndex))
-                        await KickPlayerAsync(playerIndex, targetIndex);
+                case "/kick":               
+                    await KickPlayerAsync(playerIndex);
                     break;
 
                 case "/broadcast":
-                    if (parts.Length > 1)
-                        await BroadcastMessageAsync(playerIndex, string.Join(" ", parts[1..]));
+                    await BroadcastMessageAsync(playerIndex, string.Join(" ", command[1..]));
                     break;
 
                 case "/status":
                     await SendServerStatusAsync(playerIndex);
                     break;
 
-                case "/help":
-                    await SendHelpMessageAsync(playerIndex);
-                    break;
-
                 case "/whisper":
-                    if (parts.Length >= 3)
-                        await SendWhisperAsync(playerIndex, parts[1], string.Join(" ", parts[2..]));
-                    else
-                        NetworkSend.PlayerMsg(playerIndex, "Usage: /whisper <player> <message>", (int)Core.Color.BrightRed);
-                    break;
-
-                case "/party":
-                    if (parts.Length >= 2)
-                        await HandlePartyCommandAsync(playerIndex, parts[1], parts.Length > 2 ? parts[2] : null);
-                    else
-                        NetworkSend.PlayerMsg(playerIndex, "Usage: /party <create|invite|leave> [player]", (int)Core.Color.BrightRed);
+                    await SendWhisperAsync(playerIndex, "Server", string.Join(" ", command[1..]));
                     break;
 
                 case "/stats":
@@ -560,8 +556,119 @@ namespace Server
                     await SavePlayerDataAsync(playerIndex);
                     break;
 
+                case "/shutdown":
+                    {
+                        if (General.GetShutDownTimer != null && General.GetShutDownTimer.IsRunning)
+                        {
+                            General.GetShutDownTimer.Stop();
+                            Console.WriteLine("Server shutdown has been cancelled!");
+                            NetworkSend.GlobalMsg("Server shutdown has been cancelled!");
+                        }
+                        else
+                        {
+                            if (General.GetShutDownTimer != null && General.GetShutDownTimer.ElapsedTicks > 0L)
+                            {
+                                General.GetShutDownTimer.Restart();
+                            }
+                            else
+                            {
+                                General.GetShutDownTimer?.Start();
+                            }
+
+                            Console.WriteLine("Server shutdown in " + SettingsManager.Instance.ServerShutdown + " seconds!");
+                            NetworkSend.GlobalMsg("Server shutdown in " + SettingsManager.Instance.ServerShutdown + " seconds!");
+                        }
+                        break;
+                    }
+
+                case "/exit":
+                    {
+                        await General.DestroyServerAsync();
+                        break;
+                    }
+
+                case "/access":
+                    {
+                        byte access;
+                        if (!byte.TryParse(command[2], out access))
+                        {
+                            Console.WriteLine("Invalid access level.");
+                            break;
+                        }
+
+                        // SetPlayerAccess implementation stub
+                        void SetPlayerAccess(int idx, byte lvl)
+                        {
+                            Core.Data.Player[idx].Access = lvl;
+                        }
+
+                        switch (access)
+                        {
+                            case (byte)AccessLevel.Player:
+                                SetPlayerAccess(playerIndex, access);
+                                NetworkSend.SendPlayerData(playerIndex);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Player!", (int)Core.Color.Yellow);
+                                Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            case (byte)AccessLevel.Moderator:
+                                SetPlayerAccess(playerIndex, access);
+                                NetworkSend.SendPlayerData(playerIndex);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Moderator!", (int)Core.Color.Yellow);
+                                Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            case (byte)AccessLevel.Mapper:
+                                SetPlayerAccess(playerIndex, access);
+                                NetworkSend.SendPlayerData(playerIndex);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Mapper!", (int)Core.Color.Yellow);
+                                Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            case (byte)AccessLevel.Developer:
+                                SetPlayerAccess(playerIndex, access);
+                                NetworkSend.SendPlayerData(playerIndex);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Developer!", (int)Core.Color.Yellow);
+                                Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            case (byte)AccessLevel.Owner:
+                                SetPlayerAccess(playerIndex, access);
+                                NetworkSend.SendPlayerData(playerIndex);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Owner!", (int)Core.Color.Yellow);
+                                Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            default:
+                                Console.WriteLine("Failed to set the access level to " + access + " for player " + GetPlayerName(playerIndex));
+                                break;
+                            
+                        }
+                        break;
+                    }
+
+                case "/ban":
+                    {
+                        Core.Data.Account[playerIndex].Banned = true;
+                        NetworkSend.AlertMsg(playerIndex, SystemMessage.Banned);
+                        await Player.LeftGame(playerIndex);
+                        Console.WriteLine($"Player {GetPlayerName(playerIndex)} has been banned by the server.");
+                        
+                        break;
+                    }
+
+                case "/timespeed":
+                    {
+                        double speed;
+                        if (!double.TryParse(command[1], out speed))
+                        {
+                            Console.WriteLine("Invalid speed value.");
+                            break;
+                        }
+                        Clock.Instance.GameSpeed = speed;
+                        SettingsManager.Instance.TimeSpeed = speed;
+                        SettingsManager.Save();
+                        Console.WriteLine("Set GameSpeed to " + Clock.Instance.GameSpeed + " secs per seconds");
+                        break;
+                    }
+
                 default:
-                    NetworkSend.PlayerMsg(playerIndex, "Unknown command. Use /help for assistance.", (int)Core.Color.BrightRed);
+                    Console.WriteLine("Unknown command. Use /help for assistance.", (int)Core.Color.BrightRed);
                     break;
             }
         }
@@ -590,22 +697,16 @@ namespace Server
             }
         }
 
-        private static async System.Threading.Tasks.Task KickPlayerAsync(int playerIndex, int targetIndex)
+        private static async System.Threading.Tasks.Task KickPlayerAsync(int playerIndex)
         {
             try
             {
-                if (!await IsAdminAsync(playerIndex))
+                if (NetworkConfig.IsPlaying(playerIndex))
                 {
-                    NetworkSend.PlayerMsg(playerIndex, "You are not authorized to kick players.", (int)Core.Color.BrightRed);
-                    return;
-                }
-
-                if (NetworkConfig.IsPlaying(targetIndex))
-                {
-                    NetworkSend.SendLeftGame(targetIndex);
-                    Player.LeftGame(targetIndex);
-                    Logger.LogInformation($"Player {targetIndex} kicked by {playerIndex}");
-                    NetworkSend.PlayerMsg(playerIndex, $"Player {targetIndex} has been kicked.", (int)Core.Color.BrightGreen);
+                    NetworkSend.SendLeftGame(playerIndex);
+                    await Player.LeftGame(playerIndex);
+                    Logger.LogInformation($"Player {playerIndex} kicked by server!");
+                    NetworkSend.PlayerMsg(playerIndex, $"Player {playerIndex} has been kicked.", (int)Core.Color.BrightGreen);
                 }
                 else
                 {
@@ -614,7 +715,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"Failed to kick player {targetIndex}");
+                Logger.LogError(ex, $"Failed to kick player {playerIndex}");
                 NetworkSend.PlayerMsg(playerIndex, "Kick operation failed.", (int)Core.Color.BrightRed);
             }
         }
@@ -655,19 +756,22 @@ namespace Server
             }
         }
 
-        private static async System.Threading.Tasks.Task SendHelpMessageAsync(int playerIndex)
+        private static async System.Threading.Tasks.Task SendHelpMessageAsync()
         {
             string help = "Available Commands:\n" +
                           "/teleport <x> <y> - Teleport to coordinates\n" +
-                          "/kick <playerId> - Kick a player (admin only)\n" +
+                          "/kick <player> - Kick a player (admin only)\n" +
                           "/broadcast <message> - Send a message to all players (admin only)\n" +
                           "/status - View server status\n" +
                           "/whisper <player> <message> - Send a private message\n" +
-                          "/party <create|invite|leave> [player] - Manage parties\n" +
-                          "/stats - View your statistics\n" +
-                          "/save - Manually save your data\n" +
+                          "/exit - Shutdown the server\n" +
+                          "/ban <player> - Ban a player\n" +
+                          "/shutdown - Initiate server shutdown\n" +
+                          "/stats - View player statistics\n" +
+                          "/access <player> <level> - Set player access level (1-5)\n" +
+                          "/save - Manually save player data\n" +
                           "/help - Show this message";
-            NetworkSend.PlayerMsg(playerIndex, help, (int)Core.Color.BrightGreen);
+            Console.WriteLine(help);
         }
 
         private static async System.Threading.Tasks.Task SendWhisperAsync(int senderIndex, string targetName, string message)
@@ -720,14 +824,14 @@ namespace Server
                             NetworkSend.PlayerMsg(playerIndex, $"Player '{targetName}' not found.", (int)Core.Color.BrightRed);
                             return;
                         }
-                        var targetPlayer = Core.Data.TempPlayer[targetIndex];
+                        var targetPlayer = Core.Data.TempPlayer[playerIndex];
                         if (targetPlayer.InParty != -1)
                         {
                             NetworkSend.PlayerMsg(playerIndex, $"{targetName} is already in a party.", (int)Core.Color.BrightRed);
                             return;
                         }
                         targetPlayer.InParty = player.InParty;
-                        NetworkSend.PlayerMsg(targetIndex, $"You have joined {Core.Data.Player[playerIndex].Name}'s party.", (int)Core.Color.BrightGreen);
+                        NetworkSend.PlayerMsg(playerIndex, $"You have joined {Core.Data.Player[playerIndex].Name}'s party.", (int)Core.Color.BrightGreen);
                         NetworkSend.PlayerMsg(playerIndex, $"{targetName} has joined your party.", (int)Core.Color.BrightGreen);
                         break;
 

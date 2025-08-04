@@ -12,11 +12,7 @@ builder.Services.AddSerilog(options => options.ReadFrom.Configuration(builder.Co
 builder.Services.AddHostedService<GameService>();
 builder.Services.AddSingleton<IPlayerService, PlayerService>();
 builder.Services.AddNetworkService<GameSession, GameSessionManager, GameNetworkService>();
-
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddHostedService<ConsoleInputService>();
-}
+builder.Services.AddHostedService<ConsoleInputService>();
 
 var app = builder.Build();
 

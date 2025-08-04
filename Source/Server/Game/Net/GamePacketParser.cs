@@ -1278,7 +1278,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // The player session.Id
         var n = GameLogic.FindPlayer(buffer.ReadString());
 
-
         if (n != session.Id)
         {
             if (n >= 0)
