@@ -1,6 +1,7 @@
 ﻿using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Server.Game;
 using static Core.Global.Command;
 
 namespace Server
@@ -11,12 +12,10 @@ namespace Server
         public static int GetTotalMapPlayers(int mapNum)
         {
             int getTotalMapPlayersRet = default;
-            int i;
             int n;
             n = 0;
 
-            var loopTo = NetworkConfig.Socket.HighIndex;
-            for (i = 0; i <= loopTo; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (GetPlayerMap(i) == mapNum)
                 {
@@ -56,10 +55,8 @@ namespace Server
         public static int FindPlayer(string name)
         {
             int findPlayerRet = default;
-            int i;
 
-            var loopTo = NetworkConfig.Socket.HighIndex;
-            for (i = 0; i <= loopTo; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 // Trim and convert both names to uppercase for case-insensitive comparison
                 if (Strings.UCase(GetPlayerName(i)) == Strings.UCase(name))

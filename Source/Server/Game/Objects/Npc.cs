@@ -9,6 +9,9 @@ using static Core.Packets;
 using static Core.Type;
 using System.Reflection;
 using Core;
+using Server.Game;
+using Server.Game.Net;
+using Server.Net;
 
 namespace Server
 {
@@ -158,11 +161,10 @@ namespace Server
         public static bool NpcTileIsOpen(int mapNum, int x, int y)
         {
             bool npcTileIsOpenRet = default;
-            int i;
+
             npcTileIsOpenRet = true;
 
-            var loopTo = NetworkConfig.Socket.HighIndex;
-            for (i = 0; i < loopTo; i++)
+            foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 if (GetPlayerMap(i) == mapNum & GetPlayerX(i) == x & GetPlayerY(i) == y)
                 {
@@ -192,7 +194,6 @@ namespace Server
         public static bool CanNpcMove(int mapNum, int mapNpcNum, byte dir)
         {
             bool canNpcMoveRet = default;
-            int i;
             int n;
             int n2;
             int x;
@@ -233,8 +234,7 @@ namespace Server
                             }
 
                             // Check to make sure that there is not a player in the way
-                            var loopTo = NetworkConfig.Socket.HighIndex;
-                            for (i = 0; i < loopTo; i++)
+                            foreach (var i in PlayerService.Instance.PlayerIds)
                             {
                                 if (NetworkConfig.IsPlaying(i))
                                 {
@@ -248,7 +248,7 @@ namespace Server
 
                             // Check to make sure that there is not another npc in the way
                             var loopTo1 = Core.Constant.MaxMapNpcs;
-                            for (i = 0; i < loopTo1; i++)
+                            for (var i = 0; i < loopTo1; i++)
                             {
                                 npcX = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].X / 32);
                                 npcY = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].Y / 32);
@@ -280,8 +280,7 @@ namespace Server
                                 return canNpcMoveRet;
                             }
 
-                            var loopTo2 = NetworkConfig.Socket.HighIndex;
-                            for (i = 0; i < loopTo2; i++)
+                            foreach (var i in PlayerService.Instance.PlayerIds)
                             {
                                 if (NetworkConfig.IsPlaying(i))
                                 {
@@ -294,7 +293,7 @@ namespace Server
                             }
 
                             var loopTo3 = Core.Constant.MaxMapNpcs;
-                            for (i = 0; i < loopTo3; i++)
+                            for (var i = 0; i < loopTo3; i++)
                             {
                                 npcX = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].X / 32);
                                 npcY = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].Y / 32);
@@ -326,8 +325,7 @@ namespace Server
                                 return canNpcMoveRet;
                             }
 
-                            var loopTo4 = NetworkConfig.Socket.HighIndex;
-                            for (i = 0; i < loopTo4; i++)
+                            foreach (var i in PlayerService.Instance.PlayerIds)
                             {
                                 if (NetworkConfig.IsPlaying(i))
                                 {
@@ -340,7 +338,7 @@ namespace Server
                             }
 
                             var loopTo5 = Core.Constant.MaxMapNpcs;
-                            for (i = 0; i < loopTo5; i++)
+                            for (var i = 0; i < loopTo5; i++)
                             {
                                 npcX = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].X / 32);
                                 npcY = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].Y / 32);
@@ -372,8 +370,7 @@ namespace Server
                                 return canNpcMoveRet;
                             }
 
-                            var loopTo6 = NetworkConfig.Socket.HighIndex;
-                            for (i = 0; i < loopTo6; i++)
+                            foreach (var i in PlayerService.Instance.PlayerIds)
                             {
                                 if (NetworkConfig.IsPlaying(i))
                                 {
@@ -386,7 +383,7 @@ namespace Server
                             }
 
                             var loopTo7 = Core.Constant.MaxMapNpcs;
-                            for (i = 0; i < loopTo7; i++)
+                            for (var i = 0; i < loopTo7; i++)
                             {
                                 npcX = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].X / 32);
                                 npcY = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].Y / 32);
@@ -537,44 +534,41 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_RequestEditNpc(int index, ref byte[] data)
+        public static void Packet_RequestEditNpc(GameSession session, ReadOnlySpan<byte> bytes)
         {
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
                 return;
 
-            string user;
-
-            user = IsEditorLocked(index, (byte) EditorType.Npc);
-
+            var user = IsEditorLocked(session.Id, (byte) EditorType.Npc);
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
                 return;
             }
 
-            Core.Data.TempPlayer[index].Editor = (byte) EditorType.Npc;
+            Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Npc;
 
-            Item.SendItems(index);
-            Animation.SendAnimations(index);
-            NetworkSend.SendSkills(index);
-            SendNpcs(index);
+            Item.SendItems(session.Id);
+            Animation.SendAnimations(session.Id);
+            NetworkSend.SendSkills(session.Id);
+            SendNpcs(session.Id);
 
             var buffer = new ByteStream(4);
             buffer.WriteInt32((int) ServerPackets.SNpcEditor);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
 
-        public static void Packet_SaveNpc(int index, ref byte[] data)
+        public static void Packet_SaveNpc(GameSession session, ReadOnlySpan<byte> bytes)
         {
             int npcNum;
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
                 return;
 
             npcNum = buffer.ReadInt32();
@@ -615,9 +609,7 @@ namespace Server
             // Save it
             SendUpdateNpcToAll(npcNum);
             Database.SaveNpc(npcNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved Npc #" + npcNum + ".", Constant.AdminLog);
-
-            buffer.Dispose();
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved Npc #" + npcNum + ".", Constant.AdminLog);
         }
 
         public static void SendNpcs(int index)
@@ -676,7 +668,7 @@ namespace Server
             buffer.WriteInt32(Data.Npc[(int)npcNum].Level);
             buffer.WriteInt32(Data.Npc[(int)npcNum].Damage);
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -742,7 +734,7 @@ namespace Server
                 buffer.WriteByte(Data.MapNpc[mapNum].Npc[i].Dir);
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }

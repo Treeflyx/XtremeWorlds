@@ -3,16 +3,16 @@ using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Packets;
 using static Core.Type;
 using static Core.Global.Command;
 
 namespace Server
 {
-
     public class Moral
     {
-
         #region Database
         public static void ClearMoral(int moralNum)
         {
@@ -124,7 +124,7 @@ namespace Server
 
             buffer.WriteBlock(MoralData(moralNum));
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -144,45 +144,41 @@ namespace Server
         #endregion
 
         #region Incoming Packets
-        public static void Packet_RequestEditMoral(int index, ref byte[] data)
+        public static void Packet_RequestEditMoral(GameSession session, ReadOnlySpan<byte> bytes)
         {
             var buffer = new ByteStream(4);
 
-            if (GetPlayerAccess(index) < (byte) Core.AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) Core.AccessLevel.Developer)
                 return;
 
-            string user;
-
-            user = IsEditorLocked(index, (byte) Core.EditorType.Moral);
-
+            var user = IsEditorLocked(session.Id, (byte) Core.EditorType.Moral);
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Core.Color.BrightRed);
                 return;
             }
 
-            SendMorals(index);
+            SendMorals(session.Id);
 
-            Core.Data.TempPlayer[index].Editor = (byte) Core.EditorType.Moral;
+            Core.Data.TempPlayer[session.Id].Editor = (byte) Core.EditorType.Moral;
 
             buffer.WriteInt32((int) ServerPackets.SMoralEditor);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
 
         }
 
-        public static void Packet_SaveMoral(int index, ref byte[] data)
+        public static void Packet_SaveMoral(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            int moralNum;
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) Core.AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) Core.AccessLevel.Developer)
                 return;
 
-            moralNum = buffer.ReadInt32();
+            var moralNum = buffer.ReadInt32();
 
             // Prevent hacking
             if (moralNum < 0 | moralNum > Core.Constant.MaxMorals)
@@ -206,13 +202,13 @@ namespace Server
             // Save it
             SendUpdateMoralToAll(moralNum);
             SaveMoral(moralNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved moral #" + moralNum + ".", Constant.AdminLog);
-            SendMorals(index);
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved moral #" + moralNum + ".", Constant.AdminLog);
+            SendMorals(session.Id);
         }
 
-        public static void Packet_RequestMoral(int index, ref byte[] data)
+        public static void Packet_RequestMoral(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            SendMorals(index);
+            SendMorals(session.Id);
         }
         #endregion
     }

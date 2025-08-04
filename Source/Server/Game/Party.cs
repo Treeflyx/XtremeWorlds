@@ -3,6 +3,9 @@ using System.Linq;
 using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
+using Server.Game;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Packets;
 using static Core.Global.Command;
 
@@ -24,7 +27,7 @@ namespace Server
                 if (Data.Party[partyNum].Member[i] > 0)
                 {
                     var dataSize = data.Length;
-                    NetworkConfig.Socket.SendDataTo(Data.Party[partyNum].Member[i], data, dataSize);
+                    NetworkConfig.SendDataTo(Data.Party[partyNum].Member[i], data, dataSize);
                 }
             }
         }
@@ -36,7 +39,7 @@ namespace Server
 
             buffer.WriteString(Core.Data.Player[target].Name);
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -89,7 +92,7 @@ namespace Server
                 buffer.WriteInt32(0);
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -115,46 +118,44 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_PartyRquest(int index, ref byte[] data)
+        public static void Packet_PartyRquest(GameSession session, ReadOnlySpan<byte> bytes)
         {
             // Prevent partying with self
-            if (Core.Data.TempPlayer[index].Target == index)
+            if (Core.Data.TempPlayer[session.Id].Target == session.Id)
                 return;
 
             // make sure it's a valid target
-            if (Core.Data.TempPlayer[index].TargetType != (byte)TargetType.Player)
+            if (Core.Data.TempPlayer[session.Id].TargetType != (byte)TargetType.Player)
                 return;
 
             // make sure they're connected and on the same map
-            if (GetPlayerMap(Core.Data.TempPlayer[index].Target) != GetPlayerMap(index))
+            if (GetPlayerMap(Core.Data.TempPlayer[session.Id].Target) != GetPlayerMap(session.Id))
                 return;
 
             // init the request
-            Invite(index, Core.Data.TempPlayer[index].Target);
+            Invite(session.Id, Core.Data.TempPlayer[session.Id].Target);
         }
 
-        public static void Packet_AcceptParty(int index, ref byte[] data)
+        public static void Packet_AcceptParty(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            InviteAccept(Core.Data.TempPlayer[index].PartyInvite, index);
+            InviteAccept(Core.Data.TempPlayer[session.Id].PartyInvite, session.Id);
         }
 
-        public static void Packet_DeclineParty(int index, ref byte[] data)
+        public static void Packet_DeclineParty(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            InviteDecline(Core.Data.TempPlayer[index].PartyInvite, index);
+            InviteDecline(Core.Data.TempPlayer[session.Id].PartyInvite, session.Id);
         }
 
-        public static void Packet_LeaveParty(int index, ref byte[] data)
+        public static void Packet_LeaveParty(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            PlayerLeave(index);
+            PlayerLeave(session.Id);
         }
 
-        public static void Packet_PartyChatMsg(int index, ref byte[] data)
+        public static void Packet_PartyChatMsg(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
-            PartyMsg(index, buffer.ReadString());
-
-            buffer.Dispose();
+            PartyMsg(session.Id, buffer.ReadString());
         }
 
         #endregion
@@ -502,7 +503,7 @@ namespace Server
                 tmpindex = Data.Party[partyNum].Member[i];
                 if (tmpindex > -1)
                 {
-                    if (NetworkConfig.Socket.IsConnected(tmpindex) & NetworkConfig.IsPlaying(tmpindex))
+                    if (PlayerService.Instance.IsConnected(tmpindex) & NetworkConfig.IsPlaying(tmpindex))
                     {
                         if (GetPlayerMap(tmpindex) != mapNum)
                         {
@@ -534,7 +535,7 @@ namespace Server
                 if (tmpindex > -1)
                 {
                     // playing?
-                    if (NetworkConfig.Socket.IsConnected(tmpindex) & NetworkConfig.IsPlaying(tmpindex))
+                    if (PlayerService.Instance.IsConnected(tmpindex) & NetworkConfig.IsPlaying(tmpindex))
                     {
                         if (GetPlayerMap(tmpindex) == mapNum)
                         {

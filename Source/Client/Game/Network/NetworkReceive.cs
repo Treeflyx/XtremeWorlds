@@ -153,7 +153,8 @@ namespace Client
             // Read IV
             byte[] iv = buffer.ReadBlock(ivLength).ToArray();
 
-            General.Aes = new Reoria.Engine.Common.Security.Encryption.AesEncryption(key, iv);
+            General.AesKey = key;
+            General.AesIV = iv;
         }
 
         private static void Packet_AlertMsg(ref byte[] data)

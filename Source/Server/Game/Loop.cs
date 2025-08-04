@@ -12,15 +12,14 @@ using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
+using Server.Game;
 using static Core.Global.Command;
 using static Core.Type;
 
 namespace Server
 {
-
     public class Loop
     {
-
         public static async System.Threading.Tasks.Task ServerAsync()
         {
             int tick;
@@ -56,11 +55,11 @@ namespace Server
                 
                 if (tick > tmrWalk)
                 {
-                    for (int index = 0; index < NetworkConfig.Socket.HighIndex; index++)
+                    foreach (var player in PlayerService.Instance.Players)
                     {
-                        if (Core.Data.Player[index].Moving > 0)
+                        if (Core.Data.Player[player.Id].Moving > 0)
                         {
-                            Player.PlayerMove(index, Core.Data.Player[index].Dir, Core.Data.Player[index].Moving, false);
+                            Player.PlayerMove(player.Id, Core.Data.Player[player.Id].Dir, Core.Data.Player[player.Id].Moving, false);
                         }
                     }
 
@@ -101,18 +100,6 @@ namespace Server
 
                 if (tick > tmr500)
                 {
-                    // Check for disconnects
-                    for (int i = 0; i < NetworkConfig.Socket.HighIndex; i++)
-                    {
-                        if (!NetworkConfig.Socket.IsConnected(i))
-                        {
-                            if (IsPlaying(i))
-                            {
-                                await Player.LeftGame(i);
-                            }
-                        }
-                    }
-
                     UpdateMapAi();
 
                     // Move the timer up 500ms.
@@ -149,21 +136,18 @@ namespace Server
 
         public static void UpdateSavePlayers()
         {
-            int i;
-
-            if (NetworkConfig.Socket?.HighIndex > 0)
+            var playerIds = PlayerService.Instance.Players.ToList();
+            
+            if (playerIds.Count > 0)
             {
                 Console.WriteLine("Saving all online players...");
-
-                var loopTo = NetworkConfig.Socket.HighIndex;
-                for (i = 0; i < loopTo; i++)
+                
+                foreach (var player in PlayerService.Instance.Players)
                 {
-                    Database.SaveCharacter(i, Core.Data.TempPlayer[i].Slot);
-                    Database.SaveBank(i);
+                    Database.SaveCharacter(player.Id, Core.Data.TempPlayer[player.Id].Slot);
+                    Database.SaveBank(player.Id);
                 }
-
             }
-
         }
 
         private static void UpdateMapSpawnItems()
@@ -212,12 +196,12 @@ namespace Server
                 }
 
                 // Add Players
-                for (int i = 0; i < NetworkConfig.Socket.HighIndex; i++)
+                foreach (var i in PlayerService.Instance.Players)
                 {
-                    if (Core.Data.Player[i].Map == mapNum)
+                    if (Core.Data.Player[i.Id].Map == mapNum)
                     {
-                        var player = Core.Globals.Entity.FromPlayer(i, Core.Data.Player[i]);
-                        if (IsPlaying(i))
+                        var player = Core.Globals.Entity.FromPlayer(i.Id, Core.Data.Player[i.Id]);
+                        if (IsPlaying(i.Id))
                         {
                             player.Map = mapNum;
                             entities.Add(player);

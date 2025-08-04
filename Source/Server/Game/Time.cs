@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core;
 using Mirage.Sharp.Asfw;
+using Server.Game;
 using static Core.Packets;
 
 namespace Server;
@@ -151,24 +152,6 @@ public sealed class TimeManager : IDisposable
     /// </summary>
     public void AdjustTime(TimeSpan delta) => _clock.Time = _clock.Time.Add(delta);
 
-    /// <summary>
-    /// Broadcasts the authoritative UTC time to all <paramref name="servers"/>.
-    /// </summary>
-    public async Task SynchronizeTimeAsync(IEnumerable<Server> servers, CancellationToken ct = default)
-    {
-        ArgumentNullException.ThrowIfNull(servers);
-        var utc = _clock.Time;
-
-        var tasks = servers.Select(async server =>
-        {
-            // TODO: Implement SendTimeAsync on Server type
-            // await server.SendTimeAsync(utc, ct).ConfigureAwait(false);
-            await Task.CompletedTask.ConfigureAwait(false);
-        });
-
-        await Task.WhenAll(tasks).ConfigureAwait(false);
-    }
-
     #endregion
 
     #region Event forwarding
@@ -185,7 +168,7 @@ public sealed class TimeManager : IDisposable
 
     public void BroadcastClock()
     {
-        Parallel.For(0, NetworkConfig.Socket.HighIndex, i =>
+        Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
         {
             if (NetworkConfig.IsPlaying(i)) SendClock(i);
         });
@@ -193,7 +176,7 @@ public sealed class TimeManager : IDisposable
 
     public void BroadcastTime()
     {
-        Parallel.For(0, NetworkConfig.Socket.HighIndex, i =>
+        Parallel.ForEach(PlayerService.Instance.PlayerIds, i =>
         {
             if (NetworkConfig.IsPlaying(i)) SendTime(i);
         });
@@ -205,7 +188,7 @@ public sealed class TimeManager : IDisposable
         bs.WriteInt32((int)ServerPackets.SClock);
         bs.WriteInt32(GameSpeed);
         bs.WriteInt64(_clock.Time.Ticks);
-        NetworkConfig.Socket.SendDataTo(index, bs.UnreadData, bs.WritePosition);
+        NetworkConfig.SendDataTo(index, bs.UnreadData, bs.WritePosition);
     }
 
     public void SendTime(int index)
@@ -213,7 +196,7 @@ public sealed class TimeManager : IDisposable
         using var bs = new ByteStream(PacketReserve);
         bs.WriteInt32((int)ServerPackets.STime);
         bs.WriteByte((byte)TimeOfDay);
-        NetworkConfig.Socket.SendDataTo(index, bs.UnreadData, bs.WritePosition);
+        NetworkConfig.SendDataTo(index, bs.UnreadData, bs.WritePosition);
     }
 
     #endregion

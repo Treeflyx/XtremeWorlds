@@ -25,8 +25,9 @@ namespace Client
         public static GameState State = new GameState();
         public static RandomUtility Random = new RandomUtility();
         public static Gui Gui = new Gui();
-
-        public static AesEncryption Aes = new Reoria.Engine.Common.Security.Encryption.AesEncryption();
+        
+        public static byte[] AesKey = new byte[32];
+        public static byte[] AesIV = new byte[16];
 
         public static IEngineContainer? Container;
         public static IConfiguration? Configuration;

@@ -24,6 +24,7 @@ using static Server.Resource;
 using static System.Net.Mime.MediaTypeNames;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using Server.Game;
 
 public class Script
 {
@@ -415,26 +416,24 @@ public class Script
 
     public void JoinMap(int index)
     {
-        int i;
         byte[] data;
         int dataSize;
         int mapNum = GetPlayerMap(index);
 
         // Send all players on current map to index
-        var loopTo = NetworkConfig.Socket.HighIndex;
-        for (i = 0; i < loopTo; i++)
+        foreach (var player in PlayerService.Instance.Players)
         {
-            if (IsPlaying(i))
+            if (IsPlaying(player.Id))
             {
-                if (i != index)
+                if (player.Id != index)
                 {
-                    if (GetPlayerMap(i) == mapNum)
+                    if (GetPlayerMap(player.Id) == mapNum)
                     {
-                        data = PlayerData(i);
+                        data = PlayerData(player.Id);
                         dataSize = data.Length;
-                        NetworkConfig.Socket.SendDataTo(index, data, dataSize);
-                        SendPlayerXyTo(index, i);
-                        NetworkSend.SendMapEquipmentTo(index, i);
+                        NetworkConfig.SendDataTo(index, data, dataSize);
+                        SendPlayerXyTo(index, player.Id);
+                        NetworkSend.SendMapEquipmentTo(index, player.Id);
                     }
                 }
             }
@@ -574,30 +573,29 @@ public class Script
                     // make sure it's not stunned
                     if (!(entity.StunDuration > 0))
                     {
-                        int loopTo4 = NetworkConfig.Socket.HighIndex;
-                        for (int i = 0; i < loopTo4; i++)
+                        foreach (var player in PlayerService.Instance.Players)
                         {
-                            if (NetworkConfig.IsPlaying(i))
+                            if (NetworkConfig.IsPlaying(player.Id))
                             {
-                                if (GetPlayerMap(i) == mapNum && entity.TargetType == 0 && GetPlayerAccess(i) <= (byte)AccessLevel.Moderator)
+                                if (GetPlayerMap(player.Id) == mapNum && entity.TargetType == 0 && GetPlayerAccess(player.Id) <= (byte)AccessLevel.Moderator)
                                 {
                                     int n = entity.Range;
-                                    int distanceX = entity.X - GetPlayerX(i);
-                                    int distanceY = entity.Y - GetPlayerY(i);
+                                    int distanceX = entity.X - GetPlayerX(player.Id);
+                                    int distanceY = entity.Y - GetPlayerY(player.Id);
 
                                     if (distanceX < 0) distanceX *= -1;
                                     if (distanceY < 0) distanceY *= -1;
 
                                     if (distanceX <= n && distanceY <= n)
                                     {
-                                        if (entity.Behaviour == (byte)NpcBehavior.AttackOnSight || GetPlayerPk(i))
+                                        if (entity.Behaviour == (byte)NpcBehavior.AttackOnSight || GetPlayerPk(player.Id))
                                         {
                                             if (!string.IsNullOrEmpty(entity.AttackSay))
                                             {
-                                                NetworkSend.PlayerMsg(i, GameLogic.CheckGrammar(entity.Name, 1) + " says, '" + entity.AttackSay + "' to you.", (int)Core.Color.Yellow);
+                                                NetworkSend.PlayerMsg(player.Id, GameLogic.CheckGrammar(entity.Name, 1) + " says, '" + entity.AttackSay + "' to you.", (int)Core.Color.Yellow);
                                             }
                                             entity.TargetType = (byte)TargetType.Player;
-                                            entity.Target = i;
+                                            entity.Target = player.Id;
                                         }
                                     }
                                 }

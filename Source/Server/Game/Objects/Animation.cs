@@ -8,13 +8,13 @@ using static Core.Packets;
 using static Core.Type;
 using static Core.Global.Command;
 using System.Threading.Tasks;
+using Server.Game.Net;
+using Server.Net;
 
 namespace Server
 {
-
     public class Animation
     {
-
         #region Database
         public static void SaveAnimation(int animationNum)
         {
@@ -101,38 +101,34 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_RequestEditAnimation(int index, ref byte[] data)
+        public static void Packet_RequestEditAnimation(GameSession session, ReadOnlySpan<byte> bytes)
         {
             // Prevent hacking
-            if (GetPlayerAccess(index) < (byte) Core.AccessLevel.Developer)
+            if (GetPlayerAccess(session.Id) < (byte) Core.AccessLevel.Developer)
                 return;
 
-            string user;
-
-            user = IsEditorLocked(index, (byte) Core.EditorType.Animation);
-
+            var user = IsEditorLocked(session.Id, (byte) Core.EditorType.Animation);
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int) Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Core.Color.BrightRed);
                 return;
             }
 
-            Core.Data.TempPlayer[index].Editor = (byte) Core.EditorType.Animation;
+            Core.Data.TempPlayer[session.Id].Editor = (byte) Core.EditorType.Animation;
 
-            SendAnimations(index);
+            SendAnimations(session.Id);
 
             var buffer = new ByteStream(4);
             buffer.WriteInt32((int) ServerPackets.SAnimationEditor);
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
-        public static void Packet_SaveAnimation(int index, ref byte[] data)
+        public static void Packet_SaveAnimation(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            int animNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(bytes);
 
-            animNum = buffer.ReadInt32();
+            var animNum = buffer.ReadInt32();
 
             // Update the Animation
             for (int i = 0, loopTo = Information.UBound(Core.Data.Animation[animNum].Frames); i < loopTo; i++)
@@ -149,27 +145,24 @@ namespace Server
 
             for (int i = 0, loopTo3 = Information.UBound(Core.Data.Animation[animNum].Sprite); i < loopTo3; i++)
                 Core.Data.Animation[animNum].Sprite[i] = buffer.ReadInt32();
-
-            buffer.Dispose();
-
+            
             // Save it
             SaveAnimation(animNum);
             SendUpdateAnimationToAll(animNum);
-            Core.Log.Add(GetAccountLogin(index) + " saved Animation #" + animNum + ".", Constant.AdminLog);
+            Core.Log.Add(GetAccountLogin(session.Id) + " saved Animation #" + animNum + ".", Constant.AdminLog);
 
         }
 
-        public static void Packet_RequestAnimation(int index, ref byte[] data)
+        public static void Packet_RequestAnimation(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);
-            int n;
+            var buffer = new PacketReader(bytes);
 
-            n = buffer.ReadInt32();
+            var n = buffer.ReadInt32();
 
             if (n < 0 | n > Core.Constant.MaxAnimations)
                 return;
 
-            SendUpdateAnimationTo(index, n);
+            SendUpdateAnimationTo(session.Id, n);
         }
 
         #endregion
@@ -216,7 +209,7 @@ namespace Server
 
             buffer.WriteBlock(AnimationData(animationNum));
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

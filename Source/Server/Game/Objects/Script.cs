@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Packets;
 
 namespace Server
@@ -16,27 +18,24 @@ namespace Server
     {
         public static dynamic? Instance { get; private set; }
 
-        public static void Packet_RequestEditScript(int index, ref byte[] data)
+        public static void Packet_RequestEditScript(GameSession session, ReadOnlySpan<byte> bytes)
         {
             var buffer = new ByteStream(4);
 
-            if (Core.Global.Command.GetPlayerAccess(index) < (byte)Core.AccessLevel.Owner)
+            if (Core.Global.Command.GetPlayerAccess(session.Id) < (byte)Core.AccessLevel.Owner)
                 return;
 
-            string user;
-
-            user = Core.Global.Command.IsEditorLocked(index, (byte)Core.EditorType.Script);
+            var user = Core.Global.Command.IsEditorLocked(session.Id, (byte)Core.EditorType.Script);
 
             if (!string.IsNullOrEmpty(user))
             {
-                NetworkSend.PlayerMsg(index, "The game editor is locked and being used by " + user + ".", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int)Core.Color.BrightRed);
                 return;
             }
 
-            Core.Data.TempPlayer[index].Editor = (byte)Core.EditorType.Script;
+            Core.Data.TempPlayer[session.Id].Editor = (byte)Core.EditorType.Script;
 
             buffer.WriteInt32((int)ServerPackets.SScriptEditor);
-
             buffer.WriteInt32(Core.Data.Script.Code != null ? Core.Data.Script.Code.Length : 0);
 
             if (Core.Data.Script.Code != null)
@@ -51,17 +50,17 @@ namespace Server
                 buffer.WriteString(string.Empty);
             }
 
-            NetworkConfig.Socket.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
 
-        public static void Packet_SaveScript(int index, ref byte[] data)
+        public static void Packet_SaveScript(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            var buffer = new ByteStream(data);;
+            var buffer = new PacketReader(bytes);
 
             // Prevent hacking
-            if (Core.Global.Command.GetPlayerAccess(index) < (byte)Core.AccessLevel.Owner)
+            if (Core.Global.Command.GetPlayerAccess(session.Id) < (byte)Core.AccessLevel.Owner)
                 return;
 
             // Save with the new script code and ensure the filename is Script.cs
@@ -85,7 +84,7 @@ namespace Server
 
             Task.Run(async () =>
                 {
-                    await LoadScriptAsync(index);
+                    await LoadScriptAsync(session.Id);
                 });
         }
 
@@ -133,12 +132,18 @@ namespace Server
                 if (script != null)
                 {
                     Instance = script;
-                    NetworkSend.PlayerMsg(index, "Script saved successfully!", (int)Core.Color.Yellow);
+                    if (index > 0)
+                    {
+                        NetworkSend.PlayerMsg(index, "Script saved successfully!", (int) Core.Color.Yellow);
+                    }
                 }
             }
             catch (Exception e)
             {
-                NetworkSend.PlayerMsg(index, e.Message, (int)Core.Color.BrightRed);
+                if (index > 0)
+                {
+                    NetworkSend.PlayerMsg(index, e.Message, (int)Core.Color.BrightRed);
+                }
                 Console.WriteLine(e.Message);
             }
         }

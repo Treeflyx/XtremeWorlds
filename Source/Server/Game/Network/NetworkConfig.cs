@@ -1,237 +1,128 @@
 ﻿using Core;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Microsoft.Xna.Framework;
-using Mirage.Sharp.Asfw.Network;
-using Reoria.Engine.Common.Security.Encryption;
-using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics.Arm;
-using System.Threading.Tasks;
+using Server.Game;
+using Server.Game.Net;
+using Server.Net;
 using static Core.Global.Command;
-using static Core.Packets;
 
-namespace Server
+namespace Server;
+
+public class NetworkConfig
 {
-
-    public class NetworkConfig
+    public static bool IsLoggedIn(int index)
     {
-        private static NetworkServer _socket;
+        return Data.Account[index].Login.Length > 0;
+    }
 
-        public static NetworkServer Socket
+    public static bool IsPlaying(int index)
+    {
+        return Data.TempPlayer[index].InGame;
+    }
+
+    public static bool IsMultiLogin(int index, string login)
+    {
+        foreach (var i in PlayerService.Instance.PlayerIds)
         {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
+            if (i != index)
             {
-                return _socket;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_socket != null)
+                if (login != "" && Data.Account[i].Login.ToLower() != "")
                 {
-                    _socket.ConnectionReceived -= Socket_ConnectionReceived;
-                    _socket.ConnectionLost -= Socket_ConnectionLost;
-                    _socket.CrashReport -= Socket_CrashReport;
-                    _socket.TrafficReceived -= Socket_TrafficReceived;
-                    _socket.PacketReceived -= Socket_PacketReceived;
-                }
-
-                _socket = value;
-                if (_socket != null)
-                {
-                    _socket.ConnectionReceived += Socket_ConnectionReceived;
-                    _socket.ConnectionLost += Socket_ConnectionLost;
-                    _socket.CrashReport += Socket_CrashReport;
-                    _socket.TrafficReceived += Socket_TrafficReceived;
-                    _socket.PacketReceived += Socket_PacketReceived;
-                }
-            }
-        }
-
-        public static void InitNetwork()
-        {
-            if (Socket is not null)
-                return;
-
-            // Establish some Rulez
-            Socket = new NetworkServer((int)Packets.ClientPackets.Count, 8192, Core.Constant.MaxPlayers)
-            {
-                BufferLimit = 5048000, // <- this is 2mb MAX data storage
-                MinimumIndex = 0, // <- this prevents the network from giving us 0 as an index
-            };
-            // END THE ESTABLISHMENT! WOOH ANARCHY! ~SpiceyWolf
-
-            NetworkReceive.PacketRouter(); // Need them packet ids boah!
-        }
-
-        public static void DestroyNetwork()
-        {
-            Socket.Dispose();
-        }
-
-        public static bool IsLoggedIn(int index)
-        {
-            return Core.Data.Account[index].Login.Length > 0;
-        }
-
-        public static bool IsPlaying(int index)
-        {
-            return Core.Data.TempPlayer[index].InGame;
-        }
-
-        public static bool IsMultiLogin(int index, string login)
-        {
-            for (int i = 0, loopTo = Socket.HighIndex; i <= loopTo; i++)
-            {
-                if (i != index)
-                {
-                    if (login != "" && Core.Data.Account[i].Login.ToLower() != "")
+                    if (Data.Account[i].Login.ToLower() != login)
                     {
-                        if (Core.Data.Account[i].Login.ToLower() != login)
+                        if (PlayerService.Instance.ClientIp(i) == PlayerService.Instance.ClientIp(index))
                         {
-                            if (Socket.ClientIp(i) == Socket.ClientIp(index))
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }
             }
+        }
             
-            return false;
-        }
+        return false;
+    }
 
-        public static async System.Threading.Tasks.Task LoadAccount(int index, string login, byte slot)
+    public static async Task LoadAccount(GameSession session, string login, byte slot)
+    {
+        foreach (var i in PlayerService.Instance.PlayerIds)
         {
-            for (int i = 0, loopTo = Socket.HighIndex; i <= loopTo; i++)
+            if (login != "" && Data.Account[i].Login.ToLower() != "")
             {
-                if (login != "" && Core.Data.Account[i].Login.ToLower() != "")
+                if (Data.Account[i].Login.ToLower() == login)
                 {
-                    if (Core.Data.Account[i].Login.ToLower() == login)
+                    if (session.Id != i)
                     {
-                        if (index != i)
-                        {
-                            await Player.LeftGame(i);
-                            break;
-                        }
+                        await Player.LeftGame(i);
+                        break;
                     }
                 }
             }
-
-            Database.LoadCharacter(index, slot);
-            Database.LoadBank(index);
-
-            // Check if character data has been created
-            if (Strings.Len(Core.Data.Player[index].Name) > 0)
-            {
-                // we have a char!                        
-                Player.HandleUseChar(index);
-            }
-            else
-            {
-                NetworkSend.AlertMsg(index, (byte)SystemMessage.DatabaseError, (byte)Menu.CharacterSelect);
-            }
         }
 
-        public static void SendDataToAll(ReadOnlySpan<byte> data, int head)
-        {
-            for (int i = 0, loopTo = Socket.HighIndex; i <= loopTo; i++)
-                Socket.SendDataTo(i, data, head);
-        }
+        Database.LoadCharacter(session.Id, slot);
+        Database.LoadBank(session.Id);
 
-        public static void SendDataToAllBut(int index, ReadOnlySpan<byte> data, int head)
+        // Check if character data has been created
+        if (Strings.Len(Data.Player[session.Id].Name) > 0)
         {
-            for (int i = 0, loopTo = Socket.HighIndex; i <= loopTo; i++)
+            // we have a char!                        
+            Player.HandleUseChar(session);
+        }
+        else
+        {
+            NetworkSend.AlertMsg(session, SystemMessage.DatabaseError, Menu.CharacterSelect);
+        }
+    }
+
+    public static void SendDataToAll(ReadOnlySpan<byte> data, int head)
+    {
+        PlayerService.Instance.SendDataToAll(data, head);
+    }
+
+    public static void SendDataToAllBut(int index, ReadOnlySpan<byte> data, int head)
+    {
+        foreach (var i in PlayerService.Instance.PlayerIds)
+        {
+            if (i != index)
+            {
+                PlayerService.Instance.SendDataTo(i, data, head);
+            }
+        }
+    }
+
+    public static void SendDataToMapBut(int index, int mapNum, ReadOnlySpan<byte> data, int head)
+    {
+        foreach (var i in PlayerService.Instance.PlayerIds)
+        {
+            if (IsPlaying(i))
             {
                 if (i != index)
-                {
-                    Socket.SendDataTo(i, data, head);
-                }
-            }
-        }
-
-        public static void SendDataToMapBut(int index, int mapNum, ReadOnlySpan<byte> data, int head)
-        {
-            for (int i = 0, loopTo = Socket.HighIndex; i <= loopTo; i++)
-            {
-                if (IsPlaying(i))
-                {
-                    if (i != index)
-                    {
-                        if (GetPlayerMap(i) == mapNum)
-                        {
-                            Socket.SendDataTo(i, data, head);
-                        }
-                    }
-                }
-            }
-        }
-
-        public static void SendDataToMap(int mapNum, ReadOnlySpan<byte> data, int head)
-        {
-            int i;
-
-            var loopTo = Socket.HighIndex;
-            for (i = 0; i <= loopTo; i++)
-            {
-                if (IsPlaying(i))
                 {
                     if (GetPlayerMap(i) == mapNum)
                     {
-                        Socket.SendDataTo(i, data, head);
+                        PlayerService.Instance.SendDataTo(i, data, head);
                     }
                 }
             }
-
         }
+    }
 
-        public static void SendDataTo(int index, ReadOnlySpan<byte> data, int head)
+    public static void SendDataToMap(int mapNum, ReadOnlySpan<byte> data, int head)
+    {
+        foreach (var i in PlayerService.Instance.PlayerIds)
         {
-            Socket.SendDataTo(index, data, head);
-        }
-
-        #region Events
-
-        public static void Socket_ConnectionReceived(int index)
-        {
-            Console.WriteLine("Connection received on index [" + index + "] - IP[" + Socket.ClientIp(index) + "]");
-            General.Aes.TryAdd(index, new AesEncryption());
-            NetworkSend.AesKeyIv(index);
-
-        }
-
-        public static void Socket_ConnectionLost(int index)
-        {
-            Console.WriteLine("Connection lost on index [" + index + "] - IP[" + Socket.ClientIp(index) + "]");
-            Player.LeftGame(index);
-            General.Aes.Remove(index);
-        }
-
-        public static void Socket_CrashReport(int index, string err)
-        {
-            Console.WriteLine("There was a network error index [" + index + "]");
-            Console.WriteLine("Report: " + err);
-        }
-
-        private static void Socket_TrafficReceived(int size, ref byte[] data)
-        {
-            if (Conversions.ToInteger(Global.DebugTxt) == 1)
+            if (IsPlaying(i))
             {
-                Console.WriteLine("Traffic Received: [Size: " + size + "]");
+                if (GetPlayerMap(i) == mapNum)
+                {
+                    PlayerService.Instance.SendDataTo(i, data, head);
+                }
             }
         }
 
-        private static void Socket_PacketReceived(int size, int header, ref byte[] data)
-        {
-            if (Conversions.ToInteger(Global.DebugTxt) == 1)
-            {
-                Console.WriteLine("Packet Received: [Size: " + size + "| Packet: " + ((ClientPackets)header).ToString() + "]");
-            }
-        }
+    }
 
-        #endregion
-
+    public static void SendDataTo(int index, ReadOnlySpan<byte> data, int head)
+    {
+        PlayerService.Instance.SendDataTo(index, data, head);
     }
 }

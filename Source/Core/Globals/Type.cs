@@ -319,15 +319,8 @@ namespace Core
             public int TmpMap;
             public int TmpX;
             public int TmpY;
-            public int PetTarget;
-            public int PetTargetType;
-            public int PetBehavior;
             public int GoToX;
             public int GoToY;
-            public int PetStunTimer;
-            public int PetStunDuration;
-            public int PetAttackTimer;
-            public int[] PetSkillCd;
             public SkillBuffer PetSkillBuffer;
             public DoT[] PetDoT;
             public DoT[] PetHoT;
