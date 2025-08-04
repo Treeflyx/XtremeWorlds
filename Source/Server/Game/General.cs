@@ -19,7 +19,6 @@ namespace Server
         private static bool _serverDestroyed;
         private static string _myIpAddress = string.Empty;
         private static readonly Stopwatch MyStopwatch = new Stopwatch();
-        private static TimeManager _timeManager = new TimeManager();
         public static ILogger Logger;
         private static readonly object SyncLock = new object();
         private static readonly CancellationTokenSource Cts = new CancellationTokenSource();
@@ -121,6 +120,7 @@ namespace Server
             await InitializeCoreComponentsAsync(configuration);
             await LoadGameDataAsync();
             await StartGameLoopAsync(startTime);
+            new TimeManager();
         }
 
         private static async System.Threading.Tasks.Task InitializeCoreComponentsAsync(IConfiguration configuration)
