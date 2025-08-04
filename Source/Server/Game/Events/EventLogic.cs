@@ -58,7 +58,7 @@ namespace Server
         //   - Used 'var' to declare variables with implicit typing.
 
         // Constants for enhanced code clarity and maintainability:
-        private const int DefaultMovementSpeed = 4; // Example default speed
+        private const int DefaultMovementSpeed = 1; // Example default speed
 
         // Helper methods for better readability:
         private static bool IsEventVisible(ref MapEvent eventPage) => eventPage.Visible;
@@ -2823,10 +2823,10 @@ namespace Server
                     int z = p;
 
                     Core.Data.TempPlayer[index].EventMap.CurrentEvents++;
-                    Array.Resize(ref Core.Data.TempPlayer[index].EventMap.EventPages, Core.Data.TempPlayer[index].EventMap.CurrentEvents + 1); //+1 for easier indexing
+                    Array.Resize(ref Core.Data.TempPlayer[index].EventMap.EventPages, Core.Data.TempPlayer[index].EventMap.CurrentEvents + 1);
                     ref var withBlock1 = ref Core.Data.TempPlayer[index].EventMap.EventPages[Core.Data.TempPlayer[index].EventMap.CurrentEvents];
 
-                    EventPage eventPage = Data.Map[mapNum].Event[i].Pages[z];
+                    ref var eventPage = ref Data.Map[mapNum].Event[i].Pages[z];
 
                     // Set up the event page data.
                     withBlock1.Dir = eventPage.GraphicType == 1 ? (eventPage.GraphicY % 4) switch
