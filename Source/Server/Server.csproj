@@ -58,6 +58,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
     <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" />
     <PackageReference Include="MonoGame.Library.SDL" />
     <PackageReference Include="Serilog" />

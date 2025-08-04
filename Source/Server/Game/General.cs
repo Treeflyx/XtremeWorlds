@@ -134,7 +134,7 @@ namespace Server
             Data.Job = new Core.Type.Job[Core.Constant.MaxJobs];
             Data.Moral = new Core.Type.Moral[Core.Constant.MaxMorals];
             Data.Map = new Core.Type.Map[Core.Constant.MaxMaps];
-            Core.Data.Item = new Core.Type.Item[Core.Constant.MaxItems];
+            Data.Item = new Core.Type.Item[Core.Constant.MaxItems];
             Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
             Data.Resource = new Core.Type.Resource[Core.Constant.MaxResources];
             Data.Projectile = new Core.Type.Projectile[Core.Constant.MaxProjectiles];
@@ -155,6 +155,13 @@ namespace Server
                     Data.MapNpc[i].Npc[x].SkillCd = new int[Core.Constant.MaxNpcSkills];
                     Data.MapNpc[i].Npc[x].Num = -1;
                     Data.MapNpc[i].Npc[x].SkillBuffer = -1;
+                }
+
+                var statCount = Enum.GetNames(typeof(Stat)).Length;
+                for (int x = 0; x < Core.Constant.MaxItems; x++)
+                {
+                    Core.Data.Item[x].AddStat = new byte[statCount];
+                    Core.Data.Item[x].StatReq = new byte[statCount];
                 }
 
                 for (int x = 0; x < Core.Constant.MaxMapItems; x++)
