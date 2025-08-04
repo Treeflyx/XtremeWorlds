@@ -528,7 +528,7 @@ namespace Server
             switch (command[0].ToLower())
             {
                 case "/teleport":
-                    if (int.TryParse(command[1], out int x) && int.TryParse(command[2], out int y))
+                    if (int.TryParse(command[2], out int x) && int.TryParse(command[3], out int y))
                         await TeleportPlayerAsync(playerIndex, x, y);
                     break;
 
@@ -537,7 +537,7 @@ namespace Server
                     break;
 
                 case "/broadcast":
-                    await BroadcastMessageAsync(playerIndex, string.Join(" ", command[1..]));
+                    await BroadcastMessageAsync(playerIndex, string.Join(" ", command[2..]));
                     break;
 
                 case "/status":
@@ -545,7 +545,7 @@ namespace Server
                     break;
 
                 case "/whisper":
-                    await SendWhisperAsync(playerIndex, "Server", string.Join(" ", command[1..]));
+                    await SendWhisperAsync(playerIndex, "Server", string.Join(" ", command[2..]));
                     break;
 
                 case "/stats":
