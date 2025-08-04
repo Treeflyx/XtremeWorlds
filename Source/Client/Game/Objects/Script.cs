@@ -1,5 +1,6 @@
 ﻿using Assimp;
 using Core;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Mirage.Sharp.Asfw;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace Client
         public static void Packet_EditScript(ref byte[] data)
         {
             ByteStream buffer;
+            buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(data.ToArray()));
 
-            buffer = new ByteStream(data);
 
             // Read the number of lines first
             int lineCount = buffer.ReadInt32();

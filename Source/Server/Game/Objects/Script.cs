@@ -1,6 +1,9 @@
 ﻿using CSScriptLib;
 using Mirage.Sharp.Asfw;
+using Mirage.Sharp.Asfw.IO;
 using Mirage.Sharp.Asfw.Network;
+using Server.Game.Net;
+using Server.Net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +11,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Server.Game.Net;
-using Server.Net;
 using static Core.Packets;
 
 namespace Server
@@ -36,19 +37,18 @@ namespace Server
             Core.Data.TempPlayer[session.Id].Editor = (byte)Core.EditorType.Script;
 
             buffer.WriteInt32((int)ServerPackets.SScriptEditor);
-            buffer.WriteInt32(Core.Data.Script.Code != null ? Core.Data.Script.Code.Length : 0);
 
-            if (Core.Data.Script.Code != null)
+            // Ensure Code is not null
+            var codeLines = Core.Data.Script.Code ?? Array.Empty<string>();
+            buffer.WriteInt32(codeLines.Length);
+
+            foreach (var line in codeLines)
             {
-                foreach (var line in Core.Data.Script.Code)
-                {
-                    buffer.WriteString(line);
-                }
+                buffer.WriteString(line ?? string.Empty);
             }
-            else
-            {
-                buffer.WriteString(string.Empty);
-            }
+            var data = Compression.CompressBytes(buffer.ToArray());
+            buffer = new ByteStream(4);
+            buffer.WriteBlock(data);
 
             NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
 
