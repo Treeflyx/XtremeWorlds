@@ -69,6 +69,28 @@ public class Script
         NetworkSend.SendWelcome(index);
     }
 
+    public void UnEquipItem(int index, int itemNum, int eqSlot)
+    {
+        int m;
+
+        itemNum = GetPlayerEquipment(index, (Equipment)eqSlot);
+
+        m = FindOpenInvSlot(index, (int)Core.Data.Player[index].Equipment[eqSlot]);
+        SetPlayerInv(index, m, Core.Data.Player[index].Equipment[eqSlot]);
+        SetPlayerInvValue(index, m, 0);
+
+        NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Core.Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int)Color.Yellow);
+
+        // remove equipment
+        SetPlayerEquipment(index, -1, (Equipment)eqSlot);
+        NetworkSend.SendWornEquipment(index);
+        NetworkSend.SendMapEquipment(index);
+        NetworkSend.SendStats(index);
+        NetworkSend.SendInventory(index);
+
+        // send vitals
+        NetworkSend.SendVitals(index);
+    }
     public void UseItem(int index, int itemNum, int invNum)
     {
         int i;

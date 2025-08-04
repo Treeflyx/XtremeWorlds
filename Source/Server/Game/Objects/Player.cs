@@ -1318,7 +1318,7 @@ namespace Server
 
         }
 
-        public static void PlayerUnequipItem(int index, int eqSlot)
+        public static void UnequipItem(int index, int eqSlot)
         {
             int i;
             int m;
@@ -1334,23 +1334,14 @@ namespace Server
 
             if (FindOpenInvSlot(index, GetPlayerEquipment(index, (Equipment)eqSlot)) >= 0)
             {
-                itemNum = GetPlayerEquipment(index, (Equipment)eqSlot);
-
-                m = FindOpenInvSlot(index, (int)Core.Data.Player[index].Equipment[eqSlot]);
-                SetPlayerInv(index, m, Core.Data.Player[index].Equipment[eqSlot]);
-                SetPlayerInvValue(index, m, 0);
-
-                NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Core.Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int) Color.Yellow);
-
-                // remove equipment
-                SetPlayerEquipment(index, -1, (Equipment)eqSlot);
-                NetworkSend.SendWornEquipment(index);
-                NetworkSend.SendMapEquipment(index);
-                NetworkSend.SendStats(index);
-                NetworkSend.SendInventory(index);
-
-                // send vitals
-                NetworkSend.SendVitals(index);
+                try
+                {
+                    Script.Instance?.UnequipItem(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else
             {

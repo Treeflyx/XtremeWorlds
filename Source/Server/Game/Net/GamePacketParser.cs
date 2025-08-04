@@ -1731,7 +1731,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
     {
         var buffer = new PacketReader(bytes);
 
-        global::Server.Player.PlayerUnequipItem(session.Id, buffer.ReadInt32());
+        Server.Player.UnequipItem(session.Id, buffer.ReadInt32());
     }
 
     public static void Packet_RequestPlayerData(GameSession session, ReadOnlySpan<byte> bytes)
