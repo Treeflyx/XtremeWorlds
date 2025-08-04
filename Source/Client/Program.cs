@@ -2218,6 +2218,9 @@ static void LoadFonts()
 
         public static void DrawEvents()
         {
+            if (Data.MyMap.Event == null)
+                return;
+
             for (int i = 0, loopTo = Information.UBound(Data.MyMap.Event); i < loopTo; i++)
             {
                 int x = GameLogic.ConvertMapX(Data.MyMap.Event[i].X);
