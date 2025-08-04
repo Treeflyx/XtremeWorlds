@@ -4,14 +4,6 @@ using Core.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic.CompilerServices;
-using Reoria.Engine.Common.Security.Encryption;
-using Reoria.Engine.Container;
-using Reoria.Engine.Container.Configuration;
-using Reoria.Engine.Container.Configuration.Interfaces;
-using Reoria.Engine.Container.Interfaces;
-using Reoria.Engine.Container.Logging;
-using Reoria.Engine.Container.Logging.Interfaces;
 using System.Runtime.InteropServices;
 using static Core.Global.Command;
 
@@ -27,10 +19,6 @@ namespace Client
         
         public static byte[] AesKey = new byte[32];
         public static byte[] AesIV = new byte[16];
-
-        public static IEngineContainer? Container;
-        public static IConfiguration? Configuration;
-        public static ILogger<T> GetLogger<T>() where T : class => Container?.Provider.GetRequiredService<Logger<T>>() ?? throw new NullReferenceException();
 
 		[DllImport("user32.dll")]
 		public static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -88,15 +76,6 @@ namespace Client
                     }
                 }
             }
-
-            IServiceCollection services = new ServiceCollection()
-                .AddTransient<IEngineConfigurationSources, EngineConfigurationSources>()
-                .AddTransient<IEngineConfigurationProvider, EngineConfigurationProvider>()
-                .AddTransient<IEngineLoggerFactory, SerilogLoggerFactory>();
-
-            Container = new EngineContainer(services);
-
-            Configuration = Container?.Provider.GetRequiredService<IConfiguration>() ?? throw new NullReferenceException();
 
             GameState.InMenu = true;
             ClearGameData();
