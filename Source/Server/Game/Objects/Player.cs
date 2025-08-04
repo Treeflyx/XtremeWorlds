@@ -725,7 +725,7 @@ namespace Server
 
         }
 
-        public static void PlayerMapGetItem(int index)
+        public static void MapGetItem(int index)
         {
             int i;
             int itemnum;
@@ -755,26 +755,14 @@ namespace Server
                                 // Open slot available?
                                 if (n != -1)
                                 {
-                                    // Set item in players inventor
-                                    itemnum = (int)Data.MapItem[mapNum, i].Num;
-
-                                    SetPlayerInv(index, n, (int)Data.MapItem[mapNum, i].Num);
-
-                                    if (Core.Data.Item[GetPlayerInv(index, n)].Type == (byte)ItemCategory.Currency | Core.Data.Item[GetPlayerInv(index, n)].Stackable == 1)
+                                    try
                                     {
-                                        SetPlayerInvValue(index, n, GetPlayerInvValue(index, n) + Data.MapItem[mapNum, i].Value);
-                                        msg = Data.MapItem[mapNum, i].Value + " " + Core.Data.Item[GetPlayerInv(index, n)].Name;
+                                        Script.Instance?.MapGetItem(index, mapNum, i, n);
                                     }
-                                    else
+                                    catch (Exception e)
                                     {
-                                        SetPlayerInvValue(index, n, 1);
-                                        msg = Core.Data.Item[GetPlayerInv(index, n)].Name;
+                                        Console.WriteLine(e.Message);
                                     }
-
-                                    // Erase item from the map
-                                    Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, i].X, Data.MapItem[mapNum, i].Y);
-                                    NetworkSend.SendInventoryUpdate(index, n);                                 
-                                    NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int) Color.White, (byte)Core.ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
                                     break;
                                 }
                                 else

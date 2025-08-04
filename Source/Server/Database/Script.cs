@@ -69,6 +69,32 @@ public class Script
         NetworkSend.SendWelcome(index);
     }
 
+    public void MapGetItem(int index, int mapNum, int mapSlot, int invSlot)
+    {
+        // Set item in players inventor
+        int itemNum = (int)Data.MapItem[mapNum, mapSlot].Num;
+
+        SetPlayerInv(index, invSlot, (int)Data.MapItem[mapNum, mapSlot].Num);
+
+        string msg;
+
+        if (Core.Data.Item[GetPlayerInv(index, invSlot)].Type == (byte)ItemCategory.Currency | Core.Data.Item[GetPlayerInv(index, invSlot)].Stackable == 1)
+        {
+            SetPlayerInvValue(index, invSlot, GetPlayerInvValue(index, invSlot) + Data.MapItem[mapNum, mapSlot].Value);
+            msg = Data.MapItem[mapNum, mapSlot].Value + " " + Core.Data.Item[GetPlayerInv(index, invSlot)].Name;
+        }
+        else
+        {
+            SetPlayerInvValue(index, invSlot, 1);
+            msg = Core.Data.Item[GetPlayerInv(index, invSlot)].Name;
+        }
+
+        // Erase item from the map
+        Server.Item.SpawnItemSlot(mapSlot, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, mapSlot].X, Data.MapItem[mapNum, mapSlot].Y);
+        NetworkSend.SendInventoryUpdate(index, invSlot);
+        NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int)Color.White, (byte)Core.ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+    }
+
     public void UnEquipItem(int index, int itemNum, int eqSlot)
     {
         int m;
