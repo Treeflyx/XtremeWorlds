@@ -142,7 +142,7 @@ namespace Client
             cmbOpenShop.SelectedIndex = 0;
             cmbSpawnNpc.Items.Clear();
 
-            for (i = 0; i < Constant.MaxNpcs; i++)
+            for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
                 if (Data.MyMap.Npc[i] > 0)
                 {
