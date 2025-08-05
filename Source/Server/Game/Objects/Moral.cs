@@ -1,215 +1,180 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
+﻿using Core;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Server.Game;
 using Server.Game.Net;
 using Server.Net;
 using static Core.Packets;
-using static Core.Type;
 using static Core.Global.Command;
+using Type = Core.Type;
 
-namespace Server
+namespace Server;
+
+public static class Moral
 {
-    public class Moral
+    private static void ClearMoral(int moralNum)
     {
-        #region Database
-        public static void ClearMoral(int moralNum)
+        Data.Moral[moralNum].Name = "";
+        Data.Moral[moralNum].Color = 0;
+        Data.Moral[moralNum].CanCast = false;
+        Data.Moral[moralNum].CanDropItem = false;
+        Data.Moral[moralNum].CanPk = false;
+        Data.Moral[moralNum].CanPickupItem = false;
+        Data.Moral[moralNum].CanUseItem = false;
+        Data.Moral[moralNum].DropItems = false;
+        Data.Moral[moralNum].LoseExp = false;
+        Data.Moral[moralNum].NpcBlock = false;
+        Data.Moral[moralNum].PlayerBlock = false;
+    }
+
+    private static async ValueTask LoadMoralAsync(int moralNum, CancellationToken cancellationToken)
+    {
+        var data = await Database.SelectRowAsync(moralNum, "moral", "data");
+        if (data is null)
         {
-            Core.Data.Moral[moralNum].Name = "";
-            Core.Data.Moral[moralNum].Color = 0;
-            Core.Data.Moral[moralNum].CanCast = false;
-            Core.Data.Moral[moralNum].CanDropItem = false;
-            Core.Data.Moral[moralNum].CanPk = false;
-            Core.Data.Moral[moralNum].CanPickupItem = false;
-            Core.Data.Moral[moralNum].CanUseItem = false;
-            Core.Data.Moral[moralNum].DropItems = false;
-            Core.Data.Moral[moralNum].LoseExp = false;
-            Core.Data.Moral[moralNum].NpcBlock = false;
-            Core.Data.Moral[moralNum].PlayerBlock = false;
+            ClearMoral(moralNum);
+            return;
         }
 
-        public static async System.Threading.Tasks.Task LoadMoralAsync(int moralNum)
+        var moralData = JObject.FromObject(data).ToObject<Type.Moral>();
+
+        Data.Moral[moralNum] = moralData;
+    }
+
+    public static async Task LoadMoralsAsync()
+    {
+        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxMorals), LoadMoralAsync);
+    }
+
+    private static void SaveMoral(int moralNum)
+    {
+        var json = JsonConvert.SerializeObject(Data.Moral[moralNum]);
+
+        if (Database.RowExists(moralNum, "moral"))
         {
-            JObject data;
+            Database.UpdateRow(moralNum, json, "moral", "data");
+        }
+        else
+        {
+            Database.InsertRow(moralNum, json, "moral");
+        }
+    }
 
-            data = await Database.SelectRowAsync(moralNum, "moral", "data");
-
-            if (data is null)
+    public static void SendMorals(int playerId)
+    {
+        for (var moralNum = 0; moralNum < Core.Constant.MaxMorals; moralNum++)
+        {
+            if (Data.Moral[moralNum].Name.Length > 0)
             {
-                ClearMoral(moralNum);
-                return;
-            }
-
-            var moralData = JObject.FromObject(data).ToObject<Core.Type.Moral>();
-            Core.Data.Moral[moralNum] = moralData;
-        }
-
-        public static async System.Threading.Tasks.Task LoadMoralsAsync()
-        {
-            int i;
-
-            var loopTo = Core.Constant.MaxMorals;
-            for (i = 0; i < loopTo; i++)
-                await System.Threading.Tasks.Task.Run(() => LoadMoralAsync(i));
-        }
-
-        public static void SaveMoral(int moralNum)
-        {
-            string json = JsonConvert.SerializeObject(Core.Data.Moral[moralNum]).ToString();
-
-            if (Database.RowExists(moralNum, "moral"))
-            {
-                Database.UpdateRow(moralNum, json, "moral", "data");
-            }
-            else
-            {
-                Database.InsertRow(moralNum, json, "moral");
+                SendUpdateMoralTo(playerId, moralNum);
             }
         }
+    }
 
-        public static void SaveMorals()
+    public static void SendUpdateMoralTo(int playerId, int moralNum)
+    {
+        var packet = new PacketWriter();
+
+        packet.WriteEnum(ServerPackets.SUpdateMoral);
+
+        WriteMoralDataToPacket(moralNum, packet);
+
+        PlayerService.Instance.SendDataTo(playerId, packet.GetBytes());
+    }
+
+    private static void SendUpdateMoralToAll(int moralNum)
+    {
+        var packet = new PacketWriter();
+
+        packet.WriteEnum(ServerPackets.SUpdateMoral);
+
+        WriteMoralDataToPacket(moralNum, packet);
+
+        PlayerService.Instance.SendDataToAll(packet.GetBytes());
+    }
+
+    private static void WriteMoralDataToPacket(int moralNum, PacketWriter packet)
+    {
+        packet.WriteInt32(moralNum);
+        packet.WriteString(Data.Moral[moralNum].Name);
+        packet.WriteByte(Data.Moral[moralNum].Color);
+        packet.WriteBoolean(Data.Moral[moralNum].NpcBlock);
+        packet.WriteBoolean(Data.Moral[moralNum].PlayerBlock);
+        packet.WriteBoolean(Data.Moral[moralNum].DropItems);
+        packet.WriteBoolean(Data.Moral[moralNum].CanCast);
+        packet.WriteBoolean(Data.Moral[moralNum].CanDropItem);
+        packet.WriteBoolean(Data.Moral[moralNum].CanPickupItem);
+        packet.WriteBoolean(Data.Moral[moralNum].CanPk);
+        packet.WriteBoolean(Data.Moral[moralNum].DropItems);
+        packet.WriteBoolean(Data.Moral[moralNum].LoseExp);
+    }
+
+    public static void HandleRequestEditMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
-            int i;
-
-            var loopTo = Core.Constant.MaxMorals;
-            for (i = 0; i < loopTo; i++)
-                SaveMoral(i);
+            return;
         }
 
-        public static byte[] MoralData(int moralNum)
+        var user = IsEditorLocked(session.Id, (byte) EditorType.Moral);
+        if (!string.IsNullOrEmpty(user))
         {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32(moralNum);
-            buffer.WriteString(Core.Data.Moral[moralNum].Name);
-            buffer.WriteByte(Core.Data.Moral[moralNum].Color);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].NpcBlock);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].PlayerBlock);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].DropItems);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanCast);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanDropItem);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanPickupItem);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].CanPk);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].DropItems);
-            buffer.WriteBoolean(Core.Data.Moral[moralNum].LoseExp);
-
-            return buffer.ToArray();
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            return;
         }
 
-        #endregion
+        SendMorals(session.Id);
 
-        #region Outgoing Packets
+        Data.TempPlayer[session.Id].Editor = (byte) EditorType.Moral;
 
-        public static void SendMorals(int index)
+        var packet = new PacketWriter(4);
+
+        packet.WriteEnum(ServerPackets.SMoralEditor);
+
+        PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
+    }
+
+    public static void HandleSaveMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        var packetReader = new PacketReader(bytes);
+
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
-            int i;
-
-            var loopTo = Core.Constant.MaxMorals;
-            for (i = 0; i < loopTo; i++)
-            {
-                if (Strings.Len(Core.Data.Moral[i].Name) > 0)
-                {
-                    SendUpdateMoralTo(index, i);
-                }
-            }
-
+            return;
         }
 
-        public static void SendUpdateMoralTo(int index, int moralNum)
+        var moralNum = packetReader.ReadInt32();
+        if (moralNum is < 0 or > Core.Constant.MaxMorals)
         {
-            ByteStream buffer;
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int) ServerPackets.SUpdateMoral);
-
-            buffer.WriteBlock(MoralData(moralNum));
-
-            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            return;
         }
 
-        public static void SendUpdateMoralToAll(int moralNum)
-        {
-            ByteStream buffer;
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int) ServerPackets.SUpdateMoral);
+        ref var moral = ref Data.Moral[moralNum];
 
-            buffer.WriteBlock(MoralData(moralNum));
+        moral.Name = packetReader.ReadString();
+        moral.Color = packetReader.ReadByte();
+        moral.CanCast = packetReader.ReadBoolean();
+        moral.CanPk = packetReader.ReadBoolean();
+        moral.CanDropItem = packetReader.ReadBoolean();
+        moral.CanPickupItem = packetReader.ReadBoolean();
+        moral.CanUseItem = packetReader.ReadBoolean();
+        moral.DropItems = packetReader.ReadBoolean();
+        moral.LoseExp = packetReader.ReadBoolean();
+        moral.PlayerBlock = packetReader.ReadBoolean();
+        moral.NpcBlock = packetReader.ReadBoolean();
 
-            NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-        }
+        SaveMoral(moralNum);
 
+        General.Logger.LogInformation("{AccountName} saved moral #{MoralNum}",
+            GetAccountLogin(session.Id), moralNum);
 
-        #endregion
+        SendUpdateMoralToAll(moralNum);
+        SendMorals(session.Id);
+    }
 
-        #region Incoming Packets
-        public static void Packet_RequestEditMoral(GameSession session, ReadOnlySpan<byte> bytes)
-        {
-            var buffer = new ByteStream(4);
-
-            if (GetPlayerAccess(session.Id) < (byte) Core.AccessLevel.Developer)
-                return;
-
-            var user = IsEditorLocked(session.Id, (byte) Core.EditorType.Moral);
-            if (!string.IsNullOrEmpty(user))
-            {
-                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Core.Color.BrightRed);
-                return;
-            }
-
-            SendMorals(session.Id);
-
-            Core.Data.TempPlayer[session.Id].Editor = (byte) Core.EditorType.Moral;
-
-            buffer.WriteInt32((int) ServerPackets.SMoralEditor);
-            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
-
-            buffer.Dispose();
-
-        }
-
-        public static void Packet_SaveMoral(GameSession session, ReadOnlySpan<byte> bytes)
-        {
-            int i;
-            var buffer = new PacketReader(bytes);
-
-            // Prevent hacking
-            if (GetPlayerAccess(session.Id) < (byte) Core.AccessLevel.Developer)
-                return;
-
-            var moralNum = buffer.ReadInt32();
-
-            // Prevent hacking
-            if (moralNum < 0 | moralNum > Core.Constant.MaxMorals)
-                return;
-
-            {
-                ref var withBlock = ref Core.Data.Moral[moralNum];
-                withBlock.Name = buffer.ReadString();
-                withBlock.Color = buffer.ReadByte();
-                withBlock.CanCast = buffer.ReadBoolean();
-                withBlock.CanPk = buffer.ReadBoolean();
-                withBlock.CanDropItem = buffer.ReadBoolean();
-                withBlock.CanPickupItem = buffer.ReadBoolean();
-                withBlock.CanUseItem = buffer.ReadBoolean();
-                withBlock.DropItems = buffer.ReadBoolean();
-                withBlock.LoseExp = buffer.ReadBoolean();
-                withBlock.PlayerBlock = buffer.ReadBoolean();
-                withBlock.NpcBlock = buffer.ReadBoolean();
-            }
-
-            // Save it
-            SendUpdateMoralToAll(moralNum);
-            SaveMoral(moralNum);
-            Core.Log.Add(GetAccountLogin(session.Id) + " saved moral #" + moralNum + ".", Constant.AdminLog);
-            SendMorals(session.Id);
-        }
-
-        public static void Packet_RequestMoral(GameSession session, ReadOnlySpan<byte> bytes)
-        {
-            SendMorals(session.Id);
-        }
-        #endregion
+    public static void HandleRequestMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        SendMorals(session.Id);
     }
 }

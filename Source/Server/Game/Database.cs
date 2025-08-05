@@ -368,7 +368,7 @@ namespace Server
             }
         }
 
-        public static async System.Threading.Tasks.Task<JObject> SelectRowAsync(long id, string tableName, string columnName)
+        public static async System.Threading.Tasks.Task<JObject?> SelectRowAsync(long id, string tableName, string columnName)
         {
             await ConnectionSemaphore.WaitAsync();
             try

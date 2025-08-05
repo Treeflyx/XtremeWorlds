@@ -9,7 +9,7 @@ public sealed class PlayerService : IPlayerService
     private readonly LinkedList<int> _playerIds = [];
 
     private readonly LinkedList<Player> _players = [];
-    
+
     public IEnumerable<Player> Players => _players;
     public IEnumerable<int> PlayerIds => _playerIds;
 
@@ -46,9 +46,14 @@ public sealed class PlayerService : IPlayerService
 
         data.CopyTo(buffer.AsSpan(4));
 
+        SendDataToAll(buffer);
+    }
+
+    public void SendDataToAll(byte[] bytes)
+    {
         foreach (var player in _players)
         {
-            player.Send(buffer);
+            player.Send(bytes);
         }
     }
 
@@ -67,6 +72,13 @@ public sealed class PlayerService : IPlayerService
         data.CopyTo(buffer.AsSpan(4));
 
         player.Send(buffer);
+    }
+
+    public void SendDataTo(int playerId, byte[] bytes)
+    {
+        var player = _players.FirstOrDefault(x => x.Id == playerId);
+
+        player?.Send(bytes);
     }
 
     public string ClientIp(int playerId)

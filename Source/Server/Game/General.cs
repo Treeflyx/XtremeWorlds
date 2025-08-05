@@ -391,7 +391,7 @@ namespace Server
         private static async System.Threading.Tasks.Task SpawnGameObjectsAsync()
         {
             await System.Threading.Tasks.Task.WhenAll(
-                Item.SpawnAllMapsItemsAsync(),
+                System.Threading.Tasks.Task.Run(Item.SpawnAllMapsItems),
                 Npc.SpawnAllMapNpcs(),
                 EventLogic.SpawnAllMapGlobalEvents()
             );

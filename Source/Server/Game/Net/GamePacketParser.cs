@@ -39,8 +39,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Bind(GamePacketId.FromClient.CRequestNewMap, Packet_RequestNewMap);
         Bind(GamePacketId.FromClient.CSaveMap, Packet_MapData);
         Bind(GamePacketId.FromClient.CNeedMap, Packet_NeedMap);
-        Bind(GamePacketId.FromClient.CMapGetItem, Item.Packet_GetItem);
-        Bind(GamePacketId.FromClient.CMapDropItem, Item.Packet_DropItem);
+        Bind(GamePacketId.FromClient.CMapGetItem, Item.HandleGetItem);
+        Bind(GamePacketId.FromClient.CMapDropItem, Item.HandleDropItem);
         Bind(GamePacketId.FromClient.CMapRespawn, Packet_RespawnMap);
         Bind(GamePacketId.FromClient.CMapReport, Packet_MapReport);
         Bind(GamePacketId.FromClient.CKickPlayer, Packet_KickPlayer);
@@ -62,13 +62,13 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Bind(GamePacketId.FromClient.CCheckPing, Packet_CheckPing);
         Bind(GamePacketId.FromClient.CUnequip, Packet_Unequip);
         Bind(GamePacketId.FromClient.CRequestPlayerData, Packet_RequestPlayerData);
-        Bind(GamePacketId.FromClient.CRequestItem, Item.Packet_RequestItem);
+        Bind(GamePacketId.FromClient.CRequestItem, Item.HandleRequestItem);
         Bind(GamePacketId.FromClient.CRequestNpc, Packet_RequestNpc);
-        Bind(GamePacketId.FromClient.CRequestResource, Resource.Packet_RequestResource);
+        Bind(GamePacketId.FromClient.CRequestResource, Resource.HandleRequestResource);
         Bind(GamePacketId.FromClient.CSpawnItem, Packet_SpawnItem);
         Bind(GamePacketId.FromClient.CTrainStat, Packet_TrainStat);
 
-        Bind(GamePacketId.FromClient.CRequestAnimation, Animation.Packet_RequestAnimation);
+        Bind(GamePacketId.FromClient.CRequestAnimation, Animation.HandleRequestAnimation);
         Bind(GamePacketId.FromClient.CRequestSkill, Packet_RequestSkill);
         Bind(GamePacketId.FromClient.CRequestShop, Packet_RequestShop);
         Bind(GamePacketId.FromClient.CRequestLevelUp, Packet_RequestLevelUp);
@@ -112,29 +112,29 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Bind(GamePacketId.FromClient.CDeclineParty, Party.Packet_DeclineParty);
         Bind(GamePacketId.FromClient.CLeaveParty, Party.Packet_LeaveParty);
         Bind(GamePacketId.FromClient.CPartyChatMsg, Party.Packet_PartyChatMsg);
-        Bind(GamePacketId.FromClient.CRequestEditItem, Item.Packet_RequestEditItem);
-        Bind(GamePacketId.FromClient.CSaveItem, Item.Packet_SaveItem);
-        Bind(GamePacketId.FromClient.CRequestEditNpc, Npc.Packet_RequestEditNpc);
-        Bind(GamePacketId.FromClient.CSaveNpc, Npc.Packet_SaveNpc);
+        Bind(GamePacketId.FromClient.CRequestEditItem, Item.HandleRequestEditItem);
+        Bind(GamePacketId.FromClient.CSaveItem, Item.HandleSaveItem);
+        Bind(GamePacketId.FromClient.CRequestEditNpc, Npc.HandleRequestEditNpc);
+        Bind(GamePacketId.FromClient.CSaveNpc, Npc.HandleSaveNpc);
         Bind(GamePacketId.FromClient.CRequestEditShop, Packet_RequestEditShop);
         Bind(GamePacketId.FromClient.CSaveShop, Packet_SaveShop);
         Bind(GamePacketId.FromClient.CRequestEditSkill, Packet_RequestEditSkill);
         Bind(GamePacketId.FromClient.CSaveSkill, Packet_SaveSkill);
-        Bind(GamePacketId.FromClient.CRequestEditResource, Resource.Packet_RequestEditResource);
-        Bind(GamePacketId.FromClient.CSaveResource, Resource.Packet_SaveResource);
-        Bind(GamePacketId.FromClient.CRequestEditAnimation, Animation.Packet_RequestEditAnimation);
-        Bind(GamePacketId.FromClient.CSaveAnimation, Animation.Packet_SaveAnimation);
+        Bind(GamePacketId.FromClient.CRequestEditResource, Resource.HandleRequestEditResource);
+        Bind(GamePacketId.FromClient.CSaveResource, Resource.HandleSaveResource);
+        Bind(GamePacketId.FromClient.CRequestEditAnimation, Animation.HandleRequestEditAnimation);
+        Bind(GamePacketId.FromClient.CSaveAnimation, Animation.HandleSaveAnimation);
         Bind(GamePacketId.FromClient.CRequestEditProjectile, Projectile.HandleRequestEditProjectile);
         Bind(GamePacketId.FromClient.CSaveProjectile, Projectile.HandleSaveProjectile);
         Bind(GamePacketId.FromClient.CRequestEditJob, Packet_RequestEditJob);
         Bind(GamePacketId.FromClient.CSaveJob, Packet_SaveJob);
 
-        Bind(GamePacketId.FromClient.CRequestMoral, Moral.Packet_RequestMoral);
-        Bind(GamePacketId.FromClient.CRequestEditMoral, Moral.Packet_RequestEditMoral);
-        Bind(GamePacketId.FromClient.CSaveMoral, Moral.Packet_SaveMoral);
+        Bind(GamePacketId.FromClient.CRequestMoral, Moral.HandleRequestMoral);
+        Bind(GamePacketId.FromClient.CRequestEditMoral, Moral.HandleRequestEditMoral);
+        Bind(GamePacketId.FromClient.CSaveMoral, Moral.HandleSaveMoral);
 
-        Bind(GamePacketId.FromClient.CRequestEditScript, Script.Packet_RequestEditScript);
-        Bind(GamePacketId.FromClient.CSaveScript, Script.Packet_SaveScript);
+        Bind(GamePacketId.FromClient.CRequestEditScript, Script.HandleRequestEditScript);
+        Bind(GamePacketId.FromClient.CSaveScript, Script.HandleSaveScript);
 
         Bind(GamePacketId.FromClient.CCloseEditor, Packet_CloseEditor);
     }

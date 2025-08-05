@@ -25,7 +25,6 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using Server.Game;
-using static Server.General;
 
 public class Script
 {
@@ -70,89 +69,6 @@ public class Script
         NetworkSend.SendWelcome(index);
     }
 
-    public void MapDropItem(int index, int mapSlot, int invSlot, int amount, int mapNum, Core.Type.Item item, int itemNum)
-    {
-        // Determine if the item is currency or stackable
-        if (item.Type == (byte)ItemCategory.Currency || item.Stackable == 1)
-        {
-            // Check if dropping more than the player has, drop all if so
-            var playerInvValue = GetPlayerInvValue(index, invSlot);
-            if (amount >= playerInvValue)
-            {
-                amount = playerInvValue;
-                SetPlayerInv(index, invSlot, -1);
-                SetPlayerInvValue(index, invSlot, 0);
-            }
-            else
-            {
-                SetPlayerInvValue(index, invSlot, playerInvValue - amount);
-            }
-            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1} ({2}x).", GetPlayerName(index), GameLogic.CheckGrammar(item.Name), amount), (int)Color.Yellow);
-        }
-        else
-        {
-            // Not a currency or stackable item
-            SetPlayerInv(index, invSlot, -1);
-            SetPlayerInvValue(index, invSlot, 0);
-
-            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1}.", GetPlayerName(index), GameLogic.CheckGrammar(item.Name)), (int)Color.Yellow);
-        }
-
-        // Send inventory update
-        NetworkSend.SendInventoryUpdate(index, invSlot);
-
-        // Spawn the item on the map
-        Server.Item.SpawnItemSlot(mapSlot, itemNum, amount, mapNum, GetPlayerX(index), GetPlayerY(index));
-    }
-
-    public void MapGetItem(int index, int mapNum, int mapSlot, int invSlot)
-    {
-        // Set item in players inventor
-        int itemNum = (int)Data.MapItem[mapNum, mapSlot].Num;
-
-        SetPlayerInv(index, invSlot, (int)Data.MapItem[mapNum, mapSlot].Num);
-
-        string msg;
-
-        if (Core.Data.Item[GetPlayerInv(index, invSlot)].Type == (byte)ItemCategory.Currency | Core.Data.Item[GetPlayerInv(index, invSlot)].Stackable == 1)
-        {
-            SetPlayerInvValue(index, invSlot, GetPlayerInvValue(index, invSlot) + Data.MapItem[mapNum, mapSlot].Value);
-            msg = Data.MapItem[mapNum, mapSlot].Value + " " + Core.Data.Item[GetPlayerInv(index, invSlot)].Name;
-        }
-        else
-        {
-            SetPlayerInvValue(index, invSlot, 1);
-            msg = Core.Data.Item[GetPlayerInv(index, invSlot)].Name;
-        }
-
-        // Erase item from the map
-        Server.Item.SpawnItemSlot(mapSlot, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, mapSlot].X, Data.MapItem[mapNum, mapSlot].Y);
-        NetworkSend.SendInventoryUpdate(index, invSlot);
-        NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int)Color.White, (byte)Core.ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
-    }
-
-    public void UnEquipItem(int index, int itemNum, int eqSlot)
-    {
-        int m;
-
-        itemNum = GetPlayerEquipment(index, (Equipment)eqSlot);
-
-        m = FindOpenInvSlot(index, (int)Core.Data.Player[index].Equipment[eqSlot]);
-        SetPlayerInv(index, m, Core.Data.Player[index].Equipment[eqSlot]);
-        SetPlayerInvValue(index, m, 0);
-
-        NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Core.Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int)Color.Yellow);
-
-        // remove equipment
-        SetPlayerEquipment(index, -1, (Equipment)eqSlot);
-        NetworkSend.SendWornEquipment(index);
-        NetworkSend.SendMapEquipment(index);
-        NetworkSend.SendStats(index);
-        NetworkSend.SendInventory(index);
-
-        // send vitals
-        NetworkSend.SendVitals(index);
-    }
     public void UseItem(int index, int itemNum, int invNum)
     {
         int i;
@@ -886,7 +802,7 @@ public class Script
                                 resData.Timer = now;
                                 resData.State = 0;
                                 resData.Health = (byte)Data.Resource[resourceindex].Health;
-                                Server.Resource.SendMapResourceToMap(mapNum, i);
+                                Server.Resource.SendMapResourceToMap(mapNum);
                             }
                         }
                     }
