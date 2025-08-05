@@ -14,7 +14,7 @@ namespace Client
     {
         public static string TempFile = System.IO.Path.GetTempFileName() + ".cs";
 
-        public static void Packet_EditScript(ref byte[] data)
+        public static void Packet_EditScript(ReadOnlyMemory<byte> data)
         {
             ByteStream buffer;
             buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(data.ToArray()));
@@ -39,7 +39,7 @@ namespace Client
 
             buffer = new ByteStream(4);
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditScript);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -53,7 +53,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CSaveScript);
             buffer.WriteString(string.Join(Environment.NewLine, Data.Script.Code));
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }

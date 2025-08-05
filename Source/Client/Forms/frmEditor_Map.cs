@@ -1509,7 +1509,7 @@ namespace Client
             buffer = new ByteStream(4);
             buffer.WriteInt32((int)Packets.ClientPackets.CNeedMap);
             buffer.WriteInt32(1);
-            NetworkConfig.Socket?.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             GameState.MyEditorType = -1;
             GameState.GettingMap = true;
             NetworkSend.SendCloseEditor();

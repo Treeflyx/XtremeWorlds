@@ -70,7 +70,7 @@ namespace Client
             CheckGradients();
             CheckDesigns();
             Sound.InitializeBass();
-            NetworkConfig.InitNetwork();
+            _ = NetworkConfig.InitNetwork();
             Ui.Load();
             Gui.Init();
             GameState.Ping = -1;

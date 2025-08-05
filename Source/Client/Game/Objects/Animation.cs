@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
@@ -382,11 +383,11 @@ namespace Client
 
         #region Incoming Traffic
 
-        public static void Packet_UpdateAnimation(ref byte[] data)
+        public static void Packet_UpdateAnimation(ReadOnlyMemory<byte> data)
         {
             int n;
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             n = buffer.ReadInt32();
             // Update the Animation
@@ -408,12 +409,11 @@ namespace Client
             var loopTo3 = Information.UBound(Data.Animation[n].Sprite);
             for (i = 0; i < loopTo3; i++)
                 Data.Animation[n].Sprite[i] = buffer.ReadInt32();
-            buffer.Dispose();
         }
 
-        public static void Packet_Animation(ref byte[] data)
+        public static void Packet_Animation(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             AnimationIndex = (byte)(AnimationIndex + 1);
             if (AnimationIndex >= byte.MaxValue)
@@ -429,7 +429,6 @@ namespace Client
                 withBlock.Used[0] = true;
                 withBlock.Used[1] = true;
             }
-            buffer.Dispose();
         }
 
         #endregion
@@ -443,7 +442,7 @@ namespace Client
 
             buffer.WriteInt32(animationNum);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

@@ -2037,7 +2037,7 @@ namespace Client
 
         public static void btnRegister_Click()
         {
-            if (!(bool)(NetworkConfig.Socket?.IsConnected))
+            if (!(bool)(NetworkConfig.IsConnected))
             {
                 GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte)DialogueType.Alert);
                 return;
@@ -2091,7 +2091,7 @@ namespace Client
                     return;
                 }
 
-                if (NetworkConfig.Socket?.IsConnected == true)
+                if (NetworkConfig.IsConnected == true)
                 {
                     NetworkSend.SendRegister(user, pass);
                 }
@@ -2251,7 +2251,6 @@ namespace Client
 
         public static void btnCharacters_Close()
         {
-            NetworkConfig.InitNetwork();
             HideWindows();
             ShowWindow(GetWindowIndex("winLogin"));
         }

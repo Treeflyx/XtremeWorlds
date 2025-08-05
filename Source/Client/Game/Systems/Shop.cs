@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 
@@ -57,27 +58,25 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_OpenShop(ref byte[] data)
+        public static void Packet_OpenShop(ReadOnlyMemory<byte> data)
         {
             int shopnum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             shopnum = buffer.ReadInt32();
 
             GameLogic.OpenShop(shopnum);
-
-            buffer.Dispose();
         }
 
-        public static void Packet_ResetShopAction(ref byte[] data)
+        public static void Packet_ResetShopAction(ReadOnlyMemory<byte> data)
         {
             GameState.ShopAction = 0;
         }
 
-        public static void Packet_UpdateShop(ref byte[] data)
+        public static void Packet_UpdateShop(ReadOnlyMemory<byte> data)
         {
             int shopnum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             shopnum = buffer.ReadInt32();
 
             Data.Shop[shopnum].BuyRate = buffer.ReadInt32();
@@ -93,8 +92,6 @@ namespace Client
 
             if (Data.Shop[shopnum].Name is null)
                 Data.Shop[shopnum].Name = "";
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -108,7 +105,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestShop);
             buffer.WriteInt32(shopNum);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -119,7 +116,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CBuyItem);
             buffer.WriteInt32(shopSlot);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -130,7 +127,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CSellItem);
             buffer.WriteInt32(invslot);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

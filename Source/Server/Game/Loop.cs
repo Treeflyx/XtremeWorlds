@@ -2,7 +2,6 @@
 using Core.Globals;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw.Network;
 using MonoGame.Extended.ECS;
 using Npgsql.Replication.PgOutput.Messages;
 using System;

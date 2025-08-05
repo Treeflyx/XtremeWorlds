@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Core.Localization;
 using Mirage.Sharp.Asfw;
 
@@ -24,37 +25,33 @@ namespace Client
         #endregion
 
         #region Incoming Packets
-        public static void Packet_TradeInvite(ref byte[] data)
+        public static void Packet_TradeInvite(ReadOnlyMemory<byte> data)
         {
             int requester;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             requester = buffer.ReadInt32();
             GameLogic.Dialogue("Trade Invite", string.Format(LocalesManager.Get("Request"), Core.Data.Player[requester].Name), "", (byte)DialogueType.Trade, (byte)DialogueStyle.YesNo);
-
-            buffer.Dispose();
         }
 
-        public static void Packet_Trade(ref byte[] data)
+        public static void Packet_Trade(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             InTrade = buffer.ReadInt32();
 
             GameLogic.ShowTrade();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_CloseTrade(ref byte[] data)
+        public static void Packet_CloseTrade(ReadOnlyMemory<byte> data)
         {
             CloseTrade();
         }
 
-        public static void Packet_TradeUpdate(ref byte[] data)
+        public static void Packet_TradeUpdate(ReadOnlyMemory<byte> data)
         {
             int datatype;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             datatype = buffer.ReadInt32();
 
@@ -78,14 +75,12 @@ namespace Client
                 TheirWorth = buffer.ReadInt32().ToString();
                 Gui.Windows[Gui.GetWindowIndex("winTrade")].Controls[(int)Gui.GetControlIndex("winTrade", "lblTheirValue")].Text = TheirWorth + "g";
             }
-
-            buffer.Dispose();
         }
 
-        public static void Packet_TradeStatus(ref byte[] data)
+        public static void Packet_TradeStatus(ReadOnlyMemory<byte> data)
         {
             int tradestatus;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             tradestatus = buffer.ReadInt32();
 
@@ -112,8 +107,6 @@ namespace Client
                         break;
                     }
             }
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -126,7 +119,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CAcceptTrade);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -136,7 +129,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CDeclineTrade);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -147,7 +140,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CTradeInvite);
             buffer.WriteString(name);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -159,7 +152,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CHandleTradeInvite);
             buffer.WriteInt32(answer);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -172,7 +165,7 @@ namespace Client
             buffer.WriteInt32(invslot);
             buffer.WriteInt32(amount);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -183,7 +176,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CUntradeItem);
             buffer.WriteInt32(invslot);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

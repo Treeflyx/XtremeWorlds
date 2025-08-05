@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Mirage.Sharp.Asfw;
 
 namespace Client
@@ -23,22 +24,20 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_PartyInvite(ref byte[] data)
+        public static void Packet_PartyInvite(ReadOnlyMemory<byte> data)
         {
             string name;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             name = buffer.ReadString();
             GameLogic.Dialogue("Party Invite", name + " has invited you to a party.", "Would you like to join?", (byte)DialogueType.PartyInvite, (byte)DialogueStyle.YesNo);
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PartyUpdate(ref byte[] data)
+        public static void Packet_PartyUpdate(ReadOnlyMemory<byte> data)
         {
             int i;
             int inParty;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             inParty = buffer.ReadInt32();
 
@@ -48,7 +47,6 @@ namespace Client
                 ClearParty();
                 Gui.UpdatePartyInterface();
                 // exit out early
-                buffer.Dispose();
                 return;
             }
 
@@ -59,15 +57,13 @@ namespace Client
             Data.MyParty.MemberCount = buffer.ReadInt32();
 
             Gui.UpdatePartyInterface();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PartyVitals(ref byte[] data)
+        public static void Packet_PartyVitals(ReadOnlyMemory<byte> data)
         {
             int playerNum;
             var partyindex = -1;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             // which player?
             playerNum = buffer.ReadInt32();
@@ -91,8 +87,6 @@ namespace Client
                 Core.Data.Player[playerNum].Vital[i] = buffer.ReadInt32();
 
             GameLogic.UpdatePartyBars();
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -105,7 +99,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestParty);
             buffer.WriteString(name);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -115,7 +109,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CAcceptParty);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -125,7 +119,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CDeclineParty);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -135,7 +129,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CLeaveParty);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -146,7 +140,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CPartyChatMsg);
             buffer.WriteString(text);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

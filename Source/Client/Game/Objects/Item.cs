@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 
@@ -51,11 +52,11 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_UpdateItem(ref byte[] data)
+        public static void Packet_UpdateItem(ReadOnlyMemory<byte> data)
         {
             int n;
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             n = buffer.ReadInt32();
 
@@ -101,9 +102,6 @@ namespace Client
                 GameState.DescLastType = 0;
                 GameState.DescLastItem = 0L;
             }
-
-            buffer.Dispose();
-
         }
 
         #endregion
@@ -117,7 +115,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestItem);
             buffer.WriteInt32(itemNum);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

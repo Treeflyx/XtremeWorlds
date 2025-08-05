@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Core;
 using static Core.Global.Command;
 using Microsoft.VisualBasic.CompilerServices;
@@ -17,7 +18,7 @@ namespace Client
 
             buffer = new ByteStream(4);
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditProjectile);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -37,7 +38,7 @@ namespace Client
             buffer.WriteInt32(Core.Data.Projectile[projectileNum].Speed);
             buffer.WriteInt32(Core.Data.Projectile[projectileNum].Damage);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -49,7 +50,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestProjectile);
             buffer.WriteInt32(projectileNum);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -64,7 +65,7 @@ namespace Client
             buffer.WriteInt32(collisionType);
             buffer.WriteInt32(collisionZone);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
         }
@@ -73,10 +74,10 @@ namespace Client
 
         #region Recieving
 
-        public static void HandleUpdateProjectile(ref byte[] data)
+        public static void HandleUpdateProjectile(ReadOnlyMemory<byte> data)
         {
             int projectileNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             projectileNum = buffer.ReadInt32();
 
             Core.Data.Projectile[projectileNum].Name = buffer.ReadString();
@@ -85,14 +86,12 @@ namespace Client
             Core.Data.Projectile[projectileNum].Speed = buffer.ReadInt32();
             Core.Data.Projectile[projectileNum].Damage = buffer.ReadInt32();
 
-            buffer.Dispose();
-
         }
 
-        public static void HandleMapProjectile(ref byte[] data)
+        public static void HandleMapProjectile(ReadOnlyMemory<byte> data)
         {
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             i = buffer.ReadInt32();
 
             {
@@ -106,9 +105,6 @@ namespace Client
                 withBlock.Range = 0;
                 withBlock.Timer = General.GetTickCount() + 60000;
             }
-
-            buffer.Dispose();
-
         }
 
         #endregion
