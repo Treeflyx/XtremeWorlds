@@ -121,14 +121,14 @@ public static class Script
                 }
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
             if (playerId > 0)
             {
-                NetworkSend.PlayerMsg(playerId, e.Message, (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(playerId, ex.Message, (int) Color.BrightRed);
             }
 
-            General.Logger.LogError(e, "[Script] Failed to load script");
+            General.Logger.LogError(ex, "[Script] Failed to load script");
         }
     }
 }

@@ -1150,9 +1150,9 @@ namespace Client
             {
                 General.SetWindowFocus(General.Client.Window.Handle);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }
 
             // make the Gui.Windows visible

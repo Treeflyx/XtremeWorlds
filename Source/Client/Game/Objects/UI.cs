@@ -54,9 +54,9 @@ namespace Client.Game.Objects
                     Instance = script;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }
         }
     }

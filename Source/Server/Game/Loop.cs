@@ -72,9 +72,9 @@ namespace Server
                     {                    
                         Script.Instance?.ServerMinute();
                     }
-                    catch(Exception e)
+                    catch(Exception ex)
                     {
-                        Console.WriteLine(e.Message);
+                        Console.WriteLine(ex.Message);
                     }
 
                     tmr60000 = General.GetTimeMs() + 60000;
@@ -86,9 +86,9 @@ namespace Server
                     {
                         Script.Instance?.ServerSecond();
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine(e.Message);
+                        Console.WriteLine(ex.Message);
                     }
 
                     Clock.Instance.Tick();
@@ -123,9 +123,9 @@ namespace Server
                 {
                     Script.Instance?.Loop();
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ex.Message);
                 }
 
                 await System.Threading.Tasks.Task.Delay(1);
@@ -233,9 +233,9 @@ namespace Server
             {
                 Script.Instance?.CastSkill(index, skillSlot);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }
         }
     }

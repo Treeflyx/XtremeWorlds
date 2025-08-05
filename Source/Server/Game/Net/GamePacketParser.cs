@@ -1696,9 +1696,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 {
                     Script.Instance?.BufferSkill(session.Id, n);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine(ex.Message);
                 }
             }
         }
@@ -1795,9 +1795,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             Script.Instance?.TrainStat(session.Id, tmpStat);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -2452,9 +2452,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             Script.Instance?.LearnSkill(session.Id, -1, skillNum);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(ex.Message);
         }
     }
 

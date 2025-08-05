@@ -16,9 +16,9 @@ public static class Player
         {
             Script.Instance?.CheckPlayerLevelUp(playerId);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(CheckPlayerLevelUp));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(CheckPlayerLevelUp));
         }
     }
 
@@ -74,9 +74,9 @@ public static class Player
             {
                 Script.Instance?.LeaveMap(playerId, oldMapNum);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                General.Logger.LogError(e, "[Script] Error in {MethodName}", "LeaveMap");
+                General.Logger.LogError(ex, "[Script] Error in {MethodName}", "LeaveMap");
             }
 
             SendLeaveMap(playerId, oldMapNum);
@@ -537,9 +537,9 @@ public static class Player
         {
             Script.Instance?.PlayerMove(playerId);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(PlayerMove));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(PlayerMove));
         }
 
         if (Data.TempPlayer[playerId].EventMap.CurrentEvents <= 0)
@@ -712,9 +712,9 @@ public static class Player
             {
                 Script.Instance?.MapGetItem(playerId, mapNum, mapItemNum, slot);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(MapGetItem));
+                General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(MapGetItem));
             }
 
             break;
@@ -902,9 +902,9 @@ public static class Player
             {
                 Script.Instance?.MapDropItem(playerId, slot, invNum, amount, mapNum, item, itemNum);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(MapDropItem));
+                General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(MapDropItem));
             }
         }
         else
@@ -1025,9 +1025,9 @@ public static class Player
         {
             Script.Instance?.UseItem(playerId, itemNum, invNum);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(UseItem));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(UseItem));
         }
     }
 
@@ -1151,9 +1151,9 @@ public static class Player
             {
                 Script.Instance?.UnequipItem(playerId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(UnequipItem));
+                General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(UnequipItem));
             }
         }
         else
@@ -1170,9 +1170,9 @@ public static class Player
 
             General.UpdateCaption();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(JoinGame));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(JoinGame));
         }
     }
 
@@ -1186,9 +1186,9 @@ public static class Player
         {
             Script.Instance?.LeftGame(playerId);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(LeftGame));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(LeftGame));
         }
 
         if (Data.TempPlayer[playerId].InGame)
@@ -1212,9 +1212,9 @@ public static class Player
         {
             return Script.Instance?.KillPlayer(playerId);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            General.Logger.LogError(e, "[Script] Error in {MethodName}", nameof(KillPlayer));
+            General.Logger.LogError(ex, "[Script] Error in {MethodName}", nameof(KillPlayer));
         }
 
         return 0;
