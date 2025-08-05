@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asfw", "Source\Network\Asfw
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{17067D41-98EF-470E-8A86-9C6587C3C69F}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Reoria.Engine", "Source\Modules\Reoria.Engine\Reoria.Engine.shproj", "{FEF01654-46BB-4F6E-AB19-77950B369A0A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
