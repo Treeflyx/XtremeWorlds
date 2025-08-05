@@ -73,9 +73,7 @@
   <ItemGroup>
     <None Update="appsettings.server.secret.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </None>
     <None Update="Database\News.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
