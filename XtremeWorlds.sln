@@ -121,7 +121,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34F4C6E4-D681-43B9-A894-4D9A534ABC40}
 	EndGlobalSection
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Source\Modules\Reoria.Engine\Reoria.Engine.projitems*{fef01654-46bb-4f6e-ab19-77950b369a0a}*SharedItemsImports = 13
-	EndGlobalSection
 EndGlobal
