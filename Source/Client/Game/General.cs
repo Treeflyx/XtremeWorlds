@@ -29,39 +29,6 @@ namespace Client
         
         public static void Startup()
         {
-            if (OperatingSystem.IsMacOS())
-            {
-                string configDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "XtremeWorlds");
-                string targetFile = System.IO.Path.Combine(configDir, "appsettings.json");
-
-                if (!File.Exists(targetFile))
-                {
-                    string bundledFile = System.IO.Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-                    if (File.Exists(bundledFile))
-                    {
-                        Directory.CreateDirectory(configDir);
-                        File.Copy(bundledFile, targetFile);
-                    }
-                }
-            }
-            
-            if (OperatingSystem.IsLinux())
-            {
-                string configDir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
-                string targetFile = System.IO.Path.Combine(configDir, "appsettings.json");
-
-                if (!File.Exists(targetFile))
-                {
-                    string bundledFile = System.IO.Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-                    if (File.Exists(bundledFile))
-                    {
-                        Directory.CreateDirectory(configDir);
-                        File.Copy(bundledFile, targetFile);
-                    }
-                }
-            }
-
             GameState.InMenu = true;
             ClearGameData();
             LoadGame();
