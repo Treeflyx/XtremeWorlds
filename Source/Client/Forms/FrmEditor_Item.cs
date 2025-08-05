@@ -147,6 +147,7 @@ namespace Client
                 // Build subtype cmb
                 cmbSubType.Items.Clear();
 
+                cmbSubType.Items.Add("Weapon");
                 cmbSubType.Items.Add("Armor");
                 cmbSubType.Items.Add("Helmet");
                 cmbSubType.Items.Add("Shield");
