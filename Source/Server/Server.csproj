@@ -8,7 +8,6 @@
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <Type>Console</Type>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
