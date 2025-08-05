@@ -555,7 +555,7 @@ namespace Server
             }
 
             // everything worked out fine
-            Player.PlayerMapDropItem(session.Id, invNum, amount);
+            Player.MapDropItem(session.Id, invNum, amount);
         }
 
         #endregion

@@ -25,6 +25,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using Server.Game;
+using static Server.General;
 
 public class Script
 {
@@ -67,6 +68,41 @@ public class Script
 
         // Send welcome messages
         NetworkSend.SendWelcome(index);
+    }
+
+    public void MapDropItem(int index, int mapSlot, int invSlot, int amount, int mapNum, Core.Type.Item item, int itemNum)
+    {
+        // Determine if the item is currency or stackable
+        if (item.Type == (byte)ItemCategory.Currency || item.Stackable == 1)
+        {
+            // Check if dropping more than the player has, drop all if so
+            var playerInvValue = GetPlayerInvValue(index, invSlot);
+            if (amount >= playerInvValue)
+            {
+                amount = playerInvValue;
+                SetPlayerInv(index, invSlot, -1);
+                SetPlayerInvValue(index, invSlot, 0);
+            }
+            else
+            {
+                SetPlayerInvValue(index, invSlot, playerInvValue - amount);
+            }
+            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1} ({2}x).", GetPlayerName(index), GameLogic.CheckGrammar(item.Name), amount), (int)Color.Yellow);
+        }
+        else
+        {
+            // Not a currency or stackable item
+            SetPlayerInv(index, invSlot, -1);
+            SetPlayerInvValue(index, invSlot, 0);
+
+            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1}.", GetPlayerName(index), GameLogic.CheckGrammar(item.Name)), (int)Color.Yellow);
+        }
+
+        // Send inventory update
+        NetworkSend.SendInventoryUpdate(index, invSlot);
+
+        // Spawn the item on the map
+        Server.Item.SpawnItemSlot(mapSlot, itemNum, amount, mapNum, GetPlayerX(index), GetPlayerY(index));
     }
 
     public void MapGetItem(int index, int mapNum, int mapSlot, int invSlot)
