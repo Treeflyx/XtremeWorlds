@@ -645,7 +645,8 @@ namespace Server
                 case "/ban":
                     {
                         Core.Data.Account[playerIndex].Banned = true;
-                        Server.Player.LeftGame(playerIndex);
+                        var task = Server.Player.LeftGame(playerIndex);
+                        task.Wait();
                         Console.WriteLine($"Player {GetPlayerName(playerIndex)} has been banned by the server.");
                         
                         break;

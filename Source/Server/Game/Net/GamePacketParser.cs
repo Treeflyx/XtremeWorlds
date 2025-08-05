@@ -2351,7 +2351,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (index > 0 & NetworkConfig.IsPlaying(index))
         {
             NetworkSend.GlobalMsg(GetAccountLogin(index) + "/" + GetPlayerName(index) + " has been booted for (" + reason + ")");
-            Server.Player.LeftGame(index);
+            var task = Server.Player.LeftGame(index);
+            task.Wait();
         }
     }
 
