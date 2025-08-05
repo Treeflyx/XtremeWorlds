@@ -445,13 +445,16 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
     private static void Packet_Logout(GameSession session, ReadOnlySpan<byte> bytes)
     {
-        var buffer = new PacketReader(bytes);
-
         if (!NetworkConfig.IsPlaying(session.Id))
+        {
             return;
-
+        }
+        
         NetworkSend.SendLeftGame(session.Id);
-        Server.Player.LeftGame(session.Id);
+        
+        var task = Server.Player.LeftGame(session.Id);
+
+        task.Wait();
     }
 
     private static void Packet_SayMessage(GameSession session, ReadOnlySpan<byte> bytes)

@@ -1178,6 +1178,10 @@ public static class Player
 
     public static async Task LeftGame(int playerId)
     {
+        General.Logger.LogInformation("{AccountName} | {PlayerName} has stopped playing {GameName}",
+            GetAccountLogin(playerId), GetPlayerName(playerId),
+            SettingsManager.Instance.GameName);
+        
         try
         {
             Script.Instance?.LeftGame(playerId);
@@ -1192,11 +1196,13 @@ public static class Player
             await Database.SaveCharacterAsync(playerId, Data.TempPlayer[playerId].Slot);
             await Database.SaveBankAsync(playerId);
         }
-
+        
         Database.ClearPlayer(playerId);
 
         PlayerService.Instance.RemovePlayer(playerId);
-
+        
+        Data.TempPlayer[playerId].InGame = false;
+        
         General.UpdateCaption();
     }
 
