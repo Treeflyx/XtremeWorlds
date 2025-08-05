@@ -137,36 +137,27 @@ namespace Client
             {
                 int srcWidth = srcImage.Width;
                 int srcHeight = srcImage.Height;
-                int picWidth = Instance.picBackSelect.Width;
-                int picHeight = Instance.picBackSelect.Height;
 
-                // Calculate scale to fit PictureBox while preserving aspect ratio
-                float scaleX = (float)picWidth / srcWidth;
-                float scaleY = (float)picHeight / srcHeight;
-                float scale = Math.Min(scaleX, scaleY);
+                // Dynamically resize PictureBox to match image size
+                Instance.picBackSelect.Width = srcWidth;
+                Instance.picBackSelect.Height = srcHeight;
 
-                int destWidth = (int)Math.Round(srcWidth * scale);
-                int destHeight = (int)Math.Round(srcHeight * scale);
-
-                using (var bmp = new System.Drawing.Bitmap(picWidth, picHeight))
+                using (var bmp = new System.Drawing.Bitmap(srcWidth, srcHeight))
                 using (var g = System.Drawing.Graphics.FromImage(bmp))
                 {
                     g.Clear(System.Drawing.Color.Black);
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
-                    // Center the image
-                    int offsetX = (picWidth - destWidth) / 2;
-                    int offsetY = (picHeight - destHeight) / 2;
-
-                    g.DrawImage(srcImage, offsetX, offsetY, destWidth, destHeight);
+                    // Draw the image at (0,0) since PictureBox matches image size
+                    g.DrawImage(srcImage, 0, 0, srcWidth, srcHeight);
 
                     // Draw selection rectangle
-                    int scaledX = (int)Math.Round(GameState.EditorTileSelStart.X * GameState.SizeX * scale) + offsetX;
-                    int scaledY = (int)Math.Round(GameState.EditorTileSelStart.Y * GameState.SizeY * scale) + offsetY;
-                    int scaledWidth = (int)Math.Round(GameState.EditorTileWidth * GameState.SizeX * scale);
-                    int scaledHeight = (int)Math.Round(GameState.EditorTileHeight * GameState.SizeY * scale);
+                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX;
+                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY;
+                    int scaledWidth = GameState.EditorTileWidth * GameState.SizeX;
+                    int scaledHeight = GameState.EditorTileHeight * GameState.SizeY;
 
-                    using (var pen = new System.Drawing.Pen(System.Drawing.Color.Red, Math.Max(1, (int)Math.Round(1f * scale))))
+                    using (var pen = new System.Drawing.Pen(System.Drawing.Color.Red, 1))
                     {
                         g.DrawRectangle(pen, scaledX, scaledY, scaledWidth, scaledHeight);
                     }
