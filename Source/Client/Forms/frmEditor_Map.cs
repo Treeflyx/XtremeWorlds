@@ -1024,8 +1024,8 @@ namespace Client
                     }
                 }
 
-                GameState.EditorTileX = (int)((long)Math.Round(X) / GameState.SizeX);
-                GameState.EditorTileY = (int)((long)Math.Round(Y) / GameState.SizeY);
+                GameState.EditorTileX = (int)(Math.Floor(X / GameState.SizeX));
+                GameState.EditorTileY = (int)(Math.Floor(Y / GameState.SizeY));
 
                 GameState.EditorTileSelStart = new Point(GameState.EditorTileX, GameState.EditorTileY);
                 GameState.EditorTileSelEnd = new Point(GameState.EditorTileX + GameState.EditorTileWidth, GameState.EditorTileY + GameState.EditorTileHeight);
