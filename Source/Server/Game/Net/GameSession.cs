@@ -5,7 +5,7 @@ namespace Server.Game.Net;
 
 public sealed class GameSession(int id, INetworkChannel channel, GameSessionManager sessionManager) : IDisposable
 {
-    private const int BufferSize = 0xFFFF;
+    private const int BufferSize = 0x2000;
 
     private readonly GamePacketParser _parser = new();
     private readonly byte[] _buffer = new byte[BufferSize];

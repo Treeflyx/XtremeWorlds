@@ -725,7 +725,7 @@ namespace Server
 
         }
 
-        public static void PlayerMapGetItem(int index)
+        public static void MapGetItem(int index)
         {
             int i;
             int itemnum;
@@ -755,26 +755,14 @@ namespace Server
                                 // Open slot available?
                                 if (n != -1)
                                 {
-                                    // Set item in players inventor
-                                    itemnum = (int)Data.MapItem[mapNum, i].Num;
-
-                                    SetPlayerInv(index, n, (int)Data.MapItem[mapNum, i].Num);
-
-                                    if (Core.Data.Item[GetPlayerInv(index, n)].Type == (byte)ItemCategory.Currency | Core.Data.Item[GetPlayerInv(index, n)].Stackable == 1)
+                                    try
                                     {
-                                        SetPlayerInvValue(index, n, GetPlayerInvValue(index, n) + Data.MapItem[mapNum, i].Value);
-                                        msg = Data.MapItem[mapNum, i].Value + " " + Core.Data.Item[GetPlayerInv(index, n)].Name;
+                                        Script.Instance?.MapGetItem(index, mapNum, i, n);
                                     }
-                                    else
+                                    catch (Exception e)
                                     {
-                                        SetPlayerInvValue(index, n, 1);
-                                        msg = Core.Data.Item[GetPlayerInv(index, n)].Name;
+                                        Console.WriteLine(e.Message);
                                     }
-
-                                    // Erase item from the map
-                                    Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, i].X, Data.MapItem[mapNum, i].Y);
-                                    NetworkSend.SendInventoryUpdate(index, n);                                 
-                                    NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int) Color.White, (byte)Core.ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
                                     break;
                                 }
                                 else
@@ -948,12 +936,12 @@ namespace Server
 
         }
 
-        public static void PlayerMapDropItem(int index, int invNum, int amount)
+        public static void MapDropItem(int index, int invNum, int amount)
         {
             int i;
 
             // Check for subscript out of range
-            if (Conversions.ToInteger(NetworkConfig.IsPlaying(index)) == 0 | invNum < 0 | invNum > Core.Constant.MaxInv)
+            if (!NetworkConfig.IsPlaying(index) | invNum < 0 | invNum > Core.Constant.MaxInv)
             {
                 return;
             }
@@ -962,7 +950,7 @@ namespace Server
             if (Core.Data.TempPlayer[index].InBank | Core.Data.TempPlayer[index].InShop >= 0 | Core.Data.TempPlayer[index].InTrade >= 0)
                 return;
 
-            if (Conversions.ToInteger(Data.Moral[GetPlayerMap(index)].CanDropItem) == 0)
+            if (Data.Moral[GetPlayerMap(index)].CanDropItem == false)
             {
                 NetworkSend.PlayerMsg(index, "You can't drop items here!", (int) Color.BrightRed);
                 return;
@@ -977,48 +965,26 @@ namespace Server
                     if (i != 0)
                     {
                         {
-                            var withBlock = Data.MapItem[GetPlayerMap(index), i];
-                            withBlock.Num = GetPlayerInv(index, invNum);
-                            withBlock.X = (byte)GetPlayerX(index);
-                            withBlock.Y = (byte)GetPlayerY(index);
+                            var mapNum = GetPlayerMap(index);
+                            var itemNum = GetPlayerInv(index, invNum);
+                            var item = Data.Item[itemNum];
+                            ref var withBlock = ref Data.MapItem[mapNum, i];
+                            withBlock.Num = itemNum;
+                            withBlock.X = GetPlayerX(index);
+                            withBlock.Y = GetPlayerY(index);
                             withBlock.PlayerName = GetPlayerName(index);
-                            withBlock.PlayerTimer = General.GetTimeMs() + Constant.ItemSpawnTime;
-
+                            withBlock.PlayerTimer = General.GetTimeMs() + Server.Constant.ItemSpawnTime;
+                            withBlock.DespawnTimer = General.GetTimeMs() + Server.Constant.ItemDespawnTime;
                             withBlock.CanDespawn = true;
-                            withBlock.DespawnTimer = General.GetTimeMs() + Constant.ItemDespawnTime;
 
-                            if (Core.Data.Item[GetPlayerInv(index, invNum)].Type == (byte)ItemCategory.Currency | Core.Data.Item[GetPlayerInv(index, invNum)].Stackable == 1)
+                            try
                             {
-                                // Check if its more then they have and if so drop it all
-                                if (amount >= GetPlayerInvValue(index, invNum))
-                                {
-                                    amount = GetPlayerInvValue(index, invNum);
-                                    withBlock.Value = amount;
-                                    SetPlayerInv(index, invNum, -1);
-                                    SetPlayerInvValue(index, invNum, 0);
-                                }
-                                else
-                                {
-                                    withBlock.Value = amount;
-                                    SetPlayerInvValue(index, invNum, GetPlayerInvValue(index, invNum) - amount);
-                                }
-                                NetworkSend.MapMsg(GetPlayerMap(index), string.Format("{0} has dropped {1} ({2}x).", GetPlayerName(index), GameLogic.CheckGrammar(Core.Data.Item[GetPlayerInv(index, invNum)].Name), amount), (int) Color.Yellow);
+                                Script.Instance?.MapDropItem(index, i, invNum, amount, mapNum, item, itemNum);
                             }
-                            else
+                            catch (Exception e)
                             {
-                                // It's not a currency object so this is easy
-                                withBlock.Value = 0;
-
-                                // send message
-                                NetworkSend.MapMsg(GetPlayerMap(index), string.Format("{0} has dropped {1}.", GetPlayerName(index), GameLogic.CheckGrammar(Core.Data.Item[GetPlayerInv(index, invNum)].Name)), (int) Color.Yellow);
-                                SetPlayerInv(index, invNum, -1);
-                                SetPlayerInvValue(index, invNum, 0);
+                                Console.WriteLine(e.Message);
                             }
-
-                            // Send inventory update
-                            NetworkSend.SendInventoryUpdate(index, invNum);
-                            // Spawn the item before we set the num or we'll get a different free map item slot
-                            Item.SpawnItemSlot(i, (int)withBlock.Num, amount, GetPlayerMap(index), GetPlayerX(index), GetPlayerY(index));
                         }
                     }
                     else
@@ -1318,7 +1284,7 @@ namespace Server
 
         }
 
-        public static void PlayerUnequipItem(int index, int eqSlot)
+        public static void UnequipItem(int index, int eqSlot)
         {
             int i;
             int m;
@@ -1334,23 +1300,14 @@ namespace Server
 
             if (FindOpenInvSlot(index, GetPlayerEquipment(index, (Equipment)eqSlot)) >= 0)
             {
-                itemNum = GetPlayerEquipment(index, (Equipment)eqSlot);
-
-                m = FindOpenInvSlot(index, (int)Core.Data.Player[index].Equipment[eqSlot]);
-                SetPlayerInv(index, m, Core.Data.Player[index].Equipment[eqSlot]);
-                SetPlayerInvValue(index, m, 0);
-
-                NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Core.Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int) Color.Yellow);
-
-                // remove equipment
-                SetPlayerEquipment(index, -1, (Equipment)eqSlot);
-                NetworkSend.SendWornEquipment(index);
-                NetworkSend.SendMapEquipment(index);
-                NetworkSend.SendStats(index);
-                NetworkSend.SendInventory(index);
-
-                // send vitals
-                NetworkSend.SendVitals(index);
+                try
+                {
+                    Script.Instance?.UnequipItem(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else
             {

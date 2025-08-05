@@ -150,7 +150,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         if (NetworkConfig.IsPlaying(session.Id))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.Connection, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.Connection, Menu.Login);
             return;
         }
 
@@ -161,7 +161,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         
         if (General.GetShutDownTimer != null && General.GetShutDownTimer.IsRunning)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.ServerMaintenance, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.ServerMaintenance, Menu.Login);
             return;
         }
 
@@ -182,43 +182,43 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // Check versions
         if (clientVersion != serverVersion)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.ClientOutdated, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.ClientOutdated, Menu.Login);
             return;
         }
 
         if (username.Length > Core.Constant.NameLength | username.Length < Core.Constant.MinNameLength)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.NameLengthInvalid);
+            NetworkSend.AlertMsg(session, SystemMessage.NameLengthInvalid);
             return;
         }
 
         if (NetworkConfig.IsMultiLogin(session.Id, username))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.MultipleAccountsNotAllowed, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.MultipleAccountsNotAllowed, Menu.Login);
             return;
         }
 
         if (!Database.LoadAccount(session.Id, username))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.Login, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.Login, Menu.Login);
             return;
         }
 
         if (GetPlayerPassword(session.Id) != password)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.WrongPassword, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.WrongPassword, Menu.Login);
             return;
         }
 
         if (Database.IsBanned(session.Id, session.Channel.IpAddress))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.Banned, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.Banned, Menu.Login);
             return;
         }
 
         if (GetAccountLogin(session.Id) == "")
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.DatabaseError, Menu.Login);
+            NetworkSend.AlertMsg(session, SystemMessage.DatabaseError, Menu.Login);
             return;
         }
 
@@ -243,13 +243,13 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // Cut off last portion of ip
         if (Database.IsBanned(session.Id, session.Channel.IpAddress))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.Banned, Menu.Register);
+            NetworkSend.AlertMsg(session, SystemMessage.Banned, Menu.Register);
             return;
         }
 
         if (General.GetShutDownTimer is {IsRunning: true})
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.ServerMaintenance, Menu.Register);
+            NetworkSend.AlertMsg(session, SystemMessage.ServerMaintenance, Menu.Register);
             return;
         }
 
@@ -270,7 +270,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // Check versions
         if (clientVersion != serverVersion)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.ClientOutdated, Menu.Register);
+            NetworkSend.AlertMsg(session, SystemMessage.ClientOutdated, Menu.Register);
             return;
         }
 
@@ -279,24 +279,24 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         switch (x) // Check if the username is valid
         {
             case -1:
-                NetworkSend.AlertMsg(session.Id, SystemMessage.NameContainsIllegalChars, Menu.Register);
+                NetworkSend.AlertMsg(session, SystemMessage.NameContainsIllegalChars, Menu.Register);
                 return;
 
             case 0:
-                NetworkSend.AlertMsg(session.Id, SystemMessage.NameLengthInvalid, Menu.Register);
+                NetworkSend.AlertMsg(session, SystemMessage.NameLengthInvalid, Menu.Register);
                 return;
         }
 
         if (NetworkConfig.IsMultiLogin(session.Id, username))
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.MultipleAccountsNotAllowed, Menu.Register);
+            NetworkSend.AlertMsg(session, SystemMessage.MultipleAccountsNotAllowed, Menu.Register);
             return;
         }
 
         var userData = Database.SelectRowByColumn("id", Database.GetStringHash(username), "account", "data");
         if (userData is not null)
         {
-            NetworkSend.AlertMsg(session.Id, SystemMessage.NameTaken, Menu.Register);
+            NetworkSend.AlertMsg(session, SystemMessage.NameTaken, Menu.Register);
             return;
         }
 
@@ -327,7 +327,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
             if (slot < 1 | slot > Core.Constant.MaxChars)
             {
-                NetworkSend.AlertMsg(session.Id, SystemMessage.MaxCharactersReached, Menu.CharacterSelect);
+                NetworkSend.AlertMsg(session, SystemMessage.MaxCharactersReached, Menu.CharacterSelect);
                 return;
             }
 
@@ -958,7 +958,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 if (Data.Map[mapNum].Event[i].PageCount > 0)
                 {
                     Data.Map[mapNum].Event[i].Pages = new Core.Type.EventPage[Data.Map[mapNum].Event[i].PageCount];
-                    ;
                     Array.Resize(ref Core.Data.TempPlayer[i].EventMap.EventPages, Data.Map[mapNum].Event[i].PageCount);
 
                     var loopTo5 = Data.Map[mapNum].Event[i].PageCount;
@@ -1082,7 +1081,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
 
         var loopTo13 = Data.Map[mapNum].EventCount;
-        for (var i = 0; i < loopTo13 - 1; i++)
+        for (var i = 0; i < loopTo13; i++)
         {
             if (Data.Map[mapNum].Event[i].PageCount == 0)
             {
@@ -1090,7 +1089,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 Data.Map[mapNum].Event[i + 1] = default;
                 Data.Map[mapNum].EventCount = Data.Map[mapNum].EventCount - 1;
             }
-        }
+        } 
 
         // Save the map
         Database.SaveMap(mapNum);
@@ -1224,7 +1223,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 {
                     NetworkSend.GlobalMsg(GetPlayerName(n) + " has been kicked from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(session.Id) + "!");
                     Log.Add(GetPlayerName(session.Id) + " has kicked " + GetPlayerName(n) + ".", Constant.AdminLog);
-                    NetworkSend.AlertMsg(n, SystemMessage.Kicked, Menu.Login);
+                    NetworkSend.AlertMsg(session, SystemMessage.Kicked, Menu.Login);
                 }
                 else
                 {
@@ -1277,7 +1276,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // The player session.Id
         var n = GameLogic.FindPlayer(buffer.ReadString());
-
 
         if (n != session.Id)
         {
@@ -1733,7 +1731,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
     {
         var buffer = new PacketReader(bytes);
 
-        global::Server.Player.PlayerUnequipItem(session.Id, buffer.ReadInt32());
+        Server.Player.UnequipItem(session.Id, buffer.ReadInt32());
     }
 
     public static void Packet_RequestPlayerData(GameSession session, ReadOnlySpan<byte> bytes)
@@ -2338,8 +2336,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (index > 0 & NetworkConfig.IsPlaying(index))
         {
             NetworkSend.GlobalMsg(GetAccountLogin(index) + "/" + GetPlayerName(index) + " has been booted for (" + reason + ")");
-
-            NetworkSend.AlertMsg(index, SystemMessage.Connection, Menu.Login);
+            PlayerService.Instance.RemovePlayer(index);
         }
     }
 

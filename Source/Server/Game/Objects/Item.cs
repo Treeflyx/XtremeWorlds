@@ -525,7 +525,7 @@ namespace Server
 
         public static void Packet_GetItem(GameSession session, ReadOnlySpan<byte> bytes)
         {
-            Player.PlayerMapGetItem(session.Id);
+            Player.MapGetItem(session.Id);
         }
 
         public static void Packet_DropItem(GameSession session, ReadOnlySpan<byte> bytes)
@@ -555,7 +555,7 @@ namespace Server
             }
 
             // everything worked out fine
-            Player.PlayerMapDropItem(session.Id, invNum, amount);
+            Player.MapDropItem(session.Id, invNum, amount);
         }
 
         #endregion

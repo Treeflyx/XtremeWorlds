@@ -58,7 +58,7 @@ namespace Server
         //   - Used 'var' to declare variables with implicit typing.
 
         // Constants for enhanced code clarity and maintainability:
-        private const int DefaultMovementSpeed = 4; // Example default speed
+        private const int DefaultMovementSpeed = 1; // Example default speed
 
         // Helper methods for better readability:
         private static bool IsEventVisible(ref MapEvent eventPage) => eventPage.Visible;
@@ -238,6 +238,8 @@ namespace Server
                         for (int z = 0; z < Core.Data.Map[mapNum].Event[id].PageCount; z++)
                         {
                             bool spawnEvent = true;
+                            if (Core.Data.Map[mapNum].Event[id].Pages == null)
+                                break;
                             Core.Type.EventPage page = Core.Data.Map[mapNum].Event[id].Pages[z];
 
                             // Check conditions (Item, Self Switch, Variable, Switch).
@@ -1392,7 +1394,7 @@ namespace Server
                         switch (withBlock1.WaitingForResponse)
                         {
                             case 2: // Waiting for shop to close.
-                                if (Core.Data.TempPlayer[i].InShop == 0)
+                                if (Core.Data.TempPlayer[i].InShop == -1)
                                 {
                                     withBlock1.WaitingForResponse = 0;
                                 }
@@ -2821,10 +2823,10 @@ namespace Server
                     int z = p;
 
                     Core.Data.TempPlayer[index].EventMap.CurrentEvents++;
-                    Array.Resize(ref Core.Data.TempPlayer[index].EventMap.EventPages, Core.Data.TempPlayer[index].EventMap.CurrentEvents + 1); //+1 for easier indexing
+                    Array.Resize(ref Core.Data.TempPlayer[index].EventMap.EventPages, Core.Data.TempPlayer[index].EventMap.CurrentEvents + 1);
                     ref var withBlock1 = ref Core.Data.TempPlayer[index].EventMap.EventPages[Core.Data.TempPlayer[index].EventMap.CurrentEvents];
 
-                    EventPage eventPage = Data.Map[mapNum].Event[i].Pages[z];
+                    ref var eventPage = ref Data.Map[mapNum].Event[i].Pages[z];
 
                     // Set up the event page data.
                     withBlock1.Dir = eventPage.GraphicType == 1 ? (eventPage.GraphicY % 4) switch
