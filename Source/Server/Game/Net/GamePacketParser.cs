@@ -1,11 +1,12 @@
-﻿using System.Reflection;
-using Core;
+﻿using Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 using Newtonsoft.Json.Linq;
 using Server.Net;
+using System;
+using System.Reflection;
 using static Core.Global.Command;
 using Type = Core.Type;
 
@@ -21,6 +22,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Bind(GamePacketId.FromClient.CAddChar, Packet_AddChar);
         Bind(GamePacketId.FromClient.CUseChar, Packet_UseChar);
         Bind(GamePacketId.FromClient.CDelChar, Packet_DelChar);
+        Bind(GamePacketId.FromClient.CLogout, Packet_Logout);
         Bind(GamePacketId.FromClient.CSayMsg, Packet_SayMessage);
         Bind(GamePacketId.FromClient.CBroadcastMsg, Packet_BroadCastMsg);
         Bind(GamePacketId.FromClient.CPlayerMsg, Packet_PlayerMsg);
@@ -441,6 +443,17 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
+    private static void Packet_Logout(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        var buffer = new PacketReader(bytes);
+
+        if (!NetworkConfig.IsPlaying(session.Id))
+            return;
+
+        NetworkSend.SendLeftGame(session.Id);
+        Server.Player.LeftGame(session.Id);
+    }
+
     private static void Packet_SayMessage(GameSession session, ReadOnlySpan<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
@@ -471,7 +484,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         var otherPlayer = buffer.ReadString();
         var msg = buffer.ReadString();
-
 
         var otherPlayerIndex = GameLogic.FindPlayer(otherPlayer);
         if (otherPlayerIndex != session.Id)
@@ -2336,7 +2348,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (index > 0 & NetworkConfig.IsPlaying(index))
         {
             NetworkSend.GlobalMsg(GetAccountLogin(index) + "/" + GetPlayerName(index) + " has been booted for (" + reason + ")");
-            PlayerService.Instance.RemovePlayer(index);
+            Server.Player.LeftGame(index);
         }
     }
 

@@ -2078,7 +2078,7 @@ namespace Client
         {
             GameState.InMenu = true;
             GameState.InGame = false;
-
+            NetworkSend.SendLogout();
             General.ClearGameData();
         }
 

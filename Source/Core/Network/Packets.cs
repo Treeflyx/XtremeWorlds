@@ -12,6 +12,7 @@ namespace Core
             CAddChar,
             CUseChar,
             CDelChar,
+            CLogout,
             CSayMsg,
             CBroadcastMsg,
             CPlayerMsg,

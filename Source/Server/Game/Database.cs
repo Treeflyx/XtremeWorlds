@@ -3,12 +3,14 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using NpgsqlTypes;
+using Server.Game;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +21,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using Server.Game;
 using static Core.Global.Command;
 using static Core.Type;
 using static System.Net.Mime.MediaTypeNames;
@@ -2118,7 +2119,7 @@ namespace Server
             Core.Log.AddTextToFile(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
             Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
-            PlayerService.Instance.RemovePlayer(banPlayerIndex);
+            Server.Player.LeftGame(banPlayerIndex);
         }
 
         #endregion

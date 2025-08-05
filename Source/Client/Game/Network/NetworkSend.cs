@@ -46,6 +46,16 @@ namespace Client
             buffer.Dispose();
         }
 
+        public static void SendLogout()
+        {
+            var buffer = new ByteStream(4);
+
+            buffer.WriteInt32((int)Packets.ClientPackets.CLogout);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
+
+            buffer.Dispose();
+        }
+
         private static byte[] Encrypt(byte[] data)
         {
             using var aes = Aes.Create();

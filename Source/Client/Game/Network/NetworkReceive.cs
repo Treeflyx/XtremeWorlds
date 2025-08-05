@@ -858,6 +858,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
     private static void Packet_RClick(ReadOnlyMemory<byte> data)
     {
+
     }
 
     private static void Packet_Emote(ReadOnlyMemory<byte> data)
