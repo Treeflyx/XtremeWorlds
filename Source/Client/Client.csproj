@@ -11,7 +11,6 @@
     <ManifestCertificateThumbprint>181BBD77C201FB969E61DF100063FD42A08B2BE6</ManifestCertificateThumbprint>
     <TargetZone>LocalIntranet</TargetZone>
     <SignManifests>false</SignManifests>
-    <PublishUrl>\Publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
