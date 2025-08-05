@@ -1322,7 +1322,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
             return;
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Map);
+        var user = IsEditorLocked(session.Id, EditorType.Map);
 
         if (!string.IsNullOrEmpty(user))
         {
@@ -1338,7 +1338,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Event.SendMapEventData(session.Id);
         Moral.SendMorals(session.Id);
 
-        Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Map;
+        Core.Data.TempPlayer[session.Id].Editor = EditorType.Map;
 
         var buffer = new ByteStream(4);
         buffer.WriteInt32((int) Packets.ServerPackets.SEditMap);
@@ -1352,7 +1352,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
             return;
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Shop);
+        var user = IsEditorLocked(session.Id, EditorType.Shop);
 
         if (!string.IsNullOrEmpty(user))
         {
@@ -1360,7 +1360,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
         }
 
-        Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Shop;
+        Core.Data.TempPlayer[session.Id].Editor = EditorType.Shop;
 
         Item.SendItems(session.Id);
         NetworkSend.SendShops(session.Id);
@@ -1408,7 +1408,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
             return;
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Skill);
+        var user = IsEditorLocked(session.Id, EditorType.Skill);
 
         if (!string.IsNullOrEmpty(user))
         {
@@ -1416,7 +1416,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
         }
 
-        Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Skill;
+        Core.Data.TempPlayer[session.Id].Editor = EditorType.Skill;
 
         NetworkSend.SendJobs(session);
         Projectile.SendProjectiles(session.Id);
@@ -2464,7 +2464,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
             return;
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Job);
+        var user = IsEditorLocked(session.Id, EditorType.Job);
 
         if (!string.IsNullOrEmpty(user))
         {
@@ -2475,7 +2475,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Item.SendItems(session.Id);
         NetworkSend.SendJobs(session);
 
-        Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Job;
+        Core.Data.TempPlayer[session.Id].Editor = EditorType.Job;
 
         NetworkSend.SendJobs(session);
 
@@ -2539,9 +2539,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
             return;
 
-        if (Core.Data.TempPlayer[session.Id].Editor == -1)
+        if (Core.Data.TempPlayer[session.Id].Editor == EditorType.None)
             return;
 
-        Core.Data.TempPlayer[session.Id].Editor = -1;
+        Core.Data.TempPlayer[session.Id].Editor = EditorType.None;
     }
 }

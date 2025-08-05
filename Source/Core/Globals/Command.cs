@@ -414,7 +414,7 @@ public static string GetAccountLogin(int index)
             Data.Player[index].Equipment[(int)equipmentSlot] = itemNum;
         }
 
-        public static string IsEditorLocked(int index, int id)
+        public static string IsEditorLocked(int index, EditorType id)
         {
             for (int i = 0; i < Constant.MaxPlayers; i++)
             {

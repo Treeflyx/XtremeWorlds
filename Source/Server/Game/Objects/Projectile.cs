@@ -72,7 +72,7 @@ public static class Projectile
             return;
         }
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Projectile);
+        var user = IsEditorLocked(session.Id, EditorType.Projectile);
         if (!string.IsNullOrEmpty(user))
         {
             NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
@@ -81,7 +81,7 @@ public static class Projectile
 
         SendProjectiles(session.Id);
 
-        Data.TempPlayer[session.Id].Editor = (byte) EditorType.Projectile;
+        Data.TempPlayer[session.Id].Editor = EditorType.Projectile;
 
         var buffer = new PacketWriter(4);
 

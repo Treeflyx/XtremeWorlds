@@ -75,7 +75,7 @@ internal sealed class NetworkServiceHost<TSession>(
         var connectionLogger = serviceProvider.GetRequiredService<ILogger<NetworkChannel<TSession>>>();
         var connection = new NetworkChannel<TSession>(connectionLogger, tcpClient);
 
-        if (!sessionManager.TryCreate(connection, out var user))
+        if (!sessionManager.TryCreate(connection, out TSession? user) || user is null)
         {
             logger.LogInformation("Client from {IpAddress} has been rejected - server full", connection.IpAddress);
 

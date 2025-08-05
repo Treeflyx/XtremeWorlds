@@ -63,14 +63,14 @@ public static class Animation
             return;
         }
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Animation);
+        var user = IsEditorLocked(session.Id, EditorType.Animation);
         if (!string.IsNullOrEmpty(user))
         {
             NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
             return;
         }
 
-        Data.TempPlayer[session.Id].Editor = (byte) EditorType.Animation;
+        Data.TempPlayer[session.Id].Editor = EditorType.Animation;
 
         SendAnimations(session.Id);
 

@@ -326,7 +326,7 @@ namespace Core
             public DoT[] PetHoT;
             public bool PetStopRegen;
             public int PetStopRegenTimer;
-            public int Editor;
+            public EditorType Editor;
             public byte Slot;
         }
 

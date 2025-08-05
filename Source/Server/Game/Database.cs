@@ -1811,7 +1811,7 @@ namespace Server
             Core.Data.TempPlayer[index].TradeOffer = new PlayerInv[Core.Constant.MaxInv];
 
             Core.Data.TempPlayer[index].SkillCd = new int[Core.Constant.MaxPlayerSkills];
-            Core.Data.TempPlayer[index].Editor = -1;
+            Core.Data.TempPlayer[index].Editor = EditorType.None;
             Core.Data.TempPlayer[index].SkillBuffer = -1;
             Core.Data.TempPlayer[index].InShop = -1;
             Core.Data.TempPlayer[index].InTrade = -1;

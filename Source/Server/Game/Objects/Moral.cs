@@ -117,7 +117,7 @@ public static class Moral
             return;
         }
 
-        var user = IsEditorLocked(session.Id, (byte) EditorType.Moral);
+        var user = IsEditorLocked(session.Id, EditorType.Moral);
         if (!string.IsNullOrEmpty(user))
         {
             NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
@@ -126,7 +126,7 @@ public static class Moral
 
         SendMorals(session.Id);
 
-        Data.TempPlayer[session.Id].Editor = (byte) EditorType.Moral;
+        Data.TempPlayer[session.Id].Editor = EditorType.Moral;
 
         var packet = new PacketWriter(4);
 
