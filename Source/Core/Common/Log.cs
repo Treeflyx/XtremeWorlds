@@ -1,84 +1,28 @@
-﻿using System;
-using System.IO;
-using Microsoft.VisualBasic.CompilerServices;
+﻿using System.IO;
 
-namespace Core
+namespace Core;
+
+public static class Log
 {
-
-    public class Log
+    public static void Add(string message, string logFileName)
     {
-        public static string GetFileContents(string fullPath)
+        if (!Directory.Exists(Path.Logs))
         {
-            string strContents = "";
-            StreamReader objReader;
-
-            try
-            {
-                if (!File.Exists(fullPath))
-                    File.Create(fullPath);
-                objReader = new StreamReader(fullPath);
-                strContents = objReader.ReadToEnd();
-                objReader.Close();
-            }
-            catch
-            {
-            }
-            return strContents;
+            Directory.CreateDirectory(Path.Logs);
         }
 
-        public static bool Add(string strData, string fn)
+        var path = System.IO.Path.Combine(Path.Logs, logFileName);
+
+        try
         {
-            string fullpath;
-            string contents;
-            int bAns = 0;
-            StreamWriter objReader;
-
-            // Check if the directory exists
-            if (!Directory.Exists(Path.Logs))
-            {
-                // Create the directory
-                Directory.CreateDirectory(Path.Logs);
-            }
-
-            fullpath = System.IO.Path.Combine(Path.Logs, fn);
-            contents = GetFileContents(fullpath);
-            contents = contents + Environment.NewLine + strData;
-
-            try
-            {
-                objReader = new StreamWriter(fullpath);
-                objReader.Write(contents);
-                objReader.Close();
-                bAns = 1;
-            }
-            catch
-            {
-            }
-            return Conversions.ToBoolean(bAns);
+            using var stream = File.Open(path, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+            using var streamWriter = new StreamWriter(stream);
+            
+            streamWriter.WriteLine(message);
         }
-
-        public static bool AddTextToFile(string strData, string fn)
+        catch
         {
-            string fullpath;
-            string contents;
-            int bAns = 0;
-            StreamWriter objReader;
-
-            fullpath = System.IO.Path.Combine(Path.Database, fn);
-            contents = GetFileContents(fullpath);
-            contents = contents + Environment.NewLine + strData;
-
-            try
-            {
-                objReader = new StreamWriter(fullpath);
-                objReader.Write(contents);
-                objReader.Close();
-                bAns = 1;
-            }
-            catch
-            {
-            }
-            return Conversions.ToBoolean(bAns);
+            // ignored
         }
     }
 }
