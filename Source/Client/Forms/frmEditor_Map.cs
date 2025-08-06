@@ -1530,14 +1530,14 @@ namespace Client
         {
             ByteStream buffer;
 
-            if (GameState.MyEditorType != (int)EditorType.Map)
+            if (GameState.MyEditorType != EditorType.Map)
                 return;
 
             buffer = new ByteStream(4);
             buffer.WriteInt32((int)Packets.ClientPackets.CNeedMap);
             buffer.WriteInt32(1);
             NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             GameState.GettingMap = true;
             NetworkSend.SendCloseEditor();
 
@@ -1556,7 +1556,7 @@ namespace Client
         public static void MapEditorSend()
         {
             Map.SendMap();
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             GameState.GettingMap = true;
             NetworkSend.SendCloseEditor();
 

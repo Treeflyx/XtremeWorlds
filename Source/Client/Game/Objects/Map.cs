@@ -153,7 +153,7 @@ namespace Client
 
                             alpha = 1.0f;
 
-                            if (GameState.MyEditorType == (int)EditorType.Map)
+                            if (GameState.MyEditorType == EditorType.Map)
                             {
                                 if (GameState.HideLayers)
                                 {
@@ -252,7 +252,7 @@ namespace Client
 
                             alpha = 1.0f;
 
-                            if (GameState.MyEditorType == (int)EditorType.Map)
+                            if (GameState.MyEditorType == EditorType.Map)
                             {
                                 if (GameState.HideLayers)
                                 {

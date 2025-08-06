@@ -346,7 +346,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         GameState.InGame = true;
         Gui.HideWindows();
         GameState.CanMoveNow = true;
-        GameState.MyEditorType = -1;
+        GameState.MyEditorType = EditorType.None;
         GameState.SkillBuffer = -1;
         GameState.InShop = -1;
 

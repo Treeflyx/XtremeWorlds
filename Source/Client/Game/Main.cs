@@ -88,7 +88,7 @@ namespace Client
                 if (GameState.InitMapEditor)
                 {
                     var withBlock2 = frmEditor_Map.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Map;
+                    GameState.MyEditorType = Core.EditorType.Map;
                     GameState.EditorIndex = 1;
                     withBlock2.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock2.Show();
@@ -101,7 +101,7 @@ namespace Client
                 if (GameState.InitAnimationEditor)
                 {
                     var withBlock4 = frmEditor_Animation.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Animation;
+                    GameState.MyEditorType = Core.EditorType.Animation;
                     GameState.EditorIndex = 1;
                     withBlock4.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock4.Show();
@@ -114,7 +114,7 @@ namespace Client
                 if (GameState.InitItemEditor)
                 {
                     var withBlock5 = frmEditor_Item.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Item;
+                    GameState.MyEditorType = Core.EditorType.Item;
                     GameState.EditorIndex = 1;
                     withBlock5.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock5.Show();
@@ -127,7 +127,7 @@ namespace Client
                 if (GameState.InitJobEditor)
                 {
                     var withBlock6 = frmEditor_Job.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Job;
+                    GameState.MyEditorType = Core.EditorType.Job;
                     GameState.EditorIndex = 1;
                     withBlock6.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock6.Show();
@@ -140,7 +140,7 @@ namespace Client
                 if (GameState.InitMoralEditor)
                 {
                     var withBlock7 = frmEditor_Moral.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Moral;
+                    GameState.MyEditorType = Core.EditorType.Moral;
                     GameState.EditorIndex = 1;
                     withBlock7.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock7.Show();
@@ -153,7 +153,7 @@ namespace Client
                 if (GameState.InitResourceEditor)
                 {
                     var withBlock8 = frmEditor_Resource.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Resource;
+                    GameState.MyEditorType = Core.EditorType.Resource;
                     GameState.EditorIndex = 1;
                     withBlock8.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock8.Show();
@@ -166,7 +166,7 @@ namespace Client
                 if (GameState.InitNpcEditor)
                 {
                     var withBlock9 = frmEditor_Npc.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Npc;
+                    GameState.MyEditorType = Core.EditorType.Npc;
                     GameState.EditorIndex = 1;
                     withBlock9.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock9.Show();
@@ -179,7 +179,7 @@ namespace Client
                 if (GameState.InitSkillEditor)
                 {
                     var withBlock10 = frmEditor_Skill.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Skill;
+                    GameState.MyEditorType = Core.EditorType.Skill;
                     GameState.EditorIndex = 1;
                     withBlock10.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock10.Show();
@@ -192,7 +192,7 @@ namespace Client
                 if (GameState.InitShopEditor)
                 {
                     var withBlock11 = frmEditor_Shop.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Shop;
+                    GameState.MyEditorType = Core.EditorType.Shop;
                     GameState.EditorIndex = 1;
                     withBlock11.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock11.Show();
@@ -205,7 +205,7 @@ namespace Client
                 if (GameState.InitProjectileEditor)
                 {
                     var withBlock12 = frmEditor_Projectile.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Projectile;
+                    GameState.MyEditorType = Core.EditorType.Projectile;
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock12.Show();
@@ -218,7 +218,7 @@ namespace Client
                 if (GameState.InitScriptEditor)
                 {
                     var withBlock12 = frmEditor_Script.Instance;
-                    GameState.MyEditorType = (int)Core.EditorType.Script;
+                    GameState.MyEditorType = Core.EditorType.Script;
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock12.Show();

@@ -48,7 +48,7 @@ namespace Client
         private void frmEditor_Script_FormClosing(object sender, FormClosingEventArgs e)
         {
             NetworkSend.SendCloseEditor();
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             Dispose();
         }
 
