@@ -25,33 +25,33 @@ public sealed class NetworkClient
             SingleWriter = false
         });
 
-        var tcpClient = new TcpClient();
-
         try
         {
+            Console.WriteLine("Connecting to server...");
+            
             while (!cancellationToken.IsCancellationRequested)
             {
+                var tcpClient = new TcpClient();
+
                 var connect = tcpClient.ConnectAsync(hostname, port, cancellationToken).AsTask();
                 var timeout = Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
 
-                // Bit of a awkard timeout mechanism here because TcpClient.ConnectAsync does not respect CancellationToken's
+                // Bit of a awkard timeout mechanism here because TcpClient.ConnectAsync does not respect CancellationTokens
                 await Task.WhenAny(connect, timeout);
-
                 if (!tcpClient.Connected)
                 {
-                    Console.WriteLine("Timeout");
-
                     continue;
                 }
 
-                await eventHandler.OnConnectedAsync(cancellationToken);
+                Console.WriteLine("Connected to server successfully");
 
                 await RunAsync(tcpClient, _sendChannel, eventHandler, cancellationToken);
+
+                Console.WriteLine("Reconnecting...");
             }
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("Cancelled");
         }
         finally
         {
@@ -61,18 +61,11 @@ public sealed class NetworkClient
 
     private static async Task RunAsync(TcpClient tcpClient, Channel<byte[]> sendChannel, INetworkEventHandler eventHandler, CancellationToken cancellationToken)
     {
-        try
-        {
-            await Task.WhenAll(
-                RunReceive(tcpClient, eventHandler,
-                    cancellationToken),
-                RunSend(tcpClient, sendChannel,
-                    cancellationToken));
-        }
-        finally
-        {
-            await eventHandler.OnDisconnectedAsync(cancellationToken);
-        }
+        await Task.WhenAll(
+            RunReceive(tcpClient, eventHandler,
+                cancellationToken),
+            RunSend(tcpClient, sendChannel,
+                cancellationToken));
     }
 
     private static async Task RunReceive(TcpClient tcpClient, INetworkEventHandler eventHandler, CancellationToken cancellationToken)
@@ -88,6 +81,7 @@ public sealed class NetworkClient
                 var bytesReceived = await networkStream.ReadAsync(buffer, cancellationToken);
                 if (bytesReceived == 0)
                 {
+                    Console.WriteLine("Connection with the server has been lost");
                     break;
                 }
 

@@ -11,22 +11,7 @@ public static class NetworkConfig
         private readonly GamePacketParser _parser = new();
         private readonly byte[] _buffer = new byte[BufferSize];
         private int _bufferOffset;
-
-        public Task OnConnectedAsync(CancellationToken cancellationToken)
-        {
-            Console.WriteLine("Connection success.");
-            Console.WriteLine("Connection established. Starting packet router...");
-
-            return Task.CompletedTask;
-        }
-
-        public Task OnDisconnectedAsync(CancellationToken cancellationToken)
-        {
-            Console.WriteLine("Connection lost.");
-
-            return Task.CompletedTask;
-        }
-
+        
         public Task OnBytesReceivedAsync(ReadOnlyMemory<byte> bytes, CancellationToken cancellationToken)
         {
             var space = BufferSize - _bufferOffset;

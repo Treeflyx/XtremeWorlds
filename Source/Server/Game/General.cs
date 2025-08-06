@@ -265,7 +265,6 @@ namespace Server
         {
             await System.Threading.Tasks.Task.Run(() =>
             {
-                SettingsManager.Load();
                 ValidateConfiguration();
                 Clock.Instance.GameSpeed = SettingsManager.Instance.TimeSpeed;
                 Console.Title = "XtremeWorlds Server";
