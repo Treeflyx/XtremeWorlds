@@ -3,7 +3,7 @@ using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 using System.Net.Security;
-using Mirage.Sharp.Asfw.Network;
+using Client.Net;
 using static Core.Global.Command;
 
 namespace Client
@@ -950,7 +950,7 @@ namespace Client
                                 buffer = new ByteStream(4);
                                 buffer.WriteInt32((int)Packets.ClientPackets.CEvent);
                                 buffer.WriteInt32(i);
-                                NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+                                NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
                                 buffer.Dispose();
                                 Core.Data.Player[GameState.MyIndex].EventTimer = General.GetTickCount() + 200;
                             }
@@ -1050,9 +1050,9 @@ namespace Client
         #endregion
 
         #region Incoming Traffic
-        public static void Packet_PlayerHP(ref byte[] data)
+        public static void Packet_PlayerHP(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             SetPlayerVital(GameState.MyIndex, Core.Vital.Health, buffer.ReadInt32());
 
@@ -1067,13 +1067,11 @@ namespace Client
             }
 
             Gui.UpdateStats_UI();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerMP(ref byte[] data)
+        public static void Packet_PlayerMP(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             SetPlayerVital(GameState.MyIndex, Core.Vital.Mana, buffer.ReadInt32());
 
@@ -1088,13 +1086,11 @@ namespace Client
             }
 
             Gui.UpdateStats_UI();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerSP(ref byte[] data)
+        public static void Packet_PlayerSP(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             SetPlayerVital(GameState.MyIndex, Core.Vital.Stamina, buffer.ReadInt32());
 
@@ -1109,30 +1105,26 @@ namespace Client
             }
 
             Gui.UpdateStats_UI();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerStats(ref byte[] data)
+        public static void Packet_PlayerStats(ReadOnlyMemory<byte> data)
         {
             int i;
             int index;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             index = buffer.ReadInt32();
 
             int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
             for (i = 0; i < statCount; i++)
                 SetPlayerStat(index, (Core.Stat)i, buffer.ReadInt32());
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerData(ref byte[] data)
+        public static void Packet_PlayerData(ReadOnlyMemory<byte> data)
         {
             int i;
             int x;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             i = buffer.ReadInt32();
             SetPlayerName(i, buffer.ReadString());
@@ -1200,14 +1192,12 @@ namespace Client
                 }
                 GameState.PlayerData = true;
             }
-
-            buffer.Dispose();
         }
 
-        public static void Packet_StopPlayerMove(ref byte[] data)
+        public static void Packet_StopPlayerMove(ReadOnlyMemory<byte> data)
         {
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             i = buffer.ReadInt32();
 
@@ -1217,15 +1207,13 @@ namespace Client
 
             // Stop the player from moving
             Core.Data.Player[i].Moving = 0;
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerDir(ref byte[] data)
+        public static void Packet_PlayerDir(ReadOnlyMemory<byte> data)
         {
             int dir;
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             i = buffer.ReadInt32();
             dir = buffer.ReadByte();
@@ -1234,15 +1222,13 @@ namespace Client
 
             ref var withBlock = ref Core.Data.Player[i];
             withBlock.Moving = 0;
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerExp(ref byte[] data)
+        public static void Packet_PlayerExp(ReadOnlyMemory<byte> data)
         {
             int index;
             int tnl;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             index = buffer.ReadInt32();
             SetPlayerExp(index, buffer.ReadInt32());
@@ -1269,18 +1255,16 @@ namespace Client
 
             // Update GUI
             Gui.UpdateStats_UI();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_PlayerXY(ref byte[] data)
+        public static void Packet_PlayerXY(ReadOnlyMemory<byte> data)
         {
             int x;
             int y;
             int dir;
             int index;
             byte moving;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             index = buffer.ReadInt32();
             x = buffer.ReadInt32();
@@ -1293,8 +1277,6 @@ namespace Client
             SetPlayerDir(index, dir);
             Core.Data.Player[index].Moving = moving;
             Core.Data.Player[index].IsMoving = buffer.ReadBoolean();
-
-            buffer.Dispose();
         }
         #endregion
 

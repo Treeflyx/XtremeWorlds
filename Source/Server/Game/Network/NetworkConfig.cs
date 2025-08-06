@@ -37,7 +37,7 @@ public class NetworkConfig
                 }
             }
         }
-            
+
         return false;
     }
 
@@ -91,34 +91,63 @@ public class NetworkConfig
 
     public static void SendDataToMapBut(int index, int mapNum, ReadOnlySpan<byte> data, int head)
     {
-        foreach (var i in PlayerService.Instance.PlayerIds)
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
         {
-            if (IsPlaying(i))
+            if (!IsPlaying(playerId) || playerId == index)
             {
-                if (i != index)
-                {
-                    if (GetPlayerMap(i) == mapNum)
-                    {
-                        PlayerService.Instance.SendDataTo(i, data, head);
-                    }
-                }
+                continue;
+            }
+            
+            if (GetPlayerMap(playerId) == mapNum)
+            {
+                PlayerService.Instance.SendDataTo(playerId, data, head);
+            }
+        }
+    }
+    
+    public static void SendDataToMapBut(int index, int mapNum, byte[] bytes)
+    {
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
+        {
+            if (!IsPlaying(playerId) || playerId == index)
+            {
+                continue;
+            }
+            
+            if (GetPlayerMap(playerId) == mapNum)
+            {
+                PlayerService.Instance.SendDataTo(playerId, bytes);
             }
         }
     }
 
     public static void SendDataToMap(int mapNum, ReadOnlySpan<byte> data, int head)
     {
-        foreach (var i in PlayerService.Instance.PlayerIds)
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
         {
-            if (IsPlaying(i))
+            if (!IsPlaying(playerId))
             {
-                if (GetPlayerMap(i) == mapNum)
-                {
-                    PlayerService.Instance.SendDataTo(i, data, head);
-                }
+                continue;
+            }
+
+            if (GetPlayerMap(playerId) == mapNum)
+            {
+                PlayerService.Instance.SendDataTo(playerId, data, head);
             }
         }
+    }
 
+    public static void SendDataToMap(int mapNum, byte[] bytes)
+    {
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
+        {
+            if (!IsPlaying(playerId) || GetPlayerMap(playerId) != mapNum)
+            {
+                continue;
+            }
+
+            PlayerService.Instance.SendDataTo(playerId, bytes);
+        }
     }
 
     public static void SendDataTo(int index, ReadOnlySpan<byte> data, int head)

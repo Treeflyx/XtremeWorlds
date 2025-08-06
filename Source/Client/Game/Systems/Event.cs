@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
@@ -71,10 +72,10 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_SpawnEvent(ref byte[] data)
+        public static void Packet_SpawnEvent(ReadOnlyMemory<byte> data)
         {
             int id;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             GameState.CurrentEvents = buffer.ReadInt32();
             Array.Resize(ref Data.MapEvents, GameState.CurrentEvents);
@@ -107,12 +108,10 @@ namespace Client
                 withBlock.WalkThrough = buffer.ReadInt32();
                 withBlock.ShowName = buffer.ReadInt32();
             }
-            
-            buffer.Dispose();
 
         }
 
-        public static void Packet_EventMove(ref byte[] data)
+        public static void Packet_EventMove(ReadOnlyMemory<byte> data)
         {
             int id;
             int x;
@@ -120,7 +119,7 @@ namespace Client
             int dir;
             int showDir;
             int movementSpeed;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             id = buffer.ReadInt32();
             x = buffer.ReadInt32();
@@ -144,11 +143,11 @@ namespace Client
 
         }
 
-        public static void Packet_EventDir(ref byte[] data)
+        public static void Packet_EventDir(ReadOnlyMemory<byte> data)
         {
             int i;
             byte dir;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             i = buffer.ReadInt32();
             dir = (byte)buffer.ReadInt32();
 
@@ -164,29 +163,26 @@ namespace Client
 
         }
 
-        public static void Packet_SwitchesAndVariables(ref byte[] data)
+        public static void Packet_SwitchesAndVariables(ReadOnlyMemory<byte> data)
         {
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             for (i = 0; i < Constant.MaxSwitches; i++)
                 Switches[i] = buffer.ReadString();
 
             for (i = 0; i < Constant.NaxVariables; i++)
                 Variables[i] = buffer.ReadString();
-
-            buffer.Dispose();
-
         }
 
-        public static void Packet_MapEventData(ref byte[] data)
+        public static void Packet_MapEventData(ReadOnlyMemory<byte> data)
         {
             int i;
             int x;
             int y;
             int z;
             int w;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             Data.MyMap.EventCount = buffer.ReadInt32();
 
@@ -325,16 +321,13 @@ namespace Client
                     }
                 }
             }
-
-            buffer.Dispose();
-
         }
 
-        public static void Packet_EventChat(ref byte[] data)
+        public static void Packet_EventChat(ReadOnlyMemory<byte> data)
         {
             int i;
             int choices;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             EventReplyId = buffer.ReadInt32();
             EventReplyPage = buffer.ReadInt32();
             EventChatFace = buffer.ReadInt32();
@@ -365,24 +358,21 @@ namespace Client
                 }
             }
             AnotherChat = buffer.ReadInt32();
-
-            buffer.Dispose();
-
         }
 
-        public static void Packet_EventStart(ref byte[] data)
+        public static void Packet_EventStart(ReadOnlyMemory<byte> data)
         {
             InEvent = true;
         }
 
-        public static void Packet_EventEnd(ref byte[] data)
+        public static void Packet_EventEnd(ReadOnlyMemory<byte> data)
         {
             InEvent = false;
         }
 
-        public static void Packet_Picture(ref byte[] data)
+        public static void Packet_Picture(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             int picIndex;
             int spriteType;
             int xOffset;
@@ -411,21 +401,18 @@ namespace Client
             Picture.SpriteType = (byte)spriteType;
             Picture.XOffset = (byte)xOffset;
             Picture.YOffset = (byte)yOffset;
-
-            buffer.Dispose();
-
         }
 
-        public static void Packet_HidePicture(ref byte[] data)
+        public static void Packet_HidePicture(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             Picture = default;
         }
 
-        public static void Packet_HoldPlayer(ref byte[] data)
+        public static void Packet_HoldPlayer(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             if (buffer.ReadInt32() == 0)
             {
                 HoldPlayer = true;
@@ -435,31 +422,27 @@ namespace Client
                 HoldPlayer = false;
             }
 
-            buffer.Dispose();
-
         }
 
-        public static void Packet_PlayBGM(ref byte[] data)
+        public static void Packet_PlayBGM(ReadOnlyMemory<byte> data)
         {
             string music;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             music = buffer.ReadString();
             Data.MyMap.Music = music;
-
-            buffer.Dispose();
         }
 
-        public static void Packet_FadeOutBGM(ref byte[] data)
+        public static void Packet_FadeOutBGM(ReadOnlyMemory<byte> data)
         {
             Sound.CurrentMusic = "";
             Sound.FadeOutSwitch = true;
         }
 
-        public static void Packet_PlaySound(ref byte[] data)
+        public static void Packet_PlaySound(ReadOnlyMemory<byte> data)
         {
             string sound;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             int x;
             int y;
 
@@ -468,19 +451,17 @@ namespace Client
             y = buffer.ReadInt32();
 
             Sound.PlaySound(sound, x, y);
-
-            buffer.Dispose();
         }
 
-        public static void Packet_StopSound(ref byte[] data)
+        public static void Packet_StopSound(ReadOnlyMemory<byte> data)
         {
             Sound.StopSound();
         }
 
-        public static void Packet_SpecialEffect(ref byte[] data)
+        public static void Packet_SpecialEffect(ReadOnlyMemory<byte> data)
         {
             int effectType;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             effectType = buffer.ReadInt32();
 
             switch (effectType)
@@ -527,8 +508,6 @@ namespace Client
                         break;
                     }
             }
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -540,7 +519,7 @@ namespace Client
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestSwitchesAndVariables);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
@@ -558,7 +537,7 @@ namespace Client
             for (i = 0; i < Constant.NaxVariables; i++)
                 buffer.WriteString(Variables[i]);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
@@ -569,7 +548,7 @@ namespace Client
 
         public static void ProcessEventMovement(int id)
         {
-            if (GameState.MyEditorType == (int)EditorType.Map)
+            if (GameState.MyEditorType == EditorType.Map)
                 return;
 
             if (id >= Data.MyMap.EventCount)

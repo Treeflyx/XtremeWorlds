@@ -461,6 +461,7 @@ namespace Core
     /// </summary>
     public enum EditorType
     {
+        None,
         Item,
         Map,
         Npc,

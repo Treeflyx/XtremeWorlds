@@ -5,7 +5,7 @@ namespace Server.Net;
 
 public sealed class PacketWriter(int capacity = PacketWriter.InitialCapacity)
 {
-    private const int InitialCapacity = 64;
+    private const int InitialCapacity = 8192;
 
     private byte[] _buffer = new byte[capacity];
     private int _offset;

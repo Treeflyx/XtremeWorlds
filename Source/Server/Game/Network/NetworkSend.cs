@@ -785,9 +785,9 @@ public class NetworkSend
         {
             Script.Instance?.JoinMap(index);
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.Message);
+            Console.WriteLine(ex.Message);
         }
     }
 

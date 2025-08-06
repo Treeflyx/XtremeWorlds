@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Core;
 using Core;
 using static Core.Global.Command;
@@ -7,1116 +8,1015 @@ using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
 using Mirage.Sharp.Asfw.IO;
 
-namespace Client
+namespace Client;
+
+public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 {
-
-    public class NetworkReceive
+    public GamePacketParser()
     {
+        Bind(Packets.ServerPackets.SAes, Packet_Aes);
+        Bind(Packets.ServerPackets.SAlertMsg, Packet_AlertMsg);
+        Bind(Packets.ServerPackets.SLoginOk, Packet_LoginOk);
+        Bind(Packets.ServerPackets.SPlayerChars, Packet_PlayerChars);
+        Bind(Packets.ServerPackets.SUpdateJob, Packet_UpdateJob);
+        Bind(Packets.ServerPackets.SJobData, Packet_JobData);
+        Bind(Packets.ServerPackets.SInGame, Packet_InGame);
+        Bind(Packets.ServerPackets.SPlayerInv, Packet_PlayerInv);
+        Bind(Packets.ServerPackets.SPlayerInvUpdate, Packet_PlayerInvUpdate);
+        Bind(Packets.ServerPackets.SPlayerWornEq, Packet_PlayerWornEquipment);
+        Bind(Packets.ServerPackets.SPlayerHp, Player.Packet_PlayerHP);
+        Bind(Packets.ServerPackets.SPlayerMp, Player.Packet_PlayerMP);
+        Bind(Packets.ServerPackets.SPlayerSp, Player.Packet_PlayerSP);
+        Bind(Packets.ServerPackets.SPlayerStats, Player.Packet_PlayerStats);
+        Bind(Packets.ServerPackets.SPlayerData, Player.Packet_PlayerData);
+        Bind(Packets.ServerPackets.SNpcMove, Packet_NpcMove);
+        Bind(Packets.ServerPackets.SPlayerDir, Player.Packet_PlayerDir);
+        Bind(Packets.ServerPackets.SNpcDir, Packet_NpcDir);
+        Bind(Packets.ServerPackets.SPlayerXy, Player.Packet_PlayerXY);
+        Bind(Packets.ServerPackets.SAttack, Packet_Attack);
+        Bind(Packets.ServerPackets.SNpcAttack, Packet_NpcAttack);
+        Bind(Packets.ServerPackets.SCheckForMap, Map.Packet_CheckMap);
+        Bind(Packets.ServerPackets.SMapData, Map.MapData);
+        Bind(Packets.ServerPackets.SMapNpcData, Map.Packet_MapNpcData);
+        Bind(Packets.ServerPackets.SMapNpcUpdate, Map.Packet_MapNpcUpdate);
+        Bind(Packets.ServerPackets.SGlobalMsg, Packet_GlobalMsg);
+        Bind(Packets.ServerPackets.SAdminMsg, Packet_AdminMsg);
+        Bind(Packets.ServerPackets.SPlayerMsg, Packet_PlayerMsg);
+        Bind(Packets.ServerPackets.SMapMsg, Packet_MapMsg);
+        Bind(Packets.ServerPackets.SSpawnItem, Packet_SpawnItem);
+        Bind(Packets.ServerPackets.SUpdateItem, Item.Packet_UpdateItem);
+        Bind(Packets.ServerPackets.SSpawnNpc, Packet_SpawnNpc);
+        Bind(Packets.ServerPackets.SNpcDead, Packet_NpcDead);
+        Bind(Packets.ServerPackets.SUpdateNpc, Packet_UpdateNpc);
+        Bind(Packets.ServerPackets.SEditMap, Map.Packet_EditMap);
+        Bind(Packets.ServerPackets.SUpdateShop, Shop.Packet_UpdateShop);
+        Bind(Packets.ServerPackets.SUpdateSkill, Packet_UpdateSkill);
+        Bind(Packets.ServerPackets.SSkills, Packet_Skills);
+        Bind(Packets.ServerPackets.SLeftMap, Packet_LeftMap);
+        Bind(Packets.ServerPackets.SMapResource, MapResource.Packet_MapResource);
+        Bind(Packets.ServerPackets.SUpdateResource, MapResource.Packet_UpdateResource);
+        Bind(Packets.ServerPackets.SSendPing, Packet_Ping);
+        Bind(Packets.ServerPackets.SActionMsg, Packet_ActionMessage);
+        Bind(Packets.ServerPackets.SPlayerExp, Player.Packet_PlayerExp);
+        Bind(Packets.ServerPackets.SBlood, Packet_Blood);
+        Bind(Packets.ServerPackets.SUpdateAnimation, Animation.Packet_UpdateAnimation);
+        Bind(Packets.ServerPackets.SAnimation, Animation.Packet_Animation);
+        Bind(Packets.ServerPackets.SMapNpcVitals, Packet_NpcVitals);
+        Bind(Packets.ServerPackets.SCooldown, Packet_Cooldown);
+        Bind(Packets.ServerPackets.SClearSkillBuffer, Packet_ClearSkillBuffer);
+        Bind(Packets.ServerPackets.SSayMsg, Packet_SayMessage);
+        Bind(Packets.ServerPackets.SOpenShop, Shop.Packet_OpenShop);
+        Bind(Packets.ServerPackets.SResetShopAction, Shop.Packet_ResetShopAction);
+        Bind(Packets.ServerPackets.SStunned, Packet_Stunned);
+        Bind(Packets.ServerPackets.SMapWornEq, Packet_MapWornEquipment);
+        Bind(Packets.ServerPackets.SBank, Bank.Packet_OpenBank);
+        Bind(Packets.ServerPackets.SLeftGame, Packet_LeftGame);
+        Bind(Packets.ServerPackets.STradeInvite, Trade.Packet_TradeInvite);
+        Bind(Packets.ServerPackets.STrade, Trade.Packet_Trade);
+        Bind(Packets.ServerPackets.SCloseTrade, Trade.Packet_CloseTrade);
+        Bind(Packets.ServerPackets.STradeUpdate, Trade.Packet_TradeUpdate);
+        Bind(Packets.ServerPackets.STradeStatus, Trade.Packet_TradeStatus);
+        Bind(Packets.ServerPackets.SMapReport, Packet_MapReport);
+        Bind(Packets.ServerPackets.STarget, Packet_Target);
+        Bind(Packets.ServerPackets.SAdmin, Packet_Admin);
+        Bind(Packets.ServerPackets.SCritical, Packet_Critical);
+        Bind(Packets.ServerPackets.SrClick, Packet_RClick);
+        Bind(Packets.ServerPackets.SHotbar, Packet_Hotbar);
+        Bind(Packets.ServerPackets.SSpawnEvent, Event.Packet_SpawnEvent);
+        Bind(Packets.ServerPackets.SEventMove, Event.Packet_EventMove);
+        Bind(Packets.ServerPackets.SEventDir, Event.Packet_EventDir);
+        Bind(Packets.ServerPackets.SEventChat, Event.Packet_EventChat);
+        Bind(Packets.ServerPackets.SEventStart, Event.Packet_EventStart);
+        Bind(Packets.ServerPackets.SEventEnd, Event.Packet_EventEnd);
+        Bind(Packets.ServerPackets.SPlayBgm, Event.Packet_PlayBGM);
+        Bind(Packets.ServerPackets.SPlaySound, Event.Packet_PlaySound);
+        Bind(Packets.ServerPackets.SFadeoutBgm, Event.Packet_FadeOutBGM);
+        Bind(Packets.ServerPackets.SStopSound, Event.Packet_StopSound);
+        Bind(Packets.ServerPackets.SSwitchesAndVariables, Event.Packet_SwitchesAndVariables);
+        Bind(Packets.ServerPackets.SMapEventData, Event.Packet_MapEventData);
+        Bind(Packets.ServerPackets.SChatBubble, Packet_ChatBubble);
+        Bind(Packets.ServerPackets.SSpecialEffect, Event.Packet_SpecialEffect);
+        Bind(Packets.ServerPackets.SPic, Event.Packet_Picture);
+        Bind(Packets.ServerPackets.SHoldPlayer, Event.Packet_HoldPlayer);
+        Bind(Packets.ServerPackets.SUpdateProjectile, Projectile.HandleUpdateProjectile);
+        Bind(Packets.ServerPackets.SMapProjectile, Projectile.HandleMapProjectile);
+        Bind(Packets.ServerPackets.SEmote, Packet_Emote);
+        Bind(Packets.ServerPackets.SPartyInvite, Party.Packet_PartyInvite);
+        Bind(Packets.ServerPackets.SPartyUpdate, Party.Packet_PartyUpdate);
+        Bind(Packets.ServerPackets.SPartyVitals, Party.Packet_PartyVitals);
+        Bind(Packets.ServerPackets.SClock, Packet_Clock);
+        Bind(Packets.ServerPackets.STime, Packet_Time);
+        Bind(Packets.ServerPackets.SScriptEditor, Script.Packet_EditScript);
+        Bind(Packets.ServerPackets.SItemEditor, Packet_EditItem);
+        Bind(Packets.ServerPackets.SNpcEditor, Packet_NpcEditor);
+        Bind(Packets.ServerPackets.SShopEditor, Packet_EditShop);
+        Bind(Packets.ServerPackets.SSkillEditor, Packet_EditSkill);
+        Bind(Packets.ServerPackets.SResourceEditor, Packet_ResourceEditor);
+        Bind(Packets.ServerPackets.SAnimationEditor, Packet_AnimationEditor);
+        Bind(Packets.ServerPackets.SProjectileEditor, HandleProjectileEditor);
+        Bind(Packets.ServerPackets.SJobEditor, Packet_JobEditor);
+        Bind(Packets.ServerPackets.SUpdateMoral, Packet_UpdateMoral);
+        Bind(Packets.ServerPackets.SMoralEditor, Packet_EditMoral);
+    }
 
-        public static void PacketRouter()
+    private static void Packet_Aes(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        // Read key length
+        byte keyLength = buffer.ReadByte();
+
+        // Read key
+        byte[] key = buffer.ReadBlock(keyLength).ToArray();
+
+        byte ivLength = buffer.ReadByte();
+
+        // Read IV
+        byte[] iv = buffer.ReadBlock(ivLength).ToArray();
+
+        General.AesKey = key;
+        General.AesIV = iv;
+    }
+
+    private static void Packet_AlertMsg(ReadOnlyMemory<byte> data)
+    {
+        byte dialogueIndex;
+        int menuReset;
+        int kick;
+        var buffer = new PacketReader(data);
+
+        dialogueIndex = buffer.ReadByte();
+        menuReset = buffer.ReadInt32();
+        kick = buffer.ReadInt32();
+
+        if (menuReset > 0)
         {
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAes] = Packet_Aes;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAlertMsg] = Packet_AlertMsg;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLoginOk] = Packet_LoginOk;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerChars] = Packet_PlayerChars;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateJob] = Packet_UpdateJob;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SJobData] = Packet_JobData;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SInGame] = Packet_InGame;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerInv] = Packet_PlayerInv;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerInvUpdate] = Packet_PlayerInvUpdate;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerWornEq] = Packet_PlayerWornEquipment;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerHp] = Player.Packet_PlayerHP;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerMp] = Player.Packet_PlayerMP;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerSp] = Player.Packet_PlayerSP;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerStats] = Player.Packet_PlayerStats;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerData] = Player.Packet_PlayerData;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcMove] = Packet_NpcMove;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerDir] = Player.Packet_PlayerDir;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcDir] = Packet_NpcDir;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerXy] = Player.Packet_PlayerXY;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAttack] = Packet_Attack;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcAttack] = Packet_NpcAttack;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCheckForMap] = Map.Packet_CheckMap;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapData] = Map.MapData;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcData] = Map.Packet_MapNpcData;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcUpdate] = Map.Packet_MapNpcUpdate;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SGlobalMsg] = Packet_GlobalMsg;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAdminMsg] = Packet_AdminMsg;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerMsg] = Packet_PlayerMsg;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapMsg] = Packet_MapMsg;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnItem] = Packet_SpawnItem;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateItem] = Item.Packet_UpdateItem;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnNpc] = Packet_SpawnNpc;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcDead] = Packet_NpcDead;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateNpc] = Packet_UpdateNpc;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEditMap] = Map.Packet_EditMap;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateShop] = Shop.Packet_UpdateShop;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateSkill] = Packet_UpdateSkill;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSkills] = Packet_Skills;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLeftMap] = Packet_LeftMap;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapResource] = MapResource.Packet_MapResource;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateResource] = MapResource.Packet_UpdateResource;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSendPing] = Packet_Ping;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SActionMsg] = Packet_ActionMessage;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayerExp] = Player.Packet_PlayerExp;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SBlood] = Packet_Blood;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateAnimation] = Animation.Packet_UpdateAnimation;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAnimation] = Animation.Packet_Animation;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapNpcVitals] = Packet_NpcVitals;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCooldown] = Packet_Cooldown;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SClearSkillBuffer] = Packet_ClearSkillBuffer;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSayMsg] = Packet_SayMessage;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SOpenShop] = Shop.Packet_OpenShop;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SResetShopAction] = Shop.Packet_ResetShopAction;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SStunned] = Packet_Stunned;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapWornEq] = Packet_MapWornEquipment;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SBank] = Bank.Packet_OpenBank;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SLeftGame] = Packet_LeftGame;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeInvite] = Trade.Packet_TradeInvite;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STrade] = Trade.Packet_Trade;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCloseTrade] = Trade.Packet_CloseTrade;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeUpdate] = Trade.Packet_TradeUpdate;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STradeStatus] = Trade.Packet_TradeStatus;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapReport] = Packet_MapReport;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STarget] = Packet_Target;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAdmin] = Packet_Admin;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SCritical] = Packet_Critical;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SrClick] = Packet_RClick;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SHotbar] = Packet_Hotbar;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpawnEvent] = Event.Packet_SpawnEvent;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventMove] = Event.Packet_EventMove;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventDir] = Event.Packet_EventDir;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventChat] = Event.Packet_EventChat;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventStart] = Event.Packet_EventStart;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEventEnd] = Event.Packet_EventEnd;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlayBgm] = Event.Packet_PlayBGM;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPlaySound] = Event.Packet_PlaySound;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SFadeoutBgm] = Event.Packet_FadeOutBGM;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SStopSound] = Event.Packet_StopSound;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSwitchesAndVariables] = Event.Packet_SwitchesAndVariables;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapEventData] = Event.Packet_MapEventData;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SChatBubble] = Packet_ChatBubble;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSpecialEffect] = Event.Packet_SpecialEffect;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPic] = Event.Packet_Picture;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SHoldPlayer] = Event.Packet_HoldPlayer;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateProjectile] = Projectile.HandleUpdateProjectile;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMapProjectile] = Projectile.HandleMapProjectile;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SEmote] = Packet_Emote;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyInvite] = Party.Packet_PartyInvite;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyUpdate] = Party.Packet_PartyUpdate;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SPartyVitals] = Party.Packet_PartyVitals;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SClock] = Packet_Clock;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.STime] = Packet_Time;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SScriptEditor] = Script.Packet_EditScript;
-
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SItemEditor] = Packet_EditItem;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SNpcEditor] = Packet_NpcEditor;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SShopEditor] = Packet_EditShop;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SSkillEditor] = Packet_EditSkill;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SResourceEditor] = Packet_ResourceEditor;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SAnimationEditor] = Packet_AnimationEditor;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SProjectileEditor] = HandleProjectileEditor;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SJobEditor] = Packet_JobEditor;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SUpdateMoral] = Packet_UpdateMoral;
-            NetworkConfig.Socket.PacketId[(int)Packets.ServerPackets.SMoralEditor] = Packet_EditMoral;
-
-        }
-
-        /// <summary>
-        /// Parses an AES packet to extract the key and IV.
-        /// </summary>
-        /// <param name="data">The packet data to parse.</param>
-        /// <returns>An AesEncryption instance with the parsed key and IV, or null if parsing fails.</returns>
-        private static void Packet_Aes(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            // Read key length
-            byte keyLength = buffer.ReadByte();
-
-            // Read key
-            byte[] key = buffer.ReadBlock(keyLength).ToArray();
-
-            byte ivLength = buffer.ReadByte();
-
-            // Read IV
-            byte[] iv = buffer.ReadBlock(ivLength).ToArray();
-
-            General.AesKey = key;
-            General.AesIV = iv;
-        }
-
-        private static void Packet_AlertMsg(ref byte[] data)
-        {
-            byte dialogueIndex;
-            int menuReset;
-            int kick;
-            var buffer = new ByteStream(data);
-
-            dialogueIndex = buffer.ReadByte();
-            menuReset = buffer.ReadInt32();
-            kick = buffer.ReadInt32();
-
-            if (menuReset > 0)
-            {
-                Gui.HideWindows();
-
-                switch (menuReset)
-                {
-                    case (int)Core.Menu.Login:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
-                            break;
-                        }
-                    case (int)Core.Menu.CharacterSelect:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
-                            break;
-                        }
-                    case (int)Core.Menu.JobSelection:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
-                            break;
-                        }
-                    case (int)Core.Menu.NewCharacter:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winNewChar"));
-                            break;
-                        }
-                    case (int)Core.Menu.MainMenu:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
-                            break;
-                        }
-                    case (int)Core.Menu.Register:
-                        {
-                            Gui.ShowWindow(Gui.GetWindowIndex("winRegister"));
-                            break;
-                        }
-                }
-            }
-            else if (kick > 0 | GameState.InGame == true)
-            {
-                Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
-                NetworkConfig.InitNetwork();
-                GameLogic.DialogueAlert(dialogueIndex);
-                return;
-            }
-
-            GameLogic.DialogueAlert(dialogueIndex);
-            buffer.Dispose();
-        }
-
-        private static void Packet_LoginOk(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            // Now we can receive game data
-            GameState.MyIndex = buffer.ReadInt32();
-
-            buffer.Dispose();
-        }
-
-        public static void Packet_PlayerChars(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-            long I;
-            long winNum;
-            long conNum;
-            var isSlotEmpty = new bool[Constant.MaxChars];
-            long x;
-
-            SettingsManager.Instance.Username = Gui.Windows[Gui.GetWindowIndex("winLogin")].Controls[(int)Gui.GetControlIndex("winLogin", "txtUsername")].Text;
-            SettingsManager.Save();
-
-            for (var i = 0L; i < Constant.MaxChars; i++)
-            {
-                GameState.CharName[(int)i] = buffer.ReadString();
-                GameState.CharSprite[(int)i] = buffer.ReadInt32();
-                GameState.CharAccess[(int)i] = buffer.ReadInt32();
-                GameState.CharJob[(int)i] = buffer.ReadInt32();
-
-                // set as empty or not
-                if (Strings.Len(GameState.CharName[i]) == 0)
-                    isSlotEmpty[(int)i] = true;
-            }
-
-            buffer.Dispose();
-
             Gui.HideWindows();
-            Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
 
-            // set GUi window up
-            winNum = Gui.GetWindowIndex("winChars");
-            for (var i = 0L; i < Constant.MaxChars; i++)
+            switch (menuReset)
             {
-                conNum = Gui.GetControlIndex("winChars", "lblCharName_" + (i + 1));
+                case (int) Core.Menu.Login:
                 {
-                    var withBlock = Gui.Windows[winNum].Controls[(int)conNum];
-                    if (!isSlotEmpty[(int)i])
-                    {
-                        withBlock.Text = GameState.CharName[(int)i];
-                    }
-                    else
-                    {
-                        withBlock.Text = "Blank Slot";
-                    }
+                    Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+                    break;
                 }
-
-                // hide/show buttons
-                if (isSlotEmpty[(int)i])
+                case (int) Core.Menu.CharacterSelect:
                 {
-                    // create button
-                    conNum = Gui.GetControlIndex("winChars", "btnCreateChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = true;
-                    // select button
-                    conNum = Gui.GetControlIndex("winChars", "btnSelectChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = false;
-                    // delete button
-                    conNum = Gui.GetControlIndex("winChars", "btnDelChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = false;
+                    Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
+                    break;
+                }
+                case (int) Core.Menu.JobSelection:
+                {
+                    Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
+                    break;
+                }
+                case (int) Core.Menu.NewCharacter:
+                {
+                    Gui.ShowWindow(Gui.GetWindowIndex("winNewChar"));
+                    break;
+                }
+                case (int) Core.Menu.MainMenu:
+                {
+                    Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+                    break;
+                }
+                case (int) Core.Menu.Register:
+                {
+                    Gui.ShowWindow(Gui.GetWindowIndex("winRegister"));
+                    break;
+                }
+            }
+        }
+        else if (kick > 0 | GameState.InGame == true)
+        {
+            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+        }
+
+        GameLogic.DialogueAlert(dialogueIndex);
+    }
+
+    private static void Packet_LoginOk(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        // Now we can receive game data
+        GameState.MyIndex = buffer.ReadInt32();
+    }
+
+    public static void Packet_PlayerChars(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+        long I;
+        long winNum;
+        long conNum;
+        var isSlotEmpty = new bool[Constant.MaxChars];
+        long x;
+
+        SettingsManager.Instance.Username = Gui.Windows[Gui.GetWindowIndex("winLogin")].Controls[(int) Gui.GetControlIndex("winLogin", "txtUsername")].Text;
+        SettingsManager.Save();
+
+        for (var i = 0L; i < Constant.MaxChars; i++)
+        {
+            GameState.CharName[(int) i]= buffer.ReadString();
+            GameState.CharSprite[(int) i]= buffer.ReadInt32();
+            GameState.CharAccess[(int) i]= buffer.ReadInt32();
+            GameState.CharJob[(int) i]= buffer.ReadInt32();
+
+            // set as empty or not
+            if (Strings.Len(GameState.CharName[i]) == 0)
+                isSlotEmpty[(int) i]= true;
+        }
+
+
+        Gui.HideWindows();
+        Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
+
+        // set GUi window up
+        winNum = Gui.GetWindowIndex("winChars");
+        for (var i = 0L; i < Constant.MaxChars; i++)
+        {
+            conNum = Gui.GetControlIndex("winChars", "lblCharName_" + (i + 1));
+            {
+                var withBlock = Gui.Windows[winNum].Controls[(int) conNum];
+                if (!isSlotEmpty[(int) i])
+                {
+                    withBlock.Text = GameState.CharName[(int) i];
                 }
                 else
                 {
-                    // create button
-                    conNum = Gui.GetControlIndex("winChars", "btnCreateChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = false;
-                    // select button
-                    conNum = Gui.GetControlIndex("winChars", "btnSelectChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = true;
-                    // delete button
-                    conNum = Gui.GetControlIndex("winChars", "btnDelChar_" + (i + 1));
-                    Gui.Windows[winNum].Controls[(int)conNum].Visible = true;
+                    withBlock.Text = "Blank Slot";
                 }
             }
-        }
 
-        public static void Packet_UpdateJob(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-            buffer.WriteInt32(i);
-
+            // hide/show buttons
+            if (isSlotEmpty[(int) i])
             {
-                ref var withBlock = ref Data.Job[i];
-                withBlock.Name = buffer.ReadString();
-                withBlock.Desc = buffer.ReadString();
-
-                withBlock.MaleSprite = buffer.ReadInt32();
-                withBlock.FemaleSprite = buffer.ReadInt32();
-
-                int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
-                for (int q = 0; q < statCount; q++)
-                    withBlock.Stat[q] = buffer.ReadInt32();
-
-                for (int q = 0; q < Core.Constant.MaxStartItems; q++)
-                {
-                    withBlock.StartItem[q] = buffer.ReadInt32();
-                    withBlock.StartValue[q] = buffer.ReadInt32();
-                }
-
-                withBlock.StartMap = buffer.ReadInt32();
-                withBlock.StartX = buffer.ReadByte();
-                withBlock.StartY = buffer.ReadByte();
-                withBlock.BaseExp = buffer.ReadInt32();
+                // create button
+                conNum = Gui.GetControlIndex("winChars", "btnCreateChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = true;
+                // select button
+                conNum = Gui.GetControlIndex("winChars", "btnSelectChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = false;
+                // delete button
+                conNum = Gui.GetControlIndex("winChars", "btnDelChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = false;
             }
-
-            buffer.Dispose();
-        }
-
-        public static void Packet_JobData(ref byte[] data)
-        {
-            int i;
-            int x;
-            var buffer = new ByteStream(data);
-
-            for (i = 0; i < Constant.MaxJobs; i++)
-            {          
-                ref var withBlock = ref Data.Job[i];
-                withBlock.Name = buffer.ReadString();
-                withBlock.Desc = buffer.ReadString();
-
-                withBlock.MaleSprite = buffer.ReadInt32();
-                withBlock.FemaleSprite = buffer.ReadInt32();
-
-                int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
-                for (x = 0; x < statCount; x++)
-                    withBlock.Stat[x] = buffer.ReadInt32();
-
-                for (int q = 0; q < Core.Constant.MaxStartItems; q++)
-                {
-                    withBlock.StartItem[q] = buffer.ReadInt32();
-                    withBlock.StartValue[q] = buffer.ReadInt32();
-                }
-
-                withBlock.StartMap = buffer.ReadInt32();
-                withBlock.StartX = buffer.ReadByte();
-                withBlock.StartY = buffer.ReadByte();
-                withBlock.BaseExp = buffer.ReadInt32();
-            }
-
-            
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_InGame(ref byte[] data)
-        {
-            GameState.InMenu = false;
-            GameState.InGame = true;
-            Gui.HideWindows();
-            GameState.CanMoveNow = true;
-            GameState.MyEditorType = -1;
-            GameState.SkillBuffer = -1;
-            GameState.InShop = -1;
-
-            // show gui
-            Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
-            Gui.HideChat();
-
-            General.GameInit();
-        }
-
-        private static void Packet_PlayerInv(ref byte[] data)
-        {
-            int i;
-            int itemNum;
-            int amount;
-            var buffer = new ByteStream(data);
-
-            for (i = 0; i < Constant.MaxInv; i++)
+            else
             {
-                itemNum = buffer.ReadInt32();
-                amount = buffer.ReadInt32();
-                SetPlayerInv(GameState.MyIndex, i, itemNum);
-                SetPlayerInvValue(GameState.MyIndex, i, amount);
+                // create button
+                conNum = Gui.GetControlIndex("winChars", "btnCreateChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = false;
+                // select button
+                conNum = Gui.GetControlIndex("winChars", "btnSelectChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = true;
+                // delete button
+                conNum = Gui.GetControlIndex("winChars", "btnDelChar_" + (i + 1));
+                Gui.Windows[winNum].Controls[(int) conNum].Visible = true;
             }
-
-            GameLogic.SetGoldLabel();
-
-            buffer.Dispose();
         }
+    }
 
-        private static void Packet_PlayerInvUpdate(ref byte[] data)
+    public static void Packet_UpdateJob(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
         {
-            int n;
-            int i;
-            var buffer = new ByteStream(data);
+            ref var withBlock = ref Data.Job[i];
+            withBlock.Name = buffer.ReadString();
+            withBlock.Desc = buffer.ReadString();
 
-            n = buffer.ReadInt32();
+            withBlock.MaleSprite = buffer.ReadInt32();
+            withBlock.FemaleSprite = buffer.ReadInt32();
 
-            SetPlayerInv(GameState.MyIndex, n, buffer.ReadInt32());
-            SetPlayerInvValue(GameState.MyIndex, n, buffer.ReadInt32());
+            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            for (int q = 0; q < statCount; q++)
+                withBlock.Stat[q]=buffer.ReadInt32();
 
-            GameLogic.SetGoldLabel();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_PlayerWornEquipment(ref byte[] data)
-        {
-            int i;
-            int n;
-            var buffer = new ByteStream(data);
-
-            int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-            for (i = 0; i < equipmentCount; i++)
+            for (int q = 0; q < Core.Constant.MaxStartItems; q++)
             {
-                n = buffer.ReadInt32();
-                SetPlayerEquipment(GameState.MyIndex, n, (Equipment)i);
+                withBlock.StartItem[q]= buffer.ReadInt32();
+                withBlock.StartValue[q]= buffer.ReadInt32();
             }
 
-            buffer.Dispose();
+            withBlock.StartMap = buffer.ReadInt32();
+            withBlock.StartX = buffer.ReadByte();
+            withBlock.StartY = buffer.ReadByte();
+            withBlock.BaseExp = buffer.ReadInt32();
         }
+    }
 
-        private static void Packet_NpcMove(ref byte[] data)
+    public static void Packet_JobData(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        int x;
+        var buffer = new PacketReader(data);
+
+        for (i = 0; i < Constant.MaxJobs; i++)
         {
-            int mapNpcNum;
-            int movement;
-            int x;
-            int y;
-            byte dir;
-            var buffer = new ByteStream(data);
+            ref var withBlock = ref Data.Job[i];
+            withBlock.Name = buffer.ReadString();
+            withBlock.Desc = buffer.ReadString();
 
-            mapNpcNum = buffer.ReadInt32();
-            x = buffer.ReadInt32();
-            y = buffer.ReadInt32();
-            dir = buffer.ReadByte();
-            movement = buffer.ReadInt32();
-
-            ref var withBlock = ref Data.MyMapNpc[mapNpcNum];
-            withBlock.X = x;
-            withBlock.Y = y;
-            withBlock.Dir = dir;
-            withBlock.Moving = (byte)movement;
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_NpcDir(ref byte[] data)
-        {
-            byte dir;
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-            dir = buffer.ReadByte();
-
-            {
-                ref var withBlock = ref Data.MyMapNpc[i];
-                withBlock.Dir = dir;
-                withBlock.Moving = 0;
-            }
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_Attack(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            // Set player to attacking
-            Core.Data.Player[i].Attacking = 1;
-            Core.Data.Player[i].AttackTimer = General.GetTickCount();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_NpcAttack(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            // Set Npc to attacking
-            Data.MyMapNpc[i].Attacking = 1;
-            Data.MyMapNpc[i].AttackTimer = General.GetTickCount();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_GlobalMsg(ref byte[] data)
-        {
-            string msg;
-            var buffer = new ByteStream(data);
-
-            msg = buffer.ReadString();
-
-            buffer.Dispose();
-
-            Text.AddText(msg, (int)Core.Color.Yellow, channel: (byte)ChatChannel.Broadcast);
-        }
-
-        private static void Packet_MapMsg(ref byte[] data)
-        {
-            string msg;
-            var buffer = new ByteStream(data);
-
-            msg = buffer.ReadString();
-
-            buffer.Dispose();
-
-            Text.AddText(msg, (int)Core.Color.White, channel: (byte)ChatChannel.Map);
-
-        }
-
-        private static void Packet_AdminMsg(ref byte[] data)
-        {
-            string msg;
-            var buffer = new ByteStream(data);
-
-            msg = buffer.ReadString();
-
-            buffer.Dispose();
-
-            Text.AddText(msg, (int)Core.Color.BrightCyan, channel: (byte)ChatChannel.Broadcast);
-        }
-
-        private static void Packet_PlayerMsg(ref byte[] data)
-        {
-            string msg;
-            int color;
-            var buffer = new ByteStream(data);
-
-            msg = buffer.ReadString();
-            color = buffer.ReadInt32();
-
-            buffer.Dispose();
-
-            Text.AddText(msg, color, channel: (byte)ChatChannel.Private);
-        }
-
-        private static void Packet_SpawnItem(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            {
-                ref var withBlock = ref Data.MyMapItem[i];
-                withBlock.Num = buffer.ReadInt32();
-                withBlock.Value = buffer.ReadInt32();
-                withBlock.X = buffer.ReadInt32();
-                withBlock.Y = buffer.ReadInt32();
-            }
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_SpawnNpc(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            ref var withBlock = ref Data.MyMapNpc[i];
-            withBlock.Num = buffer.ReadInt32();
-            withBlock.X = buffer.ReadInt32();
-            withBlock.Y = buffer.ReadInt32();
-            withBlock.Dir = buffer.ReadByte();
-
-            for (i = 0; i < Enum.GetValues(typeof(Core.Vital)).Length; i++)
-                withBlock.Vital[i] = buffer.ReadInt32();
-
-            // Client use only
-            withBlock.Moving = 0;
-            
-            buffer.Dispose();
-        }
-
-        private static void Packet_NpcDead(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-            Map.ClearMapNpc(i);
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_UpdateNpc(ref byte[] data)
-        {
-            int i;
-            int x;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            // Update the Npc
-            Data.Npc[i].Animation = buffer.ReadInt32();
-            Data.Npc[i].AttackSay = buffer.ReadString();
-            Data.Npc[i].Behaviour = buffer.ReadByte();
-
-            for (x = 0; x < Constant.MaxDropItems; x++)
-            {
-                Data.Npc[i].DropChance[x] = buffer.ReadInt32();
-                Data.Npc[i].DropItem[x] = buffer.ReadInt32();
-                Data.Npc[i].DropItemValue[x] = buffer.ReadInt32();
-            }
-
-            Data.Npc[i].Exp = buffer.ReadInt32();
-            Data.Npc[i].Faction = buffer.ReadByte();
-            Data.Npc[i].Hp = buffer.ReadInt32();
-            Data.Npc[i].Name = buffer.ReadString();
-            Data.Npc[i].Range = buffer.ReadByte();
-            Data.Npc[i].SpawnTime = buffer.ReadByte();
-            Data.Npc[i].SpawnSecs = buffer.ReadInt32();
-            Data.Npc[i].Sprite = buffer.ReadInt32();
+            withBlock.MaleSprite = buffer.ReadInt32();
+            withBlock.FemaleSprite = buffer.ReadInt32();
 
             int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
             for (x = 0; x < statCount; x++)
-                Data.Npc[i].Stat[x] = buffer.ReadByte();
+                withBlock.Stat[x]= buffer.ReadInt32();
 
-            for (x = 0; x < Constant.MaxNpcSkills; x++)
-                Data.Npc[i].Skill[x] = buffer.ReadByte();
-
-            Data.Npc[i].Level = buffer.ReadByte();
-            Data.Npc[i].Damage = buffer.ReadInt32();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_UpdateSkill(ref byte[] data)
-        {
-            int skillNum;
-            var buffer = new ByteStream(data);
-            skillNum = buffer.ReadInt32();
-
-            Data.Skill[skillNum].AccessReq = buffer.ReadInt32();
-            Data.Skill[skillNum].AoE = buffer.ReadInt32();
-            Data.Skill[skillNum].CastAnim = buffer.ReadInt32();
-            Data.Skill[skillNum].CastTime = buffer.ReadInt32();
-            Data.Skill[skillNum].CdTime = buffer.ReadInt32();
-            Data.Skill[skillNum].JobReq = buffer.ReadInt32();
-            Data.Skill[skillNum].Dir = (byte)buffer.ReadInt32();
-            Data.Skill[skillNum].Duration = buffer.ReadInt32();
-            Data.Skill[skillNum].Icon = buffer.ReadInt32();
-            Data.Skill[skillNum].Interval = buffer.ReadInt32();
-            Data.Skill[skillNum].IsAoE = Conversions.ToBoolean(buffer.ReadInt32());
-            Data.Skill[skillNum].LevelReq = buffer.ReadInt32();
-            Data.Skill[skillNum].Map = buffer.ReadInt32();
-            Data.Skill[skillNum].MpCost = buffer.ReadInt32();
-            Data.Skill[skillNum].Name = buffer.ReadString();
-            Data.Skill[skillNum].Range = buffer.ReadInt32();
-            Data.Skill[skillNum].SkillAnim = buffer.ReadInt32();
-            Data.Skill[skillNum].StunDuration = buffer.ReadInt32();
-            Data.Skill[skillNum].Type = (byte)buffer.ReadInt32();
-            Data.Skill[skillNum].Vital = buffer.ReadInt32();
-            Data.Skill[skillNum].X = buffer.ReadInt32();
-            Data.Skill[skillNum].Y = buffer.ReadInt32();
-
-            Data.Skill[skillNum].IsProjectile = buffer.ReadInt32();
-            Data.Skill[skillNum].Projectile = buffer.ReadInt32();
-
-            Data.Skill[skillNum].KnockBack = (byte)buffer.ReadInt32();
-            Data.Skill[skillNum].KnockBackTiles = (byte)buffer.ReadInt32();
-
-            buffer.Dispose();
-
-        }
-
-        private static void Packet_Skills(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            for (i = 0; i < Constant.MaxPlayerSkills; i++)
-                Core.Data.Player[GameState.MyIndex].Skill[i].Num = buffer.ReadInt32();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_LeftMap(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            Player.ClearPlayer(buffer.ReadInt32());
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_Ping(ref byte[] data)
-        {
-            GameState.PingEnd = General.GetTickCount();
-            GameState.Ping = GameState.PingEnd - GameState.PingStart;
-        }
-
-        private static void Packet_ActionMessage(ref byte[] data)
-        {
-            int x;
-            int y;
-            string message;
-            int color;
-            int tmpType;
-            var buffer = new ByteStream(data);
-
-            message = buffer.ReadString();
-            color = buffer.ReadInt32();
-            tmpType = buffer.ReadInt32();
-            x = buffer.ReadInt32();
-            y = buffer.ReadInt32();
-
-            buffer.Dispose();
-
-            GameLogic.CreateActionMsg(message, color, (byte)tmpType, x, y);
-        }
-
-        private static void Packet_Blood(ref byte[] data)
-        {
-            int x;
-            int y;
-            int sprite;
-            var buffer = new ByteStream(data);
-
-            x = buffer.ReadInt32();
-            y = buffer.ReadInt32();
-
-            // randomise sprite
-            sprite = GameLogic.Rand(1, 3);
-
-            GameState.BloodIndex = (byte)(GameState.BloodIndex + 1);
-            if (GameState.BloodIndex >= byte.MaxValue)
-                GameState.BloodIndex = 1;
-
+            for (int q = 0; q < Core.Constant.MaxStartItems; q++)
             {
-                ref var withBlock = ref Data.Blood[GameState.BloodIndex];
-                withBlock.X = x;
-                withBlock.Y = y;
-                withBlock.Sprite = sprite;
-                withBlock.Timer = General.GetTickCount();
+                withBlock.StartItem[q]= buffer.ReadInt32();
+                withBlock.StartValue[q]= buffer.ReadInt32();
             }
 
-            buffer.Dispose();
+            withBlock.StartMap = buffer.ReadInt32();
+            withBlock.StartX = buffer.ReadByte();
+            withBlock.StartY = buffer.ReadByte();
+            withBlock.BaseExp = buffer.ReadInt32();
         }
-        private static void Packet_NpcVitals(ref byte[] data)
+    }
+
+    private static void Packet_InGame(ReadOnlyMemory<byte> data)
+    {
+        GameState.InMenu = false;
+        GameState.InGame = true;
+        Gui.HideWindows();
+        GameState.CanMoveNow = true;
+        GameState.MyEditorType = EditorType.None;
+        GameState.SkillBuffer = -1;
+        GameState.InShop = -1;
+
+        // show gui
+        Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
+        Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
+        Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
+        Gui.HideChat();
+
+        General.GameInit();
+    }
+
+    private static void Packet_PlayerInv(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        int itemNum;
+        int amount;
+        var buffer = new PacketReader(data);
+
+        for (i = 0; i < Constant.MaxInv; i++)
         {
-            double mapNpcNum;
-            var buffer = new ByteStream(data);
-
-            mapNpcNum = buffer.ReadInt32();
-            for (int i = 0; i < Enum.GetValues(typeof(Core.Vital)).Length; i++)
-                Data.MyMapNpc[(int)mapNpcNum].Vital[i] = buffer.ReadInt32();
-
-            buffer.Dispose();
+            itemNum = buffer.ReadInt32();
+            amount = buffer.ReadInt32();
+            SetPlayerInv(GameState.MyIndex, i, itemNum);
+            SetPlayerInvValue(GameState.MyIndex, i, amount);
         }
 
-        private static void Packet_Cooldown(ref byte[] data)
+        GameLogic.SetGoldLabel();
+    }
+
+    private static void Packet_PlayerInvUpdate(ReadOnlyMemory<byte> data)
+    {
+        int n;
+        int i;
+        var buffer = new PacketReader(data);
+
+        n = buffer.ReadInt32();
+
+        SetPlayerInv(GameState.MyIndex, n, buffer.ReadInt32());
+        SetPlayerInvValue(GameState.MyIndex, n, buffer.ReadInt32());
+
+        GameLogic.SetGoldLabel();
+    }
+
+    private static void Packet_PlayerWornEquipment(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        int n;
+        var buffer = new PacketReader(data);
+
+        int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
+        for (i = 0; i < equipmentCount; i++)
         {
-            int slot;
-            var buffer = new ByteStream(data);
+            n = buffer.ReadInt32();
+            SetPlayerEquipment(GameState.MyIndex, n, (Equipment) i);
+        }
+    }
 
-            slot = buffer.ReadInt32();
-            Core.Data.Player[GameState.MyIndex].Skill[slot].Cd = General.GetTickCount();
+    private static void Packet_NpcMove(ReadOnlyMemory<byte> data)
+    {
+        int mapNpcNum;
+        int movement;
+        int x;
+        int y;
+        byte dir;
+        var buffer = new PacketReader(data);
 
-            buffer.Dispose();
+        mapNpcNum = buffer.ReadInt32();
+        x = buffer.ReadInt32();
+        y = buffer.ReadInt32();
+        dir = buffer.ReadByte();
+        movement = buffer.ReadInt32();
+
+        ref var withBlock = ref Data.MyMapNpc[mapNpcNum];
+        withBlock.X = x;
+        withBlock.Y = y;
+        withBlock.Dir = dir;
+        withBlock.Moving = (byte) movement;
+    }
+
+    private static void Packet_NpcDir(ReadOnlyMemory<byte> data)
+    {
+        byte dir;
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+        dir = buffer.ReadByte();
+
+        {
+            ref var withBlock = ref Data.MyMapNpc[i];
+            withBlock.Dir = dir;
+            withBlock.Moving = 0;
+        }
+    }
+
+    private static void Packet_Attack(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
+        // Set player to attacking
+        Core.Data.Player[i].Attacking = 1;
+        Core.Data.Player[i].AttackTimer = General.GetTickCount();
+    }
+
+    private static void Packet_NpcAttack(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
+        // Set Npc to attacking
+        Data.MyMapNpc[i].Attacking = 1;
+        Data.MyMapNpc[i].AttackTimer = General.GetTickCount();
+    }
+
+    private static void Packet_GlobalMsg(ReadOnlyMemory<byte> data)
+    {
+        string msg;
+        var buffer = new PacketReader(data);
+
+        msg = buffer.ReadString();
+
+
+        Text.AddText(msg, (int) Core.Color.Yellow, channel: (byte) ChatChannel.Broadcast);
+    }
+
+    private static void Packet_MapMsg(ReadOnlyMemory<byte> data)
+    {
+        string msg;
+        var buffer = new PacketReader(data);
+
+        msg = buffer.ReadString();
+
+
+        Text.AddText(msg, (int) Core.Color.White, channel: (byte) ChatChannel.Map);
+    }
+
+    private static void Packet_AdminMsg(ReadOnlyMemory<byte> data)
+    {
+        string msg;
+        var buffer = new PacketReader(data);
+
+        msg = buffer.ReadString();
+
+
+        Text.AddText(msg, (int) Core.Color.BrightCyan, channel: (byte) ChatChannel.Broadcast);
+    }
+
+    private static void Packet_PlayerMsg(ReadOnlyMemory<byte> data)
+    {
+        string msg;
+        int color;
+        var buffer = new PacketReader(data);
+
+        msg = buffer.ReadString();
+        color = buffer.ReadInt32();
+
+
+        Text.AddText(msg, color, channel: (byte) ChatChannel.Private);
+    }
+
+    private static void Packet_SpawnItem(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
+        {
+            ref var withBlock = ref Data.MyMapItem[i];
+            withBlock.Num = buffer.ReadInt32();
+            withBlock.Value = buffer.ReadInt32();
+            withBlock.X = buffer.ReadInt32();
+            withBlock.Y = buffer.ReadInt32();
+        }
+    }
+
+    private static void Packet_SpawnNpc(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
+        ref var withBlock = ref Data.MyMapNpc[i];
+        withBlock.Num = buffer.ReadInt32();
+        withBlock.X = buffer.ReadInt32();
+        withBlock.Y = buffer.ReadInt32();
+        withBlock.Dir = buffer.ReadByte();
+
+        for (i = 0; i < Enum.GetValues(typeof(Core.Vital)).Length; i++)
+            withBlock.Vital[i]= buffer.ReadInt32();
+
+        // Client use only
+        withBlock.Moving = 0;
+    }
+
+    private static void Packet_NpcDead(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+        Map.ClearMapNpc(i);
+    }
+
+    private static void Packet_UpdateNpc(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        int x;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
+        // Update the Npc
+        Data.Npc[i].Animation = buffer.ReadInt32();
+        Data.Npc[i].AttackSay = buffer.ReadString();
+        Data.Npc[i].Behaviour = buffer.ReadByte();
+
+        for (x = 0; x < Constant.MaxDropItems; x++)
+        {
+            Data.Npc[i].DropChance[x]= buffer.ReadInt32();
+            Data.Npc[i].DropItem[x]= buffer.ReadInt32();
+            Data.Npc[i].DropItemValue[x]= buffer.ReadInt32();
         }
 
-        private static void Packet_ClearSkillBuffer(ref byte[] data)
+        Data.Npc[i].Exp = buffer.ReadInt32();
+        Data.Npc[i].Faction = buffer.ReadByte();
+        Data.Npc[i].Hp = buffer.ReadInt32();
+        Data.Npc[i].Name = buffer.ReadString();
+        Data.Npc[i].Range = buffer.ReadByte();
+        Data.Npc[i].SpawnTime = buffer.ReadByte();
+        Data.Npc[i].SpawnSecs = buffer.ReadInt32();
+        Data.Npc[i].Sprite = buffer.ReadInt32();
+
+        int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+        for (x = 0; x < statCount; x++)
+            Data.Npc[i].Stat[x]= buffer.ReadByte();
+
+        for (x = 0; x < Constant.MaxNpcSkills; x++)
+            Data.Npc[i].Skill[x]= buffer.ReadByte();
+
+        Data.Npc[i].Level = buffer.ReadByte();
+        Data.Npc[i].Damage = buffer.ReadInt32();
+    }
+
+    private static void Packet_UpdateSkill(ReadOnlyMemory<byte> data)
+    {
+        int skillNum;
+        var buffer = new PacketReader(data);
+        skillNum = buffer.ReadInt32();
+
+        Data.Skill[skillNum].AccessReq = buffer.ReadInt32();
+        Data.Skill[skillNum].AoE = buffer.ReadInt32();
+        Data.Skill[skillNum].CastAnim = buffer.ReadInt32();
+        Data.Skill[skillNum].CastTime = buffer.ReadInt32();
+        Data.Skill[skillNum].CdTime = buffer.ReadInt32();
+        Data.Skill[skillNum].JobReq = buffer.ReadInt32();
+        Data.Skill[skillNum].Dir = (byte) buffer.ReadInt32();
+        Data.Skill[skillNum].Duration = buffer.ReadInt32();
+        Data.Skill[skillNum].Icon = buffer.ReadInt32();
+        Data.Skill[skillNum].Interval = buffer.ReadInt32();
+        Data.Skill[skillNum].IsAoE = Conversions.ToBoolean(buffer.ReadInt32());
+        Data.Skill[skillNum].LevelReq = buffer.ReadInt32();
+        Data.Skill[skillNum].Map = buffer.ReadInt32();
+        Data.Skill[skillNum].MpCost = buffer.ReadInt32();
+        Data.Skill[skillNum].Name = buffer.ReadString();
+        Data.Skill[skillNum].Range = buffer.ReadInt32();
+        Data.Skill[skillNum].SkillAnim = buffer.ReadInt32();
+        Data.Skill[skillNum].StunDuration = buffer.ReadInt32();
+        Data.Skill[skillNum].Type = (byte) buffer.ReadInt32();
+        Data.Skill[skillNum].Vital = buffer.ReadInt32();
+        Data.Skill[skillNum].X = buffer.ReadInt32();
+        Data.Skill[skillNum].Y = buffer.ReadInt32();
+
+        Data.Skill[skillNum].IsProjectile = buffer.ReadInt32();
+        Data.Skill[skillNum].Projectile = buffer.ReadInt32();
+
+        Data.Skill[skillNum].KnockBack = (byte) buffer.ReadInt32();
+        Data.Skill[skillNum].KnockBackTiles = (byte) buffer.ReadInt32();
+    }
+
+    private static void Packet_Skills(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        for (i = 0; i < Constant.MaxPlayerSkills; i++)
+            Core.Data.Player[GameState.MyIndex].Skill[i].Num = buffer.ReadInt32();
+    }
+
+    private static void Packet_LeftMap(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        Player.ClearPlayer(buffer.ReadInt32());
+    }
+
+    private static void Packet_Ping(ReadOnlyMemory<byte> data)
+    {
+        GameState.PingEnd = General.GetTickCount();
+        GameState.Ping = GameState.PingEnd - GameState.PingStart;
+    }
+
+    private static void Packet_ActionMessage(ReadOnlyMemory<byte> data)
+    {
+        int x;
+        int y;
+        string message;
+        int color;
+        int tmpType;
+        var buffer = new PacketReader(data);
+
+        message = buffer.ReadString();
+        color = buffer.ReadInt32();
+        tmpType = buffer.ReadInt32();
+        x = buffer.ReadInt32();
+        y = buffer.ReadInt32();
+
+
+        GameLogic.CreateActionMsg(message, color, (byte) tmpType, x, y);
+    }
+
+    private static void Packet_Blood(ReadOnlyMemory<byte> data)
+    {
+        int x;
+        int y;
+        int sprite;
+        var buffer = new PacketReader(data);
+
+        x = buffer.ReadInt32();
+        y = buffer.ReadInt32();
+
+        // randomise sprite
+        sprite = GameLogic.Rand(1, 3);
+
+        GameState.BloodIndex = (byte) (GameState.BloodIndex + 1);
+        if (GameState.BloodIndex >= byte.MaxValue)
+            GameState.BloodIndex = 1;
+
         {
-            var buffer = new ByteStream(data);
-
-            GameState.SkillBuffer = -1;
-            GameState.SkillBufferTimer = 0;
-
-            buffer.Dispose();
+            ref var withBlock = ref Data.Blood[GameState.BloodIndex];
+            withBlock.X = x;
+            withBlock.Y = y;
+            withBlock.Sprite = sprite;
+            withBlock.Timer = General.GetTickCount();
         }
+    }
 
-        private static void Packet_SayMessage(ref byte[] data)
+    private static void Packet_NpcVitals(ReadOnlyMemory<byte> data)
+    {
+        double mapNpcNum;
+        var buffer = new PacketReader(data);
+
+        mapNpcNum = buffer.ReadInt32();
+        for (int i = 0; i < Enum.GetValues(typeof(Core.Vital)).Length; i++)
+            Data.MyMapNpc[(int) mapNpcNum].Vital[i]= buffer.ReadInt32();
+    }
+
+    private static void Packet_Cooldown(ReadOnlyMemory<byte> data)
+    {
+        int slot;
+        var buffer = new PacketReader(data);
+
+        slot = buffer.ReadInt32();
+        Core.Data.Player[GameState.MyIndex].Skill[slot].Cd = General.GetTickCount();
+    }
+
+    private static void Packet_ClearSkillBuffer(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        GameState.SkillBuffer = -1;
+        GameState.SkillBufferTimer = 0;
+    }
+
+    private static void Packet_SayMessage(ReadOnlyMemory<byte> data)
+    {
+        int access;
+        string name;
+        string message;
+        string header;
+        bool pk;
+        byte channelType;
+        byte color;
+        var buffer = new PacketReader(data);
+
+        name = buffer.ReadString();
+        access = buffer.ReadInt32();
+        pk = buffer.ReadBoolean();
+        message = buffer.ReadString();
+        header = buffer.ReadString();
+
+        // Check access level
+        switch (access)
         {
-            int access;
-            string name;
-            string message;
-            string header;
-            bool pk;
-            byte channelType;
-            byte color;
-            var buffer = new ByteStream(data);
-
-            name = buffer.ReadString();
-            access = buffer.ReadInt32();
-            pk = buffer.ReadBoolean();
-            message = buffer.ReadString();
-            header = buffer.ReadString();
-
-            // Check access level
-            switch (access)
+            case (int) AccessLevel.Player:
             {
-                case (int)AccessLevel.Player:
-                    {
-                        color = (byte)Core.Color.White;
-                        break;
-                    }
-                case (int)AccessLevel.Moderator:
-                    {
-                        color = (byte)Core.Color.Cyan;
-                        break;
-                    }
-                case (int)AccessLevel.Mapper:
-                    {
-                        color = (byte)Core.Color.Green;
-                        break;
-                    }
-                case (int)AccessLevel.Developer:
-                    {
-                        color = (byte)Core.Color.BrightBlue;
-                        break;
-                    }
-                case (int)AccessLevel.Owner:
-                    {
-                        color = (byte)Core.Color.Yellow;
-                        break;
-                    }
-
-                default:
-                    {
-                        color = (byte)Core.Color.White;
-                        break;
-                    }
+                color = (byte) Core.Color.White;
+                break;
+            }
+            case (int) AccessLevel.Moderator:
+            {
+                color = (byte) Core.Color.Cyan;
+                break;
+            }
+            case (int) AccessLevel.Mapper:
+            {
+                color = (byte) Core.Color.Green;
+                break;
+            }
+            case (int) AccessLevel.Developer:
+            {
+                color = (byte) Core.Color.BrightBlue;
+                break;
+            }
+            case (int) AccessLevel.Owner:
+            {
+                color = (byte) Core.Color.Yellow;
+                break;
             }
 
-            if (pk)
-                color = (byte)Core.Color.BrightRed;
-
-            // find channel
-            channelType = 0;
-            switch (header ?? "")
+            default:
             {
-                case "[Map]:":
-                    {
-                        channelType = (byte)ChatChannel.Map;
-                        break;
-                    }
-                case "[Global]:":
-                    {
-                        channelType = (byte)ChatChannel.Broadcast;
-                        break;
-                    }
+                color = (byte) Core.Color.White;
+                break;
+            }
+        }
+
+        if (pk)
+            color = (byte) Core.Color.BrightRed;
+
+        // find channel
+        channelType = 0;
+        switch (header ?? "")
+        {
+            case "[Map]:":
+            {
+                channelType = (byte) ChatChannel.Map;
+                break;
+            }
+            case "[Global]:":
+            {
+                channelType = (byte) ChatChannel.Broadcast;
+                break;
+            }
+        }
+
+        // add to the chat box
+        Text.AddText(header + " " + name + ": " + message, color, channel: channelType);
+    }
+
+    private static void Packet_Stunned(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        GameState.StunDuration = buffer.ReadInt32();
+    }
+
+    private static void Packet_MapWornEquipment(ReadOnlyMemory<byte> data)
+    {
+        int playerNum;
+        int n;
+        var buffer = new PacketReader(data);
+
+        playerNum = buffer.ReadInt32();
+        int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
+        for (int i = 0; i < equipmentCount; i++)
+        {
+            n = buffer.ReadInt32();
+            SetPlayerEquipment(playerNum, n, (Equipment) i);
+        }
+    }
+
+    private static void Packet_Target(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        GameState.MyTarget = buffer.ReadInt32();
+        GameState.MyTargetType = buffer.ReadInt32();
+    }
+
+    private static void Packet_MapReport(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        for (i = 0; i < Constant.MaxMaps; i++)
+            GameState.MapNames[i]= buffer.ReadString();
+
+        GameState.InitMapReport = true;
+    }
+
+    private static void Packet_Admin(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitAdminForm = true;
+    }
+
+    private static void Packet_Critical(ReadOnlyMemory<byte> data)
+    {
+        GameState.ShakeTimerEnabled = true;
+        GameState.ShakeTimer = General.GetTickCount();
+    }
+
+    private static void Packet_RClick(ReadOnlyMemory<byte> data)
+    {
+
+    }
+
+    private static void Packet_Emote(ReadOnlyMemory<byte> data)
+    {
+        int index;
+        int emote;
+        var buffer = new PacketReader(data);
+        index = buffer.ReadInt32();
+        emote = buffer.ReadInt32();
+
+        {
+            ref var withBlock = ref Core.Data.Player[index];
+            withBlock.Emote = emote;
+            withBlock.EmoteTimer = General.GetTickCount() + 5000;
+        }
+    }
+
+    private static void Packet_ChatBubble(ReadOnlyMemory<byte> data)
+    {
+        int targetType;
+        int target;
+        string message;
+        int color;
+        var buffer = new PacketReader(data);
+
+        target = buffer.ReadInt32();
+        targetType = buffer.ReadInt32();
+        message = buffer.ReadString();
+        color = buffer.ReadInt32();
+        GameLogic.AddChatBubble(target, (byte) targetType, message, color);
+    }
+
+    private static void Packet_LeftGame(ReadOnlyMemory<byte> data)
+    {
+        GameLogic.LogoutGame();
+    }
+
+    // *****************
+    // ***  EDITORS  ***
+    // *****************
+    private static void Packet_AnimationEditor(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitAnimationEditor = true;
+    }
+
+    private static void Packet_JobEditor(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitJobEditor = true;
+    }
+
+    public static void Packet_EditItem(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitItemEditor = true;
+    }
+
+    private static void Packet_NpcEditor(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitNpcEditor = true;
+    }
+
+    private static void Packet_ResourceEditor(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitResourceEditor = true;
+    }
+
+    public static void HandleProjectileEditor(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitProjectileEditor = true;
+    }
+
+    private static void Packet_EditShop(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitShopEditor = true;
+    }
+
+    private static void Packet_EditSkill(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitSkillEditor = true;
+    }
+
+    private static void Packet_Clock(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+        Clock.Instance.GameSpeed = buffer.ReadInt32();
+        Clock.Instance.Time = new DateTime(BitConverter.ToInt64(buffer.ReadBytes().ToArray(), 0));
+    }
+
+    private static void Packet_Time(ReadOnlyMemory<byte> data)
+    {
+        var buffer = new PacketReader(data);
+
+        Clock.Instance.TimeOfDay = (TimeOfDay) buffer.ReadByte();
+
+        switch (Clock.Instance.TimeOfDay)
+        {
+            case TimeOfDay.Dawn:
+            {
+                Text.AddText("A chilling, refreshing, breeze has come with the morning.", (int) Core.Color.DarkGray);
+                break;
             }
 
-            // add to the chat box
-            Text.AddText(header + " " + name + ": " + message, color, channel: channelType);
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_Stunned(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            GameState.StunDuration = buffer.ReadInt32();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_MapWornEquipment(ref byte[] data)
-        {
-            int playerNum;
-            int n;
-            var buffer = new ByteStream(data);
-
-            playerNum = buffer.ReadInt32();
-            int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-            for (int i = 0; i < equipmentCount; i++)
+            case TimeOfDay.Day:
             {
-                n = buffer.ReadInt32();
-                SetPlayerEquipment(playerNum, n, (Equipment)i);
+                Text.AddText("Day has dawned in this region.", (int) Core.Color.DarkGray);
+                break;
             }
 
-            buffer.Dispose();
-        }
-
-        private static void Packet_Target(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            GameState.MyTarget = buffer.ReadInt32();
-            GameState.MyTargetType = buffer.ReadInt32();
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_MapReport(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            for (i = 0; i < Constant.MaxMaps; i++)
-                GameState.MapNames[i] = buffer.ReadString();
-
-            GameState.InitMapReport = true;
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_Admin(ref byte[] data)
-        {
-            GameState.InitAdminForm = true;
-        }
-
-        private static void Packet_Critical(ref byte[] data)
-        {
-            GameState.ShakeTimerEnabled = true;
-            GameState.ShakeTimer = General.GetTickCount();
-        }
-
-        private static void Packet_RClick(ref byte[] data)
-        {
-
-        }
-
-        private static void Packet_Emote(ref byte[] data)
-        {
-            int index;
-            int emote;
-            var buffer = new ByteStream(data);
-            index = buffer.ReadInt32();
-            emote = buffer.ReadInt32();
-
+            case TimeOfDay.Dusk:
             {
-                ref var withBlock = ref Core.Data.Player[index];
-                withBlock.Emote = emote;
-                withBlock.EmoteTimer = General.GetTickCount() + 5000;
+                Text.AddText("Dusk has begun darkening the skies...", (int) Core.Color.DarkGray);
+                break;
             }
 
-            buffer.Dispose();
-
-        }
-
-        private static void Packet_ChatBubble(ref byte[] data)
-        {
-            int targetType;
-            int target;
-            string message;
-            int color;
-            var buffer = new ByteStream(data);
-
-            target = buffer.ReadInt32();
-            targetType = buffer.ReadInt32();
-            message = buffer.ReadString();
-            color = buffer.ReadInt32();
-            GameLogic.AddChatBubble(target, (byte)targetType, message, color);
-
-            buffer.Dispose();
-
-        }
-
-        private static void Packet_LeftGame(ref byte[] data)
-        {
-            GameLogic.LogoutGame();
-        }
-
-        // *****************
-        // ***  EDITORS  ***
-        // *****************
-        private static void Packet_AnimationEditor(ref byte[] data)
-        {
-            GameState.InitAnimationEditor = true;
-        }
-
-        private static void Packet_JobEditor(ref byte[] data)
-        {
-            GameState.InitJobEditor = true;
-        }
-
-        public static void Packet_EditItem(ref byte[] data)
-        {
-            GameState.InitItemEditor = true;
-        }
-
-        private static void Packet_NpcEditor(ref byte[] data)
-        {
-            GameState.InitNpcEditor = true;
-        }
-
-        private static void Packet_ResourceEditor(ref byte[] data)
-        {
-            GameState.InitResourceEditor = true;
-        }
-        public static void HandleProjectileEditor(ref byte[] data)
-        {
-            GameState.InitProjectileEditor = true;
-        }
-
-        private static void Packet_EditShop(ref byte[] data)
-        {
-            GameState.InitShopEditor = true;
-        }
-
-        private static void Packet_EditSkill(ref byte[] data)
-        {
-            GameState.InitSkillEditor = true;
-        }
-
-        private static void Packet_Clock(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-            Clock.Instance.GameSpeed = buffer.ReadInt32();
-            Clock.Instance.Time = new DateTime(BitConverter.ToInt64(buffer.ReadBytes().ToArray(), 0));
-
-            buffer.Dispose();
-        }
-
-        private static void Packet_Time(ref byte[] data)
-        {
-            var buffer = new ByteStream(data);
-
-            Clock.Instance.TimeOfDay = (TimeOfDay)buffer.ReadByte();
-
-            switch (Clock.Instance.TimeOfDay)
+            default:
             {
-                case TimeOfDay.Dawn:
-                    {
-                        Text.AddText("A chilling, refreshing, breeze has come with the morning.", (int)Core.Color.DarkGray);
-                        break;
-                    }
-
-                case TimeOfDay.Day:
-                    {
-                        Text.AddText("Day has dawned in this region.", (int)Core.Color.DarkGray);
-                        break;
-                    }
-
-                case TimeOfDay.Dusk:
-                    {
-                        Text.AddText("Dusk has begun darkening the skies...", (int)Core.Color.DarkGray);
-                        break;
-                    }
-
-                default:
-                    {
-                        Text.AddText("Night has fallen upon the weary travelers.", (int)Core.Color.DarkGray);
-                        break;
-                    }
+                Text.AddText("Night has fallen upon the weary travelers.", (int) Core.Color.DarkGray);
+                break;
             }
-
-            buffer.Dispose();
         }
+    }
 
-        public static void Packet_Hotbar(ref byte[] data)
+    public static void Packet_Hotbar(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        for (i = 0; i < Constant.MaxHotbar; i++)
         {
-            int i;
-            var buffer = new ByteStream(data);
-
-            for (i = 0; i < Constant.MaxHotbar; i++)
-            {
-                Core.Data.Player[GameState.MyIndex].Hotbar[i].Slot = buffer.ReadInt32();
-                Core.Data.Player[GameState.MyIndex].Hotbar[i].SlotType = (byte)buffer.ReadInt32();
-            }
-
-            buffer.Dispose();
+            Core.Data.Player[GameState.MyIndex].Hotbar[i].Slot = buffer.ReadInt32();
+            Core.Data.Player[GameState.MyIndex].Hotbar[i].SlotType = (byte) buffer.ReadInt32();
         }
+    }
 
-        public static void Packet_EditMoral(ref byte[] data)
+    public static void Packet_EditMoral(ReadOnlyMemory<byte> data)
+    {
+        GameState.InitMoralEditor = true;
+    }
+
+    public static void Packet_UpdateMoral(ReadOnlyMemory<byte> data)
+    {
+        int i;
+        var buffer = new PacketReader(data);
+
+        i = buffer.ReadInt32();
+
         {
-            GameState.InitMoralEditor = true;
+            ref var withBlock = ref Data.Moral[i];
+            withBlock.Name = buffer.ReadString();
+            withBlock.Color = buffer.ReadByte();
+            withBlock.NpcBlock = buffer.ReadBoolean();
+            withBlock.PlayerBlock = buffer.ReadBoolean();
+            withBlock.DropItems = buffer.ReadBoolean();
+            withBlock.CanCast = buffer.ReadBoolean();
+            withBlock.CanDropItem = buffer.ReadBoolean();
+            withBlock.CanPickupItem = buffer.ReadBoolean();
+            withBlock.CanPk = buffer.ReadBoolean();
+            withBlock.DropItems = buffer.ReadBoolean();
+            withBlock.LoseExp = buffer.ReadBoolean();
         }
-
-        public static void Packet_UpdateMoral(ref byte[] data)
-        {
-            int i;
-            var buffer = new ByteStream(data);
-
-            i = buffer.ReadInt32();
-
-            {
-                ref var withBlock = ref Data.Moral[i];
-                withBlock.Name = buffer.ReadString();
-                withBlock.Color = buffer.ReadByte();
-                withBlock.NpcBlock = buffer.ReadBoolean();
-                withBlock.PlayerBlock = buffer.ReadBoolean();
-                withBlock.DropItems = buffer.ReadBoolean();
-                withBlock.CanCast = buffer.ReadBoolean();
-                withBlock.CanDropItem = buffer.ReadBoolean();
-                withBlock.CanPickupItem = buffer.ReadBoolean();
-                withBlock.CanPk = buffer.ReadBoolean();
-                withBlock.DropItems = buffer.ReadBoolean();
-                withBlock.LoseExp = buffer.ReadBoolean();
-            }
-
-            buffer.Dispose();
-        }
-
     }
 }

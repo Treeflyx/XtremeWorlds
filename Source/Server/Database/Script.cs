@@ -25,7 +25,6 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using Server.Game;
-using static Server.General;
 
 public class Script
 {
@@ -153,6 +152,7 @@ public class Script
         // send vitals
         NetworkSend.SendVitals(index);
     }
+
     public void UseItem(int index, int itemNum, int invNum)
     {
         int i;
@@ -886,7 +886,7 @@ public class Script
                                 resData.Timer = now;
                                 resData.State = 0;
                                 resData.Health = (byte)Data.Resource[resourceindex].Health;
-                                Server.Resource.SendMapResourceToMap(mapNum, i);
+                                Server.Resource.SendMapResourceToMap(mapNum);
                             }
                         }
                     }

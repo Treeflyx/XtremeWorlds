@@ -23,7 +23,7 @@ internal sealed class NetworkChannel<TSession>(ILogger<NetworkChannel<TSession>>
             return;
         }
 
-        try
+        if (System.Diagnostics.Debugger.IsAttached)
         {
             await channelProxy.OnConnectedAsync(this, cancellationToken);
 
@@ -31,21 +31,32 @@ internal sealed class NetworkChannel<TSession>(ILogger<NetworkChannel<TSession>>
                 RunSend(cancellationToken),
                 RunReceive(channelProxy, cancellationToken));
         }
-        catch (Exception ex) when (ex is IOException or ObjectDisposedException or OperationCanceledException)
+        else
         {
-            logger.LogDebug(ex, "Network connection terminated");
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Unexpected exception handling network connection");
-        }
-        finally
-        {
-            await channelProxy.OnDisconnectedAsync(this, cancellationToken);
+            try
+            {
+                await channelProxy.OnConnectedAsync(this, cancellationToken);
 
-            tcpClient.Close();
+                await Task.WhenAll(
+                    RunSend(cancellationToken),
+                    RunReceive(channelProxy, cancellationToken));
+            }
+            catch (Exception ex) when (ex is IOException or ObjectDisposedException or OperationCanceledException)
+            {
+                logger.LogDebug(ex, "Network connection terminated");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Unexpected exception handling network connection");
+            }
+            finally
+            {
+                await channelProxy.OnDisconnectedAsync(this, cancellationToken);
 
-            session.Dispose();
+                tcpClient.Close();
+
+                session.Dispose();
+            }
         }
     }
 

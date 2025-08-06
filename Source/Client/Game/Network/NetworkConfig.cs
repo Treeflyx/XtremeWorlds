@@ -1,124 +1,140 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using Client.Net;
 using Core;
-using Mirage.Sharp.Asfw.Network;
 
-namespace Client
+namespace Client;
+
+public static class NetworkConfig
 {
-
-    public class NetworkConfig
+    private sealed class NetworkEventHandler : INetworkEventHandler
     {
-        private static NetworkClient _socket;
+        private const int BufferSize = 0x2000;
+        private readonly GamePacketParser _parser = new();
+        private readonly byte[] _buffer = new byte[BufferSize];
+        private int _bufferOffset;
 
-        public static NetworkClient Socket
-        {
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            get
-            {
-                return _socket;
-            }
-
-            [MethodImpl(MethodImplOptions.Synchronized)]
-            set
-            {
-                if (_socket != null)
-                {
-                    _socket.ConnectionSuccess -= Socket_ConnectionSuccess;
-                    _socket.ConnectionFailed -= Socket_ConnectionFailed;
-                    _socket.ConnectionLost -= Socket_ConnectionLost;
-                    _socket.CrashReport -= Socket_CrashReport;
-                    _socket.TrafficReceived -= Socket_TrafficReceived;
-                    _socket.PacketReceived -= Socket_PacketReceived;
-                }
-
-                _socket = value;
-                if (_socket != null)
-                {
-                    _socket.ConnectionSuccess += Socket_ConnectionSuccess;
-                    _socket.ConnectionFailed += Socket_ConnectionFailed;
-                    _socket.ConnectionLost += Socket_ConnectionLost;
-                    _socket.CrashReport += Socket_CrashReport;
-                    _socket.TrafficReceived += Socket_TrafficReceived;
-                    _socket.PacketReceived += Socket_PacketReceived;
-                }
-            }
-        }
-
-        public static void InitNetwork()
-        {
-            try
-            {
-                // Initialize the network client with packet count and buffer size.
-                Socket = new NetworkClient((int)Packets.ServerPackets.Count, 8192);
-
-                // Start the connection attempt.
-                Socket.ConnectionSuccess += OnConnectionSuccess;
-
-                Socket.Connect(SettingsManager.Instance.Ip, SettingsManager.Instance.Port); // Adjust IP and port as needed
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Network initialization failed: {ex.Message}");
-            }
-        }
-
-        private static void OnConnectionSuccess()
-        {
-            Console.WriteLine("Connection established. Starting packet router...");
-            NetworkReceive.PacketRouter();
-        }
-
-        public static void DestroyNetwork()
-        {
-            // Calling a disconnect is not necessary when using destroy network as
-            // Dispose already calls it and cleans up the memory internally.
-            Socket?.Dispose();
-        }
-
-        #region  Events 
-
-        private static void Socket_ConnectionSuccess()
+        public Task OnConnectedAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("Connection success.");
+            Console.WriteLine("Connection established. Starting packet router...");
+
+            return Task.CompletedTask;
         }
 
-        private static void Socket_ConnectionFailed()
-        {
-            Console.WriteLine("Failed to connect to the server. Retrying...");
-            InitNetwork();
-        }
-
-        private static void Socket_ConnectionLost()
+        public Task OnDisconnectedAsync(CancellationToken cancellationToken)
         {
             Console.WriteLine("Connection lost.");
+
+            return Task.CompletedTask;
         }
 
-        private static void Socket_CrashReport(string err)
+        public Task OnBytesReceivedAsync(ReadOnlyMemory<byte> bytes, CancellationToken cancellationToken)
         {
-            GameLogic.LogoutGame();
-            GameLogic.DialogueAlert((byte)SystemMessage.Crashed);
+            var space = BufferSize - _bufferOffset;
+            if (bytes.Length > space)
+            {
+                throw new InvalidOperationException("Buffer is full");
+            }
 
-            var currentDateTime = DateTime.Now;
-            string timestampForFileName = currentDateTime.ToString("yyyyMMdd_HHmmss");
-            string logFileName = $"{timestampForFileName}.txt";
+            bytes.Span.CopyTo(_buffer.AsSpan(_bufferOffset));
 
-            Core.Log.Add(err, logFileName);
+            _bufferOffset += bytes.Length;
+            if (_bufferOffset == 0)
+            {
+                return Task.CompletedTask;
+            }
+
+            var count = _parser.Parse(_buffer.AsMemory(0, _bufferOffset));
+            if (count == 0)
+            {
+                return Task.CompletedTask;
+            }
+
+            var bytesLeft = _bufferOffset - count;
+            if (bytesLeft > 0)
+            {
+                _buffer.AsSpan(_bufferOffset, bytesLeft).CopyTo(_buffer.AsSpan(0));
+            }
+
+            _bufferOffset = bytesLeft;
+            
+            return Task.CompletedTask;
         }
+    }
 
-        private static void Socket_TrafficReceived(int size, ref byte[] data)
+    private static readonly NetworkClient Client = new();
+    private static readonly NetworkEventHandler EventHandler = new();
+    private static readonly CancellationTokenSource CancellationTokenSource = new();
+
+    public static bool IsConnected => Client.Connected;
+    
+    public static async Task InitNetwork()
+    {
+        await Client.StartAsync(
+            SettingsManager.Instance.Ip,
+            SettingsManager.Instance.Port,
+            EventHandler,
+            CancellationTokenSource.Token);
+    }
+
+    public static void DestroyNetwork()
+    {
+        CancellationTokenSource.Cancel();
+    }
+
+    public static void SendData(byte[] data)
+    {
+        Client.Send(data);
+    }
+
+    public static void SendData(ReadOnlySpan<byte> data)
+    {
+        Client.Send(data.ToArray());
+    }
+
+    public static void SendData(ReadOnlySpan<byte> data, int head)
+    {
+        if (data.Length < head)
         {
-            Console.WriteLine("Traffic Received : [Size: " + size + "]");
-            byte[] tmpData = data;
-            // Put breakline on tmpData to look at what is contained in data at runtime in the VS logger.
+            Console.WriteLine("Invalid data length.");
+            return;
         }
 
-        private static void Socket_PacketReceived(int size, int header, ref byte[] data)
-        {
-            Console.WriteLine("Packet Received : [Size: " + size + "| Packet: " + ((Packets.ServerPackets)header).ToString() + "]");
-            byte[] tmpData = data;
-            // Put breakline on tmpData to look at what is contained in data at runtime in the VS logger.
-        }
-        #endregion
+        var buffer = new byte[head + 4];
+        
+        Buffer.BlockCopy(BitConverter.GetBytes(head), 0, buffer, 0, 4);
+        Buffer.BlockCopy(data[..head].ToArray(), 0, buffer, 4, head);
+        
+        SendData(buffer);
+    }
+    
+    private static void Socket_ConnectionFailed()
+    {
+        Console.WriteLine("Failed to connect to the server. Retrying...");
+    }
 
+    private static void Socket_ConnectionLost()
+    {
+    }
+
+    private static void Socket_CrashReport(string err)
+    {
+        GameLogic.LogoutGame();
+        GameLogic.DialogueAlert((byte) SystemMessage.Crashed);
+
+        var currentDateTime = DateTime.Now;
+        string timestampForFileName = currentDateTime.ToString("yyyyMMdd_HHmmss");
+        string logFileName = $"{timestampForFileName}.txt";
+
+        Log.Add(err, logFileName);
+    }
+
+    private static void Socket_TrafficReceived(int size, ref byte[] data)
+    {
+        Console.WriteLine("Traffic Received : [Size: " + size + "]");
+    }
+
+    private static void Socket_PacketReceived(int size, int header, ref byte[] data)
+    {
+        Console.WriteLine("Packet Received : [Size: " + size + "| Packet: " + ((Packets.ServerPackets) header).ToString() + "]");
     }
 }

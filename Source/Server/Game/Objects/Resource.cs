@@ -1,464 +1,377 @@
-﻿using System;
-using Core;
-using Microsoft.VisualBasic;
+﻿using Core;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Server.Game;
 using Server.Game.Net;
 using Server.Net;
 using static Core.Global.Command;
 using static Core.Packets;
+using Type = Core.Type;
 
-namespace Server
+namespace Server;
+
+public static class Resource
 {
-    public class Resource
+    private static void SaveResource(int resourceNum)
     {
-        #region Database
+        var json = JsonConvert.SerializeObject(Data.Resource[resourceNum]);
 
-        public static void SaveResource(int resourceNum)
+        if (Database.RowExists(resourceNum, "resource"))
         {
-            string json = JsonConvert.SerializeObject(Data.Resource[resourceNum]).ToString();
+            Database.UpdateRow(resourceNum, json, "resource", "data");
+        }
+        else
+        {
+            Database.InsertRow(resourceNum, json, "resource");
+        }
+    }
 
-            if (Database.RowExists(resourceNum, "resource"))
-            {
-                Database.UpdateRow(resourceNum, json, "resource", "data");
-            }
-            else
-            {
-                Database.InsertRow(resourceNum, json, "resource");
-            }
+    public static async Task LoadResourcesAsync()
+    {
+        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxResources), LoadResourceAsync);
+    }
+
+    public static async ValueTask LoadResourceAsync(int resourceNum, CancellationToken cancellationToken)
+    {
+        var data = await Database.SelectRowAsync(resourceNum, "resource", "data");
+        if (data is null)
+        {
+            ClearResource(resourceNum);
+            return;
         }
 
-        public static async System.Threading.Tasks.Task LoadResourcesAsync()
+        var resourceData = JObject.FromObject(data).ToObject<Type.Resource>();
+
+        Data.Resource[resourceNum] = resourceData;
+    }
+
+    public static void ClearResource(int resourceNum)
+    {
+        Data.Resource[resourceNum].Name = "";
+        Data.Resource[resourceNum].EmptyMessage = "";
+        Data.Resource[resourceNum].SuccessMessage = "";
+    }
+
+    public static void CacheResources(int mapNum)
+    {
+        var resourceCount = 0;
+
+        for (var x = 0; x < Data.Map[mapNum].MaxX; x++)
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxResources).Select(i => Task.Run(() => LoadResourceAsync(i)));
-            await System.Threading.Tasks.Task.WhenAll(tasks);
-        }
-
-        public static async System.Threading.Tasks.Task LoadResourceAsync(int resourceNum)
-        {
-            JObject data;
-
-            data = await Database.SelectRowAsync(resourceNum, "resource", "data");
-
-            if (data is null)
+            for (var y = 0; y < Data.Map[mapNum].MaxY; y++)
             {
-                ClearResource(resourceNum);
-                return;
-            }
-
-            var resourceData = JObject.FromObject(data).ToObject<Core.Type.Resource>();
-            Data.Resource[resourceNum] = resourceData;
-        }
-
-        public static void ClearResource(int index)
-        {
-            Data.Resource[index].Name = "";
-            Data.Resource[index].EmptyMessage = "";
-            Data.Resource[index].SuccessMessage = "";
-        }
-
-        public static void CacheResources(int mapNum)
-        {
-            int x;
-            int y;
-            var resourceCount = default(int);
-
-            var loopTo = (int)Data.Map[mapNum].MaxX;
-            for (x = 0; x < (int)loopTo; x++)
-            {
-                var loopTo1 = (int)Data.Map[mapNum].MaxY;
-                for (y = 0; y < (int)loopTo1; y++)
+                if (Data.Map[mapNum].Tile[x, y].Type != TileType.Resource &&
+                    Data.Map[mapNum].Tile[x, y].Type2 != TileType.Resource)
                 {
-                    if (Core.Data.Map[mapNum].Tile[x, y].Type == Core.TileType.Resource || Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Resource)
-                    {
-                        resourceCount += 1;
-                        Array.Resize(ref Data.MapResource[mapNum].ResourceData, resourceCount);
-                        Data.MapResource[mapNum].ResourceData[resourceCount - 1].X = x;
-                        Data.MapResource[mapNum].ResourceData[resourceCount - 1].Y = y;
-                        Data.MapResource[mapNum].ResourceData[resourceCount - 1].Health = (byte)Data.Resource[Data.Map[mapNum].Tile[x, y].Data1].Health;
-                    }
-
-                }
-            }
-
-            Data.MapResource[mapNum].ResourceCount = resourceCount;
-        }
-
-        public static byte[] ResourcesData()
-        {
-            var buffer = new ByteStream(4);
-            for (int i = 0, loopTo = Core.Constant.MaxResources; i < loopTo; i++)
-            {
-                if (!(Strings.Len(Data.Resource[i].Name) > 0))
                     continue;
-                buffer.WriteBlock(ResourceData(i));
+                }
+
+                resourceCount++;
+
+                Array.Resize(ref Data.MapResource[mapNum].ResourceData, resourceCount);
+
+                Data.MapResource[mapNum].ResourceData[resourceCount - 1].X = x;
+                Data.MapResource[mapNum].ResourceData[resourceCount - 1].Y = y;
+                Data.MapResource[mapNum].ResourceData[resourceCount - 1].Health = (byte) Data.Resource[Data.Map[mapNum].Tile[x, y].Data1].Health;
             }
-            return buffer.ToArray();
         }
 
-        public static byte[] ResourceData(int resourceNum)
+        Data.MapResource[mapNum].ResourceCount = resourceCount;
+    }
+
+    public static void CheckResourceLevelUp(int playerId, int skillSlot)
+    {
+        var levels = 0;
+
+        if (GetPlayerGatherSkillLvl(playerId, skillSlot) == Core.Constant.MaxLevel)
         {
-            var buffer = new ByteStream(4);
-            buffer.WriteInt32(resourceNum);
-            buffer.WriteInt32(Data.Resource[resourceNum].Animation);
-            buffer.WriteString(Data.Resource[resourceNum].EmptyMessage);
-            buffer.WriteInt32(Data.Resource[resourceNum].ExhaustedImage);
-            buffer.WriteInt32(Data.Resource[resourceNum].Health);
-            buffer.WriteInt32(Data.Resource[resourceNum].ExpReward);
-            buffer.WriteInt32(Data.Resource[resourceNum].ItemReward);
-            buffer.WriteString(Data.Resource[resourceNum].Name);
-            buffer.WriteInt32(Data.Resource[resourceNum].ResourceImage);
-            buffer.WriteInt32(Data.Resource[resourceNum].ResourceType);
-            buffer.WriteInt32(Data.Resource[resourceNum].RespawnTime);
-            buffer.WriteString(Data.Resource[resourceNum].SuccessMessage);
-            buffer.WriteInt32(Data.Resource[resourceNum].LvlRequired);
-            buffer.WriteInt32(Data.Resource[resourceNum].ToolRequired);
-            buffer.WriteInt32(Conversions.ToInteger(Data.Resource[resourceNum].Walkthrough));
-            return buffer.ToArray();
+            return;
         }
 
-        #endregion
-
-        #region Gather Skills
-        public static void CheckResourceLevelUp(int index, int skillSlot)
+        while (GetPlayerGatherSkillExp(playerId, skillSlot) >= GetPlayerGatherSkillMaxExp(playerId, skillSlot))
         {
-            int expRollover;
-            int levelCount;
+            var expRollover = GetPlayerGatherSkillExp(playerId, skillSlot) - GetPlayerGatherSkillMaxExp(playerId, skillSlot);
 
-            levelCount = 0;
+            SetPlayerGatherSkillLvl(playerId, skillSlot, GetPlayerGatherSkillLvl(playerId, skillSlot) + 1);
+            SetPlayerGatherSkillExp(playerId, skillSlot, expRollover);
+            SetPlayerGatherSkillMaxExp(playerId, skillSlot, GetSkillNextLevel(playerId, skillSlot));
 
-            if (GetPlayerGatherSkillLvl(index, skillSlot) == Core.Constant.MaxLevel)
-                return;
+            levels++;
+        }
 
-            while (GetPlayerGatherSkillExp(index, skillSlot) >= GetPlayerGatherSkillMaxExp(index, skillSlot))
+        if (levels == 0)
+        {
+            return;
+        }
+
+        NetworkSend.PlayerMsg(playerId, levels == 1
+            ? $"Your {GetResourceSkillName((ResourceSkill) skillSlot)} has gone up a level!"
+            : $"Your {GetResourceSkillName((ResourceSkill) skillSlot)} has gone up by {levels} levels!", (int) Color.BrightGreen);
+
+        NetworkSend.SendPlayerData(playerId);
+    }
+
+    public static void HandleRequestEditResource(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
+        {
+            return;
+        }
+
+        var user = IsEditorLocked(session.Id, EditorType.Resource);
+        if (!string.IsNullOrEmpty(user))
+        {
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            return;
+        }
+
+        Data.TempPlayer[session.Id].Editor = EditorType.Resource;
+
+        Item.SendItems(session.Id);
+        Animation.SendAnimations(session.Id);
+
+        SendResources(session.Id);
+
+        var packet = new PacketWriter(4);
+
+        packet.WriteEnum(ServerPackets.SResourceEditor);
+
+        PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
+    }
+
+    public static void HandleSaveResource(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        var packetReader = new PacketReader(bytes);
+
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
+        {
+            return;
+        }
+
+        var resourcenum = packetReader.ReadInt32();
+        if (resourcenum is < 0 or > Core.Constant.MaxResources)
+        {
+            return;
+        }
+
+        Data.Resource[resourcenum].Animation = packetReader.ReadInt32();
+        Data.Resource[resourcenum].EmptyMessage = packetReader.ReadString();
+        Data.Resource[resourcenum].ExhaustedImage = packetReader.ReadInt32();
+        Data.Resource[resourcenum].Health = packetReader.ReadInt32();
+        Data.Resource[resourcenum].ExpReward = packetReader.ReadInt32();
+        Data.Resource[resourcenum].ItemReward = packetReader.ReadInt32();
+        Data.Resource[resourcenum].Name = packetReader.ReadString();
+        Data.Resource[resourcenum].ResourceImage = packetReader.ReadInt32();
+        Data.Resource[resourcenum].ResourceType = packetReader.ReadInt32();
+        Data.Resource[resourcenum].RespawnTime = packetReader.ReadInt32();
+        Data.Resource[resourcenum].SuccessMessage = packetReader.ReadString();
+        Data.Resource[resourcenum].LvlRequired = packetReader.ReadInt32();
+        Data.Resource[resourcenum].ToolRequired = packetReader.ReadInt32();
+        Data.Resource[resourcenum].Walkthrough = packetReader.ReadInt32() != 0;
+
+        SaveResource(resourcenum);
+
+        General.Logger.LogInformation("{AccountName} saved Resource #{Resourcenum}",
+            GetAccountLogin(session.Id), resourcenum);
+
+        SendUpdateResourceToAll(resourcenum);
+    }
+
+    public static void HandleRequestResource(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        var packetReader = new PacketReader(bytes);
+
+        var resourceNum = packetReader.ReadInt32();
+        if (resourceNum < 0 | resourceNum > Core.Constant.MaxResources)
+        {
+            return;
+        }
+
+        SendUpdateResourceTo(session.Id, resourceNum);
+    }
+
+    public static void SendMapResourceToMap(int mapNum)
+    {
+        var packet = new PacketWriter();
+
+        packet.WriteEnum(ServerPackets.SMapResource);
+        packet.WriteInt32(Data.MapResource[mapNum].ResourceCount);
+
+        if (Data.MapResource[mapNum].ResourceCount > 0)
+        {
+            for (var i = 0; i < Data.MapResource[mapNum].ResourceCount; i++)
             {
-                expRollover = GetPlayerGatherSkillExp(index, skillSlot) - GetPlayerGatherSkillMaxExp(index, skillSlot);
-                SetPlayerGatherSkillLvl(index, skillSlot, GetPlayerGatherSkillLvl(index, skillSlot) + 1);
-                SetPlayerGatherSkillExp(index, skillSlot, expRollover);
-                SetPlayerGatherSkillMaxExp(index, skillSlot, GetSkillNextLevel(index, skillSlot));
-                levelCount =+ 1;
+                packet.WriteByte(Data.MapResource[mapNum].ResourceData[i].State);
+                packet.WriteInt32(Data.MapResource[mapNum].ResourceData[i].X);
+                packet.WriteInt32(Data.MapResource[mapNum].ResourceData[i].Y);
             }
+        }
 
-            if (levelCount > 0)
+        NetworkConfig.SendDataToMap(mapNum, packet.GetBytes());
+    }
+
+    public static void SendResources(int playerId)
+    {
+        for (var resourceNum = 0; resourceNum < Core.Constant.MaxResources; resourceNum++)
+        {
+            if (Data.Resource[resourceNum].Name.Length > 0)
             {
-                if (levelCount == 1)
-                {
-                    // singular
-                    NetworkSend.PlayerMsg(index, string.Format("Your {0} has gone up a level!", GetResourceSkillName((Core.ResourceSkill)skillSlot)), (int) Core.Color.BrightGreen);
-                }
-                else
-                {
-                    // plural
-                    NetworkSend.PlayerMsg(index, string.Format("Your {0} has gone up by {1} levels!", GetResourceSkillName((Core.ResourceSkill)skillSlot), levelCount), (int) Core.Color.BrightGreen);
-                }
-
-                NetworkSend.SendPlayerData(index);
+                SendUpdateResourceTo(playerId, resourceNum);
             }
         }
+    }
 
-        #endregion
+    public static void SendUpdateResourceTo(int playerId, int resourceNum)
+    {
+        var packet = new PacketWriter();
 
-        #region Incoming Packets
+        packet.WriteEnum(ServerPackets.SUpdateResource);
 
-        public static void Packet_RequestEditResource(GameSession session, ReadOnlySpan<byte> bytes)
+        WriteResourceDataToPacket(resourceNum, packet);
+
+        PlayerService.Instance.SendDataTo(playerId, packet.GetBytes());
+    }
+
+    public static void SendUpdateResourceToAll(int resourceNum)
+    {
+        var packet = new PacketWriter();
+
+        packet.WriteEnum(ServerPackets.SUpdateResource);
+
+        WriteResourceDataToPacket(resourceNum, packet);
+
+        PlayerService.Instance.SendDataToAll(packet.GetBytes());
+    }
+
+    private static void WriteResourceDataToPacket(int resourceNum, PacketWriter packet)
+    {
+        packet.WriteInt32(resourceNum);
+        packet.WriteInt32(Data.Resource[resourceNum].Animation);
+        packet.WriteString(Data.Resource[resourceNum].EmptyMessage);
+        packet.WriteInt32(Data.Resource[resourceNum].ExhaustedImage);
+        packet.WriteInt32(Data.Resource[resourceNum].Health);
+        packet.WriteInt32(Data.Resource[resourceNum].ExpReward);
+        packet.WriteInt32(Data.Resource[resourceNum].ItemReward);
+        packet.WriteString(Data.Resource[resourceNum].Name);
+        packet.WriteInt32(Data.Resource[resourceNum].ResourceImage);
+        packet.WriteInt32(Data.Resource[resourceNum].ResourceType);
+        packet.WriteInt32(Data.Resource[resourceNum].RespawnTime);
+        packet.WriteString(Data.Resource[resourceNum].SuccessMessage);
+        packet.WriteInt32(Data.Resource[resourceNum].LvlRequired);
+        packet.WriteInt32(Data.Resource[resourceNum].ToolRequired);
+        packet.WriteInt32(Conversions.ToInteger(Data.Resource[resourceNum].Walkthrough));
+    }
+
+    public static void CheckResource(int playerId, int x, int y)
+    {
+        var mapNum = GetPlayerMap(playerId);
+
+        if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
         {
-            var buffer = new ByteStream(4);
+            return;
+        }
 
-            // Prevent hacking
-            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
-                return;
+        if (Data.Map[mapNum].Tile[x, y].Type != TileType.Resource &&
+            Data.Map[mapNum].Tile[x, y].Type2 != TileType.Resource)
+        {
+            return;
+        }
 
-            var user = IsEditorLocked(session.Id, (byte) EditorType.Resource);
-            if (!string.IsNullOrEmpty(user))
+        var resourceNum = 0;
+        var resourceIndex = Data.Map[mapNum].Tile[x, y].Data1;
+        var resourceType = (byte) Data.Resource[resourceIndex].ResourceType;
+
+        for (var i = 0; i < Data.MapResource[mapNum].ResourceCount; i++)
+        {
+            if (Data.MapResource[mapNum].ResourceData[i].X == x &&
+                Data.MapResource[mapNum].ResourceData[i].Y == y)
             {
-                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
-                return;
+                resourceNum = i;
             }
-
-            Core.Data.TempPlayer[session.Id].Editor = (byte) EditorType.Resource;
-
-            Item.SendItems(session.Id);
-            Animation.SendAnimations(session.Id);
-            SendResources(session.Id);
-
-            buffer.WriteInt32((int) ServerPackets.SResourceEditor);
-            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
-
-            buffer.Dispose();
         }
 
-        public static void Packet_SaveResource(GameSession session, ReadOnlySpan<byte> bytes)
+        if (resourceNum < 0)
         {
-            var buffer = new PacketReader(bytes);
-
-            // Prevent hacking
-            if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
-                return;
-
-            var resourcenum = buffer.ReadInt32();
-
-            // Prevent hacking
-            if (resourcenum < 0 | resourcenum > Core.Constant.MaxResources)
-                return;
-
-            Data.Resource[resourcenum].Animation = buffer.ReadInt32();
-            Data.Resource[resourcenum].EmptyMessage = buffer.ReadString();
-            Data.Resource[resourcenum].ExhaustedImage = buffer.ReadInt32();
-            Data.Resource[resourcenum].Health = buffer.ReadInt32();
-            Data.Resource[resourcenum].ExpReward = buffer.ReadInt32();
-            Data.Resource[resourcenum].ItemReward = buffer.ReadInt32();
-            Data.Resource[resourcenum].Name = buffer.ReadString();
-            Data.Resource[resourcenum].ResourceImage = buffer.ReadInt32();
-            Data.Resource[resourcenum].ResourceType = buffer.ReadInt32();
-            Data.Resource[resourcenum].RespawnTime = buffer.ReadInt32();
-            Data.Resource[resourcenum].SuccessMessage = buffer.ReadString();
-            Data.Resource[resourcenum].LvlRequired = buffer.ReadInt32();
-            Data.Resource[resourcenum].ToolRequired = buffer.ReadInt32();
-            Data.Resource[resourcenum].Walkthrough = Conversions.ToBoolean(buffer.ReadInt32());
-
-            // Save it
-            SendUpdateResourceToAll(resourcenum);
-            SaveResource(resourcenum);
-
-            Core.Log.Add(GetAccountLogin(session.Id) + " saved Resource #" + resourcenum + ".", Constant.AdminLog);
+            return;
         }
 
-        public static void Packet_RequestResource(GameSession session, ReadOnlySpan<byte> bytes)
+        if (GetPlayerEquipment(playerId, Equipment.Weapon) < 0 && Data.Resource[resourceIndex].ToolRequired != 0)
         {
-            var buffer = new PacketReader(bytes);
-
-            var n = buffer.ReadInt32();
-
-            if (n < 0 | n > Core.Constant.MaxResources)
-                return;
-
-            SendUpdateResourceTo(session.Id, n);
+            NetworkSend.PlayerMsg(playerId, "You need a tool to gather this resource.", (int) Color.Yellow);
+            return;
         }
 
-        #endregion
-
-        #region Outgoing Packets
-
-        public static void SendMapResourceTo(int index, long resourceNum)
+        if (Data.Item[GetPlayerEquipment(playerId, Equipment.Weapon)].Data3 != Data.Resource[resourceIndex].ToolRequired)
         {
-            int i;
-            int mapnum;
-            var buffer = new ByteStream(4);
-
-            mapnum = GetPlayerMap(index);
-
-            buffer.WriteInt32((int) ServerPackets.SMapResource);
-            buffer.WriteInt32(Data.MapResource[mapnum].ResourceCount);
-
-            if (Data.MapResource[mapnum].ResourceCount > 0)
-            {           
-                var loopTo = Data.MapResource[mapnum].ResourceCount;
-                for (i = 0; i < loopTo; i++)
-                {
-                    buffer.WriteByte(Data.MapResource[mapnum].ResourceData[i].State);
-                    buffer.WriteInt32(Data.MapResource[mapnum].ResourceData[i].X);
-                    buffer.WriteInt32(Data.MapResource[mapnum].ResourceData[i].Y);
-                }
-
-            }
-
-            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            NetworkSend.PlayerMsg(playerId, "You have the wrong type of tool equiped.", (int) Color.Yellow);
+            return;
         }
 
-        public static void SendMapResourceToMap(int mapNum, int resourceNum)
+        if (Data.Resource[resourceIndex].ItemReward > 0)
         {
-            int i;
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32((int) ServerPackets.SMapResource);
-            buffer.WriteInt32(Data.MapResource[mapNum].ResourceCount);
-
-            if (Data.MapResource[mapNum].ResourceCount > 0)
+            if (Player.FindOpenInvSlot(playerId, Data.Resource[resourceIndex].ItemReward) == 0)
             {
-
-                var loopTo = Data.MapResource[mapNum].ResourceCount;
-                for (i = 0; i < loopTo; i++)
-                {
-                    buffer.WriteByte(Data.MapResource[mapNum].ResourceData[i].State);
-                    buffer.WriteInt32(Data.MapResource[mapNum].ResourceData[i].X);
-                    buffer.WriteInt32(Data.MapResource[mapNum].ResourceData[i].Y);
-                }
-
-            }
-
-            NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-        }
-
-        public static void SendResources(int index)
-        {
-            var loopTo = Core.Constant.MaxResources;
-            for (int i = 0; i < loopTo; i++)
-            {
-                if (Strings.Len(Data.Resource[i].Name) > 0)
-                {
-                    SendUpdateResourceTo(index, i);
-                }
-
-            }
-        }
-
-        public static void SendUpdateResourceTo(int index, int resourceNum)
-        {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32((int) ServerPackets.SUpdateResource);
-
-            buffer.WriteBlock(ResourceData(resourceNum));
-
-            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-        }
-
-        public static void SendUpdateResourceToAll(int resourceNum)
-        {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32((int) ServerPackets.SUpdateResource);
-
-            buffer.WriteBlock(ResourceData(resourceNum));
-
-            NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-        }
-
-        #endregion
-
-        #region Functions
-
-        public static void CheckResource(int index, int x, int y)
-        {
-            int resourceNum;
-            byte resourceType;
-            int resourceIndex;
-            int rX;
-            int rY;
-            int damage;
-            int mapNum;
-
-            mapNum = GetPlayerMap(index);
-
-            if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
+                NetworkSend.PlayerMsg(playerId, "You have no inventory space.", (int) Color.Yellow);
                 return;
-
-            if (Data.Map[mapNum].Tile[x, y].Type == Core.TileType.Resource | Data.Map[mapNum].Tile[x, y].Type2 == Core.TileType.Resource)
-            {
-                resourceNum = 0;
-                resourceIndex = Data.Map[mapNum].Tile[x, y].Data1;
-                resourceType = (byte)Data.Resource[resourceIndex].ResourceType;
-
-                // Get the cache number
-                for (int i = 0, loopTo = Data.MapResource[mapNum].ResourceCount; i < loopTo; i++)
-                {
-                    if (Data.MapResource[mapNum].ResourceData[i].X == x)
-                    {
-                        if (Data.MapResource[mapNum].ResourceData[i].Y == y)
-                        {
-                            resourceNum = i;
-                        }
-                    }
-                }
-
-                if (resourceNum >= 0)
-                {
-                    if (GetPlayerEquipment(index, Core.Equipment.Weapon) >= 0 | Core.Data.Resource[resourceIndex].ToolRequired == 0)
-                    {
-                        if (Core.Data.Item[GetPlayerEquipment(index, Core.Equipment.Weapon)].Data3 == Core.Data.Resource[resourceIndex].ToolRequired)
-                        {
-
-                            // inv space?
-                            if (Core.Data.Resource[resourceIndex].ItemReward > 0)
-                            {
-                                if (Player.FindOpenInvSlot(index, Core.Data.Resource[resourceIndex].ItemReward) == 0)
-                                {
-                                    NetworkSend.PlayerMsg(index, "You have no inventory space.", (int) Color.Yellow);
-                                    return;
-                                }
-                            }
-
-                            // required lvl?
-                            if (Data.Resource[resourceIndex].LvlRequired > GetPlayerGatherSkillLvl(index, resourceType))
-                            {
-                                NetworkSend.PlayerMsg(index, "Your level is too low!", (int) Color.Yellow);
-                                return;
-                            }
-
-                            // check if already cut down
-                            if (Data.MapResource[mapNum].ResourceData[resourceNum].State == 0)
-                            {
-
-                                rX = Data.MapResource[mapNum].ResourceData[resourceNum].X;
-                                rY = Data.MapResource[mapNum].ResourceData[resourceNum].Y;
-
-                                if (Data.Resource[resourceIndex].ToolRequired == 0)
-                                {
-                                    damage = 1 * GetPlayerGatherSkillLvl(index, resourceType);
-                                }
-                                else
-                                {
-                                    damage = Core.Data.Item[GetPlayerEquipment(index, Equipment.Weapon)].Data2;
-                                }
-
-                                // check if damage is more than health
-                                if (damage > 0)
-                                {
-                                    // cut it down!
-                                    if (Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage < 0)
-                                    {
-                                        Data.MapResource[mapNum].ResourceData[resourceNum].State = 0; // Cut
-                                        Data.MapResource[mapNum].ResourceData[resourceNum].Timer = General.GetTimeMs();
-                                        SendMapResourceToMap(mapNum, resourceNum);
-                                        NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].SuccessMessage, (int) Color.BrightGreen, 1, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
-                                        Player.GiveInv(index, Data.Resource[resourceIndex].ItemReward, 1);
-                                        Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, rX, rY);
-                                        SetPlayerGatherSkillExp(index, resourceType, GetPlayerGatherSkillExp(index, resourceType) + Data.Resource[resourceIndex].ExpReward);
-                                        // send msg
-                                        NetworkSend.PlayerMsg(index, string.Format("Your {0} has earned {1} experience. ({2}/{3})", GetResourceSkillName((ResourceSkill)resourceType), Core.Data.Resource[resourceIndex].ExpReward, GetPlayerGatherSkillExp(index, resourceType), GetPlayerGatherSkillMaxExp(index, resourceType)), (int) Core.Color.BrightGreen);
-                                        NetworkSend.SendPlayerData(index);
-
-                                        CheckResourceLevelUp(index, resourceType);
-                                    }
-                                    else
-                                    {
-                                        // just do the damage
-                                        Data.MapResource[mapNum].ResourceData[resourceNum].Health = (byte)(Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage);
-                                        NetworkSend.SendActionMsg(mapNum, "-" + damage, (int) Color.BrightRed, 1, rX * 32, rY * 32);
-                                        Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, rX, rY);
-                                    }
-                                }
-                                else
-                                {
-                                    // too weak
-                                    NetworkSend.SendActionMsg(mapNum, "Miss!", (int) Color.BrightRed, 1, rX * 32, rY * 32);
-                                }
-                            }
-                            else
-                            {
-                                NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].EmptyMessage, (int) Color.BrightRed, 1, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
-                            }
-                        }
-                        else
-                        {
-                            NetworkSend.PlayerMsg(index, "You have the wrong type of tool equiped.", (int) Color.Yellow);
-                        }
-                    }
-                    else
-                    {
-                        NetworkSend.PlayerMsg(index, "You need a tool to gather this resource.", (int) Color.Yellow);
-                    }
-                }
             }
         }
 
-        #endregion
+        if (Data.Resource[resourceIndex].LvlRequired > GetPlayerGatherSkillLvl(playerId, resourceType))
+        {
+            NetworkSend.PlayerMsg(playerId, "Your level is too low!", (int) Color.Yellow);
+            return;
+        }
 
+        if (Data.MapResource[mapNum].ResourceData[resourceNum].State != 0)
+        {
+            NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].EmptyMessage, (int) Color.BrightRed, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
+            return;
+        }
+
+        var resourceX = Data.MapResource[mapNum].ResourceData[resourceNum].X;
+        var resourceY = Data.MapResource[mapNum].ResourceData[resourceNum].Y;
+
+        int damage;
+        if (Data.Resource[resourceIndex].ToolRequired == 0)
+        {
+            damage = 1 * GetPlayerGatherSkillLvl(playerId, resourceType);
+        }
+        else
+        {
+            damage = Data.Item[GetPlayerEquipment(playerId, Equipment.Weapon)].Data2;
+        }
+
+        if (damage <= 0)
+        {
+            NetworkSend.SendActionMsg(mapNum, "Miss!", (int) Color.BrightRed, 1, resourceX * 32, resourceY * 32);
+            return;
+        }
+
+        if (Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage >= 0)
+        {
+            Data.MapResource[mapNum].ResourceData[resourceNum].Health = (byte) (Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage);
+            NetworkSend.SendActionMsg(mapNum, "-" + damage, (int) Color.BrightRed, 1, resourceX * 32, resourceY * 32);
+            Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, resourceX, resourceY);
+
+            return;
+        }
+
+        Data.MapResource[mapNum].ResourceData[resourceNum].State = 0; // Cut
+        Data.MapResource[mapNum].ResourceData[resourceNum].Timer = General.GetTimeMs();
+
+        SendMapResourceToMap(mapNum);
+
+        NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].SuccessMessage, (int) Color.BrightGreen, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
+        Player.GiveInv(playerId, Data.Resource[resourceIndex].ItemReward, 1);
+        Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, resourceX, resourceY);
+
+        SetPlayerGatherSkillExp(playerId, resourceType, GetPlayerGatherSkillExp(playerId, resourceType) + Data.Resource[resourceIndex].ExpReward);
+
+        NetworkSend.PlayerMsg(playerId, $"Your {GetResourceSkillName((ResourceSkill) resourceType)} has earned {Data.Resource[resourceIndex].ExpReward} experience. ({GetPlayerGatherSkillExp(playerId, resourceType)}/{GetPlayerGatherSkillMaxExp(playerId, resourceType)})", (int) Color.BrightGreen);
+        NetworkSend.SendPlayerData(playerId);
+
+        CheckResourceLevelUp(playerId, resourceType);
     }
 }

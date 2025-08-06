@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
@@ -41,10 +42,10 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_MapResource(ref byte[] data)
+        public static void Packet_MapResource(ReadOnlyMemory<byte> data)
         {
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             GameState.ResourceIndex = buffer.ReadInt32();
             GameState.ResourcesInit = false;
 
@@ -63,14 +64,12 @@ namespace Client
 
                 GameState.ResourcesInit = true;
             }
-
-            buffer.Dispose();
         }
 
-        public static void Packet_UpdateResource(ref byte[] data)
+        public static void Packet_UpdateResource(ReadOnlyMemory<byte> data)
         {
             int resourceNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
             resourceNum = buffer.ReadInt32();
 
             Data.Resource[resourceNum].Animation = buffer.ReadInt32();
@@ -87,8 +86,6 @@ namespace Client
             Data.Resource[resourceNum].LvlRequired = buffer.ReadInt32();
             Data.Resource[resourceNum].ToolRequired = buffer.ReadInt32();
             Data.Resource[resourceNum].Walkthrough = Conversions.ToBoolean(buffer.ReadInt32());
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -102,7 +99,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestResource);
 
             buffer.WriteInt32(resourceNum);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

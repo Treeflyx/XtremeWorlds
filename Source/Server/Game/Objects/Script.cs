@@ -1,150 +1,144 @@
-﻿using CSScriptLib;
+﻿using System.Text;
+using Core;
+using CSScriptLib;
+using Microsoft.Extensions.Logging;
 using Mirage.Sharp.Asfw;
 using Mirage.Sharp.Asfw.IO;
-using Mirage.Sharp.Asfw.Network;
 using Server.Game.Net;
 using Server.Net;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using static Core.Packets;
+using static Core.Global.Command;
+using Path = Core.Path;
 
-namespace Server
+namespace Server;
+
+public static class Script
 {
-    public class Script
+    public static dynamic? Instance { get; private set; }
+
+    public static void HandleRequestEditScript(GameSession session, ReadOnlySpan<byte> bytes)
     {
-        public static dynamic? Instance { get; private set; }
-
-        public static void Packet_RequestEditScript(GameSession session, ReadOnlySpan<byte> bytes)
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Owner)
         {
-            var buffer = new ByteStream(4);
-
-            if (Core.Global.Command.GetPlayerAccess(session.Id) < (byte)Core.AccessLevel.Owner)
-                return;
-
-            var user = Core.Global.Command.IsEditorLocked(session.Id, (byte)Core.EditorType.Script);
-
-            if (!string.IsNullOrEmpty(user))
-            {
-                NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int)Core.Color.BrightRed);
-                return;
-            }
-
-            Core.Data.TempPlayer[session.Id].Editor = (byte)Core.EditorType.Script;
-
-            // Ensure Code is not null
-            var codeLines = Core.Data.Script.Code ?? Array.Empty<string>();
-            buffer.WriteInt32(codeLines.Length);
-
-            foreach (var line in codeLines)
-            {
-                buffer.WriteString(line ?? string.Empty);
-            }
-            var data = Compression.CompressBytes(buffer.ToArray());
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int)ServerPackets.SScriptEditor);
-            buffer.WriteBlock(data);
-
-            NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
-
-            buffer.Dispose();
+            return;
         }
 
-        public static void Packet_SaveScript(GameSession session, ReadOnlySpan<byte> bytes)
+        var user = IsEditorLocked(session.Id, EditorType.Script);
+        if (!string.IsNullOrEmpty(user))
         {
-            var buffer = new PacketReader(bytes);
-
-            // Prevent hacking
-            if (Core.Global.Command.GetPlayerAccess(session.Id) < (byte)Core.AccessLevel.Owner)
-                return;
-
-            // Save with the new script code and ensure the filename is Script.cs
-            var scriptPath = Path.Combine(Core.Path.Database, "Script.cs");
-            string code = buffer.ReadString();
-
-            // Create file
-            if (!File.Exists(scriptPath))
-            {
-                Directory.CreateDirectory(Core.Path.Database);
-                File.Create(scriptPath);
-                using (File.Create(scriptPath))
-                {
-                    File.WriteAllText(scriptPath, buffer.ReadString(), Encoding.UTF8);
-                }
-            }
-            else
-            {
-                File.WriteAllText(scriptPath, code, Encoding.UTF8);
-            }
-
-            Task.Run(async () =>
-                {
-                    await LoadScriptAsync(session.Id);
-                });
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            return;
         }
 
-        public static async System.Threading.Tasks.Task LoadScriptAsync(int index)
+        var packetReader = new PacketReader(bytes);
+        var lineNum = packetReader.ReadInt32();
+
+        Data.TempPlayer[session.Id].Editor = EditorType.Script;
+
+        var codeLines = Data.Script.Code ?? [];
+        int count = 0;
+
+        var buffer = new ByteStream(4);
+
+        buffer.WriteInt32(codeLines.Length);
+
+        for (int i = lineNum; i < codeLines.Length; i++)
         {
-            // Load the script file
-            var scriptPath = Path.Combine(Core.Path.Database, "Script.cs");
-            if (File.Exists(scriptPath))
+            buffer.WriteInt32(i);
+            buffer.WriteString(codeLines[i] ?? string.Empty);
+            count++;
+
+            if (count == 256 || i == codeLines.Length - 1)
             {
-                var lines = File.ReadLines(scriptPath, Encoding.UTF8).ToArray();
-                if (lines.Length > 0)
+                var data = Compression.CompressBytes(buffer.ToArray());
+                buffer = new ByteStream(4);
+                var packet = new PacketWriter();
+
+                packet.WriteEnum(ServerPackets.SScriptEditor);
+                packet.WriteRaw(data);
+
+                session.Channel.Send(packet.GetBytes());
+                break;
+            }
+        }
+    }
+
+    public static void HandleSaveScript(GameSession session, ReadOnlySpan<byte> bytes)
+    {
+        var packetReader = new PacketReader(bytes);
+
+        if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Owner)
+        {
+            return;
+        }
+
+        var path = Path.Database;
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+
+        path = System.IO.Path.Combine(path, "Script.cs");
+
+        var script = packetReader.ReadString();
+
+        File.WriteAllText(path, script, Encoding.UTF8);
+
+        _ = LoadScriptAsync(session.Id);
+    }
+
+    public static async Task LoadScriptAsync(int playerId)
+    {
+        var path = System.IO.Path.Combine(Path.Database, "Script.cs");
+        if (File.Exists(path))
+        {
+            Data.Script.Code = await File.ReadAllLinesAsync(path, Encoding.UTF8);
+        }
+        else
+        {
+            Data.Script.Code = [];
+        }
+
+        var script = Data.Script.Code != null && Data.Script.Code.Length > 0
+            ? string.Join(Environment.NewLine, Data.Script.Code)
+            : string.Empty;
+
+        if (string.IsNullOrWhiteSpace(script))
+        {
+            NetworkSend.PlayerMsg(playerId, "No script code found to compile.", (int) Color.BrightRed);
+
+            General.Logger.LogWarning("No script code found to compile");
+            return;
+        }
+
+        try
+        {
+            var evaluator = CSScript.RoslynEvaluator;
+
+            CSScript.EvaluatorConfig.Engine = EvaluatorEngine.Roslyn;
+
+            dynamic instance = evaluator
+                .ReferenceDomainAssemblies()
+                .LoadCode(script);
+
+            if (instance is not null)
+            {
+                Instance = instance;
+
+                if (playerId > 0)
                 {
-                    Core.Data.Script.Code = lines;
-                }
-                else
-                {
-                    Core.Data.Script.Code = Array.Empty<string>();
+                    NetworkSend.PlayerMsg(playerId, "Script saved successfully!", (int) Color.Yellow);
                 }
             }
-            else
+        }
+        catch (Exception ex)
+        {
+            if (playerId > 0)
             {
-                Core.Data.Script.Code = Array.Empty<string>();
+                NetworkSend.PlayerMsg(playerId, ex.Message, (int) Color.BrightRed);
             }
 
-            string code = (Core.Data.Script.Code != null && Core.Data.Script.Code.Length > 0) ? string.Join(Environment.NewLine, Core.Data.Script.Code) : string.Empty;
-
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                NetworkSend.PlayerMsg(index, "No script code found to compile.", (int)Core.Color.BrightRed);
-                Debug.WriteLine("No script code found to compile.");
-                return;
-            }
-
-            try
-            {
-                // Use the Roslyn evaluator directly for dynamic code loading
-                var evaluator = CSScript.RoslynEvaluator;
-                CSScript.EvaluatorConfig.Engine = EvaluatorEngine.Roslyn;
-
-                // Dynamically load and execute the script
-                dynamic script = evaluator
-                    .ReferenceDomainAssemblies()
-                    .LoadCode(code);
-
-                if (script != null)
-                {
-                    Instance = script;
-                    if (index > 0)
-                    {
-                        NetworkSend.PlayerMsg(index, "Script saved successfully!", (int) Core.Color.Yellow);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                if (index > 0)
-                {
-                    NetworkSend.PlayerMsg(index, e.Message, (int)Core.Color.BrightRed);
-                }
-                Console.WriteLine(e.Message);
-            }
+            General.Logger.LogError(ex, "[Script] Failed to load script");
         }
     }
 }

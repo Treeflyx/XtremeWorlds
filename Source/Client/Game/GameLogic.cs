@@ -347,7 +347,7 @@ namespace Client
                         {
                             buffer = new ByteStream(4);
                             buffer.WriteInt32((int)Packets.ClientPackets.CGetStats);
-                            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+                            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
                             buffer.Dispose();
                             break;
                         }
@@ -608,7 +608,7 @@ namespace Client
                                 Text.AddText(LocalesManager.Get("AccessDenied"), (int)Core.Color.BrightRed);
                             }
 
-                            Script.SendRequestEditScript();
+                            NetworkSend.SendRequestEditScript(0);
                             break;
                         }
 
@@ -850,7 +850,7 @@ namespace Client
             {
                 Core.Data.Player[GameState.MyIndex].MapGetTimer = General.GetTickCount();
                 buffer.WriteInt32((int)Packets.ClientPackets.CMapGetItem);
-                NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+                NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             }
 
             buffer.Dispose();
@@ -949,8 +949,6 @@ namespace Client
                         header = "Invalid Connection";
                         body = "You lost connection to the game server.";
                         body2 = "Please try again later.";
-
-                        NetworkConfig.InitNetwork();
                         GameState.InGame = false;
                         break;
                     }
@@ -1366,7 +1364,7 @@ namespace Client
 
         public static void AddChar(string name, int sex, int job, int sprite)
         {
-            if (NetworkConfig.Socket?.IsConnected == true)
+            if (NetworkConfig.IsConnected == true)
             {
                 NetworkSend.SendAddChar(name, sex, job);
             }
@@ -1975,10 +1973,8 @@ namespace Client
         {
             GameState.InMenu = true;
             GameState.InGame = false;
-
+            NetworkSend.SendLogout();
             General.ClearGameData();
-            NetworkConfig.DestroyNetwork();
-            NetworkConfig.InitNetwork();
         }
 
         public static void SetOptionsScreen()

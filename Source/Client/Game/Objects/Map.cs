@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Client.Net;
 using Core;
 using static Core.Global.Command;
 using Microsoft.VisualBasic.CompilerServices;
@@ -152,7 +153,7 @@ namespace Client
 
                             alpha = 1.0f;
 
-                            if (GameState.MyEditorType == (int)EditorType.Map)
+                            if (GameState.MyEditorType == EditorType.Map)
                             {
                                 if (GameState.HideLayers)
                                 {
@@ -182,9 +183,9 @@ namespace Client
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -251,7 +252,7 @@ namespace Client
 
                             alpha = 1.0f;
 
-                            if (GameState.MyEditorType == (int)EditorType.Map)
+                            if (GameState.MyEditorType == EditorType.Map)
                             {
                                 if (GameState.HideLayers)
                                 {
@@ -281,9 +282,9 @@ namespace Client
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -637,23 +638,21 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_EditMap(ref byte[] data)
+        public static void Packet_EditMap(ReadOnlyMemory<byte> data)
         {
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             GameState.InitMapEditor = true;
             Gui.HideWindows();
-
-            buffer.Dispose();
         }
 
-        public static void Packet_CheckMap(ref byte[] data)
+        public static void Packet_CheckMap(ReadOnlyMemory<byte> data)
         {
             int x;
             int y;
             int i;
             byte needMap;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             GameState.GettingMap = true;
 
@@ -688,22 +687,20 @@ namespace Client
             needMap = 1;
 
             // Either the revisions didn't match or we dont have the map, so we need it
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int)Packets.ClientPackets.CNeedMap);
-            buffer.WriteInt32(needMap);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
-
-            buffer.Dispose();
+            var buffer2 = new ByteStream(4);
+            buffer2.WriteInt32((int)Packets.ClientPackets.CNeedMap);
+            buffer2.WriteInt32(needMap);
+            NetworkConfig.SendData(buffer2.UnreadData, buffer2.WritePosition);
         }
 
-        public static void MapData(ref byte[] data)
+        public static void MapData(ReadOnlyMemory<byte> data)
         {
             int x;
             int y;
             int i;
             int j;
             int mapNum;
-            var buffer = new ByteStream(Compression.DecompressBytes(data));
+            var buffer = new ByteStream(Compression.DecompressBytes(data.ToArray()));
 
             GameState.MapData = false;
 
@@ -1024,10 +1021,10 @@ namespace Client
             GameState.CanMoveNow = true;
         }
 
-        public static void Packet_MapNpcData(ref byte[] data)
+        public static void Packet_MapNpcData(ReadOnlyMemory<byte> data)
         {
             int i;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             for (i = 0; i < Constant.MaxMapNpcs; i++)
             {
@@ -1037,14 +1034,12 @@ namespace Client
                 withBlock.Y = (byte)buffer.ReadInt32();
                 withBlock.Dir = buffer.ReadByte();
             } 
-
-            buffer.Dispose();
         }
 
-        public static void Packet_MapNpcUpdate(ref byte[] data)
+        public static void Packet_MapNpcUpdate(ReadOnlyMemory<byte> data)
         {
             int npcNum;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             npcNum = buffer.ReadInt32();
 
@@ -1053,8 +1048,6 @@ namespace Client
             withBlock.X = buffer.ReadInt32();
             withBlock.Y = buffer.ReadInt32();
             withBlock.Dir = buffer.ReadByte();
-
-            buffer.Dispose();  
         }
 
         #endregion
@@ -1071,7 +1064,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestNewMap);
             buffer.WriteInt32(GetPlayerDir(GameState.MyIndex));
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
             GameState.GettingMap = true;
@@ -1084,7 +1077,7 @@ namespace Client
             var buffer = new ByteStream(4);
 
             buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditMap);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
 
             buffer.Dispose();
         }
@@ -1292,7 +1285,7 @@ namespace Client
             buffer.WriteInt32((int)Packets.ClientPackets.CSaveMap);
             buffer.WriteBlock(Compression.CompressBytes(data));
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -1302,7 +1295,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CMapRespawn);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 

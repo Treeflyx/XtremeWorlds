@@ -393,7 +393,7 @@ namespace Server
         private static async System.Threading.Tasks.Task SpawnGameObjectsAsync()
         {
             await System.Threading.Tasks.Task.WhenAll(
-                Item.SpawnAllMapsItemsAsync(),
+                System.Threading.Tasks.Task.Run(Item.SpawnAllMapsItems),
                 Npc.SpawnAllMapNpcs(),
                 EventLogic.SpawnAllMapGlobalEvents()
             );
@@ -647,7 +647,8 @@ namespace Server
                 case "/ban":
                     {
                         Core.Data.Account[playerIndex].Banned = true;
-                        PlayerService.Instance.RemovePlayer(playerIndex);
+                        var task = Server.Player.LeftGame(playerIndex);
+                        task.Wait();
                         Console.WriteLine($"Player {GetPlayerName(playerIndex)} has been banned by the server.");
                         
                         break;

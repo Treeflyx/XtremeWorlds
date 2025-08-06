@@ -3,12 +3,14 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
 using NpgsqlTypes;
+using Server.Game;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +21,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using Server.Game;
 using static Core.Global.Command;
 using static Core.Type;
 using static System.Net.Mime.MediaTypeNames;
@@ -368,7 +369,7 @@ namespace Server
             }
         }
 
-        public static async System.Threading.Tasks.Task<JObject> SelectRowAsync(long id, string tableName, string columnName)
+        public static async System.Threading.Tasks.Task<JObject?> SelectRowAsync(long id, string tableName, string columnName)
         {
             await ConnectionSemaphore.WaitAsync();
             try
@@ -1810,7 +1811,7 @@ namespace Server
             Core.Data.TempPlayer[index].TradeOffer = new PlayerInv[Core.Constant.MaxInv];
 
             Core.Data.TempPlayer[index].SkillCd = new int[Core.Constant.MaxPlayerSkills];
-            Core.Data.TempPlayer[index].Editor = -1;
+            Core.Data.TempPlayer[index].Editor = EditorType.None;
             Core.Data.TempPlayer[index].SkillBuffer = -1;
             Core.Data.TempPlayer[index].InShop = -1;
             Core.Data.TempPlayer[index].InTrade = -1;
@@ -2118,7 +2119,8 @@ namespace Server
             Core.Log.AddTextToFile(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
             Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
-            PlayerService.Instance.RemovePlayer(banPlayerIndex);
+            var task = Server.Player.LeftGame(banPlayerIndex);
+            task.Wait();
         }
 
         #endregion

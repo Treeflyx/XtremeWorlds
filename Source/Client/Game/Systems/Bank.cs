@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using static Core.Global.Command;
 using Microsoft.VisualBasic.CompilerServices;
 using Mirage.Sharp.Asfw;
@@ -32,11 +33,11 @@ namespace Client
 
         #region Incoming Packets
 
-        public static void Packet_OpenBank(ref byte[] data)
+        public static void Packet_OpenBank(ReadOnlyMemory<byte> data)
         {
             int i;
             int x;
-            var buffer = new ByteStream(data);
+            var buffer = new PacketReader(data);
 
             for (i = 0; i < Constant.MaxBank; i++)
             {
@@ -50,8 +51,6 @@ namespace Client
             {
                 Gui.ShowWindow(Gui.GetWindowIndex("winBank"), resetPosition: false);
             }
-
-            buffer.Dispose();
         }
 
         #endregion
@@ -66,7 +65,7 @@ namespace Client
             buffer.WriteInt32(invslot);
             buffer.WriteInt32(amount);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -78,7 +77,7 @@ namespace Client
             buffer.WriteByte(bankSlot);
             buffer.WriteInt32(amount);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -90,7 +89,7 @@ namespace Client
             buffer.WriteInt32(oldSlot);
             buffer.WriteInt32(newSlot);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
         }
 
@@ -106,7 +105,7 @@ namespace Client
 
             buffer.WriteInt32((int)Packets.ClientPackets.CCloseBank);
 
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
 
             GameState.InBank = false;

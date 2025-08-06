@@ -9,6 +9,7 @@ public static class GamePacketId
         CAddChar,
         CUseChar,
         CDelChar,
+        CLogout,
         CSayMsg,
         CBroadcastMsg,
         CPlayerMsg,

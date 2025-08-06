@@ -14,48 +14,36 @@ namespace Client
     {
         public static string TempFile = System.IO.Path.GetTempFileName() + ".cs";
 
-        public static void Packet_EditScript(ref byte[] data)
+        public static void Packet_EditScript(ReadOnlyMemory<byte> data)
         {
             ByteStream buffer;
             buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(data.ToArray()));
 
-            // Read the number of lines first
             int lineCount = buffer.ReadInt32();
-            var lines = new string[lineCount];
-            for (int i = 0; i < lineCount; i++)
+            string[] lines = new string[lineCount];
+            Array.Resize(ref Data.Script.Code, lineCount); 
+            int line = 0;
+
+            for (int i = 0; i < 256; i++)
             {
-                lines[i] = buffer.ReadString();
+                line = buffer.ReadInt32();
+                lines[line] = buffer.ReadString();
+                Data.Script.Code[line] = lines[line];
+
+                if (line == lineCount)
+                {
+                    break;
+                }
             }
-            Data.Script.Code = lines;
+
+            if (line != lineCount)
+            {
+                NetworkSend.SendRequestEditScript(line + 1);
+            }
 
             buffer.Dispose();
 
             GameState.InitScriptEditor = true;
-        }
-
-        public static void SendRequestEditScript()
-        {
-            ByteStream buffer;
-
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditScript);
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-
-        }
-
-        public static void SendSaveScript()
-        {
-            ByteStream buffer;
-
-            buffer = new ByteStream(4);
-
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveScript);
-            buffer.WriteString(string.Join(Environment.NewLine, Data.Script.Code));
-
-            NetworkConfig.Socket.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-
         }
 
         public static void ScriptEditorInit()
