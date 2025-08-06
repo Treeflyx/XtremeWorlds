@@ -424,7 +424,8 @@ public static string GetAccountLogin(int index)
                     {
                         if (Data.TempPlayer[i].Editor == id)
                         {
-                            return GetPlayerName(i);
+                            if (GetPlayerName(i) != GetPlayerName(index))
+                                return GetPlayerName(i);
                         }
                     }
                 }

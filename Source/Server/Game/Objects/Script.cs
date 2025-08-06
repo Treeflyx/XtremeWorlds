@@ -30,27 +30,37 @@ public static class Script
             return;
         }
 
+        var packetReader = new PacketReader(bytes);
+        var lineNum = packetReader.ReadInt32();
+
         Data.TempPlayer[session.Id].Editor = EditorType.Script;
 
         var codeLines = Data.Script.Code ?? [];
+        int count = 0;
 
         var buffer = new ByteStream(4);
 
         buffer.WriteInt32(codeLines.Length);
 
-        foreach (var line in codeLines)
+        for (int i = lineNum; i < codeLines.Length; i++)
         {
-            buffer.WriteString(line ?? string.Empty);
+            buffer.WriteInt32(i);
+            buffer.WriteString(codeLines[i] ?? string.Empty);
+            count++;
+
+            if (count == 256 || i == codeLines.Length - 1)
+            {
+                var data = Compression.CompressBytes(buffer.ToArray());
+                buffer = new ByteStream(4);
+                var packet = new PacketWriter();
+
+                packet.WriteEnum(ServerPackets.SScriptEditor);
+                packet.WriteRaw(data);
+
+                session.Channel.Send(packet.GetBytes());
+                break;
+            }
         }
-
-        var data = Compression.CompressBytes(buffer.ToArray());
-
-        var packet = new PacketWriter();
-
-        packet.WriteEnum(ServerPackets.SScriptEditor);
-        packet.WriteRaw(data);
-
-        session.Channel.Send(packet.GetBytes());
     }
 
     public static void HandleSaveScript(GameSession session, ReadOnlySpan<byte> bytes)

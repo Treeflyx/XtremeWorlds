@@ -1052,13 +1052,29 @@ namespace Client
             buffer.Dispose();
         }
 
-        public static void SendRequestEditScript()
+        public static void SendRequestEditScript(int LineNum = 0)
         {
-            var buffer = new ByteStream(4);
+            ByteStream buffer;
 
-            buffer.WriteInt32((int) Packets.ClientPackets.CRequestEditScript);
+            buffer = new ByteStream(4);
+            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditScript);
+            buffer.WriteInt32(LineNum);
             NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
             buffer.Dispose();
+        }
+
+        public static void SendSaveScript()
+        {
+            ByteStream buffer;
+
+            buffer = new ByteStream(4);
+
+            buffer.WriteInt32((int)Packets.ClientPackets.CSaveScript);
+            buffer.WriteString(string.Join(Environment.NewLine, Data.Script.Code));
+
+            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
+            buffer.Dispose();
+
         }
     }
 }

@@ -1555,9 +1555,9 @@ static void LoadFonts()
             if (Data.MyMapItem[itemNum].Num < 0 | Data.MyMapItem[itemNum].Num > Core.Constant.MaxItems)
                 return;
 
-            Item.StreamItem((int)Data.MyMapItem[itemNum].Num);
+            Item.StreamItem(Data.MyMapItem[itemNum].Num);
 
-            picNum = Core.Data.Item[(int)Data.MyMapItem[itemNum].Num].Icon;
+            picNum = Core.Data.Item[Data.MyMapItem[itemNum].Num].Icon;
 
             if (picNum < 1 | picNum > GameState.NumItems)
                 return;

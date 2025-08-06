@@ -320,7 +320,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditScript();
+            NetworkSend.SendRequestEditScript(0);
         }
 
         #endregion

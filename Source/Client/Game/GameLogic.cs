@@ -608,7 +608,7 @@ namespace Client
                                 Text.AddText(LocalesManager.Get("AccessDenied"), (int)Core.Color.BrightRed);
                             }
 
-                            Script.SendRequestEditScript();
+                            NetworkSend.SendRequestEditScript(0);
                             break;
                         }
 

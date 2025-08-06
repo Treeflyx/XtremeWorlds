@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using Core;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Client
 
             // Read the script file and set the script code to the file contents
             Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
-            Script.SendSaveScript();
+            NetworkSend.SendSaveScript();
         }
 
         private void frmEditor_Script_FormClosing(object sender, FormClosingEventArgs e)
