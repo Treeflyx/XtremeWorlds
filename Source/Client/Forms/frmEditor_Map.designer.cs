@@ -375,7 +375,7 @@ namespace Client
             pnlBack.Location = new Point(8, 12);
             pnlBack.Margin = new Padding(4);
             pnlBack.Name = "pnlBack";
-            pnlBack.Size = new Size(601, 401);
+            pnlBack.Size = new Size(601, 523);
             pnlBack.TabIndex = 9;
             // 
             // picBackSelect
@@ -384,12 +384,13 @@ namespace Client
             picBackSelect.Location = new Point(26, -4);
             picBackSelect.Margin = new Padding(4);
             picBackSelect.Name = "picBackSelect";
-            picBackSelect.Size = new Size(512, 384);
+            picBackSelect.Size = new Size(512, 512);
             picBackSelect.TabIndex = 22;
             picBackSelect.TabStop = false;
             picBackSelect.Paint += picBackSelect_Paint;
             picBackSelect.MouseDown += PicBackSelect_MouseDown;
             picBackSelect.MouseMove += PicBackSelect_MouseMove;
+            picBackSelect.MouseWheel += PicBackSelect_MouseWheel;
             // 
             // pnlAttributes
             // 
@@ -1027,7 +1028,7 @@ namespace Client
             cmbAutoTile.DrawMode = DrawMode.OwnerDrawVariable;
             cmbAutoTile.FormattingEnabled = true;
             cmbAutoTile.Items.AddRange(new object[] { "Normal", "AutoTile (VX)", "Fake (VX)", "Animated (VX)", "Cliff (VX)", "Waterfall (VX)" });
-            cmbAutoTile.Location = new Point(458, 449);
+            cmbAutoTile.Location = new Point(452, 543);
             cmbAutoTile.Margin = new Padding(4);
             cmbAutoTile.Name = "cmbAutoTile";
             cmbAutoTile.Size = new Size(125, 28);
@@ -1038,7 +1039,7 @@ namespace Client
             // 
             Label11.AutoSize = true;
             Label11.ForeColor = Color.FromArgb(220, 220, 220);
-            Label11.Location = new Point(385, 454);
+            Label11.Location = new Point(379, 548);
             Label11.Margin = new Padding(4, 0, 4, 0);
             Label11.Name = "Label11";
             Label11.Size = new Size(65, 20);
@@ -1049,7 +1050,7 @@ namespace Client
             // 
             Label10.AutoSize = true;
             Label10.ForeColor = Color.FromArgb(220, 220, 220);
-            Label10.Location = new Point(173, 454);
+            Label10.Location = new Point(167, 548);
             Label10.Margin = new Padding(4, 0, 4, 0);
             Label10.Name = "Label10";
             Label10.Size = new Size(47, 20);
@@ -1061,7 +1062,7 @@ namespace Client
             cmbLayers.DrawMode = DrawMode.OwnerDrawVariable;
             cmbLayers.FormattingEnabled = true;
             cmbLayers.Items.AddRange(new object[] { "Ground", "Mask", "Mask Anim", "Cover", "Cover Anim", "Fringe", "Fringe Anim", "Roof", "Roof Anim" });
-            cmbLayers.Location = new Point(229, 449);
+            cmbLayers.Location = new Point(223, 543);
             cmbLayers.Margin = new Padding(4);
             cmbLayers.Name = "cmbLayers";
             cmbLayers.Size = new Size(128, 28);
@@ -1072,7 +1073,7 @@ namespace Client
             // 
             Label9.AutoSize = true;
             Label9.ForeColor = Color.FromArgb(220, 220, 220);
-            Label9.Location = new Point(13, 454);
+            Label9.Location = new Point(7, 548);
             Label9.Margin = new Padding(4, 0, 4, 0);
             Label9.Name = "Label9";
             Label9.Size = new Size(55, 20);
@@ -1083,7 +1084,7 @@ namespace Client
             // 
             cmbTileSets.DrawMode = DrawMode.OwnerDrawVariable;
             cmbTileSets.FormattingEnabled = true;
-            cmbTileSets.Location = new Point(76, 449);
+            cmbTileSets.Location = new Point(70, 543);
             cmbTileSets.Margin = new Padding(4);
             cmbTileSets.Name = "cmbTileSets";
             cmbTileSets.Size = new Size(77, 28);
@@ -2108,7 +2109,7 @@ namespace Client
             AutoScroll = true;
             AutoSize = true;
             BackColor = Color.FromArgb(45, 45, 48);
-            ClientSize = new Size(631, 236);
+            ClientSize = new Size(631, 750);
             Controls.Add(tabpages);
             Controls.Add(ToolStrip);
             Controls.Add(pnlAttributes);

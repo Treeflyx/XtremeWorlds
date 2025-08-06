@@ -104,29 +104,69 @@ namespace Client
 
         }
 
+        // Pseudocode plan:
+        // 1. Add fields to track the offset for drawing the tileset (e.g., tilesetOffsetX, tilesetOffsetY).
+        // 2. Handle mouse wheel events on picBackSelect to update the offset values.
+        // 3. Modify DrawTileset to use the offset when drawing the image and selection rectangle.
+        // 4. Ensure offset does not exceed image bounds.
+
+        // Add these fields to frmEditor_Map class
+        private static int tilesetOffsetX = 0;
+        private static int tilesetOffsetY = 0;
+
+        // Mouse wheel event handler
+        private void PicBackSelect_MouseWheel(object sender, MouseEventArgs e)
+        {
+            // Vertical scroll
+            if (e.Delta > 0)
+                tilesetOffsetY = Math.Max(tilesetOffsetY - GameState.SizeY, 0);
+            else
+                tilesetOffsetY += GameState.SizeY;
+
+            // Clamp to image bounds
+            int maxY = 0;
+            if (Instance.picBackSelect.Image != null)
+                maxY = Math.Max(0, Instance.picBackSelect.Image.Height - Instance.picBackSelect.Height);
+            tilesetOffsetY = Math.Min(tilesetOffsetY, maxY);
+
+            Instance.picBackSelect.Invalidate();
+        }
+
+        // Optional: Add horizontal scroll with Shift key
+        protected override void OnMouseWheel(MouseEventArgs e)
+        {
+            if (picBackSelect.Focused && ModifierKeys.HasFlag(Keys.Shift))
+            {
+                if (e.Delta > 0)
+                    tilesetOffsetX = Math.Max(tilesetOffsetX - GameState.SizeX, 0);
+                else
+                    tilesetOffsetX += GameState.SizeX;
+
+                int maxX = 0;
+                if (Instance.picBackSelect.Image != null)
+                    maxX = Math.Max(0, Instance.picBackSelect.Image.Width - Instance.picBackSelect.Width);
+                tilesetOffsetX = Math.Min(tilesetOffsetX, maxX);
+
+                Instance.picBackSelect.Invalidate();
+            }
+            base.OnMouseWheel(e);
+        }
+
+        // Update DrawTileset to use offset
         public static void DrawTileset()
         {
             int tilesetIndex;
 
-            // Ensure a tileset is selected
             if (Instance.cmbTileSets.SelectedIndex == -1)
-            {
                 return;
-            }
 
-            // Get the selected tileset index
             tilesetIndex = GameState.CurTileset;
-
             if (tilesetIndex == 0)
-            {
                 return;
-            }
 
-            // Get the graphics information for the selected tileset
             string tilesetPath = System.IO.Path.Combine(Core.Path.Tilesets, tilesetIndex.ToString());
             var gfxInfo = GameClient.GetGfxInfo(tilesetPath);
 
-            // Handle varying tileset sizes
             if (!System.IO.File.Exists(tilesetPath + GameState.GfxExt))
             {
                 Instance.picBackSelect.Image = null;
@@ -138,22 +178,18 @@ namespace Client
                 int srcWidth = srcImage.Width;
                 int srcHeight = srcImage.Height;
 
-                // Dynamically resize PictureBox to match image size
-                Instance.picBackSelect.Width = srcWidth;
-                Instance.picBackSelect.Height = srcHeight;
-
                 using (var bmp = new System.Drawing.Bitmap(srcWidth, srcHeight))
                 using (var g = System.Drawing.Graphics.FromImage(bmp))
                 {
                     g.Clear(System.Drawing.Color.Black);
                     g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
-                    // Draw the image at (0,0) since PictureBox matches image size
-                    g.DrawImage(srcImage, 0, 0, srcWidth, srcHeight);
+                    // Draw the image at (-offsetX, -offsetY) to simulate scrolling
+                    g.DrawImage(srcImage, -tilesetOffsetX, -tilesetOffsetY, srcWidth, srcHeight);
 
-                    // Draw selection rectangle
-                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX;
-                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY;
+                    // Draw selection rectangle (adjusted for offset)
+                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX - tilesetOffsetX;
+                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY - tilesetOffsetY;
                     int scaledWidth = GameState.EditorTileWidth * GameState.SizeX;
                     int scaledHeight = GameState.EditorTileHeight * GameState.SizeY;
 
