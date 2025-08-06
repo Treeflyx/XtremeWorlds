@@ -401,7 +401,7 @@ static void LoadFonts()
                 ProcessInputs();
             }
 
-            if (GameState.MyEditorType == (int)EditorType.Map)
+            if (GameState.MyEditorType == EditorType.Map)
             {
                 if (IsKeyStateActive(Keys.Z))
                 {
@@ -931,7 +931,7 @@ static void LoadFonts()
             {
                 GameLogic.ScrollChatBox(0); // Scroll up
 
-                if (GameState.MyEditorType == (int)EditorType.Map)
+                if (GameState.MyEditorType == EditorType.Map)
                 {
                     if (GameClient.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
@@ -952,7 +952,7 @@ static void LoadFonts()
             {
                 GameLogic.ScrollChatBox(1); // Scroll down
 
-                if (GameState.MyEditorType == (int)EditorType.Map)
+                if (GameState.MyEditorType == EditorType.Map)
                 {
                     if (GameClient.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
@@ -1038,7 +1038,7 @@ static void LoadFonts()
             // In-game interactions for left click
             if (GameState.InGame == true)
             {
-                if (GameState.MyEditorType == (int)EditorType.Map)
+                if (GameState.MyEditorType == EditorType.Map)
                 {
                     frmEditor_Map.MapEditorMouseDown(GameState.CurX, GameState.CurY, false);
                 }             
@@ -2518,7 +2518,7 @@ static void LoadFonts()
             }
 
             // events
-            if (GameState.MyEditorType != (int)EditorType.Map)
+            if (GameState.MyEditorType != EditorType.Map)
             {
                 if (GameState.CurrentEvents > 0 & GameState.CurrentEvents <= Data.MyMap.EventCount)
                 {
@@ -2589,7 +2589,7 @@ static void LoadFonts()
                         }
                     }
 
-                    if (GameState.MyEditorType != (int)EditorType.Map)
+                    if (GameState.MyEditorType != EditorType.Map)
                     {
                         if (GameState.CurrentEvents > 0 & GameState.CurrentEvents <= Data.MyMap.EventCount)
                         {
@@ -2745,7 +2745,7 @@ static void LoadFonts()
             Map.DrawMapTint();
 
             // Draw out a square at mouse cursor
-            if (Conversions.ToInteger(GameState.MapGrid) == 1 & GameState.MyEditorType == (int)EditorType.Map)
+            if (Conversions.ToInteger(GameState.MapGrid) == 1 & GameState.MyEditorType == EditorType.Map)
             {
                 DrawGrid();
             }
@@ -2758,7 +2758,7 @@ static void LoadFonts()
                 }
             }
 
-            if (GameState.MyEditorType != (int)EditorType.Map)
+            if (GameState.MyEditorType != EditorType.Map)
             {
                 if (GameState.CurrentEvents > 0 && Data.MyMap.EventCount >= GameState.CurrentEvents)
                 {
@@ -2787,7 +2787,7 @@ static void LoadFonts()
             for (i = 0; i < byte.MaxValue; i++)
                 Text.DrawActionMsg(i);
 
-            if (GameState.MyEditorType == (int)EditorType.Map)
+            if (GameState.MyEditorType == EditorType.Map)
             {
                 UpdateDirBlock();
                 UpdateMapAttributes();
@@ -2826,7 +2826,7 @@ static void LoadFonts()
 
             Text.DrawMapName();
 
-            if (GameState.MyEditorType == (int)EditorType.Map)
+            if (GameState.MyEditorType == EditorType.Map)
             {
                 if (GameState.MapEditorTab == (int)MapEditorTab.Events)
                 {

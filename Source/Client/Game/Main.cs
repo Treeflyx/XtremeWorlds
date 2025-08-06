@@ -218,7 +218,7 @@ namespace Client
                 if (GameState.InitScriptEditor)
                 {
                     var withBlock12 = frmEditor_Script.Instance;
-                    GameState.MyEditorType = (int)Core. EditorType.Script;
+                    GameState.MyEditorType = (int)Core.EditorType.Script;
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock12.Show();

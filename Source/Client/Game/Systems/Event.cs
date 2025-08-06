@@ -132,7 +132,7 @@ namespace Client
             int i;
             int lowIndex = -1;
 
-            if (GameState.MyEditorType != (int)EditorType.Map)
+            if (GameState.MyEditorType != EditorType.Map)
                 return;
 
             // First pass: find all events to delete and shift others down
@@ -3755,7 +3755,7 @@ namespace Client
 
         public static void ProcessEventMovement(int id)
         {
-            if (GameState.MyEditorType == (int)EditorType.Map)
+            if (GameState.MyEditorType == EditorType.Map)
                 return;
 
             if (id >= Data.MyMap.EventCount)

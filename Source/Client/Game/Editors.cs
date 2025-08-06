@@ -66,14 +66,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Animation();
             NetworkSend.SendCloseEditor();
         }
 
         public static void AnimationEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Animation();
             Animation.ClearAnimations();
             NetworkSend.SendCloseEditor();
@@ -145,14 +145,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Npc();
             NetworkSend.SendCloseEditor();
         }
 
         public static void NpcEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Npc();
             Database.ClearNpcs();
             NetworkSend.SendCloseEditor();
@@ -210,14 +210,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Resource();
             NetworkSend.SendCloseEditor();
         }
 
         public static void ResourceEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Resource();
             MapResource.ClearResources();
             NetworkSend.SendCloseEditor();
@@ -298,14 +298,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Skill();
             NetworkSend.SendCloseEditor();
         }
 
         public static void SkillEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Skill();
             Database.ClearSkills();
             NetworkSend.SendCloseEditor();
@@ -380,14 +380,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Shop();
             NetworkSend.SendCloseEditor();
         }
 
         public static void ShopEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Shop();
             Shop.ClearShops();
             NetworkSend.SendCloseEditor();
@@ -411,13 +411,13 @@ namespace Client
                     NetworkSend.SendSaveJob(i);
                 }
             }
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             NetworkSend.SendCloseEditor();
         }
 
         public static void JobEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Job();
             Database.ClearJobs();
             NetworkSend.SendCloseEditor();
@@ -624,7 +624,7 @@ namespace Client
 
         public static void ItemEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             Item.ClearChangedItem();
             Item.ClearItems();
             NetworkSend.SendCloseEditor();
@@ -642,7 +642,7 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             Item.ClearChangedItem();
             NetworkSend.SendCloseEditor();
         }
@@ -659,13 +659,13 @@ namespace Client
                     NetworkSend.SendSaveMoral(i);
                 }
             }
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             NetworkSend.SendCloseEditor();
         }
 
         public static void MoralEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Moral();
             Moral.ClearMorals();
             NetworkSend.SendCloseEditor();
@@ -728,14 +728,14 @@ namespace Client
                 }
             }
 
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Projectile();
             NetworkSend.SendCloseEditor();
         }
 
         public static void ProjectileEditorCancel()
         {
-            GameState.MyEditorType = -1;
+            GameState.MyEditorType = EditorType.None;
             ClearChanged_Projectile();
             Projectile.ClearProjectile();
             NetworkSend.SendCloseEditor();

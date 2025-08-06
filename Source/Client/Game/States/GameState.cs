@@ -168,7 +168,7 @@ namespace Client
         public static bool Info;
 
         // Game editors
-        public static int MyEditorType;
+        public static EditorType MyEditorType;
         public static int EditorIndex;
         public static bool AdminPanel;
 
