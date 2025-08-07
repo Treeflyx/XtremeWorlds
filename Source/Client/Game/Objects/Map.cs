@@ -103,6 +103,13 @@ namespace Client
             if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
                 return;
 
+            // Check for null Layer arrays (cannot check struct for null, but can check Layer property)
+            if (Data.MyMap.Tile[x, y].Layer == null)
+                return;
+
+            if (Data.Autotile[x, y].Layer == null)
+                return;
+
             try
             {
                 for (i = (int)MapLayer.Ground; i <= (int)MapLayer.CoverAnimation; i++)
@@ -201,6 +208,13 @@ namespace Client
 
             // Ensure x and y are within valid map bounds
             if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
+                return;
+
+            // Check for null Layer arrays (cannot check struct for null, but can check Layer property)
+            if (Data.MyMap.Tile[x, y].Layer == null)
+                return;
+
+            if (Data.Autotile[x, y].Layer == null)
                 return;
 
             try

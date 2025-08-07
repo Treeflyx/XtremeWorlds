@@ -1980,7 +1980,7 @@ namespace Client
             // 
             scrlMapAlpha.Location = new Point(105, 182);
             scrlMapAlpha.Maximum = 255;
-            scrlMapAlpha.Minimum = 1;
+            scrlMapAlpha.Minimum = 0;
             scrlMapAlpha.Name = "scrlMapAlpha";
             scrlMapAlpha.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapAlpha.Size = new Size(241, 17);
@@ -1991,7 +1991,7 @@ namespace Client
             // 
             scrlMapBlue.Location = new Point(105, 148);
             scrlMapBlue.Maximum = 255;
-            scrlMapBlue.Minimum = 1;
+            scrlMapBlue.Minimum = 0;
             scrlMapBlue.Name = "scrlMapBlue";
             scrlMapBlue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBlue.Size = new Size(241, 17);
@@ -2002,7 +2002,7 @@ namespace Client
             // 
             scrlMapGreen.Location = new Point(105, 108);
             scrlMapGreen.Maximum = 255;
-            scrlMapGreen.Minimum = 1;
+            scrlMapGreen.Minimum = 0;
             scrlMapGreen.Name = "scrlMapGreen";
             scrlMapGreen.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapGreen.Size = new Size(241, 17);
@@ -2013,7 +2013,7 @@ namespace Client
             // 
             scrlMapRed.Location = new Point(105, 76);
             scrlMapRed.Maximum = 255;
-            scrlMapRed.Minimum = 1;
+            scrlMapRed.Minimum = 0;
             scrlMapRed.Name = "scrlMapRed";
             scrlMapRed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapRed.Size = new Size(241, 17);
@@ -2046,7 +2046,7 @@ namespace Client
             // 
             scrlFogOpacity.Location = new Point(150, 239);
             scrlFogOpacity.Maximum = 255;
-            scrlFogOpacity.Minimum = 1;
+            scrlFogOpacity.Minimum = 0;
             scrlFogOpacity.Name = "scrlFogOpacity";
             scrlFogOpacity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogOpacity.Size = new Size(241, 17);
@@ -2067,7 +2067,7 @@ namespace Client
             // scrlFogSpeed
             // 
             scrlFogSpeed.Location = new Point(150, 195);
-            scrlFogSpeed.Minimum = 1;
+            scrlFogSpeed.Minimum = 0;
             scrlFogSpeed.Name = "scrlFogSpeed";
             scrlFogSpeed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogSpeed.Size = new Size(241, 17);
@@ -2088,7 +2088,7 @@ namespace Client
             // scrlIntensity
             // 
             scrlIntensity.Location = new Point(150, 99);
-            scrlIntensity.Minimum = 1;
+            scrlIntensity.Minimum = 0;
             scrlIntensity.Name = "scrlIntensity";
             scrlIntensity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlIntensity.Size = new Size(241, 17);
@@ -2109,7 +2109,7 @@ namespace Client
             // scrlFog
             // 
             scrlFog.Location = new Point(150, 155);
-            scrlFog.Minimum = 1;
+            scrlFog.Minimum = 0;
             scrlFog.Name = "scrlFog";
             scrlFog.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFog.Size = new Size(241, 17);
