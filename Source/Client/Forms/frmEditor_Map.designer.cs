@@ -107,7 +107,7 @@ namespace Client
             btnTrap = new DarkButton();
             scrlTrap = new HScrollBar();
             lblTrap = new DarkLabel();
-            ToolStrip = new ToolStrip();
+            ToolStrip = new DarkToolStrip();
             tsbSave = new ToolStripButton();
             tsbDiscard = new ToolStripButton();
             ToolStripSeparator1 = new ToolStripSeparator();
