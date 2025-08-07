@@ -18,6 +18,9 @@ namespace Client
 
     public partial class Editor_Map
     {
+        private static int tilesetOffsetX = 0;
+        private static int tilesetOffsetY = 0;
+
         public Editor_Map()
         {
             InitializeComponent();
@@ -104,9 +107,6 @@ namespace Client
 
         }
 
-        // Add these fields to Editor_Map class
-        private static int tilesetOffsetX = 0;
-        private static int tilesetOffsetY = 0;
 
         // Mouse wheel event handler
         private void PicBackSelect_MouseWheel(object sender, MouseEventArgs e)
