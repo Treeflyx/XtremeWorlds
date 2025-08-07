@@ -623,6 +623,11 @@ public static class Player
             }
         }
 
+        if (Data.Map[mapNum].Tile == null)
+        {
+            return false;
+        }
+
         // Check to make sure that the tile is walkable
         if (IsDirBlocked(ref Data.Map[mapNum].Tile[x, y].DirBlock, (byte) dir))
         {
