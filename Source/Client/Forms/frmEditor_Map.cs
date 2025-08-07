@@ -758,7 +758,7 @@ namespace Client
         private void ScrlFogSpeed_Scroll(object sender, EventArgs e)
         {
             Data.MyMap.FogSpeed = (byte)scrlFogSpeed.Value;
-            lblFogSpeed.Text = "FogSpeed: " + scrlFogSpeed.Value;
+            lblFogSpeed.Text = "Fog Speed: " + scrlFogSpeed.Value;
         }
 
         private void ScrlFogOpacity_Scroll(object sender, EventArgs e)
