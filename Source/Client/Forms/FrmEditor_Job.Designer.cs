@@ -6,8 +6,6 @@ using System.Windows.Forms;
 
 namespace Client
 {
-
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
     internal partial class Editor_Job : DarkForm
     {
 

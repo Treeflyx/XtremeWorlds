@@ -7,8 +7,6 @@ using DarkUI.Forms;
 
 namespace Client
 {
-
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
     internal partial class FrmAdmin : DarkForm
     {
 

@@ -7,8 +7,6 @@ using System.Windows.Forms;
 
 namespace Client
 {
-
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
     public partial class Editor_Map : DarkForm
     {
 
