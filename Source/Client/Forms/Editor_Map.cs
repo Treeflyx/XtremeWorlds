@@ -1013,48 +1013,45 @@ namespace Client
                     switch (GameState.CurAutotileType)
                     {
                         case 1: // autotile
-                            {
-                                GameState.EditorTileWidth = 2;
-                                GameState.EditorTileHeight = 3;
-                                break;
-                            }
+                            GameState.EditorTileWidth = 2;
+                            GameState.EditorTileHeight = 3;
+                            break;
                         case 2: // fake autotile
-                            {
-                                GameState.EditorTileWidth = 1;
-                                GameState.EditorTileHeight = 1;
-                                break;
-                            }
+                            GameState.EditorTileWidth = 1;
+                            GameState.EditorTileHeight = 1;
+                            break;
                         case 3: // animated
-                            {
-                                GameState.EditorTileWidth = 6;
-                                GameState.EditorTileHeight = 3;
-                                break;
-                            }
+                            GameState.EditorTileWidth = 6;
+                            GameState.EditorTileHeight = 3;
+                            break;
                         case 4: // cliff
-                            {
-                                GameState.EditorTileWidth = 2;
-                                GameState.EditorTileHeight = 2;
-                                break;
-                            }
+                            GameState.EditorTileWidth = 2;
+                            GameState.EditorTileHeight = 2;
+                            break;
                         case 5: // waterfall
-                            {
-                                GameState.EditorTileWidth = 2;
-                                GameState.EditorTileHeight = 3;
-                                break;
-                            }
+                            GameState.EditorTileWidth = 2;
+                            GameState.EditorTileHeight = 3;
+                            break;
                     }
                 }
 
-                GameState.EditorTileX = (int)(Math.Floor(X / GameState.SizeX));
-                GameState.EditorTileY = (int)(Math.Floor(Y / GameState.SizeY));
+                // Corrected: Use integer division to get the tile index, not Math.Round
+                GameState.EditorTileX = (int)(X / GameState.SizeX);
+                GameState.EditorTileY = (int)(Y / GameState.SizeY);
 
                 GameState.EditorTileSelStart = new Point(GameState.EditorTileX, GameState.EditorTileY);
-                GameState.EditorTileSelEnd = new Point(GameState.EditorTileX + GameState.EditorTileWidth, GameState.EditorTileY + GameState.EditorTileHeight);
+                GameState.EditorTileSelEnd = new Point(
+                    GameState.EditorTileX + GameState.EditorTileWidth,
+                    GameState.EditorTileY + GameState.EditorTileHeight
+                );
             }
         }
 
         public static void MapEditorDrag(int Button, float X, float Y)
         {
+            if (GameState.CurAutotileType > 0)
+                return;
+
             if (Button == (int)MouseButtons.Left) // Left Mouse Button
             {
                 // convert the pixel number to tile number
