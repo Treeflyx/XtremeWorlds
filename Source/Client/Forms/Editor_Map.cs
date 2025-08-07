@@ -1036,8 +1036,8 @@ namespace Client
                 }
 
                 // Corrected: Use integer division to get the tile index, not Math.Round
-                GameState.EditorTileX = (int)(X / GameState.SizeX);
-                GameState.EditorTileY = (int)(Y / GameState.SizeY);
+                GameState.EditorTileX = (int)((X + tilesetOffsetX) / GameState.SizeX);
+                GameState.EditorTileY = (int)((Y + tilesetOffsetY) / GameState.SizeY);
 
                 GameState.EditorTileSelStart = new Point(GameState.EditorTileX, GameState.EditorTileY);
                 GameState.EditorTileSelEnd = new Point(
