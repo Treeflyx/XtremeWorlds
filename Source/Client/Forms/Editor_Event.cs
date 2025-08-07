@@ -15,7 +15,7 @@ namespace Client
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 
-        #region Frm
+        #region Form
 
         public void ClearConditionFrame()
         {

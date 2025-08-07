@@ -26,7 +26,7 @@ namespace Client
             InitializeComponent();
         }
 
-        #region Frm
+        #region Form
         private void Editor_Map_Load(object sender, EventArgs e)
         {
             pnlAttributes.BringToFront();

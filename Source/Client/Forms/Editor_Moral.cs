@@ -12,7 +12,7 @@ namespace Client
         {
             InitializeComponent();
         }
-        #region Frm
+        #region Form
 
         protected override void WndProc(ref Message m)
         {

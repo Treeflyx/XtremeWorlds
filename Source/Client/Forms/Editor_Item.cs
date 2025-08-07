@@ -14,7 +14,7 @@ namespace Client
             InitializeComponent();
         }
 
-        #region Frm
+        #region Form
 
         private void BtnSave_Click(object sender, EventArgs e)
         {

@@ -15,7 +15,7 @@ namespace Client
             InitializeComponent();
         }
 
-        #region Frm
+        #region Form
 
         private void Editor_Job_Load(object sender, EventArgs e)
         {

@@ -14,7 +14,7 @@ namespace Client
             InitializeComponent();
         }
 
-        #region Frm
+        #region Form
 
         private void Editor_Npc_Load(object sender, EventArgs e)
         {

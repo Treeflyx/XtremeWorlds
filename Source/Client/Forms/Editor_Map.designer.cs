@@ -1677,7 +1677,7 @@ namespace Client
             // lstMusic
             // 
             lstMusic.BackColor = Color.FromArgb(45, 45, 48);
-            lstMusic.ForeColor = SystemColors.Window;
+            lstMusic.ForeColor = Color.Gainsboro;
             lstMusic.FormattingEnabled = true;
             lstMusic.Location = new Point(10, 36);
             lstMusic.Margin = new Padding(5);
