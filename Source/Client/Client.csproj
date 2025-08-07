@@ -1,148 +1,117 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>Client</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <MyType>Empty</MyType>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ManifestCertificateThumbprint>181BBD77C201FB969E61DF100063FD42A08B2BE6</ManifestCertificateThumbprint>
-    <TargetZone>LocalIntranet</TargetZone>
-    <SignManifests>false</SignManifests>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>false</BootstrapperEnabled>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DebugType>Full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-    <DefaultItemExcludes>$(DefaultItemExcludes);$(ProjectDir)**\*.csproj</DefaultItemExcludes>
-    <LangVersion>latest</LangVersion>
-	<MonoGamePlatform>OpenGL</MonoGamePlatform>
-	<EnableWindowsFormsHighDpiAutoResizing>true</EnableWindowsFormsHighDpiAutoResizing>
-	<HighDpiMode>SystemAware</HighDpiMode>
-	<!-- Options: DpiUnaware, SystemAware, PerMonitor, PerMonitorV2 -->
-	<UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <OutputPath>..\..\Build\Client\</OutputPath>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355,CA1416</NoWarn>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>CLIENT</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <OutputPath>..\..\Build\Client\</OutputPath>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355,CA1416</NoWarn>
-    <DebugType>None</DebugType>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>CLIENT</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="bass.dll" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="bassmidi.dll" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="libbass.dylib" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="libbassmidi.dylib" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="libbass.so" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="libbassmidi.so" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="GeneralUser.sf2" CopyToOutputDirectory="PreserveNewest" />
-	  <Content Include="Content\**\*.*">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		  <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
-	  </Content>
-	  <Compile Remove="Content\Crystalshire.cs" />
-	  <Compile Remove="Content\UI.cs" />
-	  <Content Remove="Content\Crystalshire.cs" />
-	  <Content Remove="Content\UI.cs" />
-    <EmbeddedResource Include="Icon.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Modules\DarkUI\DarkUI\DarkUI.csproj" />
-    <ProjectReference Include="..\Network\Asfw.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
-    <PackageReference Include="ManagedBass" />
-    <PackageReference Include="ManagedBass.Midi" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
-    <PackageReference Include="Microsoft.VisualBasic" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" />
-    <PackageReference Include="MonoGame.Framework.Content.Pipeline" />
-    <PackageReference Include="MonoGame.Framework.DesktopGL" />
-    <PackageReference Include="MonoGame.Library.SDL" />
-    <PackageReference Include="Ryujinx.SDL2-CS" />
-    <PackageReference Include="SDL2-CS" />
-    <PackageReference Include="Serilog" />
-    <PackageReference Include="Serilog.Enrichers.Environment" />
-    <PackageReference Include="Serilog.Enrichers.Thread" />
-    <PackageReference Include="Serilog.Extensions.Logging" />
-    <PackageReference Include="Serilog.Settings.Configuration" />
-    <PackageReference Include="Serilog.Sinks.Console" />
-    <PackageReference Include="Serilog.Sinks.File" />
-    <PackageReference Include="System.Reflection.Extensions" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Network\Asfw.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.Configuration">
-      <HintPath>..\..\..\.nuget\packages\microsoft.extensions.configuration\9.0.0\lib\net8.0\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.UserSecrets">
-      <HintPath>..\..\..\.nuget\packages\microsoft.extensions.configuration.usersecrets\9.0.6\lib\net9.0\Microsoft.Extensions.Configuration.UserSecrets.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Configuration" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Content\Skins\Crystashire.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <PropertyGroup>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <ApplicationIcon>icon.ico</ApplicationIcon>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <UserSecretsId>e1a83a62-5587-413f-8a1a-f277ec156c75</UserSecretsId>
-    <TargetFramework>net9.0-windows</TargetFramework>
-  </PropertyGroup>
-  <Target Name="EnsureContentFolderExists" BeforeTargets="Build">
-    <MakeDir Directories="$(OutputPath)Content" />
-  </Target>
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <RootNamespace>Client</RootNamespace>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <OutputPath>..\..\Build\Client\</OutputPath>
+        <DefineConstants>CLIENT</DefineConstants>
+        <UserSecretsId>e1a83a62-5587-413f-8a1a-f277ec156c75</UserSecretsId>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <MonoGamePlatform>OpenGL</MonoGamePlatform>
+        <EnableWindowsFormsHighDpiAutoResizing>true</EnableWindowsFormsHighDpiAutoResizing>
+        <HighDpiMode>SystemAware</HighDpiMode>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Title>XtremeWorlds Client</Title>
+        <Product>Game Client</Product>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ManifestCertificateThumbprint>181BBD77C201FB969E61DF100063FD42A08B2BE6</ManifestCertificateThumbprint>
+        <TargetZone>LocalIntranet</TargetZone>
+        <SignManifests>false</SignManifests>
+        <Install>true</Install>
+        <InstallFrom>Disk</InstallFrom>
+        <UpdateEnabled>false</UpdateEnabled>
+        <UpdateMode>Foreground</UpdateMode>
+        <UpdateInterval>7</UpdateInterval>
+        <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+        <UpdatePeriodically>false</UpdatePeriodically>
+        <UpdateRequired>false</UpdateRequired>
+        <ApplicationRevision>1</ApplicationRevision>
+        <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+        <UseApplicationTrust>false</UseApplicationTrust>
+        <PublishWizardCompleted>true</PublishWizardCompleted>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="bass.dll" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="bassmidi.dll" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="libbass.dylib" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="libbassmidi.dylib" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="libbass.so" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="libbassmidi.so" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="GeneralUser.sf2" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="Content\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        </Content>
+        <Compile Remove="Content\Crystalshire.cs"/>
+        <Compile Remove="Content\UI.cs"/>
+        <Content Remove="Content\Crystalshire.cs"/>
+        <Content Remove="Content\UI.cs"/>
+        <EmbeddedResource Include="Icon.bmp">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Core\Core.csproj"/>
+        <ProjectReference Include="..\Modules\DarkUI\DarkUI\DarkUI.csproj"/>
+        <ProjectReference Include="..\Network\Asfw.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ManagedBass"/>
+        <PackageReference Include="ManagedBass.Midi"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
+        <PackageReference Include="Microsoft.VisualBasic"/>
+        <PackageReference Include="MonoGame.Content.Builder.Task"/>
+        <PackageReference Include="MonoGame.Framework.Content.Pipeline"/>
+        <PackageReference Include="MonoGame.Framework.DesktopGL"/>
+        <PackageReference Include="MonoGame.Library.SDL"/>
+        <PackageReference Include="Ryujinx.SDL2-CS"/>
+        <PackageReference Include="SDL2-CS"/>
+        <PackageReference Include="Serilog"/>
+        <PackageReference Include="Serilog.Enrichers.Environment"/>
+        <PackageReference Include="Serilog.Enrichers.Thread"/>
+        <PackageReference Include="Serilog.Extensions.Logging"/>
+        <PackageReference Include="Serilog.Settings.Configuration"/>
+        <PackageReference Include="Serilog.Sinks.Console"/>
+        <PackageReference Include="Serilog.Sinks.File"/>
+        <PackageReference Include="System.Reflection.Extensions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Content\Skins\Crystashire.cs">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Compile>
+        <Compile Update="Properties\Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <Target Name="EnsureContentFolderExists" BeforeTargets="Build">
+        <MakeDir Directories="$(OutputPath)Content"/>
+    </Target>
+
 </Project>

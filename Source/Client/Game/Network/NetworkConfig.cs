@@ -71,11 +71,6 @@ public static class NetworkConfig
         Client.Send(data);
     }
 
-    public static void SendData(ReadOnlySpan<byte> data)
-    {
-        Client.Send(data.ToArray());
-    }
-
     public static void SendData(ReadOnlySpan<byte> data, int head)
     {
         if (data.Length < head)
@@ -90,36 +85,5 @@ public static class NetworkConfig
         Buffer.BlockCopy(data[..head].ToArray(), 0, buffer, 4, head);
         
         SendData(buffer);
-    }
-    
-    private static void Socket_ConnectionFailed()
-    {
-        Console.WriteLine("Failed to connect to the server. Retrying...");
-    }
-
-    private static void Socket_ConnectionLost()
-    {
-    }
-
-    private static void Socket_CrashReport(string err)
-    {
-        GameLogic.LogoutGame();
-        GameLogic.DialogueAlert((byte) SystemMessage.Crashed);
-
-        var currentDateTime = DateTime.Now;
-        string timestampForFileName = currentDateTime.ToString("yyyyMMdd_HHmmss");
-        string logFileName = $"{timestampForFileName}.txt";
-
-        Log.Add(err, logFileName);
-    }
-
-    private static void Socket_TrafficReceived(int size, ref byte[] data)
-    {
-        Console.WriteLine("Traffic Received : [Size: " + size + "]");
-    }
-
-    private static void Socket_PacketReceived(int size, int header, ref byte[] data)
-    {
-        Console.WriteLine("Packet Received : [Size: " + size + "| Packet: " + ((Packets.ServerPackets) header).ToString() + "]");
     }
 }
