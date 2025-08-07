@@ -5,7 +5,7 @@ using Core;
 namespace Client
 {
 
-    internal partial class Editor_Shop
+    public partial class Editor_Shop
     {
         public Editor_Shop()
         {

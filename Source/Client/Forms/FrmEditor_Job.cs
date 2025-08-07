@@ -8,7 +8,7 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class Editor_Job
+    public partial class Editor_Job
     {
         public Editor_Job()
         {

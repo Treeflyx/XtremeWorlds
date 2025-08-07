@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    internal partial class Editor_Projectile : Form
+    public partial class Editor_Projectile : Form
     {
 
         // Shared instance of the form

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    internal partial class Editor_Shop : Form
+    public partial class Editor_Shop : Form
     {
 
         // Shared instance of the form

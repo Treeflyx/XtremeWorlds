@@ -10,7 +10,7 @@ using RenderTargetUsage = Microsoft.Xna.Framework.Graphics.RenderTargetUsage;
 
 namespace Client
 {
-    internal partial class Editor_Animation
+    public partial class Editor_Animation
     {
 
         protected override void WndProc(ref Message m)

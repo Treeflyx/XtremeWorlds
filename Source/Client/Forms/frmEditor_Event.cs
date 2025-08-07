@@ -10,7 +10,7 @@ using static Core.Type;
 namespace Client
 {
 
-    internal partial class Editor_Event
+    public partial class Editor_Event
     {
         private int tmpGraphicIndex;
         private byte tmpGraphicType;

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    internal partial class Editor_Animation : DarkForm
+    public partial class Editor_Animation : DarkForm
     {
 
         // Shared instance of the form

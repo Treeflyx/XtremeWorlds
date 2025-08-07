@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    internal partial class Editor_Skill : Form
+    public partial class Editor_Skill : Form
     {
         // Shared instance of the form
         private static Editor_Skill _instance;

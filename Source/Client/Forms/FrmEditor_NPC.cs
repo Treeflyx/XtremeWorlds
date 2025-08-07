@@ -7,7 +7,7 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class Editor_Npc
+    public partial class Editor_Npc
     {
         public Editor_Npc()
         {

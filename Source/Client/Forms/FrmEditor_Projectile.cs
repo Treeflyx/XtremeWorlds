@@ -7,7 +7,7 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class Editor_Projectile
+    public partial class Editor_Projectile
     {
         public Editor_Projectile()
         {

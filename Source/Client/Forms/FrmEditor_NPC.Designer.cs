@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    internal partial class Editor_Npc : DarkForm
+    public partial class Editor_Npc : DarkForm
     {
         // Shared instance of the form
         private static Editor_Npc _instance;

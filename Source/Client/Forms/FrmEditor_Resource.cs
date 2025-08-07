@@ -3,7 +3,7 @@ using Microsoft.VisualBasic;
 
 namespace Client
 {
-    internal partial class Editor_Resource
+    public partial class Editor_Resource
     {
         public Editor_Resource()
         {
