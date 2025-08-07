@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Controls;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -306,22 +307,22 @@ namespace Client
 
         }
 
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox1;
+        internal DarkGroupBox DarkGroupBox1;
         internal ListBox lstIndex;
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox2;
-        internal DarkUI.Controls.DarkTextBox txtName;
-        internal DarkUI.Controls.DarkLabel DarkLabel1;
+        internal DarkGroupBox DarkGroupBox2;
+        internal DarkTextBox txtName;
+        internal DarkLabel DarkLabel1;
         internal PictureBox picProjectile;
-        internal DarkUI.Controls.DarkNumericUpDown nudRange;
-        internal DarkUI.Controls.DarkNumericUpDown nudPic;
-        internal DarkUI.Controls.DarkLabel DarkLabel2;
-        internal DarkUI.Controls.DarkLabel DarkLabel3;
-        internal DarkUI.Controls.DarkNumericUpDown nudDamage;
-        internal DarkUI.Controls.DarkNumericUpDown nudSpeed;
-        internal DarkUI.Controls.DarkLabel DarkLabel4;
-        internal DarkUI.Controls.DarkLabel DarkLabel5;
-        internal DarkUI.Controls.DarkButton btnSave;
-        internal DarkUI.Controls.DarkButton btnCancel;
-        internal DarkUI.Controls.DarkButton btnDelete;
+        internal DarkNumericUpDown nudRange;
+        internal DarkNumericUpDown nudPic;
+        internal DarkLabel DarkLabel2;
+        internal DarkLabel DarkLabel3;
+        internal DarkNumericUpDown nudDamage;
+        internal DarkNumericUpDown nudSpeed;
+        internal DarkLabel DarkLabel4;
+        internal DarkLabel DarkLabel5;
+        internal DarkButton btnSave;
+        internal DarkButton btnCancel;
+        internal DarkButton btnDelete;
     }
 }

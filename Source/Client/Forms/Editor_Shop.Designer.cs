@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Controls;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -387,28 +388,28 @@ namespace Client
 
         }
 
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox1;
+        internal DarkGroupBox DarkGroupBox1;
         internal ListBox lstIndex;
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox2;
-        internal DarkUI.Controls.DarkTextBox txtName;
-        internal DarkUI.Controls.DarkLabel DarkLabel1;
-        internal DarkUI.Controls.DarkLabel DarkLabel4;
-        internal DarkUI.Controls.DarkLabel DarkLabel3;
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox3;
-        internal DarkUI.Controls.DarkComboBox cmbItem;
-        internal DarkUI.Controls.DarkLabel DarkLabel5;
+        internal DarkGroupBox DarkGroupBox2;
+        internal DarkTextBox txtName;
+        internal DarkLabel DarkLabel1;
+        internal DarkLabel DarkLabel4;
+        internal DarkLabel DarkLabel3;
+        internal DarkGroupBox DarkGroupBox3;
+        internal DarkComboBox cmbItem;
+        internal DarkLabel DarkLabel5;
         internal ListBox lstTradeItem;
-        internal DarkUI.Controls.DarkNumericUpDown nudItemValue;
-        internal DarkUI.Controls.DarkLabel DarkLabel6;
-        internal DarkUI.Controls.DarkLabel DarkLabel7;
-        internal DarkUI.Controls.DarkComboBox cmbCostItem;
-        internal DarkUI.Controls.DarkNumericUpDown nudCostValue;
-        internal DarkUI.Controls.DarkLabel DarkLabel8;
-        internal DarkUI.Controls.DarkButton btnUpdate;
-        internal DarkUI.Controls.DarkButton btnDeleteTrade;
-        internal DarkUI.Controls.DarkButton btnCancel;
-        internal DarkUI.Controls.DarkButton btnDelete;
-        internal DarkUI.Controls.DarkButton btnSave;
-        internal DarkUI.Controls.DarkNumericUpDown nudBuy;
+        internal DarkNumericUpDown nudItemValue;
+        internal DarkLabel DarkLabel6;
+        internal DarkLabel DarkLabel7;
+        internal DarkComboBox cmbCostItem;
+        internal DarkNumericUpDown nudCostValue;
+        internal DarkLabel DarkLabel8;
+        internal DarkButton btnUpdate;
+        internal DarkButton btnDeleteTrade;
+        internal DarkButton btnCancel;
+        internal DarkButton btnDelete;
+        internal DarkButton btnSave;
+        internal DarkNumericUpDown nudBuy;
     }
 }

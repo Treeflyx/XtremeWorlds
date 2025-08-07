@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using DarkUI.Controls;
+using System.Diagnostics;
 
 namespace Client
 {
@@ -87,7 +88,7 @@ namespace Client
         }
 
         #endregion
-        internal DarkUI.Controls.DarkButton btnOpenScript;
-        internal DarkUI.Controls.DarkButton buttonSaveScript;
+        internal DarkButton btnOpenScript;
+        internal DarkButton buttonSaveScript;
     }
 }

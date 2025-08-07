@@ -1,4 +1,5 @@
-﻿using DarkUI.Forms;
+﻿using DarkUI.Controls;
+using DarkUI.Forms;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -331,24 +332,24 @@ namespace Client
             Load += new EventHandler(Editor_Moral_Load);
             ResumeLayout(false);
         }
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox1;
+        internal DarkGroupBox DarkGroupBox1;
         internal ListBox lstIndex;
-        internal DarkUI.Controls.DarkLabel DarkLabel6;
-        internal DarkUI.Controls.DarkTextBox txtName;
-        internal DarkUI.Controls.DarkGroupBox DarkGroupBox2;
-        internal DarkUI.Controls.DarkComboBox cmbColor;
-        internal DarkUI.Controls.DarkLabel DarkLabel11;
-        internal DarkUI.Controls.DarkCheckBox chkCanPickupItem;
-        internal DarkUI.Controls.DarkCheckBox chkCanPK;
-        internal DarkUI.Controls.DarkCheckBox chkCanCast;
-        internal DarkUI.Controls.DarkCheckBox chkNpcBlock;
-        internal DarkUI.Controls.DarkCheckBox chkPlayerBlock;
-        internal DarkUI.Controls.DarkCheckBox chkLoseExp;
-        internal DarkUI.Controls.DarkCheckBox chkDropItems;
-        internal DarkUI.Controls.DarkCheckBox chkCanUseItem;
-        internal DarkUI.Controls.DarkCheckBox chkCanDropItem;
-        internal DarkUI.Controls.DarkButton btnDelete;
-        internal DarkUI.Controls.DarkButton btnSave;
-        internal DarkUI.Controls.DarkButton btnCancel;
+        internal DarkLabel DarkLabel6;
+        internal DarkTextBox txtName;
+        internal DarkGroupBox DarkGroupBox2;
+        internal DarkComboBox cmbColor;
+        internal DarkLabel DarkLabel11;
+        internal DarkCheckBox chkCanPickupItem;
+        internal DarkCheckBox chkCanPK;
+        internal DarkCheckBox chkCanCast;
+        internal DarkCheckBox chkNpcBlock;
+        internal DarkCheckBox chkPlayerBlock;
+        internal DarkCheckBox chkLoseExp;
+        internal DarkCheckBox chkDropItems;
+        internal DarkCheckBox chkCanUseItem;
+        internal DarkCheckBox chkCanDropItem;
+        internal DarkButton btnDelete;
+        internal DarkButton btnSave;
+        internal DarkButton btnCancel;
     }
 }
