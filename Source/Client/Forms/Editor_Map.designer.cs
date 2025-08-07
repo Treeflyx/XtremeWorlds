@@ -66,6 +66,7 @@ namespace Client
             optWarp = new DarkRadioButton();
             optBlocked = new DarkRadioButton();
             pnlBack = new Panel();
+            scrlTileset = new DarkScrollBar();
             picBackSelect = new PictureBox();
             pnlAttributes = new Panel();
             fraAnimation = new DarkGroupBox();
@@ -370,12 +371,22 @@ namespace Client
             // 
             // pnlBack
             // 
+            pnlBack.Controls.Add(scrlTileset);
             pnlBack.Controls.Add(picBackSelect);
             pnlBack.Location = new Point(10, 15);
             pnlBack.Margin = new Padding(5);
             pnlBack.Name = "pnlBack";
             pnlBack.Size = new Size(751, 654);
             pnlBack.TabIndex = 9;
+            // 
+            // scrlTileset
+            // 
+            scrlTileset.Location = new Point(680, 8);
+            scrlTileset.Name = "scrlTileset";
+            scrlTileset.Size = new Size(30, 627);
+            scrlTileset.TabIndex = 23;
+            scrlTileset.Text = "Tileset";
+            scrlTileset.Click += scrlTileset_Click;
             // 
             // picBackSelect
             // 
@@ -1036,11 +1047,15 @@ namespace Client
             tabPages.Controls.Add(tpDirBlock);
             tabPages.Controls.Add(tpEvents);
             tabPages.Controls.Add(tpEffects);
+            tabPages.DrawMode = TabDrawMode.OwnerDrawFixed;
+            tabPages.ForeColor = Color.Gainsboro;
+            tabPages.ItemSize = new Size(120, 28);
             tabPages.Location = new Point(8, 52);
             tabPages.Margin = new Padding(5);
-            tabPages.Name = "Menu";
+            tabPages.Name = "tabPages";
             tabPages.SelectedIndex = 0;
             tabPages.Size = new Size(785, 1049);
+            tabPages.SizeMode = TabSizeMode.Fixed;
             tabPages.TabIndex = 14;
             tabPages.SelectedIndexChanged += tabPages_SelectedIndexChanged;
             // 
@@ -1054,11 +1069,11 @@ namespace Client
             tpTiles.Controls.Add(Label9);
             tpTiles.Controls.Add(cmbTileSets);
             tpTiles.Controls.Add(pnlBack);
-            tpTiles.Location = new Point(4, 34);
+            tpTiles.Location = new Point(4, 32);
             tpTiles.Margin = new Padding(5);
             tpTiles.Name = "tpTiles";
             tpTiles.Padding = new Padding(5);
-            tpTiles.Size = new Size(777, 1011);
+            tpTiles.Size = new Size(777, 1013);
             tpTiles.TabIndex = 0;
             tpTiles.Text = "Tiles";
             // 
@@ -1151,11 +1166,11 @@ namespace Client
             tpAttributes.Controls.Add(optNpcAvoid);
             tpAttributes.Controls.Add(optNpcSpawn);
             tpAttributes.Controls.Add(optResource);
-            tpAttributes.Location = new Point(4, 34);
+            tpAttributes.Location = new Point(4, 32);
             tpAttributes.Margin = new Padding(5);
             tpAttributes.Name = "tpAttributes";
             tpAttributes.Padding = new Padding(5);
-            tpAttributes.Size = new Size(777, 1011);
+            tpAttributes.Size = new Size(777, 1013);
             tpAttributes.TabIndex = 3;
             tpAttributes.Text = "Attributes";
             // 
@@ -1228,11 +1243,11 @@ namespace Client
             // 
             tpNpcs.BackColor = Color.FromArgb(45, 45, 48);
             tpNpcs.Controls.Add(fraNpcs);
-            tpNpcs.Location = new Point(4, 34);
+            tpNpcs.Location = new Point(4, 32);
             tpNpcs.Margin = new Padding(5);
             tpNpcs.Name = "tpNpcs";
             tpNpcs.Padding = new Padding(5);
-            tpNpcs.Size = new Size(777, 1011);
+            tpNpcs.Size = new Size(777, 1013);
             tpNpcs.TabIndex = 1;
             tpNpcs.Text = "Npcs";
             // 
@@ -1318,11 +1333,11 @@ namespace Client
             tpSettings.Controls.Add(GroupBox2);
             tpSettings.Controls.Add(txtName);
             tpSettings.Controls.Add(Label6);
-            tpSettings.Location = new Point(4, 34);
+            tpSettings.Location = new Point(4, 32);
             tpSettings.Margin = new Padding(5);
             tpSettings.Name = "tpSettings";
             tpSettings.Padding = new Padding(5);
-            tpSettings.Size = new Size(777, 1011);
+            tpSettings.Size = new Size(777, 1013);
             tpSettings.TabIndex = 2;
             tpSettings.Text = "Settings";
             // 
@@ -1698,11 +1713,11 @@ namespace Client
             // 
             tpDirBlock.BackColor = Color.FromArgb(45, 45, 48);
             tpDirBlock.Controls.Add(Label12);
-            tpDirBlock.Location = new Point(4, 34);
+            tpDirBlock.Location = new Point(4, 32);
             tpDirBlock.Margin = new Padding(5);
             tpDirBlock.Name = "tpDirBlock";
             tpDirBlock.Padding = new Padding(5);
-            tpDirBlock.Size = new Size(777, 1011);
+            tpDirBlock.Size = new Size(777, 1013);
             tpDirBlock.TabIndex = 4;
             tpDirBlock.Text = "Directional Block";
             // 
@@ -1727,11 +1742,11 @@ namespace Client
             tpEvents.Controls.Add(btnCopyEvent);
             tpEvents.Controls.Add(Label15);
             tpEvents.Controls.Add(Label13);
-            tpEvents.Location = new Point(4, 34);
+            tpEvents.Location = new Point(4, 32);
             tpEvents.Margin = new Padding(5);
             tpEvents.Name = "tpEvents";
             tpEvents.Padding = new Padding(5);
-            tpEvents.Size = new Size(777, 1011);
+            tpEvents.Size = new Size(777, 1013);
             tpEvents.TabIndex = 5;
             tpEvents.Text = "Events";
             // 
@@ -1820,11 +1835,11 @@ namespace Client
             tpEffects.Controls.Add(GroupBox4);
             tpEffects.Controls.Add(GroupBox3);
             tpEffects.Controls.Add(GroupBox1);
-            tpEffects.Location = new Point(4, 34);
+            tpEffects.Location = new Point(4, 32);
             tpEffects.Margin = new Padding(5);
             tpEffects.Name = "tpEffects";
             tpEffects.Padding = new Padding(5);
-            tpEffects.Size = new Size(777, 1011);
+            tpEffects.Size = new Size(777, 1013);
             tpEffects.TabIndex = 6;
             tpEffects.Text = "Effects";
             // 
@@ -1980,7 +1995,6 @@ namespace Client
             // 
             scrlMapAlpha.Location = new Point(105, 182);
             scrlMapAlpha.Maximum = 255;
-            scrlMapAlpha.Minimum = 0;
             scrlMapAlpha.Name = "scrlMapAlpha";
             scrlMapAlpha.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapAlpha.Size = new Size(241, 17);
@@ -1991,7 +2005,6 @@ namespace Client
             // 
             scrlMapBlue.Location = new Point(105, 148);
             scrlMapBlue.Maximum = 255;
-            scrlMapBlue.Minimum = 0;
             scrlMapBlue.Name = "scrlMapBlue";
             scrlMapBlue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBlue.Size = new Size(241, 17);
@@ -2002,7 +2015,6 @@ namespace Client
             // 
             scrlMapGreen.Location = new Point(105, 108);
             scrlMapGreen.Maximum = 255;
-            scrlMapGreen.Minimum = 0;
             scrlMapGreen.Name = "scrlMapGreen";
             scrlMapGreen.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapGreen.Size = new Size(241, 17);
@@ -2013,7 +2025,6 @@ namespace Client
             // 
             scrlMapRed.Location = new Point(105, 76);
             scrlMapRed.Maximum = 255;
-            scrlMapRed.Minimum = 0;
             scrlMapRed.Name = "scrlMapRed";
             scrlMapRed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapRed.Size = new Size(241, 17);
@@ -2046,7 +2057,6 @@ namespace Client
             // 
             scrlFogOpacity.Location = new Point(150, 239);
             scrlFogOpacity.Maximum = 255;
-            scrlFogOpacity.Minimum = 0;
             scrlFogOpacity.Name = "scrlFogOpacity";
             scrlFogOpacity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogOpacity.Size = new Size(241, 17);
@@ -2067,7 +2077,6 @@ namespace Client
             // scrlFogSpeed
             // 
             scrlFogSpeed.Location = new Point(150, 195);
-            scrlFogSpeed.Minimum = 0;
             scrlFogSpeed.Name = "scrlFogSpeed";
             scrlFogSpeed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogSpeed.Size = new Size(241, 17);
@@ -2088,7 +2097,6 @@ namespace Client
             // scrlIntensity
             // 
             scrlIntensity.Location = new Point(150, 99);
-            scrlIntensity.Minimum = 0;
             scrlIntensity.Name = "scrlIntensity";
             scrlIntensity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlIntensity.Size = new Size(241, 17);
@@ -2109,7 +2117,6 @@ namespace Client
             // scrlFog
             // 
             scrlFog.Location = new Point(150, 155);
-            scrlFog.Minimum = 0;
             scrlFog.Name = "scrlFog";
             scrlFog.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFog.Size = new Size(241, 17);
@@ -2387,5 +2394,6 @@ namespace Client
         internal DarkRadioButton optNoCrossing;
         private ToolStripButton tsbTileset;
         internal DarkToolStrip ToolStrip;
+        private DarkScrollBar scrlTileset;
     }
 }

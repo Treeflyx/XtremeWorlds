@@ -104,12 +104,6 @@ namespace Client
 
         }
 
-        // Pseudocode plan:
-        // 1. Add fields to track the offset for drawing the tileset (e.g., tilesetOffsetX, tilesetOffsetY).
-        // 2. Handle mouse wheel events on picBackSelect to update the offset values.
-        // 3. Modify DrawTileset to use the offset when drawing the image and selection rectangle.
-        // 4. Ensure offset does not exceed image bounds.
-
         // Add these fields to Editor_Map class
         private static int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
@@ -2201,6 +2195,35 @@ namespace Client
             }
         }
 
-        #endregion
+        private void scrlTileset_Click(object sender, EventArgs e)
+        {
+            // Determine if the up or down arrow was clicked based on mouse position
+            var mousePos = scrlTileset.PointToClient(Cursor.Position);
+            bool isUpArrow = mousePos.Y < scrlTileset.Height / 2;
+            bool isDownArrow = mousePos.Y >= scrlTileset.Height / 2;
+
+            if (isUpArrow)
+            {
+                // Scroll up
+                tilesetOffsetY = Math.Max(tilesetOffsetY - GameState.SizeY, 0);
+            }
+            else if (isDownArrow)
+            {
+                // Scroll down
+                tilesetOffsetY += GameState.SizeY;
+            }
+
+            if (Instance.picBackSelect.Image != null)
+            {
+                int maxY = Math.Max(0, Instance.picBackSelect.Image.Height - Instance.picBackSelect.Height);
+                tilesetOffsetY = Math.Min(tilesetOffsetY, maxY);
+                if (scrlTileset.Maximum != maxY)
+                    scrlTileset.Maximum = maxY;
+            }
+
+            Instance.picBackSelect.Invalidate();
+        }
     }
+
+    #endregion
 }
