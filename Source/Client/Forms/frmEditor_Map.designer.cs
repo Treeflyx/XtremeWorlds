@@ -122,7 +122,7 @@ namespace Client
             tsbRedo = new ToolStripButton();
             tsbScreenshot = new ToolStripButton();
             tsbTileset = new ToolStripButton();
-            tabPages = new TabControl();
+            tabPages = new DarkTabControl();
             tpTiles = new TabPage();
             cmbAutoTile = new DarkComboBox();
             Label11 = new DarkLabel();
@@ -2274,7 +2274,7 @@ namespace Client
         internal DarkLabel lblTrap;
         internal ToolStripButton tsbSave;
         internal ToolStripButton tsbDiscard;
-        internal TabControl tabPages;
+        internal DarkTabControl tabPages;
         internal TabPage tpTiles;
         internal TabPage tpNpcs;
         internal TabPage tpSettings;

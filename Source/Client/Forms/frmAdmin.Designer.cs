@@ -72,7 +72,7 @@ namespace Client
             lstMaps = new DarkListView();
             ColumnHeader1 = new ColumnHeader();
             ColumnHeader2 = new ColumnHeader();
-            TabControl1 = new TabControl();
+            TabControl1 = new DarkTabControl();
             tabModeration = new TabPage();
             nudAdminSprite = new DarkNumericUpDown();
             nudAdminMap = new DarkNumericUpDown();
@@ -577,7 +577,7 @@ namespace Client
         internal DarkListView lstMaps;
         internal ColumnHeader ColumnHeader1;
         internal ColumnHeader ColumnHeader2;
-        internal TabControl TabControl1;
+        internal DarkTabControl TabControl1;
         internal TabPage tabModeration;
         internal TabPage tabMapList;
         internal TabPage tabMapTools;
