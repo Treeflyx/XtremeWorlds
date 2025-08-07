@@ -73,19 +73,19 @@ namespace Client
             brnAnimation = new DarkButton();
             fraMapWarp = new DarkGroupBox();
             btnMapWarp = new DarkButton();
-            scrlMapWarpY = new HScrollBar();
-            scrlMapWarpX = new HScrollBar();
-            scrlMapWarpMap = new HScrollBar();
+            scrlMapWarpY = new DarkScrollBar();
+            scrlMapWarpX = new DarkScrollBar();
+            scrlMapWarpMap = new DarkScrollBar();
             lblMapWarpY = new DarkLabel();
             lblMapWarpX = new DarkLabel();
             lblMapWarpMap = new DarkLabel();
             fraNpcSpawn = new DarkGroupBox();
             lstNpc = new DarkComboBox();
             btnNpcSpawn = new DarkButton();
-            scrlNpcDir = new HScrollBar();
+            scrlNpcDir = new DarkScrollBar();
             lblNpcDir = new DarkLabel();
             fraHeal = new DarkGroupBox();
-            scrlHeal = new HScrollBar();
+            scrlHeal = new DarkScrollBar();
             lblHeal = new DarkLabel();
             cmbHeal = new DarkComboBox();
             btnHeal = new DarkButton();
@@ -94,17 +94,17 @@ namespace Client
             btnShop = new DarkButton();
             fraResource = new DarkGroupBox();
             btnResourceOk = new DarkButton();
-            scrlResource = new HScrollBar();
+            scrlResource = new DarkScrollBar();
             lblResource = new DarkLabel();
             fraMapItem = new DarkGroupBox();
             picMapItem = new PictureBox();
             btnMapItem = new DarkButton();
-            scrlMapItemValue = new HScrollBar();
-            scrlMapItem = new HScrollBar();
+            scrlMapItemValue = new DarkScrollBar();
+            scrlMapItem = new DarkScrollBar();
             lblMapItem = new DarkLabel();
             fraTrap = new DarkGroupBox();
             btnTrap = new DarkButton();
-            scrlTrap = new HScrollBar();
+            scrlTrap = new DarkScrollBar();
             lblTrap = new DarkLabel();
             ToolStrip = new DarkToolStrip();
             tsbSave = new ToolStripButton();
@@ -187,7 +187,7 @@ namespace Client
             Label13 = new DarkLabel();
             tpEffects = new TabPage();
             GroupBox6 = new DarkGroupBox();
-            scrlMapBrightness = new HScrollBar();
+            scrlMapBrightness = new DarkScrollBar();
             GroupBox5 = new DarkGroupBox();
             cmbParallax = new DarkComboBox();
             GroupBox4 = new DarkGroupBox();
@@ -198,18 +198,18 @@ namespace Client
             lblMapBlue = new DarkLabel();
             lblMapGreen = new DarkLabel();
             lblMapRed = new DarkLabel();
-            scrlMapAlpha = new HScrollBar();
-            scrlMapBlue = new HScrollBar();
-            scrlMapGreen = new HScrollBar();
-            scrlMapRed = new HScrollBar();
+            scrlMapAlpha = new DarkScrollBar();
+            scrlMapBlue = new DarkScrollBar();
+            scrlMapGreen = new DarkScrollBar();
+            scrlMapRed = new DarkScrollBar();
             GroupBox1 = new DarkGroupBox();
-            scrlFogOpacity = new HScrollBar();
+            scrlFogOpacity = new DarkScrollBar();
             lblFogOpacity = new DarkLabel();
-            scrlFogSpeed = new HScrollBar();
+            scrlFogSpeed = new DarkScrollBar();
             lblFogSpeed = new DarkLabel();
-            scrlIntensity = new HScrollBar();
+            scrlIntensity = new DarkScrollBar();
             lblIntensity = new DarkLabel();
-            scrlFog = new HScrollBar();
+            scrlFog = new DarkScrollBar();
             lblFogIndex = new DarkLabel();
             Label14 = new DarkLabel();
             cmbWeather = new DarkComboBox();
@@ -481,6 +481,7 @@ namespace Client
             scrlMapWarpY.Name = "scrlMapWarpY";
             scrlMapWarpY.Size = new Size(269, 18);
             scrlMapWarpY.TabIndex = 5;
+            scrlMapWarpY.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpY.ValueChanged += ScrlMapWarpY_Scroll;
             // 
             // scrlMapWarpX
@@ -489,6 +490,7 @@ namespace Client
             scrlMapWarpX.Name = "scrlMapWarpX";
             scrlMapWarpX.Size = new Size(269, 18);
             scrlMapWarpX.TabIndex = 4;
+            scrlMapWarpX.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpX.ValueChanged += ScrlMapWarpX_Scroll;
             // 
             // scrlMapWarpMap
@@ -497,6 +499,7 @@ namespace Client
             scrlMapWarpMap.Name = "scrlMapWarpMap";
             scrlMapWarpMap.Size = new Size(269, 18);
             scrlMapWarpMap.TabIndex = 3;
+            scrlMapWarpMap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpMap.ValueChanged += ScrlMapWarpMap_Scroll;
             // 
             // lblMapWarpY
@@ -571,12 +574,13 @@ namespace Client
             // 
             // scrlNpcDir
             // 
-            scrlNpcDir.LargeChange = 1;
+            scrlNpcDir.Minimum = 1;
             scrlNpcDir.Location = new Point(12, 105);
             scrlNpcDir.Maximum = 3;
             scrlNpcDir.Name = "scrlNpcDir";
             scrlNpcDir.Size = new Size(255, 18);
             scrlNpcDir.TabIndex = 3;
+            scrlNpcDir.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlNpcDir.ValueChanged += ScrlNpcDir_Scroll;
             // 
             // lblNpcDir
@@ -771,6 +775,7 @@ namespace Client
             scrlMapItemValue.Name = "scrlMapItemValue";
             scrlMapItemValue.Size = new Size(200, 18);
             scrlMapItemValue.TabIndex = 4;
+            scrlMapItemValue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItemValue.ValueChanged += ScrlMapItemValue_ValueChanged;
             // 
             // scrlMapItem
@@ -779,6 +784,7 @@ namespace Client
             scrlMapItem.Name = "scrlMapItem";
             scrlMapItem.Size = new Size(200, 18);
             scrlMapItem.TabIndex = 3;
+            scrlMapItem.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItem.ValueChanged += ScrlMapItem_ValueChanged;
             // 
             // lblMapItem
@@ -824,6 +830,7 @@ namespace Client
             scrlTrap.Name = "scrlTrap";
             scrlTrap.Size = new Size(212, 17);
             scrlTrap.TabIndex = 41;
+            scrlTrap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlTrap.ValueChanged += ScrlTrap_ValueChanged;
             // 
             // lblTrap
@@ -1802,13 +1809,14 @@ namespace Client
             // 
             // scrlMapBrightness
             // 
-            scrlMapBrightness.LargeChange = 1;
+            scrlMapBrightness.Minimum = 1;
             scrlMapBrightness.Location = new Point(5, 32);
             scrlMapBrightness.Maximum = 255;
             scrlMapBrightness.Name = "scrlMapBrightness";
             scrlMapBrightness.Size = new Size(375, 17);
             scrlMapBrightness.TabIndex = 10;
-            scrlMapBrightness.Scroll += scrMapBrightness_Scroll;
+            scrlMapBrightness.ScrollOrientation = DarkScrollOrientation.Horizontal;
+            scrlMapBrightness.ValueChanged += scrMapBrightness_Scroll;
             // 
             // GroupBox5
             // 
@@ -1936,42 +1944,46 @@ namespace Client
             // 
             // scrlMapAlpha
             // 
-            scrlMapAlpha.LargeChange = 1;
+            scrlMapAlpha.Minimum = 1;
             scrlMapAlpha.Location = new Point(105, 182);
             scrlMapAlpha.Maximum = 255;
             scrlMapAlpha.Name = "scrlMapAlpha";
             scrlMapAlpha.Size = new Size(241, 17);
             scrlMapAlpha.TabIndex = 13;
+            scrlMapAlpha.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapAlpha.ValueChanged += ScrlMapAlpha_Scroll;
             // 
             // scrlMapBlue
             // 
-            scrlMapBlue.LargeChange = 1;
+            scrlMapBlue.Minimum = 1;
             scrlMapBlue.Location = new Point(105, 148);
             scrlMapBlue.Maximum = 255;
             scrlMapBlue.Name = "scrlMapBlue";
             scrlMapBlue.Size = new Size(241, 17);
             scrlMapBlue.TabIndex = 12;
+            scrlMapBlue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBlue.ValueChanged += ScrlMapBlue_Scroll;
             // 
             // scrlMapGreen
             // 
-            scrlMapGreen.LargeChange = 1;
+            scrlMapGreen.Minimum = 1;
             scrlMapGreen.Location = new Point(105, 108);
             scrlMapGreen.Maximum = 255;
             scrlMapGreen.Name = "scrlMapGreen";
             scrlMapGreen.Size = new Size(241, 17);
             scrlMapGreen.TabIndex = 11;
+            scrlMapGreen.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapGreen.ValueChanged += ScrlMapGreen_Scroll;
             // 
             // scrlMapRed
             // 
-            scrlMapRed.LargeChange = 1;
+            scrlMapRed.Minimum = 1;
             scrlMapRed.Location = new Point(105, 76);
             scrlMapRed.Maximum = 255;
             scrlMapRed.Name = "scrlMapRed";
             scrlMapRed.Size = new Size(241, 17);
             scrlMapRed.TabIndex = 10;
+            scrlMapRed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapRed.ValueChanged += ScrlMapRed_Scroll;
             // 
             // GroupBox1
@@ -1998,12 +2010,13 @@ namespace Client
             // 
             // scrlFogOpacity
             // 
-            scrlFogOpacity.LargeChange = 1;
+            scrlFogOpacity.Minimum = 1;
             scrlFogOpacity.Location = new Point(150, 239);
             scrlFogOpacity.Maximum = 255;
             scrlFogOpacity.Name = "scrlFogOpacity";
             scrlFogOpacity.Size = new Size(241, 17);
             scrlFogOpacity.TabIndex = 9;
+            scrlFogOpacity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogOpacity.ValueChanged += ScrlFogOpacity_Scroll;
             // 
             // lblFogOpacity
@@ -2019,11 +2032,12 @@ namespace Client
             // 
             // scrlFogSpeed
             // 
-            scrlFogSpeed.LargeChange = 1;
+            scrlFogSpeed.Minimum = 1;
             scrlFogSpeed.Location = new Point(150, 195);
             scrlFogSpeed.Name = "scrlFogSpeed";
             scrlFogSpeed.Size = new Size(241, 17);
             scrlFogSpeed.TabIndex = 7;
+            scrlFogSpeed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogSpeed.ValueChanged += ScrlFogSpeed_Scroll;
             // 
             // lblFogSpeed
@@ -2039,11 +2053,12 @@ namespace Client
             // 
             // scrlIntensity
             // 
-            scrlIntensity.LargeChange = 1;
+            scrlIntensity.Minimum = 1;
             scrlIntensity.Location = new Point(150, 99);
             scrlIntensity.Name = "scrlIntensity";
             scrlIntensity.Size = new Size(241, 17);
             scrlIntensity.TabIndex = 5;
+            scrlIntensity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlIntensity.ValueChanged += ScrlIntensity_Scroll;
             // 
             // lblIntensity
@@ -2059,11 +2074,12 @@ namespace Client
             // 
             // scrlFog
             // 
-            scrlFog.LargeChange = 1;
+            scrlFog.Minimum = 1;
             scrlFog.Location = new Point(150, 155);
             scrlFog.Name = "scrlFog";
             scrlFog.Size = new Size(241, 17);
             scrlFog.TabIndex = 3;
+            scrlFog.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFog.ValueChanged += ScrlFog_Scroll;
             // 
             // lblFogIndex
@@ -2191,23 +2207,23 @@ namespace Client
         internal DarkLabel lblMapWarpY;
         internal DarkLabel lblMapWarpX;
         internal DarkLabel lblMapWarpMap;
-        internal HScrollBar scrlMapWarpY;
-        internal HScrollBar scrlMapWarpX;
-        internal HScrollBar scrlMapWarpMap;
+        internal DarkScrollBar scrlMapWarpY;
+        internal DarkScrollBar scrlMapWarpX;
+        internal DarkScrollBar scrlMapWarpMap;
         internal DarkButton btnMapWarp;
         internal DarkGroupBox fraMapItem;
         internal DarkButton btnMapItem;
-        internal HScrollBar scrlMapItemValue;
-        internal HScrollBar scrlMapItem;
+        internal DarkScrollBar scrlMapItemValue;
+        internal DarkScrollBar scrlMapItem;
         internal DarkLabel lblMapItem;
         internal PictureBox picMapItem;
         internal DarkGroupBox fraResource;
         internal DarkButton btnResourceOk;
-        internal HScrollBar scrlResource;
+        internal DarkScrollBar scrlResource;
         internal DarkLabel lblResource;
         internal DarkGroupBox fraNpcSpawn;
         internal DarkButton btnNpcSpawn;
-        internal HScrollBar scrlNpcDir;
+        internal DarkScrollBar scrlNpcDir;
         internal DarkLabel lblNpcDir;
         internal DarkComboBox lstNpc;
         internal DarkGroupBox fraShop;
@@ -2217,10 +2233,10 @@ namespace Client
         internal DarkLabel lblHeal;
         internal DarkComboBox cmbHeal;
         internal DarkButton btnHeal;
-        internal HScrollBar scrlHeal;
+        internal DarkScrollBar scrlHeal;
         internal DarkGroupBox fraTrap;
         internal DarkButton btnTrap;
-        internal HScrollBar scrlTrap;
+        internal DarkScrollBar scrlTrap;
         internal DarkLabel lblTrap;
         internal ToolStrip ToolStrip;
         internal ToolStripButton tsbSave;
@@ -2288,18 +2304,18 @@ namespace Client
         internal DarkLabel lblMapBlue;
         internal DarkLabel lblMapGreen;
         internal DarkLabel lblMapRed;
-        internal HScrollBar scrlMapAlpha;
-        internal HScrollBar scrlMapBlue;
-        internal HScrollBar scrlMapGreen;
-        internal HScrollBar scrlMapRed;
+        internal DarkScrollBar scrlMapAlpha;
+        internal DarkScrollBar scrlMapBlue;
+        internal DarkScrollBar scrlMapGreen;
+        internal DarkScrollBar scrlMapRed;
         internal DarkGroupBox GroupBox1;
-        internal HScrollBar scrlFogOpacity;
+        internal DarkScrollBar scrlFogOpacity;
         internal DarkLabel lblFogOpacity;
-        internal HScrollBar scrlFogSpeed;
+        internal DarkScrollBar scrlFogSpeed;
         internal DarkLabel lblFogSpeed;
-        internal HScrollBar scrlIntensity;
+        internal DarkScrollBar scrlIntensity;
         internal DarkLabel lblIntensity;
-        internal HScrollBar scrlFog;
+        internal DarkScrollBar scrlFog;
         internal DarkLabel lblFogIndex;
         internal DarkLabel Label14;
         internal DarkComboBox cmbWeather;
@@ -2313,7 +2329,7 @@ namespace Client
         internal DarkComboBox cmbPanorama;
         internal DarkGroupBox GroupBox6;
         internal DarkLabel lblMapBrightness;
-        internal HScrollBar scrlMapBrightness;
+        internal DarkScrollBar scrlMapBrightness;
         internal PictureBox picBackSelect;
         internal ToolStripButton tsbClear;
         internal ToolStripButton tsbCopyMap;

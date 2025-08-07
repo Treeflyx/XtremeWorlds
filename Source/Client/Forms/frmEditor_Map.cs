@@ -1885,8 +1885,11 @@ namespace Client
             MapEditorCancel();
         }
 
-        private void scrMapBrightness_Scroll(object sender, ScrollEventArgs e)
+        private void scrMapBrightness_Scroll(object sender, EventArgs e)
         {
+            if (lblMapBrightness == null)
+                return;
+
             Data.MyMap.Brightness = (byte)scrlMapBrightness.Value;
             lblMapBrightness.Text = "Brightness: " + scrlMapBrightness.Value;
         }
