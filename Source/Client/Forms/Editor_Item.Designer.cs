@@ -55,57 +55,57 @@ namespace Client
         {
             DarkGroupBox1 = new DarkUI.Controls.DarkGroupBox();
             lstIndex = new ListBox();
-            DarkLabel1 = new DarkUI.Controls.DarkLabel();
-            DarkLabel35 = new DarkUI.Controls.DarkLabel();
+            cmbLabel1 = new DarkUI.Controls.cmbLabel();
+            cmbLabel35 = new DarkUI.Controls.cmbLabel();
             fraEquipment = new DarkUI.Controls.DarkGroupBox();
             fraProjectile = new DarkUI.Controls.DarkGroupBox();
             cmbAmmo = new DarkUI.Controls.DarkComboBox();
-            DarkLabel25 = new DarkUI.Controls.DarkLabel();
+            cmbLabel25 = new DarkUI.Controls.cmbLabel();
             cmbProjectile = new DarkUI.Controls.DarkComboBox();
-            DarkLabel24 = new DarkUI.Controls.DarkLabel();
+            cmbLabel24 = new DarkUI.Controls.cmbLabel();
             nudPaperdoll = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel23 = new DarkUI.Controls.DarkLabel();
+            cmbLabel23 = new DarkUI.Controls.cmbLabel();
             picPaperdoll = new PictureBox();
             cmbKnockBackTiles = new DarkUI.Controls.DarkComboBox();
-            DarkLabel16 = new DarkUI.Controls.DarkLabel();
+            cmbLabel16 = new DarkUI.Controls.cmbLabel();
             chkKnockBack = new DarkUI.Controls.DarkCheckBox();
             nudSpeed = new DarkUI.Controls.DarkNumericUpDown();
-            lblSpeed = new DarkUI.Controls.DarkLabel();
+            lblSpeed = new DarkUI.Controls.cmbLabel();
             nudDamage = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel15 = new DarkUI.Controls.DarkLabel();
+            cmbLabel15 = new DarkUI.Controls.cmbLabel();
             cmbTool = new DarkUI.Controls.DarkComboBox();
-            DarkLabel14 = new DarkUI.Controls.DarkLabel();
+            cmbLabel14 = new DarkUI.Controls.cmbLabel();
             DarkGroupBox2 = new DarkUI.Controls.DarkGroupBox();
             nudSpirit = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel22 = new DarkUI.Controls.DarkLabel();
+            cmbLabel22 = new DarkUI.Controls.cmbLabel();
             nudIntelligence = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel21 = new DarkUI.Controls.DarkLabel();
+            cmbLabel21 = new DarkUI.Controls.cmbLabel();
             nudVitality = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel20 = new DarkUI.Controls.DarkLabel();
+            cmbLabel20 = new DarkUI.Controls.cmbLabel();
             nudLuck = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel19 = new DarkUI.Controls.DarkLabel();
+            cmbLabel19 = new DarkUI.Controls.cmbLabel();
             nudStrength = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel17 = new DarkUI.Controls.DarkLabel();
+            cmbLabel17 = new DarkUI.Controls.cmbLabel();
             btnBasics = new DarkUI.Controls.DarkButton();
             btnRequirements = new DarkUI.Controls.DarkButton();
             fraRequirements = new DarkUI.Controls.DarkGroupBox();
-            DarkLabel28 = new DarkUI.Controls.DarkLabel();
+            cmbLabel28 = new DarkUI.Controls.cmbLabel();
             nudLevelReq = new DarkUI.Controls.DarkNumericUpDown();
             cmbAccessReq = new DarkUI.Controls.DarkComboBox();
-            DarkLabel27 = new DarkUI.Controls.DarkLabel();
+            cmbLabel27 = new DarkUI.Controls.cmbLabel();
             cmbJobReq = new DarkUI.Controls.DarkComboBox();
-            DarkLabel26 = new DarkUI.Controls.DarkLabel();
+            cmbLabel26 = new DarkUI.Controls.cmbLabel();
             DarkGroupBox4 = new DarkUI.Controls.DarkGroupBox();
             nudSprReq = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel32 = new DarkUI.Controls.DarkLabel();
+            cmbLabel32 = new DarkUI.Controls.cmbLabel();
             nudIntReq = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel33 = new DarkUI.Controls.DarkLabel();
+            cmbLabel33 = new DarkUI.Controls.cmbLabel();
             nudVitReq = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel34 = new DarkUI.Controls.DarkLabel();
+            cmbLabel34 = new DarkUI.Controls.cmbLabel();
             nudLuckReq = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel29 = new DarkUI.Controls.DarkLabel();
+            cmbLabel29 = new DarkUI.Controls.cmbLabel();
             nudStrReq = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel31 = new DarkUI.Controls.DarkLabel();
+            cmbLabel31 = new DarkUI.Controls.cmbLabel();
             btnSave = new DarkUI.Controls.DarkButton();
             btnDelete = new DarkUI.Controls.DarkButton();
             btnCancel = new DarkUI.Controls.DarkButton();
@@ -113,38 +113,38 @@ namespace Client
             nudSpanwAmount = new DarkUI.Controls.DarkNumericUpDown();
             fraSkill = new DarkUI.Controls.DarkGroupBox();
             cmbSkills = new DarkUI.Controls.DarkComboBox();
-            DarkLabel12 = new DarkUI.Controls.DarkLabel();
+            cmbLabel12 = new DarkUI.Controls.cmbLabel();
             fraVitals = new DarkUI.Controls.DarkGroupBox();
             nudVitalMod = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel11 = new DarkUI.Controls.DarkLabel();
+            cmbLabel11 = new DarkUI.Controls.cmbLabel();
             txtName = new DarkUI.Controls.DarkTextBox();
-            DarkLabel2 = new DarkUI.Controls.DarkLabel();
+            cmbLabel2 = new DarkUI.Controls.cmbLabel();
             nudIcon = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel3 = new DarkUI.Controls.DarkLabel();
+            cmbLabel3 = new DarkUI.Controls.cmbLabel();
             nudRarity = new DarkUI.Controls.DarkNumericUpDown();
             picItem = new PictureBox();
-            DarkLabel4 = new DarkUI.Controls.DarkLabel();
+            cmbLabel4 = new DarkUI.Controls.cmbLabel();
             cmbType = new DarkUI.Controls.DarkComboBox();
-            DarkLabel5 = new DarkUI.Controls.DarkLabel();
+            cmbLabel5 = new DarkUI.Controls.cmbLabel();
             cmbSubType = new DarkUI.Controls.DarkComboBox();
             chkStackable = new DarkUI.Controls.DarkCheckBox();
-            DarkLabel6 = new DarkUI.Controls.DarkLabel();
+            cmbLabel6 = new DarkUI.Controls.cmbLabel();
             cmbBind = new DarkUI.Controls.DarkComboBox();
-            DarkLabel7 = new DarkUI.Controls.DarkLabel();
+            cmbLabel7 = new DarkUI.Controls.cmbLabel();
             nudPrice = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel8 = new DarkUI.Controls.DarkLabel();
+            cmbLabel8 = new DarkUI.Controls.cmbLabel();
             nudItemLvl = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel9 = new DarkUI.Controls.DarkLabel();
+            cmbLabel9 = new DarkUI.Controls.cmbLabel();
             cmbAnimation = new DarkUI.Controls.DarkComboBox();
-            DarkLabel10 = new DarkUI.Controls.DarkLabel();
+            cmbLabel10 = new DarkUI.Controls.cmbLabel();
             txtDescription = new DarkUI.Controls.DarkTextBox();
-            DarkLabel13 = new DarkUI.Controls.DarkLabel();
+            cmbLabel13 = new DarkUI.Controls.cmbLabel();
             fraEvents = new DarkUI.Controls.DarkGroupBox();
             nudEventValue = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel39 = new DarkUI.Controls.DarkLabel();
+            cmbLabel39 = new DarkUI.Controls.cmbLabel();
             nudEvent = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel38 = new DarkUI.Controls.DarkLabel();
-            DarkLabel36 = new DarkUI.Controls.DarkLabel();
+            cmbLabel38 = new DarkUI.Controls.cmbLabel();
+            cmbLabel36 = new DarkUI.Controls.cmbLabel();
             fraBasics = new DarkUI.Controls.DarkGroupBox();
             DarkGroupBox1.SuspendLayout();
             fraEquipment.SuspendLayout();
@@ -210,24 +210,24 @@ namespace Client
             lstIndex.TabIndex = 1;
             lstIndex.Click += lstIndex_Click;
             // 
-            // DarkLabel1
+            // cmbLabel1
             // 
-            DarkLabel1.AutoSize = true;
-            DarkLabel1.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel1.Location = new Point(7, 18);
-            DarkLabel1.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel1.Name = "DarkLabel1";
-            DarkLabel1.Size = new Size(42, 15);
-            DarkLabel1.TabIndex = 0;
-            DarkLabel1.Text = "Name:";
+            cmbLabel1.AutoSize = true;
+            cmbLabel1.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel1.Location = new Point(7, 18);
+            cmbLabel1.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel1.Name = "cmbLabel1";
+            cmbLabel1.Size = new Size(42, 15);
+            cmbLabel1.TabIndex = 0;
+            cmbLabel1.Text = "Name:";
             // 
-            // DarkLabel35
+            // cmbLabel35
             // 
-            DarkLabel35.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel35.Location = new Point(0, 0);
-            DarkLabel35.Name = "DarkLabel35";
-            DarkLabel35.Size = new Size(100, 23);
-            DarkLabel35.TabIndex = 0;
+            cmbLabel35.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel35.Location = new Point(0, 0);
+            cmbLabel35.Name = "cmbLabel35";
+            cmbLabel35.Size = new Size(100, 23);
+            cmbLabel35.TabIndex = 0;
             // 
             // fraEquipment
             // 
@@ -235,17 +235,17 @@ namespace Client
             fraEquipment.BorderColor = Color.FromArgb(90, 90, 90);
             fraEquipment.Controls.Add(fraProjectile);
             fraEquipment.Controls.Add(nudPaperdoll);
-            fraEquipment.Controls.Add(DarkLabel23);
+            fraEquipment.Controls.Add(cmbLabel23);
             fraEquipment.Controls.Add(picPaperdoll);
             fraEquipment.Controls.Add(cmbKnockBackTiles);
-            fraEquipment.Controls.Add(DarkLabel16);
+            fraEquipment.Controls.Add(cmbLabel16);
             fraEquipment.Controls.Add(chkKnockBack);
             fraEquipment.Controls.Add(nudSpeed);
             fraEquipment.Controls.Add(lblSpeed);
             fraEquipment.Controls.Add(nudDamage);
-            fraEquipment.Controls.Add(DarkLabel15);
+            fraEquipment.Controls.Add(cmbLabel15);
             fraEquipment.Controls.Add(cmbTool);
-            fraEquipment.Controls.Add(DarkLabel14);
+            fraEquipment.Controls.Add(cmbLabel14);
             fraEquipment.Controls.Add(DarkGroupBox2);
             fraEquipment.ForeColor = Color.Gainsboro;
             fraEquipment.Location = new Point(253, 283);
@@ -262,9 +262,9 @@ namespace Client
             fraProjectile.BackColor = Color.FromArgb(45, 45, 48);
             fraProjectile.BorderColor = Color.FromArgb(90, 90, 90);
             fraProjectile.Controls.Add(cmbAmmo);
-            fraProjectile.Controls.Add(DarkLabel25);
+            fraProjectile.Controls.Add(cmbLabel25);
             fraProjectile.Controls.Add(cmbProjectile);
-            fraProjectile.Controls.Add(DarkLabel24);
+            fraProjectile.Controls.Add(cmbLabel24);
             fraProjectile.ForeColor = Color.Gainsboro;
             fraProjectile.Location = new Point(140, 192);
             fraProjectile.Margin = new Padding(4, 3, 4, 3);
@@ -286,16 +286,16 @@ namespace Client
             cmbAmmo.TabIndex = 3;
             cmbAmmo.SelectedIndexChanged += CmbAmmo_SelectedIndexChanged;
             // 
-            // DarkLabel25
+            // cmbLabel25
             // 
-            DarkLabel25.AutoSize = true;
-            DarkLabel25.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel25.Location = new Point(22, 50);
-            DarkLabel25.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel25.Name = "DarkLabel25";
-            DarkLabel25.Size = new Size(47, 15);
-            DarkLabel25.TabIndex = 2;
-            DarkLabel25.Text = "Ammo:";
+            cmbLabel25.AutoSize = true;
+            cmbLabel25.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel25.Location = new Point(22, 50);
+            cmbLabel25.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel25.Name = "cmbLabel25";
+            cmbLabel25.Size = new Size(47, 15);
+            cmbLabel25.TabIndex = 2;
+            cmbLabel25.Text = "Ammo:";
             // 
             // cmbProjectile
             // 
@@ -308,16 +308,16 @@ namespace Client
             cmbProjectile.TabIndex = 1;
             cmbProjectile.SelectedIndexChanged += CmbProjectile_SelectedIndexChanged;
             // 
-            // DarkLabel24
+            // cmbLabel24
             // 
-            DarkLabel24.AutoSize = true;
-            DarkLabel24.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel24.Location = new Point(9, 18);
-            DarkLabel24.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel24.Name = "DarkLabel24";
-            DarkLabel24.Size = new Size(59, 15);
-            DarkLabel24.TabIndex = 0;
-            DarkLabel24.Text = "Projectile:";
+            cmbLabel24.AutoSize = true;
+            cmbLabel24.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel24.Location = new Point(9, 18);
+            cmbLabel24.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel24.Name = "cmbLabel24";
+            cmbLabel24.Size = new Size(59, 15);
+            cmbLabel24.TabIndex = 0;
+            cmbLabel24.Text = "Projectile:";
             // 
             // nudPaperdoll
             // 
@@ -328,16 +328,16 @@ namespace Client
             nudPaperdoll.TabIndex = 59;
             nudPaperdoll.Click += NudPaperdoll_ValueChanged;
             // 
-            // DarkLabel23
+            // cmbLabel23
             // 
-            DarkLabel23.AutoSize = true;
-            DarkLabel23.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel23.Location = new Point(7, 252);
-            DarkLabel23.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel23.Name = "DarkLabel23";
-            DarkLabel23.Size = new Size(60, 15);
-            DarkLabel23.TabIndex = 58;
-            DarkLabel23.Text = "Paperdoll:";
+            cmbLabel23.AutoSize = true;
+            cmbLabel23.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel23.Location = new Point(7, 252);
+            cmbLabel23.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel23.Name = "cmbLabel23";
+            cmbLabel23.Size = new Size(60, 15);
+            cmbLabel23.TabIndex = 58;
+            cmbLabel23.Text = "Paperdoll:";
             // 
             // picPaperdoll
             // 
@@ -361,16 +361,16 @@ namespace Client
             cmbKnockBackTiles.TabIndex = 8;
             cmbKnockBackTiles.SelectedIndexChanged += CmbKnockBackTiles_SelectedIndexChanged;
             // 
-            // DarkLabel16
+            // cmbLabel16
             // 
-            DarkLabel16.AutoSize = true;
-            DarkLabel16.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel16.Location = new Point(351, 70);
-            DarkLabel16.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel16.Name = "DarkLabel16";
-            DarkLabel16.Size = new Size(20, 15);
-            DarkLabel16.TabIndex = 7;
-            DarkLabel16.Text = "Of";
+            cmbLabel16.AutoSize = true;
+            cmbLabel16.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel16.Location = new Point(351, 70);
+            cmbLabel16.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel16.Name = "cmbLabel16";
+            cmbLabel16.Size = new Size(20, 15);
+            cmbLabel16.TabIndex = 7;
+            cmbLabel16.Text = "Of";
             // 
             // chkKnockBack
             // 
@@ -413,16 +413,16 @@ namespace Client
             nudDamage.TabIndex = 3;
             nudDamage.Click += NudDamage_ValueChanged;
             // 
-            // DarkLabel15
+            // cmbLabel15
             // 
-            DarkLabel15.AutoSize = true;
-            DarkLabel15.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel15.Location = new Point(230, 25);
-            DarkLabel15.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel15.Name = "DarkLabel15";
-            DarkLabel15.Size = new Size(54, 15);
-            DarkLabel15.TabIndex = 2;
-            DarkLabel15.Text = "Damage:";
+            cmbLabel15.AutoSize = true;
+            cmbLabel15.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel15.Location = new Point(230, 25);
+            cmbLabel15.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel15.Name = "cmbLabel15";
+            cmbLabel15.Size = new Size(54, 15);
+            cmbLabel15.TabIndex = 2;
+            cmbLabel15.Text = "Damage:";
             // 
             // cmbTool
             // 
@@ -436,31 +436,31 @@ namespace Client
             cmbTool.TabIndex = 1;
             cmbTool.SelectedIndexChanged += CmbTool_SelectedIndexChanged;
             // 
-            // DarkLabel14
+            // cmbLabel14
             // 
-            DarkLabel14.AutoSize = true;
-            DarkLabel14.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel14.Location = new Point(7, 25);
-            DarkLabel14.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel14.Name = "DarkLabel14";
-            DarkLabel14.Size = new Size(59, 15);
-            DarkLabel14.TabIndex = 0;
-            DarkLabel14.Text = "Tool Type:";
+            cmbLabel14.AutoSize = true;
+            cmbLabel14.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel14.Location = new Point(7, 25);
+            cmbLabel14.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel14.Name = "cmbLabel14";
+            cmbLabel14.Size = new Size(59, 15);
+            cmbLabel14.TabIndex = 0;
+            cmbLabel14.Text = "Tool Type:";
             // 
             // DarkGroupBox2
             // 
             DarkGroupBox2.BackColor = Color.FromArgb(45, 45, 48);
             DarkGroupBox2.BorderColor = Color.FromArgb(90, 90, 90);
             DarkGroupBox2.Controls.Add(nudSpirit);
-            DarkGroupBox2.Controls.Add(DarkLabel22);
+            DarkGroupBox2.Controls.Add(cmbLabel22);
             DarkGroupBox2.Controls.Add(nudIntelligence);
-            DarkGroupBox2.Controls.Add(DarkLabel21);
+            DarkGroupBox2.Controls.Add(cmbLabel21);
             DarkGroupBox2.Controls.Add(nudVitality);
-            DarkGroupBox2.Controls.Add(DarkLabel20);
+            DarkGroupBox2.Controls.Add(cmbLabel20);
             DarkGroupBox2.Controls.Add(nudLuck);
-            DarkGroupBox2.Controls.Add(DarkLabel19);
+            DarkGroupBox2.Controls.Add(cmbLabel19);
             DarkGroupBox2.Controls.Add(nudStrength);
-            DarkGroupBox2.Controls.Add(DarkLabel17);
+            DarkGroupBox2.Controls.Add(cmbLabel17);
             DarkGroupBox2.ForeColor = Color.Gainsboro;
             DarkGroupBox2.Location = new Point(7, 98);
             DarkGroupBox2.Margin = new Padding(4, 3, 4, 3);
@@ -481,16 +481,16 @@ namespace Client
             nudSpirit.TabIndex = 12;
             nudSpirit.Click += NudSpirit_ValueChanged;
             // 
-            // DarkLabel22
+            // cmbLabel22
             // 
-            DarkLabel22.AutoSize = true;
-            DarkLabel22.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel22.Location = new Point(146, 52);
-            DarkLabel22.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel22.Name = "DarkLabel22";
-            DarkLabel22.Size = new Size(37, 15);
-            DarkLabel22.TabIndex = 11;
-            DarkLabel22.Text = "Spirit:";
+            cmbLabel22.AutoSize = true;
+            cmbLabel22.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel22.Location = new Point(146, 52);
+            cmbLabel22.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel22.Name = "cmbLabel22";
+            cmbLabel22.Size = new Size(37, 15);
+            cmbLabel22.TabIndex = 11;
+            cmbLabel22.Text = "Spirit:";
             // 
             // nudIntelligence
             // 
@@ -502,16 +502,16 @@ namespace Client
             nudIntelligence.TabIndex = 10;
             nudIntelligence.Click += NudIntelligence_ValueChanged;
             // 
-            // DarkLabel21
+            // cmbLabel21
             // 
-            DarkLabel21.AutoSize = true;
-            DarkLabel21.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel21.Location = new Point(7, 52);
-            DarkLabel21.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel21.Name = "DarkLabel21";
-            DarkLabel21.Size = new Size(71, 15);
-            DarkLabel21.TabIndex = 9;
-            DarkLabel21.Text = "Intelligence:";
+            cmbLabel21.AutoSize = true;
+            cmbLabel21.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel21.Location = new Point(7, 52);
+            cmbLabel21.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel21.Name = "cmbLabel21";
+            cmbLabel21.Size = new Size(71, 15);
+            cmbLabel21.TabIndex = 9;
+            cmbLabel21.Text = "Intelligence:";
             // 
             // nudVitality
             // 
@@ -523,16 +523,16 @@ namespace Client
             nudVitality.TabIndex = 8;
             nudVitality.Click += NudVitality_ValueChanged;
             // 
-            // DarkLabel20
+            // cmbLabel20
             // 
-            DarkLabel20.AutoSize = true;
-            DarkLabel20.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel20.Location = new Point(7, 23);
-            DarkLabel20.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel20.Name = "DarkLabel20";
-            DarkLabel20.Size = new Size(46, 15);
-            DarkLabel20.TabIndex = 7;
-            DarkLabel20.Text = "Vitality:";
+            cmbLabel20.AutoSize = true;
+            cmbLabel20.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel20.Location = new Point(7, 23);
+            cmbLabel20.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel20.Name = "cmbLabel20";
+            cmbLabel20.Size = new Size(46, 15);
+            cmbLabel20.TabIndex = 7;
+            cmbLabel20.Text = "Vitality:";
             // 
             // nudLuck
             // 
@@ -544,16 +544,16 @@ namespace Client
             nudLuck.TabIndex = 6;
             nudLuck.Click += NudLuck_ValueChanged;
             // 
-            // DarkLabel19
+            // cmbLabel19
             // 
-            DarkLabel19.AutoSize = true;
-            DarkLabel19.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel19.Location = new Point(282, 25);
-            DarkLabel19.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel19.Name = "DarkLabel19";
-            DarkLabel19.Size = new Size(35, 15);
-            DarkLabel19.TabIndex = 5;
-            DarkLabel19.Text = "Luck:";
+            cmbLabel19.AutoSize = true;
+            cmbLabel19.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel19.Location = new Point(282, 25);
+            cmbLabel19.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel19.Name = "cmbLabel19";
+            cmbLabel19.Size = new Size(35, 15);
+            cmbLabel19.TabIndex = 5;
+            cmbLabel19.Text = "Luck:";
             // 
             // nudStrength
             // 
@@ -565,16 +565,16 @@ namespace Client
             nudStrength.TabIndex = 2;
             nudStrength.Click += NudStrength_ValueChanged;
             // 
-            // DarkLabel17
+            // cmbLabel17
             // 
-            DarkLabel17.AutoSize = true;
-            DarkLabel17.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel17.Location = new Point(138, 23);
-            DarkLabel17.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel17.Name = "DarkLabel17";
-            DarkLabel17.Size = new Size(55, 15);
-            DarkLabel17.TabIndex = 1;
-            DarkLabel17.Text = "Strength:";
+            cmbLabel17.AutoSize = true;
+            cmbLabel17.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel17.Location = new Point(138, 23);
+            cmbLabel17.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel17.Name = "cmbLabel17";
+            cmbLabel17.Size = new Size(55, 15);
+            cmbLabel17.TabIndex = 1;
+            cmbLabel17.Text = "Strength:";
             // 
             // btnBasics
             // 
@@ -602,12 +602,12 @@ namespace Client
             // 
             fraRequirements.BackColor = Color.FromArgb(45, 45, 48);
             fraRequirements.BorderColor = Color.FromArgb(90, 90, 90);
-            fraRequirements.Controls.Add(DarkLabel28);
+            fraRequirements.Controls.Add(cmbLabel28);
             fraRequirements.Controls.Add(nudLevelReq);
             fraRequirements.Controls.Add(cmbAccessReq);
-            fraRequirements.Controls.Add(DarkLabel27);
+            fraRequirements.Controls.Add(cmbLabel27);
             fraRequirements.Controls.Add(cmbJobReq);
-            fraRequirements.Controls.Add(DarkLabel26);
+            fraRequirements.Controls.Add(cmbLabel26);
             fraRequirements.Controls.Add(DarkGroupBox4);
             fraRequirements.ForeColor = Color.Gainsboro;
             fraRequirements.Location = new Point(253, 43);
@@ -620,16 +620,16 @@ namespace Client
             fraRequirements.Text = "Requirements";
             fraRequirements.Visible = false;
             // 
-            // DarkLabel28
+            // cmbLabel28
             // 
-            DarkLabel28.AutoSize = true;
-            DarkLabel28.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel28.Location = new Point(7, 78);
-            DarkLabel28.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel28.Name = "DarkLabel28";
-            DarkLabel28.Size = new Size(108, 15);
-            DarkLabel28.TabIndex = 5;
-            DarkLabel28.Text = "Level Requirement:";
+            cmbLabel28.AutoSize = true;
+            cmbLabel28.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel28.Location = new Point(7, 78);
+            cmbLabel28.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel28.Name = "cmbLabel28";
+            cmbLabel28.Size = new Size(108, 15);
+            cmbLabel28.TabIndex = 5;
+            cmbLabel28.Text = "Level Requirement:";
             // 
             // nudLevelReq
             // 
@@ -652,16 +652,16 @@ namespace Client
             cmbAccessReq.TabIndex = 3;
             cmbAccessReq.SelectedIndexChanged += CmbAccessReq_SelectedIndexChanged;
             // 
-            // DarkLabel27
+            // cmbLabel27
             // 
-            DarkLabel27.AutoSize = true;
-            DarkLabel27.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel27.Location = new Point(7, 50);
-            DarkLabel27.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel27.Name = "DarkLabel27";
-            DarkLabel27.Size = new Size(117, 15);
-            DarkLabel27.TabIndex = 2;
-            DarkLabel27.Text = "Access Requirement:";
+            cmbLabel27.AutoSize = true;
+            cmbLabel27.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel27.Location = new Point(7, 50);
+            cmbLabel27.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel27.Name = "cmbLabel27";
+            cmbLabel27.Size = new Size(117, 15);
+            cmbLabel27.TabIndex = 2;
+            cmbLabel27.Text = "Access Requirement:";
             // 
             // cmbJobReq
             // 
@@ -674,31 +674,31 @@ namespace Client
             cmbJobReq.TabIndex = 1;
             cmbJobReq.SelectedIndexChanged += CmbJobReq_SelectedIndexChanged;
             // 
-            // DarkLabel26
+            // cmbLabel26
             // 
-            DarkLabel26.AutoSize = true;
-            DarkLabel26.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel26.Location = new Point(7, 18);
-            DarkLabel26.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel26.Name = "DarkLabel26";
-            DarkLabel26.Size = new Size(99, 15);
-            DarkLabel26.TabIndex = 0;
-            DarkLabel26.Text = "Job Requirement:";
+            cmbLabel26.AutoSize = true;
+            cmbLabel26.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel26.Location = new Point(7, 18);
+            cmbLabel26.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel26.Name = "cmbLabel26";
+            cmbLabel26.Size = new Size(99, 15);
+            cmbLabel26.TabIndex = 0;
+            cmbLabel26.Text = "Job Requirement:";
             // 
             // DarkGroupBox4
             // 
             DarkGroupBox4.BackColor = Color.FromArgb(45, 45, 48);
             DarkGroupBox4.BorderColor = Color.FromArgb(90, 90, 90);
             DarkGroupBox4.Controls.Add(nudSprReq);
-            DarkGroupBox4.Controls.Add(DarkLabel32);
+            DarkGroupBox4.Controls.Add(cmbLabel32);
             DarkGroupBox4.Controls.Add(nudIntReq);
-            DarkGroupBox4.Controls.Add(DarkLabel33);
+            DarkGroupBox4.Controls.Add(cmbLabel33);
             DarkGroupBox4.Controls.Add(nudVitReq);
-            DarkGroupBox4.Controls.Add(DarkLabel34);
+            DarkGroupBox4.Controls.Add(cmbLabel34);
             DarkGroupBox4.Controls.Add(nudLuckReq);
-            DarkGroupBox4.Controls.Add(DarkLabel29);
+            DarkGroupBox4.Controls.Add(cmbLabel29);
             DarkGroupBox4.Controls.Add(nudStrReq);
-            DarkGroupBox4.Controls.Add(DarkLabel31);
+            DarkGroupBox4.Controls.Add(cmbLabel31);
             DarkGroupBox4.ForeColor = Color.Gainsboro;
             DarkGroupBox4.Location = new Point(7, 111);
             DarkGroupBox4.Margin = new Padding(4, 3, 4, 3);
@@ -719,16 +719,16 @@ namespace Client
             nudSprReq.TabIndex = 18;
             nudSprReq.Click += NudSprReq_ValueChanged;
             // 
-            // DarkLabel32
+            // cmbLabel32
             // 
-            DarkLabel32.AutoSize = true;
-            DarkLabel32.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel32.Location = new Point(139, 75);
-            DarkLabel32.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel32.Name = "DarkLabel32";
-            DarkLabel32.Size = new Size(37, 15);
-            DarkLabel32.TabIndex = 17;
-            DarkLabel32.Text = "Spirit:";
+            cmbLabel32.AutoSize = true;
+            cmbLabel32.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel32.Location = new Point(139, 75);
+            cmbLabel32.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel32.Name = "cmbLabel32";
+            cmbLabel32.Size = new Size(37, 15);
+            cmbLabel32.TabIndex = 17;
+            cmbLabel32.Text = "Spirit:";
             // 
             // nudIntReq
             // 
@@ -740,16 +740,16 @@ namespace Client
             nudIntReq.TabIndex = 16;
             nudIntReq.Click += NudIntReq_ValueChanged;
             // 
-            // DarkLabel33
+            // cmbLabel33
             // 
-            DarkLabel33.AutoSize = true;
-            DarkLabel33.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel33.Location = new Point(139, 28);
-            DarkLabel33.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel33.Name = "DarkLabel33";
-            DarkLabel33.Size = new Size(71, 15);
-            DarkLabel33.TabIndex = 15;
-            DarkLabel33.Text = "Intelligence:";
+            cmbLabel33.AutoSize = true;
+            cmbLabel33.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel33.Location = new Point(139, 28);
+            cmbLabel33.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel33.Name = "cmbLabel33";
+            cmbLabel33.Size = new Size(71, 15);
+            cmbLabel33.TabIndex = 15;
+            cmbLabel33.Text = "Intelligence:";
             // 
             // nudVitReq
             // 
@@ -761,16 +761,16 @@ namespace Client
             nudVitReq.TabIndex = 14;
             nudVitReq.Click += NudVitReq_ValueChanged;
             // 
-            // DarkLabel34
+            // cmbLabel34
             // 
-            DarkLabel34.AutoSize = true;
-            DarkLabel34.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel34.Location = new Point(7, 76);
-            DarkLabel34.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel34.Name = "DarkLabel34";
-            DarkLabel34.Size = new Size(46, 15);
-            DarkLabel34.TabIndex = 13;
-            DarkLabel34.Text = "Vitality:";
+            cmbLabel34.AutoSize = true;
+            cmbLabel34.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel34.Location = new Point(7, 76);
+            cmbLabel34.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel34.Name = "cmbLabel34";
+            cmbLabel34.Size = new Size(46, 15);
+            cmbLabel34.TabIndex = 13;
+            cmbLabel34.Text = "Vitality:";
             // 
             // nudLuckReq
             // 
@@ -782,16 +782,16 @@ namespace Client
             nudLuckReq.TabIndex = 12;
             nudLuckReq.Click += NudLuckReq_ValueChanged;
             // 
-            // DarkLabel29
+            // cmbLabel29
             // 
-            DarkLabel29.AutoSize = true;
-            DarkLabel29.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel29.Location = new Point(294, 28);
-            DarkLabel29.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel29.Name = "DarkLabel29";
-            DarkLabel29.Size = new Size(35, 15);
-            DarkLabel29.TabIndex = 11;
-            DarkLabel29.Text = "Luck:";
+            cmbLabel29.AutoSize = true;
+            cmbLabel29.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel29.Location = new Point(294, 28);
+            cmbLabel29.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel29.Name = "cmbLabel29";
+            cmbLabel29.Size = new Size(35, 15);
+            cmbLabel29.TabIndex = 11;
+            cmbLabel29.Text = "Luck:";
             // 
             // nudStrReq
             // 
@@ -803,16 +803,16 @@ namespace Client
             nudStrReq.TabIndex = 8;
             nudStrReq.Click += NudStrReq_ValueChanged;
             // 
-            // DarkLabel31
+            // cmbLabel31
             // 
-            DarkLabel31.AutoSize = true;
-            DarkLabel31.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel31.Location = new Point(7, 28);
-            DarkLabel31.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel31.Name = "DarkLabel31";
-            DarkLabel31.Size = new Size(55, 15);
-            DarkLabel31.TabIndex = 7;
-            DarkLabel31.Text = "Strength:";
+            cmbLabel31.AutoSize = true;
+            cmbLabel31.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel31.Location = new Point(7, 28);
+            cmbLabel31.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel31.Name = "cmbLabel31";
+            cmbLabel31.Size = new Size(55, 15);
+            cmbLabel31.TabIndex = 7;
+            cmbLabel31.Text = "Strength:";
             // 
             // btnSave
             // 
@@ -873,7 +873,7 @@ namespace Client
             fraSkill.BackColor = Color.FromArgb(45, 45, 48);
             fraSkill.BorderColor = Color.FromArgb(90, 90, 90);
             fraSkill.Controls.Add(cmbSkills);
-            fraSkill.Controls.Add(DarkLabel12);
+            fraSkill.Controls.Add(cmbLabel12);
             fraSkill.ForeColor = Color.Gainsboro;
             fraSkill.Location = new Point(284, 138);
             fraSkill.Margin = new Padding(4, 3, 4, 3);
@@ -895,23 +895,23 @@ namespace Client
             cmbSkills.TabIndex = 1;
             cmbSkills.SelectedIndexChanged += CmbSkills_SelectedIndexChanged;
             // 
-            // DarkLabel12
+            // cmbLabel12
             // 
-            DarkLabel12.AutoSize = true;
-            DarkLabel12.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel12.Location = new Point(7, 20);
-            DarkLabel12.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel12.Name = "DarkLabel12";
-            DarkLabel12.Size = new Size(31, 15);
-            DarkLabel12.TabIndex = 0;
-            DarkLabel12.Text = "Skill:";
+            cmbLabel12.AutoSize = true;
+            cmbLabel12.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel12.Location = new Point(7, 20);
+            cmbLabel12.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel12.Name = "cmbLabel12";
+            cmbLabel12.Size = new Size(31, 15);
+            cmbLabel12.TabIndex = 0;
+            cmbLabel12.Text = "Skill:";
             // 
             // fraVitals
             // 
             fraVitals.BackColor = Color.FromArgb(45, 45, 48);
             fraVitals.BorderColor = Color.FromArgb(90, 90, 90);
             fraVitals.Controls.Add(nudVitalMod);
-            fraVitals.Controls.Add(DarkLabel11);
+            fraVitals.Controls.Add(cmbLabel11);
             fraVitals.ForeColor = Color.Gainsboro;
             fraVitals.Location = new Point(284, 138);
             fraVitals.Margin = new Padding(4, 3, 4, 3);
@@ -931,16 +931,16 @@ namespace Client
             nudVitalMod.TabIndex = 1;
             nudVitalMod.Click += NudVitalMod_Click;
             // 
-            // DarkLabel11
+            // cmbLabel11
             // 
-            DarkLabel11.AutoSize = true;
-            DarkLabel11.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel11.Location = new Point(7, 20);
-            DarkLabel11.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel11.Name = "DarkLabel11";
-            DarkLabel11.Size = new Size(35, 15);
-            DarkLabel11.TabIndex = 0;
-            DarkLabel11.Text = "Mod:";
+            cmbLabel11.AutoSize = true;
+            cmbLabel11.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel11.Location = new Point(7, 20);
+            cmbLabel11.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel11.Name = "cmbLabel11";
+            cmbLabel11.Size = new Size(35, 15);
+            cmbLabel11.TabIndex = 0;
+            cmbLabel11.Text = "Mod:";
             // 
             // txtName
             // 
@@ -954,16 +954,16 @@ namespace Client
             txtName.TabIndex = 1;
             txtName.TextChanged += TxtName_TextChanged;
             // 
-            // DarkLabel2
+            // cmbLabel2
             // 
-            DarkLabel2.AutoSize = true;
-            DarkLabel2.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel2.Location = new Point(358, 18);
-            DarkLabel2.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel2.Name = "DarkLabel2";
-            DarkLabel2.Size = new Size(33, 15);
-            DarkLabel2.TabIndex = 2;
-            DarkLabel2.Text = "Icon:";
+            cmbLabel2.AutoSize = true;
+            cmbLabel2.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel2.Location = new Point(358, 18);
+            cmbLabel2.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel2.Name = "cmbLabel2";
+            cmbLabel2.Size = new Size(33, 15);
+            cmbLabel2.TabIndex = 2;
+            cmbLabel2.Text = "Icon:";
             // 
             // nudIcon
             // 
@@ -974,16 +974,16 @@ namespace Client
             nudIcon.TabIndex = 3;
             nudIcon.Click += NudPic_Click;
             // 
-            // DarkLabel3
+            // cmbLabel3
             // 
-            DarkLabel3.AutoSize = true;
-            DarkLabel3.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel3.Location = new Point(358, 50);
-            DarkLabel3.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel3.Name = "DarkLabel3";
-            DarkLabel3.Size = new Size(40, 15);
-            DarkLabel3.TabIndex = 4;
-            DarkLabel3.Text = "Rarity:";
+            cmbLabel3.AutoSize = true;
+            cmbLabel3.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel3.Location = new Point(358, 50);
+            cmbLabel3.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel3.Name = "cmbLabel3";
+            cmbLabel3.Size = new Size(40, 15);
+            cmbLabel3.TabIndex = 4;
+            cmbLabel3.Text = "Rarity:";
             // 
             // nudRarity
             // 
@@ -1005,16 +1005,16 @@ namespace Client
             picItem.TabIndex = 7;
             picItem.TabStop = false;
             // 
-            // DarkLabel4
+            // cmbLabel4
             // 
-            DarkLabel4.AutoSize = true;
-            DarkLabel4.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel4.Location = new Point(7, 50);
-            DarkLabel4.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel4.Name = "DarkLabel4";
-            DarkLabel4.Size = new Size(34, 15);
-            DarkLabel4.TabIndex = 8;
-            DarkLabel4.Text = "Type:";
+            cmbLabel4.AutoSize = true;
+            cmbLabel4.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel4.Location = new Point(7, 50);
+            cmbLabel4.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel4.Name = "cmbLabel4";
+            cmbLabel4.Size = new Size(34, 15);
+            cmbLabel4.TabIndex = 8;
+            cmbLabel4.Text = "Type:";
             // 
             // cmbType
             // 
@@ -1028,16 +1028,16 @@ namespace Client
             cmbType.TabIndex = 9;
             cmbType.SelectedIndexChanged += CmbType_SelectedIndexChanged;
             // 
-            // DarkLabel5
+            // cmbLabel5
             // 
-            DarkLabel5.AutoSize = true;
-            DarkLabel5.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel5.Location = new Point(7, 81);
-            DarkLabel5.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel5.Name = "DarkLabel5";
-            DarkLabel5.Size = new Size(59, 15);
-            DarkLabel5.TabIndex = 10;
-            DarkLabel5.Text = "Sub-Type:";
+            cmbLabel5.AutoSize = true;
+            cmbLabel5.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel5.Location = new Point(7, 81);
+            cmbLabel5.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel5.Name = "cmbLabel5";
+            cmbLabel5.Size = new Size(59, 15);
+            cmbLabel5.TabIndex = 10;
+            cmbLabel5.Text = "Sub-Type:";
             // 
             // cmbSubType
             // 
@@ -1062,16 +1062,16 @@ namespace Client
             chkStackable.Text = "Stackable";
             chkStackable.CheckedChanged += ChkStackable_CheckedChanged;
             // 
-            // DarkLabel6
+            // cmbLabel6
             // 
-            DarkLabel6.AutoSize = true;
-            DarkLabel6.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel6.Location = new Point(261, 81);
-            DarkLabel6.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel6.Name = "DarkLabel6";
-            DarkLabel6.Size = new Size(61, 15);
-            DarkLabel6.TabIndex = 13;
-            DarkLabel6.Text = "Bind Type:";
+            cmbLabel6.AutoSize = true;
+            cmbLabel6.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel6.Location = new Point(261, 81);
+            cmbLabel6.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel6.Name = "cmbLabel6";
+            cmbLabel6.Size = new Size(61, 15);
+            cmbLabel6.TabIndex = 13;
+            cmbLabel6.Text = "Bind Type:";
             // 
             // cmbBind
             // 
@@ -1085,16 +1085,16 @@ namespace Client
             cmbBind.TabIndex = 14;
             cmbBind.SelectedIndexChanged += CmbBind_SelectedIndexChanged;
             // 
-            // DarkLabel7
+            // cmbLabel7
             // 
-            DarkLabel7.AutoSize = true;
-            DarkLabel7.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel7.Location = new Point(7, 111);
-            DarkLabel7.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel7.Name = "DarkLabel7";
-            DarkLabel7.Size = new Size(36, 15);
-            DarkLabel7.TabIndex = 15;
-            DarkLabel7.Text = "Price:";
+            cmbLabel7.AutoSize = true;
+            cmbLabel7.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel7.Location = new Point(7, 111);
+            cmbLabel7.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel7.Name = "cmbLabel7";
+            cmbLabel7.Size = new Size(36, 15);
+            cmbLabel7.TabIndex = 15;
+            cmbLabel7.Text = "Price:";
             // 
             // nudPrice
             // 
@@ -1106,16 +1106,16 @@ namespace Client
             nudPrice.TabIndex = 16;
             nudPrice.Click += NudPrice_ValueChanged;
             // 
-            // DarkLabel8
+            // cmbLabel8
             // 
-            DarkLabel8.AutoSize = true;
-            DarkLabel8.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel8.Location = new Point(173, 111);
-            DarkLabel8.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel8.Name = "DarkLabel8";
-            DarkLabel8.Size = new Size(37, 15);
-            DarkLabel8.TabIndex = 17;
-            DarkLabel8.Text = "Level:";
+            cmbLabel8.AutoSize = true;
+            cmbLabel8.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel8.Location = new Point(173, 111);
+            cmbLabel8.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel8.Name = "cmbLabel8";
+            cmbLabel8.Size = new Size(37, 15);
+            cmbLabel8.TabIndex = 17;
+            cmbLabel8.Text = "Level:";
             // 
             // nudItemLvl
             // 
@@ -1128,16 +1128,16 @@ namespace Client
             nudItemLvl.Value = new decimal(new int[] { 1, 0, 0, 0 });
             nudItemLvl.Click += NuditemLvl_ValueChanged;
             // 
-            // DarkLabel9
+            // cmbLabel9
             // 
-            DarkLabel9.AutoSize = true;
-            DarkLabel9.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel9.Location = new Point(307, 111);
-            DarkLabel9.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel9.Name = "DarkLabel9";
-            DarkLabel9.Size = new Size(66, 15);
-            DarkLabel9.TabIndex = 19;
-            DarkLabel9.Text = "Animation:";
+            cmbLabel9.AutoSize = true;
+            cmbLabel9.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel9.Location = new Point(307, 111);
+            cmbLabel9.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel9.Name = "cmbLabel9";
+            cmbLabel9.Size = new Size(66, 15);
+            cmbLabel9.TabIndex = 19;
+            cmbLabel9.Text = "Animation:";
             // 
             // cmbAnimation
             // 
@@ -1150,16 +1150,16 @@ namespace Client
             cmbAnimation.TabIndex = 20;
             cmbAnimation.SelectedIndexChanged += CmbAnimation_SelectedIndexChanged;
             // 
-            // DarkLabel10
+            // cmbLabel10
             // 
-            DarkLabel10.AutoSize = true;
-            DarkLabel10.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel10.Location = new Point(7, 137);
-            DarkLabel10.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel10.Name = "DarkLabel10";
-            DarkLabel10.Size = new Size(70, 15);
-            DarkLabel10.TabIndex = 21;
-            DarkLabel10.Text = "Description:";
+            cmbLabel10.AutoSize = true;
+            cmbLabel10.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel10.Location = new Point(7, 137);
+            cmbLabel10.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel10.Name = "cmbLabel10";
+            cmbLabel10.Size = new Size(70, 15);
+            cmbLabel10.TabIndex = 21;
+            cmbLabel10.Text = "Description:";
             // 
             // txtDescription
             // 
@@ -1174,25 +1174,25 @@ namespace Client
             txtDescription.TabIndex = 22;
             txtDescription.TextChanged += TxtDescription_TextChanged;       
             // 
-            // DarkLabel13
+            // cmbLabel13
             // 
-            DarkLabel13.AutoSize = true;
-            DarkLabel13.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel13.Location = new Point(7, 20);
-            DarkLabel13.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel13.Name = "DarkLabel13";
-            DarkLabel13.Size = new Size(37, 15);
-            DarkLabel13.TabIndex = 0;
-            DarkLabel13.Text = "Num:";
+            cmbLabel13.AutoSize = true;
+            cmbLabel13.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel13.Location = new Point(7, 20);
+            cmbLabel13.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel13.Name = "cmbLabel13";
+            cmbLabel13.Size = new Size(37, 15);
+            cmbLabel13.TabIndex = 0;
+            cmbLabel13.Text = "Num:";
             // 
             // fraEvents
             // 
             fraEvents.BackColor = Color.FromArgb(45, 45, 48);
             fraEvents.BorderColor = Color.FromArgb(90, 90, 90);
             fraEvents.Controls.Add(nudEventValue);
-            fraEvents.Controls.Add(DarkLabel39);
+            fraEvents.Controls.Add(cmbLabel39);
             fraEvents.Controls.Add(nudEvent);
-            fraEvents.Controls.Add(DarkLabel38);
+            fraEvents.Controls.Add(cmbLabel38);
             fraEvents.ForeColor = Color.Gainsboro;
             fraEvents.Location = new Point(292, 137);
             fraEvents.Margin = new Padding(4, 3, 4, 3);
@@ -1211,16 +1211,16 @@ namespace Client
             nudEventValue.Size = new Size(148, 23);
             nudEventValue.TabIndex = 5;
             // 
-            // DarkLabel39
+            // cmbLabel39
             // 
-            DarkLabel39.AutoSize = true;
-            DarkLabel39.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel39.Location = new Point(9, 61);
-            DarkLabel39.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel39.Name = "DarkLabel39";
-            DarkLabel39.Size = new Size(38, 15);
-            DarkLabel39.TabIndex = 4;
-            DarkLabel39.Text = "Value:";
+            cmbLabel39.AutoSize = true;
+            cmbLabel39.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel39.Location = new Point(9, 61);
+            cmbLabel39.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel39.Name = "cmbLabel39";
+            cmbLabel39.Size = new Size(38, 15);
+            cmbLabel39.TabIndex = 4;
+            cmbLabel39.Text = "Value:";
             // 
             // nudEvent
             // 
@@ -1231,53 +1231,53 @@ namespace Client
             nudEvent.TabIndex = 1;
             nudEvent.ValueChanged += nudEvents_ValueChanged;
             // 
-            // DarkLabel38
+            // cmbLabel38
             // 
-            DarkLabel38.AutoSize = true;
-            DarkLabel38.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel38.Location = new Point(9, 20);
-            DarkLabel38.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel38.Name = "DarkLabel38";
-            DarkLabel38.Size = new Size(21, 15);
-            DarkLabel38.TabIndex = 0;
-            DarkLabel38.Text = "Id:";
+            cmbLabel38.AutoSize = true;
+            cmbLabel38.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel38.Location = new Point(9, 20);
+            cmbLabel38.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel38.Name = "cmbLabel38";
+            cmbLabel38.Size = new Size(21, 15);
+            cmbLabel38.TabIndex = 0;
+            cmbLabel38.Text = "Id:";
             // 
-            // DarkLabel36
+            // cmbLabel36
             // 
-            DarkLabel36.AutoSize = true;
-            DarkLabel36.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel36.Location = new Point(7, 18);
-            DarkLabel36.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel36.Name = "DarkLabel36";
-            DarkLabel36.Size = new Size(42, 15);
-            DarkLabel36.TabIndex = 28;
-            DarkLabel36.Text = "Name:";
+            cmbLabel36.AutoSize = true;
+            cmbLabel36.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel36.Location = new Point(7, 18);
+            cmbLabel36.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel36.Name = "cmbLabel36";
+            cmbLabel36.Size = new Size(42, 15);
+            cmbLabel36.TabIndex = 28;
+            cmbLabel36.Text = "Name:";
             // 
             // fraBasics
             // 
             fraBasics.BackColor = Color.FromArgb(45, 45, 48);
             fraBasics.BorderColor = Color.FromArgb(90, 90, 90);
-            fraBasics.Controls.Add(DarkLabel36);
+            fraBasics.Controls.Add(cmbLabel36);
             fraBasics.Controls.Add(txtDescription);
-            fraBasics.Controls.Add(DarkLabel10);
+            fraBasics.Controls.Add(cmbLabel10);
             fraBasics.Controls.Add(cmbAnimation);
-            fraBasics.Controls.Add(DarkLabel9);
+            fraBasics.Controls.Add(cmbLabel9);
             fraBasics.Controls.Add(nudItemLvl);
-            fraBasics.Controls.Add(DarkLabel8);
+            fraBasics.Controls.Add(cmbLabel8);
             fraBasics.Controls.Add(nudPrice);
-            fraBasics.Controls.Add(DarkLabel7);
+            fraBasics.Controls.Add(cmbLabel7);
             fraBasics.Controls.Add(cmbBind);
-            fraBasics.Controls.Add(DarkLabel6);
+            fraBasics.Controls.Add(cmbLabel6);
             fraBasics.Controls.Add(chkStackable);
             fraBasics.Controls.Add(cmbSubType);
-            fraBasics.Controls.Add(DarkLabel5);
+            fraBasics.Controls.Add(cmbLabel5);
             fraBasics.Controls.Add(cmbType);
-            fraBasics.Controls.Add(DarkLabel4);
+            fraBasics.Controls.Add(cmbLabel4);
             fraBasics.Controls.Add(picItem);
             fraBasics.Controls.Add(nudRarity);
-            fraBasics.Controls.Add(DarkLabel3);
+            fraBasics.Controls.Add(cmbLabel3);
             fraBasics.Controls.Add(nudIcon);
-            fraBasics.Controls.Add(DarkLabel2);
+            fraBasics.Controls.Add(cmbLabel2);
             fraBasics.Controls.Add(txtName);
             fraBasics.Controls.Add(fraVitals);
             fraBasics.Controls.Add(fraSkill);
@@ -1364,52 +1364,52 @@ namespace Client
 
         internal DarkGroupBox DarkGroupBox1;
         internal ListBox lstIndex;
-        internal DarkLabel DarkLabel1;
+        internal cmbLabel cmbLabel1;
         internal DarkGroupBox fraEquipment;
         internal DarkComboBox cmbTool;
-        internal DarkLabel DarkLabel14;
-        internal DarkLabel DarkLabel15;
+        internal cmbLabel cmbLabel14;
+        internal cmbLabel cmbLabel15;
         internal DarkNumericUpDown nudDamage;
-        internal DarkLabel lblSpeed;
+        internal cmbLabel lblSpeed;
         internal DarkNumericUpDown nudSpeed;
         internal DarkCheckBox chkKnockBack;
         internal DarkComboBox cmbKnockBackTiles;
-        internal DarkLabel DarkLabel16;
+        internal cmbLabel cmbLabel16;
         internal DarkGroupBox DarkGroupBox2;
-        internal DarkLabel DarkLabel17;
+        internal cmbLabel cmbLabel17;
         internal DarkNumericUpDown nudStrength;
         internal DarkNumericUpDown nudLuck;
-        internal DarkLabel DarkLabel19;
+        internal cmbLabel cmbLabel19;
         internal DarkNumericUpDown nudVitality;
-        internal DarkLabel DarkLabel20;
+        internal cmbLabel cmbLabel20;
         internal DarkNumericUpDown nudIntelligence;
-        internal DarkLabel DarkLabel21;
+        internal cmbLabel cmbLabel21;
         internal DarkNumericUpDown nudSpirit;
-        internal DarkLabel DarkLabel22;
+        internal cmbLabel cmbLabel22;
         internal DarkNumericUpDown nudPaperdoll;
-        internal DarkLabel DarkLabel23;
+        internal cmbLabel cmbLabel23;
         internal PictureBox picPaperdoll;
         internal DarkButton btnBasics;
         internal DarkButton btnRequirements;
         internal DarkGroupBox fraRequirements;
         internal DarkComboBox cmbJobReq;
-        internal DarkLabel DarkLabel26;
+        internal cmbLabel cmbLabel26;
         internal DarkComboBox cmbAccessReq;
-        internal DarkLabel DarkLabel27;
-        internal DarkLabel DarkLabel28;
+        internal cmbLabel cmbLabel27;
+        internal cmbLabel cmbLabel28;
         internal DarkNumericUpDown nudLevelReq;
         internal DarkGroupBox DarkGroupBox4;
         internal DarkNumericUpDown nudSprReq;
-        internal DarkLabel DarkLabel32;
+        internal cmbLabel cmbLabel32;
         internal DarkNumericUpDown nudIntReq;
-        internal DarkLabel DarkLabel33;
+        internal cmbLabel cmbLabel33;
         internal DarkNumericUpDown nudVitReq;
-        internal DarkLabel DarkLabel34;
+        internal cmbLabel cmbLabel34;
         internal DarkNumericUpDown nudLuckReq;
-        internal DarkLabel DarkLabel29;
+        internal cmbLabel cmbLabel29;
         internal DarkNumericUpDown nudStrReq;
-        internal DarkLabel DarkLabel31;
-        internal DarkLabel DarkLabel35;
+        internal cmbLabel cmbLabel31;
+        internal cmbLabel cmbLabel35;
         internal DarkButton btnSave;
         internal DarkButton btnDelete;
         internal DarkButton btnCancel;
@@ -1417,43 +1417,43 @@ namespace Client
         internal DarkNumericUpDown nudSpanwAmount;
         internal DarkGroupBox fraProjectile;
         internal DarkComboBox cmbAmmo;
-        internal DarkLabel DarkLabel25;
+        internal cmbLabel cmbLabel25;
         internal DarkComboBox cmbProjectile;
-        internal DarkLabel DarkLabel24;
+        internal cmbLabel cmbLabel24;
         internal DarkGroupBox fraSkill;
         internal DarkComboBox cmbSkills;
-        internal DarkLabel DarkLabel12;
+        internal cmbLabel cmbLabel12;
         internal DarkGroupBox fraVitals;
         internal DarkNumericUpDown nudVitalMod;
-        internal DarkLabel DarkLabel11;
+        internal cmbLabel cmbLabel11;
         internal DarkTextBox txtName;
-        internal DarkLabel DarkLabel2;
+        internal cmbLabel cmbLabel2;
         internal DarkNumericUpDown nudIcon;
-        internal DarkLabel DarkLabel3;
+        internal cmbLabel cmbLabel3;
         internal DarkNumericUpDown nudRarity;
         internal PictureBox picItem;
-        internal DarkLabel DarkLabel4;
+        internal cmbLabel cmbLabel4;
         internal DarkComboBox cmbType;
-        internal DarkLabel DarkLabel5;
+        internal cmbLabel cmbLabel5;
         internal DarkComboBox cmbSubType;
         internal DarkCheckBox chkStackable;
-        internal DarkLabel DarkLabel6;
+        internal cmbLabel cmbLabel6;
         internal DarkComboBox cmbBind;
-        internal DarkLabel DarkLabel7;
+        internal cmbLabel cmbLabel7;
         internal DarkNumericUpDown nudPrice;
-        internal DarkLabel DarkLabel8;
+        internal cmbLabel cmbLabel8;
         internal DarkNumericUpDown nudItemLvl;
-        internal DarkLabel DarkLabel9;
+        internal cmbLabel cmbLabel9;
         internal DarkComboBox cmbAnimation;
-        internal DarkLabel DarkLabel10;
+        internal cmbLabel cmbLabel10;
         internal DarkTextBox txtDescription;
-        internal DarkLabel DarkLabel13;
+        internal cmbLabel cmbLabel13;
         internal DarkGroupBox fraEvents;
         internal DarkNumericUpDown nudEventValue;
-        internal DarkLabel DarkLabel39;
+        internal cmbLabel cmbLabel39;
         internal DarkNumericUpDown nudEvent;
-        internal DarkLabel DarkLabel38;
-        internal DarkLabel DarkLabel36;
+        internal cmbLabel cmbLabel38;
+        internal cmbLabel cmbLabel36;
         internal DarkGroupBox fraBasics;
     }
 }

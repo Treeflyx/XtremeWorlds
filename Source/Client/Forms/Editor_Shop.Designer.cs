@@ -60,18 +60,18 @@ namespace Client
             btnDeleteTrade = new DarkUI.Controls.DarkButton();
             btnUpdate = new DarkUI.Controls.DarkButton();
             nudCostValue = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel8 = new DarkUI.Controls.DarkLabel();
+            cmbLabel8 = new DarkUI.Controls.cmbLabel();
             cmbCostItem = new DarkUI.Controls.DarkComboBox();
-            DarkLabel7 = new DarkUI.Controls.DarkLabel();
+            cmbLabel7 = new DarkUI.Controls.cmbLabel();
             nudItemValue = new DarkUI.Controls.DarkNumericUpDown();
-            DarkLabel6 = new DarkUI.Controls.DarkLabel();
+            cmbLabel6 = new DarkUI.Controls.cmbLabel();
             cmbItem = new DarkUI.Controls.DarkComboBox();
-            DarkLabel5 = new DarkUI.Controls.DarkLabel();
+            cmbLabel5 = new DarkUI.Controls.cmbLabel();
             lstTradeItem = new ListBox();
-            DarkLabel4 = new DarkUI.Controls.DarkLabel();
-            DarkLabel3 = new DarkUI.Controls.DarkLabel();
+            cmbLabel4 = new DarkUI.Controls.cmbLabel();
+            cmbLabel3 = new DarkUI.Controls.cmbLabel();
             txtName = new DarkUI.Controls.DarkTextBox();
-            DarkLabel1 = new DarkUI.Controls.DarkLabel();
+            cmbLabel1 = new DarkUI.Controls.cmbLabel();
             btnCancel = new DarkUI.Controls.DarkButton();
             btnDelete = new DarkUI.Controls.DarkButton();
             btnSave = new DarkUI.Controls.DarkButton();
@@ -117,10 +117,10 @@ namespace Client
             DarkGroupBox2.BorderColor = Color.FromArgb(90, 90, 90);
             DarkGroupBox2.Controls.Add(nudBuy);
             DarkGroupBox2.Controls.Add(DarkGroupBox3);
-            DarkGroupBox2.Controls.Add(DarkLabel4);
-            DarkGroupBox2.Controls.Add(DarkLabel3);
+            DarkGroupBox2.Controls.Add(cmbLabel4);
+            DarkGroupBox2.Controls.Add(cmbLabel3);
             DarkGroupBox2.Controls.Add(txtName);
-            DarkGroupBox2.Controls.Add(DarkLabel1);
+            DarkGroupBox2.Controls.Add(cmbLabel1);
             DarkGroupBox2.ForeColor = Color.Gainsboro;
             DarkGroupBox2.Location = new Point(254, 3);
             DarkGroupBox2.Margin = new Padding(4, 3, 4, 3);
@@ -146,13 +146,13 @@ namespace Client
             DarkGroupBox3.Controls.Add(btnDeleteTrade);
             DarkGroupBox3.Controls.Add(btnUpdate);
             DarkGroupBox3.Controls.Add(nudCostValue);
-            DarkGroupBox3.Controls.Add(DarkLabel8);
+            DarkGroupBox3.Controls.Add(cmbLabel8);
             DarkGroupBox3.Controls.Add(cmbCostItem);
-            DarkGroupBox3.Controls.Add(DarkLabel7);
+            DarkGroupBox3.Controls.Add(cmbLabel7);
             DarkGroupBox3.Controls.Add(nudItemValue);
-            DarkGroupBox3.Controls.Add(DarkLabel6);
+            DarkGroupBox3.Controls.Add(cmbLabel6);
             DarkGroupBox3.Controls.Add(cmbItem);
-            DarkGroupBox3.Controls.Add(DarkLabel5);
+            DarkGroupBox3.Controls.Add(cmbLabel5);
             DarkGroupBox3.Controls.Add(lstTradeItem);
             DarkGroupBox3.ForeColor = Color.Gainsboro;
             DarkGroupBox3.Location = new Point(14, 81);
@@ -194,16 +194,16 @@ namespace Client
             nudCostValue.Size = new Size(114, 23);
             nudCostValue.TabIndex = 51;
             // 
-            // DarkLabel8
+            // cmbLabel8
             // 
-            DarkLabel8.AutoSize = true;
-            DarkLabel8.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel8.Location = new Point(286, 215);
-            DarkLabel8.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel8.Name = "DarkLabel8";
-            DarkLabel8.Size = new Size(54, 15);
-            DarkLabel8.TabIndex = 50;
-            DarkLabel8.Text = "Amount:";
+            cmbLabel8.AutoSize = true;
+            cmbLabel8.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel8.Location = new Point(286, 215);
+            cmbLabel8.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel8.Name = "cmbLabel8";
+            cmbLabel8.Size = new Size(54, 15);
+            cmbLabel8.TabIndex = 50;
+            cmbLabel8.Text = "Amount:";
             // 
             // cmbCostItem
             // 
@@ -215,16 +215,16 @@ namespace Client
             cmbCostItem.Size = new Size(192, 24);
             cmbCostItem.TabIndex = 49;
             // 
-            // DarkLabel7
+            // cmbLabel7
             // 
-            DarkLabel7.AutoSize = true;
-            DarkLabel7.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel7.Location = new Point(7, 216);
-            DarkLabel7.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel7.Name = "DarkLabel7";
-            DarkLabel7.Size = new Size(61, 15);
-            DarkLabel7.TabIndex = 48;
-            DarkLabel7.Text = "Item Cost:";
+            cmbLabel7.AutoSize = true;
+            cmbLabel7.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel7.Location = new Point(7, 216);
+            cmbLabel7.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel7.Name = "cmbLabel7";
+            cmbLabel7.Size = new Size(61, 15);
+            cmbLabel7.TabIndex = 48;
+            cmbLabel7.Text = "Item Cost:";
             // 
             // nudItemValue
             // 
@@ -234,16 +234,16 @@ namespace Client
             nudItemValue.Size = new Size(114, 23);
             nudItemValue.TabIndex = 47;
             // 
-            // DarkLabel6
+            // cmbLabel6
             // 
-            DarkLabel6.AutoSize = true;
-            DarkLabel6.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel6.Location = new Point(286, 185);
-            DarkLabel6.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel6.Name = "DarkLabel6";
-            DarkLabel6.Size = new Size(54, 15);
-            DarkLabel6.TabIndex = 46;
-            DarkLabel6.Text = "Amount:";
+            cmbLabel6.AutoSize = true;
+            cmbLabel6.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel6.Location = new Point(286, 185);
+            cmbLabel6.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel6.Name = "cmbLabel6";
+            cmbLabel6.Size = new Size(54, 15);
+            cmbLabel6.TabIndex = 46;
+            cmbLabel6.Text = "Amount:";
             // 
             // cmbItem
             // 
@@ -255,16 +255,16 @@ namespace Client
             cmbItem.Size = new Size(192, 24);
             cmbItem.TabIndex = 45;
             // 
-            // DarkLabel5
+            // cmbLabel5
             // 
-            DarkLabel5.AutoSize = true;
-            DarkLabel5.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel5.Location = new Point(7, 185);
-            DarkLabel5.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel5.Name = "DarkLabel5";
-            DarkLabel5.Size = new Size(69, 15);
-            DarkLabel5.TabIndex = 44;
-            DarkLabel5.Text = "Item to Sell:";
+            cmbLabel5.AutoSize = true;
+            cmbLabel5.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel5.Location = new Point(7, 185);
+            cmbLabel5.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel5.Name = "cmbLabel5";
+            cmbLabel5.Size = new Size(69, 15);
+            cmbLabel5.TabIndex = 44;
+            cmbLabel5.Text = "Item to Sell:";
             // 
             // lstTradeItem
             // 
@@ -279,27 +279,27 @@ namespace Client
             lstTradeItem.Size = new Size(453, 152);
             lstTradeItem.TabIndex = 43;
             // 
-            // DarkLabel4
+            // cmbLabel4
             // 
-            DarkLabel4.AutoSize = true;
-            DarkLabel4.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel4.Location = new Point(204, 54);
-            DarkLabel4.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel4.Name = "DarkLabel4";
-            DarkLabel4.Size = new Size(109, 15);
-            DarkLabel4.TabIndex = 51;
-            DarkLabel4.Text = "% of the Item Value";
+            cmbLabel4.AutoSize = true;
+            cmbLabel4.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel4.Location = new Point(204, 54);
+            cmbLabel4.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel4.Name = "cmbLabel4";
+            cmbLabel4.Size = new Size(109, 15);
+            cmbLabel4.TabIndex = 51;
+            cmbLabel4.Text = "% of the Item Value";
             // 
-            // DarkLabel3
+            // cmbLabel3
             // 
-            DarkLabel3.AutoSize = true;
-            DarkLabel3.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel3.Location = new Point(14, 60);
-            DarkLabel3.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel3.Name = "DarkLabel3";
-            DarkLabel3.Size = new Size(81, 15);
-            DarkLabel3.TabIndex = 49;
-            DarkLabel3.Text = "Buyback Rate:";
+            cmbLabel3.AutoSize = true;
+            cmbLabel3.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel3.Location = new Point(14, 60);
+            cmbLabel3.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel3.Name = "cmbLabel3";
+            cmbLabel3.Size = new Size(81, 15);
+            cmbLabel3.TabIndex = 49;
+            cmbLabel3.Text = "Buyback Rate:";
             // 
             // txtName
             // 
@@ -313,16 +313,16 @@ namespace Client
             txtName.TabIndex = 46;
             txtName.TextChanged += TxtName_TextChanged;
             // 
-            // DarkLabel1
+            // cmbLabel1
             // 
-            DarkLabel1.AutoSize = true;
-            DarkLabel1.ForeColor = Color.FromArgb(220, 220, 220);
-            DarkLabel1.Location = new Point(14, 23);
-            DarkLabel1.Margin = new Padding(4, 0, 4, 0);
-            DarkLabel1.Name = "DarkLabel1";
-            DarkLabel1.Size = new Size(42, 15);
-            DarkLabel1.TabIndex = 45;
-            DarkLabel1.Text = "Name:";
+            cmbLabel1.AutoSize = true;
+            cmbLabel1.ForeColor = Color.FromArgb(220, 220, 220);
+            cmbLabel1.Location = new Point(14, 23);
+            cmbLabel1.Margin = new Padding(4, 0, 4, 0);
+            cmbLabel1.Name = "cmbLabel1";
+            cmbLabel1.Size = new Size(42, 15);
+            cmbLabel1.TabIndex = 45;
+            cmbLabel1.Text = "Name:";
             // 
             // btnCancel
             // 
@@ -392,19 +392,19 @@ namespace Client
         internal ListBox lstIndex;
         internal DarkGroupBox DarkGroupBox2;
         internal DarkTextBox txtName;
-        internal DarkLabel DarkLabel1;
-        internal DarkLabel DarkLabel4;
-        internal DarkLabel DarkLabel3;
+        internal cmbLabel cmbLabel1;
+        internal cmbLabel cmbLabel4;
+        internal cmbLabel cmbLabel3;
         internal DarkGroupBox DarkGroupBox3;
         internal DarkComboBox cmbItem;
-        internal DarkLabel DarkLabel5;
+        internal cmbLabel cmbLabel5;
         internal ListBox lstTradeItem;
         internal DarkNumericUpDown nudItemValue;
-        internal DarkLabel DarkLabel6;
-        internal DarkLabel DarkLabel7;
+        internal cmbLabel cmbLabel6;
+        internal cmbLabel cmbLabel7;
         internal DarkComboBox cmbCostItem;
         internal DarkNumericUpDown nudCostValue;
-        internal DarkLabel DarkLabel8;
+        internal cmbLabel cmbLabel8;
         internal DarkButton btnUpdate;
         internal DarkButton btnDeleteTrade;
         internal DarkButton btnCancel;
