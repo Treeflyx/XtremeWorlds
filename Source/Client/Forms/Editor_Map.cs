@@ -1055,20 +1055,21 @@ namespace Client
             if (Button == (int)MouseButtons.Left) // Left Mouse Button
             {
                 // convert the pixel number to tile number
-                X = (long)Math.Round(X) / GameState.SizeX + 1L;
-                Y = (long)Math.Round(Y) / GameState.SizeY + 1L;
+                X = (long)Math.Round((X + tilesetOffsetX) / GameState.SizeX) + 1L;
+                Y = (long)Math.Round((Y + tilesetOffsetY) / GameState.SizeY) + 1L;
 
                 // check it's not out of bounds
                 if (X < 0f)
                     X = 0f;
 
-                if ((double)X > Instance.picBackSelect.Width / (double)GameState.SizeX)
-                    X = (float)(Instance.picBackSelect.Width / (double)GameState.SizeX);
+                if ((double)X > (Instance.picBackSelect.Width + tilesetOffsetX) / (double)GameState.SizeX)
+                    X = (float)((Instance.picBackSelect.Width + tilesetOffsetX) / (double)GameState.SizeX);
+                
                 if (Y < 0f)
                     Y = 0f;
 
-                if ((double)Y > Instance.picBackSelect.Height / (double)GameState.SizeY)
-                    Y = (float)(Instance.picBackSelect.Height / (double)GameState.SizeY);
+                if ((double)Y > (Instance.picBackSelect.Height + tilesetOffsetY) / (double)GameState.SizeY)
+                    Y = (float)((Instance.picBackSelect.Height + tilesetOffsetY) / (double)GameState.SizeY);
 
                 // find out what to set the width + height of map editor to
                 if (X > GameState.EditorTileX) // drag right
