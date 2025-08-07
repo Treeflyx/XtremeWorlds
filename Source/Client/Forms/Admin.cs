@@ -6,7 +6,7 @@ using static Core.Global.Command;
 namespace Client
 {
 
-    internal partial class FrmAdmin
+    internal partial class Admin
     {
         protected override void WndProc(ref Message m)
         {
@@ -29,7 +29,7 @@ namespace Client
             base.WndProc(ref m);
         }
 
-        public FrmAdmin()
+        public Admin()
         {
             InitializeComponent();
         }

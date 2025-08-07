@@ -67,7 +67,7 @@ namespace Client
 
                 if (GameState.InitAdminForm)
                 {
-                    var withBlock1 = FrmAdmin.Instance;
+                    var withBlock1 = Admin.Instance;
                     withBlock1.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock1.Show();
                     withBlock1.txtAdminName.Text = Core.Global.Command.GetPlayerName(GameState.MyIndex);
@@ -83,7 +83,7 @@ namespace Client
                         var item1 = new DarkUI.Controls.DarkListItem(i.ToString());
                         // Set the Text property to include both the index and the map name
                         item1.Text = $"{i}: {GameState.MapNames[i]}";
-                        FrmAdmin.Instance.lstMaps.Items.Add(item1);
+                        Admin.Instance.lstMaps.Items.Add(item1);
                     }
                     GameState.InitMapReport = false;
                 }
@@ -253,7 +253,7 @@ namespace Client
 
                     if (GameState.AdminPanel)
                     {
-                        FrmAdmin.Instance.Dispose();
+                        Admin.Instance.Dispose();
                     }
 
                     Application.DoEvents();

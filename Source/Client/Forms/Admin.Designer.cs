@@ -7,21 +7,21 @@ using DarkUI.Forms;
 
 namespace Client
 {
-    internal partial class FrmAdmin : DarkForm
+    internal partial class Admin : DarkForm
     {
 
         // Shared instance of the form
-        private static FrmAdmin _instance;
+        private static Admin _instance;
 
         // Public property to get the shared instance
-        public static FrmAdmin Instance
+        public static Admin Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new FrmAdmin();
+                    _instance = new Admin();
                 }
                 return _instance;
             }
@@ -53,7 +53,7 @@ namespace Client
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmAdmin));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Admin));
             btnRespawn = new DarkButton();
             btnMapReport = new DarkButton();
             btnALoc = new DarkButton();
