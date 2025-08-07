@@ -31,7 +31,7 @@ namespace Client
             pnlAttributes.Left = 4;
             pnlAttributes.Top = 28;
             optBlocked.Checked = true;
-            tabpages.SelectedIndex = 0;
+            tabPages.SelectedIndex = 0;
 
             UpdateDirBlock();
 
@@ -954,7 +954,7 @@ namespace Client
 
             Instance.cmbParallax.SelectedIndex = Data.MyMap.Parallax;
 
-            Instance.tabpages.SelectedIndex = 0;
+            Instance.tabPages.SelectedIndex = 0;
             Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
             Instance.chkTint.Checked = Data.MyMap.MapTint;
             Instance.scrlMapRed.Value = Data.MyMap.MapTintR;
@@ -2098,9 +2098,9 @@ namespace Client
             Activate();
         }
 
-        private void tabpages_SelectedIndexChanged(object sender, EventArgs e)
+        private void tabPages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            GameState.MapEditorTab = Instance.tabpages.SelectedIndex;
+            GameState.MapEditorTab = Instance.tabPages.SelectedIndex;
 
             if (GameState.MapEditorTab == (int)MapEditorTab.Attributes)
             {

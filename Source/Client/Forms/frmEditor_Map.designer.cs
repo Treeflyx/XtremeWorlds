@@ -122,7 +122,7 @@ namespace Client
             tsbRedo = new ToolStripButton();
             tsbScreenshot = new ToolStripButton();
             tsbTileset = new ToolStripButton();
-            tabpages = new TabControl();
+            tabPages = new TabControl();
             tpTiles = new TabPage();
             cmbAutoTile = new DarkComboBox();
             Label11 = new DarkLabel();
@@ -226,7 +226,7 @@ namespace Client
             ((System.ComponentModel.ISupportInitialize)picMapItem).BeginInit();
             fraTrap.SuspendLayout();
             ToolStrip.SuspendLayout();
-            tabpages.SuspendLayout();
+            tabPages.SuspendLayout();
             tpTiles.SuspendLayout();
             tpAttributes.SuspendLayout();
             tpNpcs.SuspendLayout();
@@ -250,7 +250,7 @@ namespace Client
             // btnClearAttribute
             // 
             btnClearAttribute.Location = new Point(571, 949);
-            btnClearAttribute.Margin = new Padding(5, 5, 5, 5);
+            btnClearAttribute.Margin = new Padding(5);
             btnClearAttribute.Name = "btnClearAttribute";
             btnClearAttribute.Padding = new Padding(8, 9, 8, 9);
             btnClearAttribute.Size = new Size(195, 49);
@@ -262,7 +262,7 @@ namespace Client
             // 
             optTrap.AutoSize = true;
             optTrap.Location = new Point(395, 98);
-            optTrap.Margin = new Padding(5, 5, 5, 5);
+            optTrap.Margin = new Padding(5);
             optTrap.Name = "optTrap";
             optTrap.Size = new Size(70, 29);
             optTrap.TabIndex = 12;
@@ -273,7 +273,7 @@ namespace Client
             // 
             optHeal.AutoSize = true;
             optHeal.Location = new Point(289, 98);
-            optHeal.Margin = new Padding(5, 5, 5, 5);
+            optHeal.Margin = new Padding(5);
             optHeal.Name = "optHeal";
             optHeal.Size = new Size(72, 29);
             optHeal.TabIndex = 11;
@@ -284,7 +284,7 @@ namespace Client
             // 
             optBank.AutoSize = true;
             optBank.Location = new Point(169, 98);
-            optBank.Margin = new Padding(5, 5, 5, 5);
+            optBank.Margin = new Padding(5);
             optBank.Name = "optBank";
             optBank.Size = new Size(75, 29);
             optBank.TabIndex = 10;
@@ -294,7 +294,7 @@ namespace Client
             // 
             optShop.AutoSize = true;
             optShop.Location = new Point(681, 26);
-            optShop.Margin = new Padding(5, 5, 5, 5);
+            optShop.Margin = new Padding(5);
             optShop.Name = "optShop";
             optShop.Size = new Size(79, 29);
             optShop.TabIndex = 9;
@@ -305,7 +305,7 @@ namespace Client
             // 
             optNpcSpawn.AutoSize = true;
             optNpcSpawn.Location = new Point(532, 26);
-            optNpcSpawn.Margin = new Padding(5, 5, 5, 5);
+            optNpcSpawn.Margin = new Padding(5);
             optNpcSpawn.Name = "optNpcSpawn";
             optNpcSpawn.Size = new Size(127, 29);
             optNpcSpawn.TabIndex = 8;
@@ -316,7 +316,7 @@ namespace Client
             // 
             optResource.AutoSize = true;
             optResource.Location = new Point(18, 98);
-            optResource.Margin = new Padding(5, 5, 5, 5);
+            optResource.Margin = new Padding(5);
             optResource.Name = "optResource";
             optResource.Size = new Size(108, 29);
             optResource.TabIndex = 6;
@@ -327,7 +327,7 @@ namespace Client
             // 
             optNpcAvoid.AutoSize = true;
             optNpcAvoid.Location = new Point(395, 26);
-            optNpcAvoid.Margin = new Padding(5, 5, 5, 5);
+            optNpcAvoid.Margin = new Padding(5);
             optNpcAvoid.Name = "optNpcAvoid";
             optNpcAvoid.Size = new Size(121, 29);
             optNpcAvoid.TabIndex = 3;
@@ -337,7 +337,7 @@ namespace Client
             // 
             optItem.AutoSize = true;
             optItem.Location = new Point(289, 26);
-            optItem.Margin = new Padding(5, 5, 5, 5);
+            optItem.Margin = new Padding(5);
             optItem.Name = "optItem";
             optItem.Size = new Size(73, 29);
             optItem.TabIndex = 2;
@@ -348,7 +348,7 @@ namespace Client
             // 
             optWarp.AutoSize = true;
             optWarp.Location = new Point(169, 26);
-            optWarp.Margin = new Padding(5, 5, 5, 5);
+            optWarp.Margin = new Padding(5);
             optWarp.Name = "optWarp";
             optWarp.Size = new Size(79, 29);
             optWarp.TabIndex = 1;
@@ -360,7 +360,7 @@ namespace Client
             optBlocked.AutoSize = true;
             optBlocked.Checked = true;
             optBlocked.Location = new Point(18, 26);
-            optBlocked.Margin = new Padding(5, 5, 5, 5);
+            optBlocked.Margin = new Padding(5);
             optBlocked.Name = "optBlocked";
             optBlocked.Size = new Size(99, 29);
             optBlocked.TabIndex = 0;
@@ -372,7 +372,7 @@ namespace Client
             // 
             pnlBack.Controls.Add(picBackSelect);
             pnlBack.Location = new Point(10, 15);
-            pnlBack.Margin = new Padding(5, 5, 5, 5);
+            pnlBack.Margin = new Padding(5);
             pnlBack.Name = "pnlBack";
             pnlBack.Size = new Size(751, 654);
             pnlBack.TabIndex = 9;
@@ -381,7 +381,7 @@ namespace Client
             // 
             picBackSelect.BackColor = Color.Black;
             picBackSelect.Location = new Point(32, -5);
-            picBackSelect.Margin = new Padding(5, 5, 5, 5);
+            picBackSelect.Margin = new Padding(5);
             picBackSelect.Name = "picBackSelect";
             picBackSelect.Size = new Size(640, 640);
             picBackSelect.TabIndex = 22;
@@ -402,7 +402,7 @@ namespace Client
             pnlAttributes.Controls.Add(fraMapItem);
             pnlAttributes.Controls.Add(fraTrap);
             pnlAttributes.Location = new Point(792, 92);
-            pnlAttributes.Margin = new Padding(5, 5, 5, 5);
+            pnlAttributes.Margin = new Padding(5);
             pnlAttributes.Name = "pnlAttributes";
             pnlAttributes.Size = new Size(838, 945);
             pnlAttributes.TabIndex = 12;
@@ -414,9 +414,9 @@ namespace Client
             fraAnimation.Controls.Add(cmbAnimation);
             fraAnimation.Controls.Add(brnAnimation);
             fraAnimation.Location = new Point(305, 485);
-            fraAnimation.Margin = new Padding(5, 5, 5, 5);
+            fraAnimation.Margin = new Padding(5);
             fraAnimation.Name = "fraAnimation";
-            fraAnimation.Padding = new Padding(5, 5, 5, 5);
+            fraAnimation.Padding = new Padding(5);
             fraAnimation.Size = new Size(290, 216);
             fraAnimation.TabIndex = 17;
             fraAnimation.TabStop = false;
@@ -429,7 +429,7 @@ namespace Client
             cmbAnimation.FormattingEnabled = true;
             cmbAnimation.Items.AddRange(new object[] { "Heal HP", "Heal MP" });
             cmbAnimation.Location = new Point(10, 36);
-            cmbAnimation.Margin = new Padding(5, 5, 5, 5);
+            cmbAnimation.Margin = new Padding(5);
             cmbAnimation.Name = "cmbAnimation";
             cmbAnimation.Size = new Size(255, 32);
             cmbAnimation.TabIndex = 37;
@@ -437,7 +437,7 @@ namespace Client
             // brnAnimation
             // 
             brnAnimation.Location = new Point(61, 148);
-            brnAnimation.Margin = new Padding(5, 5, 5, 5);
+            brnAnimation.Margin = new Padding(5);
             brnAnimation.Name = "brnAnimation";
             brnAnimation.Padding = new Padding(8, 9, 8, 9);
             brnAnimation.Size = new Size(150, 52);
@@ -456,9 +456,9 @@ namespace Client
             fraMapWarp.Controls.Add(lblMapWarpX);
             fraMapWarp.Controls.Add(lblMapWarpMap);
             fraMapWarp.Location = new Point(15, 711);
-            fraMapWarp.Margin = new Padding(5, 5, 5, 5);
+            fraMapWarp.Margin = new Padding(5);
             fraMapWarp.Name = "fraMapWarp";
-            fraMapWarp.Padding = new Padding(5, 5, 5, 5);
+            fraMapWarp.Padding = new Padding(5);
             fraMapWarp.Size = new Size(420, 228);
             fraMapWarp.TabIndex = 0;
             fraMapWarp.TabStop = false;
@@ -467,7 +467,7 @@ namespace Client
             // btnMapWarp
             // 
             btnMapWarp.Location = new Point(132, 170);
-            btnMapWarp.Margin = new Padding(5, 5, 5, 5);
+            btnMapWarp.Margin = new Padding(5);
             btnMapWarp.Name = "btnMapWarp";
             btnMapWarp.Padding = new Padding(8, 9, 8, 9);
             btnMapWarp.Size = new Size(150, 52);
@@ -479,27 +479,27 @@ namespace Client
             // 
             scrlMapWarpY.Location = new Point(102, 122);
             scrlMapWarpY.Name = "scrlMapWarpY";
+            scrlMapWarpY.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpY.Size = new Size(269, 18);
             scrlMapWarpY.TabIndex = 5;
-            scrlMapWarpY.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpY.ValueChanged += ScrlMapWarpY_Scroll;
             // 
             // scrlMapWarpX
             // 
             scrlMapWarpX.Location = new Point(102, 78);
             scrlMapWarpX.Name = "scrlMapWarpX";
+            scrlMapWarpX.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpX.Size = new Size(269, 18);
             scrlMapWarpX.TabIndex = 4;
-            scrlMapWarpX.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpX.ValueChanged += ScrlMapWarpX_Scroll;
             // 
             // scrlMapWarpMap
             // 
             scrlMapWarpMap.Location = new Point(102, 39);
             scrlMapWarpMap.Name = "scrlMapWarpMap";
+            scrlMapWarpMap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpMap.Size = new Size(269, 18);
             scrlMapWarpMap.TabIndex = 3;
-            scrlMapWarpMap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapWarpMap.ValueChanged += ScrlMapWarpMap_Scroll;
             // 
             // lblMapWarpY
@@ -543,9 +543,9 @@ namespace Client
             fraNpcSpawn.Controls.Add(scrlNpcDir);
             fraNpcSpawn.Controls.Add(lblNpcDir);
             fraNpcSpawn.Location = new Point(5, 11);
-            fraNpcSpawn.Margin = new Padding(5, 5, 5, 5);
+            fraNpcSpawn.Margin = new Padding(5);
             fraNpcSpawn.Name = "fraNpcSpawn";
-            fraNpcSpawn.Padding = new Padding(5, 5, 5, 5);
+            fraNpcSpawn.Padding = new Padding(5);
             fraNpcSpawn.Size = new Size(290, 216);
             fraNpcSpawn.TabIndex = 11;
             fraNpcSpawn.TabStop = false;
@@ -556,7 +556,7 @@ namespace Client
             lstNpc.DrawMode = DrawMode.OwnerDrawVariable;
             lstNpc.FormattingEnabled = true;
             lstNpc.Location = new Point(10, 30);
-            lstNpc.Margin = new Padding(5, 5, 5, 5);
+            lstNpc.Margin = new Padding(5);
             lstNpc.Name = "lstNpc";
             lstNpc.Size = new Size(255, 32);
             lstNpc.TabIndex = 37;
@@ -564,7 +564,7 @@ namespace Client
             // btnNpcSpawn
             // 
             btnNpcSpawn.Location = new Point(65, 148);
-            btnNpcSpawn.Margin = new Padding(5, 5, 5, 5);
+            btnNpcSpawn.Margin = new Padding(5);
             btnNpcSpawn.Name = "btnNpcSpawn";
             btnNpcSpawn.Padding = new Padding(8, 9, 8, 9);
             btnNpcSpawn.Size = new Size(150, 52);
@@ -574,13 +574,13 @@ namespace Client
             // 
             // scrlNpcDir
             // 
-            scrlNpcDir.Minimum = 1;
             scrlNpcDir.Location = new Point(12, 105);
             scrlNpcDir.Maximum = 3;
+            scrlNpcDir.Minimum = 1;
             scrlNpcDir.Name = "scrlNpcDir";
+            scrlNpcDir.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlNpcDir.Size = new Size(255, 18);
             scrlNpcDir.TabIndex = 3;
-            scrlNpcDir.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlNpcDir.ValueChanged += ScrlNpcDir_Scroll;
             // 
             // lblNpcDir
@@ -602,9 +602,9 @@ namespace Client
             fraHeal.Controls.Add(cmbHeal);
             fraHeal.Controls.Add(btnHeal);
             fraHeal.Location = new Point(5, 484);
-            fraHeal.Margin = new Padding(5, 5, 5, 5);
+            fraHeal.Margin = new Padding(5);
             fraHeal.Name = "fraHeal";
-            fraHeal.Padding = new Padding(5, 5, 5, 5);
+            fraHeal.Padding = new Padding(5);
             fraHeal.Size = new Size(290, 216);
             fraHeal.TabIndex = 15;
             fraHeal.TabStop = false;
@@ -635,7 +635,7 @@ namespace Client
             cmbHeal.FormattingEnabled = true;
             cmbHeal.Items.AddRange(new object[] { "Heal HP", "Heal MP" });
             cmbHeal.Location = new Point(10, 36);
-            cmbHeal.Margin = new Padding(5, 5, 5, 5);
+            cmbHeal.Margin = new Padding(5);
             cmbHeal.Name = "cmbHeal";
             cmbHeal.Size = new Size(255, 32);
             cmbHeal.TabIndex = 37;
@@ -643,7 +643,7 @@ namespace Client
             // btnHeal
             // 
             btnHeal.Location = new Point(61, 148);
-            btnHeal.Margin = new Padding(5, 5, 5, 5);
+            btnHeal.Margin = new Padding(5);
             btnHeal.Name = "btnHeal";
             btnHeal.Padding = new Padding(8, 9, 8, 9);
             btnHeal.Size = new Size(150, 52);
@@ -657,9 +657,9 @@ namespace Client
             fraShop.Controls.Add(cmbShop);
             fraShop.Controls.Add(btnShop);
             fraShop.Location = new Point(562, 15);
-            fraShop.Margin = new Padding(5, 5, 5, 5);
+            fraShop.Margin = new Padding(5);
             fraShop.Name = "fraShop";
-            fraShop.Padding = new Padding(5, 5, 5, 5);
+            fraShop.Padding = new Padding(5);
             fraShop.Size = new Size(245, 230);
             fraShop.TabIndex = 12;
             fraShop.TabStop = false;
@@ -670,7 +670,7 @@ namespace Client
             cmbShop.DrawMode = DrawMode.OwnerDrawVariable;
             cmbShop.FormattingEnabled = true;
             cmbShop.Location = new Point(10, 36);
-            cmbShop.Margin = new Padding(5, 5, 5, 5);
+            cmbShop.Margin = new Padding(5);
             cmbShop.Name = "cmbShop";
             cmbShop.Size = new Size(219, 32);
             cmbShop.TabIndex = 37;
@@ -678,7 +678,7 @@ namespace Client
             // btnShop
             // 
             btnShop.Location = new Point(49, 164);
-            btnShop.Margin = new Padding(5, 5, 5, 5);
+            btnShop.Margin = new Padding(5);
             btnShop.Name = "btnShop";
             btnShop.Padding = new Padding(8, 9, 8, 9);
             btnShop.Size = new Size(150, 52);
@@ -693,9 +693,9 @@ namespace Client
             fraResource.Controls.Add(scrlResource);
             fraResource.Controls.Add(lblResource);
             fraResource.Location = new Point(305, 11);
-            fraResource.Margin = new Padding(5, 5, 5, 5);
+            fraResource.Margin = new Padding(5);
             fraResource.Name = "fraResource";
-            fraResource.Padding = new Padding(5, 5, 5, 5);
+            fraResource.Padding = new Padding(5);
             fraResource.Size = new Size(245, 216);
             fraResource.TabIndex = 10;
             fraResource.TabStop = false;
@@ -704,7 +704,7 @@ namespace Client
             // btnResourceOk
             // 
             btnResourceOk.Location = new Point(48, 148);
-            btnResourceOk.Margin = new Padding(5, 5, 5, 5);
+            btnResourceOk.Margin = new Padding(5);
             btnResourceOk.Name = "btnResourceOk";
             btnResourceOk.Padding = new Padding(8, 9, 8, 9);
             btnResourceOk.Size = new Size(150, 52);
@@ -740,9 +740,9 @@ namespace Client
             fraMapItem.Controls.Add(scrlMapItem);
             fraMapItem.Controls.Add(lblMapItem);
             fraMapItem.Location = new Point(5, 228);
-            fraMapItem.Margin = new Padding(5, 5, 5, 5);
+            fraMapItem.Margin = new Padding(5);
             fraMapItem.Name = "fraMapItem";
-            fraMapItem.Padding = new Padding(5, 5, 5, 5);
+            fraMapItem.Padding = new Padding(5);
             fraMapItem.Size = new Size(290, 228);
             fraMapItem.TabIndex = 7;
             fraMapItem.TabStop = false;
@@ -752,7 +752,7 @@ namespace Client
             // 
             picMapItem.BackColor = Color.Black;
             picMapItem.Location = new Point(221, 70);
-            picMapItem.Margin = new Padding(5, 5, 5, 5);
+            picMapItem.Margin = new Padding(5);
             picMapItem.Name = "picMapItem";
             picMapItem.Size = new Size(52, 61);
             picMapItem.TabIndex = 7;
@@ -761,7 +761,7 @@ namespace Client
             // btnMapItem
             // 
             btnMapItem.Location = new Point(65, 161);
-            btnMapItem.Margin = new Padding(5, 5, 5, 5);
+            btnMapItem.Margin = new Padding(5);
             btnMapItem.Name = "btnMapItem";
             btnMapItem.Padding = new Padding(8, 9, 8, 9);
             btnMapItem.Size = new Size(150, 52);
@@ -773,18 +773,18 @@ namespace Client
             // 
             scrlMapItemValue.Location = new Point(15, 114);
             scrlMapItemValue.Name = "scrlMapItemValue";
+            scrlMapItemValue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItemValue.Size = new Size(200, 18);
             scrlMapItemValue.TabIndex = 4;
-            scrlMapItemValue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItemValue.ValueChanged += ScrlMapItemValue_ValueChanged;
             // 
             // scrlMapItem
             // 
             scrlMapItem.Location = new Point(15, 72);
             scrlMapItem.Name = "scrlMapItem";
+            scrlMapItem.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItem.Size = new Size(200, 18);
             scrlMapItem.TabIndex = 3;
-            scrlMapItem.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapItem.ValueChanged += ScrlMapItem_ValueChanged;
             // 
             // lblMapItem
@@ -805,9 +805,9 @@ namespace Client
             fraTrap.Controls.Add(scrlTrap);
             fraTrap.Controls.Add(lblTrap);
             fraTrap.Location = new Point(305, 240);
-            fraTrap.Margin = new Padding(5, 5, 5, 5);
+            fraTrap.Margin = new Padding(5);
             fraTrap.Name = "fraTrap";
-            fraTrap.Padding = new Padding(5, 5, 5, 5);
+            fraTrap.Padding = new Padding(5);
             fraTrap.Size = new Size(245, 230);
             fraTrap.TabIndex = 16;
             fraTrap.TabStop = false;
@@ -816,7 +816,7 @@ namespace Client
             // btnTrap
             // 
             btnTrap.Location = new Point(48, 164);
-            btnTrap.Margin = new Padding(5, 5, 5, 5);
+            btnTrap.Margin = new Padding(5);
             btnTrap.Name = "btnTrap";
             btnTrap.Padding = new Padding(8, 9, 8, 9);
             btnTrap.Size = new Size(150, 52);
@@ -828,9 +828,9 @@ namespace Client
             // 
             scrlTrap.Location = new Point(19, 64);
             scrlTrap.Name = "scrlTrap";
+            scrlTrap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlTrap.Size = new Size(212, 17);
             scrlTrap.TabIndex = 41;
-            scrlTrap.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlTrap.ValueChanged += ScrlTrap_ValueChanged;
             // 
             // lblTrap
@@ -848,10 +848,12 @@ namespace Client
             // 
             ToolStrip.AutoSize = false;
             ToolStrip.BackColor = Color.FromArgb(45, 45, 48);
+            ToolStrip.ForeColor = Color.FromArgb(220, 220, 220);
             ToolStrip.ImageScalingSize = new Size(24, 24);
             ToolStrip.Items.AddRange(new ToolStripItem[] { tsbSave, tsbDiscard, ToolStripSeparator1, tsbMapGrid, tsbOpacity, ToolStripSeparator2, tsbFill, tsbClear, tsbEyeDropper, tsbCopyMap, tsbDeleteMap, tsbUndo, tsbRedo, tsbScreenshot, tsbTileset });
             ToolStrip.Location = new Point(0, 0);
             ToolStrip.Name = "ToolStrip";
+            ToolStrip.Padding = new Padding(5, 0, 1, 0);
             ToolStrip.Size = new Size(1630, 48);
             ToolStrip.TabIndex = 13;
             ToolStrip.Text = "ToolStrip1";
@@ -859,6 +861,8 @@ namespace Client
             // 
             // tsbSave
             // 
+            tsbSave.BackColor = Color.FromArgb(60, 63, 65);
+            tsbSave.ForeColor = Color.FromArgb(220, 220, 220);
             tsbSave.Image = (Image)resources.GetObject("tsbSave.Image");
             tsbSave.ImageTransparentColor = Color.Magenta;
             tsbSave.Name = "tsbSave";
@@ -868,6 +872,8 @@ namespace Client
             // 
             // tsbDiscard
             // 
+            tsbDiscard.BackColor = Color.FromArgb(60, 63, 65);
+            tsbDiscard.ForeColor = Color.FromArgb(220, 220, 220);
             tsbDiscard.Image = (Image)resources.GetObject("tsbDiscard.Image");
             tsbDiscard.ImageTransparentColor = Color.Magenta;
             tsbDiscard.Name = "tsbDiscard";
@@ -877,11 +883,16 @@ namespace Client
             // 
             // ToolStripSeparator1
             // 
+            ToolStripSeparator1.BackColor = Color.FromArgb(60, 63, 65);
+            ToolStripSeparator1.ForeColor = Color.FromArgb(220, 220, 220);
+            ToolStripSeparator1.Margin = new Padding(0, 0, 2, 0);
             ToolStripSeparator1.Name = "ToolStripSeparator1";
             ToolStripSeparator1.Size = new Size(6, 48);
             // 
             // tsbMapGrid
             // 
+            tsbMapGrid.BackColor = Color.FromArgb(60, 63, 65);
+            tsbMapGrid.ForeColor = Color.FromArgb(220, 220, 220);
             tsbMapGrid.Image = (Image)resources.GetObject("tsbMapGrid.Image");
             tsbMapGrid.ImageTransparentColor = Color.Magenta;
             tsbMapGrid.Name = "tsbMapGrid";
@@ -891,7 +902,9 @@ namespace Client
             // 
             // tsbOpacity
             // 
+            tsbOpacity.BackColor = Color.FromArgb(60, 63, 65);
             tsbOpacity.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbOpacity.ForeColor = Color.FromArgb(220, 220, 220);
             tsbOpacity.Image = (Image)resources.GetObject("tsbOpacity.Image");
             tsbOpacity.ImageTransparentColor = Color.Magenta;
             tsbOpacity.Name = "tsbOpacity";
@@ -902,11 +915,16 @@ namespace Client
             // 
             // ToolStripSeparator2
             // 
+            ToolStripSeparator2.BackColor = Color.FromArgb(60, 63, 65);
+            ToolStripSeparator2.ForeColor = Color.FromArgb(220, 220, 220);
+            ToolStripSeparator2.Margin = new Padding(0, 0, 2, 0);
             ToolStripSeparator2.Name = "ToolStripSeparator2";
             ToolStripSeparator2.Size = new Size(6, 48);
             // 
             // tsbFill
             // 
+            tsbFill.BackColor = Color.FromArgb(60, 63, 65);
+            tsbFill.ForeColor = Color.FromArgb(220, 220, 220);
             tsbFill.Image = (Image)resources.GetObject("tsbFill.Image");
             tsbFill.ImageTransparentColor = Color.Magenta;
             tsbFill.Name = "tsbFill";
@@ -917,6 +935,8 @@ namespace Client
             // 
             // tsbClear
             // 
+            tsbClear.BackColor = Color.FromArgb(60, 63, 65);
+            tsbClear.ForeColor = Color.FromArgb(220, 220, 220);
             tsbClear.Image = (Image)resources.GetObject("tsbClear.Image");
             tsbClear.ImageTransparentColor = Color.Magenta;
             tsbClear.Name = "tsbClear";
@@ -926,6 +946,8 @@ namespace Client
             // 
             // tsbEyeDropper
             // 
+            tsbEyeDropper.BackColor = Color.FromArgb(60, 63, 65);
+            tsbEyeDropper.ForeColor = Color.FromArgb(220, 220, 220);
             tsbEyeDropper.Image = (Image)resources.GetObject("tsbEyeDropper.Image");
             tsbEyeDropper.ImageTransparentColor = Color.Magenta;
             tsbEyeDropper.Name = "tsbEyeDropper";
@@ -935,7 +957,9 @@ namespace Client
             // 
             // tsbCopyMap
             // 
+            tsbCopyMap.BackColor = Color.FromArgb(60, 63, 65);
             tsbCopyMap.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbCopyMap.ForeColor = Color.FromArgb(220, 220, 220);
             tsbCopyMap.Image = (Image)resources.GetObject("tsbCopyMap.Image");
             tsbCopyMap.ImageTransparentColor = Color.Magenta;
             tsbCopyMap.Name = "tsbCopyMap";
@@ -945,7 +969,9 @@ namespace Client
             // 
             // tsbDeleteMap
             // 
+            tsbDeleteMap.BackColor = Color.FromArgb(60, 63, 65);
             tsbDeleteMap.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbDeleteMap.ForeColor = Color.FromArgb(220, 220, 220);
             tsbDeleteMap.Image = (Image)resources.GetObject("tsbDeleteMap.Image");
             tsbDeleteMap.ImageTransparentColor = Color.Magenta;
             tsbDeleteMap.Name = "tsbDeleteMap";
@@ -955,7 +981,9 @@ namespace Client
             // 
             // tsbUndo
             // 
+            tsbUndo.BackColor = Color.FromArgb(60, 63, 65);
             tsbUndo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbUndo.ForeColor = Color.FromArgb(220, 220, 220);
             tsbUndo.Image = (Image)resources.GetObject("tsbUndo.Image");
             tsbUndo.ImageTransparentColor = Color.Magenta;
             tsbUndo.Name = "tsbUndo";
@@ -965,7 +993,9 @@ namespace Client
             // 
             // tsbRedo
             // 
+            tsbRedo.BackColor = Color.FromArgb(60, 63, 65);
             tsbRedo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbRedo.ForeColor = Color.FromArgb(220, 220, 220);
             tsbRedo.Image = (Image)resources.GetObject("tsbRedo.Image");
             tsbRedo.ImageTransparentColor = Color.Magenta;
             tsbRedo.Name = "tsbRedo";
@@ -975,7 +1005,9 @@ namespace Client
             // 
             // tsbScreenshot
             // 
+            tsbScreenshot.BackColor = Color.FromArgb(60, 63, 65);
             tsbScreenshot.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbScreenshot.ForeColor = Color.FromArgb(220, 220, 220);
             tsbScreenshot.Image = (Image)resources.GetObject("tsbScreenshot.Image");
             tsbScreenshot.ImageTransparentColor = Color.Magenta;
             tsbScreenshot.Name = "tsbScreenshot";
@@ -985,7 +1017,9 @@ namespace Client
             // 
             // tsbTileset
             // 
+            tsbTileset.BackColor = Color.FromArgb(60, 63, 65);
             tsbTileset.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            tsbTileset.ForeColor = Color.FromArgb(220, 220, 220);
             tsbTileset.Image = (Image)resources.GetObject("tsbTileset.Image");
             tsbTileset.ImageTransparentColor = Color.Magenta;
             tsbTileset.Name = "tsbTileset";
@@ -993,22 +1027,22 @@ namespace Client
             tsbTileset.Text = "Tileset";
             tsbTileset.Click += tsbTileset_Click;
             // 
-            // tabpages
+            // tabPages
             // 
-            tabpages.Controls.Add(tpTiles);
-            tabpages.Controls.Add(tpAttributes);
-            tabpages.Controls.Add(tpNpcs);
-            tabpages.Controls.Add(tpSettings);
-            tabpages.Controls.Add(tpDirBlock);
-            tabpages.Controls.Add(tpEvents);
-            tabpages.Controls.Add(tpEffects);
-            tabpages.Location = new Point(8, 52);
-            tabpages.Margin = new Padding(5, 5, 5, 5);
-            tabpages.Name = "tabpages";
-            tabpages.SelectedIndex = 0;
-            tabpages.Size = new Size(785, 1049);
-            tabpages.TabIndex = 14;
-            tabpages.SelectedIndexChanged += tabpages_SelectedIndexChanged;
+            tabPages.Controls.Add(tpTiles);
+            tabPages.Controls.Add(tpAttributes);
+            tabPages.Controls.Add(tpNpcs);
+            tabPages.Controls.Add(tpSettings);
+            tabPages.Controls.Add(tpDirBlock);
+            tabPages.Controls.Add(tpEvents);
+            tabPages.Controls.Add(tpEffects);
+            tabPages.Location = new Point(8, 52);
+            tabPages.Margin = new Padding(5);
+            tabPages.Name = "Menu";
+            tabPages.SelectedIndex = 0;
+            tabPages.Size = new Size(785, 1049);
+            tabPages.TabIndex = 14;
+            tabPages.SelectedIndexChanged += tabPages_SelectedIndexChanged;
             // 
             // tpTiles
             // 
@@ -1021,9 +1055,9 @@ namespace Client
             tpTiles.Controls.Add(cmbTileSets);
             tpTiles.Controls.Add(pnlBack);
             tpTiles.Location = new Point(4, 34);
-            tpTiles.Margin = new Padding(5, 5, 5, 5);
+            tpTiles.Margin = new Padding(5);
             tpTiles.Name = "tpTiles";
-            tpTiles.Padding = new Padding(5, 5, 5, 5);
+            tpTiles.Padding = new Padding(5);
             tpTiles.Size = new Size(777, 1011);
             tpTiles.TabIndex = 0;
             tpTiles.Text = "Tiles";
@@ -1034,7 +1068,7 @@ namespace Client
             cmbAutoTile.FormattingEnabled = true;
             cmbAutoTile.Items.AddRange(new object[] { "Normal", "AutoTile (VX)", "Fake (VX)", "Animated (VX)", "Cliff (VX)", "Waterfall (VX)" });
             cmbAutoTile.Location = new Point(565, 679);
-            cmbAutoTile.Margin = new Padding(5, 5, 5, 5);
+            cmbAutoTile.Margin = new Padding(5);
             cmbAutoTile.Name = "cmbAutoTile";
             cmbAutoTile.Size = new Size(155, 32);
             cmbAutoTile.TabIndex = 17;
@@ -1068,7 +1102,7 @@ namespace Client
             cmbLayers.FormattingEnabled = true;
             cmbLayers.Items.AddRange(new object[] { "Ground", "Mask", "Mask Anim", "Cover", "Cover Anim", "Fringe", "Fringe Anim", "Roof", "Roof Anim" });
             cmbLayers.Location = new Point(279, 679);
-            cmbLayers.Margin = new Padding(5, 5, 5, 5);
+            cmbLayers.Margin = new Padding(5);
             cmbLayers.Name = "cmbLayers";
             cmbLayers.Size = new Size(159, 32);
             cmbLayers.TabIndex = 14;
@@ -1090,7 +1124,7 @@ namespace Client
             cmbTileSets.DrawMode = DrawMode.OwnerDrawVariable;
             cmbTileSets.FormattingEnabled = true;
             cmbTileSets.Location = new Point(88, 679);
-            cmbTileSets.Margin = new Padding(5, 5, 5, 5);
+            cmbTileSets.Margin = new Padding(5);
             cmbTileSets.Name = "cmbTileSets";
             cmbTileSets.Size = new Size(95, 32);
             cmbTileSets.TabIndex = 12;
@@ -1118,9 +1152,9 @@ namespace Client
             tpAttributes.Controls.Add(optNpcSpawn);
             tpAttributes.Controls.Add(optResource);
             tpAttributes.Location = new Point(4, 34);
-            tpAttributes.Margin = new Padding(5, 5, 5, 5);
+            tpAttributes.Margin = new Padding(5);
             tpAttributes.Name = "tpAttributes";
-            tpAttributes.Padding = new Padding(5, 5, 5, 5);
+            tpAttributes.Padding = new Padding(5);
             tpAttributes.Size = new Size(777, 1011);
             tpAttributes.TabIndex = 3;
             tpAttributes.Text = "Attributes";
@@ -1129,7 +1163,7 @@ namespace Client
             // 
             optNoCrossing.AutoSize = true;
             optNoCrossing.Location = new Point(18, 159);
-            optNoCrossing.Margin = new Padding(5, 5, 5, 5);
+            optNoCrossing.Margin = new Padding(5);
             optNoCrossing.Name = "optNoCrossing";
             optNoCrossing.Size = new Size(102, 29);
             optNoCrossing.TabIndex = 25;
@@ -1138,7 +1172,7 @@ namespace Client
             // btnFillAttributes
             // 
             btnFillAttributes.Location = new Point(365, 948);
-            btnFillAttributes.Margin = new Padding(5, 5, 5, 5);
+            btnFillAttributes.Margin = new Padding(5);
             btnFillAttributes.Name = "btnFillAttributes";
             btnFillAttributes.Padding = new Padding(8, 9, 8, 9);
             btnFillAttributes.Size = new Size(195, 49);
@@ -1150,7 +1184,7 @@ namespace Client
             // 
             optInfo.AutoSize = true;
             optInfo.Location = new Point(195, 959);
-            optInfo.Margin = new Padding(5, 5, 5, 5);
+            optInfo.Margin = new Padding(5);
             optInfo.Name = "optInfo";
             optInfo.Size = new Size(69, 29);
             optInfo.TabIndex = 22;
@@ -1173,7 +1207,7 @@ namespace Client
             cmbAttribute.FormattingEnabled = true;
             cmbAttribute.Items.AddRange(new object[] { "Layer 1", "Layer 2" });
             cmbAttribute.Location = new Point(89, 958);
-            cmbAttribute.Margin = new Padding(5, 5, 5, 5);
+            cmbAttribute.Margin = new Padding(5);
             cmbAttribute.Name = "cmbAttribute";
             cmbAttribute.Size = new Size(95, 32);
             cmbAttribute.TabIndex = 20;
@@ -1183,7 +1217,7 @@ namespace Client
             // 
             optAnimation.AutoSize = true;
             optAnimation.Location = new Point(532, 98);
-            optAnimation.Margin = new Padding(5, 5, 5, 5);
+            optAnimation.Margin = new Padding(5);
             optAnimation.Name = "optAnimation";
             optAnimation.Size = new Size(119, 29);
             optAnimation.TabIndex = 19;
@@ -1195,9 +1229,9 @@ namespace Client
             tpNpcs.BackColor = Color.FromArgb(45, 45, 48);
             tpNpcs.Controls.Add(fraNpcs);
             tpNpcs.Location = new Point(4, 34);
-            tpNpcs.Margin = new Padding(5, 5, 5, 5);
+            tpNpcs.Margin = new Padding(5);
             tpNpcs.Name = "tpNpcs";
-            tpNpcs.Padding = new Padding(5, 5, 5, 5);
+            tpNpcs.Padding = new Padding(5);
             tpNpcs.Size = new Size(777, 1011);
             tpNpcs.TabIndex = 1;
             tpNpcs.Text = "Npcs";
@@ -1212,9 +1246,9 @@ namespace Client
             fraNpcs.Controls.Add(lstMapNpc);
             fraNpcs.Controls.Add(ComboBox23);
             fraNpcs.Location = new Point(10, 15);
-            fraNpcs.Margin = new Padding(5, 5, 5, 5);
+            fraNpcs.Margin = new Padding(5);
             fraNpcs.Name = "fraNpcs";
-            fraNpcs.Padding = new Padding(5, 5, 5, 5);
+            fraNpcs.Padding = new Padding(5);
             fraNpcs.Size = new Size(799, 820);
             fraNpcs.TabIndex = 11;
             fraNpcs.TabStop = false;
@@ -1247,7 +1281,7 @@ namespace Client
             cmbNpcList.DrawMode = DrawMode.OwnerDrawVariable;
             cmbNpcList.FormattingEnabled = true;
             cmbNpcList.Location = new Point(325, 86);
-            cmbNpcList.Margin = new Padding(5, 5, 5, 5);
+            cmbNpcList.Margin = new Padding(5);
             cmbNpcList.Name = "cmbNpcList";
             cmbNpcList.Size = new Size(425, 32);
             cmbNpcList.TabIndex = 70;
@@ -1259,7 +1293,7 @@ namespace Client
             lstMapNpc.ForeColor = SystemColors.Window;
             lstMapNpc.FormattingEnabled = true;
             lstMapNpc.Location = new Point(15, 86);
-            lstMapNpc.Margin = new Padding(5, 5, 5, 5);
+            lstMapNpc.Margin = new Padding(5);
             lstMapNpc.Name = "lstMapNpc";
             lstMapNpc.Size = new Size(299, 704);
             lstMapNpc.TabIndex = 69;
@@ -1269,7 +1303,7 @@ namespace Client
             ComboBox23.DrawMode = DrawMode.OwnerDrawVariable;
             ComboBox23.FormattingEnabled = true;
             ComboBox23.Location = new Point(569, 901);
-            ComboBox23.Margin = new Padding(5, 5, 5, 5);
+            ComboBox23.Margin = new Padding(5);
             ComboBox23.Name = "ComboBox23";
             ComboBox23.Size = new Size(219, 32);
             ComboBox23.TabIndex = 68;
@@ -1285,9 +1319,9 @@ namespace Client
             tpSettings.Controls.Add(txtName);
             tpSettings.Controls.Add(Label6);
             tpSettings.Location = new Point(4, 34);
-            tpSettings.Margin = new Padding(5, 5, 5, 5);
+            tpSettings.Margin = new Padding(5);
             tpSettings.Name = "tpSettings";
-            tpSettings.Padding = new Padding(5, 5, 5, 5);
+            tpSettings.Padding = new Padding(5);
             tpSettings.Size = new Size(777, 1011);
             tpSettings.TabIndex = 2;
             tpSettings.Text = "Settings";
@@ -1300,9 +1334,9 @@ namespace Client
             fraMapSettings.Controls.Add(Label8);
             fraMapSettings.Controls.Add(lstMoral);
             fraMapSettings.Location = new Point(10, 61);
-            fraMapSettings.Margin = new Padding(5, 5, 5, 5);
+            fraMapSettings.Margin = new Padding(5);
             fraMapSettings.Name = "fraMapSettings";
-            fraMapSettings.Padding = new Padding(5, 5, 5, 5);
+            fraMapSettings.Padding = new Padding(5);
             fraMapSettings.Size = new Size(388, 132);
             fraMapSettings.TabIndex = 15;
             fraMapSettings.TabStop = false;
@@ -1324,7 +1358,7 @@ namespace Client
             lstShop.DrawMode = DrawMode.OwnerDrawVariable;
             lstShop.FormattingEnabled = true;
             lstShop.Location = new Point(75, 66);
-            lstShop.Margin = new Padding(5, 5, 5, 5);
+            lstShop.Margin = new Padding(5);
             lstShop.Name = "lstShop";
             lstShop.Size = new Size(299, 32);
             lstShop.TabIndex = 39;
@@ -1345,7 +1379,7 @@ namespace Client
             lstMoral.DrawMode = DrawMode.OwnerDrawVariable;
             lstMoral.FormattingEnabled = true;
             lstMoral.Location = new Point(75, 24);
-            lstMoral.Margin = new Padding(5, 5, 5, 5);
+            lstMoral.Margin = new Padding(5);
             lstMoral.Name = "lstMoral";
             lstMoral.Size = new Size(299, 32);
             lstMoral.TabIndex = 37;
@@ -1359,9 +1393,9 @@ namespace Client
             fraMapLinks.Controls.Add(txtRight);
             fraMapLinks.Controls.Add(txtUp);
             fraMapLinks.Location = new Point(10, 202);
-            fraMapLinks.Margin = new Padding(5, 5, 5, 5);
+            fraMapLinks.Margin = new Padding(5);
             fraMapLinks.Name = "fraMapLinks";
-            fraMapLinks.Padding = new Padding(5, 5, 5, 5);
+            fraMapLinks.Padding = new Padding(5);
             fraMapLinks.Size = new Size(388, 215);
             fraMapLinks.TabIndex = 14;
             fraMapLinks.TabStop = false;
@@ -1373,7 +1407,7 @@ namespace Client
             txtDown.BorderStyle = BorderStyle.FixedSingle;
             txtDown.ForeColor = Color.FromArgb(220, 220, 220);
             txtDown.Location = new Point(150, 165);
-            txtDown.Margin = new Padding(5, 5, 5, 5);
+            txtDown.Margin = new Padding(5);
             txtDown.Name = "txtDown";
             txtDown.Size = new Size(82, 31);
             txtDown.TabIndex = 6;
@@ -1385,7 +1419,7 @@ namespace Client
             txtLeft.BorderStyle = BorderStyle.FixedSingle;
             txtLeft.ForeColor = Color.FromArgb(220, 220, 220);
             txtLeft.Location = new Point(11, 90);
-            txtLeft.Margin = new Padding(5, 5, 5, 5);
+            txtLeft.Margin = new Padding(5);
             txtLeft.Name = "txtLeft";
             txtLeft.Size = new Size(71, 31);
             txtLeft.TabIndex = 5;
@@ -1408,7 +1442,7 @@ namespace Client
             txtRight.BorderStyle = BorderStyle.FixedSingle;
             txtRight.ForeColor = Color.FromArgb(220, 220, 220);
             txtRight.Location = new Point(295, 90);
-            txtRight.Margin = new Padding(5, 5, 5, 5);
+            txtRight.Margin = new Padding(5);
             txtRight.Name = "txtRight";
             txtRight.Size = new Size(82, 31);
             txtRight.TabIndex = 3;
@@ -1420,7 +1454,7 @@ namespace Client
             txtUp.BorderStyle = BorderStyle.FixedSingle;
             txtUp.ForeColor = Color.FromArgb(220, 220, 220);
             txtUp.Location = new Point(149, 20);
-            txtUp.Margin = new Padding(5, 5, 5, 5);
+            txtUp.Margin = new Padding(5);
             txtUp.Name = "txtUp";
             txtUp.Size = new Size(82, 31);
             txtUp.TabIndex = 1;
@@ -1438,9 +1472,9 @@ namespace Client
             fraBootSettings.Controls.Add(txtBootX);
             fraBootSettings.Controls.Add(Label4);
             fraBootSettings.Location = new Point(10, 430);
-            fraBootSettings.Margin = new Padding(5, 5, 5, 5);
+            fraBootSettings.Margin = new Padding(5);
             fraBootSettings.Name = "fraBootSettings";
-            fraBootSettings.Padding = new Padding(5, 5, 5, 5);
+            fraBootSettings.Padding = new Padding(5);
             fraBootSettings.Size = new Size(388, 209);
             fraBootSettings.TabIndex = 13;
             fraBootSettings.TabStop = false;
@@ -1450,7 +1484,7 @@ namespace Client
             // 
             chkIndoors.AutoSize = true;
             chkIndoors.Location = new Point(11, 170);
-            chkIndoors.Margin = new Padding(5, 5, 5, 5);
+            chkIndoors.Margin = new Padding(5);
             chkIndoors.Name = "chkIndoors";
             chkIndoors.Size = new Size(100, 29);
             chkIndoors.TabIndex = 42;
@@ -1461,7 +1495,7 @@ namespace Client
             // 
             chkNoMapRespawn.AutoSize = true;
             chkNoMapRespawn.Location = new Point(205, 170);
-            chkNoMapRespawn.Margin = new Padding(5, 5, 5, 5);
+            chkNoMapRespawn.Margin = new Padding(5);
             chkNoMapRespawn.Name = "chkNoMapRespawn";
             chkNoMapRespawn.Size = new Size(178, 29);
             chkNoMapRespawn.TabIndex = 19;
@@ -1474,7 +1508,7 @@ namespace Client
             txtBootMap.BorderStyle = BorderStyle.FixedSingle;
             txtBootMap.ForeColor = Color.FromArgb(220, 220, 220);
             txtBootMap.Location = new Point(292, 22);
-            txtBootMap.Margin = new Padding(5, 5, 5, 5);
+            txtBootMap.Margin = new Padding(5);
             txtBootMap.Name = "txtBootMap";
             txtBootMap.Size = new Size(82, 31);
             txtBootMap.TabIndex = 5;
@@ -1497,7 +1531,7 @@ namespace Client
             txtBootY.BorderStyle = BorderStyle.FixedSingle;
             txtBootY.ForeColor = Color.FromArgb(220, 220, 220);
             txtBootY.Location = new Point(292, 122);
-            txtBootY.Margin = new Padding(5, 5, 5, 5);
+            txtBootY.Margin = new Padding(5);
             txtBootY.Name = "txtBootY";
             txtBootY.Size = new Size(82, 31);
             txtBootY.TabIndex = 3;
@@ -1520,7 +1554,7 @@ namespace Client
             txtBootX.BorderStyle = BorderStyle.FixedSingle;
             txtBootX.ForeColor = Color.FromArgb(220, 220, 220);
             txtBootX.Location = new Point(292, 72);
-            txtBootX.Margin = new Padding(5, 5, 5, 5);
+            txtBootX.Margin = new Padding(5);
             txtBootX.Name = "txtBootX";
             txtBootX.Size = new Size(82, 31);
             txtBootX.TabIndex = 1;
@@ -1545,9 +1579,9 @@ namespace Client
             fraMaxSizes.Controls.Add(txtMaxX);
             fraMaxSizes.Controls.Add(Label7);
             fraMaxSizes.Location = new Point(408, 430);
-            fraMaxSizes.Margin = new Padding(5, 5, 5, 5);
+            fraMaxSizes.Margin = new Padding(5);
             fraMaxSizes.Name = "fraMaxSizes";
-            fraMaxSizes.Padding = new Padding(5, 5, 5, 5);
+            fraMaxSizes.Padding = new Padding(5);
             fraMaxSizes.Size = new Size(355, 150);
             fraMaxSizes.TabIndex = 12;
             fraMaxSizes.TabStop = false;
@@ -1559,7 +1593,7 @@ namespace Client
             txtMaxY.BorderStyle = BorderStyle.FixedSingle;
             txtMaxY.ForeColor = Color.FromArgb(220, 220, 220);
             txtMaxY.Location = new Point(208, 80);
-            txtMaxY.Margin = new Padding(5, 5, 5, 5);
+            txtMaxY.Margin = new Padding(5);
             txtMaxY.Name = "txtMaxY";
             txtMaxY.Size = new Size(82, 31);
             txtMaxY.TabIndex = 3;
@@ -1582,7 +1616,7 @@ namespace Client
             txtMaxX.BorderStyle = BorderStyle.FixedSingle;
             txtMaxX.ForeColor = Color.FromArgb(220, 220, 220);
             txtMaxX.Location = new Point(208, 30);
-            txtMaxX.Margin = new Padding(5, 5, 5, 5);
+            txtMaxX.Margin = new Padding(5);
             txtMaxX.Name = "txtMaxX";
             txtMaxX.Size = new Size(82, 31);
             txtMaxX.TabIndex = 1;
@@ -1605,9 +1639,9 @@ namespace Client
             GroupBox2.Controls.Add(btnPreview);
             GroupBox2.Controls.Add(lstMusic);
             GroupBox2.Location = new Point(408, 5);
-            GroupBox2.Margin = new Padding(5, 5, 5, 5);
+            GroupBox2.Margin = new Padding(5);
             GroupBox2.Name = "GroupBox2";
-            GroupBox2.Padding = new Padding(5, 5, 5, 5);
+            GroupBox2.Padding = new Padding(5);
             GroupBox2.Size = new Size(401, 415);
             GroupBox2.TabIndex = 11;
             GroupBox2.TabStop = false;
@@ -1617,7 +1651,7 @@ namespace Client
             // 
             btnPreview.Image = (Image)resources.GetObject("btnPreview.Image");
             btnPreview.Location = new Point(81, 348);
-            btnPreview.Margin = new Padding(5, 5, 5, 5);
+            btnPreview.Margin = new Padding(5);
             btnPreview.Name = "btnPreview";
             btnPreview.Padding = new Padding(8, 9, 8, 9);
             btnPreview.Size = new Size(231, 55);
@@ -1631,7 +1665,7 @@ namespace Client
             lstMusic.ForeColor = SystemColors.Window;
             lstMusic.FormattingEnabled = true;
             lstMusic.Location = new Point(10, 36);
-            lstMusic.Margin = new Padding(5, 5, 5, 5);
+            lstMusic.Margin = new Padding(5);
             lstMusic.Name = "lstMusic";
             lstMusic.ScrollAlwaysVisible = true;
             lstMusic.Size = new Size(344, 304);
@@ -1643,7 +1677,7 @@ namespace Client
             txtName.BorderStyle = BorderStyle.FixedSingle;
             txtName.ForeColor = Color.FromArgb(220, 220, 220);
             txtName.Location = new Point(89, 11);
-            txtName.Margin = new Padding(5, 5, 5, 5);
+            txtName.Margin = new Padding(5);
             txtName.Name = "txtName";
             txtName.Size = new Size(307, 31);
             txtName.TabIndex = 10;
@@ -1665,9 +1699,9 @@ namespace Client
             tpDirBlock.BackColor = Color.FromArgb(45, 45, 48);
             tpDirBlock.Controls.Add(Label12);
             tpDirBlock.Location = new Point(4, 34);
-            tpDirBlock.Margin = new Padding(5, 5, 5, 5);
+            tpDirBlock.Margin = new Padding(5);
             tpDirBlock.Name = "tpDirBlock";
-            tpDirBlock.Padding = new Padding(5, 5, 5, 5);
+            tpDirBlock.Padding = new Padding(5);
             tpDirBlock.Size = new Size(777, 1011);
             tpDirBlock.TabIndex = 4;
             tpDirBlock.Text = "Directional Block";
@@ -1694,9 +1728,9 @@ namespace Client
             tpEvents.Controls.Add(Label15);
             tpEvents.Controls.Add(Label13);
             tpEvents.Location = new Point(4, 34);
-            tpEvents.Margin = new Padding(5, 5, 5, 5);
+            tpEvents.Margin = new Padding(5);
             tpEvents.Name = "tpEvents";
-            tpEvents.Padding = new Padding(5, 5, 5, 5);
+            tpEvents.Padding = new Padding(5);
             tpEvents.Size = new Size(777, 1011);
             tpEvents.TabIndex = 5;
             tpEvents.Text = "Events";
@@ -1726,7 +1760,7 @@ namespace Client
             // btnPasteEvent
             // 
             btnPasteEvent.Location = new Point(39, 320);
-            btnPasteEvent.Margin = new Padding(5, 5, 5, 5);
+            btnPasteEvent.Margin = new Padding(5);
             btnPasteEvent.Name = "btnPasteEvent";
             btnPasteEvent.Padding = new Padding(8, 9, 8, 9);
             btnPasteEvent.Size = new Size(125, 45);
@@ -1748,7 +1782,7 @@ namespace Client
             // btnCopyEvent
             // 
             btnCopyEvent.Location = new Point(39, 205);
-            btnCopyEvent.Margin = new Padding(5, 5, 5, 5);
+            btnCopyEvent.Margin = new Padding(5);
             btnCopyEvent.Name = "btnCopyEvent";
             btnCopyEvent.Padding = new Padding(8, 9, 8, 9);
             btnCopyEvent.Size = new Size(125, 45);
@@ -1787,9 +1821,9 @@ namespace Client
             tpEffects.Controls.Add(GroupBox3);
             tpEffects.Controls.Add(GroupBox1);
             tpEffects.Location = new Point(4, 34);
-            tpEffects.Margin = new Padding(5, 5, 5, 5);
+            tpEffects.Margin = new Padding(5);
             tpEffects.Name = "tpEffects";
-            tpEffects.Padding = new Padding(5, 5, 5, 5);
+            tpEffects.Padding = new Padding(5);
             tpEffects.Size = new Size(777, 1011);
             tpEffects.TabIndex = 6;
             tpEffects.Text = "Effects";
@@ -1799,9 +1833,9 @@ namespace Client
             GroupBox6.BorderColor = Color.FromArgb(51, 51, 51);
             GroupBox6.Controls.Add(scrlMapBrightness);
             GroupBox6.Location = new Point(19, 432);
-            GroupBox6.Margin = new Padding(5, 5, 5, 5);
+            GroupBox6.Margin = new Padding(5);
             GroupBox6.Name = "GroupBox6";
-            GroupBox6.Padding = new Padding(5, 5, 5, 5);
+            GroupBox6.Padding = new Padding(5);
             GroupBox6.Size = new Size(392, 75);
             GroupBox6.TabIndex = 22;
             GroupBox6.TabStop = false;
@@ -1809,13 +1843,13 @@ namespace Client
             // 
             // scrlMapBrightness
             // 
-            scrlMapBrightness.Minimum = 1;
             scrlMapBrightness.Location = new Point(5, 32);
             scrlMapBrightness.Maximum = 255;
+            scrlMapBrightness.Minimum = 1;
             scrlMapBrightness.Name = "scrlMapBrightness";
+            scrlMapBrightness.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBrightness.Size = new Size(375, 17);
             scrlMapBrightness.TabIndex = 10;
-            scrlMapBrightness.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBrightness.ValueChanged += scrMapBrightness_Scroll;
             // 
             // GroupBox5
@@ -1823,9 +1857,9 @@ namespace Client
             GroupBox5.BorderColor = Color.FromArgb(51, 51, 51);
             GroupBox5.Controls.Add(cmbParallax);
             GroupBox5.Location = new Point(421, 320);
-            GroupBox5.Margin = new Padding(5, 5, 5, 5);
+            GroupBox5.Margin = new Padding(5);
             GroupBox5.Name = "GroupBox5";
-            GroupBox5.Padding = new Padding(5, 5, 5, 5);
+            GroupBox5.Padding = new Padding(5);
             GroupBox5.Size = new Size(392, 101);
             GroupBox5.TabIndex = 21;
             GroupBox5.TabStop = false;
@@ -1836,7 +1870,7 @@ namespace Client
             cmbParallax.DrawMode = DrawMode.OwnerDrawVariable;
             cmbParallax.FormattingEnabled = true;
             cmbParallax.Location = new Point(12, 35);
-            cmbParallax.Margin = new Padding(5, 5, 5, 5);
+            cmbParallax.Margin = new Padding(5);
             cmbParallax.Name = "cmbParallax";
             cmbParallax.Size = new Size(329, 32);
             cmbParallax.TabIndex = 0;
@@ -1847,9 +1881,9 @@ namespace Client
             GroupBox4.BorderColor = Color.FromArgb(51, 51, 51);
             GroupBox4.Controls.Add(cmbPanorama);
             GroupBox4.Location = new Point(10, 320);
-            GroupBox4.Margin = new Padding(5, 5, 5, 5);
+            GroupBox4.Margin = new Padding(5);
             GroupBox4.Name = "GroupBox4";
-            GroupBox4.Padding = new Padding(5, 5, 5, 5);
+            GroupBox4.Padding = new Padding(5);
             GroupBox4.Size = new Size(401, 101);
             GroupBox4.TabIndex = 20;
             GroupBox4.TabStop = false;
@@ -1860,7 +1894,7 @@ namespace Client
             cmbPanorama.DrawMode = DrawMode.OwnerDrawVariable;
             cmbPanorama.FormattingEnabled = true;
             cmbPanorama.Location = new Point(15, 39);
-            cmbPanorama.Margin = new Padding(5, 5, 5, 5);
+            cmbPanorama.Margin = new Padding(5);
             cmbPanorama.Name = "cmbPanorama";
             cmbPanorama.Size = new Size(373, 32);
             cmbPanorama.TabIndex = 0;
@@ -1879,9 +1913,9 @@ namespace Client
             GroupBox3.Controls.Add(scrlMapGreen);
             GroupBox3.Controls.Add(scrlMapRed);
             GroupBox3.Location = new Point(421, 11);
-            GroupBox3.Margin = new Padding(5, 5, 5, 5);
+            GroupBox3.Margin = new Padding(5);
             GroupBox3.Name = "GroupBox3";
-            GroupBox3.Padding = new Padding(5, 5, 5, 5);
+            GroupBox3.Padding = new Padding(5);
             GroupBox3.Size = new Size(392, 298);
             GroupBox3.TabIndex = 19;
             GroupBox3.TabStop = false;
@@ -1891,7 +1925,7 @@ namespace Client
             // 
             chkTint.AutoSize = true;
             chkTint.Location = new Point(10, 36);
-            chkTint.Margin = new Padding(5, 5, 5, 5);
+            chkTint.Margin = new Padding(5);
             chkTint.Name = "chkTint";
             chkTint.Size = new Size(90, 29);
             chkTint.TabIndex = 18;
@@ -1944,46 +1978,46 @@ namespace Client
             // 
             // scrlMapAlpha
             // 
-            scrlMapAlpha.Minimum = 1;
             scrlMapAlpha.Location = new Point(105, 182);
             scrlMapAlpha.Maximum = 255;
+            scrlMapAlpha.Minimum = 1;
             scrlMapAlpha.Name = "scrlMapAlpha";
+            scrlMapAlpha.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapAlpha.Size = new Size(241, 17);
             scrlMapAlpha.TabIndex = 13;
-            scrlMapAlpha.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapAlpha.ValueChanged += ScrlMapAlpha_Scroll;
             // 
             // scrlMapBlue
             // 
-            scrlMapBlue.Minimum = 1;
             scrlMapBlue.Location = new Point(105, 148);
             scrlMapBlue.Maximum = 255;
+            scrlMapBlue.Minimum = 1;
             scrlMapBlue.Name = "scrlMapBlue";
+            scrlMapBlue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBlue.Size = new Size(241, 17);
             scrlMapBlue.TabIndex = 12;
-            scrlMapBlue.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapBlue.ValueChanged += ScrlMapBlue_Scroll;
             // 
             // scrlMapGreen
             // 
-            scrlMapGreen.Minimum = 1;
             scrlMapGreen.Location = new Point(105, 108);
             scrlMapGreen.Maximum = 255;
+            scrlMapGreen.Minimum = 1;
             scrlMapGreen.Name = "scrlMapGreen";
+            scrlMapGreen.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapGreen.Size = new Size(241, 17);
             scrlMapGreen.TabIndex = 11;
-            scrlMapGreen.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapGreen.ValueChanged += ScrlMapGreen_Scroll;
             // 
             // scrlMapRed
             // 
-            scrlMapRed.Minimum = 1;
             scrlMapRed.Location = new Point(105, 76);
             scrlMapRed.Maximum = 255;
+            scrlMapRed.Minimum = 1;
             scrlMapRed.Name = "scrlMapRed";
+            scrlMapRed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapRed.Size = new Size(241, 17);
             scrlMapRed.TabIndex = 10;
-            scrlMapRed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlMapRed.ValueChanged += ScrlMapRed_Scroll;
             // 
             // GroupBox1
@@ -2000,9 +2034,9 @@ namespace Client
             GroupBox1.Controls.Add(Label14);
             GroupBox1.Controls.Add(cmbWeather);
             GroupBox1.Location = new Point(10, 11);
-            GroupBox1.Margin = new Padding(5, 5, 5, 5);
+            GroupBox1.Margin = new Padding(5);
             GroupBox1.Name = "GroupBox1";
-            GroupBox1.Padding = new Padding(5, 5, 5, 5);
+            GroupBox1.Padding = new Padding(5);
             GroupBox1.Size = new Size(401, 298);
             GroupBox1.TabIndex = 18;
             GroupBox1.TabStop = false;
@@ -2010,13 +2044,13 @@ namespace Client
             // 
             // scrlFogOpacity
             // 
-            scrlFogOpacity.Minimum = 1;
             scrlFogOpacity.Location = new Point(150, 239);
             scrlFogOpacity.Maximum = 255;
+            scrlFogOpacity.Minimum = 1;
             scrlFogOpacity.Name = "scrlFogOpacity";
+            scrlFogOpacity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogOpacity.Size = new Size(241, 17);
             scrlFogOpacity.TabIndex = 9;
-            scrlFogOpacity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogOpacity.ValueChanged += ScrlFogOpacity_Scroll;
             // 
             // lblFogOpacity
@@ -2032,12 +2066,12 @@ namespace Client
             // 
             // scrlFogSpeed
             // 
-            scrlFogSpeed.Minimum = 1;
             scrlFogSpeed.Location = new Point(150, 195);
+            scrlFogSpeed.Minimum = 1;
             scrlFogSpeed.Name = "scrlFogSpeed";
+            scrlFogSpeed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogSpeed.Size = new Size(241, 17);
             scrlFogSpeed.TabIndex = 7;
-            scrlFogSpeed.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFogSpeed.ValueChanged += ScrlFogSpeed_Scroll;
             // 
             // lblFogSpeed
@@ -2053,12 +2087,12 @@ namespace Client
             // 
             // scrlIntensity
             // 
-            scrlIntensity.Minimum = 1;
             scrlIntensity.Location = new Point(150, 99);
+            scrlIntensity.Minimum = 1;
             scrlIntensity.Name = "scrlIntensity";
+            scrlIntensity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlIntensity.Size = new Size(241, 17);
             scrlIntensity.TabIndex = 5;
-            scrlIntensity.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlIntensity.ValueChanged += ScrlIntensity_Scroll;
             // 
             // lblIntensity
@@ -2074,12 +2108,12 @@ namespace Client
             // 
             // scrlFog
             // 
-            scrlFog.Minimum = 1;
             scrlFog.Location = new Point(150, 155);
+            scrlFog.Minimum = 1;
             scrlFog.Name = "scrlFog";
+            scrlFog.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFog.Size = new Size(241, 17);
             scrlFog.TabIndex = 3;
-            scrlFog.ScrollOrientation = DarkScrollOrientation.Horizontal;
             scrlFog.ValueChanged += ScrlFog_Scroll;
             // 
             // lblFogIndex
@@ -2110,7 +2144,7 @@ namespace Client
             cmbWeather.FormattingEnabled = true;
             cmbWeather.Items.AddRange(new object[] { "None", "Rain", "Snow", "Hail", "Sand Storm", "Storm", "Fog" });
             cmbWeather.Location = new Point(150, 41);
-            cmbWeather.Margin = new Padding(5, 5, 5, 5);
+            cmbWeather.Margin = new Padding(5);
             cmbWeather.Name = "cmbWeather";
             cmbWeather.Size = new Size(239, 32);
             cmbWeather.TabIndex = 0;
@@ -2124,11 +2158,11 @@ namespace Client
             AutoSize = true;
             BackColor = Color.FromArgb(45, 45, 48);
             ClientSize = new Size(789, 938);
-            Controls.Add(tabpages);
+            Controls.Add(tabPages);
             Controls.Add(ToolStrip);
             Controls.Add(pnlAttributes);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Margin = new Padding(5, 5, 5, 5);
+            Margin = new Padding(5);
             MaximizeBox = false;
             Name = "Editor_Map";
             Text = "Map Editor";
@@ -2156,7 +2190,7 @@ namespace Client
             fraTrap.PerformLayout();
             ToolStrip.ResumeLayout(false);
             ToolStrip.PerformLayout();
-            tabpages.ResumeLayout(false);
+            tabPages.ResumeLayout(false);
             tpTiles.ResumeLayout(false);
             tpTiles.PerformLayout();
             tpAttributes.ResumeLayout(false);
@@ -2238,10 +2272,9 @@ namespace Client
         internal DarkButton btnTrap;
         internal DarkScrollBar scrlTrap;
         internal DarkLabel lblTrap;
-        internal ToolStrip ToolStrip;
         internal ToolStripButton tsbSave;
         internal ToolStripButton tsbDiscard;
-        internal TabControl tabpages;
+        internal TabControl tabPages;
         internal TabPage tpTiles;
         internal TabPage tpNpcs;
         internal TabPage tpSettings;
@@ -2353,5 +2386,6 @@ namespace Client
         internal DarkButton btnFillAttributes;
         internal DarkRadioButton optNoCrossing;
         private ToolStripButton tsbTileset;
+        internal DarkToolStrip ToolStrip;
     }
 }
