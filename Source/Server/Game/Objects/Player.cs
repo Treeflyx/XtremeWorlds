@@ -597,46 +597,48 @@ public static class Player
 
     public static bool IsTileBlocked(int mapNum, int x, int y, Direction dir)
     {
-        if (Data.Moral[Data.Map[mapNum].Moral].PlayerBlock)
+        try
         {
-            foreach (var playerId in PlayerService.Instance.PlayerIds)
+            if (Data.Moral[Data.Map[mapNum].Moral].PlayerBlock)
             {
-                if (GetPlayerMap(playerId) == mapNum &&
-                    GetPlayerX(playerId) == x &&
-                    GetPlayerY(playerId) == y)
+                foreach (var playerId in PlayerService.Instance.PlayerIds)
                 {
-                    return true;
+                    if (GetPlayerMap(playerId) == mapNum &&
+                        GetPlayerX(playerId) == x &&
+                        GetPlayerY(playerId) == y)
+                    {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if (Data.Moral[Data.Map[mapNum].Moral].NpcBlock)
-        {
-            for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
+            if (Data.Moral[Data.Map[mapNum].Moral].NpcBlock)
             {
-                if (Data.MapNpc[mapNum].Npc[mapNpcNum].Num >= 0 &&
-                    Data.MapNpc[mapNum].Npc[mapNpcNum].X == x &&
-                    Data.MapNpc[mapNum].Npc[mapNpcNum].Y == y)
+                for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
                 {
-                    return true;
+                    if (Data.MapNpc[mapNum].Npc[mapNpcNum].Num >= 0 &&
+                        Data.MapNpc[mapNum].Npc[mapNpcNum].X == x &&
+                        Data.MapNpc[mapNum].Npc[mapNpcNum].Y == y)
+                    {
+                        return true;
+                    }
                 }
             }
-        }
 
-        if (Data.Map[mapNum].Tile == null)
+            // Check to make sure that the tile is walkable
+            if (IsDirBlocked(ref Data.Map[mapNum].Tile[x, y].DirBlock, (byte)dir))
+            {
+                return true;
+            }
+
+            return Data.Map[mapNum].Tile[x, y].Type == TileType.Blocked ||
+                   Data.Map[mapNum].Tile[x, y].Type2 == TileType.Blocked;
+        }
+        catch (Exception ex)
         {
             return false;
         }
-
-        // Check to make sure that the tile is walkable
-        if (IsDirBlocked(ref Data.Map[mapNum].Tile[x, y].DirBlock, (byte) dir))
-        {
-            return true;
-        }
-
-        return Data.Map[mapNum].Tile[x, y].Type == TileType.Blocked ||
-               Data.Map[mapNum].Tile[x, y].Type2 == TileType.Blocked;
-    }
+     }
 
     public static int HasItem(int playerId, int itemNum)
     {
