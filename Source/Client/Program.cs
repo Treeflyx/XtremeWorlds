@@ -405,12 +405,12 @@ static void LoadFonts()
             {
                 if (IsKeyStateActive(Keys.Z))
                 {
-                    frmEditor_Map.MapEditorUndo();
+                    Editor_Map.MapEditorUndo();
                 }
 
                 if (IsKeyStateActive(Keys.Y))
                 {
-                    frmEditor_Map.MapEditorRedo();
+                    Editor_Map.MapEditorRedo();
                 }
             }
 
@@ -1040,7 +1040,7 @@ static void LoadFonts()
             {
                 if (GameState.MyEditorType == EditorType.Map)
                 {
-                    frmEditor_Map.MapEditorMouseDown(GameState.CurX, GameState.CurY, false);
+                    Editor_Map.MapEditorMouseDown(GameState.CurX, GameState.CurY, false);
                 }             
                 
                 if (IsSeartchCooldownElapsed())

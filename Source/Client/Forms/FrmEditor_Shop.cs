@@ -5,9 +5,9 @@ using Core;
 namespace Client
 {
 
-    internal partial class frmEditor_Shop
+    internal partial class Editor_Shop
     {
-        public frmEditor_Shop()
+        public Editor_Shop()
         {
             InitializeComponent();
         }
@@ -111,7 +111,7 @@ namespace Client
             Editors.ShopEditorInit();
         }
 
-        private void frmEditor_Shop_Load(object sender, EventArgs e)
+        private void Editor_Shop_Load(object sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 
@@ -129,7 +129,7 @@ namespace Client
 
         }
 
-        private void frmEditor_Shop_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Shop_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.ShopEditorCancel();
         }

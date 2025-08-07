@@ -266,78 +266,78 @@ namespace Client
             GraphicSelY = withBlock.GraphicY;
             GraphicSelX2 = withBlock.GraphicX2;
             GraphicSelY2 = withBlock.GraphicY2;
-            frmEditor_Event.Instance.cmbGraphic.SelectedIndex = withBlock.GraphicType;
-            frmEditor_Event.Instance.cmbHasItem.SelectedIndex = withBlock.HasItemIndex;
+            Editor_Event.Instance.cmbGraphic.SelectedIndex = withBlock.GraphicType;
+            Editor_Event.Instance.cmbHasItem.SelectedIndex = withBlock.HasItemIndex;
             if (withBlock.HasItemAmount == 0)
             {
-                frmEditor_Event.Instance.nudCondition_HasItem.Value = 1m;
+                Editor_Event.Instance.nudCondition_HasItem.Value = 1m;
             }
             else
             {
-                frmEditor_Event.Instance.nudCondition_HasItem.Value = withBlock.HasItemAmount;
+                Editor_Event.Instance.nudCondition_HasItem.Value = withBlock.HasItemAmount;
             }
-            frmEditor_Event.Instance.cmbMoveFreq.SelectedIndex = withBlock.MoveFreq;
-            frmEditor_Event.Instance.cmbMoveSpeed.SelectedIndex = withBlock.MoveSpeed;
-            frmEditor_Event.Instance.cmbMoveType.SelectedIndex = withBlock.MoveType;
-            frmEditor_Event.Instance.cmbPlayerVar.SelectedIndex = withBlock.VariableIndex;
-            frmEditor_Event.Instance.cmbPlayerSwitch.SelectedIndex = withBlock.SwitchIndex;
-            frmEditor_Event.Instance.cmbSelfSwitchCompare.SelectedIndex = withBlock.SelfSwitchCompare;
-            frmEditor_Event.Instance.cmbPlayerSwitchCompare.SelectedIndex = withBlock.SwitchCompare;
-            frmEditor_Event.Instance.cmbPlayervarCompare.SelectedIndex = withBlock.VariableCompare;
-            frmEditor_Event.Instance.chkGlobal.Checked = Conversions.ToBoolean(TmpEvent.Globals);
-            frmEditor_Event.Instance.cmbTrigger.SelectedIndex = withBlock.Trigger;
-            frmEditor_Event.Instance.chkDirFix.Checked = Conversions.ToBoolean(withBlock.DirFix);
-            frmEditor_Event.Instance.chkHasItem.Checked = Conversions.ToBoolean(withBlock.ChkHasItem);
-            frmEditor_Event.Instance.chkPlayerVar.Checked = Conversions.ToBoolean(withBlock.ChkVariable);
-            frmEditor_Event.Instance.chkPlayerSwitch.Checked = Conversions.ToBoolean(withBlock.ChkSwitch);
-            frmEditor_Event.Instance.chkSelfSwitch.Checked = Conversions.ToBoolean(withBlock.ChkSelfSwitch);
-            frmEditor_Event.Instance.chkWalkAnim.Checked = Conversions.ToBoolean(withBlock.WalkAnim);
-            frmEditor_Event.Instance.chkWalkThrough.Checked = Conversions.ToBoolean(withBlock.WalkThrough);
-            frmEditor_Event.Instance.chkShowName.Checked = Conversions.ToBoolean(withBlock.ShowName);
-            frmEditor_Event.Instance.nudPlayerVariable.Value = withBlock.VariableCondition;
-            frmEditor_Event.Instance.nudGraphic.Value = withBlock.Graphic;
+            Editor_Event.Instance.cmbMoveFreq.SelectedIndex = withBlock.MoveFreq;
+            Editor_Event.Instance.cmbMoveSpeed.SelectedIndex = withBlock.MoveSpeed;
+            Editor_Event.Instance.cmbMoveType.SelectedIndex = withBlock.MoveType;
+            Editor_Event.Instance.cmbPlayerVar.SelectedIndex = withBlock.VariableIndex;
+            Editor_Event.Instance.cmbPlayerSwitch.SelectedIndex = withBlock.SwitchIndex;
+            Editor_Event.Instance.cmbSelfSwitchCompare.SelectedIndex = withBlock.SelfSwitchCompare;
+            Editor_Event.Instance.cmbPlayerSwitchCompare.SelectedIndex = withBlock.SwitchCompare;
+            Editor_Event.Instance.cmbPlayervarCompare.SelectedIndex = withBlock.VariableCompare;
+            Editor_Event.Instance.chkGlobal.Checked = Conversions.ToBoolean(TmpEvent.Globals);
+            Editor_Event.Instance.cmbTrigger.SelectedIndex = withBlock.Trigger;
+            Editor_Event.Instance.chkDirFix.Checked = Conversions.ToBoolean(withBlock.DirFix);
+            Editor_Event.Instance.chkHasItem.Checked = Conversions.ToBoolean(withBlock.ChkHasItem);
+            Editor_Event.Instance.chkPlayerVar.Checked = Conversions.ToBoolean(withBlock.ChkVariable);
+            Editor_Event.Instance.chkPlayerSwitch.Checked = Conversions.ToBoolean(withBlock.ChkSwitch);
+            Editor_Event.Instance.chkSelfSwitch.Checked = Conversions.ToBoolean(withBlock.ChkSelfSwitch);
+            Editor_Event.Instance.chkWalkAnim.Checked = Conversions.ToBoolean(withBlock.WalkAnim);
+            Editor_Event.Instance.chkWalkThrough.Checked = Conversions.ToBoolean(withBlock.WalkThrough);
+            Editor_Event.Instance.chkShowName.Checked = Conversions.ToBoolean(withBlock.ShowName);
+            Editor_Event.Instance.nudPlayerVariable.Value = withBlock.VariableCondition;
+            Editor_Event.Instance.nudGraphic.Value = withBlock.Graphic;
 
             if (withBlock.ChkSelfSwitch == 0)
             {
-                frmEditor_Event.Instance.cmbSelfSwitch.Enabled = false;
-                frmEditor_Event.Instance.cmbSelfSwitchCompare.Enabled = false;
+                Editor_Event.Instance.cmbSelfSwitch.Enabled = false;
+                Editor_Event.Instance.cmbSelfSwitchCompare.Enabled = false;
             }
             else
             {
-                frmEditor_Event.Instance.cmbSelfSwitch.Enabled = true;
-                frmEditor_Event.Instance.cmbSelfSwitchCompare.Enabled = true;
+                Editor_Event.Instance.cmbSelfSwitch.Enabled = true;
+                Editor_Event.Instance.cmbSelfSwitchCompare.Enabled = true;
             }
             if (withBlock.ChkSwitch == 0)
             {
-                frmEditor_Event.Instance.cmbPlayerSwitch.Enabled = false;
-                frmEditor_Event.Instance.cmbPlayerSwitchCompare.Enabled = false;
+                Editor_Event.Instance.cmbPlayerSwitch.Enabled = false;
+                Editor_Event.Instance.cmbPlayerSwitchCompare.Enabled = false;
             }
             else
             {
-                frmEditor_Event.Instance.cmbPlayerSwitch.Enabled = true;
-                frmEditor_Event.Instance.cmbPlayerSwitchCompare.Enabled = true;
+                Editor_Event.Instance.cmbPlayerSwitch.Enabled = true;
+                Editor_Event.Instance.cmbPlayerSwitchCompare.Enabled = true;
             }
             if (withBlock.ChkVariable == 0)
             {
-                frmEditor_Event.Instance.cmbPlayerVar.Enabled = false;
-                frmEditor_Event.Instance.nudPlayerVariable.Enabled = false;
-                frmEditor_Event.Instance.cmbPlayervarCompare.Enabled = false;
+                Editor_Event.Instance.cmbPlayerVar.Enabled = false;
+                Editor_Event.Instance.nudPlayerVariable.Enabled = false;
+                Editor_Event.Instance.cmbPlayervarCompare.Enabled = false;
             }
             else
             {
-                frmEditor_Event.Instance.cmbPlayerVar.Enabled = true;
-                frmEditor_Event.Instance.nudPlayerVariable.Enabled = true;
-                frmEditor_Event.Instance.cmbPlayervarCompare.Enabled = true;
+                Editor_Event.Instance.cmbPlayerVar.Enabled = true;
+                Editor_Event.Instance.nudPlayerVariable.Enabled = true;
+                Editor_Event.Instance.cmbPlayervarCompare.Enabled = true;
             }
-            if (frmEditor_Event.Instance.cmbMoveType.SelectedIndex == 2)
+            if (Editor_Event.Instance.cmbMoveType.SelectedIndex == 2)
             {
-                frmEditor_Event.Instance.btnMoveRoute.Enabled = true;
+                Editor_Event.Instance.btnMoveRoute.Enabled = true;
             }
             else
             {
-                frmEditor_Event.Instance.btnMoveRoute.Enabled = false;
+                Editor_Event.Instance.btnMoveRoute.Enabled = false;
             }
-            frmEditor_Event.Instance.cmbPositioning.SelectedIndex = int.Parse(withBlock.Position.ToString());
+            Editor_Event.Instance.cmbPositioning.SelectedIndex = int.Parse(withBlock.Position.ToString());
             EventListCommands();
         }
 
@@ -348,7 +348,7 @@ namespace Client
             TmpEvent = default;
 
             // unload the form
-            frmEditor_Event.Instance.Dispose();
+            Editor_Event.Instance.Dispose();
         }
 
         public static void EventListCommands()
@@ -363,7 +363,7 @@ namespace Client
             if (TmpEvent.Pages == null)
                 return;
 
-            frmEditor_Event.Instance.lstCommands.Items.Clear();
+            Editor_Event.Instance.lstCommands.Items.Clear();
 
             if (TmpEvent.Pages[CurPageNum].CommandListCount > 0)
             {
@@ -407,32 +407,32 @@ namespace Client
                                                     {
                                                         case 0:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                         case 1:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] >= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] >= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                         case 2:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] <= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] <= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                         case 3:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] > " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] > " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                         case 4:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] < " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] < " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                         case 5:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] != " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Variable [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Variables[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1] + 1 + "] != " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                                 break;
                                                             }
                                                     }
@@ -443,28 +443,28 @@ namespace Client
                                                 {
                                                     if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data2 == 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Switch [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Switches[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + 1] + "] == " + "True");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Switch [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Switches[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + 1] + "] == " + "True");
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Switch [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Switches[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + 1] + "] == " + "False");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Switch [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + ". " + Switches[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + 1] + "] == " + "False");
                                                     }
 
                                                     break;
                                                 }
                                             case 2:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Has Item [" + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name + "] x" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data2);
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Has Item [" + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name + "] x" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data2);
                                                     break;
                                                 }
                                             case 3:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Job Is [" + Strings.Trim(Data.Job[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name) + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Job Is [" + Strings.Trim(Data.Job[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name) + "]");
                                                     break;
                                                 }
                                             case 4:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Knows Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name) + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player Knows Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1].Name) + "]");
                                                     break;
                                                 }
                                             case 5:
@@ -473,32 +473,32 @@ namespace Client
                                                     {
                                                         case 0:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                         case 1:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is >= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is >= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                         case 2:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is <= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is <= " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                         case 3:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is > " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is > " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                         case 4:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is < " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is < " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                         case 5:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is NOT " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Level is NOT " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1);
                                                                 break;
                                                             }
                                                     }
@@ -513,22 +513,22 @@ namespace Client
                                                         {
                                                             case 0:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [A] == " + "True");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [A] == " + "True");
                                                                     break;
                                                                 }
                                                             case 1:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [B] == " + "True");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [B] == " + "True");
                                                                     break;
                                                                 }
                                                             case 2:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [C] == " + "True");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [C] == " + "True");
                                                                     break;
                                                                 }
                                                             case 3:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [D] == " + "True");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [D] == " + "True");
                                                                     break;
                                                                 }
                                                         }
@@ -539,22 +539,22 @@ namespace Client
                                                         {
                                                             case 0:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [A] == " + "False");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [A] == " + "False");
                                                                     break;
                                                                 }
                                                             case 1:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [B] == " + "False");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [B] == " + "False");
                                                                     break;
                                                                 }
                                                             case 2:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [C] == " + "False");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [C] == " + "False");
                                                                     break;
                                                                 }
                                                             case 3:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [D] == " + "False");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Self Switch [D] == " + "False");
                                                                     break;
                                                                 }
                                                         }
@@ -570,34 +570,34 @@ namespace Client
                                                         {
                                                             case 0:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] not started.");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] not started.");
                                                                     break;
                                                                 }
                                                             case 1:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] is started.");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] is started.");
                                                                     break;
                                                                 }
                                                             case 2:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] is completed.");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] is completed.");
                                                                     break;
                                                                 }
                                                             case 3:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] can be started.");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] can be started.");
                                                                     break;
                                                                 }
                                                             case 4:
                                                                 {
-                                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] can be ended. (All tasks complete)");
+                                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] can be ended. (All tasks complete)");
                                                                     break;
                                                                 }
                                                         }
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] in progress and on task #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Quest [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data1 + "] in progress and on task #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.Data3);
                                                     }
 
                                                     break;
@@ -608,12 +608,12 @@ namespace Client
                                                     {
                                                         case (int)Sex.Male:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Gender is Male");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's Gender is Male");
                                                                 break;
                                                             }
                                                         case (int)Sex.Female:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's  Gender is Female");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Player's  Gender is Female");
                                                                 break;
                                                             }
                                                     }
@@ -626,22 +626,22 @@ namespace Client
                                                     {
                                                         case (int)TimeOfDay.Day:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Day");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Day");
                                                                 break;
                                                             }
                                                         case (int)TimeOfDay.Night:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Night");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Night");
                                                                 break;
                                                             }
                                                         case (int)TimeOfDay.Dawn:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Dawn");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Dawn");
                                                                 break;
                                                             }
                                                         case (int)TimeOfDay.Dusk:
                                                             {
-                                                                frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Dusk");
+                                                                Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Conditional Branch: Time of Day is Dusk");
                                                                 break;
                                                             }
                                                     }
@@ -660,7 +660,7 @@ namespace Client
                                     {
                                         EventList[X].CommandList = curlist;
                                         EventList[X].CommandNum = 0;
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "Else");
+                                        Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "Else");
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 2;
                                         curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.ElseCommandList;
@@ -671,7 +671,7 @@ namespace Client
                                     {
                                         EventList[X].CommandList = curlist;
                                         EventList[X].CommandNum = 0;
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "End Branch");
+                                        Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "End Branch");
                                         indent = Strings.Mid(indent, 1, Strings.Len(indent) - 7);
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 0;
@@ -689,7 +689,7 @@ namespace Client
                                         Array.Resize(ref EventList, X + 1);
                                         EventList[X].CommandList = curlist;
                                         EventList[X].CommandNum = i;
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Choices - Prompt: " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20));
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Choices - Prompt: " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20));
                                         indent = indent + "       ";
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 1;
@@ -703,7 +703,7 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             EventList[X].CommandList = 7;
                                             EventList[X].CommandNum = 0;
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text2) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text2) + "]");
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 2;
                                             curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1;
@@ -728,7 +728,7 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             EventList[X].CommandList = curlist;
                                             EventList[X].CommandNum = 0;
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text3) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text3) + "]");
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 3;
                                             curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2;
@@ -753,7 +753,7 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             EventList[X].CommandList = curlist;
                                             EventList[X].CommandNum = 0;
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text4) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text4) + "]");
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 4;
                                             curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3;
@@ -778,7 +778,7 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             EventList[X].CommandList = curlist;
                                             EventList[X].CommandNum = 0;
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text5) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "When [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text5) + "]");
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 5;
                                             curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4;
@@ -801,7 +801,7 @@ namespace Client
                                         Array.Resize(ref EventList, X + 1);
                                         EventList[X].CommandList = curlist;
                                         EventList[X].CommandNum = 0;
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "Branch End");
+                                        Editor_Event.Instance.lstCommands.Items.Add(Strings.Mid(indent, 1, Strings.Len(indent) - 4) + " : " + "Branch End");
                                         indent = Strings.Mid(indent, 1, Strings.Len(indent) - 7);
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 0;
@@ -823,17 +823,17 @@ namespace Client
                                         {
                                             case 0:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Player"));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Player"));
                                                     break;
                                                 }
                                             case 1:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Map"));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Map"));
                                                     break;
                                                 }
                                             case 2:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Global"));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Global"));
                                                     break;
                                                 }
                                         }
@@ -842,7 +842,7 @@ namespace Client
                                     }
                                 case (byte)Core.EventCommand.ShowText:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20));
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20));
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ModifyVariable:
@@ -857,22 +857,22 @@ namespace Client
                                         {
                                             case 0:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] == " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
                                                     break;
                                                 }
                                             case 1:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] + " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] + " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
                                                     break;
                                                 }
                                             case 2:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] - " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] - " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
                                                     break;
                                                 }
                                             case 3:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] Random Between " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " and " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4);
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Variable [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + variableValue + "] Random Between " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " and " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4);
                                                     break;
                                                 }
                                         }
@@ -889,11 +889,11 @@ namespace Client
 
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Switch [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + switchValue + "] == False");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Switch [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + switchValue + "] == False");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Switch [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + switchValue + "] == True");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Switch [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + switchValue + "] == True");
                                         }
                                         
                                         break;
@@ -906,11 +906,11 @@ namespace Client
                                                 {
                                                     if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [A] to Off");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [A] to Off");
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [A] to On");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [A] to On");
                                                     }
 
                                                     break;
@@ -919,11 +919,11 @@ namespace Client
                                                 {
                                                     if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [B] to Off");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [B] to Off");
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [B] to On");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [B] to On");
                                                     }
 
                                                     break;
@@ -932,11 +932,11 @@ namespace Client
                                                 {
                                                     if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [C] to Off");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [C] to Off");
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [C] to On");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [C] to On");
                                                     }
 
                                                     break;
@@ -945,11 +945,11 @@ namespace Client
                                                 {
                                                     if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [D] to Off");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [D] to Off");
                                                     }
                                                     else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [D] to On");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Self Switch [D] to On");
                                                     }
 
                                                     break;
@@ -960,83 +960,83 @@ namespace Client
                                     }
                                 case (byte)Core.EventCommand.ExitEventProcess:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Exit Event Processing");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Exit Event Processing");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeItems:
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Item Amount of [" + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "] to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Item Amount of [" + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "] to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3);
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Give Player " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " " + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "(s)");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Give Player " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " " + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "(s)");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 2)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Take " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " " + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "(s) from Player.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Take " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " " + Core.Data.Item[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "(s) from Player.");
                                         }
 
                                         break;
                                     }
                                 case (byte)Core.EventCommand.RestoreHealth:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player HP");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player HP");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.RestoreMana:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player MP");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player MP");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.RestoreStamina:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player SP");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Restore Player SP");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.LevelUp:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Level Up Player");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Level Up Player");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeLevel:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Level to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Level to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeSkills:
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Teach Player Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Teach Player Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "]");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Remove Player Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Remove Player Skill [" + Strings.Trim(Data.Skill[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "]");
                                         }
 
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeJob:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Job to " + Strings.Trim(Data.Job[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name));
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Job to " + Strings.Trim(Data.Job[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name));
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeSprite:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sprite to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sprite to " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ChangeSex:
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sex to Male.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sex to Male.");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sex to Female.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Sex to Female.");
                                         }
 
                                         break;
@@ -1045,11 +1045,11 @@ namespace Client
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player PK to No.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player PK to No.");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player PK to Yes.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player PK to Yes.");
                                         }
 
                                         break;
@@ -1058,7 +1058,7 @@ namespace Client
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") while retaining direction.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") while retaining direction.");
                                         }
                                         else
                                         {
@@ -1066,22 +1066,22 @@ namespace Client
                                             {
                                                 case (int)Direction.Up:
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing upward.");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing upward.");
                                                         break;
                                                     }
                                                 case (int)Direction.Down:
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing downward.");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing downward.");
                                                         break;
                                                     }
                                                 case (int)Direction.Left:
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing left.");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing left.");
                                                         break;
                                                     }
                                                 case (int)Direction.Right:
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing right.");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Warp Player To Map: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Tile(" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + ") facing right.");
                                                         break;
                                                     }
                                             }
@@ -1093,11 +1093,11 @@ namespace Client
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 <= Data.MyMap.EventCount)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Move Route for Event #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " [" + Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Move Route for Event #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " [" + Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]");
                                         }
                                         else
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Move Route for COULD NOT FIND EVENT!");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Move Route for COULD NOT FIND EVENT!");
                                         }
 
                                         break;
@@ -1106,57 +1106,57 @@ namespace Client
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Player");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Player");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 1)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Event " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " [" + Strings.Trim(Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3].Name) + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Event " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + " [" + Strings.Trim(Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3].Name) + "]");
                                         }
                                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 == 2)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Tile (" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4 + ")");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Animation " + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + 1) + " [" + Data.Animation[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]" + " On Tile (" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3 + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4 + ")");
                                         }
 
                                         break;
                                     }
                                 case (byte)Core.EventCommand.PlayBgm:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play BGM [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1 + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play BGM [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1 + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.FadeOutBgm:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fadeout BGM");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fadeout BGM");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.PlaySound:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Sound [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1 + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Play Sound [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1 + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.StopSound:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Stop Sound");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Stop Sound");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.OpenBank:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Open Bank");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Open Bank");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.OpenShop:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Open Shop [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + Data.Shop[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Open Shop [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + Data.Shop[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.SetAccessLevel:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Access [" + frmEditor_Event.Instance.cmbSetAccess.Items[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 - 1]);
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Player Access [" + Editor_Event.Instance.cmbSetAccess.Items[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 - 1]);
                                         break;
                                     }
                                 case (byte)Core.EventCommand.GiveExperience:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Give Player " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Experience.");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Give Player " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " Experience.");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ShowChatBubble:
@@ -1165,25 +1165,25 @@ namespace Client
                                         {
                                             case (int)TargetType.Player:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Player");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Player");
                                                     break;
                                                 }
                                             case (int)TargetType.Npc:
                                                 {
                                                     if (Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2] <= 0)
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Npc [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". ]");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Npc [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". ]");
                                                     }
                                                     else
                                                     {
-                                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Npc [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". " + Data.Npc[Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2]].Name + "]");
+                                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Npc [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". " + Data.Npc[Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2]].Name + "]");
                                                     }
 
                                                     break;
                                                 }
                                             case (int)TargetType.Event:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Event [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". " + Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2].Name + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Chat Bubble - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - On Event [" + (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2 + 1).ToString() + ". " + Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2].Name + "]");
                                                     break;
                                                 }
                                         }
@@ -1192,45 +1192,45 @@ namespace Client
                                     }
                                 case (byte)Core.EventCommand.Label:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Label: [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1) + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Label: [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1) + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.GoToLabel:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Jump to Label: [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1) + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Jump to Label: [" + Strings.Trim(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1) + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.SpawnNpc:
                                     {
                                         if (Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1] <= 0)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Spawn Npc: [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Spawn Npc: [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + "]");
                                         }
                                         else
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Spawn Npc: [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + Data.Npc[Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1]].Name + "]");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Spawn Npc: [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ". " + Data.Npc[Data.MyMap.Npc[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1]].Name + "]");
                                         }
 
                                         break;
                                     }
                                 case (byte)Core.EventCommand.FadeIn:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fade In");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fade In");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.FadeOut:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fade Out");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Fade Out");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.FlashScreen:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Flash White");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Flash White");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.SetFog:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Fog [Fog: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + " Speed: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + " Opacity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3.ToString() + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Fog [Fog: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + " Speed: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + " Opacity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3.ToString() + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.SetWeather:
@@ -1239,27 +1239,27 @@ namespace Client
                                         {
                                             case (int)WeatherType.None:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [None]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [None]");
                                                     break;
                                                 }
                                             case (int)WeatherType.Rain:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Rain - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Rain - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
                                                     break;
                                                 }
                                             case (int)WeatherType.Snow:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Snow - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Snow - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
                                                     break;
                                                 }
                                             case (int)WeatherType.Sandstorm:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Sand Storm - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Sand Storm - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
                                                     break;
                                                 }
                                             case (int)WeatherType.Storm:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Storm - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Weather [Storm - Intensity: " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "]");
                                                     break;
                                                 }
                                         }
@@ -1268,12 +1268,12 @@ namespace Client
                                     }
                                 case (byte)Core.EventCommand.SetScreenTint:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Map Tint RGBA [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4.ToString() + "]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Set Map Tint RGBA [" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data3.ToString() + "," + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4.ToString() + "]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.Wait:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + " Ms");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + " Ms");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ShowPicture:
@@ -1282,22 +1282,22 @@ namespace Client
                                         {
                                             case 0:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " Top Left, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " Top Left, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
                                                     break;
                                                 }
                                             case 1:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " Center Screen, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " Center Screen, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
                                                     break;
                                                 }
                                             case 2:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " On Event, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " On Event, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
                                                     break;
                                                 }
                                             case 3:
                                                 {
-                                                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " On Player, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
+                                                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Show Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString() + ": Pic=" + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data2) + " On Player, X: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data4) + " Y: " + Conversion.Str(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data5));
                                                     break;
                                                 }
                                         }
@@ -1306,30 +1306,30 @@ namespace Client
                                     }
                                 case (byte)Core.EventCommand.HidePicture:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Hide Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString());
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Hide Picture " + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1.ToString());
                                         break;
                                     }
                                 case (byte)Core.EventCommand.WaitMovementCompletion:
                                     {
                                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 <= Data.MyMap.EventCount)
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait for Event #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " [" + Strings.Trim(Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "] to complete move route.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait for Event #" + TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1 + " [" + Strings.Trim(Data.MyMap.Event[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1].Name) + "] to complete move route.");
                                         }
                                         else
                                         {
-                                            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait for COULD NOT FIND EVENT to complete move route.");
+                                            Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Wait for COULD NOT FIND EVENT to complete move route.");
                                         }
 
                                         break;
                                     }
                                 case (byte)Core.EventCommand.HoldPlayer:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Hold Player [Do not allow player to move.]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Hold Player [Do not allow player to move.]");
                                         break;
                                     }
                                 case (byte)Core.EventCommand.ReleasePlayer:
                                     {
-                                        frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Release Player [Allow player to turn and move again.]");
+                                        Editor_Event.Instance.lstCommands.Items.Add(indent + "@>" + "Release Player [Allow player to turn and move again.]");
                                         break;
                                     }
 
@@ -1359,16 +1359,16 @@ namespace Client
                     Array.Resize(ref EventList, X + 1);
                     EventList[X].CommandList = curlist;
                     EventList[X].CommandNum = TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount;
-                    frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@> ");
+                    Editor_Event.Instance.lstCommands.Items.Add(indent + "@> ");
                     curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].ParentList;
                     goto newlist;
                 }
             }
-            frmEditor_Event.Instance.lstCommands.Items.Add(indent + "@> ");
+            Editor_Event.Instance.lstCommands.Items.Add(indent + "@> ");
 
             var z = default(int);
             X = 0;
-            var loopTo1 = frmEditor_Event.Instance.lstCommands.Items.Count;
+            var loopTo1 = Editor_Event.Instance.lstCommands.Items.Count;
             for (i = 0; i < loopTo1; i++)
             {
                 if (X > z)
@@ -1386,13 +1386,13 @@ namespace Client
             int p;
             Core.Type.CommandList oldCommandList;
 
-            if (frmEditor_Event.Instance.lstCommands.SelectedIndex == -1 || EventList == null)
+            if (Editor_Event.Instance.lstCommands.SelectedIndex == -1 || EventList == null)
             {
                 curlist = 0;
             }
             else
             {
-                curlist = EventList[frmEditor_Event.Instance.lstCommands.SelectedIndex].CommandList;
+                curlist = EventList[Editor_Event.Instance.lstCommands.SelectedIndex].CommandList;
             }
 
             TmpEvent.Pages[CurPageNum].CommandListCount += 1;
@@ -1401,7 +1401,7 @@ namespace Client
             p = TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount;
             Array.Resize(ref TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands, p);
 
-            if (frmEditor_Event.Instance.lstCommands.SelectedIndex + 1 == frmEditor_Event.Instance.lstCommands.Items.Count)
+            if (Editor_Event.Instance.lstCommands.SelectedIndex + 1 == Editor_Event.Instance.lstCommands.Items.Count)
             {
                 curslot = TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount - 1;
             }
@@ -1414,7 +1414,7 @@ namespace Client
                 for (i = 0; i < loopTo; i++)
                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i] = oldCommandList.Commands[i];
 
-                i = EventList[frmEditor_Event.Instance.lstCommands.SelectedIndex].CommandNum;
+                i = EventList[Editor_Event.Instance.lstCommands.SelectedIndex].CommandNum;
                 if (i <= TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount)
                 {
 
@@ -1422,7 +1422,7 @@ namespace Client
                     for (X = TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount; X < loopTo1; X++)
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[X + 1] = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[X];
 
-                    curslot = EventList[frmEditor_Event.Instance.lstCommands.SelectedIndex].CommandNum;
+                    curslot = EventList[Editor_Event.Instance.lstCommands.SelectedIndex].CommandNum;
                 }
                 else
                 {
@@ -1436,16 +1436,16 @@ namespace Client
                 case (int)Core.EventCommand.AddText:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtAddText_Text.Text;
-                        if (frmEditor_Event.Instance.optAddText_Player.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtAddText_Text.Text;
+                        if (Editor_Event.Instance.optAddText_Player.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optAddText_Map.Checked == true)
+                        else if (Editor_Event.Instance.optAddText_Map.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
-                        else if (frmEditor_Event.Instance.optAddText_Global.Checked == true)
+                        else if (Editor_Event.Instance.optAddText_Global.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
                         }
@@ -1462,23 +1462,23 @@ namespace Client
                         TmpEvent.Pages[CurPageNum].CommandList[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.CommandList].ParentList = curlist;
                         TmpEvent.Pages[CurPageNum].CommandList[TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.ElseCommandList].ParentList = curlist;
 
-                        if (frmEditor_Event.Instance.optCondition0.Checked == true)
+                        if (Editor_Event.Instance.optCondition0.Checked == true)
                             X = 0;
-                        if (frmEditor_Event.Instance.optCondition1.Checked == true)
+                        if (Editor_Event.Instance.optCondition1.Checked == true)
                             X = 1;
-                        if (frmEditor_Event.Instance.optCondition2.Checked == true)
+                        if (Editor_Event.Instance.optCondition2.Checked == true)
                             X = 2;
-                        if (frmEditor_Event.Instance.optCondition3.Checked == true)
+                        if (Editor_Event.Instance.optCondition3.Checked == true)
                             X = 3;
-                        if (frmEditor_Event.Instance.optCondition4.Checked == true)
+                        if (Editor_Event.Instance.optCondition4.Checked == true)
                             X = 4;
-                        if (frmEditor_Event.Instance.optCondition5.Checked == true)
+                        if (Editor_Event.Instance.optCondition5.Checked == true)
                             X = 5;
-                        if (frmEditor_Event.Instance.optCondition6.Checked == true)
+                        if (Editor_Event.Instance.optCondition6.Checked == true)
                             X = 6;
-                        if (frmEditor_Event.Instance.optCondition8.Checked == true)
+                        if (Editor_Event.Instance.optCondition8.Checked == true)
                             X = 8;
-                        if (frmEditor_Event.Instance.optCondition9.Checked == true)
+                        if (Editor_Event.Instance.optCondition9.Checked == true)
                             X = 9;
 
                         switch (X)
@@ -1486,49 +1486,49 @@ namespace Client
                             case 0: // Player Var
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 0;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_PlayerVarCondition.Value);
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3 = (int)Math.Round(Editor_Event.Instance.nudCondition_PlayerVarCondition.Value);
                                     break;
                                 }
                             case 1: // Player Switch
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 1;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex;
                                     break;
                                 }
                             case 2: // Has Item
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 2;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_HasItem.SelectedIndex;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_HasItem.Value);
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_HasItem.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = (int)Math.Round(Editor_Event.Instance.nudCondition_HasItem.Value);
                                     break;
                                 }
                             case 3: // Job Is
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 3;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_JobIs.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_JobIs.SelectedIndex;
                                     break;
                                 }
                             case 4: // Learnt Skill
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 4;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex;
                                     break;
                                 }
                             case 5: // Level Is
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 5;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_LevelAmount.Value);
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = (int)Math.Round(Editor_Event.Instance.nudCondition_LevelAmount.Value);
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex;
                                     break;
                                 }
                             case 6: // Self Switch
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 6;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex;
                                     break;
                                 }
                             case 7:
@@ -1539,13 +1539,13 @@ namespace Client
                             case 8: // Gender
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 8;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_Gender.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_Gender.SelectedIndex;
                                     break;
                                 }
                             case 9: // Time
                                 {
                                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 9;
-                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_Time.SelectedIndex;
+                                    TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_Time.SelectedIndex;
                                     break;
                                 }
                         }
@@ -1557,9 +1557,9 @@ namespace Client
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
                         string tmptxt = "";
-                        var loopTo2 = Information.UBound(frmEditor_Event.Instance.txtShowText.Lines);
+                        var loopTo2 = Information.UBound(Editor_Event.Instance.txtShowText.Lines);
                         for (i = 0; i <= loopTo2; i++)
-                            tmptxt = tmptxt + frmEditor_Event.Instance.txtShowText.Lines[i];
+                            tmptxt = tmptxt + Editor_Event.Instance.txtShowText.Lines[i];
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = tmptxt;
                         break;
                     }
@@ -1567,11 +1567,11 @@ namespace Client
                 case (int)Core.EventCommand.ShowChoices:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtChoicePrompt.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2 = frmEditor_Event.Instance.txtChoices1.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3 = frmEditor_Event.Instance.txtChoices2.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4 = frmEditor_Event.Instance.txtChoices3.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5 = frmEditor_Event.Instance.txtChoices4.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtChoicePrompt.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2 = Editor_Event.Instance.txtChoices1.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3 = Editor_Event.Instance.txtChoices2.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4 = Editor_Event.Instance.txtChoices3.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5 = Editor_Event.Instance.txtChoices4.Text;
                         TmpEvent.Pages[CurPageNum].CommandListCount += 3;
                         Array.Resize(ref TmpEvent.Pages[CurPageNum].CommandList, TmpEvent.Pages[CurPageNum].CommandListCount + 1);
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = TmpEvent.Pages[CurPageNum].CommandListCount - 3;
@@ -1588,34 +1588,34 @@ namespace Client
                 case (int)Core.EventCommand.ModifyVariable:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbVariable.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbVariable.SelectedIndex;
 
-                        if (frmEditor_Event.Instance.optVariableAction0.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction0.Checked == true)
                             i = 0;
-                        if (frmEditor_Event.Instance.optVariableAction1.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction1.Checked == true)
                             i = 1;
-                        if (frmEditor_Event.Instance.optVariableAction2.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction2.Checked == true)
                             i = 2;
-                        if (frmEditor_Event.Instance.optVariableAction3.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction3.Checked == true)
                             i = 3;
 
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = i;
                         if (i == 3)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData3.Value);
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData4.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData3.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudVariableData4.Value);
                         }
                         else if (i == 0)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData0.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData0.Value);
                         }
                         else if (i == 1)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData1.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData1.Value);
                         }
                         else if (i == 2)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData2.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData2.Value);
                         }
 
                         break;
@@ -1624,16 +1624,16 @@ namespace Client
                 case (int)Core.EventCommand.ModifySwitch:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSwitch.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSwitch.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.ModifySelfSwitch:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetSelfSwitch.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetSelfSwitch.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex;
                         break;
                     }
 
@@ -1646,20 +1646,20 @@ namespace Client
                 case (int)Core.EventCommand.ChangeItems:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeItemIndex.SelectedIndex;
-                        if (frmEditor_Event.Instance.optChangeItemSet.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeItemIndex.SelectedIndex;
+                        if (Editor_Event.Instance.optChangeItemSet.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optChangeItemAdd.Checked == true)
+                        else if (Editor_Event.Instance.optChangeItemAdd.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
-                        else if (frmEditor_Event.Instance.optChangeItemRemove.Checked == true)
+                        else if (Editor_Event.Instance.optChangeItemRemove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
                         }
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudChangeItemsAmount.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudChangeItemsAmount.Value);
                         break;
                     }
 
@@ -1690,19 +1690,19 @@ namespace Client
                 case (int)Core.EventCommand.ChangeLevel:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudChangeLevel.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudChangeLevel.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.ChangeSkills:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeSkills.SelectedIndex;
-                        if (frmEditor_Event.Instance.optChangeSkillsAdd.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeSkills.SelectedIndex;
+                        if (Editor_Event.Instance.optChangeSkillsAdd.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optChangeSkillsRemove.Checked == true)
+                        else if (Editor_Event.Instance.optChangeSkillsRemove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
@@ -1713,25 +1713,25 @@ namespace Client
                 case (int)Core.EventCommand.ChangeJob:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeJob.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeJob.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.ChangeSprite:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudChangeSprite.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudChangeSprite.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.ChangeSex:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        if (frmEditor_Event.Instance.optChangeSexMale.Checked == true)
+                        if (Editor_Event.Instance.optChangeSexMale.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Sex.Male;
                         }
-                        else if (frmEditor_Event.Instance.optChangeSexFemale.Checked == true)
+                        else if (Editor_Event.Instance.optChangeSexFemale.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Sex.Female;
                         }
@@ -1742,25 +1742,25 @@ namespace Client
                 case (int)Core.EventCommand.SetPlayerKillable:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetPK.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetPK.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.WarpPlayer:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudWPMap.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudWPX.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudWPY.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = frmEditor_Event.Instance.cmbWarpPlayerDir.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudWPMap.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudWPX.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudWPY.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = Editor_Event.Instance.cmbWarpPlayerDir.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.SetMoveRoute:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[frmEditor_Event.Instance.cmbEvent.SelectedIndex];
-                        if (frmEditor_Event.Instance.chkIgnoreMove.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[Editor_Event.Instance.cmbEvent.SelectedIndex];
+                        if (Editor_Event.Instance.chkIgnoreMove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
@@ -1769,7 +1769,7 @@ namespace Client
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
 
-                        if (frmEditor_Event.Instance.chkRepeatRoute.Checked == true)
+                        if (Editor_Event.Instance.chkRepeatRoute.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = 1;
                         }
@@ -1786,21 +1786,21 @@ namespace Client
                 case (int)Core.EventCommand.PlayAnimation:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbPlayAnim.SelectedIndex;
-                        if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 0)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbPlayAnim.SelectedIndex;
+                        if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 0)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 1)
+                        else if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 1)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = frmEditor_Event.Instance.cmbPlayAnimEvent.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = Editor_Event.Instance.cmbPlayAnimEvent.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 2 == true)
+                        else if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 2 == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudPlayAnimTileX.Value);
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudPlayAnimTileY.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudPlayAnimTileX.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudPlayAnimTileY.Value);
                         }
 
                         break;
@@ -1809,7 +1809,7 @@ namespace Client
                 case (int)Core.EventCommand.PlayBgm:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.MusicCache[frmEditor_Event.Instance.cmbPlayBGM.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.MusicCache[Editor_Event.Instance.cmbPlayBGM.SelectedIndex];
                         break;
                     }
 
@@ -1822,7 +1822,7 @@ namespace Client
                 case (int)Core.EventCommand.PlaySound:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.SoundCache[frmEditor_Event.Instance.cmbPlaySound.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.SoundCache[Editor_Event.Instance.cmbPlaySound.SelectedIndex];
                         break;
                     }
 
@@ -1841,51 +1841,51 @@ namespace Client
                 case (int)Core.EventCommand.OpenShop:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbOpenShop.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbOpenShop.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.SetAccessLevel:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetAccess.SelectedIndex + 1;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetAccess.SelectedIndex + 1;
                         break;
                     }
 
                 case (int)Core.EventCommand.GiveExperience:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudGiveExp.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudGiveExp.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.ShowChatBubble:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtChatbubbleText.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex + 1;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbChatBubbleTarget.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtChatbubbleText.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex + 1;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbChatBubbleTarget.SelectedIndex;
                         break;
                     }
 
                 case (int)Core.EventCommand.Label:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtLabelName.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtLabelName.Text;
                         break;
                     }
 
                 case (int)Core.EventCommand.GoToLabel:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtGoToLabel.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtGoToLabel.Text;
                         break;
                     }
 
                 case (int)Core.EventCommand.SpawnNpc:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSpawnNpc.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSpawnNpc.SelectedIndex;
                         break;
                     }
 
@@ -1910,44 +1910,44 @@ namespace Client
                 case (int)Core.EventCommand.SetFog:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudFogData0.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudFogData1.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudFogData2.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudFogData0.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudFogData1.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudFogData2.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.SetWeather:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.CmbWeather.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudWeatherIntensity.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.CmbWeather.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudWeatherIntensity.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.SetScreenTint:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData0.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData1.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData2.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData3.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudMapTintData0.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudMapTintData1.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudMapTintData2.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudMapTintData3.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.Wait:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudWaitAmount.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudWaitAmount.Value);
                         break;
                     }
 
                 case (int)Core.EventCommand.ShowPicture:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudShowPicture.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbPicLoc.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudPicOffsetX.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudPicOffsetY.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudShowPicture.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbPicLoc.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudPicOffsetX.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudPicOffsetY.Value);
                         break;
                     }
 
@@ -1960,7 +1960,7 @@ namespace Client
                 case (int)Core.EventCommand.WaitMovementCompletion:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[frmEditor_Event.Instance.cmbMoveWait.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[Editor_Event.Instance.cmbMoveWait.SelectedIndex];
                         break;
                     }
 
@@ -1988,15 +1988,15 @@ namespace Client
             int curlist;
             int curslot;
 
-            i = frmEditor_Event.Instance.lstCommands.SelectedIndex + 1;
+            i = Editor_Event.Instance.lstCommands.SelectedIndex + 1;
             if (i == -1)
                 return;
 
             if (i > Information.UBound(EventList))
                 return;
 
-            frmEditor_Event.Instance.fraConditionalBranch.Visible = false;
-            frmEditor_Event.Instance.fraDialogue.BringToFront();
+            Editor_Event.Instance.fraConditionalBranch.Visible = false;
+            Editor_Event.Instance.fraDialogue.BringToFront();
 
             curlist = EventList[i].CommandList;
             curslot = EventList[i].CommandNum;
@@ -2015,74 +2015,74 @@ namespace Client
                 case (byte)Core.EventCommand.AddText:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtAddText_Text.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        // frmEditor_Event.Instance.scrlAddText_Color.Value = tmpEvent.Pages(curPageNum).CommandList(curlist).Commands(curslot).Data1
+                        Editor_Event.Instance.txtAddText_Text.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        // Editor_Event.Instance.scrlAddText_Color.Value = tmpEvent.Pages(curPageNum).CommandList(curlist).Commands(curslot).Data1
                         switch (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2)
                         {
                             case 0:
                                 {
-                                    frmEditor_Event.Instance.optAddText_Player.Checked = true;
+                                    Editor_Event.Instance.optAddText_Player.Checked = true;
                                     break;
                                 }
                             case 1:
                                 {
-                                    frmEditor_Event.Instance.optAddText_Map.Checked = true;
+                                    Editor_Event.Instance.optAddText_Map.Checked = true;
                                     break;
                                 }
                             case 2:
                                 {
-                                    frmEditor_Event.Instance.optAddText_Global.Checked = true;
+                                    Editor_Event.Instance.optAddText_Global.Checked = true;
                                     break;
                                 }
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraAddText.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraAddText.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ConditionalBranch:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraConditionalBranch.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
-                        frmEditor_Event.Instance.ClearConditionFrame();
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraConditionalBranch.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.ClearConditionFrame();
 
                         switch (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition)
                         {
                             case 0:
                                 {
-                                    frmEditor_Event.Instance.optCondition0.Checked = true;
+                                    Editor_Event.Instance.optCondition0.Checked = true;
                                     break;
                                 }
                             case 1:
                                 {
-                                    frmEditor_Event.Instance.optCondition1.Checked = true;
+                                    Editor_Event.Instance.optCondition1.Checked = true;
                                     break;
                                 }
                             case 2:
                                 {
-                                    frmEditor_Event.Instance.optCondition2.Checked = true;
+                                    Editor_Event.Instance.optCondition2.Checked = true;
                                     break;
                                 }
                             case 3:
                                 {
-                                    frmEditor_Event.Instance.optCondition3.Checked = true;
+                                    Editor_Event.Instance.optCondition3.Checked = true;
                                     break;
                                 }
                             case 4:
                                 {
-                                    frmEditor_Event.Instance.optCondition4.Checked = true;
+                                    Editor_Event.Instance.optCondition4.Checked = true;
                                     break;
                                 }
                             case 5:
                                 {
-                                    frmEditor_Event.Instance.optCondition5.Checked = true;
+                                    Editor_Event.Instance.optCondition5.Checked = true;
                                     break;
                                 }
                             case 6:
                                 {
-                                    frmEditor_Event.Instance.optCondition6.Checked = true;
+                                    Editor_Event.Instance.optCondition6.Checked = true;
                                     break;
                                 }
                             case 7:
@@ -2092,12 +2092,12 @@ namespace Client
 
                             case 8:
                                 {
-                                    frmEditor_Event.Instance.optCondition8.Checked = true;
+                                    Editor_Event.Instance.optCondition8.Checked = true;
                                     break;
                                 }
                             case 9:
                                 {
-                                    frmEditor_Event.Instance.optCondition9.Checked = true;
+                                    Editor_Event.Instance.optCondition9.Checked = true;
                                     break;
                                 }
                         }
@@ -2106,56 +2106,56 @@ namespace Client
                         {
                             case 0:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_PlayerVarIndex.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_PlayerVarCompare.Enabled = true;
-                                    frmEditor_Event.Instance.nudCondition_PlayerVarCondition.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
-                                    frmEditor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
-                                    frmEditor_Event.Instance.nudCondition_PlayerVarCondition.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3;
+                                    Editor_Event.Instance.cmbCondition_PlayerVarIndex.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_PlayerVarCompare.Enabled = true;
+                                    Editor_Event.Instance.nudCondition_PlayerVarCondition.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
+                                    Editor_Event.Instance.nudCondition_PlayerVarCondition.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3;
                                     break;
                                 }
                             case 1:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_PlayerSwitch.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondtion_PlayerSwitchCondition.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
-                                    frmEditor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
+                                    Editor_Event.Instance.cmbCondition_PlayerSwitch.Enabled = true;
+                                    Editor_Event.Instance.cmbCondtion_PlayerSwitchCondition.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
                                     break;
                                 }
                             case 2:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_HasItem.Enabled = true;
-                                    frmEditor_Event.Instance.nudCondition_HasItem.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_HasItem.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
-                                    frmEditor_Event.Instance.nudCondition_HasItem.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
+                                    Editor_Event.Instance.cmbCondition_HasItem.Enabled = true;
+                                    Editor_Event.Instance.nudCondition_HasItem.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_HasItem.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.nudCondition_HasItem.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
                                     break;
                                 }
                             case 3:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_JobIs.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_JobIs.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_JobIs.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_JobIs.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
                                     break;
                                 }
                             case 4:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_LearntSkill.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_LearntSkill.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
                                     break;
                                 }
                             case 5:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_LevelCompare.Enabled = true;
-                                    frmEditor_Event.Instance.nudCondition_LevelAmount.Enabled = true;
-                                    frmEditor_Event.Instance.nudCondition_LevelAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
-                                    frmEditor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
+                                    Editor_Event.Instance.cmbCondition_LevelCompare.Enabled = true;
+                                    Editor_Event.Instance.nudCondition_LevelAmount.Enabled = true;
+                                    Editor_Event.Instance.nudCondition_LevelAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
                                     break;
                                 }
                             case 6:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_SelfSwitch.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_SelfSwitchCondition.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
-                                    frmEditor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
+                                    Editor_Event.Instance.cmbCondition_SelfSwitch.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_SelfSwitchCondition.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2;
                                     break;
                                 }
                             case 7:
@@ -2165,14 +2165,14 @@ namespace Client
 
                             case 8:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_Gender.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_Gender.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_Gender.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_Gender.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
                                     break;
                                 }
                             case 9:
                                 {
-                                    frmEditor_Event.Instance.cmbCondition_Time.Enabled = true;
-                                    frmEditor_Event.Instance.cmbCondition_Time.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
+                                    Editor_Event.Instance.cmbCondition_Time.Enabled = true;
+                                    Editor_Event.Instance.cmbCondition_Time.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1;
                                     break;
                                 }
                         }
@@ -2182,146 +2182,146 @@ namespace Client
                 case (byte)Core.EventCommand.ShowText:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtShowText.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraShowText.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.txtShowText.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraShowText.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ShowChoices:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtChoicePrompt.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        frmEditor_Event.Instance.txtChoices1.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2;
-                        frmEditor_Event.Instance.txtChoices2.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3;
-                        frmEditor_Event.Instance.txtChoices3.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4;
-                        frmEditor_Event.Instance.txtChoices4.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraShowChoices.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.txtChoicePrompt.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        Editor_Event.Instance.txtChoices1.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2;
+                        Editor_Event.Instance.txtChoices2.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3;
+                        Editor_Event.Instance.txtChoices3.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4;
+                        Editor_Event.Instance.txtChoices4.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraShowChoices.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ModifyVariable:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbVariable.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbVariable.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
                         switch (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2)
                         {
                             case 0:
                                 {
-                                    frmEditor_Event.Instance.optVariableAction0.Checked = true;
-                                    frmEditor_Event.Instance.nudVariableData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                                    Editor_Event.Instance.optVariableAction0.Checked = true;
+                                    Editor_Event.Instance.nudVariableData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
                                     break;
                                 }
                             case 1:
                                 {
-                                    frmEditor_Event.Instance.optVariableAction1.Checked = true;
-                                    frmEditor_Event.Instance.nudVariableData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                                    Editor_Event.Instance.optVariableAction1.Checked = true;
+                                    Editor_Event.Instance.nudVariableData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
                                     break;
                                 }
                             case 2:
                                 {
-                                    frmEditor_Event.Instance.optVariableAction2.Checked = true;
-                                    frmEditor_Event.Instance.nudVariableData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                                    Editor_Event.Instance.optVariableAction2.Checked = true;
+                                    Editor_Event.Instance.nudVariableData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
                                     break;
                                 }
                             case 3:
                                 {
-                                    frmEditor_Event.Instance.optVariableAction3.Checked = true;
-                                    frmEditor_Event.Instance.nudVariableData3.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                                    frmEditor_Event.Instance.nudVariableData4.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
+                                    Editor_Event.Instance.optVariableAction3.Checked = true;
+                                    Editor_Event.Instance.nudVariableData3.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                                    Editor_Event.Instance.nudVariableData4.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
                                     break;
                                 }
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlayerVariable.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlayerVariable.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ModifySwitch:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlayerSwitch.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlayerSwitch.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ModifySelfSwitch:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbSetSelfSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSetSelfSwitch.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbSetSelfSwitch.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSetSelfSwitch.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeItems:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbChangeItemIndex.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbChangeItemIndex.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 0)
                         {
-                            frmEditor_Event.Instance.optChangeItemSet.Checked = true;
+                            Editor_Event.Instance.optChangeItemSet.Checked = true;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 1)
                         {
-                            frmEditor_Event.Instance.optChangeItemAdd.Checked = true;
+                            Editor_Event.Instance.optChangeItemAdd.Checked = true;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 2)
                         {
-                            frmEditor_Event.Instance.optChangeItemRemove.Checked = true;
+                            Editor_Event.Instance.optChangeItemRemove.Checked = true;
                         }
-                        frmEditor_Event.Instance.nudChangeItemsAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeItems.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudChangeItemsAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeItems.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeLevel:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudChangeLevel.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeLevel.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudChangeLevel.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeLevel.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSkills:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbChangeSkills.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbChangeSkills.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 0)
                         {
-                            frmEditor_Event.Instance.optChangeSkillsAdd.Checked = true;
+                            Editor_Event.Instance.optChangeSkillsAdd.Checked = true;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 1)
                         {
-                            frmEditor_Event.Instance.optChangeSkillsRemove.Checked = true;
+                            Editor_Event.Instance.optChangeSkillsRemove.Checked = true;
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeSkills.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeSkills.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeJob:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbChangeJob.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeJob.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbChangeJob.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeJob.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSprite:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudChangeSprite.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeSprite.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudChangeSprite.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeSprite.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSex:
@@ -2329,46 +2329,46 @@ namespace Client
                         IsEdit = true;
                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 == 0)
                         {
-                            frmEditor_Event.Instance.optChangeSexMale.Checked = true;
+                            Editor_Event.Instance.optChangeSexMale.Checked = true;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 == 1)
                         {
-                            frmEditor_Event.Instance.optChangeSexFemale.Checked = true;
+                            Editor_Event.Instance.optChangeSexFemale.Checked = true;
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangeGender.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangeGender.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetPlayerKillable:
                     {
                         IsEdit = true;
 
-                        frmEditor_Event.Instance.cmbSetPK.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbSetPK.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
 
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraChangePK.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraChangePK.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.WarpPlayer:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudWPMap.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.nudWPX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.nudWPY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                        frmEditor_Event.Instance.cmbWarpPlayerDir.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlayerWarp.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudWPMap.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.nudWPX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.nudWPY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                        Editor_Event.Instance.cmbWarpPlayerDir.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlayerWarp.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetMoveRoute:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.fraMoveRoute.Visible = true;
-                        frmEditor_Event.Instance.fraMoveRoute.BringToFront();
-                        frmEditor_Event.Instance.lstMoveRoute.Items.Clear();
+                        Editor_Event.Instance.fraMoveRoute.Visible = true;
+                        Editor_Event.Instance.fraMoveRoute.BringToFront();
+                        Editor_Event.Instance.lstMoveRoute.Items.Clear();
                         ListOfEvents = new int[Data.MyMap.EventCount];
                         ListOfEvents[0] = EditorEvent;
                         var loopTo = Data.MyMap.EventCount;
@@ -2376,17 +2376,17 @@ namespace Client
                         {
                             if (i != EditorEvent)
                             {
-                                frmEditor_Event.Instance.cmbEvent.Items.Add(Strings.Trim(Data.MyMap.Event[i].Name));
+                                Editor_Event.Instance.cmbEvent.Items.Add(Strings.Trim(Data.MyMap.Event[i].Name));
                                 X = X + 1;
                                 ListOfEvents[X] = i;
                                 if (i == TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1)
-                                    frmEditor_Event.Instance.cmbEvent.SelectedIndex = X;
+                                    Editor_Event.Instance.cmbEvent.SelectedIndex = X;
                             }
                         }
 
                         IsMoveRouteCommand = true;
-                        frmEditor_Event.Instance.chkIgnoreMove.Checked = Conversions.ToBoolean(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2);
-                        frmEditor_Event.Instance.chkRepeatRoute.Checked = Conversions.ToBoolean(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3);
+                        Editor_Event.Instance.chkIgnoreMove.Checked = Conversions.ToBoolean(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2);
+                        Editor_Event.Instance.chkRepeatRoute.Checked = Conversions.ToBoolean(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3);
                         TempMoveRouteCount = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].MoveRouteCount;
                         TempMoveRoute = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].MoveRoute;
                         var loopTo1 = TempMoveRouteCount;
@@ -2396,260 +2396,260 @@ namespace Client
                             {
                                 case 1:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Up");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Up");
                                         break;
                                     }
                                 case 2:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Down");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Down");
                                         break;
                                     }
                                 case 3:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Left");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Left");
                                         break;
                                     }
                                 case 4:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Right");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Right");
                                         break;
                                     }
                                 case 5:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Randomly");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Randomly");
                                         break;
                                     }
                                 case 6:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Towards Player");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Towards Player");
                                         break;
                                     }
                                 case 7:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Move Away From Player");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Move Away From Player");
                                         break;
                                     }
                                 case 8:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Step Forward");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Step Forward");
                                         break;
                                     }
                                 case 9:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Step Back");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Step Back");
                                         break;
                                     }
                                 case 10:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Wait 100ms");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Wait 100ms");
                                         break;
                                     }
                                 case 11:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Wait 500ms");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Wait 500ms");
                                         break;
                                     }
                                 case 12:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Wait 1000ms");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Wait 1000ms");
                                         break;
                                     }
                                 case 13:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Up");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Up");
                                         break;
                                     }
                                 case 14:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Down");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Down");
                                         break;
                                     }
                                 case 15:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Left");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Left");
                                         break;
                                     }
                                 case 16:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Right");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Right");
                                         break;
                                     }
                                 case 17:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn 90 Degrees To the Right");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn 90 Degrees To the Right");
                                         break;
                                     }
                                 case 18:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn 90 Degrees To the Left");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn 90 Degrees To the Left");
                                         break;
                                     }
                                 case 19:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Around 180 Degrees");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Around 180 Degrees");
                                         break;
                                     }
                                 case 20:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Randomly");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Randomly");
                                         break;
                                     }
                                 case 21:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Towards Player");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Towards Player");
                                         break;
                                     }
                                 case 22:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Away from Player");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Away from Player");
                                         break;
                                     }
                                 case 23:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 8x Slower");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 8x Slower");
                                         break;
                                     }
                                 case 24:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 4x Slower");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 4x Slower");
                                         break;
                                     }
                                 case 25:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 2x Slower");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 2x Slower");
                                         break;
                                     }
                                 case 26:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed to Normal");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed to Normal");
                                         break;
                                     }
                                 case 27:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 2x Faster");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 2x Faster");
                                         break;
                                     }
                                 case 28:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 4x Faster");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Speed 4x Faster");
                                         break;
                                     }
                                 case 29:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Lowest");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Lowest");
                                         break;
                                     }
                                 case 30:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Lower");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Lower");
                                         break;
                                     }
                                 case 31:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Normal");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Normal");
                                         break;
                                     }
                                 case 32:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Higher");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Higher");
                                         break;
                                     }
                                 case 33:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Highest");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Frequency Highest");
                                         break;
                                     }
                                 case 34:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn On Walking Animation");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn On Walking Animation");
                                         break;
                                     }
                                 case 35:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Walking Animation");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Walking Animation");
                                         break;
                                     }
                                 case 36:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn On Fixed Direction");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn On Fixed Direction");
                                         break;
                                     }
                                 case 37:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Fixed Direction");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Fixed Direction");
                                         break;
                                     }
                                 case 38:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn On Walk Through");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn On Walk Through");
                                         break;
                                     }
                                 case 39:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Walk Through");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Turn Off Walk Through");
                                         break;
                                     }
                                 case 40:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Position Below Characters");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Position Below Characters");
                                         break;
                                     }
                                 case 41:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Position Same as Characters");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Position Same as Characters");
                                         break;
                                     }
                                 case 42:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Position Above Characters");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Position Above Characters");
                                         break;
                                     }
                                 case 43:
                                     {
-                                        frmEditor_Event.Instance.lstMoveRoute.Items.Add("Set Graphic");
+                                        Editor_Event.Instance.lstMoveRoute.Items.Add("Set Graphic");
                                         break;
                                     }
                             }
                         }
-                        frmEditor_Event.Instance.fraMoveRoute.Visible = true;
-                        frmEditor_Event.Instance.fraDialogue.Visible = false;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraMoveRoute.Visible = true;
+                        Editor_Event.Instance.fraDialogue.Visible = false;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.PlayAnimation:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.lblPlayAnimX.Visible = false;
-                        frmEditor_Event.Instance.lblPlayAnimY.Visible = false;
-                        frmEditor_Event.Instance.nudPlayAnimTileX.Visible = false;
-                        frmEditor_Event.Instance.nudPlayAnimTileY.Visible = false;
-                        frmEditor_Event.Instance.cmbPlayAnimEvent.Visible = false;
-                        frmEditor_Event.Instance.cmbPlayAnim.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.cmbPlayAnimEvent.Items.Clear();
+                        Editor_Event.Instance.lblPlayAnimX.Visible = false;
+                        Editor_Event.Instance.lblPlayAnimY.Visible = false;
+                        Editor_Event.Instance.nudPlayAnimTileX.Visible = false;
+                        Editor_Event.Instance.nudPlayAnimTileY.Visible = false;
+                        Editor_Event.Instance.cmbPlayAnimEvent.Visible = false;
+                        Editor_Event.Instance.cmbPlayAnim.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.cmbPlayAnimEvent.Items.Clear();
                         var loopTo2 = Data.MyMap.EventCount;
                         for (i = 0; i < loopTo2; i++)
-                            frmEditor_Event.Instance.cmbPlayAnimEvent.Items.Add(i + 1 + ". " + Data.MyMap.Event[i].Name);
-                        frmEditor_Event.Instance.cmbPlayAnimEvent.SelectedIndex = 0;
+                            Editor_Event.Instance.cmbPlayAnimEvent.Items.Add(i + 1 + ". " + Data.MyMap.Event[i].Name);
+                        Editor_Event.Instance.cmbPlayAnimEvent.SelectedIndex = 0;
                         if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 0)
                         {
-                            frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex = 0;
+                            Editor_Event.Instance.cmbAnimTargetType.SelectedIndex = 0;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 1)
                         {
-                            frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex = 1;
-                            frmEditor_Event.Instance.cmbPlayAnimEvent.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                            Editor_Event.Instance.cmbAnimTargetType.SelectedIndex = 1;
+                            Editor_Event.Instance.cmbPlayAnimEvent.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
                         }
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 2)
                         {
-                            frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex = 2;
-                            frmEditor_Event.Instance.nudPlayAnimTileX.Maximum = Data.MyMap.MaxX;
-                            frmEditor_Event.Instance.nudPlayAnimTileY.Maximum = Data.MyMap.MaxY;
-                            frmEditor_Event.Instance.nudPlayAnimTileX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                            frmEditor_Event.Instance.nudPlayAnimTileY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
+                            Editor_Event.Instance.cmbAnimTargetType.SelectedIndex = 2;
+                            Editor_Event.Instance.nudPlayAnimTileX.Maximum = Data.MyMap.MaxX;
+                            Editor_Event.Instance.nudPlayAnimTileY.Maximum = Data.MyMap.MaxY;
+                            Editor_Event.Instance.nudPlayAnimTileX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                            Editor_Event.Instance.nudPlayAnimTileY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlayAnimation.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlayAnimation.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
 
@@ -2661,12 +2661,12 @@ namespace Client
                         {
                             if ((Sound.MusicCache[i] ?? "") == (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 ?? ""))
                             {
-                                frmEditor_Event.Instance.cmbPlayBGM.SelectedIndex = i;
+                                Editor_Event.Instance.cmbPlayBGM.SelectedIndex = i;
                             }
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlayBGM.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlayBGM.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.PlaySound:
@@ -2677,159 +2677,159 @@ namespace Client
                         {
                             if ((Sound.SoundCache[i] ?? "") == (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 ?? ""))
                             {
-                                frmEditor_Event.Instance.cmbPlaySound.SelectedIndex = i;
+                                Editor_Event.Instance.cmbPlaySound.SelectedIndex = i;
                             }
                         }
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraPlaySound.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraPlaySound.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.OpenShop:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbOpenShop.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraOpenShop.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbOpenShop.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraOpenShop.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetAccessLevel:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbSetAccess.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 - 1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSetAccess.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbSetAccess.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 - 1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSetAccess.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.GiveExperience:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudGiveExp.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraGiveExp.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudGiveExp.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraGiveExp.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ShowChatBubble:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtChatbubbleText.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        frmEditor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 - 1;
-                        if (frmEditor_Event.Instance.cmbChatBubbleTarget.Items.Count > -1)
-                            frmEditor_Event.Instance.cmbChatBubbleTarget.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.txtChatbubbleText.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        Editor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 - 1;
+                        if (Editor_Event.Instance.cmbChatBubbleTarget.Items.Count > -1)
+                            Editor_Event.Instance.cmbChatBubbleTarget.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
 
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraShowChatBubble.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraShowChatBubble.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.Label:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtLabelName.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraCreateLabel.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.txtLabelName.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraCreateLabel.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.GoToLabel:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.txtGoToLabel.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraGoToLabel.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.txtGoToLabel.Text = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraGoToLabel.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SpawnNpc:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.cmbSpawnNpc.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSpawnNpc.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbSpawnNpc.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSpawnNpc.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetFog:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudFogData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.nudFogData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.nudFogData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSetFog.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudFogData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.nudFogData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.nudFogData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSetFog.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetWeather:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.CmbWeather.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.nudWeatherIntensity.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSetWeather.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.CmbWeather.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.nudWeatherIntensity.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSetWeather.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.SetScreenTint:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudMapTintData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.nudMapTintData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
-                        frmEditor_Event.Instance.nudMapTintData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                        frmEditor_Event.Instance.nudMapTintData3.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraMapTint.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudMapTintData0.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.nudMapTintData1.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.nudMapTintData2.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                        Editor_Event.Instance.nudMapTintData3.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraMapTint.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.Wait:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudWaitAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraSetWait.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudWaitAmount.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraSetWait.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         break;
                     }
                 case (byte)Core.EventCommand.ShowPicture:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.nudShowPicture.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
+                        Editor_Event.Instance.nudShowPicture.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
 
-                        frmEditor_Event.Instance.cmbPicLoc.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
+                        Editor_Event.Instance.cmbPicLoc.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2;
 
-                        frmEditor_Event.Instance.nudPicOffsetX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
-                        frmEditor_Event.Instance.nudPicOffsetY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraShowPic.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.nudPicOffsetX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
+                        Editor_Event.Instance.nudPicOffsetY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraShowPic.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
                         Map.DrawPicture();
                         break;
                     }
                 case (byte)Core.EventCommand.WaitMovementCompletion:
                     {
                         IsEdit = true;
-                        frmEditor_Event.Instance.fraDialogue.Visible = true;
-                        frmEditor_Event.Instance.fraMoveRouteWait.Visible = true;
-                        frmEditor_Event.Instance.fraCommands.Visible = false;
-                        frmEditor_Event.Instance.cmbMoveWait.Items.Clear();
+                        Editor_Event.Instance.fraDialogue.Visible = true;
+                        Editor_Event.Instance.fraMoveRouteWait.Visible = true;
+                        Editor_Event.Instance.fraCommands.Visible = false;
+                        Editor_Event.Instance.cmbMoveWait.Items.Clear();
                         ListOfEvents = new int[Data.MyMap.EventCount];
                         ListOfEvents[0] = EditorEvent;
-                        frmEditor_Event.Instance.cmbMoveWait.Items.Add("This Event");
-                        frmEditor_Event.Instance.cmbMoveWait.SelectedIndex = 0;
+                        Editor_Event.Instance.cmbMoveWait.Items.Add("This Event");
+                        Editor_Event.Instance.cmbMoveWait.SelectedIndex = 0;
                         var loopTo5 = Data.MyMap.EventCount;
                         for (i = 0; i < loopTo5; i++)
                         {
                             if (i != EditorEvent)
                             {
-                                frmEditor_Event.Instance.cmbMoveWait.Items.Add(Strings.Trim(Data.MyMap.Event[i].Name));
+                                Editor_Event.Instance.cmbMoveWait.Items.Add(Strings.Trim(Data.MyMap.Event[i].Name));
                                 X = X + 1;
                                 ListOfEvents[X] = i;
                                 if (i == TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1)
-                                    frmEditor_Event.Instance.cmbMoveWait.SelectedIndex = X;
+                                    Editor_Event.Instance.cmbMoveWait.SelectedIndex = X;
                             }
                         }
 
@@ -2847,7 +2847,7 @@ namespace Client
             int p;
             Core.Type.CommandList oldCommandList;
 
-            i = frmEditor_Event.Instance.lstCommands.SelectedIndex;
+            i = Editor_Event.Instance.lstCommands.SelectedIndex;
             if (i == -1)
                 return;
 
@@ -2883,7 +2883,7 @@ namespace Client
                     TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount = p;
 
                     // Move all commands down by 1  
-                    for (i = frmEditor_Event.Instance.lstCommands.SelectedIndex + 1; i <= p; i++)
+                    for (i = Editor_Event.Instance.lstCommands.SelectedIndex + 1; i <= p; i++)
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i - 1] = oldCommandList.Commands[i];
                     }
@@ -2912,7 +2912,7 @@ namespace Client
             int curlist;
             int curslot;
 
-            i = frmEditor_Event.Instance.lstCommands.SelectedIndex;
+            i = Editor_Event.Instance.lstCommands.SelectedIndex;
             if (i == -1)
                 return;
 
@@ -2932,17 +2932,17 @@ namespace Client
             {
                 case (byte)Core.EventCommand.AddText:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtAddText_Text.Text;
-                        // tmpEvent.Pages(curPageNum).CommandList(curlist).Commands(curslot).Data1 = frmEditor_Event.Instance.scrlAddText_Color.Value
-                        if (frmEditor_Event.Instance.optAddText_Player.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtAddText_Text.Text;
+                        // tmpEvent.Pages(curPageNum).CommandList(curlist).Commands(curslot).Data1 = Editor_Event.Instance.scrlAddText_Color.Value
+                        if (Editor_Event.Instance.optAddText_Player.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optAddText_Map.Checked == true)
+                        else if (Editor_Event.Instance.optAddText_Map.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
-                        else if (frmEditor_Event.Instance.optAddText_Global.Checked == true)
+                        else if (Editor_Event.Instance.optAddText_Global.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
                         }
@@ -2951,149 +2951,149 @@ namespace Client
                     }
                 case (byte)Core.EventCommand.ConditionalBranch:
                     {
-                        if (frmEditor_Event.Instance.optCondition0.Checked == true)
+                        if (Editor_Event.Instance.optCondition0.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 0;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_PlayerVarCondition.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_PlayerVarIndex.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_PlayerVarCompare.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data3 = (int)Math.Round(Editor_Event.Instance.nudCondition_PlayerVarCondition.Value);
                         }
-                        else if (frmEditor_Event.Instance.optCondition1.Checked == true)
+                        else if (Editor_Event.Instance.optCondition1.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 1;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_PlayerSwitch.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondtion_PlayerSwitchCondition.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition2.Checked == true)
+                        else if (Editor_Event.Instance.optCondition2.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 2;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_HasItem.SelectedIndex;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_HasItem.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_HasItem.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = (int)Math.Round(Editor_Event.Instance.nudCondition_HasItem.Value);
                         }
-                        else if (frmEditor_Event.Instance.optCondition3.Checked == true)
+                        else if (Editor_Event.Instance.optCondition3.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 3;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_JobIs.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_JobIs.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition4.Checked == true)
+                        else if (Editor_Event.Instance.optCondition4.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 4;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_LearntSkill.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition5.Checked == true)
+                        else if (Editor_Event.Instance.optCondition5.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 5;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = (int)Math.Round(frmEditor_Event.Instance.nudCondition_LevelAmount.Value);
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = (int)Math.Round(Editor_Event.Instance.nudCondition_LevelAmount.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_LevelCompare.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition6.Checked == true)
+                        else if (Editor_Event.Instance.optCondition6.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 6;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = frmEditor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_SelfSwitch.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data2 = Editor_Event.Instance.cmbCondition_SelfSwitchCondition.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition8.Checked == true)
+                        else if (Editor_Event.Instance.optCondition8.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 8;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_Gender.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_Gender.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.optCondition9.Checked == true)
+                        else if (Editor_Event.Instance.optCondition9.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Condition = 9;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = frmEditor_Event.Instance.cmbCondition_Time.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].ConditionalBranch.Data1 = Editor_Event.Instance.cmbCondition_Time.SelectedIndex;
                         }
 
                         break;
                     }
                 case (byte)Core.EventCommand.ShowText:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtShowText.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtShowText.Text;
                         break;
                     }
                 case (byte)Core.EventCommand.ShowChoices:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtChoicePrompt.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2 = frmEditor_Event.Instance.txtChoices1.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3 = frmEditor_Event.Instance.txtChoices2.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4 = frmEditor_Event.Instance.txtChoices3.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5 = frmEditor_Event.Instance.txtChoices4.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtChoicePrompt.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text2 = Editor_Event.Instance.txtChoices1.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text3 = Editor_Event.Instance.txtChoices2.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text4 = Editor_Event.Instance.txtChoices3.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text5 = Editor_Event.Instance.txtChoices4.Text;
                         break;
                     }
                 case (byte)Core.EventCommand.ModifyVariable:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbVariable.SelectedIndex;
-                        if (frmEditor_Event.Instance.optVariableAction0.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbVariable.SelectedIndex;
+                        if (Editor_Event.Instance.optVariableAction0.Checked == true)
                             i = 0;
-                        if (frmEditor_Event.Instance.optVariableAction1.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction1.Checked == true)
                             i = 1;
-                        if (frmEditor_Event.Instance.optVariableAction2.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction2.Checked == true)
                             i = 2;
-                        if (frmEditor_Event.Instance.optVariableAction3.Checked == true)
+                        if (Editor_Event.Instance.optVariableAction3.Checked == true)
                             i = 3;
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = i;
                         if (i == 0)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData0.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData0.Value);
                         }
                         else if (i == 1)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData1.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData1.Value);
                         }
                         else if (i == 2)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData2.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData2.Value);
                         }
                         else if (i == 3)
                         {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData3.Value);
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudVariableData4.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudVariableData3.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudVariableData4.Value);
                         }
 
                         break;
                     }
                 case (byte)Core.EventCommand.ModifySwitch:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSwitch.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSwitch.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbPlayerSwitchSet.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.ModifySelfSwitch:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetSelfSwitch.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetSelfSwitch.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbSetSelfSwitchTo.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeItems:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeItemIndex.SelectedIndex;
-                        if (frmEditor_Event.Instance.optChangeItemSet.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeItemIndex.SelectedIndex;
+                        if (Editor_Event.Instance.optChangeItemSet.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optChangeItemAdd.Checked == true)
+                        else if (Editor_Event.Instance.optChangeItemAdd.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
-                        else if (frmEditor_Event.Instance.optChangeItemRemove.Checked == true)
+                        else if (Editor_Event.Instance.optChangeItemRemove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
                         }
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudChangeItemsAmount.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudChangeItemsAmount.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeLevel:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudChangeLevel.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudChangeLevel.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSkills:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeSkills.SelectedIndex;
-                        if (frmEditor_Event.Instance.optChangeSkillsAdd.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeSkills.SelectedIndex;
+                        if (Editor_Event.Instance.optChangeSkillsAdd.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optChangeSkillsRemove.Checked == true)
+                        else if (Editor_Event.Instance.optChangeSkillsRemove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
@@ -3102,21 +3102,21 @@ namespace Client
                     }
                 case (byte)Core.EventCommand.ChangeJob:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChangeJob.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeJob.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSprite:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudChangeSprite.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudChangeSprite.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.ChangeSex:
                     {
-                        if (frmEditor_Event.Instance.optChangeSexMale.Checked == true)
+                        if (Editor_Event.Instance.optChangeSexMale.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = 0;
                         }
-                        else if (frmEditor_Event.Instance.optChangeSexFemale.Checked == true)
+                        else if (Editor_Event.Instance.optChangeSexFemale.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = 1;
                         }
@@ -3125,22 +3125,22 @@ namespace Client
                     }
                 case (byte)Core.EventCommand.SetPlayerKillable:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetPK.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetPK.SelectedIndex;
                         break;
                     }
 
                 case (byte)Core.EventCommand.WarpPlayer:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudWPMap.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudWPX.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudWPY.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = frmEditor_Event.Instance.cmbWarpPlayerDir.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudWPMap.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudWPX.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudWPY.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = Editor_Event.Instance.cmbWarpPlayerDir.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.SetMoveRoute:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[frmEditor_Event.Instance.cmbEvent.SelectedIndex];
-                        if (frmEditor_Event.Instance.chkIgnoreMove.Checked == true)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[Editor_Event.Instance.cmbEvent.SelectedIndex];
+                        if (Editor_Event.Instance.chkIgnoreMove.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
                         }
@@ -3149,7 +3149,7 @@ namespace Client
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
 
-                        if (frmEditor_Event.Instance.chkRepeatRoute.Checked == true)
+                        if (Editor_Event.Instance.chkRepeatRoute.Checked == true)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = 1;
                         }
@@ -3163,111 +3163,111 @@ namespace Client
                     }
                 case (byte)Core.EventCommand.PlayAnimation:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbPlayAnim.SelectedIndex;
-                        if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 0)
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbPlayAnim.SelectedIndex;
+                        if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 0)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
                         }
-                        else if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 1)
+                        else if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 1)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = frmEditor_Event.Instance.cmbPlayAnimEvent.SelectedIndex;
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = Editor_Event.Instance.cmbPlayAnimEvent.SelectedIndex;
                         }
-                        else if (frmEditor_Event.Instance.cmbAnimTargetType.SelectedIndex == 2)
+                        else if (Editor_Event.Instance.cmbAnimTargetType.SelectedIndex == 2)
                         {
                             TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 2;
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudPlayAnimTileX.Value);
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudPlayAnimTileY.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudPlayAnimTileX.Value);
+                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudPlayAnimTileY.Value);
                         }
 
                         break;
                     }
                 case (byte)Core.EventCommand.PlayBgm:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.MusicCache[frmEditor_Event.Instance.cmbPlayBGM.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.MusicCache[Editor_Event.Instance.cmbPlayBGM.SelectedIndex];
                         break;
                     }
                 case (byte)Core.EventCommand.PlaySound:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.SoundCache[frmEditor_Event.Instance.cmbPlaySound.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Sound.SoundCache[Editor_Event.Instance.cmbPlaySound.SelectedIndex];
                         break;
                     }
                 case (byte)Core.EventCommand.OpenShop:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbOpenShop.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbOpenShop.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.SetAccessLevel:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSetAccess.SelectedIndex + 1;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSetAccess.SelectedIndex + 1;
                         break;
                     }
                 case (byte)Core.EventCommand.GiveExperience:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudGiveExp.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudGiveExp.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.ShowChatBubble:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtChatbubbleText.Text;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex + 1;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbChatBubbleTarget.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtChatbubbleText.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChatBubbleTargetType.SelectedIndex + 1;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbChatBubbleTarget.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.Label:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtLabelName.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtLabelName.Text;
                         break;
                     }
                 case (byte)Core.EventCommand.GoToLabel:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = frmEditor_Event.Instance.txtGoToLabel.Text;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = Editor_Event.Instance.txtGoToLabel.Text;
                         break;
                     }
                 case (byte)Core.EventCommand.SpawnNpc:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.cmbSpawnNpc.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbSpawnNpc.SelectedIndex;
                         break;
                     }
                 case (byte)Core.EventCommand.SetFog:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudFogData0.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudFogData1.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudFogData2.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudFogData0.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudFogData1.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudFogData2.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.SetWeather:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = frmEditor_Event.Instance.CmbWeather.SelectedIndex;
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudWeatherIntensity.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.CmbWeather.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudWeatherIntensity.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.SetScreenTint:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData0.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData1.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData2.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudMapTintData3.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudMapTintData0.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = (int)Math.Round(Editor_Event.Instance.nudMapTintData1.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudMapTintData2.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudMapTintData3.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.Wait:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudWaitAmount.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudWaitAmount.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.ShowPicture:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(frmEditor_Event.Instance.nudShowPicture.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = (int)Math.Round(Editor_Event.Instance.nudShowPicture.Value);
 
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = frmEditor_Event.Instance.cmbPicLoc.SelectedIndex;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.cmbPicLoc.SelectedIndex;
 
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(frmEditor_Event.Instance.nudPicOffsetX.Value);
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(frmEditor_Event.Instance.nudPicOffsetY.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3 = (int)Math.Round(Editor_Event.Instance.nudPicOffsetX.Value);
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4 = (int)Math.Round(Editor_Event.Instance.nudPicOffsetY.Value);
                         break;
                     }
                 case (byte)Core.EventCommand.WaitMovementCompletion:
                     {
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[frmEditor_Event.Instance.cmbMoveWait.SelectedIndex];
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = ListOfEvents[Editor_Event.Instance.cmbMoveWait.SelectedIndex];
                         break;
                     }
             }

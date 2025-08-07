@@ -3,12 +3,13 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using DarkUI.Controls;
+using DarkUI.Forms;
 
 namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class FrmAdmin : Form
+    internal partial class FrmAdmin : DarkForm
     {
 
         // Shared instance of the form

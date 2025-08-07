@@ -2,20 +2,20 @@
 
 namespace Client
 {
-    partial class frmEditor_Script : Form
+    partial class Editor_Script : Form
     {
         // Shared instance of the form
-        private static frmEditor_Script _instance;
+        private static Editor_Script _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Script Instance
+        public static Editor_Script Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Script();
+                    _instance = new Editor_Script();
                 }
                 return _instance;
             }
@@ -71,7 +71,7 @@ namespace Client
             buttonSaveScript.Text = "Save Script";
             buttonSaveScript.Click += buttonSaveScript_Click;
             // 
-            // frmEditor_Script
+            // Editor_Script
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -80,9 +80,9 @@ namespace Client
             Controls.Add(buttonSaveScript);
             Controls.Add(btnOpenScript);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "frmEditor_Script";
+            Name = "Editor_Script";
             Text = "Script Editor";
-            FormClosing += frmEditor_Script_FormClosing;
+            FormClosing += Editor_Script_FormClosing;
             ResumeLayout(false);
         }
 

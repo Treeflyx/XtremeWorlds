@@ -10,7 +10,7 @@ using RenderTargetUsage = Microsoft.Xna.Framework.Graphics.RenderTargetUsage;
 
 namespace Client
 {
-    internal partial class frmEditor_Animation
+    internal partial class Editor_Animation
     {
 
         protected override void WndProc(ref Message m)
@@ -115,7 +115,7 @@ namespace Client
             Dispose();
         }
 
-        private void frmEditor_Animation_Load(object sender, EventArgs e)
+        private void Editor_Animation_Load(object sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 
@@ -140,7 +140,7 @@ namespace Client
             Core.Data.Animation[GameState.EditorIndex].Sound = cmbSound.SelectedItem.ToString();
         }
 
-        private void frmEditor_Animation_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Animation_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.AnimationEditorCancel();
         }

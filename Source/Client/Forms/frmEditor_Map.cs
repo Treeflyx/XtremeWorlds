@@ -16,15 +16,15 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Client
 {
 
-    public partial class frmEditor_Map
+    public partial class Editor_Map
     {
-        public frmEditor_Map()
+        public Editor_Map()
         {
             InitializeComponent();
         }
 
         #region Frm
-        private void frmEditor_Map_Load(object sender, EventArgs e)
+        private void Editor_Map_Load(object sender, EventArgs e)
         {
             pnlAttributes.BringToFront();
             pnlAttributes.Visible = false;
@@ -74,13 +74,13 @@ namespace Client
             base.WndProc(ref m);
         }
 
-        private void frmEditor_Map_Resize(object sender, EventArgs e)
+        private void Editor_Map_Resize(object sender, EventArgs e)
         {
             this.AutoScroll = true;
             this.PerformLayout();
         }
 
-        private void frmEditor_Map_Activated(object sender, EventArgs e)
+        private void Editor_Map_Activated(object sender, EventArgs e)
         {
             this.AutoScroll = true;
         }
@@ -110,7 +110,7 @@ namespace Client
         // 3. Modify DrawTileset to use the offset when drawing the image and selection rectangle.
         // 4. Ensure offset does not exceed image bounds.
 
-        // Add these fields to frmEditor_Map class
+        // Add these fields to Editor_Map class
         private static int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
 
@@ -1400,7 +1400,7 @@ namespace Client
                 }
                 else if (GameState.MapEditorTab == (int)MapEditorTab.Events)
                 {
-                    if (frmEditor_Event.Instance.Visible == false)
+                    if (Editor_Event.Instance.Visible == false)
                     {
                         if (Event.EventCopy)
                         {
@@ -1547,7 +1547,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
             Gui.HideChat();
 
-            frmEditor_Event.Instance?.Dispose();
+            Editor_Event.Instance?.Dispose();
 
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
@@ -1566,7 +1566,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
             Gui.HideChat();
 
-            frmEditor_Event.Instance?.Dispose();
+            Editor_Event.Instance?.Dispose();
 
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
@@ -1880,7 +1880,7 @@ namespace Client
             Data.MyMap.Name = txtName.Text;
         }
 
-        private void frmEditor_Map_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Map_FormClosing(object sender, FormClosingEventArgs e)
         {
             MapEditorCancel();
         }

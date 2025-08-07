@@ -7,21 +7,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Resource : Form
+    internal partial class Editor_Resource : Form
     {
 
         // Shared instance of the form
-        private static frmEditor_Resource _instance;
+        private static Editor_Resource _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Resource Instance
+        public static Editor_Resource Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Resource();
+                    _instance = new Editor_Resource();
                 }
                 return _instance;
             }
@@ -556,7 +556,7 @@ namespace Client
             btnCancel.TabIndex = 4;
             btnCancel.Text = "Cancel";
             // 
-            // frmEditor_Resource
+            // Editor_Resource
             // 
             AutoScaleDimensions = new SizeF(13.0f, 32.0f);
             AutoScaleMode = AutoScaleMode.Font;
@@ -570,7 +570,7 @@ namespace Client
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(8, 6, 8, 6);
-            Name = "frmEditor_Resource";
+            Name = "Editor_Resource";
             Text = "Resource Editor";
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
@@ -589,8 +589,8 @@ namespace Client
             ((System.ComponentModel.ISupportInitialize)picExhaustedPic).EndInit();
             ((System.ComponentModel.ISupportInitialize)picNormalpic).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudHealth).EndInit();
-            Load += new EventHandler(frmEditor_Resource_Load);
-            FormClosing += new FormClosingEventHandler(frmEditor_Resource_FormClosing);
+            Load += new EventHandler(Editor_Resource_Load);
+            FormClosing += new FormClosingEventHandler(Editor_Resource_FormClosing);
             ResumeLayout(false);
 
         }

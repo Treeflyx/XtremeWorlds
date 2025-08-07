@@ -7,9 +7,9 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class frmEditor_Skill
+    internal partial class Editor_Skill
     {
-        public frmEditor_Skill()
+        public Editor_Skill()
         {
             InitializeComponent();
         }
@@ -183,7 +183,7 @@ namespace Client
             Dispose();
         }
 
-        private void frmEditor_Skill_Load(object sender, EventArgs e)
+        private void Editor_Skill_Load(object sender, EventArgs e)
         {
             nudIcon.Maximum = GameState.NumSkills;
             nudAoE.Maximum = byte.MaxValue;
@@ -246,7 +246,7 @@ namespace Client
             Core.Data.Skill[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
         }
 
-        private void frmEditor_Skill_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Skill_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.SkillEditorCancel();
         }

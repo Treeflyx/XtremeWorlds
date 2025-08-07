@@ -1,4 +1,5 @@
 ﻿using DarkUI.Controls;
+using DarkUI.Forms;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -8,21 +9,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    public partial class frmEditor_Map : Form
+    public partial class Editor_Map : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Map _instance;
+        private static Editor_Map _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Map Instance
+        public static Editor_Map Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Map();
+                    _instance = new Editor_Map();
                 }
                 return _instance;
             }
@@ -54,7 +55,7 @@ namespace Client
         [DebuggerStepThrough()]
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEditor_Map));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor_Map));
             btnClearAttribute = new DarkButton();
             optTrap = new DarkRadioButton();
             optHeal = new DarkRadioButton();
@@ -2101,7 +2102,7 @@ namespace Client
             cmbWeather.TabIndex = 0;
             cmbWeather.SelectedIndexChanged += CmbWeather_SelectedIndexChanged;
             // 
-            // frmEditor_Map
+            // Editor_Map
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -2115,12 +2116,12 @@ namespace Client
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(5, 5, 5, 5);
             MaximizeBox = false;
-            Name = "frmEditor_Map";
+            Name = "Editor_Map";
             Text = "Map Editor";
-            Activated += frmEditor_Map_Activated;
-            FormClosing += frmEditor_Map_FormClosing;
-            Load += frmEditor_Map_Load;
-            Resize += frmEditor_Map_Resize;
+            Activated += Editor_Map_Activated;
+            FormClosing += Editor_Map_FormClosing;
+            Load += Editor_Map_Load;
+            Resize += Editor_Map_Resize;
             pnlBack.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picBackSelect).EndInit();
             pnlAttributes.ResumeLayout(false);

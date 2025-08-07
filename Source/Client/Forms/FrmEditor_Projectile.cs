@@ -7,14 +7,14 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class frmEditor_Projectile
+    internal partial class Editor_Projectile
     {
-        public frmEditor_Projectile()
+        public Editor_Projectile()
         {
             InitializeComponent();
         }
 
-        private void frmEditor_Projectile_Load(object sender, EventArgs e)
+        private void Editor_Projectile_Load(object sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 
@@ -109,7 +109,7 @@ namespace Client
             Editors.ProjectileEditorInit();
         }
 
-        private void frmEditor_Projectile_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Projectile_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.ProjectileEditorCancel();
         }

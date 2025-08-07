@@ -7,21 +7,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Projectile : Form
+    internal partial class Editor_Projectile : Form
     {
 
         // Shared instance of the form
-        private static frmEditor_Projectile _instance;
+        private static Editor_Projectile _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Projectile Instance
+        public static Editor_Projectile Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Projectile();
+                    _instance = new Editor_Projectile();
                 }
                 return _instance;
             }
@@ -278,7 +278,7 @@ namespace Client
             btnDelete.TabIndex = 4;
             btnDelete.Text = "Delete";
             // 
-            // frmEditor_Projectile
+            // Editor_Projectile
             // 
             AutoScaleDimensions = new SizeF(13.0f, 32.0f);
             AutoScaleMode = AutoScaleMode.Font;
@@ -292,7 +292,7 @@ namespace Client
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(8, 6, 8, 6);
-            Name = "frmEditor_Projectile";
+            Name = "Editor_Projectile";
             Text = "Projectile Editor";
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
@@ -302,8 +302,8 @@ namespace Client
             ((System.ComponentModel.ISupportInitialize)nudRange).EndInit();
             ((System.ComponentModel.ISupportInitialize)nudPic).EndInit();
             ((System.ComponentModel.ISupportInitialize)picProjectile).EndInit();
-            Load += new EventHandler(frmEditor_Projectile_Load);
-            FormClosing += new FormClosingEventHandler(frmEditor_Projectile_FormClosing);
+            Load += new EventHandler(Editor_Projectile_Load);
+            FormClosing += new FormClosingEventHandler(Editor_Projectile_FormClosing);
             ResumeLayout(false);
 
         }

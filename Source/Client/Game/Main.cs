@@ -58,7 +58,7 @@ namespace Client
             {
                 if (GameState.InitEventEditor)
                 {
-                    var withBlock = frmEditor_Event.Instance;
+                    var withBlock = Editor_Event.Instance;
                     withBlock.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock.Show();
 
@@ -90,12 +90,12 @@ namespace Client
 
                 if (GameState.InitMapEditor)
                 {
-                    var withBlock2 = frmEditor_Map.Instance;
+                    var withBlock2 = Editor_Map.Instance;
                     GameState.MyEditorType = Core.EditorType.Map;
                     GameState.EditorIndex = 1;
                     withBlock2.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock2.Show();
-                    frmEditor_Map.MapEditorInit();
+                    Editor_Map.MapEditorInit();
                     General.SetWindowFocus(General.Client.Window.Handle);
 
                     GameState.InitMapEditor = false;
@@ -103,7 +103,7 @@ namespace Client
 
                 if (GameState.InitAnimationEditor)
                 {
-                    var withBlock4 = frmEditor_Animation.Instance;
+                    var withBlock4 = Editor_Animation.Instance;
                     GameState.MyEditorType = Core.EditorType.Animation;
                     GameState.EditorIndex = 1;
                     withBlock4.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -116,7 +116,7 @@ namespace Client
 
                 if (GameState.InitItemEditor)
                 {
-                    var withBlock5 = frmEditor_Item.Instance;
+                    var withBlock5 = Editor_Item.Instance;
                     GameState.MyEditorType = Core.EditorType.Item;
                     GameState.EditorIndex = 1;
                     withBlock5.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -129,7 +129,7 @@ namespace Client
 
                 if (GameState.InitJobEditor)
                 {
-                    var withBlock6 = frmEditor_Job.Instance;
+                    var withBlock6 = Editor_Job.Instance;
                     GameState.MyEditorType = Core.EditorType.Job;
                     GameState.EditorIndex = 1;
                     withBlock6.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -142,7 +142,7 @@ namespace Client
 
                 if (GameState.InitMoralEditor)
                 {
-                    var withBlock7 = frmEditor_Moral.Instance;
+                    var withBlock7 = Editor_Moral.Instance;
                     GameState.MyEditorType = Core.EditorType.Moral;
                     GameState.EditorIndex = 1;
                     withBlock7.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -155,7 +155,7 @@ namespace Client
 
                 if (GameState.InitResourceEditor)
                 {
-                    var withBlock8 = frmEditor_Resource.Instance;
+                    var withBlock8 = Editor_Resource.Instance;
                     GameState.MyEditorType = Core.EditorType.Resource;
                     GameState.EditorIndex = 1;
                     withBlock8.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -168,7 +168,7 @@ namespace Client
 
                 if (GameState.InitNpcEditor)
                 {
-                    var withBlock9 = frmEditor_Npc.Instance;
+                    var withBlock9 = Editor_Npc.Instance;
                     GameState.MyEditorType = Core.EditorType.Npc;
                     GameState.EditorIndex = 1;
                     withBlock9.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -181,7 +181,7 @@ namespace Client
 
                 if (GameState.InitSkillEditor)
                 {
-                    var withBlock10 = frmEditor_Skill.Instance;
+                    var withBlock10 = Editor_Skill.Instance;
                     GameState.MyEditorType = Core.EditorType.Skill;
                     GameState.EditorIndex = 1;
                     withBlock10.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -194,7 +194,7 @@ namespace Client
 
                 if (GameState.InitShopEditor)
                 {
-                    var withBlock11 = frmEditor_Shop.Instance;
+                    var withBlock11 = Editor_Shop.Instance;
                     GameState.MyEditorType = Core.EditorType.Shop;
                     GameState.EditorIndex = 1;
                     withBlock11.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -207,7 +207,7 @@ namespace Client
 
                 if (GameState.InitProjectileEditor)
                 {
-                    var withBlock12 = frmEditor_Projectile.Instance;
+                    var withBlock12 = Editor_Projectile.Instance;
                     GameState.MyEditorType = Core.EditorType.Projectile;
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -220,7 +220,7 @@ namespace Client
 
                 if (GameState.InitScriptEditor)
                 {
-                    var withBlock12 = frmEditor_Script.Instance;
+                    var withBlock12 = Editor_Script.Instance;
                     GameState.MyEditorType = Core.EditorType.Script;
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
@@ -231,25 +231,25 @@ namespace Client
 
                 }
 
-                frmEditor_Map.Instance.picBackSelect.Invalidate();
-                frmEditor_Animation.Instance.picSprite0.Invalidate();
-                frmEditor_Animation.Instance.picSprite1.Invalidate();
+                Editor_Map.Instance.picBackSelect.Invalidate();
+                Editor_Animation.Instance.picSprite0.Invalidate();
+                Editor_Animation.Instance.picSprite1.Invalidate();
 
                 if (GameState.InGame == false)
                 {
                     // Close all open editor forms, not just the last opened one
-                    frmEditor_Item.Instance.Dispose();
-                    frmEditor_Job.Instance.Dispose();
-                    frmEditor_Map.Instance.Dispose();
-                    frmEditor_Event.Instance.Dispose();
-                    frmEditor_Npc.Instance.Dispose();
-                    frmEditor_Projectile.Instance.Dispose();
-                    frmEditor_Resource.Instance.Dispose();
-                    frmEditor_Shop.Instance.Dispose();
-                    frmEditor_Skill.Instance.Dispose();
-                    frmEditor_Animation.Instance.Dispose();
-                    frmEditor_Moral.Instance.Dispose();
-                    frmEditor_Script.Instance.Dispose();
+                    Editor_Item.Instance.Dispose();
+                    Editor_Job.Instance.Dispose();
+                    Editor_Map.Instance.Dispose();
+                    Editor_Event.Instance.Dispose();
+                    Editor_Npc.Instance.Dispose();
+                    Editor_Projectile.Instance.Dispose();
+                    Editor_Resource.Instance.Dispose();
+                    Editor_Shop.Instance.Dispose();
+                    Editor_Skill.Instance.Dispose();
+                    Editor_Animation.Instance.Dispose();
+                    Editor_Moral.Instance.Dispose();
+                    Editor_Script.Instance.Dispose();
 
                     if (GameState.AdminPanel)
                     {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,28 +8,28 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Event : Form
+    internal partial class Editor_Event : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Event _instance;
+        private static Editor_Event _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Event Instance
+        public static Editor_Event Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Event();
+                    _instance = new Editor_Event();
                 }
                 return _instance;
             }
         }
 
         // Private constructor to prevent instantiation from outside
-        private frmEditor_Event()
+        private Editor_Event()
         {
             InitializeComponent(); // Call to initialize the form's controls
         }
@@ -4897,7 +4898,7 @@ namespace Client
             btnLabel_Ok.Text = "Ok";
             btnLabel_Ok.Click += BtnLabel_Ok_Click;
             // 
-            // frmEditor_Event
+            // Editor_Event
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -4920,12 +4921,12 @@ namespace Client
             Margin = new Padding(4, 3, 4, 3);
             MaximumSize = new Size(1300, 751);
             MinimumSize = new Size(1300, 751);
-            Name = "frmEditor_Event";
+            Name = "Editor_Event";
             Text = "Event Editor";
-            Activated += frmEditor_Event_Activated;
-            FormClosing += frmEditor_Events_FormClosing;
-            Load += frmEditor_Events_Load;
-            Resize += frmEditor_Event_Resize;
+            Activated += Editor_Event_Activated;
+            FormClosing += Editor_Events_FormClosing;
+            Load += Editor_Events_Load;
+            Resize += Editor_Event_Resize;
             fraPageSetUp.ResumeLayout(false);
             fraPageSetUp.PerformLayout();
             tabPages.ResumeLayout(false);

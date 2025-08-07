@@ -7,21 +7,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Shop : Form
+    internal partial class Editor_Shop : Form
     {
 
         // Shared instance of the form
-        private static frmEditor_Shop _instance;
+        private static Editor_Shop _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Shop Instance
+        public static Editor_Shop Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Shop();
+                    _instance = new Editor_Shop();
                 }
                 return _instance;
             }
@@ -358,7 +358,7 @@ namespace Client
             btnSave.Text = "Save";
             btnSave.Click += BtnSave_Click;
             // 
-            // frmEditor_Shop
+            // Editor_Shop
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -373,10 +373,10 @@ namespace Client
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            Name = "frmEditor_Shop";
+            Name = "Editor_Shop";
             Text = "Shop Editor";
-            FormClosing += frmEditor_Shop_FormClosing;
-            Load += frmEditor_Shop_Load;
+            FormClosing += Editor_Shop_FormClosing;
+            Load += Editor_Shop_Load;
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
             DarkGroupBox2.PerformLayout();

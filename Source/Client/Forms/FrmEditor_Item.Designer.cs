@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,21 +8,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Item : Form
+    internal partial class Editor_Item : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Item _instance;
+        private static Editor_Item _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Item Instance
+        public static Editor_Item Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Item();
+                    _instance = new Editor_Item();
                 }
                 return _instance;
             }
@@ -1292,7 +1293,7 @@ namespace Client
             fraBasics.TabStop = false;
             fraBasics.Text = "Properties";
             // 
-            // frmEditor_Item
+            // Editor_Item
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -1312,10 +1313,10 @@ namespace Client
             Controls.Add(fraEquipment);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "frmEditor_Item";
+            Name = "Editor_Item";
             Text = "Item Editor";
-            FormClosing += frmEditor_Item_FormClosing;
-            Load += frmEditor_Item_Load;
+            FormClosing += Editor_Item_FormClosing;
+            Load += Editor_Item_Load;
             DarkGroupBox1.ResumeLayout(false);
             fraEquipment.ResumeLayout(false);
             fraEquipment.PerformLayout();

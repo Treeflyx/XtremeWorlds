@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,21 +8,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    public partial class frmEditor_Moral : Form
+    public partial class Editor_Moral : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Moral _instance;
+        private static Editor_Moral _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Moral Instance
+        public static Editor_Moral Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Moral();
+                    _instance = new Editor_Moral();
                 }
                 return _instance;
             }
@@ -313,7 +314,7 @@ namespace Client
             DarkLabel11.TabIndex = 10;
             DarkLabel11.Text = "Color:";
             // 
-            // frmEditor_Moral
+            // Editor_Moral
             // 
             AutoScaleDimensions = new SizeF(10.0f, 25.0f);
             AutoScaleMode = AutoScaleMode.Font;
@@ -323,13 +324,13 @@ namespace Client
             Controls.Add(DarkGroupBox2);
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "frmEditor_Moral";
+            Name = "Editor_Moral";
             Text = "Moral Editor";
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
             DarkGroupBox2.PerformLayout();
-            FormClosing += new FormClosingEventHandler(frmEditor_Moral_FormClosing);
-            Load += new EventHandler(frmEditor_Moral_Load);
+            FormClosing += new FormClosingEventHandler(Editor_Moral_FormClosing);
+            Load += new EventHandler(Editor_Moral_Load);
             ResumeLayout(false);
         }
         internal DarkUI.Controls.DarkGroupBox DarkGroupBox1;

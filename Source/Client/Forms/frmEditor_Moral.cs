@@ -6,9 +6,9 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    public partial class frmEditor_Moral
+    public partial class Editor_Moral
     {
-        public frmEditor_Moral()
+        public Editor_Moral()
         {
             InitializeComponent();
         }
@@ -47,7 +47,7 @@ namespace Client
             Dispose();
         }
 
-        private void frmEditor_Moral_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Moral_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.MoralEditorCancel();
         }
@@ -71,7 +71,7 @@ namespace Client
             Editors.MoralEditorInit();
         }
 
-        private void frmEditor_Moral_Load(object sender, EventArgs e)
+        private void Editor_Moral_Load(object sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 

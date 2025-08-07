@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace Client
 {
-    public partial class frmEditor_Script : Form
+    public partial class Editor_Script : Form
     {
-        public frmEditor_Script()
+        public Editor_Script()
         {
             InitializeComponent();
         }
@@ -46,7 +46,7 @@ namespace Client
             NetworkSend.SendSaveScript();
         }
 
-        private void frmEditor_Script_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Script_FormClosing(object sender, FormClosingEventArgs e)
         {
             NetworkSend.SendCloseEditor();
             GameState.MyEditorType = EditorType.None;

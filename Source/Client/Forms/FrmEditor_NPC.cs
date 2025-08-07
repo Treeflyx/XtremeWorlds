@@ -7,16 +7,16 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class frmEditor_Npc
+    internal partial class Editor_Npc
     {
-        public frmEditor_Npc()
+        public Editor_Npc()
         {
             InitializeComponent();
         }
 
         #region Frm
 
-        private void frmEditor_Npc_Load(object sender, EventArgs e)
+        private void Editor_Npc_Load(object sender, EventArgs e)
         {
             nudSprite.Maximum = GameState.NumCharacters;
 
@@ -290,7 +290,7 @@ namespace Client
             Data.Npc[GameState.EditorIndex].Skill[6] = (byte)cmbSkill6.SelectedIndex;
         }
 
-        private void frmEditor_Npc_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Npc_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.NpcEditorCancel();
         }

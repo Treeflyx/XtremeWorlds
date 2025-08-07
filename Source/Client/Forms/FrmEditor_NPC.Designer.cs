@@ -1,27 +1,26 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace Client
 {
-
-    [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Npc : Form
+    internal partial class Editor_Npc : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Npc _instance;
+        private static Editor_Npc _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Npc Instance
+        public static Editor_Npc Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Npc();
+                    _instance = new Editor_Npc();
                 }
                 return _instance;
             }
@@ -923,7 +922,7 @@ namespace Client
             btnSave.Text = "Save";
             btnSave.Click += BtnSave_Click;
             // 
-            // frmEditor_Npc
+            // Editor_Npc
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -940,10 +939,10 @@ namespace Client
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "frmEditor_Npc";
+            Name = "Editor_Npc";
             Text = "Npc Editor";
-            FormClosing += frmEditor_Npc_FormClosing;
-            Load += frmEditor_Npc_Load;
+            FormClosing += Editor_Npc_FormClosing;
+            Load += Editor_Npc_Load;
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
             DarkGroupBox2.PerformLayout();

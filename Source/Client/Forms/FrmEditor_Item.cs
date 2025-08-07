@@ -7,9 +7,9 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class frmEditor_Item
+    internal partial class Editor_Item
     {
-        public frmEditor_Item()
+        public Editor_Item()
         {
             InitializeComponent();
         }
@@ -47,7 +47,7 @@ namespace Client
             Editors.ItemEditorInit();
         }
 
-        private void frmEditor_Item_Load(object sender, EventArgs e)
+        private void Editor_Item_Load(object sender, EventArgs e)
         {
             nudIcon.Maximum = GameState.NumItems;
             nudPaperdoll.Maximum = GameState.NumPaperdolls;
@@ -425,7 +425,7 @@ namespace Client
             NetworkSend.SendSpawnItem(GameState.EditorIndex, (int)Math.Round(nudSpanwAmount.Value));
         }
 
-        private void frmEditor_Item_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Item_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.ItemEditorCancel();
         }

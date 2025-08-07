@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,28 +8,28 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Animation : Form
+    internal partial class Editor_Animation : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Animation _instance;
+        private static Editor_Animation _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Animation Instance
+        public static Editor_Animation Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Animation();
+                    _instance = new Editor_Animation();
                 }
                 return _instance;
             }
         }
 
         // Private constructor to prevent instantiation from outside
-        private frmEditor_Animation()
+        private Editor_Animation()
         {
             InitializeComponent(); // Call to initialize the form's controls
         }
@@ -469,7 +470,7 @@ namespace Client
             btnCancel.Text = "Cancel";
             btnCancel.Click += BtnCancel_Click;
             // 
-            // frmEditor_Animation
+            // Editor_Animation
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -483,10 +484,10 @@ namespace Client
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "frmEditor_Animation";
+            Name = "Editor_Animation";
             Text = "Animation Editor";
-            FormClosing += frmEditor_Animation_FormClosing;
-            Load += frmEditor_Animation_Load;
+            FormClosing += Editor_Animation_FormClosing;
+            Load += Editor_Animation_Load;
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
             DarkGroupBox2.PerformLayout();

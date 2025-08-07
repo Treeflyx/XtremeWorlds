@@ -8,16 +8,16 @@ using Microsoft.VisualBasic;
 namespace Client
 {
 
-    internal partial class frmEditor_Job
+    internal partial class Editor_Job
     {
-        public frmEditor_Job()
+        public Editor_Job()
         {
             InitializeComponent();
         }
 
         #region Frm
 
-        private void frmEditor_Job_Load(object sender, EventArgs e)
+        private void Editor_Job_Load(object sender, EventArgs e)
         {
             nudMaleSprite.Maximum = GameState.NumCharacters;
             nudFemaleSprite.Maximum = GameState.NumCharacters;
@@ -201,7 +201,7 @@ namespace Client
             Editors.JobEditorInit();
         }
 
-        private void frmEditor_Job_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Job_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.JobEditorCancel();
         }

@@ -3,9 +3,9 @@ using Microsoft.VisualBasic;
 
 namespace Client
 {
-    internal partial class frmEditor_Resource
+    internal partial class Editor_Resource
     {
-        public frmEditor_Resource()
+        public Editor_Resource()
         {
             InitializeComponent();
         }
@@ -114,7 +114,7 @@ namespace Client
             Dispose();
         }
 
-        private void frmEditor_Resource_Load(object sender, EventArgs e)
+        private void Editor_Resource_Load(object sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 
@@ -157,7 +157,7 @@ namespace Client
             Core.Data.Resource[GameState.EditorIndex].EmptyMessage = Strings.Trim(txtMessage2.Text);
         }
 
-        private void frmEditor_Resource_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Resource_FormClosing(object sender, FormClosingEventArgs e)
         {
             Editors.ResourceEditorCancel();
         }

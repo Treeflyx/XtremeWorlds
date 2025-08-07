@@ -10,7 +10,7 @@ using static Core.Type;
 namespace Client
 {
 
-    internal partial class frmEditor_Event
+    internal partial class Editor_Event
     {
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
@@ -82,7 +82,7 @@ namespace Client
             cmbCondition_Time.Enabled = false;
         }
 
-        private void frmEditor_Events_Load(object sender, EventArgs e)
+        private void Editor_Events_Load(object sender, EventArgs e)
         {
             int i;
 
@@ -223,14 +223,14 @@ namespace Client
             DrawGraphic();
         }
 
-        private void frmEditor_Event_Resize(object sender, EventArgs e)
+        private void Editor_Event_Resize(object sender, EventArgs e)
         {
             this.AutoScroll = true;
             this.AutoScrollMinSize = new Size(this.Width, this.Height);
             this.PerformLayout();
         }
 
-        private void frmEditor_Event_Activated(object sender, EventArgs e)
+        private void Editor_Event_Activated(object sender, EventArgs e)
         {
             this.AutoScroll = true;
         }
@@ -449,7 +449,7 @@ namespace Client
 
         }
 
-        private void frmEditor_Events_FormClosing(object sender, FormClosingEventArgs e)
+        private void Editor_Events_FormClosing(object sender, FormClosingEventArgs e)
         {
             Event.TmpEvent = default;
         }

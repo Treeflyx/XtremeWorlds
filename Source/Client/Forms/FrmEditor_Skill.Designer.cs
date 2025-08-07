@@ -7,21 +7,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Skill : Form
+    internal partial class Editor_Skill : Form
     {
 
         // Shared instance of the form
-        private static frmEditor_Skill _instance;
+        private static Editor_Skill _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Skill Instance
+        public static Editor_Skill Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Skill();
+                    _instance = new Editor_Skill();
                 }
                 return _instance;
             }
@@ -894,7 +894,7 @@ namespace Client
             btnSave.Text = "Save";
             btnSave.Click += BtnSave_Click;
             // 
-            // frmEditor_Skill
+            // Editor_Skill
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -908,10 +908,10 @@ namespace Client
             Controls.Add(btnSave);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(4, 3, 4, 3);
-            Name = "frmEditor_Skill";
+            Name = "Editor_Skill";
             Text = "Skill Editor";
-            FormClosing += frmEditor_Skill_FormClosing;
-            Load += frmEditor_Skill_Load;
+            FormClosing += Editor_Skill_FormClosing;
+            Load += Editor_Skill_Load;
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
             DarkGroupBox5.ResumeLayout(false);

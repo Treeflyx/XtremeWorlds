@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DarkUI.Forms;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -7,21 +8,21 @@ namespace Client
 {
 
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    internal partial class frmEditor_Job : Form
+    internal partial class Editor_Job : DarkForm
     {
 
         // Shared instance of the form
-        private static frmEditor_Job _instance;
+        private static Editor_Job _instance;
 
         // Public property to get the shared instance
-        public static frmEditor_Job Instance
+        public static Editor_Job Instance
         {
             get
             {
                 // Create a new instance if one does not exist or if it has been disposed
                 if (_instance is null || _instance.IsDisposed)
                 {
-                    _instance = new frmEditor_Job();
+                    _instance = new Editor_Job();
                 }
                 return _instance;
             }
@@ -695,7 +696,7 @@ namespace Client
             btnDelete.TabIndex = 6;
             btnDelete.Text = "Delete";
             // 
-            // frmEditor_Job
+            // Editor_Job
             // 
             AutoScaleDimensions = new SizeF(10.0f, 25.0f);
             AutoScaleMode = AutoScaleMode.Font;
@@ -709,7 +710,7 @@ namespace Client
             Controls.Add(DarkGroupBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Margin = new Padding(5, 5, 5, 5);
-            Name = "frmEditor_Job";
+            Name = "Editor_Job";
             Text = "Job Editor";
             DarkGroupBox1.ResumeLayout(false);
             DarkGroupBox2.ResumeLayout(false);
@@ -738,8 +739,8 @@ namespace Client
             DarkGroupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)nudMaleSprite).EndInit();
             ((System.ComponentModel.ISupportInitialize)picMale).EndInit();
-            Load += new EventHandler(frmEditor_Job_Load);
-            FormClosing += new FormClosingEventHandler(frmEditor_Job_FormClosing);
+            Load += new EventHandler(Editor_Job_Load);
+            FormClosing += new FormClosingEventHandler(Editor_Job_FormClosing);
             ResumeLayout(false);
         }
 
