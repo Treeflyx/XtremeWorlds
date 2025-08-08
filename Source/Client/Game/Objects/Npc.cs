@@ -11,7 +11,7 @@ namespace Client
     {
         public static void ProcessMovement(double mapNpcNum)
         {
-            if (mapNpcNum < 0 || mapNpcNum > Constant.MaxMapNpcs)
+            if (mapNpcNum < 0 || mapNpcNum >= Constant.MaxMapNpcs)
             {
                 return;
             }
