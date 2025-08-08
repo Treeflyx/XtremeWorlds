@@ -830,9 +830,6 @@ namespace Client
         }
 
 
-        #endregion
-
-        #region Attacking
         public static void CheckAttack(bool mouse = false)
         {
             int attackSpeed;
@@ -883,55 +880,55 @@ namespace Client
                     case (byte)Direction.Up:
                         {
                             x = GetPlayerRawX(GameState.MyIndex);
-                            y = GetPlayerRawY(GameState.MyIndex) - 1;
+                            y = GetPlayerRawY(GameState.MyIndex) - GameState.SizeY;
                             break;
                         }
 
                     case (byte)Direction.Down:
                         {
                             x = GetPlayerRawX(GameState.MyIndex);
-                            y = GetPlayerRawY(GameState.MyIndex) + 1;
+                            y = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY;
                             break;
                         }
 
                     case (byte)Direction.Left:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) - 1;
+                            x = GetPlayerRawX(GameState.MyIndex) - GameState.SizeX;
                             y = GetPlayerRawY(GameState.MyIndex);
                             break;
                         }
                     case (byte)Direction.Right:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) + 1;
+                            x = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX;
                             y = GetPlayerRawY(GameState.MyIndex);
                             break;
                         }
 
                     case (byte)Direction.UpRight:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) + 1;
-                            y = GetPlayerRawY(GameState.MyIndex) - 1;
+                            x = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX;
+                            y = GetPlayerRawY(GameState.MyIndex) - GameState.SizeY;
                             break;
                         }
 
                     case (byte)Direction.UpLeft:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) - 1;
-                            y = GetPlayerRawY(GameState.MyIndex) - 1;
+                            x = GetPlayerRawX(GameState.MyIndex) - GameState.SizeX;
+                            y = GetPlayerRawY(GameState.MyIndex) - GameState.SizeY;
                             break;
                         }
 
                     case (byte)Direction.DownRight:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) + 1;
-                            y = GetPlayerRawY(GameState.MyIndex) + 1;
+                            x = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX;
+                            y = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY;
                             break;
                         }
 
                     case (byte)Direction.DownLeft:
                         {
-                            x = GetPlayerRawX(GameState.MyIndex) - 1;
-                            y = GetPlayerRawY(GameState.MyIndex) + 1;
+                            x = GetPlayerRawX(GameState.MyIndex) - GameState.SizeX;
+                            y = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY;
                             break;
                         }
                 }
@@ -945,7 +942,16 @@ namespace Client
 
                         if (Data.MapEvents[i].Visible == true)
                         {
-                            if (Data.MapEvents[i].X == x & Data.MapEvents[i].Y == y)
+                            // Check for 32 pixels around the map event
+                            int eventX = Data.MapEvents[i].X;
+                            int eventY = Data.MapEvents[i].Y;
+                            // Assume eventX and eventY are in pixel coordinates
+                            // If they are in tile coordinates, multiply by tile size (e.g., 32)
+                            int px = x;
+                            int py = y;
+                            // If x/y are tile coordinates, multiply by tile size
+                            // For now, assume all are pixel coordinates
+                            if (Math.Abs(px - eventX) <= GameState.SizeX && Math.Abs(py - eventY) <= GameState.SizeY)
                             {
                                 buffer = new ByteStream(4);
                                 buffer.WriteInt32((int)Packets.ClientPackets.CEvent);

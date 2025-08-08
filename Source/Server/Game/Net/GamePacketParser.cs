@@ -532,7 +532,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var tmpX = buffer.ReadInt32();
         var tmpY = buffer.ReadInt32();
 
-
         SetPlayerDir(session.Id, dir);
         Core.Data.Player[session.Id].Moving = movement;
     }
@@ -1991,7 +1990,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var x = buffer.ReadInt32();
         var y = buffer.ReadInt32();
 
-        if (x < 0 || x > Data.Map[GetPlayerMap(session.Id)].MaxX || y < 0 || y > Data.Map[GetPlayerMap(session.Id)].MaxY)
+        if (x < 0 || x >= Data.Map[GetPlayerMap(session.Id)].MaxX || y < 0 || y >= Data.Map[GetPlayerMap(session.Id)].MaxY)
             return;
 
         x *= 32;

@@ -103,6 +103,13 @@ namespace Client
             if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
                 return;
 
+            // Check for null Layer arrays (cannot check struct for null, but can check Layer property)
+            if (Data.MyMap.Tile[x, y].Layer == null)
+                return;
+
+            if (Data.Autotile[x, y].Layer == null)
+                return;
+
             try
             {
                 for (i = (int)MapLayer.Ground; i <= (int)MapLayer.CoverAnimation; i++)
@@ -164,6 +171,12 @@ namespace Client
                                 }
                             }
 
+                            if (Data.MyMap.Tile == null)
+                                return;
+
+                            if (Data.MyMap.Tile[x, y].Layer == null)
+                                return;
+
                             // Render the tile
                             string argpath = System.IO.Path.Combine(Core.Path.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
                             GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
@@ -201,6 +214,13 @@ namespace Client
 
             // Ensure x and y are within valid map bounds
             if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
+                return;
+
+            // Check for null Layer arrays (cannot check struct for null, but can check Layer property)
+            if (Data.MyMap.Tile[x, y].Layer == null)
+                return;
+
+            if (Data.Autotile[x, y].Layer == null)
                 return;
 
             try

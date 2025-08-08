@@ -1767,7 +1767,7 @@ namespace Server
                                                         {
                                                             SetPlayerInvValue((int)i, Player.FindItemSlot((int)i, command.Data1), command.Data3);
                                                         }
-                                                        break;
+                                                         break;
                                                     case 1: // Give
                                                         Player.GiveInv((int)i, command.Data1, command.Data3, true);
                                                         break;
@@ -2983,7 +2983,7 @@ namespace Server
             }
 
             // 5. Validate player is at the event's coordinates
-            if (targetX != eventPage.X || targetY != eventPage.Y)
+            if (targetX * 32 != eventPage.X || targetY * 32 != eventPage.Y)
                 return false;
 
             // 6. Begin event processing if applicable

@@ -403,6 +403,9 @@ namespace Client
                 var loopTo3 = (int)Data.MyMap.MaxY;
                 for (y = 0; y < loopTo3; y++)
                 {
+                    if (Data.Autotile[x, y].Layer == null)
+                        return;
+
                     int layerCount = System.Enum.GetValues(typeof(MapLayer)).Length;
                     for (layerNum = 0; layerNum < layerCount; layerNum++)
                     {

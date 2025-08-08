@@ -2397,39 +2397,41 @@ namespace Client
 
             return true;
         }
-
         public static void UpdateCamera()
         {
             float targetCameraX;
             float targetCameraY;
 
-            // Calculate the target camera position based on the player's pixel position  
-            targetCameraX = GetPlayerRawX(GameState.MyIndex) - (GameState.ResolutionWidth / 2f);
-            targetCameraY = GetPlayerRawY(GameState.MyIndex) - (GameState.ResolutionHeight / 2f);
+            // Calculate the target camera position based on the player's position  
+            targetCameraX = GetPlayerRawX(GameState.MyIndex) - (GameState.ResolutionWidth / 2);
+            targetCameraY = GetPlayerRawY(GameState.MyIndex) - (GameState.ResolutionHeight / 2);
 
             // Directly set the camera position to match the player's position for better sync  
             GameState.Camera.Left = (long)Math.Round(targetCameraX);
             GameState.Camera.Top = (long)Math.Round(targetCameraY);
 
-            // Clamp the camera position to the map edges (in pixels)  
-            long mapWidth = Data.MyMap.MaxX;
-            long mapHeight = Data.MyMap.MaxY;
+            // Clamp the camera position to the map edges  
+            long mapWidth = Data.MyMap.MaxX * GameState.SizeX;
+            long mapHeight = Data.MyMap.MaxY * GameState.SizeY;
 
             GameState.Camera.Left = Math.Max(0, Math.Min(GameState.Camera.Left, mapWidth - GameState.ResolutionWidth));
             GameState.Camera.Top = Math.Max(0, Math.Min(GameState.Camera.Top, mapHeight - GameState.ResolutionHeight));
 
-            // Calculate the visible tile range (in tiles)  
-            long startX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1));
-            long startY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1));
-            long endX = Math.Min(Data.MyMap.MaxX, startX + (long)(GameState.ResolutionWidth) + 1);
-            long endY = Math.Min(Data.MyMap.MaxY, startY + (long)(GameState.ResolutionHeight) + 1);
+            // Calculate the visible tile range  
+            long tileWidth = (long)Math.Round(GameState.ResolutionWidth / 32d);
+            long tileHeight = (long)Math.Round(GameState.ResolutionHeight / 32d);
+                    
+            long StartX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1) / 32);
+            long StartY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1) / 32);
+            long EndX = Data.MyMap.MaxX;
+            long EndY = Data.MyMap.MaxY;
 
             // Update the tile view  
             ref var withBlock = ref GameState.TileView;
-            withBlock.Top = startY;
-            withBlock.Bottom = endY;
-            withBlock.Left = startX;
-            withBlock.Right = endX;
+            withBlock.Top = StartY;
+            withBlock.Bottom = EndY;
+            withBlock.Left = StartX;
+            withBlock.Right = EndX;
 
             // Update the camera bounds  
             ref var withBlock1 = ref GameState.Camera;
