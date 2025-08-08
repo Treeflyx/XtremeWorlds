@@ -7,6 +7,7 @@ using Mirage.Sharp.Asfw;
 using System;
 using System.Data.Common;
 using static Core.Global.Command;
+using static Core.Type;
 using Color = Core.Color;
 
 namespace Client
@@ -14,7 +15,7 @@ namespace Client
     public class GameLogic
     {
         public static void ProcessNpcMovement(double mapNpcNum)
-        {        
+        {
             if (mapNpcNum < 0 || mapNpcNum > Constant.MaxMapNpcs)
             {
                 return;
@@ -23,30 +24,33 @@ namespace Client
             // Check if Npc is walking, and if so process moving them over
             if (Data.MyMapNpc[(int)mapNpcNum].Moving == (byte)MovementState.Walking)
             {
+                int x = Core.Data.MyMapNpc[(int)mapNpcNum].X;
+                int y = Core.Data.MyMapNpc[(int)mapNpcNum].Y;
+
                 switch (Data.MyMapNpc[(int)mapNpcNum].Dir)
                 {
                     case (int)Direction.Up:
-                        {
-                            Core.Data.MyMapNpc[(int)mapNpcNum].Y -= 1;
-
-                            break;
-                        }
+                        y -= 1;
+                        break;
                     case (int)Direction.Down:
-                        {
-                            Core.Data.MyMapNpc[(int)mapNpcNum].Y += 1;
-                            break;
-                        }
+                        y += 1;
+                        break;
                     case (int)Direction.Left:
-                        {
-                            Core.Data.MyMapNpc[(int)mapNpcNum].X -= 1;
-                            break;
-                        }
+                        x -= 1;
+                        break;
                     case (int)Direction.Right:
-                        {
-                            Core.Data.MyMapNpc[(int)mapNpcNum].X += 1;
-                            break;
-                        }
+                        x += 1;
+                        break;
                 }
+
+                if (x < 0 || y < 0 || x >= Data.MyMap.MaxX * 32 || y >= Data.MyMap.MaxY * 32)
+                {
+                    return;
+                }
+
+                Core.Data.MyMapNpc[(int)mapNpcNum].X = x;
+                Core.Data.MyMapNpc[(int)mapNpcNum].Y = y;
+                
             }
         }
 
