@@ -2525,7 +2525,7 @@ namespace Client
             // Calculate the visible tile range  
             long tileWidth = (long)Math.Round(GameState.ResolutionWidth / 32d);
             long tileHeight = (long)Math.Round(GameState.ResolutionHeight / 32d);
-
+                    
             long StartX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1) / 32);
             long StartY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1) / 32);
             long EndX = Data.MyMap.MaxX;
