@@ -888,7 +888,7 @@ public static class Player
 
     public static bool TakeInvSlot(int playerId, int invSlot, int itemVal)
     {
-        var takeInvSlotRet = false;
+        var takeInvSlot = false;
 
         if (!NetworkConfig.IsPlaying(playerId) || invSlot < 0 || invSlot > Core.Constant.MaxItems)
         {
@@ -903,7 +903,7 @@ public static class Player
             // Is what we are trying to take away more then what they have?  If so just set it to zero
             if (itemVal >= GetPlayerInvValue(playerId, invSlot))
             {
-                takeInvSlotRet = true;
+                takeInvSlot = true;
             }
             else
             {
@@ -912,10 +912,10 @@ public static class Player
         }
         else
         {
-            takeInvSlotRet = true;
+            takeInvSlot = true;
         }
 
-        if (!takeInvSlotRet)
+        if (!takeInvSlot)
         {
             return false;
         }

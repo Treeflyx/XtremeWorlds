@@ -16,29 +16,29 @@ namespace Client
     {
         public static bool IsInBounds()
         {
-            bool isInBoundsRet = false;
+            bool isInBounds = false;
 
             if (GameState.CurX >= 0 & GameState.CurX <= Data.MyMap.MaxX)
             {
                 if (GameState.CurY >= 0 & GameState.CurY <= Data.MyMap.MaxY)
                 {
-                    isInBoundsRet = true;
+                    isInBounds = true;
                 }
             }
 
-            return isInBoundsRet;
+            return isInBounds;
 
         }
 
         public static bool GameStarted()
         {
-            bool gameStartedRet = false;
+            bool gameStarted = false;
 
             if (GameState.InGame == false || GameState.MapData == false || GameState.PlayerData == false)
-                return gameStartedRet;
+                return gameStarted;
 
-            gameStartedRet = true;
-            return gameStartedRet;
+            gameStarted = true;
+            return gameStarted;
         }
 
         public static void CreateActionMsg(string message, int color, byte msgType, int x, int y)
@@ -97,26 +97,26 @@ namespace Client
 
         public static string ConvertCurrency(int amount)
         {
-            string convertCurrencyRet = default;
+            string convertCurrency = default;
 
             if (Conversion.Int(amount) < 10000)
             {
-                convertCurrencyRet = amount.ToString();
+                convertCurrency = amount.ToString();
             }
             else if (Conversion.Int(amount) < 999999)
             {
-                convertCurrencyRet = Conversion.Int(amount / 1000d) + "k";
+                convertCurrency = Conversion.Int(amount / 1000d) + "k";
             }
             else if (Conversion.Int(amount) < 999999999)
             {
-                convertCurrencyRet = Conversion.Int(amount / 1000000d) + "m";
+                convertCurrency = Conversion.Int(amount / 1000000d) + "m";
             }
             else
             {
-                convertCurrencyRet = Conversion.Int(amount / 1000000000d) + "b";
+                convertCurrency = Conversion.Int(amount / 1000000000d) + "b";
             }
 
-            return convertCurrencyRet;
+            return convertCurrency;
 
         }
 
@@ -1473,7 +1473,7 @@ namespace Client
 
         public static long IsHotbar(long startX, long startY)
         {
-            long isHotbarRet = default;
+            long isHotbar = default;
             Core.Type.Rectangle tempRec;
             long i;
 
@@ -1490,8 +1490,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isHotbarRet = i;
-                            return isHotbarRet;
+                            isHotbar = i;
+                            return isHotbar;
                         }
                     }
                 }
@@ -2243,16 +2243,16 @@ namespace Client
 
         public static int ConvertMapX(int x)
         {
-            int convertMapXRet = default;
-            convertMapXRet = (int)Math.Round(x - GameState.TileView.Left - GameState.Camera.Left);
-            return convertMapXRet;
+            int convertMapX = default;
+            convertMapX = (int)Math.Round(x - GameState.TileView.Left - GameState.Camera.Left);
+            return convertMapX;
         }
 
         public static int ConvertMapY(int y)
         {
-            int convertMapYRet = default;
-            convertMapYRet = (int)Math.Round(y - GameState.TileView.Top - GameState.Camera.Top);
-            return convertMapYRet;
+            int convertMapY = default;
+            convertMapY = (int)Math.Round(y - GameState.TileView.Top - GameState.Camera.Top);
+            return convertMapY;
         }
 
         public static bool IsValidMapPoint(int x, int y)

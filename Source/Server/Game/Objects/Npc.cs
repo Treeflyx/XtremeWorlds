@@ -184,7 +184,7 @@ public static class Npc
 
     public static bool CanNpcMove(int mapNum, int mapNpcNum, byte dir)
     {
-        bool canNpcMoveRet = false;
+        bool canNpcMove = false;
         int n;
         int n2;
         int npcX;
@@ -192,7 +192,7 @@ public static class Npc
 
         if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight)
         {
-            return canNpcMoveRet;
+            return canNpcMove;
         }
 
         var x = Data.MapNpc[mapNum].Npc[mapNpcNum].X;
@@ -201,7 +201,7 @@ public static class Npc
         var tileX = (int) Math.Floor((double) x / 32);
         var tileY = (int) Math.Floor((double) y / 32);
 
-        canNpcMoveRet = true;
+        canNpcMove = true;
 
         switch (dir)
         {
@@ -247,7 +247,7 @@ public static class Npc
                 }
                 else
                 {
-                    canNpcMoveRet = false;
+                    canNpcMove = false;
                 }
 
                 break;
@@ -286,7 +286,7 @@ public static class Npc
                 }
                 else
                 {
-                    canNpcMoveRet = false;
+                    canNpcMove = false;
                 }
 
                 break;
@@ -325,7 +325,7 @@ public static class Npc
                 }
                 else
                 {
-                    canNpcMoveRet = false;
+                    canNpcMove = false;
                 }
 
                 break;
@@ -364,7 +364,7 @@ public static class Npc
                 }
                 else
                 {
-                    canNpcMoveRet = false;
+                    canNpcMove = false;
                 }
 
                 break;
@@ -376,7 +376,7 @@ public static class Npc
             return false;
         }
 
-        return canNpcMoveRet;
+        return canNpcMove;
     }
 
     public static void NpcMove(int mapNum, int mapNpcNum, byte dir, int movement)

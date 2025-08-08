@@ -2043,7 +2043,7 @@ namespace Server
 
         public static bool IsBanned(int index, string ip)
         {
-            bool isBannedRet = default;
+            bool isBanned = default;
             string filename;
             string line;
             int i;
@@ -2075,7 +2075,7 @@ namespace Server
                 line = sr.ReadLine();
                 if ((Strings.LCase(line) ?? "") == (Strings.LCase(Strings.Mid(ip, 1, Strings.Len(line))) ?? ""))
                 {
-                    isBannedRet = true;
+                    isBanned = true;
                 }
             }
 
@@ -2083,10 +2083,10 @@ namespace Server
 
             if (Core.Data.Account[index].Banned)
             {
-                isBannedRet = true;
+                isBanned = true;
             }
 
-            return isBannedRet;
+            return isBanned;
 
         }
 

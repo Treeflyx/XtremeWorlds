@@ -574,22 +574,22 @@ namespace Server
 
         public static bool IsPlayerInParty(int index)
         {
-            bool isPlayerInPartyRet = default;
+            bool isPlayerInParty = default;
             if (index < 0 | index >= Core.Constant.MaxPlayers | !Core.Data.TempPlayer[index].InGame)
-                return isPlayerInPartyRet;
+                return isPlayerInParty;
 
             if (Core.Data.TempPlayer[index].InParty >= 0)
-                isPlayerInPartyRet = true;
-            return isPlayerInPartyRet;
+                isPlayerInParty = true;
+            return isPlayerInParty;
         }
 
         public static int GetPlayerParty(int index)
         {
-            int getPlayerPartyRet = default;
+            int getPlayerParty = default;
             if (index < 0 | index >= Core.Constant.MaxPlayers | !Core.Data.TempPlayer[index].InGame)
-                return getPlayerPartyRet;
-            getPlayerPartyRet = Core.Data.TempPlayer[index].InParty;
-            return getPlayerPartyRet;
+                return getPlayerParty;
+            getPlayerParty = Core.Data.TempPlayer[index].InParty;
+            return getPlayerParty;
         }
 
     }

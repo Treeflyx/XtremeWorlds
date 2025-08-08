@@ -460,15 +460,15 @@ namespace Client
 
         public static int GetWindowIndex(string winName)
         {
-            int getWindowIndexRet = default;
+            int getWindowIndex = default;
 
             var loopTo = Gui.Windows.Count - 1;
             for (int i = 0; i <= loopTo; i++)
             {
                 if ((Strings.LCase(Windows[i + 1].Name) ?? "") == (Strings.LCase(winName) ?? ""))
                 {
-                    getWindowIndexRet = i + 1;
-                    return getWindowIndexRet;
+                    getWindowIndex = i + 1;
+                    return getWindowIndex;
                 }
 
             }
@@ -479,7 +479,7 @@ namespace Client
 
         public static int GetControlIndex(string winName, string controlName)
         {
-            int getControlIndexRet = default;
+            int getControlIndex = default;
             int winIndex;
 
             winIndex = GetWindowIndex(winName);
@@ -490,8 +490,8 @@ namespace Client
 
                 if ((Strings.LCase(Windows[winIndex].Controls[(int)i].Name) ?? "") == (Strings.LCase(controlName) ?? ""))
                 {
-                    getControlIndexRet = i;
-                    return getControlIndexRet;
+                    getControlIndex = i;
+                    return getControlIndex;
                 }
 
             }
@@ -502,7 +502,7 @@ namespace Client
 
         public static bool SetActiveControl(long curWindow, long curControl)
         {
-            bool setActiveControlRet = default;
+            bool setActiveControl = default;
             // make sure it's something which CAN be active
             switch (Windows[curWindow].Controls[(int)curControl].Type)
             {
@@ -510,12 +510,12 @@ namespace Client
                     {
                         Windows[curWindow].LastControl = Windows[curWindow].ActiveControl;
                         Windows[curWindow].ActiveControl = (int)curControl;
-                        setActiveControlRet = true;
+                        setActiveControl = true;
                         break;
                     }
             }
 
-            return setActiveControlRet;
+            return setActiveControl;
         }
 
         public static int ActivateControl(int startIndex = 0, bool skipLast = true)

@@ -324,7 +324,7 @@ namespace Client
 
         public static long IsEq(long startX, long startY)
         {
-            long isEqRet = default;
+            long isEq = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -342,19 +342,19 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isEqRet = i;
-                            return isEqRet;
+                            isEq = i;
+                            return isEq;
                         }
                     }
                 }
             }
 
-            return isEqRet;
+            return isEq;
         }
 
         public static long IsInv(long startX, long startY)
         {
-            long isInvRet = default;
+            long isInv = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -371,8 +371,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isInvRet = i;
-                            return isInvRet;
+                            isInv = i;
+                            return isInv;
                         }
                     }
                 }
@@ -383,7 +383,7 @@ namespace Client
 
         public static long IsSkill(long startX, long startY)
         {
-            long isSkillRet = default;
+            long isSkill = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -400,8 +400,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isSkillRet = i;
-                            return isSkillRet;
+                            isSkill = i;
+                            return isSkill;
                         }
                     }
                 }
@@ -412,7 +412,7 @@ namespace Client
 
         public static long IsBank(long startX, long startY)
         {
-            byte isBankRet = default;
+            byte isBank = default;
             Core.Type.Rect tempRec;
 
             for (byte i = 0; i < Constant.MaxBank; i++)
@@ -428,8 +428,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isBankRet = i;
-                            return isBankRet;
+                            isBank = i;
+                            return isBank;
                         }
                     }
                 }
@@ -442,7 +442,7 @@ namespace Client
 
         public static long IsShop(long startX, long startY)
         {
-            long isShopRet = default;
+            long isShop = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -457,8 +457,8 @@ namespace Client
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        isShopRet = i;
-                        return isShopRet;
+                        isShop = i;
+                        return isShop;
                     }
                 }
             }
@@ -468,7 +468,7 @@ namespace Client
 
         public static long IsTrade(long startX, long startY)
         {
-            long isTradeRet = default;
+            long isTrade = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -483,8 +483,8 @@ namespace Client
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        isTradeRet = i;
-                        return isTradeRet;
+                        isTrade = i;
+                        return isTrade;
                     }
                 }
             }
