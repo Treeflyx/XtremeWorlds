@@ -1991,7 +1991,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var x = buffer.ReadInt32();
         var y = buffer.ReadInt32();
 
-        if (x < 0 || x > Data.Map[GetPlayerMap(session.Id)].MaxX || y < 0 || y > Data.Map[GetPlayerMap(session.Id)].MaxY)
+        if (x < 0 || x >= Data.Map[GetPlayerMap(session.Id)].MaxX || y < 0 || y >= Data.Map[GetPlayerMap(session.Id)].MaxY)
             return;
 
         x *= 32;
