@@ -376,7 +376,7 @@ public static class Player
                 y = tile.Data3_2;
             }
 
-            if (mapNum >= 0 && mapNum <= Core.Constant.MaxMaps)
+            if (mapNum >= 0 && mapNum < Core.Constant.MaxMaps)
             {
                 PlayerWarp(playerId, mapNum, x, y, (int) Direction.Down);
 
