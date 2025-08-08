@@ -171,9 +171,6 @@ namespace Client
             Label2 = new cmbLabel();
             txtMaxX = new DarkTextBox();
             Label7 = new cmbLabel();
-            GroupBox2 = new DarkGroupBox();
-            btnPreview = new DarkButton();
-            lstMusic = new ListBox();
             txtName = new DarkTextBox();
             Label6 = new cmbLabel();
             tpDirBlock = new TabPage();
@@ -214,6 +211,9 @@ namespace Client
             lblFogIndex = new cmbLabel();
             Label14 = new cmbLabel();
             cmbWeather = new DarkComboBox();
+            btnPreview = new DarkButton();
+            GroupBox2 = new DarkGroupBox();
+            lstMusic = new ListBox();
             pnlBack.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picBackSelect).BeginInit();
             pnlAttributes.SuspendLayout();
@@ -237,7 +237,6 @@ namespace Client
             fraMapLinks.SuspendLayout();
             fraBootSettings.SuspendLayout();
             fraMaxSizes.SuspendLayout();
-            GroupBox2.SuspendLayout();
             tpDirBlock.SuspendLayout();
             tpEvents.SuspendLayout();
             tpEffects.SuspendLayout();
@@ -246,6 +245,7 @@ namespace Client
             GroupBox4.SuspendLayout();
             GroupBox3.SuspendLayout();
             GroupBox1.SuspendLayout();
+            GroupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // btnClearAttribute
@@ -1648,44 +1648,6 @@ namespace Client
             Label7.TabIndex = 0;
             Label7.Text = "Max X:";
             // 
-            // GroupBox2
-            // 
-            GroupBox2.BorderColor = Color.FromArgb(51, 51, 51);
-            GroupBox2.Controls.Add(btnPreview);
-            GroupBox2.Controls.Add(lstMusic);
-            GroupBox2.Location = new Point(408, 5);
-            GroupBox2.Margin = new Padding(5);
-            GroupBox2.Name = "GroupBox2";
-            GroupBox2.Padding = new Padding(5);
-            GroupBox2.Size = new Size(401, 415);
-            GroupBox2.TabIndex = 11;
-            GroupBox2.TabStop = false;
-            GroupBox2.Text = "Music";
-            // 
-            // btnPreview
-            // 
-            btnPreview.Image = (Image)resources.GetObject("btnPreview.Image");
-            btnPreview.Location = new Point(81, 348);
-            btnPreview.Margin = new Padding(5);
-            btnPreview.Name = "btnPreview";
-            btnPreview.Padding = new Padding(8, 9, 8, 9);
-            btnPreview.Size = new Size(231, 55);
-            btnPreview.TabIndex = 4;
-            btnPreview.Text = "Preview Music";
-            btnPreview.Click += BtnPreview_Click;
-            // 
-            // lstMusic
-            // 
-            lstMusic.BackColor = Color.FromArgb(45, 45, 48);
-            lstMusic.ForeColor = Color.Gainsboro;
-            lstMusic.FormattingEnabled = true;
-            lstMusic.Location = new Point(10, 36);
-            lstMusic.Margin = new Padding(5);
-            lstMusic.Name = "lstMusic";
-            lstMusic.ScrollAlwaysVisible = true;
-            lstMusic.Size = new Size(344, 304);
-            lstMusic.TabIndex = 3;
-            // 
             // txtName
             // 
             txtName.BackColor = Color.FromArgb(69, 73, 74);
@@ -2157,6 +2119,44 @@ namespace Client
             cmbWeather.TabIndex = 0;
             cmbWeather.SelectedIndexChanged += CmbWeather_SelectedIndexChanged;
             // 
+            // btnPreview
+            // 
+            btnPreview.Image = (Image)resources.GetObject("btnPreview.Image");
+            btnPreview.Location = new Point(81, 348);
+            btnPreview.Margin = new Padding(5);
+            btnPreview.Name = "btnPreview";
+            btnPreview.Padding = new Padding(8, 9, 8, 9);
+            btnPreview.Size = new Size(231, 55);
+            btnPreview.TabIndex = 4;
+            btnPreview.Text = "Preview Music";
+            btnPreview.Click += BtnPreview_Click;
+            // 
+            // GroupBox2
+            // 
+            GroupBox2.BorderColor = Color.FromArgb(90, 90, 90);
+            GroupBox2.Controls.Add(lstMusic);
+            GroupBox2.Controls.Add(btnPreview);
+            GroupBox2.Location = new Point(408, 5);
+            GroupBox2.Margin = new Padding(5);
+            GroupBox2.Name = "GroupBox2";
+            GroupBox2.Padding = new Padding(5);
+            GroupBox2.Size = new Size(401, 415);
+            GroupBox2.TabIndex = 11;
+            GroupBox2.TabStop = false;
+            GroupBox2.Text = "Music";
+            // 
+            // lstMusic
+            // 
+            lstMusic.BackColor = Color.FromArgb(45, 45, 48);
+            lstMusic.BorderStyle = BorderStyle.FixedSingle;
+            lstMusic.ForeColor = Color.Gainsboro;
+            lstMusic.FormattingEnabled = true;
+            lstMusic.Location = new Point(21, 44);
+            lstMusic.Margin = new Padding(6, 5, 6, 5);
+            lstMusic.Name = "lstMusic";
+            lstMusic.Size = new Size(334, 277);
+            lstMusic.TabIndex = 5;
+            // 
             // Editor_Map
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -2215,7 +2215,6 @@ namespace Client
             fraBootSettings.PerformLayout();
             fraMaxSizes.ResumeLayout(false);
             fraMaxSizes.PerformLayout();
-            GroupBox2.ResumeLayout(false);
             tpDirBlock.ResumeLayout(false);
             tpDirBlock.PerformLayout();
             tpEvents.ResumeLayout(false);
@@ -2228,6 +2227,7 @@ namespace Client
             GroupBox3.PerformLayout();
             GroupBox1.ResumeLayout(false);
             GroupBox1.PerformLayout();
+            GroupBox2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -2307,8 +2307,6 @@ namespace Client
         internal cmbLabel Label2;
         internal DarkTextBox txtMaxX;
         internal cmbLabel Label7;
-        internal DarkGroupBox GroupBox2;
-        internal ListBox lstMusic;
         internal DarkGroupBox fraMapSettings;
         internal cmbLabel Label8;
         internal DarkComboBox lstMoral;
@@ -2327,7 +2325,6 @@ namespace Client
         internal cmbLabel Label12;
         internal cmbLabel Label13;
         internal ToolStripButton tsbMapGrid;
-        internal DarkButton btnPreview;
         internal ToolStripButton tsbFill;
         internal ToolStripButton tsbEyeDropper;
         internal ToolStripSeparator ToolStripSeparator2;
@@ -2395,5 +2392,8 @@ namespace Client
         private ToolStripButton tsbTileset;
         internal DarkToolStrip ToolStrip;
         private DarkScrollBar scrlTileset;
+        internal DarkGroupBox GroupBox2;
+        internal DarkButton btnPreview;
+        internal ListBox lstMusic;
     }
 }
