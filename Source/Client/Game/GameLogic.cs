@@ -2082,7 +2082,8 @@ namespace Client
         {
             GameState.InMenu = true;
             GameState.InGame = false;
-            NetworkSend.SendLogout();
+            Gui.HideWindows();
+            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
             General.ClearGameData();
         }
 
