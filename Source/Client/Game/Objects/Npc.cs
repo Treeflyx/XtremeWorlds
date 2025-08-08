@@ -48,7 +48,6 @@ namespace Client
                     return;
                 }
 
-
                 Core.Data.MyMapNpc[(int)mapNpcNum].X = x;
                 Core.Data.MyMapNpc[(int)mapNpcNum].Y = y;
 
