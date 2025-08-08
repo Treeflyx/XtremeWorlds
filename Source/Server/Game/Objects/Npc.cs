@@ -415,6 +415,7 @@ public static class Npc
         }
 
         Data.MapNpc[mapNum].Npc[mapNpcNum].Dir = dir;
+        Data.MapNpc[mapNum].Npc[mapNpcNum].X = nextX;
         Data.MapNpc[mapNum].Npc[mapNpcNum].Y = nextY;
 
         var buffer = new PacketWriter(4);
