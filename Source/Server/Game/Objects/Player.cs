@@ -137,7 +137,8 @@ public static class Player
         var amount = 0;
 
         // Check for subscript out of range
-        if (dir < (int) Direction.Up || dir > (int) Direction.DownRight || movement < (int) MovementState.Standing || movement > (int) MovementState.Running)
+        var count = System.Enum.GetValues(typeof(MovementState)).Length;
+        if (dir < (int) Direction.Up || dir > (int) Direction.DownRight || movement < 0 || movement > count)
         {
             return;
         }

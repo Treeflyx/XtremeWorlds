@@ -381,7 +381,9 @@ public static class Npc
 
     public static void NpcMove(int mapNum, int mapNpcNum, byte dir, int movement)
     {
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight || movement < 0 || movement > 2)
+        // MovementState enum count
+        var count = System.Enum.GetValues(typeof(MovementState)).Length;
+        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight || movement < 0 || movement > count)
         {
             return;
         }
