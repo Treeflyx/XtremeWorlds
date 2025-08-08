@@ -280,7 +280,7 @@ namespace Client
             if (GameState.InGame && x == GetPlayerX(GameState.MyIndex) && y == GetPlayerY(GameState.MyIndex))
             {
                 calculateSoundVolume = 1d;
-                calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
+                calculateSoundVolume *= SettingsManager.Instance.SoundVolume;
                 return calculateSoundVolume;
             }
 
@@ -313,13 +313,13 @@ namespace Client
                 {
                     calculateSoundVolume = 1d / (distance / 32d);
 
-                    if (calculateSoundVolumeRet > 1d)
+                    if (calculateSoundVolume > 1d)
                     {
                         calculateSoundVolume = 1d;
                     }
-                    else if (calculateSoundVolumeRet < 0d)
+                    else if (calculateSoundVolume < 0d)
                     {
-                        calculateSoundVolumeRet *= -1;
+                        calculateSoundVolume *= -1;
                     }
                 }
             }
@@ -328,7 +328,7 @@ namespace Client
                 calculateSoundVolume = 1d;
             }
 
-            calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
+            calculateSoundVolume *= SettingsManager.Instance.SoundVolume;
 
             return calculateSoundVolume;
         }

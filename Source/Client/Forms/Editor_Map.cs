@@ -1381,7 +1381,7 @@ namespace Client
                             if (y >= GameState.DirArrowY[i] & y <= GameState.DirArrowY[i] + 16)
                             {
                                 // flip the value.
-                                bool localIsDirBlocked() { byte argdir = (byte)i; var  = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[GameState.CurX, GameState.CurY].DirBlock, ref argdir); return ; }
+                                bool localIsDirBlocked() { byte argdir = (byte)i; var dirBlocked = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[GameState.CurX, GameState.CurY].DirBlock, ref argdir); return dirBlocked; }
 
                                 byte argdir = (byte)i;
                                 GameLogic.SetDirBlock(ref Data.MyMap.Tile[GameState.CurX, GameState.CurY].DirBlock, ref argdir, !localIsDirBlocked());

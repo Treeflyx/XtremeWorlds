@@ -1353,8 +1353,8 @@ static void LoadFonts()
                 bool LocalIsDirBlocked()
                 {
                     byte argdir = (byte)i;
-                    var  = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[x, y].DirBlock, ref argdir);
-                    return ;
+                    var n  = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[x, y].DirBlock, ref argdir);
+                    return n;
                 }
 
                 if (!LocalIsDirBlocked())
