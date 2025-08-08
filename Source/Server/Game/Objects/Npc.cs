@@ -184,205 +184,89 @@ public static class Npc
 
     public static bool CanNpcMove(int mapNum, int mapNpcNum, byte dir)
     {
-        bool canNpcMove = false;
-        int n;
-        int n2;
-        int npcX;
-        int npcY;
-
         int count = System.Enum.GetValues(typeof(Direction)).Length;
         if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count)
         {
-            return canNpcMove;
+            return false;
         }
 
         var x = Data.MapNpc[mapNum].Npc[mapNpcNum].X;
         var y = Data.MapNpc[mapNum].Npc[mapNpcNum].Y;
 
-        var tileX = (int) Math.Floor((double) x / 32);
-        var tileY = (int) Math.Floor((double) y / 32);
-
-        canNpcMove = true;
-
+        // Calculate the next pixel position
+        int nextX = x, nextY = y;
         switch (dir)
         {
-            case (byte) Direction.Up:
-            {
-                // Check to make sure not outside of boundaries
-                if (tileY > 0)
-                {
-                    n = (int) Data.Map[mapNum].Tile[tileX, tileY - 1].Type;
-                    n2 = (int) Data.Map[mapNum].Tile[tileX, tileY - 1].Type2;
-
-                    // Check to make sure that the tile is walkable
-                    if (n != (byte) TileType.None &&
-                        n != (byte) TileType.Item &&
-                        n != (byte) TileType.NpcSpawn &&
-                        n2 != (byte) TileType.None &&
-                        n2 != (byte) TileType.Item &&
-                        n2 != (byte) TileType.NpcSpawn)
-                    {
-                        return false;
-                    }
-
-                    // Check to make sure that there is not a player in the way
-                    foreach (var i in PlayerService.Instance.PlayerIds)
-                    {
-                        if (GetPlayerMap(i) == mapNum && GetPlayerX(i) == tileX & GetPlayerY(i) == tileY - 1)
-                        {
-                            return false;
-                        }
-                    }
-
-                    // Check to make sure that there is not another npc in the way
-                    for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
-                    {
-                        npcX = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].X / 32);
-                        npcY = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].Y / 32);
-
-                        if (i != mapNpcNum && Data.MapNpc[mapNum].Npc[i].Num >= 0 && npcX == tileX && npcY == tileY - 1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    canNpcMove = false;
-                }
-
+            case (byte)Direction.Up:
+                nextY -= 1;
                 break;
-            }
-
-            case (byte) Direction.Down:
-            {
-                if (tileY < Data.Map[mapNum].MaxY - 1)
-                {
-                    n = (int) Data.Map[mapNum].Tile[tileX, tileY + 1].Type;
-                    n2 = (int) Data.Map[mapNum].Tile[tileX, tileY + 1].Type2;
-
-                    if (n != (byte) TileType.None & n != (byte) TileType.Item & n != (byte) TileType.NpcSpawn & n2 != (byte) TileType.None & n2 != (byte) TileType.Item & n2 != (byte) TileType.NpcSpawn)
-                    {
-                        return false;
-                    }
-
-                    foreach (var i in PlayerService.Instance.PlayerIds)
-                    {
-                        if (GetPlayerMap(i) == mapNum && GetPlayerX(i) == tileX && GetPlayerY(i) == tileY + 1)
-                        {
-                            return false;
-                        }
-                    }
-
-                    for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
-                    {
-                        npcX = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].X / 32);
-                        npcY = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].Y / 32);
-                        
-                        if (i != mapNpcNum & Data.MapNpc[mapNum].Npc[i].Num >= 0 & npcX == tileX & npcY == tileY + 1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    canNpcMove = false;
-                }
-
+            case (byte)Direction.Down:
+                nextY += 1;
                 break;
-            }
-
-            case (byte) Direction.Left:
-            {
-                if (tileX > 0)
-                {
-                    n = (int) Data.Map[mapNum].Tile[tileX - 1, tileY].Type;
-                    n2 = (int) Data.Map[mapNum].Tile[tileX - 1, tileY].Type2;
-
-                    if (n != (byte) TileType.None & n != (byte) TileType.Item & n != (byte) TileType.NpcSpawn & n2 != (byte) TileType.None & n2 != (byte) TileType.Item & n2 != (byte) TileType.NpcSpawn)
-                    {
-                        return false;
-                    }
-
-                    foreach (var i in PlayerService.Instance.PlayerIds)
-                    {
-                        if (GetPlayerMap(i) == mapNum && GetPlayerX(i) == tileX - 1 && GetPlayerY(i) == tileY)
-                        {
-                            return false;
-                        }
-                    }
-                    
-                    for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
-                    {
-                        npcX = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].X / 32);
-                        npcY = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].Y / 32);
-                        
-                        if (i != mapNpcNum & Data.MapNpc[mapNum].Npc[i].Num >= 0 & npcX == tileX - 1 & npcY == tileY)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    canNpcMove = false;
-                }
-
+            case (byte)Direction.Left:
+                nextX -= 1;
                 break;
-            }
-
-            case (byte) Direction.Right:
-            {
-                if (tileX < Data.Map[mapNum].MaxX - 1)
-                {
-                    n = (int) Data.Map[mapNum].Tile[tileX + 1, tileY].Type;
-                    n2 = (int) Data.Map[mapNum].Tile[tileX + 1, tileY].Type2;
-
-                    if (n != (byte) TileType.None & n != (byte) TileType.Item & n != (byte) TileType.NpcSpawn & n2 != (byte) TileType.None & n2 != (byte) TileType.Item & n2 != (byte) TileType.NpcSpawn)
-                    {
-                        return false;
-                    }
-
-                    foreach (var playerId in PlayerService.Instance.PlayerIds)
-                    {
-                        if (GetPlayerMap(playerId) == mapNum & GetPlayerX(playerId) == tileX + 1 & GetPlayerY(playerId) == tileY)
-                        {
-                            return false;
-                        }
-                    }
-                    
-                    for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
-                    {
-                        npcX = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].X / 32);
-                        npcY = (int) Math.Floor((double) Data.MapNpc[mapNum].Npc[i].Y / 32);
-                        
-                        if (i != mapNpcNum & Data.MapNpc[mapNum].Npc[i].Num >= 0 & npcX == tileX + 1 & npcY == tileY)
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    canNpcMove = false;
-                }
-
+            case (byte)Direction.Right:
+                nextX += 1;
                 break;
+        }
+
+        // Calculate the tile the NPC would occupy after moving
+        int nextTileX = (int)Math.Floor((double)nextX / 32);
+        int nextTileY = (int)Math.Floor((double)nextY / 32);
+
+        // Check map bounds
+        if (nextTileX < 0 || nextTileY < 0 || nextTileX >= Data.Map[mapNum].MaxX || nextTileY >= Data.Map[mapNum].MaxY)
+            return false;
+
+        // Check tile walkability
+        int n = (int)Data.Map[mapNum].Tile[nextTileX, nextTileY].Type;
+        int n2 = (int)Data.Map[mapNum].Tile[nextTileX, nextTileY].Type2;
+        if (n != (byte)TileType.None &&
+            n != (byte)TileType.Item &&
+            n != (byte)TileType.NpcSpawn &&
+            n2 != (byte)TileType.None &&
+            n2 != (byte)TileType.Item &&
+            n2 != (byte)TileType.NpcSpawn)
+        {
+            return false;
+        }
+
+        // Check for player collision (using tile grid)
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
+        {
+            if (GetPlayerMap(playerId) == mapNum &&
+                GetPlayerX(playerId) == nextTileX &&
+                GetPlayerY(playerId) == nextTileY)
+            {
+                return false;
             }
         }
 
+        // Check for other NPC collision (using tile grid)
+        for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
+        {
+            if (i == mapNpcNum) continue;
+            if (Data.MapNpc[mapNum].Npc[i].Num < 0) continue;
+            int npcTileX = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].X / 32);
+            int npcTileY = (int)Math.Floor((double)Data.MapNpc[mapNum].Npc[i].Y / 32);
+            if (npcTileX == nextTileX && npcTileY == nextTileY)
+            {
+                return false;
+            }
+        }
+
+        // Prevent movement if skill buffer is active
         if (Data.MapNpc[mapNum].Npc[mapNpcNum].SkillBuffer >= 0)
         {
             return false;
         }
 
-        return canNpcMove;
+        return true;
     }
 
     public static void NpcMove(int mapNum, int mapNpcNum, byte dir, int movement)
     {
-        // MovementState enum count
         var count = System.Enum.GetValues(typeof(MovementState)).Length;
         int count2 = System.Enum.GetValues(typeof(Direction)).Length;
         if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count2 || movement < 0 || movement > count)
@@ -390,7 +274,6 @@ public static class Npc
             return;
         }
 
-        // Check if the intended move would go off map boundaries
         int nextX = Data.MapNpc[mapNum].Npc[mapNpcNum].X;
         int nextY = Data.MapNpc[mapNum].Npc[mapNpcNum].Y;
 
@@ -410,10 +293,13 @@ public static class Npc
                 break;
         }
 
-        if (nextX < 0 || nextY < 0 || nextX >= (Data.Map[mapNum].MaxX - 1) * 32 || nextY >= (Data.Map[mapNum].MaxY - 1) * 32)
-        {
+        // Calculate the tile the NPC would occupy after moving
+        int nextTileX = (int)Math.Floor((double)nextX / 32);
+        int nextTileY = (int)Math.Floor((double)nextY / 32);
+
+        // Check map bounds
+        if (nextTileX < 0 || nextTileY < 0 || nextTileX >= Data.Map[mapNum].MaxX || nextTileY >= Data.Map[mapNum].MaxY)
             return;
-        }
 
         Data.MapNpc[mapNum].Npc[mapNpcNum].Dir = dir;
         Data.MapNpc[mapNum].Npc[mapNpcNum].X = nextX;
