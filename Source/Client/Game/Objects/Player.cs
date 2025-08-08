@@ -94,7 +94,7 @@ namespace Client
         #region Movement
         public static void CheckMovement()
         {
-            if (IsTryingToMove() && CanPlayerMove())
+            if (IsTryingToMove() && CanMove())
             {
                 // Check if player has the shift key down for running
                 if (GameState.VbKeyShift)
@@ -207,7 +207,7 @@ namespace Client
 
         }
 
-        public static bool CanPlayerMove()
+        public static bool CanMove()
         {
             bool canMoveRet = default;
             int d;
@@ -773,7 +773,7 @@ namespace Client
 
         }
 
-        public static void ProcessPlayerMovement(int index)
+        public static void ProcessMovement(int index)
         {
             if (Data.Player[GameState.MyIndex].IsMoving)
             {
