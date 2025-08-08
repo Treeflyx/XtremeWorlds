@@ -381,7 +381,7 @@ public static class Npc
 
     public static void NpcMove(int mapNum, int mapNpcNum, byte dir, int movement)
     {
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum > Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight || movement < 0 || movement > 2)
+        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight || movement < 0 || movement > 2)
         {
             return;
         }
@@ -459,7 +459,7 @@ public static class Npc
 
     public static void NpcDir(int mapNum, int mapNpcNum, byte dir)
     {
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum > Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight)
+        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight)
         {
             return;
         }
