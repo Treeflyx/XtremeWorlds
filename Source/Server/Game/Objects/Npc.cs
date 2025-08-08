@@ -190,7 +190,8 @@ public static class Npc
         int npcX;
         int npcY;
 
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight)
+        int count = System.Enum.GetValues(typeof(Direction)).Length;
+        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count)
         {
             return canNpcMove;
         }
@@ -383,7 +384,8 @@ public static class Npc
     {
         // MovementState enum count
         var count = System.Enum.GetValues(typeof(MovementState)).Length;
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte)Direction.DownRight || movement < 0 || movement > count)
+        int count2 = System.Enum.GetValues(typeof(Direction)).Length;
+        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count2 || movement < 0 || movement > count)
         {
             return;
         }
@@ -431,7 +433,8 @@ public static class Npc
 
     public static void NpcDir(int mapNum, int mapNpcNum, byte dir)
     {
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight)
+        int count = System.Enum.GetValues(typeof(Direction)).Length;
+        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count)
         {
             return;
         }

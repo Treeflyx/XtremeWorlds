@@ -51,7 +51,7 @@ public static class Player
 
     public static void PlayerWarp(int playerId, int mapNum, int x, int y, int dir)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum > Core.Constant.MaxMaps)
+        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum >= Core.Constant.MaxMaps)
         {
             return;
         }
@@ -138,7 +138,8 @@ public static class Player
 
         // Check for subscript out of range
         var count = System.Enum.GetValues(typeof(MovementState)).Length;
-        if (dir < (int) Direction.Up || dir > (int) Direction.DownRight || movement < 0 || movement > count)
+        var count2 = System.Enum.GetValues(typeof(Direction)).Length;
+		if (dir < (int) Direction.Up || dir > count2 || movement < 0 || movement > count)
         {
             return;
         }
@@ -375,7 +376,7 @@ public static class Player
                 y = tile.Data3_2;
             }
 
-            if (mapNum >= 0)
+            if (mapNum >= 0 && mapNum <= Core.Constant.MaxMaps)
             {
                 PlayerWarp(playerId, mapNum, x, y, (int) Direction.Down);
 

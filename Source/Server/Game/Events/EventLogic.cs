@@ -2426,6 +2426,7 @@ namespace Server
 
             if (fx == -1)
                 fx = 0;
+
             if (fy == -1)
                 fy = 0;
 
