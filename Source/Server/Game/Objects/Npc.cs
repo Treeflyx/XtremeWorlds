@@ -280,16 +280,16 @@ public static class Npc
         switch (dir)
         {
             case (byte)Direction.Up:
-                nextY -= 1;
+                nextY -= 32;
                 break;
             case (byte)Direction.Down:
-                nextY += 1;
+                nextY += 32;
                 break;
             case (byte)Direction.Left:
-                nextX -= 1;
+                nextX -= 32;
                 break;
             case (byte)Direction.Right:
-                nextX += 1;
+                nextX += 32;
                 break;
         }
 

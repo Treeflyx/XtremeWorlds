@@ -23,7 +23,7 @@ namespace Server
         {
             int tick;
             var tmr25 = default(int);
-            var tmr10 = default(int);
+            var tmr500 = default(int);
             var tmrWalk = default(int);
             var tmr1000 = default(int);
             var tmr60000 = default(int);
@@ -97,12 +97,12 @@ namespace Server
                     tmr1000 = General.GetTimeMs() + 1000;
                 }
 
-                if (tick > tmr10)
+                if (tick > tmr500)
                 {
                     UpdateMapAi();
 
                     // Move the timer up 500ms.
-                    tmr10 = General.GetTimeMs() + 10;
+                    tmr500 = General.GetTimeMs() + 500;
                 }
 
                 // Checks to spawn map items every 1 minute

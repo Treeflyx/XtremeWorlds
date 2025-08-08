@@ -43,6 +43,12 @@ namespace Client
                     return;
                 }
 
+                if (x % 32 == 0 && y % 32 == 0)
+                {
+                    return;
+                }
+
+
                 Core.Data.MyMapNpc[(int)mapNpcNum].X = x;
                 Core.Data.MyMapNpc[(int)mapNpcNum].Y = y;
 
