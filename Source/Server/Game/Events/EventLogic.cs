@@ -1767,7 +1767,7 @@ namespace Server
                                                         {
                                                             SetPlayerInvValue((int)i, Player.FindItemSlot((int)i, command.Data1), command.Data3);
                                                         }
-                                                        break;
+                                                         break;
                                                     case 1: // Give
                                                         Player.GiveInv((int)i, command.Data1, command.Data3, true);
                                                         break;

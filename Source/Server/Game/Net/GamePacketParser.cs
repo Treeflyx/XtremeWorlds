@@ -532,7 +532,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var tmpX = buffer.ReadInt32();
         var tmpY = buffer.ReadInt32();
 
-
         SetPlayerDir(session.Id, dir);
         Core.Data.Player[session.Id].Moving = movement;
     }

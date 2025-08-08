@@ -185,11 +185,6 @@ public static class Player
 
                     SetPlayerY(playerId, GetPlayerRawY(playerId) - 1);
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
                 else if (Data.Map[mapNum].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type != TileType.NoCrossing && Data.Map[mapNum].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type2 != TileType.NoCrossing)
                 {
@@ -217,11 +212,6 @@ public static class Player
                     SetPlayerY(playerId, GetPlayerRawY(playerId) + 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
                 else if (Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type != TileType.NoCrossing && Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type2 != TileType.NoCrossing)
                 {
@@ -247,11 +237,6 @@ public static class Player
                     SetPlayerX(playerId, GetPlayerRawX(playerId) - 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
                 else if (Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type != TileType.NoCrossing && Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type2 != TileType.NoCrossing)
                 {
@@ -279,11 +264,6 @@ public static class Player
                     SetPlayerX(playerId, GetPlayerRawX(playerId) + 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
                 else if (Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type != TileType.NoCrossing && Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)].Type2 != TileType.NoCrossing)
                 {
@@ -310,11 +290,6 @@ public static class Player
                     SetPlayerY(playerId, GetPlayerRawY(playerId) - 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
 
                 break;
@@ -331,11 +306,6 @@ public static class Player
                     SetPlayerY(playerId, GetPlayerRawY(playerId) - 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
 
                 break;
@@ -352,11 +322,6 @@ public static class Player
                     SetPlayerY(playerId, GetPlayerRawY(playerId) + 1);
                     
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
 
                 break;
@@ -373,11 +338,6 @@ public static class Player
                     SetPlayerY(playerId, GetPlayerRawY(playerId) + 1);
 
                     moved = true;
-
-                    for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
-                    {
-                        EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
-                    }
                 }
 
                 break;
@@ -388,6 +348,11 @@ public static class Player
             GetPlayerX(playerId) < Data.Map[GetPlayerMap(playerId)].MaxX &&
             GetPlayerY(playerId) < Data.Map[GetPlayerMap(playerId)].MaxY)
         {
+            for (var i = 0; i < Data.TempPlayer[playerId].EventMap.CurrentEvents; i++)
+            {
+                EventLogic.TriggerEvent(playerId, i, 1, GetPlayerX(playerId), GetPlayerY(playerId));
+            }
+
             ref var tile = ref Data.Map[GetPlayerMap(playerId)].Tile[GetPlayerX(playerId), GetPlayerY(playerId)];
 
             mapNum = -1;
