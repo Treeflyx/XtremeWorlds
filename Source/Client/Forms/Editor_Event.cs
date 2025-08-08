@@ -1244,6 +1244,10 @@ namespace Client
         {
             if (cmbSelfSwitch.SelectedIndex == -1)
                 return;
+
+            if (Event.TmpEvent.Pages == null)
+                return;
+
             Event.TmpEvent.Pages[Event.CurPageNum].SelfSwitchIndex = cmbSelfSwitch.SelectedIndex;
         }
 

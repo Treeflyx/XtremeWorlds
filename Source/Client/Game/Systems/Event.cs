@@ -255,6 +255,9 @@ namespace Client
 
         public static void EventEditorLoadPage(int pageNum)
         {
+            if (Event.TmpEvent.Pages == null)
+             return;
+
             if (pageNum < 0 || pageNum >= TmpEvent.Pages.Length || TmpEvent.Pages == null)
             {
                 // Invalid page number, return or throw an exception

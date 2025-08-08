@@ -174,6 +174,9 @@ namespace Client
                             if (Data.MyMap.Tile == null)
                                 return;
 
+                            if (Data.MyMap.Tile[x, y].Layer == null)
+                                return;
+
                             // Render the tile
                             string argpath = System.IO.Path.Combine(Core.Path.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
                             GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);

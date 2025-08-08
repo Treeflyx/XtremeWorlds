@@ -2552,13 +2552,13 @@ static void LoadFonts()
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Information.UBound(Animation.AnimInstance) >= i)
+                    if (Animation.AnimInstance == null)
+                        break;
+
+                    if (Animation.AnimInstance[i].Used[0])
                     {
-                        if (Animation.AnimInstance[i].Used[0])
-                        {
-                            Animation.DrawAnimation(i, 0);
-                        }
-                    }
+                        Animation.DrawAnimation(i, 0);
+                    }                
                 }
             }
 
@@ -2691,14 +2691,14 @@ static void LoadFonts()
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Information.UBound(Animation.AnimInstance) >= i)
-                    {
-                        if (Animation.AnimInstance[i].Used[1])
+                    if (Animation.AnimInstance == null)
+                        break;
+
+                    if (Animation.AnimInstance[i].Used[1])
                         {
                             Animation.DrawAnimation(i, 1);
                         }
-                    }
-                }
+                    }              
             }
 
             if (GameState.NumProjectiles > 0)
