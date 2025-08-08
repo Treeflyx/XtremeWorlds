@@ -2983,7 +2983,7 @@ namespace Server
             }
 
             // 5. Validate player is at the event's coordinates
-            if (targetX != eventPage.X || targetY != eventPage.Y)
+            if (targetX * 32 != eventPage.X || targetY * 32 != eventPage.Y)
                 return false;
 
             // 6. Begin event processing if applicable
