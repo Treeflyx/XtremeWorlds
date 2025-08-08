@@ -63,29 +63,29 @@ namespace Client
             lstIndex = new ListBox();
             DarkGroupBox2 = new DarkUI.Controls.DarkGroupBox();
             cmbSound = new DarkUI.Controls.DarkComboBox();
-            cmbLabel2 = new DarkUI.Controls.cmbLabel();
+            DarkLabel2 = new DarkUI.Controls.DarkLabel();
             DarkGroupBox4 = new DarkUI.Controls.DarkGroupBox();
             nudLoopTime1 = new DarkUI.Controls.DarkNumericUpDown();
             nudFrameCount1 = new DarkUI.Controls.DarkNumericUpDown();
             nudLoopCount1 = new DarkUI.Controls.DarkNumericUpDown();
             nudSprite1 = new DarkUI.Controls.DarkNumericUpDown();
-            lblLoopTime1 = new DarkUI.Controls.cmbLabel();
-            lblFrameCount1 = new DarkUI.Controls.cmbLabel();
-            lblLoopCount1 = new DarkUI.Controls.cmbLabel();
-            lblSprite1 = new DarkUI.Controls.cmbLabel();
+            lblLoopTime1 = new DarkUI.Controls.DarkLabel();
+            lblFrameCount1 = new DarkUI.Controls.DarkLabel();
+            lblLoopCount1 = new DarkUI.Controls.DarkLabel();
+            lblSprite1 = new DarkUI.Controls.DarkLabel();
             picSprite1 = new PictureBox();
             DarkGroupBox3 = new DarkUI.Controls.DarkGroupBox();
             nudLoopTime0 = new DarkUI.Controls.DarkNumericUpDown();
             nudFrameCount0 = new DarkUI.Controls.DarkNumericUpDown();
             nudLoopCount0 = new DarkUI.Controls.DarkNumericUpDown();
             nudSprite0 = new DarkUI.Controls.DarkNumericUpDown();
-            lblLoopTime0 = new DarkUI.Controls.cmbLabel();
-            lblFrameCount0 = new DarkUI.Controls.cmbLabel();
-            lblLoopCount0 = new DarkUI.Controls.cmbLabel();
-            lblSprite0 = new DarkUI.Controls.cmbLabel();
+            lblLoopTime0 = new DarkUI.Controls.DarkLabel();
+            lblFrameCount0 = new DarkUI.Controls.DarkLabel();
+            lblLoopCount0 = new DarkUI.Controls.DarkLabel();
+            lblSprite0 = new DarkUI.Controls.DarkLabel();
             picSprite0 = new PictureBox();
             txtName = new DarkUI.Controls.DarkTextBox();
-            cmbLabel1 = new DarkUI.Controls.cmbLabel();
+            DarkLabel1 = new DarkUI.Controls.DarkLabel();
             btnSave = new DarkUI.Controls.DarkButton();
             btnDelete = new DarkUI.Controls.DarkButton();
             btnCancel = new DarkUI.Controls.DarkButton();
@@ -138,11 +138,11 @@ namespace Client
             DarkGroupBox2.BackColor = Color.FromArgb(45, 45, 48);
             DarkGroupBox2.BorderColor = Color.FromArgb(90, 90, 90);
             DarkGroupBox2.Controls.Add(cmbSound);
-            DarkGroupBox2.Controls.Add(cmbLabel2);
+            DarkGroupBox2.Controls.Add(DarkLabel2);
             DarkGroupBox2.Controls.Add(DarkGroupBox4);
             DarkGroupBox2.Controls.Add(DarkGroupBox3);
             DarkGroupBox2.Controls.Add(txtName);
-            DarkGroupBox2.Controls.Add(cmbLabel1);
+            DarkGroupBox2.Controls.Add(DarkLabel1);
             DarkGroupBox2.ForeColor = Color.Gainsboro;
             DarkGroupBox2.Location = new Point(243, 3);
             DarkGroupBox2.Margin = new Padding(4, 3, 4, 3);
@@ -164,16 +164,16 @@ namespace Client
             cmbSound.TabIndex = 25;
             cmbSound.SelectedIndexChanged += CmbSound_SelectedIndexChanged;
             // 
-            // cmbLabel2
+            // DarkLabel2
             // 
-            cmbLabel2.AutoSize = true;
-            cmbLabel2.ForeColor = Color.FromArgb(220, 220, 220);
-            cmbLabel2.Location = new Point(12, 64);
-            cmbLabel2.Margin = new Padding(4, 0, 4, 0);
-            cmbLabel2.Name = "cmbLabel2";
-            cmbLabel2.Size = new Size(44, 15);
-            cmbLabel2.TabIndex = 24;
-            cmbLabel2.Text = "Sound:";
+            DarkLabel2.AutoSize = true;
+            DarkLabel2.ForeColor = Color.FromArgb(220, 220, 220);
+            DarkLabel2.Location = new Point(12, 64);
+            DarkLabel2.Margin = new Padding(4, 0, 4, 0);
+            DarkLabel2.Name = "DarkLabel2";
+            DarkLabel2.Size = new Size(44, 15);
+            DarkLabel2.TabIndex = 24;
+            DarkLabel2.Text = "Sound:";
             // 
             // DarkGroupBox4
             // 
@@ -425,16 +425,16 @@ namespace Client
             txtName.TabIndex = 1;
             txtName.TextChanged += TxtName_TextChanged;
             // 
-            // cmbLabel1
+            // DarkLabel1
             // 
-            cmbLabel1.AutoSize = true;
-            cmbLabel1.ForeColor = Color.FromArgb(220, 220, 220);
-            cmbLabel1.Location = new Point(12, 33);
-            cmbLabel1.Margin = new Padding(4, 0, 4, 0);
-            cmbLabel1.Name = "cmbLabel1";
-            cmbLabel1.Size = new Size(42, 15);
-            cmbLabel1.TabIndex = 0;
-            cmbLabel1.Text = "Name:";
+            DarkLabel1.AutoSize = true;
+            DarkLabel1.ForeColor = Color.FromArgb(220, 220, 220);
+            DarkLabel1.Location = new Point(12, 33);
+            DarkLabel1.Margin = new Padding(4, 0, 4, 0);
+            DarkLabel1.Name = "DarkLabel1";
+            DarkLabel1.Size = new Size(42, 15);
+            DarkLabel1.TabIndex = 0;
+            DarkLabel1.Text = "Name:";
             // 
             // btnSave
             // 
@@ -511,18 +511,18 @@ namespace Client
         internal DarkGroupBox DarkGroupBox2;
         internal ListBox lstIndex;
         internal DarkTextBox txtName;
-        internal cmbLabel cmbLabel1;
+        internal DarkLabel DarkLabel1;
         internal DarkGroupBox DarkGroupBox3;
         internal PictureBox picSprite0;
-        internal cmbLabel lblLoopCount0;
-        internal cmbLabel lblSprite0;
-        internal cmbLabel lblLoopTime0;
-        internal cmbLabel lblFrameCount0;
+        internal DarkLabel lblLoopCount0;
+        internal DarkLabel lblSprite0;
+        internal DarkLabel lblLoopTime0;
+        internal DarkLabel lblFrameCount0;
         internal DarkGroupBox DarkGroupBox4;
-        internal cmbLabel lblLoopTime1;
-        internal cmbLabel lblFrameCount1;
-        internal cmbLabel lblLoopCount1;
-        internal cmbLabel lblSprite1;
+        internal DarkLabel lblLoopTime1;
+        internal DarkLabel lblFrameCount1;
+        internal DarkLabel lblLoopCount1;
+        internal DarkLabel lblSprite1;
         internal PictureBox picSprite1;
         internal DarkButton btnSave;
         internal DarkButton btnDelete;
@@ -536,6 +536,6 @@ namespace Client
         internal DarkNumericUpDown nudLoopCount1;
         internal DarkNumericUpDown nudSprite1;
         internal DarkComboBox cmbSound;
-        internal cmbLabel cmbLabel2;
+        internal DarkLabel DarkLabel2;
     }
 }

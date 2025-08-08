@@ -62,7 +62,7 @@ namespace Client
             btnCancel.Click += new EventHandler(BtnCancel_Click);
             lstIndex = new ListBox();
             lstIndex.Click += new EventHandler(lstIndex_Click);
-            cmbLabel6 = new DarkUI.Controls.cmbLabel();
+            DarkLabel6 = new DarkUI.Controls.DarkLabel();
             txtName = new DarkUI.Controls.DarkTextBox();
             txtName.TextChanged += new EventHandler(txtName_TextChanged);
             DarkGroupBox2 = new DarkUI.Controls.DarkGroupBox();
@@ -86,7 +86,7 @@ namespace Client
             chkCanCast.CheckedChanged += new EventHandler(chkCanCast_CheckedChanged);
             cmbColor = new DarkUI.Controls.DarkComboBox();
             cmbColor.SelectedIndexChanged += new EventHandler(cmbColor_SelectedIndexChanged);
-            cmbLabel11 = new DarkUI.Controls.cmbLabel();
+            DarkLabel11 = new DarkUI.Controls.DarkLabel();
             DarkGroupBox1.SuspendLayout();
             DarkGroupBox2.SuspendLayout();
             SuspendLayout();
@@ -152,16 +152,16 @@ namespace Client
             lstIndex.Size = new Size(265, 277);
             lstIndex.TabIndex = 1;
             // 
-            // cmbLabel6
+            // DarkLabel6
             // 
-            cmbLabel6.AutoSize = true;
-            cmbLabel6.ForeColor = Color.FromArgb(220, 220, 220);
-            cmbLabel6.Location = new Point(13, 43);
-            cmbLabel6.Margin = new Padding(6, 0, 6, 0);
-            cmbLabel6.Name = "cmbLabel6";
-            cmbLabel6.Size = new Size(63, 25);
-            cmbLabel6.TabIndex = 0;
-            cmbLabel6.Text = "Name:";
+            DarkLabel6.AutoSize = true;
+            DarkLabel6.ForeColor = Color.FromArgb(220, 220, 220);
+            DarkLabel6.Location = new Point(13, 43);
+            DarkLabel6.Margin = new Padding(6, 0, 6, 0);
+            DarkLabel6.Name = "DarkLabel6";
+            DarkLabel6.Size = new Size(63, 25);
+            DarkLabel6.TabIndex = 0;
+            DarkLabel6.Text = "Name:";
             // 
             // txtName
             // 
@@ -188,9 +188,9 @@ namespace Client
             DarkGroupBox2.Controls.Add(chkCanPK);
             DarkGroupBox2.Controls.Add(chkCanCast);
             DarkGroupBox2.Controls.Add(cmbColor);
-            DarkGroupBox2.Controls.Add(cmbLabel11);
+            DarkGroupBox2.Controls.Add(DarkLabel11);
             DarkGroupBox2.Controls.Add(txtName);
-            DarkGroupBox2.Controls.Add(cmbLabel6);
+            DarkGroupBox2.Controls.Add(DarkLabel6);
             DarkGroupBox2.ForeColor = Color.Gainsboro;
             DarkGroupBox2.Location = new Point(302, 0);
             DarkGroupBox2.Margin = new Padding(6, 5, 6, 5);
@@ -302,16 +302,16 @@ namespace Client
             cmbColor.Size = new Size(229, 32);
             cmbColor.TabIndex = 11;
             // 
-            // cmbLabel11
+            // DarkLabel11
             // 
-            cmbLabel11.AutoSize = true;
-            cmbLabel11.ForeColor = Color.FromArgb(220, 220, 220);
-            cmbLabel11.Location = new Point(13, 81);
-            cmbLabel11.Margin = new Padding(5, 0, 5, 0);
-            cmbLabel11.Name = "cmbLabel11";
-            cmbLabel11.Size = new Size(59, 25);
-            cmbLabel11.TabIndex = 10;
-            cmbLabel11.Text = "Color:";
+            DarkLabel11.AutoSize = true;
+            DarkLabel11.ForeColor = Color.FromArgb(220, 220, 220);
+            DarkLabel11.Location = new Point(13, 81);
+            DarkLabel11.Margin = new Padding(5, 0, 5, 0);
+            DarkLabel11.Name = "DarkLabel11";
+            DarkLabel11.Size = new Size(59, 25);
+            DarkLabel11.TabIndex = 10;
+            DarkLabel11.Text = "Color:";
             // 
             // Editor_Moral
             // 
@@ -334,11 +334,11 @@ namespace Client
         }
         internal DarkGroupBox DarkGroupBox1;
         internal ListBox lstIndex;
-        internal cmbLabel cmbLabel6;
+        internal DarkLabel DarkLabel6;
         internal DarkTextBox txtName;
         internal DarkGroupBox DarkGroupBox2;
         internal DarkComboBox cmbColor;
-        internal cmbLabel cmbLabel11;
+        internal DarkLabel DarkLabel11;
         internal DarkCheckBox chkCanPickupItem;
         internal DarkCheckBox chkCanPK;
         internal DarkCheckBox chkCanCast;
