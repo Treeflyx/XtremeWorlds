@@ -383,80 +383,50 @@ public static class Npc
     {
         // MovementState enum count
         var count = System.Enum.GetValues(typeof(MovementState)).Length;
-        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte) Direction.DownRight || movement < 0 || movement > count)
+        if (mapNum < 0 || mapNum > Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > (byte)Direction.DownRight || movement < 0 || movement > count)
         {
             return;
         }
 
-        Data.MapNpc[mapNum].Npc[mapNpcNum].Dir = dir;
+        // Check if the intended move would go off map boundaries
+        int nextX = Data.MapNpc[mapNum].Npc[mapNpcNum].X;
+        int nextY = Data.MapNpc[mapNum].Npc[mapNpcNum].Y;
 
         switch (dir)
         {
-            case (byte) Direction.Up:
-            {
-                Data.MapNpc[mapNum].Npc[mapNpcNum].Y -= 1;
-
-                var buffer = new PacketWriter(4);
-
-                buffer.WriteEnum(ServerPackets.SNpcMove);
-                buffer.WriteInt32(mapNpcNum);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Y);
-                buffer.WriteByte(Data.MapNpc[mapNum].Npc[mapNpcNum].Dir);
-                buffer.WriteInt32(movement);
-
-                NetworkConfig.SendDataToMap(mapNum, buffer.GetBytes());
+            case (byte)Direction.Up:
+                nextY -= 1;
                 break;
-            }
-            case (byte) Direction.Down:
-            {
-                Data.MapNpc[mapNum].Npc[mapNpcNum].Y += 1;
-
-                var buffer = new PacketWriter(4);
-
-                buffer.WriteEnum(ServerPackets.SNpcMove);
-                buffer.WriteInt32(mapNpcNum);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Y);
-                buffer.WriteByte(Data.MapNpc[mapNum].Npc[mapNpcNum].Dir);
-                buffer.WriteInt32(movement);
-
-                NetworkConfig.SendDataToMap(mapNum, buffer.GetBytes());
+            case (byte)Direction.Down:
+                nextY += 1;
                 break;
-            }
-            case (byte) Direction.Left:
-            {
-                Data.MapNpc[mapNum].Npc[mapNpcNum].X -= 1;
-
-                var buffer = new PacketWriter(4);
-
-                buffer.WriteEnum(ServerPackets.SNpcMove);
-                buffer.WriteInt32(mapNpcNum);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Y);
-                buffer.WriteByte(Data.MapNpc[mapNum].Npc[mapNpcNum].Dir);
-                buffer.WriteInt32(movement);
-
-                NetworkConfig.SendDataToMap(mapNum, buffer.GetBytes());
+            case (byte)Direction.Left:
+                nextX -= 1;
                 break;
-            }
-            case (byte) Direction.Right:
-            {
-                Data.MapNpc[mapNum].Npc[mapNpcNum].X += 1;
-
-                var buffer = new PacketWriter(4);
-
-                buffer.WriteEnum(ServerPackets.SNpcMove);
-                buffer.WriteInt32(mapNpcNum);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Y);
-                buffer.WriteByte(Data.MapNpc[mapNum].Npc[mapNpcNum].Dir);
-                buffer.WriteInt32(movement);
-
-                NetworkConfig.SendDataToMap(mapNum, buffer.GetBytes());
+            case (byte)Direction.Right:
+                nextX += 1;
                 break;
-            }
         }
+
+        if (nextX < 0 || nextY < 0 || nextX >= Data.Map[mapNum].MaxX * 32 || nextY >= Data.Map[mapNum].MaxY * 32)
+        {
+            Data.MapNpc[mapNum].Npc[mapNpcNum].Moving = 0;
+            return;
+        }
+
+        Data.MapNpc[mapNum].Npc[mapNpcNum].Dir = dir;
+        Data.MapNpc[mapNum].Npc[mapNpcNum].Y = nextY;
+
+        var buffer = new PacketWriter(4);
+
+        buffer.WriteEnum(ServerPackets.SNpcMove);
+        buffer.WriteInt32(mapNpcNum);
+        buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
+        buffer.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Y);
+        buffer.WriteByte(Data.MapNpc[mapNum].Npc[mapNpcNum].Dir);
+        buffer.WriteInt32(movement);
+
+        NetworkConfig.SendDataToMap(mapNum, buffer.GetBytes());
     }
 
     public static void NpcDir(int mapNum, int mapNpcNum, byte dir)
