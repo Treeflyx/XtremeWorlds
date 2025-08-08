@@ -152,8 +152,8 @@ public static class Npc
         foreach (var playerId in PlayerService.Instance.PlayerIds)
         {
             if (GetPlayerMap(playerId) == mapNum &&
-                GetPlayerX(playerId) == x &&
-                GetPlayerY(playerId) == y)
+                GetPlayerX(playerId) == x * 32 &&
+                GetPlayerY(playerId) == y * 32)
             {
                 return false;
             }
@@ -162,8 +162,8 @@ public static class Npc
         for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
         {
             if (Data.MapNpc[mapNum].Npc[mapNpcNum].Num >= 0 &&
-                Data.MapNpc[mapNum].Npc[mapNpcNum].X == x &&
-                Data.MapNpc[mapNum].Npc[mapNpcNum].Y == y)
+                Data.MapNpc[mapNum].Npc[mapNpcNum].X == x * 32 &&
+                Data.MapNpc[mapNum].Npc[mapNpcNum].Y == y  * 32)
             {
                 return false;
             }
