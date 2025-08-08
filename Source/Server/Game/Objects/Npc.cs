@@ -408,9 +408,8 @@ public static class Npc
                 break;
         }
 
-        if (nextX < 0 || nextY < 0 || nextX >= Data.Map[mapNum].MaxX * 32 || nextY >= Data.Map[mapNum].MaxY * 32)
+        if (nextX < 0 || nextY < 0 || nextX >= (Data.Map[mapNum].MaxX - 1) * 32 || nextY >= (Data.Map[mapNum].MaxY - 1) * 32)
         {
-            Data.MapNpc[mapNum].Npc[mapNpcNum].Moving = 0;
             return;
         }
 
