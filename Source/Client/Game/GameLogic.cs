@@ -43,7 +43,7 @@ namespace Client
                         break;
                 }
 
-                if (x < 0 || y < 0 || x >= Data.MyMap.MaxX * 32 || y >= Data.MyMap.MaxY * 32)
+                if (x < 0 || y < 0 || x >= (Data.MyMap.MaxX - 1) * 32 || y >= (Data.MyMap.MaxY - 1) * 32)
                 {
                     return;
                 }
