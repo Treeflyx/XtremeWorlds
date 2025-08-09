@@ -894,4 +894,38 @@ public class Script
             }
         }
     }
+
+    public void CheckPlayerLevelUp(int index)
+    {
+        int expRollover;
+        int level_count;
+
+        level_count = 0;
+
+        while (GetPlayerExp(index) >= GetPlayerNextLevel(index))
+        {
+            expRollover = GetPlayerExp(index) - GetPlayerNextLevel(index);
+            SetPlayerLevel(index, GetPlayerLevel(index) + 1);
+            SetPlayerPoints(index, GetPlayerPoints(index) + Server.Constant.StatPerLevel);
+            SetPlayerExp(index, expRollover);
+            level_count += 1;
+        }
+
+        if (level_count > 0)
+        {
+            if (level_count == 1)
+            {
+                // singular
+                NetworkSend.GlobalMsg(GetPlayerName(index) + " has gained " + level_count + " level!");
+            }
+            else
+            {
+                // plural
+                NetworkSend.GlobalMsg(GetPlayerName(index) + " has gained " + level_count + " levels!");
+            }
+            NetworkSend.SendActionMsg(GetPlayerMap(index), "Level Up", (int) Core.Color.Yellow, 1, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+            NetworkSend.SendExp(index);
+            NetworkSend.SendPlayerData(index);
+        }
+    }
 }

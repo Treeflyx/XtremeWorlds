@@ -1831,7 +1831,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
 
         SetPlayerExp(session.Id, GetPlayerNextLevel(session.Id));
-        global::Server.Player.CheckPlayerLevelUp(session.Id);
+        Server.Player.CheckPlayerLevelUp(session.Id);
     }
 
     public static void Packet_ForgetSkill(GameSession session, ReadOnlySpan<byte> bytes)
