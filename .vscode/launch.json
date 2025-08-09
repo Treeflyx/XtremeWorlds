@@ -1,0 +1,20 @@
+{
+  // Launch configurations for XtremeWorlds
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C# Server",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build Server",
+      "program": "${workspaceFolder}/Build/Server/Server.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Build/Server",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "env": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  ]
+}

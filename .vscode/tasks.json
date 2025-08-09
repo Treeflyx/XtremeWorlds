@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build Server",
+      "type": "shell",
+      "command": "dotnet build ${workspaceFolder}/Source/Server/Server.csproj -c Debug --nologo",
+      "group": "build",
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}
