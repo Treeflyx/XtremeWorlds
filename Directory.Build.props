@@ -15,4 +15,17 @@
         <Trademark>Treefly Studios</Trademark>
     </PropertyGroup>
 
+    <!-- Global warning suppression (user requested to hide warnings). 
+         NOTE: This hides potentially useful diagnostics: consider re‑enabling later. -->
+    <PropertyGroup>
+        <NoWarn>
+            $(NoWarn);
+            CS0168;CS0219;CS0169;CS0602;CS0649;CS1591;
+            CS1717;CS1998;CS8019;CS8600;CS8601;CS8602;CS8603;CS8604;CS8605;CS8618;CS8620;CS8625;CS8629;
+            CS8632;CS8765;CS8767;CS8774;CS8862;CS8892;CS0472;CS0162
+        </NoWarn>
+        <!-- Optionally disable nullable analysis entirely (commented out). -->
+        <!-- <Nullable>disable</Nullable> -->
+    </PropertyGroup>
+
 </Project>
