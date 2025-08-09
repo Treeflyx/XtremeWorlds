@@ -5,6 +5,7 @@ using System;
 using static Core.Global.Command;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Path = Core.Path;
+using Type = Core.Type;
 
 namespace Client
 {
@@ -173,14 +174,14 @@ namespace Client
                     {
                         if (IsPlaying(_i))
                         {
-                            Player.ProcessPlayerMovement(_i);                            
+                            Player.ProcessMovement(_i);                            
                         }
                     }
 
                     // Process npc movements
                     for (_i = 0; _i < Constant.MaxMapNpcs; _i++)
                     {
-                        GameLogic.ProcessNpcMovement(_i);
+                        Npc.ProcessMovement(_i);
                         
                     }
 

@@ -51,7 +51,7 @@ public static class Player
 
     public static void PlayerWarp(int playerId, int mapNum, int x, int y, int dir)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum > Core.Constant.MaxMaps)
+        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum >= Core.Constant.MaxMaps)
         {
             return;
         }
@@ -137,7 +137,9 @@ public static class Player
         var amount = 0;
 
         // Check for subscript out of range
-        if (dir < (int) Direction.Up || dir > (int) Direction.DownRight || movement < (int) MovementState.Standing || movement > (int) MovementState.Running)
+        var count = System.Enum.GetValues(typeof(MovementState)).Length;
+        var count2 = System.Enum.GetValues(typeof(Direction)).Length;
+		if (dir < (int) Direction.Up || dir > count2 || movement < 0 || movement > count)
         {
             return;
         }
@@ -374,7 +376,7 @@ public static class Player
                 y = tile.Data3_2;
             }
 
-            if (mapNum >= 0)
+            if (mapNum >= 0 && mapNum < Core.Constant.MaxMaps)
             {
                 PlayerWarp(playerId, mapNum, x, y, (int) Direction.Down);
 
@@ -887,7 +889,7 @@ public static class Player
 
     public static bool TakeInvSlot(int playerId, int invSlot, int itemVal)
     {
-        var takeInvSlotRet = false;
+        var takeInvSlot = false;
 
         if (!NetworkConfig.IsPlaying(playerId) || invSlot < 0 || invSlot > Core.Constant.MaxItems)
         {
@@ -902,7 +904,7 @@ public static class Player
             // Is what we are trying to take away more then what they have?  If so just set it to zero
             if (itemVal >= GetPlayerInvValue(playerId, invSlot))
             {
-                takeInvSlotRet = true;
+                takeInvSlot = true;
             }
             else
             {
@@ -911,10 +913,10 @@ public static class Player
         }
         else
         {
-            takeInvSlotRet = true;
+            takeInvSlot = true;
         }
 
-        if (!takeInvSlotRet)
+        if (!takeInvSlot)
         {
             return false;
         }

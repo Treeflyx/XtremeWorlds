@@ -2043,7 +2043,7 @@ namespace Server
 
         public static bool IsBanned(int index, string ip)
         {
-            bool isBannedRet = default;
+            bool isBanned = default;
             string filename;
             string line;
             int i;
@@ -2075,7 +2075,7 @@ namespace Server
                 line = sr.ReadLine();
                 if ((Strings.LCase(line) ?? "") == (Strings.LCase(Strings.Mid(ip, 1, Strings.Len(line))) ?? ""))
                 {
-                    isBannedRet = true;
+                    isBanned = true;
                 }
             }
 
@@ -2083,10 +2083,10 @@ namespace Server
 
             if (Core.Data.Account[index].Banned)
             {
-                isBannedRet = true;
+                isBanned = true;
             }
 
-            return isBannedRet;
+            return isBanned;
 
         }
 
@@ -2116,7 +2116,7 @@ namespace Server
             Core.Data.Account[banPlayerIndex].Banned = true;
 
             ip = Strings.Mid(ip, 1, i);
-            Core.Log.AddTextToFile(ip, "banlist.txt");
+            Core.Log.Add(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
             Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
             var task = Server.Player.LeftGame(banPlayerIndex);

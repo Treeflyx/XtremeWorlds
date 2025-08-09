@@ -103,9 +103,9 @@ public static string GetAccountLogin(int index)
 
         public static string GetPlayerPassword(int index)
         {
-            string getPlayerPasswordRet = default;
-            getPlayerPasswordRet = Data.Account[index].Password;
-            return getPlayerPasswordRet;
+            string getPlayerPassword = default;
+            getPlayerPassword = Data.Account[index].Password;
+            return getPlayerPassword;
         }
 
         public static void SetPlayerPassword(int index, string password)
@@ -114,34 +114,34 @@ public static string GetAccountLogin(int index)
         }
         public static int GetPlayerMaxVital(int index, Vital vital)
         {
-            int getPlayerMaxVitalRet = default;
+            int getPlayerMaxVital = default;
             switch (vital)
             {
                 case Vital.Health:
                     {
-                        getPlayerMaxVitalRet = (int)Math.Round(100d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Vitality) / 2d) * 2d);
+                        getPlayerMaxVital = (int)Math.Round(100d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Vitality) / 2d) * 2d);
                         break;
                     }
 
                 case Vital.Mana:
                     {
-                        getPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Intelligence) / 2d) * 2d);
+                        getPlayerMaxVital = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Intelligence) / 2d) * 2d);
                         break;
 
                     }
                 case Vital.Stamina:
                     {
-                        getPlayerMaxVitalRet = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Spirit) / 2d) * 2d);
+                        getPlayerMaxVital = (int)Math.Round(50d + (Data.Player[index].Level + GetPlayerStat(index, Stat.Spirit) / 2d) * 2d);
                         break;
                     }
             }
 
-            return getPlayerMaxVitalRet;
+            return getPlayerMaxVital;
         }
 
         public static int GetPlayerStat(int index, Stat stat)
         {
-            int getPlayerStatRet = default;
+            int getPlayerStat = default;
             int x;
             int i;
 
@@ -159,57 +159,57 @@ public static string GetAccountLogin(int index)
                 }
             }
 
-            getPlayerStatRet = x;
-            return getPlayerStatRet;
+            getPlayerStat = x;
+            return getPlayerStat;
         }
 
         public static byte GetPlayerAccess(int index)
         {
-            byte getPlayerAccessRet = default;
-            getPlayerAccessRet = Data.Player[index].Access;
-            return getPlayerAccessRet;
+            byte getPlayerAccess = default;
+            getPlayerAccess = Data.Player[index].Access;
+            return getPlayerAccess;
         }
 
         public static int GetPlayerX(int index)
         {
-            int getPlayerXRet = default;
-            getPlayerXRet = (int)Math.Floor((double)Data.Player[index].X / 32);
-            return getPlayerXRet;
+            int getPlayerX = default;
+            getPlayerX = (int)Math.Floor((double)Data.Player[index].X / 32);
+            return getPlayerX;
         }
 
         public static int GetPlayerY(int index)
         {
-            int getPlayerYRet = default;
-            getPlayerYRet = (int)Math.Floor((double)Data.Player[index].Y / 32);
-            return getPlayerYRet;
+            int getPlayerY = default;
+            getPlayerY = (int)Math.Floor((double)Data.Player[index].Y / 32);
+            return getPlayerY;
         }
 
         public static int GetPlayerRawX(int index)
         {
-            int getPlayerXRet = default;
-            getPlayerXRet = Data.Player[index].X;
-            return getPlayerXRet;
+            int getPlayerX = default;
+            getPlayerX = Data.Player[index].X;
+            return getPlayerX;
         }
 
         public static int GetPlayerRawY(int index)
         {
-            int getPlayerYRet = default;
-            getPlayerYRet = Data.Player[index].Y;
-            return getPlayerYRet;
+            int getPlayerY = default;
+            getPlayerY = Data.Player[index].Y;
+            return getPlayerY;
         }
 
         public static byte GetPlayerDir(int index)
         {
-            byte getPlayerDirRet = default;
-            getPlayerDirRet = Data.Player[index].Dir;
-            return getPlayerDirRet;
+            byte getPlayerDir = default;
+            getPlayerDir = Data.Player[index].Dir;
+            return getPlayerDir;
         }
 
         public static bool GetPlayerPk(int index)
         {
-            bool getPlayerPkRet = default;
-            getPlayerPkRet = Data.Player[index].Pk;
-            return getPlayerPkRet;
+            bool getPlayerPk = default;
+            getPlayerPk = Data.Player[index].Pk;
+            return getPlayerPk;
         }
 
         public static void SetPlayerVital(int index, Vital vital, int value)
@@ -254,9 +254,9 @@ public static string GetAccountLogin(int index)
 
         public static int GetPlayerNextLevel(int index)
         {
-            int getPlayerNextLevelRet = default;
-            getPlayerNextLevelRet = (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerLevel(index) + 1, 3d) - 6d * Math.Pow(GetPlayerLevel(index) + 1, 2d) + 17 * (GetPlayerLevel(index) + 1) - 12d));
-            return getPlayerNextLevelRet;
+            int getPlayerNextLevel = default;
+            getPlayerNextLevel = (int)Math.Round(50d / 3d * (Math.Pow(GetPlayerLevel(index) + 1, 3d) - 6d * Math.Pow(GetPlayerLevel(index) + 1, 2d) + 17 * (GetPlayerLevel(index) + 1) - 12d));
+            return getPlayerNextLevel;
         }
 
         public static void SetPlayerGatherSkillLvl(int index, int skillSlot, int lvl)
@@ -478,9 +478,9 @@ public static string GetAccountLogin(int index)
 
         public static int GetBank(int index, int bankslot)
         {
-            int getBankRet = default;
-            getBankRet = Data.Bank[index].Item[bankslot].Num;
-            return getBankRet;
+            int getBank = default;
+            getBank = Data.Bank[index].Item[bankslot].Num;
+            return getBank;
         }
 
         public static void SetBank(int index, byte bankSlot, int itemNum)
@@ -490,9 +490,9 @@ public static string GetAccountLogin(int index)
 
         public static int GetBankValue(int index, int bankSlot)
         {
-            int getBankValueRet = default;
-            getBankValueRet = Data.Bank[index].Item[bankSlot].Value;
-            return getBankValueRet;
+            int getBankValue = default;
+            getBankValue = Data.Bank[index].Item[bankSlot].Value;
+            return getBankValue;
         }
 
         public static void SetBankValue(int index, byte bankSlot, int itemValue)

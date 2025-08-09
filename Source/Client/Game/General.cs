@@ -36,7 +36,6 @@ namespace Client
 
         public static void LoadGame()
         {
-            SettingsManager.Load();
             LocalesManager.Initialize();
             CheckAnimations();
             CheckCharacters();
@@ -141,95 +140,26 @@ namespace Client
             GameState.NumDesigns = GetFileCount(Core.Path.Designs);
         }
 
-        public static void GetResolutionSize(byte resolution, ref int width, ref int height)
+        public static (int Width, int Height) GetResolutionSize(byte resolution)
         {
-            switch (resolution)
+            return resolution switch
             {
-                case 1:
-                    {
-                        width = 1920;
-                        height = 1080;
-                        break;
-                    }
-                case 2:
-                    {
-                        width = 1680;
-                        height = 1050;
-                        break;
-                    }
-                case 3:
-                    {
-                        width = 1600;
-                        height = 900;
-                        break;
-                    }
-                case 4:
-                    {
-                        width = 1440;
-                        height = 900;
-                        break;
-                    }
-                case 5:
-                    {
-                        width = 1440;
-                        height = 1050;
-                        break;
-                    }
-                case 6:
-                    {
-                        width = 1366;
-                        height = 768;
-                        break;
-                    }
-                case 7:
-                    {
-                        width = 1360;
-                        height = 1024;
-                        break;
-                    }
-                case 8:
-                    {
-                        width = 1360;
-                        height = 768;
-                        break;
-                    }
-                case 9:
-                    {
-                        width = 1280;
-                        height = 1024;
-                        break;
-                    }
-                case 10:
-                    {
-                        width = 1280;
-                        height = 800;
-                        break;
-                    }
-                case 11:
-                    {
-                        width = 1280;
-                        height = 768;
-                        break;
-                    }
-                case 12:
-                    {
-                        width = 1280;
-                        height = 720;
-                        break;
-                    }
-                case 13:
-                    {
-                        width = 1120;
-                        height = 864;
-                        break;
-                    }
-                case 14:
-                    {
-                        width = 1024;
-                        height = 768;
-                        break;
-                    }
-            }
+                1 => (1920, 1080),
+                2 => (1680, 1050),
+                3 => (1600, 900),
+                4 => (1440, 900),
+                5 => (1440, 1050),
+                6 => (1366, 768),
+                7 => (1360, 1024),
+                8 => (1360, 768),
+                9 => (1280, 1024),
+                10 => (1280, 800),
+                11 => (1280, 768),
+                12 => (1280, 720),
+                13 => (1120, 864),
+                14 => (1024, 768),
+                _ => (1280, 720)
+            };
         }
 
         public static void ClearGameData()
@@ -379,7 +309,7 @@ namespace Client
 
         public static long IsEq(long startX, long startY)
         {
-            long isEqRet = default;
+            long isEq = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -397,19 +327,19 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isEqRet = i;
-                            return isEqRet;
+                            isEq = i;
+                            return isEq;
                         }
                     }
                 }
             }
 
-            return isEqRet;
+            return isEq;
         }
 
         public static long IsInv(long startX, long startY)
         {
-            long isInvRet = default;
+            long isInv = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -426,8 +356,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isInvRet = i;
-                            return isInvRet;
+                            isInv = i;
+                            return isInv;
                         }
                     }
                 }
@@ -438,7 +368,7 @@ namespace Client
 
         public static long IsSkill(long startX, long startY)
         {
-            long isSkillRet = default;
+            long isSkill = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -455,8 +385,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isSkillRet = i;
-                            return isSkillRet;
+                            isSkill = i;
+                            return isSkill;
                         }
                     }
                 }
@@ -467,7 +397,7 @@ namespace Client
 
         public static long IsBank(long startX, long startY)
         {
-            byte isBankRet = default;
+            byte isBank = default;
             Core.Type.Rect tempRec;
 
             for (byte i = 0; i < Constant.MaxBank; i++)
@@ -483,8 +413,8 @@ namespace Client
                     {
                         if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                         {
-                            isBankRet = i;
-                            return isBankRet;
+                            isBank = i;
+                            return isBank;
                         }
                     }
                 }
@@ -497,7 +427,7 @@ namespace Client
 
         public static long IsShop(long startX, long startY)
         {
-            long isShopRet = default;
+            long isShop = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -512,8 +442,8 @@ namespace Client
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        isShopRet = i;
-                        return isShopRet;
+                        isShop = i;
+                        return isShop;
                     }
                 }
             }
@@ -523,7 +453,7 @@ namespace Client
 
         public static long IsTrade(long startX, long startY)
         {
-            long isTradeRet = default;
+            long isTrade = default;
             Core.Type.Rect tempRec;
             long i;
 
@@ -538,8 +468,8 @@ namespace Client
                 {
                     if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        isTradeRet = i;
-                        return isTradeRet;
+                        isTrade = i;
+                        return isTrade;
                     }
                 }
             }

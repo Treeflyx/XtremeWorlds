@@ -1,0 +1,18 @@
+﻿<Project>
+    
+    <PropertyGroup>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <TargetFramework>net9.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Title>XtremeWorlds</Title>
+        <Description>2-D MMORPG Game Engine</Description>
+        <Company>Treefly Studios</Company>
+        <Product>Game Engine</Product>
+        <Copyright>Copyright © 2025</Copyright>
+        <Trademark>Treefly Studios</Trademark>
+    </PropertyGroup>
+
+</Project>

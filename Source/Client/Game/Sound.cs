@@ -267,21 +267,21 @@ namespace Client
 
         public static double CalculateSoundVolume(ref int x, ref int y)
         {
-            double calculateSoundVolumeRet = default;
+            double calculateSoundVolume = default;
             int x1, x2, y1, y2;
             double distance;
 
             if (!(GameState.InGame == true))
             {
-                calculateSoundVolumeRet = 1d;
-                return calculateSoundVolumeRet;
+                calculateSoundVolume = 1d;
+                return calculateSoundVolume;
             }
 
             if (GameState.InGame && x == GetPlayerX(GameState.MyIndex) && y == GetPlayerY(GameState.MyIndex))
             {
-                calculateSoundVolumeRet = 1d;
-                calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
-                return calculateSoundVolumeRet;
+                calculateSoundVolume = 1d;
+                calculateSoundVolume *= SettingsManager.Instance.SoundVolume;
+                return calculateSoundVolume;
             }
 
             if (x > -1 || y > -1)
@@ -307,30 +307,30 @@ namespace Client
                 // If the range is greater than 32, do not send a sound
                 if (distance / 32d > 32d)
                 {
-                    calculateSoundVolumeRet = 0d;
+                    calculateSoundVolume = 0d;
                 }
                 else
                 {
-                    calculateSoundVolumeRet = 1d / (distance / 32d);
+                    calculateSoundVolume = 1d / (distance / 32d);
 
-                    if (calculateSoundVolumeRet > 1d)
+                    if (calculateSoundVolume > 1d)
                     {
-                        calculateSoundVolumeRet = 1d;
+                        calculateSoundVolume = 1d;
                     }
-                    else if (calculateSoundVolumeRet < 0d)
+                    else if (calculateSoundVolume < 0d)
                     {
-                        calculateSoundVolumeRet *= -1;
+                        calculateSoundVolume *= -1;
                     }
                 }
             }
             else
             {
-                calculateSoundVolumeRet = 1d;
+                calculateSoundVolume = 1d;
             }
 
-            calculateSoundVolumeRet *= SettingsManager.Instance.SoundVolume;
+            calculateSoundVolume *= SettingsManager.Instance.SoundVolume;
 
-            return calculateSoundVolumeRet;
+            return calculateSoundVolume;
         }
 
         public static void FreeBass()

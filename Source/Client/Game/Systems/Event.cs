@@ -596,99 +596,99 @@ namespace Client
 
         public static object GetColorString(int color)
         {
-            object getColorStringRet = default;
+            object getColorString = default;
 
             switch (color)
             {
                 case 0:
                     {
-                        getColorStringRet = "Black";
+                        getColorString = "Black";
                         break;
                     }
                 case 1:
                     {
-                        getColorStringRet = "Blue";
+                        getColorString = "Blue";
                         break;
                     }
                 case 2:
                     {
-                        getColorStringRet = "Green";
+                        getColorString = "Green";
                         break;
                     }
                 case 3:
                     {
-                        getColorStringRet = "Cyan";
+                        getColorString = "Cyan";
                         break;
                     }
                 case 4:
                     {
-                        getColorStringRet = "Red";
+                        getColorString = "Red";
                         break;
                     }
                 case 5:
                     {
-                        getColorStringRet = "Magenta";
+                        getColorString = "Magenta";
                         break;
                     }
                 case 6:
                     {
-                        getColorStringRet = "Brown";
+                        getColorString = "Brown";
                         break;
                     }
                 case 7:
                     {
-                        getColorStringRet = "Grey";
+                        getColorString = "Grey";
                         break;
                     }
                 case 8:
                     {
-                        getColorStringRet = "Dark Grey";
+                        getColorString = "Dark Grey";
                         break;
                     }
                 case 9:
                     {
-                        getColorStringRet = "Bright Blue";
+                        getColorString = "Bright Blue";
                         break;
                     }
                 case 10:
                     {
-                        getColorStringRet = "Bright Green";
+                        getColorString = "Bright Green";
                         break;
                     }
                 case 11:
                     {
-                        getColorStringRet = "Bright Cyan";
+                        getColorString = "Bright Cyan";
                         break;
                     }
                 case 12:
                     {
-                        getColorStringRet = "Bright Red";
+                        getColorString = "Bright Red";
                         break;
                     }
                 case 13:
                     {
-                        getColorStringRet = "Pink";
+                        getColorString = "Pink";
                         break;
                     }
                 case 14:
                     {
-                        getColorStringRet = "Yellow";
+                        getColorString = "Yellow";
                         break;
                     }
                 case 15:
                     {
-                        getColorStringRet = "White";
+                        getColorString = "White";
                         break;
                     }
 
                 default:
                     {
-                        getColorStringRet = "Black";
+                        getColorString = "Black";
                         break;
                     }
             }
 
-            return getColorStringRet;
+            return getColorString;
 
         }
 

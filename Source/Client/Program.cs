@@ -12,32 +12,22 @@ using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
-using System;
-using System.Reflection;
 using Client.Game.Objects;
 using SDL2;
 
 namespace Client
 {
-
     public class GameClient : Microsoft.Xna.Framework.Game
     {
 
         public static GraphicsDeviceManager Graphics;
-        public static Microsoft.Xna.Framework.Graphics.SpriteBatch SpriteBatch;
+        public static SpriteBatch SpriteBatch;
 
-        public static readonly ConcurrentDictionary<string, Texture2D> TextureCache =
-            new ConcurrentDictionary<string, Texture2D>();
-
-        public static readonly ConcurrentDictionary<string, GfxInfo> GfxInfoCache =
-            new ConcurrentDictionary<string, GfxInfo>();
-
-        public static int TextureCounter;
-
-        public readonly BlendState MultiplyBlendState = new BlendState();
+        public static readonly ConcurrentDictionary<string, Texture2D> TextureCache = new();
+        public static readonly ConcurrentDictionary<string, GfxInfo> GfxInfoCache = new();
 
         private static int _gameFps;
-        private static readonly object FpsLock = new object();
+        private static readonly object FpsLock = new();
 
         // Safely set FPS with a lock
         public static void SetFps(int newFps)
@@ -57,15 +47,14 @@ namespace Client
         // Shared keyboard and mouse states for cross-thread access
         public static KeyboardState CurrentKeyboardState;
         public static KeyboardState PreviousKeyboardState;
-
         public static MouseState CurrentMouseState;
         public static MouseState PreviousMouseState;
 
         // Keep track of the key states to avoid repeated input
-        public static readonly Dictionary<Keys, bool> KeyStates = new Dictionary<Keys, bool>();
+        public static readonly Dictionary<Keys, bool> KeyStates = new();
 
         // Define a dictionary to store the last time a key was processed
-        public static Dictionary<Keys, DateTime> KeyRepeatTimers = new Dictionary<Keys, DateTime>();
+        public static Dictionary<Keys, DateTime> KeyRepeatTimers = new();
 
         // Minimum interval (in milliseconds) between repeated key inputs
         private const byte KeyRepeatInterval = 200;
@@ -73,10 +62,10 @@ namespace Client
         static float _dpiScale = 96;
 
         // Lock object to ensure thread safety
-        public static readonly object InputLock = new object();
+        public static readonly object InputLock = new();
 
         // Track the previous scroll value to compute delta
-        private static readonly object ScrollLock = new object();
+        private static readonly object ScrollLock = new();
 
         private TimeSpan _elapsedTime = TimeSpan.Zero;
 
@@ -137,8 +126,7 @@ namespace Client
 
         public GameClient()
         {
-            General.GetResolutionSize(SettingsManager.Instance.Resolution, ref GameState.ResolutionWidth,
-                ref GameState.ResolutionHeight);
+            (GameState.ResolutionWidth, GameState.ResolutionHeight) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
 
             Graphics = new GraphicsDeviceManager(this);
             
@@ -158,8 +146,7 @@ namespace Client
             // Add handler for PreparingDeviceSettings
             Graphics.PreparingDeviceSettings += (sender, args) =>
             {
-                args.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage =
-                    Microsoft.Xna.Framework.Graphics.RenderTargetUsage.PreserveContents;
+                args.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
                 args.GraphicsDeviceInformation.PresentationParameters.MultiSampleCount = 8;
             };
 
@@ -208,12 +195,12 @@ static void LoadFonts()
 
         protected override void LoadContent()
         {
-            SpriteBatch = new Microsoft.Xna.Framework.Graphics.SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
             TransparentTexture = new Texture2D(GraphicsDevice, 1, 1);
-            TransparentTexture.SetData(new Color[] { Color.White });
+            TransparentTexture.SetData([Color.White]);
             PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
-            PixelTexture.SetData(new Color[] { Color.White });
+            PixelTexture.SetData([Color.White]);
 
             LoadFonts();
             General.Startup();
@@ -306,9 +293,8 @@ static void LoadFonts()
             {
                 return;
             }
-            
-            int targetWidth = 0, targetHeight = 0;
-            General.GetResolutionSize(SettingsManager.Instance.Resolution, ref targetWidth, ref targetHeight);
+
+            var (targetWidth, targetHeight) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
             var targetAspect = (float)targetWidth / targetHeight;
             
             var destRect = GetAspectRatio(dX, dY, Graphics.PreferredBackBufferWidth * (int)_dpiScale, Graphics.PreferredBackBufferHeight * (int)_dpiScale, dW, dH, targetAspect);
@@ -547,14 +533,14 @@ static void LoadFonts()
             {
                 var uiPath = System.IO.Path.Combine(Core.Path.Skins, SettingsManager.Instance.Skin + ".cs");
 
-                if (!System.IO.File.Exists(uiPath))
+                if (!File.Exists(uiPath))
                 {
                     Console.WriteLine($"File not found: {uiPath}");
                 }
                 else
                 { 
                     // Open with default text editor
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    Process.Start(new ProcessStartInfo
                     {
                         FileName = uiPath,
                         UseShellExecute = true
@@ -920,7 +906,7 @@ static void LoadFonts()
 
                 if (GameState.MyEditorType == EditorType.Map)
                 {
-                    if (GameClient.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
+                    if (CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
                         if (GameState.CurLayer > 0)
                         {
@@ -941,7 +927,7 @@ static void LoadFonts()
 
                 if (GameState.MyEditorType == EditorType.Map)
                 {
-                    if (GameClient.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
+                    if (CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
                         if (GameState.CurLayer < Enum.GetValues(typeof(MapLayer)).Length)
                         {
@@ -1121,7 +1107,7 @@ static void LoadFonts()
             // Create a 1x1 white texture for drawing
             var whiteTexture = new Texture2D(SpriteBatch.GraphicsDevice, 1, 1);
 
-            whiteTexture.SetData(new Color[] { Color.White });
+            whiteTexture.SetData([Color.White]);
 
             // Draw the filled rectangle
             SpriteBatch.Draw(whiteTexture, new Rectangle(position.ToPoint(), size.ToPoint()), fillColor);
@@ -1169,7 +1155,7 @@ static void LoadFonts()
 
             // Create a 1x1 white texture
             var whiteTexture = new Texture2D(SpriteBatch.GraphicsDevice, 1, 1);
-            whiteTexture.SetData(new Color[] { Color.White });
+            whiteTexture.SetData([Color.White]);
 
             // Draw the filled rectangle
             SpriteBatch.Draw(whiteTexture, rect, fillColor);
@@ -1349,8 +1335,8 @@ static void LoadFonts()
                 bool LocalIsDirBlocked()
                 {
                     byte argdir = (byte)i;
-                    var ret = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[x, y].DirBlock, ref argdir);
-                    return ret;
+                    var n  = GameLogic.IsDirBlocked(ref Data.MyMap.Tile[x, y].DirBlock, ref argdir);
+                    return n;
                 }
 
                 if (!LocalIsDirBlocked())
@@ -1415,7 +1401,7 @@ static void LoadFonts()
 
             // Check if Npc exists
             if (Data.MyMapNpc[(int)mapNpcNum].Num < 0 ||
-                Data.MyMapNpc[(int)mapNpcNum].Num > Core.Constant.MaxNpcs)
+                Data.MyMapNpc[(int)mapNpcNum].Num > Constant.MaxNpcs)
                 return;
 
             x = (int)Math.Floor((double)Data.MyMapNpc[(int)mapNpcNum].X / 32);
@@ -1534,12 +1520,12 @@ static void LoadFonts()
             int x;
             int y;
 
-            if (Data.MyMapItem[itemNum].Num < 0 | Data.MyMapItem[itemNum].Num > Core.Constant.MaxItems)
+            if (Data.MyMapItem[itemNum].Num < 0 | Data.MyMapItem[itemNum].Num > Constant.MaxItems)
                 return;
 
             Item.StreamItem(Data.MyMapItem[itemNum].Num);
 
-            picNum = Core.Data.Item[Data.MyMapItem[itemNum].Num].Icon;
+            picNum = Data.Item[Data.MyMapItem[itemNum].Num].Icon;
 
             if (picNum < 1 | picNum > GameState.NumItems)
                 return;
@@ -1631,7 +1617,7 @@ static void LoadFonts()
             {
                 npcNum = (long)Data.MyMapNpc[(int)i].Num;
                 // exists?
-                if (npcNum >= 0L && npcNum <= Core.Constant.MaxNpcs)
+                if (npcNum >= 0L && npcNum <= Constant.MaxNpcs)
                 {
                     // alive?
                     if (Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] > 0 &
@@ -1731,9 +1717,9 @@ static void LoadFonts()
 
                     if (GameState.SkillBuffer >= 0)
                     {
-                        if ((int)Core.Data.Player[(int)i].Skill[GameState.SkillBuffer].Num >= 0)
+                        if ((int)Data.Player[(int)i].Skill[GameState.SkillBuffer].Num >= 0)
                         {
-                            if (Data.Skill[(int)Core.Data.Player[(int)i].Skill[GameState.SkillBuffer].Num]
+                            if (Data.Skill[(int)Data.Player[(int)i].Skill[GameState.SkillBuffer].Num]
                                     .CastTime >
                                 0)
                             {
@@ -1746,8 +1732,8 @@ static void LoadFonts()
                                 // calculate the width to fill
                                 if (width > 0L)
                                     barWidth = (long)Math.Round((General.GetTickCount() - GameState.SkillBufferTimer) /
-                                        (double)(Core.Data
-                                            .Skill[(int)Core.Data.Player[(int)i].Skill[GameState.SkillBuffer].Num]
+                                        (double)(Data
+                                            .Skill[(int)Data.Player[(int)i].Skill[GameState.SkillBuffer].Num]
                                             .CastTime * 1000) * width);
 
                                 // draw bar background
@@ -1912,8 +1898,8 @@ static void LoadFonts()
                             return;
 
                         // it's on our map - get co-ords
-                        x = GameLogic.ConvertMapX(Core.Data.Player[withBlock.Target].X ) + 16;
-                        y = GameLogic.ConvertMapY(Core.Data.Player[withBlock.Target].Y) - 32;
+                        x = GameLogic.ConvertMapX(Data.Player[withBlock.Target].X ) + 16;
+                        y = GameLogic.ConvertMapY(Data.Player[withBlock.Target].Y) - 32;
                         break;
                     }
                     case (byte)TargetType.Event:
@@ -2026,7 +2012,7 @@ static void LoadFonts()
                     Text.RenderText(theArray[(int)i],
                         (int)Math.Round(x - theArray[(int)i].Length / 2d - Text.GetTextWidth(theArray[(int)i]) / 2d +
                                         padding), (int)y2, QbColorToXnaColor(withBlock.Color),
-                        Microsoft.Xna.Framework.Color.Black);
+                        Color.Black);
                     y2 = y2 + 12L;
                 }
 
@@ -2059,7 +2045,7 @@ static void LoadFonts()
             // speed from weapon
             if (GetPlayerEquipment(index, Equipment.Weapon) >= 0)
             {
-                attackSpeed = Core.Data.Item[GetPlayerEquipment(index, Equipment.Weapon)].Speed;
+                attackSpeed = Data.Item[GetPlayerEquipment(index, Equipment.Weapon)].Speed;
             }
             else
             {
@@ -2070,21 +2056,21 @@ static void LoadFonts()
             anim = 0;
 
             // Check for attacking animation
-            if (Core.Data.Player[index].AttackTimer + attackSpeed / 2d > General.GetTickCount())
+            if (Data.Player[index].AttackTimer + attackSpeed / 2d > General.GetTickCount())
             {
-                if (Core.Data.Player[index].Attacking == 1)
+                if (Data.Player[index].Attacking == 1)
                 {
                     anim = 3;
                 }
             }
             else
             {
-                anim = Core.Data.Player[index].Steps;
+                anim = Data.Player[index].Steps;
             }
 
             // Check to see if we want to stop making him attack
             {
-                ref var withBlock = ref Core.Data.Player[index];
+                ref var withBlock = ref Data.Player[index];
                 if (withBlock.AttackTimer + attackSpeed < General.GetTickCount())
                 {
                     withBlock.Attacking = 0;
@@ -2146,7 +2132,7 @@ static void LoadFonts()
             }
 
             // Calculate the X
-            x = (int)Math.Round(Core.Data.Player[index].X - (gfxInfo.Width / 4d - 32d) / 2d);
+            x = (int)Math.Round(Data.Player[index].X - (gfxInfo.Width / 4d - 32d) / 2d);
 
             // Is the player's height more than 32..?
             if ((gfxInfo.Height / 4) > 32)
@@ -2173,9 +2159,9 @@ static void LoadFonts()
             {
                 if (GetPlayerEquipment(index, (Equipment)i) >= 0)
                 {
-                    if (Core.Data.Item[GetPlayerEquipment(index, (Equipment)i)].Paperdoll > 0)
+                    if (Data.Item[GetPlayerEquipment(index, (Equipment)i)].Paperdoll > 0)
                     {
-                        DrawPaperdoll(x, y, Core.Data.Item[GetPlayerEquipment(index, (Equipment)i)].Paperdoll, anim,
+                        DrawPaperdoll(x, y, Data.Item[GetPlayerEquipment(index, (Equipment)i)].Paperdoll, anim,
                             spriteleft);
                     }
                 }
@@ -2183,7 +2169,7 @@ static void LoadFonts()
 
             // Check to see if we want to stop showing emote
             {
-                ref var withBlock1 = ref Core.Data.Player[index];
+                ref var withBlock1 = ref Data.Player[index];
                 if (withBlock1.EmoteTimer < General.GetTickCount())
                 {
                     withBlock1.Emote = 0;
@@ -2192,9 +2178,9 @@ static void LoadFonts()
             }
 
             // check for emotes
-            if (Core.Data.Player[GameState.MyIndex].Emote > 0)
+            if (Data.Player[GameState.MyIndex].Emote > 0)
             {
-                DrawEmote(x, y, Core.Data.Player[GameState.MyIndex].Emote);
+                DrawEmote(x, y, Data.Player[GameState.MyIndex].Emote);
             }
         }
 
@@ -2228,13 +2214,13 @@ static void LoadFonts()
 
                     case 1: // Character Graphic
                     {
-                        RenderCharacterGraphic(Core.Data.MyMap.Event[i], x * GameState.SizeX, y * GameState.SizeY);
+                        RenderCharacterGraphic(Data.MyMap.Event[i], x * GameState.SizeX, y * GameState.SizeY);
                         break;
                     }
 
                     case 2: // Tileset Graphic
                     {
-                        RenderTilesetGraphic(Core.Data.MyMap.Event[i], x, y);
+                        RenderTilesetGraphic(Data.MyMap.Event[i], x, y);
                         break;
                     }
 
@@ -2597,15 +2583,15 @@ static void LoadFonts()
                             case (int)TargetType.Player:
                                 if (IsPlaying(GameState.MyTarget))
                                 {
-                                    if (Core.Data.Player[GameState.MyTarget].Map ==
-                                        Core.Data.Player[GameState.MyIndex].Map)
+                                    if (Data.Player[GameState.MyTarget].Map ==
+                                        Data.Player[GameState.MyIndex].Map)
                                     {
-                                        if (Core.Data.Player[GameState.MyTarget].Sprite > 0)
+                                        if (Data.Player[GameState.MyTarget].Sprite > 0)
                                         {
                                             // Draw the target icon for the player
                                             DrawTarget(
-                                                Core.Data.Player[GameState.MyTarget].X - 16,
-                                                Core.Data.Player[GameState.MyTarget].Y);
+                                                Data.Player[GameState.MyTarget].X - 16,
+                                                Data.Player[GameState.MyTarget].Y);
                                         }
                                     }
                                 }
@@ -2625,12 +2611,12 @@ static void LoadFonts()
                     {
                         if (IsPlaying(i))
                         {
-                            if (Core.Data.Player[i].Map == Core.Data.Player[GameState.MyIndex].Map)
+                            if (Data.Player[i].Map == Data.Player[GameState.MyIndex].Map)
                             {
-                                if (Core.Data.Player[i].Sprite == 0)
+                                if (Data.Player[i].Sprite == 0)
                                     continue;
 
-                                if (GameState.CurX == Core.Data.Player[i].X & GameState.CurY == Core.Data.Player[i].Y)
+                                if (GameState.CurX == Data.Player[i].X & GameState.CurY == Data.Player[i].Y)
                                 {
                                     if (GameState.MyTargetType == (int)TargetType.Player & GameState.MyTarget == i)
                                     {
@@ -2638,8 +2624,8 @@ static void LoadFonts()
 
                                     else
                                     {
-                                        DrawHover(Core.Data.Player[i].X * 32 - 16,
-                                            Core.Data.Player[i].Y * 32 + Core.Data.Player[i].Y);
+                                        DrawHover(Data.Player[i].X * 32 - 16,
+                                            Data.Player[i].Y * 32 + Data.Player[i].Y);
                                     }
                                 }
 
@@ -2687,7 +2673,7 @@ static void LoadFonts()
             {
                 for (i = 0; i < Constant.MaxProjectiles; i++)
                 {
-                    if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, i].ProjectileNum >= 0)
+                    if (Data.MapProjectile[Data.Player[GameState.MyIndex].Map, i].ProjectileNum >= 0)
                     {
                         Projectile.DrawProjectile(i);
                     }

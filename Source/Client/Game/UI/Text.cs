@@ -189,14 +189,14 @@ namespace Client
 
         public static string[] Explode(string str, char[] splitChars)
         {
-            string[] explodeRet = default;
+            string[] explode = default;
             var parts = new List<string>();
             int startindex = 0;
 
-            explodeRet = null;
+            explode = null;
 
             if (string.IsNullOrEmpty(str))
-                return explodeRet;
+                return explode;
 
             while (true)
             {

@@ -72,7 +72,7 @@ public static class Item
 
     public static void SpawnItem(int itemNum, int itemVal, int mapNum, int x, int y)
     {
-        if (itemNum < 0 || itemNum > Core.Constant.MaxItems || mapNum < 0 || mapNum > Core.Constant.MaxMaps)
+        if (itemNum < 0 || itemNum > Core.Constant.MaxItems || mapNum < 0 || mapNum >= Core.Constant.MaxMaps)
         {
             return;
         }
@@ -88,7 +88,7 @@ public static class Item
 
     public static void SpawnItemSlot(int mapItemSlot, int itemNum, int itemVal, int mapNum, int x, int y)
     {
-        if (mapItemSlot < 0 || mapItemSlot > Core.Constant.MaxMapItems || itemNum < 0 || itemNum > Core.Constant.MaxItems || mapNum < 0 || mapNum > Core.Constant.MaxMaps)
+        if (mapItemSlot < 0 || mapItemSlot > Core.Constant.MaxMapItems || itemNum < 0 || itemNum > Core.Constant.MaxItems || mapNum < 0 || mapNum >= Core.Constant.MaxMaps)
         {
             return;
         }

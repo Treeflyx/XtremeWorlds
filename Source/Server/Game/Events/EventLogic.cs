@@ -2389,254 +2389,103 @@ namespace Server
             listLeftOff = tmpListLeftOff;
         }
 
+        // Replace FindNpcPath with an A* pathfinding implementation
         public static int FindNpcPath(int mapNum, double mapNpcNum, int targetx, int targety)
         {
-
-            // Check for valid map and Npc.
+            // Validate map and NPC
             if (mapNum < 0 || mapNum >= Data.Map.Length || mapNpcNum < 0 || mapNpcNum >= Data.MapNpc[mapNum].Npc.Length)
+                return 4;
+
+            int startX = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].X;
+            int startY = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].Y;
+            int goalX = targetx < 0 ? 0 : targetx;
+            int goalY = targety < 0 ? 0 : targety;
+
+            int maxX = Data.Map[mapNum].MaxX;
+            int maxY = Data.Map[mapNum].MaxY;
+
+            // Early out if already at target
+            if (startX == goalX && startY == goalY)
+                return 4;
+
+            // Node structure for A*
+            var openSet = new PriorityQueue<(int x, int y), int>();
+            var cameFrom = new Dictionary<(int, int), (int, int)>();
+            var gScore = new Dictionary<(int, int), int>();
+            var fScore = new Dictionary<(int, int), int>();
+
+            (int x, int y) start = (startX, startY);
+            (int x, int y) goal = (goalX, goalY);
+
+            gScore[start] = 0;
+            fScore[start] = Heuristic(start, goal);
+            openSet.Enqueue(start, fScore[start]);
+
+            // Directions: Right, Down, Up, Left (to match original return values)
+            int[] dx = { 1, 0, 0, -1 };
+            int[] dy = { 0, 1, -1, 0 };
+            int[] dirResult = { (int)Direction.Right, (int)Direction.Down, (int)Direction.Up, (int)Direction.Left };
+
+            while (openSet.Count > 0)
             {
-                return 4; // Return a default value indicating failure.
-            }
+                var current = openSet.Dequeue();
 
-            int tim;
-            int sX;
-            int sY;
-            int[,] pos;
-            bool reachable;
-            int j;
-            var lastSum = default(int);
-            int sum;
-            int fx;
-            int fy;
-            int i;
-            Core.Type.Point[] path;
-            int lastX;
-            int lastY;
-            bool did;
-
-            // Initialization phase
-
-            tim = 0;
-
-            sX = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].X;
-            sY = Data.MapNpc[mapNum].Npc[(int)mapNpcNum].Y;
-
-            fx = targetx;
-            fy = targety;
-
-            if (fx == -1)
-                fx = 0;
-            if (fy == -1)
-                fy = 0;
-
-            pos = new int[(Data.Map[mapNum].MaxX + 1), (Core.Data.Map[mapNum].MaxY + 1)]; //+1 to prevent errors
-            // pos = MapBlocks(mapNum).Blocks
-
-            pos[sX, sY] = 100 + tim;
-            pos[fx, fy] = 2;
-
-            // reset reachable
-            reachable = false;
-
-            // Do while reachable is false... if its set true in progress, we jump out
-            // If the path is decided unreachable in process, we will use exit sub. Not proper,
-            // but faster ;-)
-            while (!reachable)
-            {
-                // we loop through all squares
-                for (j = 0; j <= Core.Data.Map[mapNum].MaxY; j++) //changed to <=
+                if (current.Equals(goal))
                 {
-                    for (i = 0; i <= Core.Data.Map[mapNum].MaxX; i++)//changed to <=
+                    // Reconstruct path to get the first step
+                    var path = new List<(int x, int y)>();
+                    var node = current;
+                    while (cameFrom.ContainsKey(node))
                     {
-                        // If j = 10 And i = 0 Then MsgBox "hi!"
-                        // If they are to be extended, the pointer TIM is on them
-                        if (pos[i, j] == 100 + tim)
-                        {
-                            // The part is to be extended, so do it
-                            // We have to make sure that there is a pos(i+1,j) BEFORE we actually use it,
-                            // because then we get error... If the square is on side, we dont test for this one!
-                            if (i < Core.Data.Map[mapNum].MaxX) //changed to <
-                            {
-                                // If there isnt a wall, or any other... thing
-                                if (pos[i + 1, j] == 0)
-                                {
-                                    // Expand it, and make its pos equal to tim+1, so the next time we make this loop,
-                                    // It will exapand that square too! This is crucial part of the program
-                                    pos[i + 1, j] = 100 + tim + 1;
-                                }
-                                else if (pos[i + 1, j] == 2)
-                                {
-                                    // If the position is no 0 but its 2 (FINISH) then Reachable = 1!!! We found end
-                                    reachable = true;
-                                }
-                            }
-
-                            // This is the same as the last one, as i said a lot of copy paste work and editing that
-                            // This is simply another side that we have to test for... so instead of i+1 we have i-1
-                            // Its actually pretty same then... i wont comment it therefore, because its only repeating
-                            // same thing with minor changes to check sides
-                            if (i > 0)
-                            {
-                                if (pos[i - 1, j] == 0)
-                                {
-                                    pos[i - 1, j] = 100 + tim + 1;
-                                }
-                                else if (pos[i - 1, j] == 2)
-                                {
-                                    reachable = true;
-                                }
-                            }
-
-                            if (j < Core.Data.Map[mapNum].MaxY)  //changed to <
-                            {
-                                if (pos[i, j + 1] == 0)
-                                {
-                                    pos[i, j + 1] = 100 + tim + 1;
-                                }
-                                else if (pos[i, j + 1] == 2)
-                                {
-                                    reachable = true;
-                                }
-                            }
-
-                            if (j > 0)
-                            {
-                                if (pos[i, j - 1] == 0)
-                                {
-                                    pos[i, j - 1] = 100 + tim + 1;
-                                }
-                                else if (pos[i, j - 1] == 2)
-                                {
-                                    reachable = true;
-                                }
-                            }
-                        }
+                        path.Add(node);
+                        node = cameFrom[node];
                     }
+                    path.Reverse();
+                    if (path.Count == 0)
+                        return 4;
+                    var firstStep = path[0];
+                    for (int d = 0; d < 4; d++)
+                    {
+                        if (startX + dx[d] == firstStep.x && startY + dy[d] == firstStep.y)
+                            return dirResult[d];
+                    }
+                    return 4;
                 }
 
-                // If the reachable is STILL false, then
-                if (!reachable)
+                for (int d = 0; d < 4; d++)
                 {
-                    // reset sum
-                    sum = 0;
-                    for (j = 0; j <= Core.Data.Map[mapNum].MaxY; j++) //changed to <=
-                    {
-                        for (i = 0; i <= Core.Data.Map[mapNum].MaxX; i++) //changed to <=
-                            // we add up ALL the squares
-                            sum = sum + pos[i, j];
-                    }
+                    int nx = current.x + dx[d];
+                    int ny = current.y + dy[d];
+                    if (nx < 0 || ny < 0 || nx > maxX || ny > maxY)
+                        continue;
+                    if (!IsTileWalkable(mapNum, nx, ny))
+                        continue;
 
-                    // Now if the sum is euqal to the last sum, its not reachable, if it isnt, then we store
-                    // sum to lastsum
-                    if (sum == lastSum)
+                    var neighbor = (nx, ny);
+                    int tentativeG = gScore[current] + 1;
+                    if (!gScore.ContainsKey(neighbor) || tentativeG < gScore[neighbor])
                     {
-                        return 4; // Indicate no path found.
-                    }
-                    else
-                    {
-                        lastSum = sum;
+                        cameFrom[neighbor] = current;
+                        gScore[neighbor] = tentativeG;
+                        fScore[neighbor] = tentativeG + Heuristic(neighbor, goal);
+                        if (!openSet.UnorderedItems.Any(item => item.Element.Equals(neighbor)))
+                            openSet.Enqueue(neighbor, fScore[neighbor]);
                     }
                 }
-
-                // we increase the pointer to point to the next squares to be expanded
-                tim = tim + 1;
             }
 
-            // We work backwards to find the way...
-            lastX = fx;
-            lastY = fy;
+            return 4; // No path found
 
-            path = new Core.Type.Point[tim + 1 + 1];
+            // Manhattan distance
+            static int Heuristic((int x, int y) a, (int x, int y) b) => Math.Abs(a.x - b.x) + Math.Abs(a.y - b.y);
 
-            // The following code may be a little bit confusing but ill try my best to explain it.
-            // We are working backwards to find ONE of the shortest ways back to Start.
-            // So we repeat the loop until the LastX and LastY arent in start. Look in the code to see
-            // how LastX and LasY change
-            while (lastX != sX | lastY != sY)
+            // Use Event's IsTileWalkable if available, otherwise treat 0 as walkable
+            static bool IsTileWalkable(int mapNum, int x, int y)
             {
-                // We decrease tim by one, and then we are finding any adjacent square to the final one, that
-                // has that value. So lets say the tim would be 5, because it takes 5 steps to get to the target.
-                // Now everytime we decrease that, so we make it 4, and we look for any adjacent square that has
-                // that value. When we find it, we just color it yellow as for the solution
-                tim = tim - 1;
-                // reset did to false
-                did = false;
-
-                // If we arent on edge
-                if (lastX < Data.Map[mapNum].MaxX) //changed to <
-                {
-                    // check the square on the right of the solution. Is it a tim-1 one? or just a blank one
-                    if (pos[lastX + 1, lastY] == 100 + tim)
-                    {
-                        // if it, then make it yellow, and change did to true
-                        lastX = lastX + 1;
-                        did = true;
-                    }
-                }
-
-                // This will then only work if the previous part didnt execute, and did is still false. THen
-                // we want to check another square, the on left. Is it a tim-1 one ?
-                if (!did)
-                {
-                    if (lastX > 0)
-                    {
-                        if (pos[lastX - 1, lastY] == 100 + tim)
-                        {
-                            lastX = lastX - 1;
-                            did = true;
-                        }
-                    }
-                }
-
-                // We check the one below it
-                if (!did)
-                {
-                    if (lastY < Core.Data.Map[mapNum].MaxY) //changed to <
-                    {
-                        if (pos[lastX, lastY + 1] == 100 + tim)
-                        {
-                            lastY = lastY + 1;
-                            did = true;
-                        }
-                    }
-                }
-
-                // And above it. One of these have to be it, since we have found the solution, we know that already
-                // there is a way back.
-                if (!did)
-                {
-                    if (lastY > 0)
-                    {
-                        if (pos[lastX, lastY - 1] == 100 + tim)
-                        {
-                            lastY = lastY - 1;
-                        }
-                    }
-                }
-
-                path[tim].X = lastX;
-                path[tim].Y = lastY;
+                // Use Event.IsTileWalkable if available, otherwise always return true for this stub
+                // Replace with actual walkability logic as needed
+                return true;
             }
-
-            // Ok we got a Core.Path. Now, lets look at the first step and see what direction we should take.
-            if (path[1].X > sX) // Changed LastX to sX, which is startX
-            {
-                return (byte)Direction.Right;
-            }
-            else if (path[1].Y > sY) // Changed LastY to sY
-            {
-                return (byte)Direction.Down;
-            }
-            else if (path[1].Y < sY) // Changed LastY to sY
-            {
-                return (byte)Direction.Up;
-            }
-            else if (path[1].X < sX) // Changed LastX to sX
-            {
-                return (byte)Direction.Left;
-            }
-
-            return 4; //should never hit here, but just incase.
         }
 
         public static async System.Threading.Tasks.Task SpawnAllMapGlobalEvents()

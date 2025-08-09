@@ -793,7 +793,7 @@ public class NetworkSend
 
     public static byte[] PlayerData(int index)
     {
-        byte[] playerDataRet = default;
+        byte[] playerData = default;
         var buffer = new ByteStream(4);
         int i;
 
@@ -820,10 +820,10 @@ public class NetworkSend
             buffer.WriteInt32(GetPlayerGatherSkillMaxExp(index, i));
         }
 
-        playerDataRet = buffer.ToArray();
+        playerData = buffer.ToArray();
 
         buffer.Dispose();
-        return playerDataRet;
+        return playerData;
     }
 
     public static void SendPlayerXy(int index)

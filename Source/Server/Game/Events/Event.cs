@@ -1,16 +1,8 @@
 using Core;
 using Core.Serialization;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using Mirage.Sharp.Asfw;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
@@ -211,7 +203,7 @@ namespace Server
         }
 
         private static bool IsValidMapAndDirection(int mapNum, byte dir) =>
-            mapNum >= 0 && mapNum <= Core.Constant.MaxMaps && dir >= (byte)Direction.Up && dir <= (byte)Direction.DownRight;
+            mapNum >= 0 && mapNum < Core.Constant.MaxMaps && dir >= 0 && dir <= System.Enum.GetValues(typeof(Direction)).Length;
 
         public static void EventDir(int playerIndex, int mapNum, int eventId, int dir, bool globalEvent = false)
         {

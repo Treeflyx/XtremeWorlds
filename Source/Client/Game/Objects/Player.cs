@@ -94,7 +94,7 @@ namespace Client
         #region Movement
         public static void CheckMovement()
         {
-            if (IsTryingToMove() && CanPlayerMove())
+            if (IsTryingToMove() && CanMove())
             {
                 // Check if player has the shift key down for running
                 if (GameState.VbKeyShift)
@@ -188,11 +188,11 @@ namespace Client
 
         public static bool IsTryingToMove()
         {
-            bool isTryingToMoveRet = default;
+            bool isTryingToMove = default;
 
             if (GameState.DirUp | GameState.DirDown | GameState.DirLeft | GameState.DirRight)
             {
-                isTryingToMoveRet = true;
+                isTryingToMove = true;
             }
             else
             {
@@ -203,54 +203,54 @@ namespace Client
                 }
             }
 
-            return isTryingToMoveRet;
+            return isTryingToMove;
 
         }
 
-        public static bool CanPlayerMove()
+        public static bool CanMove()
         {
-            bool canMoveRet = default;
+            bool canMove = default;
             int d;
 
-            canMoveRet = true;
+            canMove = true;
 
 
             if (Event.HoldPlayer)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             if (GameState.GettingMap)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             // Make sure they haven't just casted a skill
             if (GameState.SkillBuffer >= 0)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             // make sure they're not stunned
             if (GameState.StunDuration > 0)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             if (Event.InEvent)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             if (!GameState.InSmallChat)
             {
-                canMoveRet = false;
-                return canMoveRet;
+                canMove = false;
+                return canMove;
             }
 
             if (Trade.InTrade >= 0)
@@ -278,7 +278,7 @@ namespace Client
                         {
                             GameState.DirUp = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Down);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -290,7 +290,7 @@ namespace Client
                         {
                             GameState.DirDown = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Up);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -302,7 +302,7 @@ namespace Client
                         {
                             GameState.DirLeft = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -314,7 +314,7 @@ namespace Client
                         {
                             GameState.DirRight = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Left);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -330,21 +330,21 @@ namespace Client
                             GameState.DirLeft = false;
                             GameState.DirRight = true;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Down == 0 && GetPlayerY(GameState.MyIndex) <= 0)
                         {
                             GameState.DirUp = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Down);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Right == 0 && GetPlayerX(GameState.MyIndex) <= 0)
                         {
                             GameState.DirLeft = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -360,21 +360,21 @@ namespace Client
                             GameState.DirRight = false;
                             GameState.DirLeft = true;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Left);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Up == 0 && GetPlayerY(GameState.MyIndex) <= 0)
                         {
                             GameState.DirUp = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Down);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Right == 0 && GetPlayerX(GameState.MyIndex) <= 0)
                         {
                             GameState.DirLeft = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -390,21 +390,21 @@ namespace Client
                             GameState.DirLeft = false;
                             GameState.DirRight = true;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Up == 0 && GetPlayerY(GameState.MyIndex) <= 0)
                         {
                             GameState.DirDown = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Up);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Right == 0 && GetPlayerX(GameState.MyIndex) <= 0)
                         {
                             GameState.DirLeft = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Right);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -420,21 +420,21 @@ namespace Client
                             GameState.DirRight = false;
                             GameState.DirLeft = true;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Left);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Down == 0 && GetPlayerY(GameState.MyIndex) >= Data.MyMap.MaxY)
                         {
                             GameState.DirDown = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Up);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         if (Data.Map[GetPlayerMap(GameState.MyIndex)].Right == 0 && GetPlayerX(GameState.MyIndex) >= Data.MyMap.MaxX)
                         {
                             GameState.DirRight = false;
                             SetPlayerDir(GameState.MyIndex, (int)Direction.Left);
-                            return canMoveRet;
+                            return canMove;
                         }
 
                         break;
@@ -450,19 +450,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.Up))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.Up)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Up > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
 
@@ -473,19 +473,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.Down))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.Down)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Down > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
 
@@ -496,19 +496,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.Left))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.Left)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
 
@@ -519,19 +519,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.Right))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.Right)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
 
@@ -543,19 +543,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.UpRight))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.UpRight)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Up > 0 & Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
             else if (GameState.DirUp & GameState.DirLeft)
@@ -565,19 +565,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.UpLeft))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.UpLeft)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Up > 0 & Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
             else if (GameState.DirDown & GameState.DirRight)
@@ -587,19 +587,19 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.DownRight))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.DownRight)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Down > 0 & Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
             else if (GameState.DirDown & GameState.DirLeft)
@@ -609,44 +609,44 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte)Direction.DownLeft))
                     {
-                        canMoveRet = false;
+                        canMove = false;
                         if (d != (int)Direction.DownLeft)
                         {
                             NetworkSend.SendPlayerDir();
                         }
-                        return canMoveRet;
+                        return canMove;
                     }
                 }
                 else if (Data.MyMap.Down > 0 & Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMoveRet = false;
-                    return canMoveRet;
+                    canMove = false;
+                    return canMove;
                 }
             }
 
-            return canMoveRet;
+            return canMove;
 
         }
 
         public static bool CheckPlayerDir(byte direction)
         {
-            bool checkPlayerDirRet = default;
+            bool checkPlayerDir = default;
             var x = default(int);
             var y = default(int);
             int i;
 
             if (GetPlayerX(GameState.MyIndex) >= Data.Map[GetPlayerMap(GameState.MyIndex)].MaxX || GetPlayerY(GameState.MyIndex) >= Data.Map[GetPlayerMap(GameState.MyIndex)].MaxY)
             {
-                checkPlayerDirRet = true;
-                return checkPlayerDirRet;
+                checkPlayerDir = true;
+                return checkPlayerDir;
             }
 
             // check directional blocking
             if (GameLogic.IsDirBlocked(ref Data.MyMap.Tile[GetPlayerX(GameState.MyIndex), GetPlayerY(GameState.MyIndex)].DirBlock, ref direction))
             {
-                checkPlayerDirRet = true;
-                return checkPlayerDirRet;
+                checkPlayerDir = true;
+                return checkPlayerDir;
             }
 
             switch (direction)
@@ -703,22 +703,22 @@ namespace Client
 
             if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
             {
-                checkPlayerDirRet = true;
-                return checkPlayerDirRet;
+                checkPlayerDir = true;
+                return checkPlayerDir;
             }
 
             // Check to see if the map tile is blocked or not
             if (Data.MyMap.Tile[x, y].Type == TileType.Blocked | Data.MyMap.Tile[x, y].Type2 == TileType.Blocked)
             {
-                checkPlayerDirRet = true;
-                return checkPlayerDirRet;
+                checkPlayerDir = true;
+                return checkPlayerDir;
             }
 
             // Check to see if the map tile is tree or not
             if (Data.MyMap.Tile[x, y].Type == TileType.Resource | Data.MyMap.Tile[x, y].Type2 == TileType.Resource)
             {
-                checkPlayerDirRet = true;
-                return checkPlayerDirRet;
+                checkPlayerDir = true;
+                return checkPlayerDir;
             }
 
             // Check to see if a player is already on that tile
@@ -732,8 +732,8 @@ namespace Client
                         {
                             if (Core.Data.Player[i].X == x & Core.Data.Player[i].Y == y)
                             {
-                                checkPlayerDirRet = true;
-                                return checkPlayerDirRet;
+                                checkPlayerDir = true;
+                                return checkPlayerDir;
                             }
                         }
                     }
@@ -746,8 +746,8 @@ namespace Client
                     {
                         if (Data.MyMapNpc[i].Num >= 0 & Data.MyMapNpc[i].X == x & Data.MyMapNpc[i].Y == y)
                         {
-                            checkPlayerDirRet = true;
-                            return checkPlayerDirRet;
+                            checkPlayerDir = true;
+                            return checkPlayerDir;
                         }
                     }
                 }
@@ -762,18 +762,18 @@ namespace Client
                     {
                         if (Data.MapEvents[i].WalkThrough == 0)
                         {
-                            checkPlayerDirRet = true;
-                            return checkPlayerDirRet;
+                            checkPlayerDir = true;
+                            return checkPlayerDir;
                         }
                     }
                 }
             }
 
-            return checkPlayerDirRet;
+            return checkPlayerDir;
 
         }
 
-        public static void ProcessPlayerMovement(int index)
+        public static void ProcessMovement(int index)
         {
             if (Data.Player[GameState.MyIndex].IsMoving)
             {
@@ -1024,15 +1024,15 @@ namespace Client
 
         public static int FindSkill(int skillNum)
         {
-            int findSkillRet = default;
+            int findSkill = default;
             int i;
 
-            findSkillRet = 0;
+            findSkill = 0;
 
             // Check for subscript out of range
             if (skillNum < 0 | skillNum > Constant.MaxSkills)
             {
-                return findSkillRet;
+                return findSkill;
             }
 
             for (i = 0; i < Constant.MaxPlayerSkills; i++)
@@ -1040,12 +1040,12 @@ namespace Client
                 // Check to see if the player has the skill
                 if (GetPlayerSkill(GameState.MyIndex, i) == skillNum)
                 {
-                    findSkillRet = i;
-                    return findSkillRet;
+                    findSkill = i;
+                    return findSkill;
                 }
             }
 
-            return findSkillRet;
+            return findSkill;
 
         }
 

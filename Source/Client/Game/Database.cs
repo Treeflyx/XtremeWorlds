@@ -28,10 +28,11 @@ namespace Client
 
         public static void ClearNpc(int index)
         {
+            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
             Data.Npc[index].AttackSay = "";
             Data.Npc[index].Name = "";
             Data.Npc[index] = default;
-            Data.Npc[index].Stat = new byte[6];
+            Data.Npc[index].Stat = new byte[statCount];
             Data.Npc[index].DropChance = new int[6];
             Data.Npc[index].DropItem = new int[6];
             Data.Npc[index].DropItemValue = new int[6];
