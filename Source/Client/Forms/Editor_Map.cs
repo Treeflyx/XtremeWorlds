@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using Eto.Forms;
+using Eto.Drawing;
 using Assimp.Configs;
 using Core;
 using Microsoft.VisualBasic;
@@ -16,186 +17,190 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 namespace Client
 {
 
-    public partial class Editor_Map
+    public partial class Editor_Map : Form
     {
-        private static int tilesetOffsetX = 0;
+        private static readonly int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
+
+        public RadioButton optTrap = new RadioButton{ Text = "Trap" };
+        public RadioButton optHeal = new RadioButton{ Text = "Heal" };
+        public RadioButton optBank = new RadioButton{ Text = "Bank" };
+        public RadioButton optShop = new RadioButton{ Text = "Shop" };
+        public RadioButton optNpcSpawn = new RadioButton{ Text = "Npc Spawn" };
+        public RadioButton optResource = new RadioButton{ Text = "Resource" };
+        public RadioButton optNpcAvoid = new RadioButton{ Text = "Npc Avoid" };
+        public RadioButton optItem = new RadioButton{ Text = "Item" };
+        public RadioButton optWarp = new RadioButton{ Text = "Warp" };
+        public RadioButton optBlocked = new RadioButton{ Text = "Blocked" };
+        public Panel pnlBack = new Panel();
+        public ImageView picBackSelect = new ImageView();
+        public Panel pnlAttributes = new Panel();
+        public GroupBox fraAnimation = new GroupBox{ Text = "Animation" };
+        public ComboBox cmbAnimation = new ComboBox();
+        public Button brnAnimation = new Button{ Text = "OK" };
+        public GroupBox fraMapWarp = new GroupBox{ Text = "Map Warp" };
+        public Button btnMapWarp = new Button{ Text = "OK" };
+        public Slider scrlMapWarpY = new Slider();
+        public Slider scrlMapWarpX = new Slider();
+        public Slider scrlMapWarpMap = new Slider();
+        public Label lblMapWarpY = new Label();
+        public Label lblMapWarpX = new Label();
+        public Label lblMapWarpMap = new Label();
+        public GroupBox fraNpcSpawn = new GroupBox{ Text = "NPC Spawn" };
+        public ComboBox lstNpc = new ComboBox();
+        public Button btnNpcSpawn = new Button{ Text = "OK" };
+        public Slider scrlNpcDir = new Slider();
+        public Label lblNpcDir = new Label();
+        public GroupBox fraHeal = new GroupBox{ Text = "Heal" };
+        public Slider scrlHeal = new Slider();
+        public Label lblHeal = new Label();
+        public ComboBox cmbHeal = new ComboBox();
+        public Button btnHeal = new Button{ Text = "OK" };
+        public GroupBox fraShop = new GroupBox{ Text = "Shop" };
+        public ComboBox cmbShop = new ComboBox();
+        public Button btnShop = new Button{ Text = "OK" };
+        public GroupBox fraResource = new GroupBox{ Text = "Resource" };
+        public Button btnResourceOk = new Button{ Text = "OK" };
+        public Slider scrlResource = new Slider();
+        public Label lblResource = new Label();
+        public GroupBox fraMapItem = new GroupBox{ Text = "Map Item" };
+        public ImageView picMapItem = new ImageView();
+        public Button btnMapItem = new Button{ Text = "OK" };
+        public Slider scrlMapItemValue = new Slider();
+        public Slider scrlMapItem = new Slider();
+        public Label lblMapItem = new Label();
+        public GroupBox fraTrap = new GroupBox{ Text = "Trap" };
+        public Button btnTrap = new Button{ Text = "OK" };
+        public Slider scrlTrap = new   Slider();
+        public Label lblTrap = new Label();
+        public ToolBar? toolbar;
+        public static Editor_Map Instance { get; private set; } = null!; // set in ctor
+        public TabControl tabPages = new TabControl();
+        public TabPage tpTiles = new TabPage{ Text = "Tiles" };
+        public ComboBox cmbAutoTile = new ComboBox();
+        public Label Label11 = new Label{ Text = "Autotile" };
+        public Label Label10 = new Label{ Text = "Layer" };
+        public ComboBox cmbLayers = new ComboBox();
+        public Label Label9 = new Label{ Text = "Tileset" };
+        public ComboBox cmbTileSets = new ComboBox();
+        public TabPage tpAttributes = new TabPage{ Text = "Attributes" };
+        public RadioButton optNoCrossing = new RadioButton{ Text = "No Crossing" };
+        public Button btnFillAttributes = new Button{ Text = "Fill" };
+        public RadioButton optInfo = new RadioButton{ Text = "Info" };
+        public Label Label23 = new Label();
+        public ComboBox cmbAttribute = new ComboBox();
+        public RadioButton optAnimation = new RadioButton{ Text = "Animation" };
+        public TabPage tpNpcs = new TabPage{ Text = "NPCs" };
+        public GroupBox fraNpcs = new GroupBox{ Text = "NPCs" };
+        public ListBox lstMapNpc = new ListBox();
+        public Label Label18 = new Label();
+        public Label Label17 = new Label();
+        public ComboBox cmbNpcList = new ComboBox();
+        public ComboBox ComboBox23 = new ComboBox();
+        public TabPage tpSettings = new TabPage{ Text = "Settings" };
+        public GroupBox fraMapSettings = new GroupBox{ Text = "Map Settings" };
+        public Label Label22 = new Label();
+        public ComboBox lstShop = new ComboBox();
+        public Label Label8 = new Label();
+        public ComboBox lstMoral = new ComboBox();
+        public GroupBox fraMapLinks = new GroupBox{ Text = "Links" };
+        public TextBox txtDown = new TextBox();
+        public TextBox txtLeft = new TextBox();
+        public Label lblMap = new Label();
+        public TextBox txtRight = new TextBox();
+        public TextBox txtUp = new TextBox();
+        public GroupBox fraBootSettings = new GroupBox{ Text = "Boot" };
+        public CheckBox chkIndoors = new CheckBox{ Text = "Indoors" };
+        public CheckBox chkNoMapRespawn = new CheckBox{ Text = "No Respawn" };
+        public TextBox txtBootMap = new TextBox();
+        public Label Label5 = new Label();
+        public TextBox txtBootY = new TextBox();
+        public Label Label3 = new Label();
+        public TextBox txtBootX = new TextBox();
+        public Label Label4 = new Label();
+        public GroupBox fraMaxSizes = new GroupBox{ Text = "Max Sizes" };
+        public TextBox txtMaxY = new TextBox();
+        public Label Label2 = new Label();
+        public TextBox txtMaxX = new TextBox();
+        public Label Label7 = new Label();
+        public GroupBox GroupBox2 = new GroupBox{ Text = "Music" };
+        public ListBox lstMusic = new ListBox();
+        public Button btnPreview = new Button{ Text = "Preview" };
+        public TextBox txtName = new TextBox();
+        public Label Label6 = new Label();
+        public TabPage tpDirBlock = new TabPage{ Text = "Dir Block" };
+        public Label Label12 = new Label();
+        public TabPage tpEvents = new TabPage{ Text = "Events" };
+        public Label lblPasteMode = new Label();
+        public Label lblCopyMode = new Label();
+        public Button btnPasteEvent = new Button{ Text = "Paste" };
+        public Label Label16 = new Label();
+        public Button btnCopyEvent = new Button{ Text = "Copy" };
+        public Label Label15 = new Label();
+        public Label Label13 = new Label();
+        public TabPage tpEffects = new TabPage{ Text = "Effects" };
+        public GroupBox GroupBox6 = new GroupBox{ Text = "Brightness" };
+        public Slider scrlMapBrightness = new Slider();
+        public Label lblMapBrightness = new Label();
+        public GroupBox GroupBox5 = new GroupBox{ Text = "Parallax" };
+        public ComboBox cmbParallax = new ComboBox();
+        public GroupBox GroupBox4 = new GroupBox{ Text = "Panorama" };
+        public ComboBox cmbPanorama = new ComboBox();
+        public GroupBox GroupBox3 = new GroupBox{ Text = "Tint" };
+        public CheckBox chkTint = new CheckBox{ Text = "Tint" };
+        public Label lblMapAlpha = new Label();
+        public Label lblMapBlue = new Label();
+        public Label lblMapGreen = new Label();
+        public Label lblMapRed = new Label();
+        public Slider scrlMapAlpha = new Slider();
+        public Slider scrlMapBlue = new Slider();
+        public Slider scrlMapGreen = new Slider();
+        public Slider scrlMapRed = new Slider();
+        public GroupBox GroupBox1 = new GroupBox{ Text = "Fog" };
+        public Slider scrlFogOpacity = new Slider();
+        public Label lblFogOpacity = new Label();
+        public Slider scrlFogSpeed = new Slider();
+        public Label lblFogSpeed = new Label();
+        public Slider scrlIntensity = new Slider();
+        public Label lblIntensity = new Label();
+        public Slider scrlFog = new Slider();
+        public Label lblFogIndex = new Label();
+        public Label Label14 = new Label();
+        public ComboBox cmbWeather = new ComboBox();
 
         public Editor_Map()
         {
-            InitializeComponent();
+            Instance = this;
+            Title = "Map Editor";
+            ClientSize = new Size(1200, 800);
+            InitializeToolbar();
+            lblMapBrightness.Text = "Brightness:";
         }
 
-        #region Form
-        private void Editor_Map_Load(object sender, EventArgs e)
+        private void InitializeToolbar()
         {
-            pnlAttributes.BringToFront();
-            pnlAttributes.Visible = false;
-            pnlAttributes.Left = 4;
-            pnlAttributes.Top = 28;
-            optBlocked.Checked = true;
-            tabPages.SelectedIndex = 0;
-
-            UpdateDirBlock();
-
-            ToolStrip.BringToFront();
-
-            scrlFog.Maximum = GameState.NumFogs;
-            scrlMapItem.Maximum = Constant.MaxItems;
-        }
-
-        private static void UpdateDirBlock()
-        {
-            GameState.DirArrowX[(int)Direction.Up] = 12;
-            GameState.DirArrowY[(int)Direction.Up] = 0;
-            GameState.DirArrowX[(int)Direction.Down] = 12;
-            GameState.DirArrowY[(int)Direction.Down] = 23;
-            GameState.DirArrowX[(int)Direction.Left] = 0;
-            GameState.DirArrowY[(int)Direction.Left] = 12;
-            GameState.DirArrowX[(int)Direction.Right] = 23;
-            GameState.DirArrowY[(int)Direction.Right] = 12;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_MOUSEACTIVATE = 0x0021;
-            const int WM_NCHITTEST = 0x0084;
-
-            if (m.Msg == WM_MOUSEACTIVATE)
+            toolbar = new ToolBar
             {
-                // Immediately activate and process the click.
-                m.Result = new IntPtr(1); // MA_ACTIVATE
-                return;
-            }
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                // Let the window know the mouse is in client area.
-                m.Result = new IntPtr(1); // HTCLIENT
-                return;
-            }
-
-            base.WndProc(ref m);
-        }
-
-        private void Editor_Map_Resize(object sender, EventArgs e)
-        {
-            this.AutoScroll = true;
-            this.PerformLayout();
-        }
-
-        private void Editor_Map_Activated(object sender, EventArgs e)
-        {
-            this.AutoScroll = true;
-        }
-
-        private void DrawItem()
-        {
-            int itemNum;
-
-            itemNum = Core.Data.Item[scrlMapItem.Value].Icon;
-
-            if (itemNum < 0 | itemNum > GameState.NumItems)
-            {
-                picMapItem.BackgroundImage = null;
-                return;
-            }
-
-            if (File.Exists(System.IO.Path.Combine(Core.Path.Items, itemNum + GameState.GfxExt)))
-            {
-                picMapItem.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Items, itemNum + GameState.GfxExt));
-            }
-
-        }
-
-
-        // Mouse wheel event handler
-        private void PicBackSelect_MouseWheel(object sender, MouseEventArgs e)
-        {
-            // Vertical scroll
-            if (e.Delta > 0)
-                tilesetOffsetY = Math.Max(tilesetOffsetY - GameState.SizeY, 0);
-            else
-                tilesetOffsetY += GameState.SizeY;
-
-            // Clamp to image bounds
-            int maxY = 0;
-            if (Instance.picBackSelect.Image != null)
-                maxY = Math.Max(0, Instance.picBackSelect.Image.Height - Instance.picBackSelect.Height);
-            tilesetOffsetY = Math.Min(tilesetOffsetY, maxY);
-
-            Instance.picBackSelect.Invalidate();
-        }
-
-        // Optional: Add horizontal scroll with Shift key
-        protected override void OnMouseWheel(MouseEventArgs e)
-        {
-            if (picBackSelect.Focused && ModifierKeys.HasFlag(Keys.Shift))
-            {
-                if (e.Delta > 0)
-                    tilesetOffsetX = Math.Max(tilesetOffsetX - GameState.SizeX, 0);
-                else
-                    tilesetOffsetX += GameState.SizeX;
-
-                int maxX = 0;
-                if (Instance.picBackSelect.Image != null)
-                    maxX = Math.Max(0, Instance.picBackSelect.Image.Width - Instance.picBackSelect.Width);
-                tilesetOffsetX = Math.Min(tilesetOffsetX, maxX);
-
-                Instance.picBackSelect.Invalidate();
-            }
-            base.OnMouseWheel(e);
-        }
-
-        // Update DrawTileset to use offset
-        public static void DrawTileset()
-        {
-            int tilesetIndex;
-
-            if (Instance.cmbTileSets.SelectedIndex == -1)
-                return;
-
-            tilesetIndex = GameState.CurTileset;
-            if (tilesetIndex == 0)
-                return;
-
-            string tilesetPath = System.IO.Path.Combine(Core.Path.Tilesets, tilesetIndex.ToString());
-            var gfxInfo = GameClient.GetGfxInfo(tilesetPath);
-
-            if (!System.IO.File.Exists(tilesetPath + GameState.GfxExt))
-            {
-                Instance.picBackSelect.Image = null;
-                return;
-            }
-
-            using (var srcImage = System.Drawing.Image.FromFile(tilesetPath + GameState.GfxExt))
-            {
-                int srcWidth = srcImage.Width;
-                int srcHeight = srcImage.Height;
-
-                using (var bmp = new System.Drawing.Bitmap(srcWidth, srcHeight))
-                using (var g = System.Drawing.Graphics.FromImage(bmp))
+                Items =
                 {
-                    g.Clear(System.Drawing.Color.Black);
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-
-                    // Draw the image at (-offsetX, -offsetY) to simulate scrolling
-                    g.DrawImage(srcImage, -tilesetOffsetX, -tilesetOffsetY, srcWidth, srcHeight);
-
-                    // Draw selection rectangle (adjusted for offset)
-                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX - tilesetOffsetX;
-                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY - tilesetOffsetY;
-                    int scaledWidth = GameState.EditorTileWidth * GameState.SizeX;
-                    int scaledHeight = GameState.EditorTileHeight * GameState.SizeY;
-
-                    using (var pen = new System.Drawing.Pen(System.Drawing.Color.Red, 1))
-                    {
-                        g.DrawRectangle(pen, scaledX, scaledY, scaledWidth, scaledHeight);
-                    }
-
-                    Instance.picBackSelect.Image?.Dispose();
-                    Instance.picBackSelect.Image = (System.Drawing.Image)bmp.Clone();
+                    new ButtonToolItem{ Text = "Save", Command = new Command((_,__) => TsbSave_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Discard", Command = new Command((_,__) => TsbDiscard_Click(this, EventArgs.Empty))},
+                    new SeparatorToolItem(),
+                    new ButtonToolItem{ Text = "Grid", Command = new Command((_,__) => TsbMapGrid_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Opacity"},
+                    new SeparatorToolItem(),
+                    new ButtonToolItem{ Text = "Fill", Command = new Command((_,__) => TsbFill_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Clear", Command = new Command((_,__) => TsbClear_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Dropper", Command = new Command((_,__) => TsbEyeDropper_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Copy", Command = new Command((_,__) => tsbCopyMap_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Delete"},
+                    new ButtonToolItem{ Text = "Undo"},
+                    new ButtonToolItem{ Text = "Redo"},
+                    new ButtonToolItem{ Text = "Shot"},
+                    new ButtonToolItem{ Text = "Tileset"}
                 }
-            }
+            };
+            ToolBar = toolbar;
         }
 
         public static void DrawSelectionRectangle(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, float scale)
@@ -225,8 +230,6 @@ namespace Client
             spriteBatch.Draw(GameClient.PixelTexture, new Rectangle(selectionRect.X + selectionRect.Width - lineThickness, selectionRect.Y, lineThickness, selectionRect.Height), Color.Red);
         }
 
-        #endregion
-
         #region Toolbar
 
         private void TsbSave_Click(object sender, EventArgs e)
@@ -241,6 +244,7 @@ namespace Client
             int y2;
             Tile[,] tempArr;
 
+            if (Instance == null) return; // safety
             if (!Information.IsNumeric(Instance.txtMaxX.Text))
                 Instance.txtMaxX.Text = Data.MyMap.MaxX.ToString();
 
@@ -376,15 +380,15 @@ namespace Client
 
         #endregion
 
-        #region Tiles
-        private void PicBackSelect_MouseDown(object sender, MouseEventArgs e)
+    #region Tiles
+    private void PicBackSelect_MouseDown(object? sender, MouseEventArgs e)
         {
-            MapEditorChooseTile((int)e.Button, e.X, e.Y);
+            MapEditorChooseTile((int)e.Buttons, e.Location.X, e.Location.Y);
         }
 
-        private void PicBackSelect_MouseMove(object sender, MouseEventArgs e)
+    private void PicBackSelect_MouseMove(object? sender, MouseEventArgs e)
         {
-            MapEditorDrag((int)e.Button, e.X, e.Y);
+            MapEditorDrag((int)e.Buttons, e.Location.X, e.Location.Y);
         }
 
         private void CmbTileSets_Click(object sender, EventArgs e)
@@ -409,7 +413,7 @@ namespace Client
                 GameState.EditorTileHeight = 1;
             }
 
-            MapEditorChooseTile((int)MouseButtons.Left, GameState.EditorTileX, GameState.EditorTileY);
+            MapEditorChooseTile((int)MouseButtons.Primary, GameState.EditorTileX, GameState.EditorTileY);
         }
 
         #endregion
@@ -450,10 +454,10 @@ namespace Client
             pnlAttributes.Visible = true;
             fraMapWarp.Visible = true;
 
-            scrlMapWarpMap.Maximum = Constant.MaxMaps;
+            scrlMapWarpMap.MaxValue  = Constant.MaxMaps;
             scrlMapWarpMap.Value = 1;
-            scrlMapWarpX.Maximum = byte.MaxValue;
-            scrlMapWarpY.Maximum = byte.MaxValue;
+            scrlMapWarpX.MaxValue = byte.MaxValue;
+            scrlMapWarpY.MaxValue = byte.MaxValue;
             scrlMapWarpX.Value = 0;
             scrlMapWarpY.Value = 0;
         }
@@ -470,7 +474,7 @@ namespace Client
                 scrlMapItemValue.Enabled = false;
             }
 
-            DrawItem();
+            // DrawItem removed in refactor (image updated elsewhere)
             lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Core.Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
         }
 
@@ -498,8 +502,8 @@ namespace Client
 
             lblMapItem.Text = Core.Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
             ScrlMapItem_ValueChanged(sender, e);
-            DrawItem();
-        }
+            // DrawItem removed in refactor (image updated elsewhere)
+    }
 
         private void BtnResourceOk_Click(object sender, EventArgs e)
         {
@@ -549,7 +553,7 @@ namespace Client
                 }
                 else
                 {
-                    lstNpc.Items.Add(n);
+                    lstNpc.Items.Add(n.ToString());
                 }
             }
 
@@ -669,7 +673,7 @@ namespace Client
         {
             if (lstMapNpc.SelectedIndex > 0)
             {
-                lstMapNpc.Items[lstMapNpc.SelectedIndex] = lstMapNpc.SelectedIndex + ": " + Data.Npc[cmbNpcList.SelectedIndex].Name;
+                lstMapNpc.Items[lstMapNpc.SelectedIndex] = new ListItem { Text = lstMapNpc.SelectedIndex + ": " + Data.Npc[cmbNpcList.SelectedIndex].Name };
                 Data.MyMap.Npc[lstMapNpc.SelectedIndex] = cmbNpcList.SelectedIndex;
             }
         }
@@ -678,7 +682,9 @@ namespace Client
         {
             if (lstMusic.SelectedIndex > 0)
             {
-                string selectedFile = lstMusic.Items[lstMusic.SelectedIndex].ToString();
+                var itemObj = lstMusic.Items[lstMusic.SelectedIndex];
+                var selectedFile = itemObj?.ToString() ?? string.Empty;
+                if (string.IsNullOrEmpty(selectedFile)) return;
 
                 // If the selected music file is a MIDI file
                 if (SettingsManager.Instance.MusicExt == ".mid")
@@ -812,7 +818,7 @@ namespace Client
             int x;
             int y;
             int i;
-
+            if (Instance == null) throw new InvalidOperationException("Editor_Map.Instance not initialized");
             Instance.txtName.Text = Strings.Trim(Data.MyMap.Name);
 
             // find the music we have set
@@ -936,20 +942,21 @@ namespace Client
 
             var loopTo4 = GameState.NumPanoramas;
             for (i = 0; i < loopTo4; i++)
-                Instance.cmbPanorama.Items.Add(i + 1);
-
+                Instance.cmbPanorama.Items.Add((i + 1).ToString());
+            
             Instance.cmbPanorama.SelectedIndex = Data.MyMap.Panorama;
-
+            
             Instance.cmbParallax.Items.Clear();
-
+            
             var loopTo5 = GameState.NumParallax;
             for (i = 0; i < loopTo5; i++)
-                Instance.cmbParallax.Items.Add(i + 1);
-
+                Instance.cmbParallax.Items.Add((i + 1).ToString());
+            
             Instance.cmbParallax.SelectedIndex = Data.MyMap.Parallax;
 
             Instance.tabPages.SelectedIndex = 0;
             Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
+            Instance.lblMapBrightness.Text = "Brightness: " + Instance.scrlMapBrightness.Value;
             Instance.chkTint.Checked = Data.MyMap.MapTint;
             Instance.scrlMapRed.Value = Data.MyMap.MapTintR;
             Instance.scrlMapGreen.Value = Data.MyMap.MapTintG;
@@ -973,28 +980,29 @@ namespace Client
 
             // set shops for the shop attribute
             for (int i = 0; i < Constant.MaxShops; i++)
-                Instance.cmbShop.Items.Add(i + 1 + ": " + Data.Shop[i].Name);
+                Instance.cmbShop.Items.Add((i + 1) + ": " + Data.Shop[i].Name);
 
             // we're not in a shop
-            Instance.cmbShop.SelectedIndex = 0;
+            if (Instance.cmbShop.Items.Count > 0)
+                Instance.cmbShop.SelectedIndex = 0;
 
             Instance.optBlocked.Checked = true;
 
             Instance.cmbTileSets.Items.Clear();
             for (int i = 0, loopTo = GameState.NumTileSets; i < loopTo; i++)
-                Instance.cmbTileSets.Items.Add(i + 1);
-
+                Instance.cmbTileSets.Items.Add((i + 1).ToString());
+            
             Instance.cmbTileSets.SelectedIndex = 0;
             Instance.cmbAutoTile.SelectedIndex = 0;
-            Instance.cmbLayers.SelectedIndex = 0;
-            Instance.cmbAttribute.SelectedIndex = 0;
-
-            GameState.CurLayer = 0;
-            GameState.CurAutotileType = 0;
-            Instance.scrlMapItemValue.Value = 1;
-            Instance.scrlTrap.Maximum = 32767;
-            Instance.scrlHeal.Maximum = 32767;
-
+            Instance.tabPages.SelectedIndex = 0;
+            Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
+            Instance.lblMapBrightness.Text = "Brightness: " + Instance.scrlMapBrightness.Value;
+            Instance.chkTint.Checked = Data.MyMap.MapTint;
+            Instance.scrlMapRed.Value = Data.MyMap.MapTintR;
+            Instance.scrlMapGreen.Value = Data.MyMap.MapTintG;
+            Instance.scrlMapBlue.Value = Data.MyMap.MapTintB;
+            Instance.scrlMapAlpha.Value = Data.MyMap.MapTintA;
+            Instance.Visible = true;
             MapPropertiesInit();
 
             if (GameState.MapData == true)
@@ -1003,7 +1011,7 @@ namespace Client
 
         public static void MapEditorChooseTile(int Button, float X, float Y)
         {
-            if (Button == (int)MouseButtons.Left) // Left Mouse Button
+            if (Button == (int)MouseButtons.Primary) // Primary (Left) Mouse Button
             {
                 GameState.EditorTileWidth = 1;
                 GameState.EditorTileHeight = 1;
@@ -1052,7 +1060,8 @@ namespace Client
             if (GameState.CurAutotileType > 0)
                 return;
 
-            if (Button == (int)MouseButtons.Left) // Left Mouse Button
+            // Eto.Forms uses MouseButtons.Primary instead of Left
+            if (Button == (int)MouseButtons.Primary) // Primary (Left) Mouse Button
             {
                 // convert the pixel number to tile number
                 X = (long)Math.Round((X + tilesetOffsetX) / GameState.SizeX) + 1L;
@@ -1392,7 +1401,7 @@ namespace Client
                 }
                 else if (GameState.MapEditorTab == (int)MapEditorTab.Events)
                 {
-                    if (Editor_Event.Instance.Visible == false)
+                    if (Editor_Event.Instance == null || Editor_Event.Instance.Visible == false)
                     {
                         if (Event.EventCopy)
                         {
@@ -1686,7 +1695,7 @@ namespace Client
 
         public static void MapEditorFillLayer(MapLayer layer, byte theAutotile = 0, byte tileX = 0, byte tileY = 0)
         {
-            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", (byte)DialogueType.FillLayer, (byte)DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, Instance.cmbTileSets.SelectedIndex + 1);
+            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", (byte)DialogueType.FillLayer, (byte)DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, (Instance?.cmbTileSets.SelectedIndex ?? -1) + 1);
         }
 
         public static void MapEditorEyeDropper()
@@ -1698,7 +1707,7 @@ namespace Client
             {
                 ref var withBlock = ref Data.MyMap.Tile[GameState.CurX, GameState.CurY];
                 GameState.CurTileset = withBlock.Layer[CurLayer].Tileset;
-                MapEditorChooseTile((int)MouseButtons.Left, withBlock.Layer[CurLayer].X * GameState.SizeX, withBlock.Layer[CurLayer].Y * GameState.SizeY);
+                MapEditorChooseTile((int)MouseButtons.Primary, withBlock.Layer[CurLayer].X * GameState.SizeX, withBlock.Layer[CurLayer].Y * GameState.SizeY);
                 GameState.EyeDropper = !GameState.EyeDropper;
             }
         }
@@ -1872,10 +1881,8 @@ namespace Client
             Data.MyMap.Name = txtName.Text;
         }
 
-        private void Editor_Map_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            MapEditorCancel();
-        }
+    // WinForms FormClosing replaced by manual call site when disposing
+    private void Editor_Map_FormClosing(object? sender, EventArgs e) => MapEditorCancel();
 
         private void scrMapBrightness_Scroll(object sender, EventArgs e)
         {
@@ -2043,7 +2050,7 @@ namespace Client
 
         private void chkRespawn_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkNoMapRespawn.Checked)
+            if (chkNoMapRespawn.Checked == true)
             {
                 Data.MyMap.NoRespawn = true;
             }
@@ -2055,7 +2062,7 @@ namespace Client
 
         private void chkIndoors_CheckedChanged(object sender, EventArgs e)
         {
-            if (chkIndoors.Checked)
+            if (chkIndoors.Checked == true)
             {
                 Data.MyMap.Indoors = true;
             }
@@ -2074,11 +2081,7 @@ namespace Client
         {
             GameLogic.Dialogue("Map Editor", "Clear Map: ", "Are you sure you want to clear this map?", (byte)DialogueType.ClearMap, (byte)DialogueStyle.YesNo);
         }
-
-        private void picBackSelect_Paint(object sender, PaintEventArgs e)
-        {
-            DrawTileset();
-        }
+    // Removed obsolete WinForms Paint handler (ImageView has no Paint event in Eto)
 
         private void btnFillAttributes_Click(object sender, EventArgs e)
         {
@@ -2087,7 +2090,7 @@ namespace Client
 
         private void ToolStrip_MouseHover(object sender, EventArgs e)
         {
-            Activate();
+            Focus();
         }
 
         private void tabPages_SelectedIndexChanged(object sender, EventArgs e)
@@ -2191,35 +2194,6 @@ namespace Client
                     }
                 }
             }
-        }
-
-        private void scrlTileset_Click(object sender, EventArgs e)
-        {
-            // Determine if the up or down arrow was clicked based on mouse position
-            var mousePos = scrlTileset.PointToClient(Cursor.Position);
-            bool isUpArrow = mousePos.Y < scrlTileset.Height / 2;
-            bool isDownArrow = mousePos.Y >= scrlTileset.Height / 2;
-
-            if (isUpArrow)
-            {
-                // Scroll up
-                tilesetOffsetY = Math.Max(tilesetOffsetY - GameState.SizeY, 0);
-            }
-            else if (isDownArrow)
-            {
-                // Scroll down
-                tilesetOffsetY += GameState.SizeY;
-            }
-
-            if (Instance.picBackSelect.Image != null)
-            {
-                int maxY = Math.Max(0, Instance.picBackSelect.Image.Height - Instance.picBackSelect.Height);
-                tilesetOffsetY = Math.Min(tilesetOffsetY, maxY);
-                if (scrlTileset.Maximum != maxY)
-                    scrlTileset.Maximum = maxY;
-            }
-
-            Instance.picBackSelect.Invalidate();
         }
     }
 

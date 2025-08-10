@@ -97,7 +97,7 @@ namespace Client
 
         public static string ConvertCurrency(int amount)
         {
-            string convertCurrency = default;
+            string convertCurrency = string.Empty;
 
             if (Conversion.Int(amount) < 10000)
             {
@@ -122,7 +122,7 @@ namespace Client
 
         public static void HandlePressEnter()
         {
-            var chatText = default(string);
+            string chatText = string.Empty;
             string name;
             int i;
             int n;
@@ -134,7 +134,8 @@ namespace Client
                 chatText = Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text;
             }
 
-            chatText = chatText.Replace("\0", string.Empty);
+            if (chatText != null)
+                chatText = chatText.Replace("\0", string.Empty);
 
             // hide/show chat window
             if (string.IsNullOrEmpty(chatText))
@@ -1368,20 +1369,16 @@ namespace Client
                                     {
                                         type = TileType.NoCrossing;
                                     }
-
-                                    if (Editor_Map.Instance.cmbAttribute.InvokeRequired)
+                                    // Determine which attribute set (primary/secondary) to apply based on current selection
+                                    // Assuming cmbAttribute index 0 => primary (EditorAttribute 1), 1 => secondary (EditorAttribute 2) adjust if different.
+                                    var attrIndex = Editor_Map.Instance.cmbAttribute.SelectedIndex;
+                                    if (attrIndex == 0)
                                     {
-                                        int selectedIndex = (int)Editor_Map.Instance.cmbAttribute.Invoke(
-                                            new Func<int>(() => Editor_Map.Instance.cmbAttribute.SelectedIndex));
-
-                                        if (selectedIndex == 1)
-                                        {
-                                            Data.MyMap.Tile[x, y].Type = type;
-                                        }
-                                        else
-                                        {
-                                            Data.MyMap.Tile[x, y].Type2 = type;
-                                        }
+                                        Data.MyMap.Tile[x, y].Type = type;
+                                    }
+                                    else
+                                    {
+                                        Data.MyMap.Tile[x, y].Type2 = type;
                                     }
                                 }
                             }

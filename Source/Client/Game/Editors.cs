@@ -13,43 +13,45 @@ namespace Client
 
         public static void AnimationEditorInit()
         {
-            GameState.EditorIndex = Editor_Animation.Instance.lstIndex.SelectedIndex;
+            GameState.EditorIndex = Editor_Animation.Instance!.lstIndex!.SelectedIndex;
             
             ref var withBlock = ref Data.Animation[GameState.EditorIndex];
             if (string.IsNullOrEmpty(withBlock.Sound))
             {
-                Editor_Animation.Instance.cmbSound.SelectedIndex = 0;
+                Editor_Animation.Instance!.cmbSound!.SelectedIndex = 0;
             }
             else
             {
-                for (int i = 0, loopTo = Editor_Animation.Instance.cmbSound.Items.Count; i < loopTo; i++)
+                for (int i = 0, loopTo = Editor_Animation.Instance!.cmbSound!.Items.Count; i < loopTo; i++)
                 {
-                    if (Editor_Animation.Instance.cmbSound.GetItemText(Editor_Animation.Instance.cmbSound.Items[i]) == withBlock.Sound)
+                    var raw = Editor_Animation.Instance!.cmbSound!.Items[i];
+                    string text = raw switch { Eto.Forms.ListItem li => li.Text, _ => raw?.ToString() ?? string.Empty };
+                    if (text == withBlock.Sound)
                     {
-                        Editor_Animation.Instance.cmbSound.SelectedIndex = i;
+                        Editor_Animation.Instance!.cmbSound!.SelectedIndex = i;
                         break;
                     }
                 }
             }
-            Editor_Animation.Instance.txtName.Text = withBlock.Name;
+            Editor_Animation.Instance!.txtName!.Text = withBlock.Name;
 
-            Editor_Animation.Instance.nudSprite0.Value = withBlock.Sprite[0];
-            Editor_Animation.Instance.nudFrameCount0.Value = withBlock.Frames[0];
+            Editor_Animation.Instance!.nudSprite0!.Value = withBlock.Sprite[0];
+            Editor_Animation.Instance!.nudFrameCount0!.Value = withBlock.Frames[0];
             if (Data.Animation[GameState.EditorIndex].LoopCount[0] == 0)
                 Data.Animation[GameState.EditorIndex].LoopCount[0] = 1;
-            Editor_Animation.Instance.nudLoopCount0.Value = withBlock.LoopCount[0];
+            Editor_Animation.Instance!.nudLoopCount0!.Value = withBlock.LoopCount[0];
             if (Data.Animation[GameState.EditorIndex].LoopTime[0] == 0)
                 Data.Animation[GameState.EditorIndex].LoopTime[0] = 1;
-            Editor_Animation.Instance.nudLoopTime0.Value = withBlock.LoopTime[0];
+            Editor_Animation.Instance!.nudLoopTime0!.Value = withBlock.LoopTime[0];
 
-            Editor_Animation.Instance.nudSprite1.Value = withBlock.Sprite[1];
-            Editor_Animation.Instance.nudFrameCount1.Value = withBlock.Frames[1];
+            Editor_Animation.Instance!.nudSprite1!.Value = withBlock.Sprite[1];
+            Editor_Animation.Instance!.nudFrameCount1!.Value = withBlock.Frames[1];
             if (Data.Animation[GameState.EditorIndex].LoopCount[1] == 0)
                 Data.Animation[GameState.EditorIndex].LoopCount[1] = 1;
-            Editor_Animation.Instance.nudLoopCount1.Value = withBlock.LoopCount[1];
+            Editor_Animation.Instance!.nudLoopCount1!.Value = withBlock.LoopCount[1];
             if (Data.Animation[GameState.EditorIndex].LoopTime[1] == 0)
                 Data.Animation[GameState.EditorIndex].LoopTime[1] = 1;
-            Editor_Animation.Instance.nudLoopTime1.Value = withBlock.LoopTime[1];
+            Editor_Animation.Instance!.nudLoopTime1!.Value = withBlock.LoopTime[1];
 
             GameState.AnimationChanged[GameState.EditorIndex] = true;
         }
@@ -103,7 +105,7 @@ namespace Client
             withBlock.cmbBehaviour.SelectedIndex = Data.Npc[GameState.EditorIndex].Behaviour;
             withBlock.cmbFaction.SelectedIndex = Data.Npc[GameState.EditorIndex].Faction;
             withBlock.nudRange.Value = Data.Npc[GameState.EditorIndex].Range;
-            withBlock.nudChance.Value = Data.Npc[GameState.EditorIndex].DropChance[Editor_Npc.Instance.cmbDropSlot.SelectedIndex];
+            withBlock.nudChance.Value = Data.Npc[GameState.EditorIndex].DropChance[Editor_Npc.Instance!.cmbDropSlot.SelectedIndex];
             withBlock.cmbItem.SelectedIndex = Data.Npc[GameState.EditorIndex].DropItem[Editor_Npc.Instance.cmbDropSlot.SelectedIndex];
 
             withBlock.nudAmount.Value = Data.Npc[GameState.EditorIndex].DropItemValue[Editor_Npc.Instance.cmbDropSlot.SelectedIndex];
@@ -333,7 +335,7 @@ namespace Client
             }
             else
             {
-                withBlock.nudBuy.Value = 100m;
+                withBlock.nudBuy.Value = 100d; // NumericStepper uses double
             }
 
             withBlock.cmbItem.SelectedIndex = 0;
@@ -425,8 +427,6 @@ namespace Client
 
         public static void JobEditorInit()
         {
-            int i;
-            
             var withBlock = Editor_Job.Instance;
             GameState.EditorIndex = withBlock.lstIndex.SelectedIndex;
 
@@ -443,7 +443,7 @@ namespace Client
             withBlock.cmbItems.SelectedIndex = 0;
 
             int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
-            for (i = 0; i < statCount; i++)
+            for (int i = 0; i < statCount; i++)
             {
                 if (Data.Job[GameState.EditorIndex].Stat[i] == 0)
                     Data.Job[GameState.EditorIndex].Stat[i] = 1;
@@ -477,20 +477,20 @@ namespace Client
         {
             int i;
 
-            GameState.EditorIndex = Editor_Item.Instance.lstIndex.SelectedIndex;
+            GameState.EditorIndex = Editor_Item.Instance!.lstIndex!.SelectedIndex;
 
             ref var withBlock = ref Core.Data.Item[GameState.EditorIndex];
-            Editor_Item.Instance.txtName.Text = withBlock.Name;
-            Editor_Item.Instance.txtDescription.Text = withBlock.Description;
+            Editor_Item.Instance!.txtName!.Text = withBlock.Name;
+            Editor_Item.Instance!.txtDescription!.Text = withBlock.Description;
 
-            if (withBlock.Icon > Editor_Item.Instance.nudIcon.Maximum)
+            if (withBlock.Icon > Editor_Item.Instance!.nudIcon!.MaxValue)
                 withBlock.Icon = 0;
-            Editor_Item.Instance.nudIcon.Value = withBlock.Icon;
+            Editor_Item.Instance!.nudIcon!.Value = withBlock.Icon;
             int itemCategoryCount = Enum.GetValues(typeof(ItemCategory)).Length;
             if (withBlock.Type < 0 || withBlock.Type >= itemCategoryCount)
                 withBlock.Type = 0;
-            Editor_Item.Instance.cmbType.SelectedIndex = withBlock.Type;
-            Editor_Item.Instance.cmbAnimation.SelectedIndex = withBlock.Animation;
+            Editor_Item.Instance!.cmbType!.SelectedIndex = withBlock.Type;
+            Editor_Item.Instance!.cmbAnimation!.SelectedIndex = withBlock.Animation;
 
             if (withBlock.ItemLevel == 0)
                 withBlock.ItemLevel = 1;
@@ -499,125 +499,125 @@ namespace Client
             // Type specific settings
             if (Editor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Equipment)
             {
-                Editor_Item.Instance.fraEquipment.Visible = true;
-                Editor_Item.Instance.nudDamage.Value = withBlock.Data2;
-                Editor_Item.Instance.cmbTool.SelectedIndex = withBlock.Data3;
+                Editor_Item.Instance!.fraEquipment!.Visible = true;
+                Editor_Item.Instance!.nudDamage!.Value = withBlock.Data2;
+                Editor_Item.Instance!.cmbTool!.SelectedIndex = withBlock.Data3;
 
-                Editor_Item.Instance.cmbSubType.SelectedIndex = withBlock.SubType;
+                Editor_Item.Instance!.cmbSubType!.SelectedIndex = withBlock.SubType;
 
                 if (withBlock.Speed < 1000)
                     withBlock.Speed = 100;
-                if (withBlock.Speed > Editor_Item.Instance.nudSpeed.Maximum)
-                    withBlock.Speed = (int)Math.Round(Editor_Item.Instance.nudSpeed.Maximum);
-                Editor_Item.Instance.nudSpeed.Value = withBlock.Speed;
+                if (withBlock.Speed > Editor_Item.Instance!.nudSpeed!.MaxValue)
+                    withBlock.Speed = (int)Math.Round(Editor_Item.Instance!.nudSpeed!.MaxValue);
+                Editor_Item.Instance!.nudSpeed!.Value = withBlock.Speed;
 
-                Editor_Item.Instance.nudStrength.Value = withBlock.AddStat[(int)Core.Stat.Strength];
-                Editor_Item.Instance.nudIntelligence.Value = withBlock.AddStat[(int)Core.Stat.Intelligence];
-                Editor_Item.Instance.nudVitality.Value = withBlock.AddStat[(int)Core.Stat.Vitality];
-                Editor_Item.Instance.nudLuck.Value = withBlock.AddStat[(int)Core.Stat.Luck];
-                Editor_Item.Instance.nudSpirit.Value = withBlock.AddStat[(int)Core.Stat.Spirit];
+                Editor_Item.Instance!.nudStrength!.Value = withBlock.AddStat[(int)Core.Stat.Strength];
+                Editor_Item.Instance!.nudIntelligence!.Value = withBlock.AddStat[(int)Core.Stat.Intelligence];
+                Editor_Item.Instance!.nudVitality!.Value = withBlock.AddStat[(int)Core.Stat.Vitality];
+                Editor_Item.Instance!.nudLuck!.Value = withBlock.AddStat[(int)Core.Stat.Luck];
+                Editor_Item.Instance!.nudSpirit!.Value = withBlock.AddStat[(int)Core.Stat.Spirit];
 
                 if (withBlock.KnockBack == 1)
                 {
-                    Editor_Item.Instance.chkKnockBack.Checked = true;
+                    Editor_Item.Instance!.chkKnockBack!.Checked = true;
                 }
                 else
                 {
-                    Editor_Item.Instance.chkKnockBack.Checked = false;
+                    Editor_Item.Instance!.chkKnockBack!.Checked = false;
                 }
-                Editor_Item.Instance.cmbKnockBackTiles.SelectedIndex = withBlock.KnockBackTiles;
+                Editor_Item.Instance!.cmbKnockBackTiles!.SelectedIndex = withBlock.KnockBackTiles;
                 Editor_Item.Instance.nudPaperdoll.Value = withBlock.Paperdoll;
 
                 if (withBlock.SubType == (byte)Equipment.Weapon)
                 {
-                    Editor_Item.Instance.fraProjectile.Visible = true;
+                    Editor_Item.Instance!.fraProjectile!.Visible = true;
                 }
                 else
                 {
-                    Editor_Item.Instance.fraProjectile.Visible = false;
+                    Editor_Item.Instance!.fraProjectile!.Visible = false;
                 }
             }
             else
             {
-                Editor_Item.Instance.fraEquipment.Visible = false;
+                Editor_Item.Instance!.fraEquipment!.Visible = false;
             }
 
             if (Editor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Consumable)
             {
-                Editor_Item.Instance.fraVitals.Visible = true;
-                Editor_Item.Instance.nudVitalMod.Value = withBlock.Data1;
+                Editor_Item.Instance!.fraVitals!.Visible = true;
+                Editor_Item.Instance!.nudVitalMod!.Value = withBlock.Data1;
             }
             else
             {
-                Editor_Item.Instance.fraVitals.Visible = false;
+                Editor_Item.Instance!.fraVitals!.Visible = false;
             }
 
             if (Editor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Skill)
             {
-                Editor_Item.Instance.fraSkill.Visible = true;
-                Editor_Item.Instance.cmbSkills.SelectedIndex = withBlock.Data1;
+                Editor_Item.Instance!.fraSkill!.Visible = true;
+                Editor_Item.Instance!.cmbSkills!.SelectedIndex = withBlock.Data1;
             }
             else
             {
-                Editor_Item.Instance.fraSkill.Visible = false;
+                Editor_Item.Instance!.fraSkill!.Visible = false;
             }
 
             if (Editor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Projectile)
             {
-                Editor_Item.Instance.fraProjectile.Visible = true;
-                Editor_Item.Instance.fraEquipment.Visible = true;
+                Editor_Item.Instance!.fraProjectile!.Visible = true;
+                Editor_Item.Instance!.fraEquipment!.Visible = true;
             }
             else if (withBlock.Type != (byte)ItemCategory.Equipment)
             {
-                Editor_Item.Instance.fraProjectile.Visible = false;
+                Editor_Item.Instance!.fraProjectile!.Visible = false;
             }
 
             if (Editor_Item.Instance.cmbType.SelectedIndex == (int)ItemCategory.Event)
             {
-                Editor_Item.Instance.fraEvents.Visible = true;
-                Editor_Item.Instance.nudEvent.Value = withBlock.Data1;
-                Editor_Item.Instance.nudEventValue.Value = withBlock.Data2;
+                Editor_Item.Instance!.fraEvents!.Visible = true;
+                Editor_Item.Instance!.nudEvent!.Value = withBlock.Data1;
+                Editor_Item.Instance!.nudEventValue!.Value = withBlock.Data2;
             }
             else
             {
-                Editor_Item.Instance.fraEvents.Visible = false;
+                Editor_Item.Instance!.fraEvents!.Visible = false;
             }
 
             // Projectile
-            Editor_Item.Instance.cmbProjectile.SelectedIndex = withBlock.Projectile;
-            Editor_Item.Instance.cmbAmmo.SelectedIndex = withBlock.Ammo;
+            Editor_Item.Instance!.cmbProjectile!.SelectedIndex = withBlock.Projectile;
+            Editor_Item.Instance!.cmbAmmo!.SelectedIndex = withBlock.Ammo;
 
             // Basic requirements
-            Editor_Item.Instance.cmbAccessReq.SelectedIndex = withBlock.AccessReq;
-            Editor_Item.Instance.nudLevelReq.Value = withBlock.LevelReq;
+            Editor_Item.Instance!.cmbAccessReq!.SelectedIndex = withBlock.AccessReq;
+            Editor_Item.Instance!.nudLevelReq!.Value = withBlock.LevelReq;
 
-            Editor_Item.Instance.nudStrReq.Value = withBlock.StatReq[(int)Core.Stat.Strength];
-            Editor_Item.Instance.nudVitReq.Value = withBlock.StatReq[(int)Core.Stat.Vitality];
-            Editor_Item.Instance.nudLuckReq.Value = withBlock.StatReq[(int)Core.Stat.Luck];
-            Editor_Item.Instance.nudIntReq.Value = withBlock.StatReq[(int)Core.Stat.Intelligence];
-            Editor_Item.Instance.nudSprReq.Value = withBlock.StatReq[(int)Core.Stat.Spirit];
+            Editor_Item.Instance!.nudStrReq!.Value = withBlock.StatReq[(int)Core.Stat.Strength];
+            Editor_Item.Instance!.nudVitReq!.Value = withBlock.StatReq[(int)Core.Stat.Vitality];
+            Editor_Item.Instance!.nudLuckReq!.Value = withBlock.StatReq[(int)Core.Stat.Luck];
+            Editor_Item.Instance!.nudIntReq!.Value = withBlock.StatReq[(int)Core.Stat.Intelligence];
+            Editor_Item.Instance!.nudSprReq!.Value = withBlock.StatReq[(int)Core.Stat.Spirit];
 
             // Build cmbJobReq
-            Editor_Item.Instance.cmbJobReq.Items.Clear();
-            for (i = 0; i < Constant.MaxJobs; i++)
-                Editor_Item.Instance.cmbJobReq.Items.Add(Data.Job[i].Name);
+            Editor_Item.Instance!.cmbJobReq!.Items.Clear();
+            for (int j = 0; j < Constant.MaxJobs; j++)
+                Editor_Item.Instance!.cmbJobReq!.Items.Add(Data.Job[j].Name);
 
-            Editor_Item.Instance.cmbJobReq.SelectedIndex = withBlock.JobReq;
+            Editor_Item.Instance!.cmbJobReq!.SelectedIndex = withBlock.JobReq;
             // Info
-            Editor_Item.Instance.nudPrice.Value = withBlock.Price;
-            Editor_Item.Instance.cmbBind.SelectedIndex = withBlock.BindType;
-            Editor_Item.Instance.nudRarity.Value = withBlock.Rarity;
+            Editor_Item.Instance!.nudPrice!.Value = withBlock.Price;
+            Editor_Item.Instance!.cmbBind!.SelectedIndex = withBlock.BindType;
+            Editor_Item.Instance!.nudRarity!.Value = withBlock.Rarity;
 
             if (withBlock.Stackable == 1)
             {
-                Editor_Item.Instance.chkStackable.Checked = true;
+                Editor_Item.Instance!.chkStackable!.Checked = true;
             }
             else
             {
-                Editor_Item.Instance.chkStackable.Checked = false;
+                Editor_Item.Instance!.chkStackable!.Checked = false;
             }
 
-            Editor_Item.Instance.DrawIcon();
+            Editor_Item.Instance!.DrawIcon();
 
             GameState.ItemChanged[GameState.EditorIndex] = true;
         }

@@ -1,7 +1,7 @@
 ﻿
 namespace Server
 {
-    public class Constant
+    public class Constant 
     {
         // Path constants
         public const string AdminLog = "admin.log";

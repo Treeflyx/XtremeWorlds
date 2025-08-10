@@ -1,77 +1,97 @@
-﻿using Assimp;
+﻿using Eto.Forms;
+using Eto.Drawing;
 using Core;
 using Microsoft.VisualBasic;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.IO;
 
 namespace Client
 {
-    public partial class Editor_Script : Form
+    public class Editor_Script : Form
     {
-        public Editor_Script()
+        private static Editor_Script? _instance;
+        public static Editor_Script Instance => _instance ??= new Editor_Script();
+
+        private Button btnOpenScript = new Button { Text = "Open Script" };
+        private Button btnSaveScript = new Button { Text = "Save Script" };
+        private TextArea txtPreview = new TextArea { ReadOnly = true, Wrap = false, Size = new Size(600,400) };
+        private Label lblInfo = new Label { Text = "Open the script in your external editor, then Save to reload and send." };
+
+        private Editor_Script()
         {
+            Title = "Script Editor";
+            ClientSize = new Size(700, 520);
+            Padding = 10;
             InitializeComponent();
         }
 
-        private void btnOpenScript_Click(object sender, EventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
-            // Open code in temp file
-            System.IO.File.WriteAllLines(Script.TempFile, Core.Data.Script.Code);
-
-            // Open with default text editor
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = Script.TempFile,
-                UseShellExecute = true
-            });
+            base.OnClosed(e);
+            if (ReferenceEquals(_instance, this)) _instance = null;
+            NetworkSend.SendCloseEditor();
+            GameState.MyEditorType = EditorType.None;
         }
 
-        private void buttonSaveScript_Click(object sender, EventArgs e)
+        private void InitializeComponent()
+        {
+            btnOpenScript.Click += (s, e) => OpenScript();
+            btnSaveScript.Click += (s, e) => SaveScript();
+            var buttons = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 5,
+                Items = { btnOpenScript, btnSaveScript }
+            };
+
+            var layout = new DynamicLayout { Spacing = new Size(6,6) };
+            layout.Add(lblInfo);
+            layout.Add(buttons);
+            layout.Add(txtPreview, yscale: true);
+
+            Content = layout;
+            Load += (s, e) => RefreshPreview();
+        }
+
+        private void OpenScript()
+        {
+            File.WriteAllLines(Script.TempFile, Core.Data.Script.Code);
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = Script.TempFile,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Interaction.MsgBox($"Failed to open script: {ex.Message}");
+            }
+        }
+
+        private void SaveScript()
         {
             if (!File.Exists(Script.TempFile))
             {
-                Interaction.MsgBox("Open a sript before saving.");
+                Interaction.MsgBox("Open a script before saving.");
                 return;
             }
-
-            // Read the script file and set the script code to the file contents
-            Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
-            NetworkSend.SendSaveScript();
+            try
+            {
+                Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
+                NetworkSend.SendSaveScript();
+                RefreshPreview();
+            }
+            catch (Exception ex)
+            {
+                Interaction.MsgBox($"Failed to save script: {ex.Message}");
+            }
         }
 
-        private void Editor_Script_FormClosing(object sender, FormClosingEventArgs e)
+        private void RefreshPreview()
         {
-            NetworkSend.SendCloseEditor();
-            GameState.MyEditorType = EditorType.None;
-            Dispose();
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_MOUSEACTIVATE = 0x0021;
-            const int WM_NCHITTEST = 0x0084;
-
-            if (m.Msg == WM_MOUSEACTIVATE)
-            {
-                // Immediately activate and process the click.
-                m.Result = new IntPtr(1); // MA_ACTIVATE
-                return;
-            }
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                // Let the window know the mouse is in client area.
-                m.Result = new IntPtr(1); // HTCLIENT
-                return;
-            }
-
-            base.WndProc(ref m);
+            txtPreview.Text = string.Join(Environment.NewLine, Core.Data.Script.Code ?? Array.Empty<string>());
         }
     }
 }

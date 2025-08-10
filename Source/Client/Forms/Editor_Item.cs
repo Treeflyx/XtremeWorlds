@@ -1,477 +1,365 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
+using Eto.Forms;
+using Eto.Drawing;
 using Core;
 using Microsoft.VisualBasic;
 
 namespace Client
 {
-
-    public partial class Editor_Item
+    public sealed class Editor_Item : Form
     {
-        public Editor_Item()
+        private static Editor_Item? _instance;
+        public static Editor_Item Instance => _instance ??= new Editor_Item();
+
+        // Core lists/controls
+    public ListBox? lstIndex; // legacy name used by Editors.cs
+    public TextBox? txtName;
+    public TextArea? txtDescription;
+    public NumericStepper? numIcon, numPaperdoll, numItemLvl, numPrice, numRarity, numSpeed, numDamage, numVitalMod, numEventId, numEventValue;
+    public CheckBox? chkStackable, chkKnockBack;
+    public ComboBox? cmbType, cmbSubType, cmbAnimation, cmbBind, cmbJobReq, cmbAccessReq, cmbTool, cmbSkills, cmbProjectile, cmbAmmo, cmbKnockBackTiles;
+    public NumericStepper? numStrReq, numVitReq, numLuckReq, numIntReq, numSprReq, numLevelReq;
+    public NumericStepper? numStrAdd, numVitAdd, numLuckAdd, numIntAdd, numSprAdd;
+    public Drawable? iconPreview, paperdollPreview;
+    public Button? btnSave, btnCancel, btnDelete;
+    public Button? btnSpawn;
+    public NumericStepper? numSpawnAmount;
+
+        // Frames (logical group visibility mimic of old design)
+    public GroupBox? fraEquipment, fraVitals, fraSkill, fraProjectile, fraEvents, fraRequirements, fraBasics;
+
+        Bitmap? itemBmp, paperdollBmp;
+
+        private Editor_Item()
         {
-            InitializeComponent();
+            Title = "Item Editor";
+            ClientSize = new Size(1100, 700);
+            Padding = 6;
+            Content = BuildUi();
+            Shown += (s,e) => InitData();
         }
 
-        #region Form
-
-        private void BtnSave_Click(object sender, EventArgs e)
+        Control BuildUi()
         {
-            Editors.ItemEditorOK();
-            Dispose();
-        }
+            lstIndex = new ListBox { Width = 220, Height = 500 };
+            lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
 
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            Editors.ItemEditorCancel();
-            Dispose();
-        }
+            txtName = new TextBox(); txtName.TextChanged += (s,e)=> UpdateName();
+            txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
 
-        private void BtnDelete_Click(object sender, EventArgs e)
-        {
-            int tmpindex;
+            numIcon = Num(0, GameState.NumItems); numIcon.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Icon = (int)numIcon.Value; LoadItemIcon(); MarkChanged(); };
+            numPaperdoll = Num(0, GameState.NumPaperdolls); numPaperdoll.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Paperdoll = (int)numPaperdoll.Value; LoadPaperdoll(); MarkChanged(); };
+            numItemLvl = Num(1, 255); numItemLvl.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].ItemLevel = (byte)numItemLvl.Value; MarkChanged(); };
+            numPrice = Num(0, int.MaxValue); numPrice.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Price = (int)numPrice.Value; MarkChanged(); };
+            numRarity = Num(0, 255); numRarity.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Rarity = (byte)numRarity.Value; MarkChanged(); };
+            numSpeed = Num(100, 10000); numSpeed.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Speed = (int)numSpeed.Value; MarkChanged(); };
+            numDamage = Num(0, 100000); numDamage.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data2 = (int)numDamage.Value; MarkChanged(); };
+            numVitalMod = Num(0, 100000); numVitalMod.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = (int)numVitalMod.Value; MarkChanged(); };
+            numEventId = Num(0, 100000); numEventId.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = (int)numEventId.Value; MarkChanged(); };
+            numEventValue = Num(0, 100000); numEventValue.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data2 = (int)numEventValue.Value; MarkChanged(); };
 
-            Item.ClearItem(GameState.EditorIndex);
+            chkStackable = new CheckBox { Text = "Stackable" }; chkStackable.CheckedChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Stackable = chkStackable.Checked==true? (byte)1:(byte)0; MarkChanged(); };
+            chkKnockBack = new CheckBox { Text = "KnockBack" }; chkKnockBack.CheckedChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
 
-            tmpindex = lstIndex.SelectedIndex;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Item[GameState.EditorIndex].Name);
-            lstIndex.SelectedIndex = tmpindex;
+            cmbType = new ComboBox(); cmbType.SelectedIndexChanged += (s,e)=> ChangeType();
+            cmbSubType = new ComboBox(); cmbSubType.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex; TogglePanels(); MarkChanged(); };
+            cmbAnimation = new ComboBox(); cmbAnimation.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex; MarkChanged(); };
+            cmbBind = new ComboBox(); cmbBind.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].BindType = (byte)cmbBind.SelectedIndex; MarkChanged(); };
+            cmbJobReq = new ComboBox(); cmbJobReq.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].JobReq = cmbJobReq.SelectedIndex; MarkChanged(); };
+            cmbAccessReq = new ComboBox(); cmbAccessReq.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex; MarkChanged(); };
+            cmbTool = new ComboBox(); cmbTool.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data3 = cmbTool.SelectedIndex; MarkChanged(); };
+            cmbSkills = new ComboBox(); cmbSkills.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = cmbSkills.SelectedIndex; MarkChanged(); };
+            cmbProjectile = new ComboBox(); cmbProjectile.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex; MarkChanged(); };
+            cmbAmmo = new ComboBox(); cmbAmmo.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Ammo = cmbAmmo.SelectedIndex; MarkChanged(); };
+            cmbKnockBackTiles = new ComboBox(); cmbKnockBackTiles.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex; MarkChanged(); };
 
-            Editors.ItemEditorInit();
-        }
+            numLevelReq = Num(0, 500); numLevelReq.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].LevelReq = (int)numLevelReq.Value; MarkChanged(); };
+            numStrReq = StatReq(Core.Stat.Strength);
+            numVitReq = StatReq(Core.Stat.Vitality);
+            numLuckReq = StatReq(Core.Stat.Luck);
+            numIntReq = StatReq(Core.Stat.Intelligence);
+            numSprReq = StatReq(Core.Stat.Spirit);
 
-        private void lstIndex_Click(object sender, EventArgs e)
-        {
-            Editors.ItemEditorInit();
-        }
+            numStrAdd = StatAdd(Core.Stat.Strength);
+            numVitAdd = StatAdd(Core.Stat.Vitality);
+            numLuckAdd = StatAdd(Core.Stat.Luck);
+            numIntAdd = StatAdd(Core.Stat.Intelligence);
+            numSprAdd = StatAdd(Core.Stat.Spirit);
 
-        private void Editor_Item_Load(object sender, EventArgs e)
-        {
-            nudIcon.Maximum = GameState.NumItems;
-            nudPaperdoll.Maximum = GameState.NumPaperdolls;
+            iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Black }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
+            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black }; paperdollPreview.Paint += (s,e)=> { if(paperdollBmp!=null) e.Graphics.DrawImage(paperdollBmp,0,0,64,64); };
 
-            // populate combo boxes
-            cmbAnimation.Items.Clear();
-            for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbAnimation.Items.Add(i + 1 + ": " + Data.Animation[i].Name);
+            btnSave = new Button { Text = "Save" }; btnSave.Click += (s,e)=> { Editors.ItemEditorOK(); Close(); };
+            btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s,e)=> { Editors.ItemEditorCancel(); Close(); };
+            btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s,e)=> { Item.ClearItem(GameState.EditorIndex); Editors.ItemEditorInit(); MarkChanged(); };
+            btnSpawn = new Button { Text = "Spawn" }; btnSpawn.Click += (s,e)=> { NetworkSend.SendSpawnItem(GameState.EditorIndex, (int)numSpawnAmount!.Value); };
+            numSpawnAmount = Num(1, int.MaxValue); numSpawnAmount.Value = 1;
 
-            cmbAmmo.Items.Clear();
-            for (int i = 0; i < Constant.MaxItems; i++)
-                cmbAmmo.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
-
-            cmbProjectile.Items.Clear();
-            for (int i = 0; i < Core.Constant.NaxVariables; i++)
-                cmbProjectile.Items.Add(i + 1 + ": " + Data.Projectile[i].Name);
-
-            cmbSkills.Items.Clear();
-            for (int i = 0; i < Constant.MaxSkills; i++)
-                cmbSkills.Items.Add(i + 1 + ": " + Data.Skill[i].Name);
-
-            lstIndex.Items.Clear();
-
-            // Add the names
-            for (int i = 0; i < Constant.MaxItems; i++)
-                lstIndex.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
-            nudPaperdoll.Maximum = GameState.NumPaperdolls;
-            nudSpanwAmount.Maximum = int.MaxValue;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_MOUSEACTIVATE = 0x0021;
-            const int WM_NCHITTEST = 0x0084;
-
-            if (m.Msg == WM_MOUSEACTIVATE)
+            fraBasics = Group("Basics", new TableLayout
             {
-                // Immediately activate and process the click.
-                m.Result = new IntPtr(1); // MA_ACTIVATE
-                return;
-            }
-            else if (m.Msg == WM_NCHITTEST)
+                Spacing = new Size(4,4),
+                Rows =
+                {
+                    new TableRow(new Label{Text="Name"}, txtName),
+                    new TableRow(new Label{Text="Description"}, txtDescription),
+                    new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
+                    new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="SubType"}, cmbSubType),
+                    new TableRow(new Label{Text="Animation"}, cmbAnimation, new Label{Text="Bind"}, cmbBind),
+                    new TableRow(new Label{Text="Item Lvl"}, numItemLvl, new Label{Text="Price"}, numPrice),
+                    new TableRow(new Label{Text="Rarity"}, numRarity, chkStackable, null),
+                    new TableRow(btnSpawn, numSpawnAmount, null, null)
+                }
+            });
+
+            fraEquipment = Group("Equipment", new TableLayout
             {
-                // Let the window know the mouse is in client area.
-                m.Result = new IntPtr(1); // HTCLIENT
-                return;
+                Spacing = new Size(4,4),
+                Rows =
+                {
+                    new TableRow(new Label{Text="Damage"}, numDamage, new Label{Text="Speed"}, numSpeed),
+                    new TableRow(new Label{Text="Tool"}, cmbTool, chkKnockBack, new Label{Text="KB Tiles"}, cmbKnockBackTiles),
+                    new TableRow(new Label{Text="Add STR"}, numStrAdd, new Label{Text="Add VIT"}, numVitAdd),
+                    new TableRow(new Label{Text="Add LCK"}, numLuckAdd, new Label{Text="Add INT"}, numIntAdd),
+                    new TableRow(new Label{Text="Add SPR"}, numSprAdd, null, null)
+                }
+            });
+
+            fraVitals = Group("Consumable", new TableLayout
+            {
+                Rows = { new TableRow(new Label{Text="Vital Mod"}, numVitalMod) }
+            });
+
+            fraSkill = Group("Skill", new TableLayout
+            {
+                Rows = { new TableRow(new Label{Text="Skill"}, cmbSkills) }
+            });
+
+            fraProjectile = Group("Projectile", new TableLayout
+            {
+                Rows =
+                {
+                    new TableRow(new Label{Text="Projectile"}, cmbProjectile),
+                    new TableRow(new Label{Text="Ammo"}, cmbAmmo)
+                }
+            });
+
+            fraEvents = Group("Event", new TableLayout
+            {
+                Rows =
+                {
+                    new TableRow(new Label{Text="Event Id"}, numEventId),
+                    new TableRow(new Label{Text="Event Val"}, numEventValue)
+                }
+            });
+
+            fraRequirements = Group("Requirements", new TableLayout
+            {
+                Spacing = new Size(4,4),
+                Rows =
+                {
+                    new TableRow(new Label{Text="Job"}, cmbJobReq, new Label{Text="Access"}, cmbAccessReq),
+                    new TableRow(new Label{Text="Level"}, numLevelReq, null, null),
+                    new TableRow(new Label{Text="Req STR"}, numStrReq, new Label{Text="Req VIT"}, numVitReq),
+                    new TableRow(new Label{Text="Req LCK"}, numLuckReq, new Label{Text="Req INT"}, numIntReq),
+                    new TableRow(new Label{Text="Req SPR"}, numSprReq, null, null)
+                }
+            });
+
+            var left = new DynamicLayout { Spacing = new Size(4,4) };
+            left.AddRow(new Label{Text="Items"});
+            left.AddRow(lstIndex);
+            left.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=4,Items={btnSave,btnDelete,btnCancel}});
+
+            var mid = new DynamicLayout { Spacing = new Size(6,6) };
+            mid.AddRow(fraBasics);
+            mid.AddRow(fraEquipment);
+            mid.AddRow(fraVitals);
+            mid.AddRow(fraSkill);
+            mid.AddRow(fraProjectile);
+            mid.AddRow(fraEvents);
+
+            var right = new DynamicLayout { Spacing = new Size(6,6) };
+            right.AddRow(fraRequirements);
+
+            return new TableLayout
+            {
+                Padding = 4,
+                Spacing = new Size(8,8),
+                Rows = { new TableRow(left, mid, right) }
+            };
+        }
+
+        NumericStepper Num(int min, int max) => new NumericStepper { MinValue = min, MaxValue = max, Increment = 1 };
+
+        NumericStepper StatReq(Core.Stat stat)
+        {
+            var n = Num(0, 999);
+            n.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].StatReq[(int)stat] = (byte)n.Value; MarkChanged(); };
+            return n;
+        }
+        NumericStepper StatAdd(Core.Stat stat)
+        {
+            var n = Num(0, 999);
+            n.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].AddStat[(int)stat] = (byte)n.Value; MarkChanged(); };
+            return n;
+        }
+
+        GroupBox Group(string text, Control content) => new GroupBox { Text = text, Content = content };
+
+    void InitData()
+        {
+            lstIndex!.Items.Clear();
+            for (int i = 0; i < Core.Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Core.Data.Item[i].Name);
+            lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+
+            cmbAnimation!.Items.Clear(); for (int i=0;i<Core.Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
+            cmbProjectile!.Items.Clear(); for (int i=0;i<Core.Constant.NaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
+            cmbAmmo!.Items.Clear(); for (int i=0;i<Core.Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Core.Data.Item[i].Name);
+            cmbSkills!.Items.Clear(); for (int i=0;i<Core.Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
+            cmbJobReq!.Items.Clear(); for (int i=0;i<Core.Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
+            cmbAccessReq!.Items.Clear(); for (int i=0;i<10;i++) cmbAccessReq.Items.Add(i.ToString());
+            cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
+            cmbTool!.Items.Clear(); for(int i=0;i<20;i++) cmbTool.Items.Add("Tool "+i);
+            cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
+
+            cmbType!.Items.Clear();
+            foreach(var name in Enum.GetNames(typeof(ItemCategory))) cmbType.Items.Add(name);
+
+            Editors.ItemEditorInit(); // will populate controls & preview
+            TogglePanels();
+            LoadItemIcon(); LoadPaperdoll();
+        }
+
+        void UpdateName()
+        {
+            Core.Data.Item[GameState.EditorIndex].Name = Strings.Trim(txtName!.Text);
+            if (lstIndex!.SelectedIndex >= 0)
+            {
+                int i = lstIndex.SelectedIndex;
+                lstIndex.Items.RemoveAt(i);
+                lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Core.Data.Item[i].Name });
+                lstIndex.SelectedIndex = i;
             }
-
-            base.WndProc(ref m);
+            MarkChanged();
         }
 
-        private void BtnBasics_Click(object sender, EventArgs e)
+        void ChangeType()
         {
-            fraBasics.Visible = true;
-            fraRequirements.Visible = false;
+            Core.Data.Item[GameState.EditorIndex].Type = (byte)cmbType!.SelectedIndex;
+            BuildSubtypeList();
+            TogglePanels();
+            MarkChanged();
         }
 
-        private void BtnRequirements_Click(object sender, EventArgs e)
+        void BuildSubtypeList()
         {
-            fraBasics.Visible = false;
-            fraRequirements.Visible = true;
-        }
-
-        #endregion
-
-        #region Basics
-
-        private void NudPic_Click(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Icon = (int)Math.Round(nudIcon.Value);
-            DrawIcon();
-        }
-
-        private void CmbBind_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].BindType = (byte)cmbBind.SelectedIndex;
-        }
-
-        private void NudRarity_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Rarity = (byte)Math.Round(nudRarity.Value);
-        }
-
-        private void CmbAnimation_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex;
-        }
-
-        private void CmbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
+            cmbSubType!.Items.Clear();
             cmbSubType.Enabled = false;
-
-            if (cmbType.SelectedIndex == (int)ItemCategory.Equipment)
+            var type = (ItemCategory)cmbType!.SelectedIndex;
+            switch(type)
             {
-                fraEquipment.Visible = true;
-
-                // Build subtype cmb
-                cmbSubType.Items.Clear();
-
-                cmbSubType.Items.Add("Weapon");
-                cmbSubType.Items.Add("Armor");
-                cmbSubType.Items.Add("Helmet");
-                cmbSubType.Items.Add("Shield");
-
-                cmbSubType.Enabled = true;
-                cmbSubType.SelectedIndex = Core.Data.Item[GameState.EditorIndex].SubType;
-
-                if (Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon)
-                {
-                    fraProjectile.Visible = true;
-                }
-                else
-                {
-                    fraProjectile.Visible = false;
-                }
+                case ItemCategory.Equipment:
+                    cmbSubType.Items.Add("Weapon");
+                    cmbSubType.Items.Add("Armor");
+                    cmbSubType.Items.Add("Helmet");
+                    cmbSubType.Items.Add("Shield");
+                    cmbSubType.Enabled = true;
+                    break;
+                case ItemCategory.Consumable:
+                    cmbSubType.Items.Add("HP");
+                    cmbSubType.Items.Add("SP");
+                    cmbSubType.Items.Add("Exp");
+                    cmbSubType.Enabled = true;
+                    break;
+                case ItemCategory.Event:
+                    cmbSubType.Items.Add("Switches");
+                    cmbSubType.Items.Add("Variables");
+                    cmbSubType.Items.Add("Custom Script");
+                    cmbSubType.Items.Add("Key");
+                    cmbSubType.Enabled = true;
+                    break;
             }
-            else
+            if (cmbSubType.Items.Count > 0)
             {
-                fraEquipment.Visible = false;
-            }
-
-            if (cmbType.SelectedIndex == (int)ItemCategory.Consumable)
-            {
-                fraVitals.Visible = true;
-
-                // Build subtype cmb
-                cmbSubType.Items.Clear();
-
-                cmbSubType.Items.Add("HP");
-                cmbSubType.Items.Add("SP");
-                cmbSubType.Items.Add("Exp");
-
-                cmbSubType.Enabled = true;
-                cmbSubType.SelectedIndex = Core.Data.Item[GameState.EditorIndex].SubType;
-            }
-            else
-            {
-                fraVitals.Visible = false;
-            }
-
-            if (cmbType.SelectedIndex == (int)ItemCategory.Skill)
-            {
-                fraSkill.Visible = true;
-            }
-            else
-            {
-                fraSkill.Visible = false;
-            }
-
-            if (cmbType.SelectedIndex == (int)ItemCategory.Projectile)
-            {
-                fraProjectile.Visible = true;
-                fraEquipment.Visible = true;
-            }
-            else if (cmbType.SelectedIndex != (int)ItemCategory.Equipment)
-            {
-                fraProjectile.Visible = false;
-            }
-
-            if (cmbType.SelectedIndex == (int)ItemCategory.Event)
-            {
-                fraEvents.Visible = true;
-
-                // Build subtype cmb
-                cmbSubType.Items.Clear();
-
-                cmbSubType.Items.Add("Switches");
-                cmbSubType.Items.Add("Variables");
-                cmbSubType.Items.Add("Custom Script");
-                cmbSubType.Items.Add("Key");
-
-                cmbSubType.Enabled = true;
-                cmbSubType.SelectedIndex = Core.Data.Item[GameState.EditorIndex].SubType;
-            }
-            else
-            {
-                fraEvents.Visible = false;
-            }
-
-            Core.Data.Item[GameState.EditorIndex].Type = (byte)cmbType.SelectedIndex;
-        }
-
-        private void NudVitalMod_Click(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Data1 = (int)Math.Round(nudVitalMod.Value);
-        }
-
-        private void CmbSkills_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Data1 = cmbSkills.SelectedIndex;
-        }
-
-        private void TxtName_TextChanged(object sender, EventArgs e)
-        {
-            int tmpindex;
-
-            tmpindex = lstIndex.SelectedIndex;
-            Core.Data.Item[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Item[GameState.EditorIndex].Name);
-            lstIndex.SelectedIndex = tmpindex;
-        }
-
-        private void NudPrice_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Price = (int)Math.Round(nudPrice.Value);
-        }
-
-        private void ChkStackable_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkStackable.Checked == true)
-            {
-                Core.Data.Item[GameState.EditorIndex].Stackable = 1;
-            }
-            else
-            {
-                Core.Data.Item[GameState.EditorIndex].Stackable = 0;
+                var sub = Core.Data.Item[GameState.EditorIndex].SubType;
+                if (sub < 0 || sub >= cmbSubType.Items.Count) sub = 0; 
+                cmbSubType.SelectedIndex = sub;
             }
         }
 
-        private void TxtDescription_TextChanged(object sender, EventArgs e)
+        void TogglePanels()
         {
-            Core.Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text);
+            var type = (ItemCategory)cmbType!.SelectedIndex;
+            fraEquipment.Visible = type == ItemCategory.Equipment || type == ItemCategory.Projectile;
+            fraVitals.Visible = type == ItemCategory.Consumable;
+            fraSkill.Visible = type == ItemCategory.Skill;
+            fraProjectile.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
+            fraEvents.Visible = type == ItemCategory.Event;
         }
 
-        private void CmbSubType_SelectedIndexChanged(object sender, EventArgs e)
+        void LoadItemIcon()
         {
-            Core.Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex;
-
-            if (Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon)
+            itemBmp?.Dispose(); itemBmp = null;
+            int num = (int)numIcon!.Value;
+            if (num >=1 && num <= GameState.NumItems)
             {
-                fraProjectile.Visible = true;
+                var path = System.IO.Path.Combine(Core.Path.Items, num + GameState.GfxExt);
+                if (File.Exists(path)) itemBmp = new Bitmap(path);
             }
-            else
+            iconPreview!.Invalidate();
+        }
+
+        void LoadPaperdoll()
+        {
+            paperdollBmp?.Dispose(); paperdollBmp = null;
+            int num = (int)numPaperdoll!.Value;
+            if (num >=1 && num <= GameState.NumPaperdolls)
             {
-                fraProjectile.Visible = false;
+                var path = System.IO.Path.Combine(Core.Path.Paperdolls, num + GameState.GfxExt);
+                if (File.Exists(path)) paperdollBmp = new Bitmap(path);
             }
+            paperdollPreview!.Invalidate();
         }
 
-        private void NuditemLvl_ValueChanged(object sender, EventArgs e)
+    void MarkChanged()
         {
-            Core.Data.Item[GameState.EditorIndex].ItemLevel = (byte)Math.Round(nudItemLvl.Value);
+            if (GameState.EditorIndex >= 0 && GameState.EditorIndex < GameState.ItemChanged.Length)
+                GameState.ItemChanged[GameState.EditorIndex] = true;
         }
 
-        private void nudEvents_ValueChanged(object sender, EventArgs e)
+    // Legacy alias properties for Editors.cs naming (nud*, cmb*)
+    public NumericStepper nudIcon => numIcon!;
+    public NumericStepper nudPaperdoll => numPaperdoll!;
+    public NumericStepper nudItemLvl => numItemLvl!;
+    public NumericStepper nudPrice => numPrice!;
+    public NumericStepper nudRarity => numRarity!;
+    public NumericStepper nudSpeed => numSpeed!;
+    public NumericStepper nudDamage => numDamage!;
+    public NumericStepper nudVitalMod => numVitalMod!;
+    public NumericStepper nudEvent => numEventId!;
+    public NumericStepper nudEventValue => numEventValue!;
+    public NumericStepper nudLevelReq => numLevelReq!;
+    public NumericStepper nudStrReq => numStrReq!;
+    public NumericStepper nudVitReq => numVitReq!;
+    public NumericStepper nudLuckReq => numLuckReq!;
+    public NumericStepper nudIntReq => numIntReq!;
+    public NumericStepper nudSprReq => numSprReq!;
+    public NumericStepper nudStrength => numStrAdd!;
+    public NumericStepper nudIntelligence => numIntAdd!;
+    public NumericStepper nudVitality => numVitAdd!;
+    public NumericStepper nudLuck => numLuckAdd!;
+    public NumericStepper nudSpirit => numSprAdd!;
+    // ComboBoxes already public by field declaration; no additional alias properties needed
+
+    // Legacy drawing methods accessed by Editors.cs
+    public void DrawIcon() { iconPreview?.Invalidate(); }
+
+        protected override void OnClosed(EventArgs e)
         {
-            Core.Data.Item[GameState.EditorIndex].Data1 = (int)Math.Round(nudVitalMod.Value);
-        }
-
-        #endregion
-
-        #region Requirements
-
-        private void CmbJobReq_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].JobReq = cmbJobReq.SelectedIndex;
-        }
-
-        private void CmbAccessReq_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex;
-        }
-
-        private void NudLevelReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].LevelReq = (int)Math.Round(nudLevelReq.Value);
-        }
-
-        private void NudStrReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrReq.Value);
-        }
-
-        private void NudVitReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitReq.Value);
-        }
-
-        private void NudLuckReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuckReq.Value);
-        }
-
-        private void NudIntReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntReq.Value);
-        }
-
-        private void NudSprReq_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].StatReq[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSprReq.Value);
-        }
-
-        #endregion
-
-        #region Equipment
-
-        private void CmbTool_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Data3 = cmbTool.SelectedIndex;
-        }
-
-        private void NudDamage_ValueChanged(object sender, EventArgs e)
-        {
-
-            Core.Data.Item[GameState.EditorIndex].Data2 = (int)Math.Round(nudDamage.Value);
-        }
-
-        private void NudSpeed_ValueChanged(object sender, EventArgs e)
-        {
-            lblSpeed.Text = "Speed: " + nudSpeed.Value / 1000m + " sec";
-            Core.Data.Item[GameState.EditorIndex].Speed = (int)Math.Round(nudSpeed.Value);
-        }
-
-        private void NudPaperdoll_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Paperdoll = (int)Math.Round(nudPaperdoll.Value);
-            DrawPaperdoll();
-        }
-
-        private void NudStrength_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Strength] = (byte)Math.Round(nudStrength.Value);
-        }
-
-        private void NudLuck_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Luck] = (byte)Math.Round(nudLuck.Value);
-        }
-
-        private void NudIntelligence_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Intelligence] = (byte)Math.Round(nudIntelligence.Value);
-        }
-
-        private void NudVitality_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Vitality] = (byte)Math.Round(nudVitality.Value);
-        }
-
-        private void NudSpirit_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].AddStat[(int)Core.Stat.Spirit] = (byte)Math.Round(nudSpirit.Value);
-        }
-
-        private void ChkKnockBack_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkKnockBack.Checked == true)
-            {
-                Core.Data.Item[GameState.EditorIndex].KnockBack = 1;
-            }
-            else
-            {
-                Core.Data.Item[GameState.EditorIndex].KnockBack = 0;
-            }
-        }
-
-        private void CmbKnockBackTiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
-        }
-
-        private void CmbProjectile_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex;
-        }
-
-        private void CmbAmmo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Item[GameState.EditorIndex].Ammo = cmbAmmo.SelectedIndex;
-        }
-
-        private void btnSpawn_Click(object sender, EventArgs e)
-        {
-            NetworkSend.SendSpawnItem(GameState.EditorIndex, (int)Math.Round(nudSpanwAmount.Value));
-        }
-
-        private void Editor_Item_FormClosing(object sender, FormClosingEventArgs e)
-        {
+            itemBmp?.Dispose(); paperdollBmp?.Dispose();
             Editors.ItemEditorCancel();
+            base.OnClosed(e);
         }
-
-        public void DrawIcon()
-        {
-            int itemnum;
-
-            itemnum = (int)Math.Round(nudIcon.Value);
-
-            if (itemnum < 1 | itemnum > GameState.NumItems)
-            {
-                picItem.BackgroundImage = null;
-                return;
-            }
-
-            if (File.Exists(System.IO.Path.Combine(Core.Path.Items, itemnum + GameState.GfxExt)))
-            {
-                picItem.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Items, itemnum + GameState.GfxExt));
-            }
-            else
-            {
-                picItem.BackgroundImage = null;
-            }
-
-            picItem.Size = new Size(32, 32);
-        }
-
-        private void DrawPaperdoll()
-        {
-            int Sprite;
-
-            Sprite = (int)Math.Round(nudPaperdoll.Value);
-
-            if (Sprite < 1 | Sprite > GameState.NumPaperdolls)
-            {
-                picPaperdoll.BackgroundImage = null;
-                return;
-            }
-
-            if (File.Exists(System.IO.Path.Combine(Core.Path.Paperdolls, Sprite + GameState.GfxExt)))
-            {
-                picPaperdoll.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Paperdolls, Sprite + GameState.GfxExt));
-            }
-        }
-
-        #endregion
     }
 }

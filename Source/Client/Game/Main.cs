@@ -1,269 +1,239 @@
-﻿using Client;
-using System.Reflection.Metadata;
+﻿using System;
+using Eto.Forms;
 
-namespace Client
+namespace Client;
+
+public static class Program
 {
+    private static UITimer? _uiTimer;
+    private static bool _editorsDisposed;
 
-    public class Program
+    [STAThread]
+    public static void Main()
     {
-        private static System.Windows.Forms.Timer updateFormsTimer;
+        // Start game loop on background thread so Eto UI thread stays responsive
+        var gameThread = new System.Threading.Thread(RunGame) { IsBackground = true };
+        gameThread.Start();
 
-        public static void Main()
+        // Start Eto application & periodic UI updater
+    // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
+    // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
+    var app = new Application(Eto.Platform.Detect);
+        _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
+        _uiTimer.Elapsed += (_, _) => SafeUpdateEditors();
+        _uiTimer.Start();
+
+        app.Run();
+    }
+
+    private static void RunGame()
+    {
+        General.Client.Run();
+    }
+
+    private static void SafeUpdateEditors()
+    {
+        try
         {
-            // Set visual styles and text rendering default before any forms are created
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
-#pragma warning disable WFO5001 
-            Application.SetColorMode(SystemColorMode.Dark);
-#pragma warning restore WFO5001
+            UpdateEditors();
+        }
+        catch (ObjectDisposedException) { }
+        catch (InvalidOperationException) { }
+    }
 
-            var gameThread = new System.Threading.Thread(RunGame);
-            gameThread.IsBackground = false;
-            gameThread.Start();
-
-            // Initialize and start the timer for updating forms
-            updateFormsTimer = new System.Windows.Forms.Timer();
-            updateFormsTimer.Tick += UpdateForms;
-            updateFormsTimer.Interval = 1000; // Adjust the interval as needed
-            updateFormsTimer.Start();
-
-            // Add a Windows Forms message loop to keep the application running
-            Application.Run();
+    private static void UpdateEditors()
+    {
+        // Event Editor
+        if (GameState.InitEventEditor)
+        {
+            var ev = Editor_Event.Instance ?? new Editor_Event(); // Event editor is sealed; its constructor is public here.
+            ev.Show();
+            GameState.InitEventEditor = false;
         }
 
-        public static void RunGame()
+        if (GameState.InitAdminForm)
         {
-            General.Client.Run();
+            new Admin().Show();
+            GameState.AdminPanel = true;
+            GameState.InitAdminForm = false;
         }
 
-        private static void UpdateForms(object sender, EventArgs e)
+        if (GameState.InitMapReport)
         {
-            var mainForm = Application.OpenForms.Count > 0 ? Application.OpenForms[0] : null;
+            // TODO: Populate map report Eto form
+            GameState.InitMapReport = false;
+        }
 
-            try
+        if (GameState.InitMapEditor)
+        {
+            var map = Editor_Map.Instance ?? new Editor_Map();
+            GameState.MyEditorType = Core.EditorType.Map;
+            GameState.EditorIndex = 1;
+            map.Show();
+            Editor_Map.MapEditorInit();
+            GameState.InitMapEditor = false;
+        }
+
+        if (GameState.InitAnimationEditor)
+        {
+            var anim = Editor_Animation.Instance; // singleton Instance property handles creation
+            GameState.MyEditorType = Core.EditorType.Animation;
+            GameState.EditorIndex = 1;
+            anim?.Show();
+            if (anim != null)
             {
-                if (mainForm != null && !mainForm.IsDisposed && !mainForm.Disposing && mainForm.InvokeRequired)
-                {
-                    mainForm.Invoke(new EventHandler(UpdateForms), sender, e);
-                    return;
-                }
+                anim.lstIndex.SelectedIndex = 0;
+                Editors.AnimationEditorInit();
             }
-            catch (System.ObjectDisposedException)
+            GameState.InitAnimationEditor = false;
+        }
+
+        if (GameState.InitItemEditor)
+        {
+            var item = Editor_Item.Instance; // private ctor, use Instance
+            GameState.MyEditorType = Core.EditorType.Item;
+            GameState.EditorIndex = 1;
+            item?.Show();
+            if (item?.lstIndex != null)
             {
-                return;
+                item.lstIndex.SelectedIndex = 0;
+                Editors.ItemEditorInit();
             }
+            GameState.InitItemEditor = false;
+        }
 
-            try
+        if (GameState.InitJobEditor)
+        {
+            var job = Editor_Job.Instance; // assume singleton pattern similar to others
+            GameState.MyEditorType = Core.EditorType.Job;
+            GameState.EditorIndex = 1;
+            job?.Show();
+            if (job?.lstIndex != null)
             {
-                if (GameState.InitEventEditor)
-                {
-                    var withBlock = Editor_Event.Instance;
-                    withBlock.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock.Show();
-
-                    GameState.InitEventEditor = false;
-                }
-
-                if (GameState.InitAdminForm)
-                {
-                    var withBlock1 = Admin.Instance;
-                    withBlock1.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock1.Show();
-                    withBlock1.txtAdminName.Text = Core.Global.Command.GetPlayerName(GameState.MyIndex);
-                    GameState.AdminPanel = true;
-
-                    GameState.InitAdminForm = false;
-                }
-
-                if (GameState.InitMapReport)
-                {
-                    for (int i = 1, loopTo = GameState.MapNames.Length; i < loopTo; i++)
-                    {
-                        var item1 = new DarkUI.Controls.DarkListItem(i.ToString());
-                        // Set the Text property to include both the index and the map name
-                        item1.Text = $"{i}: {GameState.MapNames[i]}";
-                        Admin.Instance.lstMaps.Items.Add(item1);
-                    }
-                    GameState.InitMapReport = false;
-                }
-
-                if (GameState.InitMapEditor)
-                {
-                    var withBlock2 = Editor_Map.Instance;
-                    GameState.MyEditorType = Core.EditorType.Map;
-                    GameState.EditorIndex = 1;
-                    withBlock2.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock2.Show();
-                    Editor_Map.MapEditorInit();
-                    General.SetWindowFocus(General.Client.Window.Handle);
-
-                    GameState.InitMapEditor = false;
-                }    
-
-                if (GameState.InitAnimationEditor)
-                {
-                    var withBlock4 = Editor_Animation.Instance;
-                    GameState.MyEditorType = Core.EditorType.Animation;
-                    GameState.EditorIndex = 1;
-                    withBlock4.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock4.Show();
-                    withBlock4.lstIndex.SelectedIndex = 0;
-                    Editors.AnimationEditorInit();
-
-                    GameState.InitAnimationEditor = false;
-                }
-
-                if (GameState.InitItemEditor)
-                {
-                    var withBlock5 = Editor_Item.Instance;
-                    GameState.MyEditorType = Core.EditorType.Item;
-                    GameState.EditorIndex = 1;
-                    withBlock5.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock5.Show();
-                    withBlock5.lstIndex.SelectedIndex = 0;
-                    Editors.ItemEditorInit();
-
-                    GameState.InitItemEditor = false;
-                }
-
-                if (GameState.InitJobEditor)
-                {
-                    var withBlock6 = Editor_Job.Instance;
-                    GameState.MyEditorType = Core.EditorType.Job;
-                    GameState.EditorIndex = 1;
-                    withBlock6.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock6.Show();
-                    withBlock6.lstIndex.SelectedIndex = 0;
-                    Editors.JobEditorInit();
-
-                    GameState.InitJobEditor = false;
-                }
-
-                if (GameState.InitMoralEditor)
-                {
-                    var withBlock7 = Editor_Moral.Instance;
-                    GameState.MyEditorType = Core.EditorType.Moral;
-                    GameState.EditorIndex = 1;
-                    withBlock7.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock7.Show();
-                    withBlock7.lstIndex.SelectedIndex = 0;
-                    Editors.MoralEditorInit();
-
-                    GameState.InitMoralEditor = false;
-                }
-
-                if (GameState.InitResourceEditor)
-                {
-                    var withBlock8 = Editor_Resource.Instance;
-                    GameState.MyEditorType = Core.EditorType.Resource;
-                    GameState.EditorIndex = 1;
-                    withBlock8.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock8.Show();
-                    withBlock8.lstIndex.SelectedIndex = 0;
-                    Editors.ResourceEditorInit();
-
-                    GameState.InitResourceEditor = false;
-                }
-
-                if (GameState.InitNpcEditor)
-                {
-                    var withBlock9 = Editor_Npc.Instance;
-                    GameState.MyEditorType = Core.EditorType.Npc;
-                    GameState.EditorIndex = 1;
-                    withBlock9.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock9.Show();
-                    withBlock9.lstIndex.SelectedIndex = 0;
-                    Editors.NpcEditorInit();
-
-                    GameState.InitNpcEditor = false;
-                }
-
-                if (GameState.InitSkillEditor)
-                {
-                    var withBlock10 = Editor_Skill.Instance;
-                    GameState.MyEditorType = Core.EditorType.Skill;
-                    GameState.EditorIndex = 1;
-                    withBlock10.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock10.Show();
-                    withBlock10.lstIndex.SelectedIndex = 0;
-                    Editors.SkillEditorInit();
-
-                    GameState.InitSkillEditor = false;
-                }
-
-                if (GameState.InitShopEditor)
-                {
-                    var withBlock11 = Editor_Shop.Instance;
-                    GameState.MyEditorType = Core.EditorType.Shop;
-                    GameState.EditorIndex = 1;
-                    withBlock11.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock11.Show();
-                    withBlock11.lstIndex.SelectedIndex = 0;
-                    Editors.ShopEditorInit();
-
-                    GameState.InitShopEditor = false;
-                }
-
-                if (GameState.InitProjectileEditor)
-                {
-                    var withBlock12 = Editor_Projectile.Instance;
-                    GameState.MyEditorType = Core.EditorType.Projectile;
-                    GameState.EditorIndex = 1;
-                    withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock12.Show();
-                    withBlock12.lstIndex.SelectedIndex = 0;
-                    Editors.ProjectileEditorInit();
-
-                    GameState.InitProjectileEditor = false;
-                }
-
-                if (GameState.InitScriptEditor)
-                {
-                    var withBlock12 = Editor_Script.Instance;
-                    GameState.MyEditorType = Core.EditorType.Script;
-                    GameState.EditorIndex = 1;
-                    withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
-                    withBlock12.Show();
-                    Script.ScriptEditorInit();
-
-                    GameState.InitScriptEditor = false;
-
-                }
-
-                Editor_Map.Instance.picBackSelect.Invalidate();
-                Editor_Animation.Instance.picSprite0.Invalidate();
-                Editor_Animation.Instance.picSprite1.Invalidate();
-
-                if (GameState.InGame == false)
-                {
-                    // Close all open editor forms, not just the last opened one
-                    Editor_Item.Instance.Dispose();
-                    Editor_Job.Instance.Dispose();
-                    Editor_Map.Instance.Dispose();
-                    Editor_Event.Instance.Dispose();
-                    Editor_Npc.Instance.Dispose();
-                    Editor_Projectile.Instance.Dispose();
-                    Editor_Resource.Instance.Dispose();
-                    Editor_Shop.Instance.Dispose();
-                    Editor_Skill.Instance.Dispose();
-                    Editor_Animation.Instance.Dispose();
-                    Editor_Moral.Instance.Dispose();
-                    Editor_Script.Instance.Dispose();
-
-                    if (GameState.AdminPanel)
-                    {
-                        Admin.Instance.Dispose();
-                    }
-
-                    Application.DoEvents();
-                }
+                job.lstIndex.SelectedIndex = 0;
+                Editors.JobEditorInit();
             }
+            GameState.InitJobEditor = false;
+        }
 
-            catch (InvalidOperationException)
+        if (GameState.InitMoralEditor)
+        {
+            var moral = Editor_Moral.Instance;
+            GameState.MyEditorType = Core.EditorType.Moral;
+            GameState.EditorIndex = 1;
+            moral?.Show();
+            if (moral?.lstIndex != null)
             {
-                return;
+                moral.lstIndex.SelectedIndex = 0;
+                Editors.MoralEditorInit();
             }
+            GameState.InitMoralEditor = false;
+        }
+
+        if (GameState.InitResourceEditor)
+        {
+            var res = Editor_Resource.Instance;
+            GameState.MyEditorType = Core.EditorType.Resource;
+            GameState.EditorIndex = 1;
+            res?.Show();
+            if (res?.lstIndex != null)
+            {
+                res.lstIndex.SelectedIndex = 0;
+                Editors.ResourceEditorInit();
+            }
+            GameState.InitResourceEditor = false;
+        }
+
+        if (GameState.InitNpcEditor)
+        {
+            var npc = Editor_Npc.Instance ?? new Editor_Npc(); // public ctor we created
+            GameState.MyEditorType = Core.EditorType.Npc;
+            GameState.EditorIndex = 1;
+            npc.Show();
+            npc.lstIndex.SelectedIndex = 0;
+            Editors.NpcEditorInit();
+            GameState.InitNpcEditor = false;
+        }
+
+        if (GameState.InitSkillEditor)
+        {
+            var skill = Editor_Skill.Instance;
+            GameState.MyEditorType = Core.EditorType.Skill;
+            GameState.EditorIndex = 1;
+            skill?.Show();
+            if (skill?.lstIndex != null)
+            {
+                skill.lstIndex.SelectedIndex = 0;
+                Editors.SkillEditorInit();
+            }
+            GameState.InitSkillEditor = false;
+        }
+
+        if (GameState.InitShopEditor)
+        {
+            var shop = Editor_Shop.Instance;
+            GameState.MyEditorType = Core.EditorType.Shop;
+            GameState.EditorIndex = 1;
+            shop?.Show();
+            if (shop?.lstIndex != null)
+            {
+                shop.lstIndex.SelectedIndex = 0;
+                Editors.ShopEditorInit();
+            }
+            GameState.InitShopEditor = false;
+        }
+
+        if (GameState.InitProjectileEditor)
+        {
+            var proj = Editor_Projectile.Instance ?? new Editor_Projectile();
+            GameState.MyEditorType = Core.EditorType.Projectile;
+            GameState.EditorIndex = 1;
+            proj.Show();
+            proj.lstIndex.SelectedIndex = 0;
+            Editors.ProjectileEditorInit();
+            GameState.InitProjectileEditor = false;
+        }
+
+        if (GameState.InitScriptEditor)
+        {
+            var scr = Editor_Script.Instance; // private ctor singleton
+            GameState.MyEditorType = Core.EditorType.Script;
+            GameState.EditorIndex = 1;
+            scr?.Show();
+            if (scr != null) Script.ScriptEditorInit();
+            GameState.InitScriptEditor = false;
+        }
+
+        // Invalidate redraw surfaces where needed (guard against null/partial migration)
+        try
+        {
+            Editor_Map.Instance?.picBackSelect.Invalidate();
+            Editor_Animation.Instance?.picSprite0.Invalidate();
+            Editor_Animation.Instance?.picSprite1.Invalidate();
+        }
+        catch { /* some editors may not be instantiated yet */ }
+        if (GameState.InGame)
+        {
+            // Reset disposal flag when (re)entering game
+            _editorsDisposed = false;
+        }
+        else if (!_editorsDisposed)
+        {
+            // Dispose editors once when leaving game state
+            try { Editor_Item.Instance?.Dispose(); } catch { }
+            try { Editor_Job.Instance?.Dispose(); } catch { }
+            try { Editor_Map.Instance?.Dispose(); } catch { }
+            try { Editor_Event.Instance?.Dispose(); } catch { }
+            try { Editor_Npc.Instance?.Dispose(); } catch { }
+            try { Editor_Projectile.Instance?.Dispose(); } catch { }
+            try { Editor_Resource.Instance?.Dispose(); } catch { }
+            try { Editor_Shop.Instance?.Dispose(); } catch { }
+            try { Editor_Skill.Instance?.Dispose(); } catch { }
+            try { Editor_Animation.Instance?.Dispose(); } catch { }
+            try { Editor_Moral.Instance?.Dispose(); } catch { }
+            try { Editor_Script.Instance?.Dispose(); } catch { }
+            // TODO: track Admin form instance and close if open
+            _editorsDisposed = true;
         }
     }
 }

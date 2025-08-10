@@ -2,18 +2,291 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
-using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
+using Eto.Forms;
+using Eto.Drawing;
 using static Core.Type;
 
 namespace Client
 {
 
-    public partial class Editor_Event
+    public partial class Editor_Event : Form
     {
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
+
+        public ComboBox cmbSwitch = new ComboBox();
+        public ComboBox cmbVariable = new ComboBox();
+        public ComboBox cmbChangeItemIndex = new ComboBox();
+        public ComboBox cmbSetSelfSwitch = new ComboBox();
+        public ComboBox cmbSetSelfSwitchTo = new ComboBox();
+        public TextBox txtGoToLabel = new TextBox();
+        public NumericStepper nudChangeItemsAmount = new NumericStepper();
+        public CheckBox optChangeItemAdd = new CheckBox { Text = "Add" };
+        public CheckBox optChangeItemSet = new CheckBox { Text = "Set" };
+        public CheckBox optChangeItemRemove = new CheckBox { Text = "Remove" };
+        public RadioButton optChangeSkillsAdd = new RadioButton { Text = "Add Skill" };
+        public RadioButton optChangeSkillsRemove = new RadioButton { Text = "Remove Skill" };
+        public RadioButton optCondition0 = new RadioButton { Text = "Player Var" };
+        public RadioButton optCondition1 = new RadioButton { Text = "Player Switch" };
+        public RadioButton optCondition2 = new RadioButton { Text = "Has Item" };
+        public RadioButton optCondition3 = new RadioButton { Text = "Self Switch" };
+        public RadioButton optCondition4 = new RadioButton { Text = "Class Is" };
+        public RadioButton optCondition5 = new RadioButton { Text = "Learnt Skill" };
+        public RadioButton optCondition6 = new RadioButton { Text = "Level" };
+        public RadioButton optCondition8 = new RadioButton { Text = "Gender" };
+        public RadioButton optCondition9 = new RadioButton { Text = "Time" };
+        // Additional controls referenced later
+        public RadioButton optChangeSexMale = new RadioButton { Text = "Male" };
+        public RadioButton optChangeSexFemale = new RadioButton { Text = "Female" };
+        public ComboBox cmbSetPK = new ComboBox();
+        public NumericStepper nudGiveExp = new NumericStepper();
+        public NumericStepper nudWPX = new NumericStepper();
+        public NumericStepper nudWPY = new NumericStepper();
+        public ComboBox cmbWarpPlayerDir = new ComboBox();
+        public ComboBox cmbMoveWait = new ComboBox();
+        // Add Text scope options
+        public RadioButton optAddText_Map = new RadioButton { Text = "Map" };
+        public RadioButton optAddText_Global = new RadioButton { Text = "Global" };
+        // Animation play / targeting controls
+        public ComboBox cmbPlayAnimEvent = new ComboBox();
+        public ComboBox cmbAnimTargetType = new ComboBox();
+        public NumericStepper nudPlayAnimTileX = new NumericStepper();
+        public NumericStepper nudPlayAnimTileY = new NumericStepper();
+        public Label lblPlayAnimX = new Label();
+        public Label lblPlayAnimY = new Label();
+        // Fog / weather / tint controls referenced later
+        public NumericStepper nudFogData1 = new NumericStepper();
+        public NumericStepper nudFogData2 = new NumericStepper();
+        public ComboBox CmbWeather = new ComboBox();
+        public NumericStepper nudWeatherIntensity = new NumericStepper();
+        public NumericStepper nudMapTintData0 = new NumericStepper();
+        public NumericStepper nudMapTintData1 = new NumericStepper();
+        public NumericStepper nudMapTintData2 = new NumericStepper();
+        public NumericStepper nudMapTintData3 = new NumericStepper();
+        // Additional missing controls referenced in logic or Event.cs
+        public NumericStepper nudWaitAmount = new NumericStepper();
+        public ComboBox cmbSetAccess = new ComboBox();
+        public Panel fraOpenShop = new Panel();
+        public NumericStepper nudPicOffsetX = new NumericStepper();
+        public NumericStepper nudPicOffsetY = new NumericStepper();
+        public ComboBox cmbMoveType = new ComboBox();
+        public ComboBox cmbMoveSpeed = new ComboBox();
+        public ComboBox cmbMoveFreq = new ComboBox();
+        public ComboBox cmbPositioning = new ComboBox();
+        public ComboBox cmbTrigger = new ComboBox();
+        public Panel pnlVariableSwitches = new Panel();
+        public ListBox lstSwitches = new ListBox();
+        public ListBox lstVariables = new ListBox();
+        public Panel FraRenaming = new Panel();
+        public Panel fraLabeling = new Panel();
+        public TextBox txtRename = new TextBox();
+        public Label lblEditing = new Label();
+     // Core top-level controls (declare only what existing logic references)
+        public ComboBox cmbCondition_PlayerVarIndex = new ComboBox();
+        public ComboBox cmbCondition_PlayerVarCompare = new ComboBox();
+        public ComboBox cmbPlayerSwitchSet = new ComboBox();
+        public ComboBox cmbCondition_PlayerSwitch = new ComboBox();
+        public ComboBox cmbCondtion_PlayerSwitchCondition = new ComboBox();
+        public ComboBox cmbCondition_HasItem = new ComboBox();
+        public ComboBox cmbCondition_JobIs = new ComboBox();
+        public ComboBox cmbCondition_LearntSkill = new ComboBox();
+        public ComboBox cmbCondition_LevelCompare = new ComboBox();
+        public ComboBox cmbCondition_SelfSwitch = new ComboBox();
+        public ComboBox cmbCondition_SelfSwitchCondition = new ComboBox();
+        public ComboBox cmbCondition_Gender = new ComboBox();
+        public ComboBox cmbCondition_Time = new ComboBox();
+        public ComboBox cmbSwitchSet = new ComboBox();
+        public Label txtLabelName = new Label();
+        public NumericStepper nudChangeLevel = new NumericStepper();
+        public ComboBox cmbChangeSkills = new ComboBox();
+        public ComboBox cmbChangeJob = new ComboBox();
+        public NumericStepper nudChangeSprite = new NumericStepper();
+        public ComboBox cmbPlayAnim = new ComboBox();
+        public ComboBox cmbPlayBGM = new ComboBox();
+        public ComboBox cmbPlaySound = new ComboBox();
+        public ComboBox cmbOpenShop = new ComboBox();
+        public ComboBox cmbSpawnNpc = new ComboBox();
+        public NumericStepper nudFogData0 = new NumericStepper();
+        public NumericStepper nudWPMap = new NumericStepper();
+        public Panel fraDialogue = new Panel();
+        public Panel fraMoveRoute = new Panel();
+        public ComboBox cmbEvent = new ComboBox();
+        public TabControl tabPages = new TabControl();
+        public ComboBox cmbHasItem = new ComboBox();
+        public ComboBox cmbPlayerVar = new ComboBox();
+        public ComboBox cmbPlayerSwitch = new ComboBox();
+        public ComboBox cmbSelfSwitch = new ComboBox();
+        public Button btnDeletePage = new Button { Text = "Delete Page" };
+        public Button btnPastePage = new Button { Text = "Paste Page" };
+        public NumericStepper nudShowPicture = new NumericStepper();
+        public ComboBox cmbPicLoc = new ComboBox();
+        public TextBox txtName = new TextBox();
+        public ImageView picGraphicSel = new ImageView();
+        public ImageView picGraphic = new ImageView();
+        public Panel fraGraphic = new Panel();
+        public ComboBox cmbGraphic = new ComboBox();
+        public NumericStepper nudGraphic = new NumericStepper();
+
+        // Additional controls referenced in logic (declare as needed)
+        public ListBox lstCommands = new ListBox();
+        public Button btnAddCommand = new Button { Text = "Add" };
+        public Button btnEditCommand = new Button { Text = "Edit" };
+        public Button btnDeleteComand = new Button { Text = "Delete" };
+        public Button btnClearCommand = new Button { Text = "Clear" };
+        public TreeView tvCommands = new TreeView();
+
+        // Numerous frame panels placeholders (keep as Panel)
+        public Panel fraShowText = new Panel();
+        public Panel fraShowChoices = new Panel();
+        public Panel fraAddText = new Panel();
+        public Panel fraShowChatBubble = new Panel();
+        public Panel fraCommands = new Panel();
+        public Panel fraPlayerVariable = new Panel();
+        public Panel fraPlayerSwitch = new Panel();
+        public Panel fraSetSelfSwitch = new Panel();
+        public Panel fraConditionalBranch = new Panel();
+        public Panel fraCreateLabel = new Panel();
+        public Panel fraGoToLabel = new Panel();
+        public Panel fraChangeItems = new Panel();
+        public Panel fraChangeLevel = new Panel();
+        public Panel fraChangeSkills = new Panel();
+        public Panel fraChangeJob = new Panel();
+        public Panel fraChangeSprite = new Panel();
+        public Panel fraChangeGender = new Panel();
+        public Panel fraChangePK = new Panel();
+        public Panel fraGiveExp = new Panel();
+        public Panel fraPlayerWarp = new Panel();
+        public Panel fraMoveRouteWait = new Panel();
+        public Panel fraSpawnNpc = new Panel();
+        public Panel fraPlayAnimation = new Panel();
+        public Panel fraSetFog = new Panel();
+        public Panel fraSetWeather = new Panel();
+        public Panel fraMapTint = new Panel();
+        public Panel fraPlayBGM = new Panel();
+        public Panel fraPlaySound = new Panel();
+        public Panel fraSetWait = new Panel();
+        public Panel fraSetAccess = new Panel();
+        public Panel fraShowPic = new Panel();
+        public ImageView picShowPic = new ImageView();
+
+        // Text/entry controls referenced in logic
+        public TextArea txtShowText = new TextArea();
+        public TextBox txtChoicePrompt = new TextBox();
+        public TextBox txtChoices1 = new TextBox();
+        public TextBox txtChoices2 = new TextBox();
+        public TextBox txtChoices3 = new TextBox();
+        public TextBox txtChoices4 = new TextBox();
+        public TextArea txtAddText_Text = new TextArea();
+        public TextBox txtChatbubbleText = new TextBox();
+        public ComboBox cmbChatBubbleTargetType = new ComboBox();
+        public ComboBox cmbChatBubbleTarget = new ComboBox();
+        public NumericStepper nudVariableData0 = new NumericStepper();
+        public NumericStepper nudVariableData1 = new NumericStepper();
+        public NumericStepper nudVariableData2 = new NumericStepper();
+        public NumericStepper nudVariableData3 = new NumericStepper();
+        public NumericStepper nudVariableData4 = new NumericStepper();
+        public CheckBox optAddText_Player = new CheckBox { Text = "Player" };
+        public CheckBox optVariableAction0 = new CheckBox { Text = "Set" };
+        public CheckBox optVariableAction1 = new CheckBox { Text = "Add" };
+        public CheckBox optVariableAction2 = new CheckBox { Text = "Sub" };
+        public CheckBox optVariableAction3 = new CheckBox { Text = "Random" };
+
+        // Condition numeric controls
+        public NumericStepper nudCondition_PlayerVarCondition = new NumericStepper();
+        public NumericStepper nudCondition_HasItem = new NumericStepper();
+        public NumericStepper nudCondition_LevelAmount = new NumericStepper();
+
+        // Additional references used later
+        public ComboBox cmbVariableDataType = new ComboBox();
+        public ComboBox cmbPlayervarCompare = new ComboBox();
+        public NumericStepper nudPlayerVariable = new NumericStepper();
+        public CheckBox chkPlayerVar = new CheckBox { Text = "Player Var" };
+        public CheckBox chkPlayerSwitch = new CheckBox { Text = "Player Switch" };
+        public ComboBox cmbPlayerSwitchCompare = new ComboBox();
+        public CheckBox chkHasItem = new CheckBox { Text = "Has Item" };
+        public CheckBox chkSelfSwitch = new CheckBox { Text = "Self Switch" };
+        public ComboBox cmbSelfSwitchCompare = new ComboBox();
+        public CheckBox chkWalkAnim = new CheckBox { Text = "Walk Anim" };
+        public CheckBox chkDirFix = new CheckBox { Text = "Dir Fix" };
+        public CheckBox chkWalkThrough = new CheckBox { Text = "Walk Through" };
+        public CheckBox chkShowName = new CheckBox { Text = "Show Name" };
+
+        // Move route related
+        public ListBox lstMoveRoute = new ListBox();
+        public ListBox lstvwMoveRoute = new ListBox();
+        public CheckBox chkIgnoreMove = new CheckBox { Text = "Ignore" };
+        public CheckBox chkRepeatRoute = new CheckBox { Text = "Repeat" };
+        public Button btnMoveRoute = new Button { Text = "Move Route" };
+        public Button btnMoveRouteOk = new Button { Text = "Route OK" };
+        public Button btnMoveRouteCancel = new Button { Text = "Cancel" };
+
+        // Graphics selection
+        public Button btnOK = new Button { Text = "OK" };
+        public Button btnCancel = new Button { Text = "Cancel" };
+
+        public CheckBox chkGlobal = new CheckBox { Text = "Global" };
+
+    public static Editor_Event Instance { get; private set; } = null!; // assigned in ctor
+
+        public Editor_Event()
+        {
+            Instance = this;
+            Title = "Event Editor";
+            ClientSize = new Size(1100, 750);
+            InitializeComponent();
+            Shown += Editor_Events_Load; // hook existing load logic
+        }
+
+        private void InitializeComponent()
+        {
+            // Basic left command tree + right content placeholder
+            var left = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Width = 250,
+                Spacing = 4,
+                Items =
+                {
+                    new Label{ Text = "Commands"},
+                    new StackLayoutItem(tvCommands, true),
+                    new Label{ Text = "Commands List"},
+                    new StackLayoutItem(lstCommands, true),
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 4,
+                        Items = { btnAddCommand, btnEditCommand, btnDeleteComand, btnClearCommand }
+                    }
+                }
+            };
+
+            var right = new Scrollable
+            {
+                Content = new StackLayout
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 6,
+                    Items =
+                    {
+                        new StackLayout { Orientation = Orientation.Horizontal, Spacing = 4, Items = { new Label{ Text = "Name"}, txtName, chkGlobal } },
+                        tabPages,
+                        fraDialogue, // placeholder panels added so logic can toggle visibility
+                        fraGraphic,
+                        fraMoveRoute,
+                        fraShowText, fraShowChoices, fraAddText, fraShowChatBubble
+                    }
+                }
+            };
+
+            Content = new Splitter
+            {
+                Orientation = Orientation.Horizontal,
+                Panel1 = left,
+                Panel2 = right,
+                Position = 260
+            };
+        }
 
         #region Form
 
@@ -30,7 +303,7 @@ namespace Client
             cmbCondition_PlayerVarCompare.SelectedIndex = 0;
             cmbCondition_PlayerVarCompare.Enabled = false;
             nudCondition_PlayerVarCondition.Enabled = false;
-            nudCondition_PlayerVarCondition.Value = 0m;
+            nudCondition_PlayerVarCondition.Value = 0;
             cmbCondition_PlayerSwitch.Enabled = false;
             cmbCondition_PlayerSwitch.Items.Clear();
 
@@ -46,7 +319,7 @@ namespace Client
                 cmbCondition_HasItem.Items.Add(i + 1 + ". " + Core.Data.Item[i].Name);
             cmbCondition_HasItem.SelectedIndex = 0;
             nudCondition_HasItem.Enabled = false;
-            nudCondition_HasItem.Value = 1m;
+            nudCondition_HasItem.Value = 1;
             cmbCondition_JobIs.Enabled = false;
             cmbCondition_JobIs.Items.Clear();
 
@@ -62,7 +335,7 @@ namespace Client
             cmbCondition_LevelCompare.Enabled = false;
             cmbCondition_LevelCompare.SelectedIndex = 0;
             nudCondition_LevelAmount.Enabled = false;
-            nudCondition_LevelAmount.Value = 0m;
+            nudCondition_LevelAmount.Value = 0;
             if (cmbCondition_SelfSwitch.Items.Count > -1)
             {
                 cmbCondition_SelfSwitch.SelectedIndex = 0;
@@ -82,7 +355,7 @@ namespace Client
             cmbCondition_Time.Enabled = false;
         }
 
-        private void Editor_Events_Load(object sender, EventArgs e)
+    private void Editor_Events_Load(object? sender, EventArgs e)
         {
             int i;
 
@@ -101,9 +374,9 @@ namespace Client
             for (i = 0; i < Constant.MaxItems; i++)
                 cmbChangeItemIndex.Items.Add(Core.Data.Item[i].Name);
             cmbChangeItemIndex.SelectedIndex = 0;
-            nudChangeLevel.Minimum = 1m;
-            nudChangeLevel.Maximum = Constant.MaxLevel;
-            nudChangeLevel.Value = 1m;
+            nudChangeLevel.MinValue = 1;
+            nudChangeLevel.MaxValue = Constant.MaxLevel;
+            nudChangeLevel.Value = 1;
             cmbChangeSkills.Items.Clear();
 
             for (i = 0; i < Constant.MaxSkills; i++)
@@ -114,7 +387,7 @@ namespace Client
             for (i = 0; i < Constant.MaxJobs; i++)
                 cmbChangeJob.Items.Add(Strings.Trim(Data.Job[i].Name));
             cmbChangeJob.SelectedIndex = 0;
-            nudChangeSprite.Maximum = GameState.NumCharacters;
+            nudChangeSprite.MaxValue = GameState.NumCharacters;
             cmbPlayAnim.Items.Clear();
 
             for (i = 0; i < Constant.MaxAnimations; i++)
@@ -155,28 +428,20 @@ namespace Client
             }
 
             cmbSpawnNpc.SelectedIndex = 0;
-            nudFogData0.Maximum = GameState.NumFogs;
-            nudWPMap.Maximum = Core.Constant.NaxVariables;
+            nudFogData0.MaxValue = GameState.NumFogs;
+            nudWPMap.MaxValue = Core.Constant.NaxVariables;
 
-            fraDialogue.Width = Width;
-            fraDialogue.Height = Height;
-            fraDialogue.Top = 0;
-            fraDialogue.Left = 0;
-
-            fraMoveRoute.Width = Width;
-            fraMoveRoute.Height = Height;
-            fraMoveRoute.Top = 0;
-            fraMoveRoute.Left = 0;
+            // Layout sizing handled by Eto containers
 
             cmbEvent.Items.Add("This Event");
             cmbEvent.SelectedIndex = 0;
 
             // set the tabs
-            tabPages.TabPages.Clear();
+            tabPages.Pages.Clear();
 
             var loopTo2 = Event.TmpEvent.PageCount;
             for (i = 0; i < loopTo2; i++)
-                tabPages.TabPages.Add(Conversion.Str(i + 1));
+                tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
 
             // items
             cmbHasItem.Items.Clear();
@@ -204,13 +469,13 @@ namespace Client
             }
             btnPastePage.Enabled = false;
 
-            nudShowPicture.Maximum = GameState.NumPictures;
+            nudShowPicture.MaxValue = GameState.NumPictures;
 
             cmbPicLoc.SelectedIndex = 0;
 
             fraDialogue.Visible = false;
 
-            if (tabPages.SelectedIndex == 0)
+            if (tabPages.SelectedIndex == 0 && tabPages.Pages.Count > 1)
                 tabPages.SelectedIndex = 1;
 
             // Load page 1 to start off with
@@ -223,236 +488,12 @@ namespace Client
             DrawGraphic();
         }
 
-        private void Editor_Event_Resize(object sender, EventArgs e)
-        {
-            this.AutoScroll = true;
-            this.AutoScrollMinSize = new Size(this.Width, this.Height);
-            this.PerformLayout();
-        }
+    private void Editor_Event_Resize(object? sender, EventArgs e) { }
+    private void Editor_Event_Activated(object? sender, EventArgs e) { }
 
-        private void Editor_Event_Activated(object sender, EventArgs e)
-        {
-            this.AutoScroll = true;
-        }
+    public void DrawGraphic() { /* TODO: Reimplement drawing using Eto.Drawing */ }
 
-        public void DrawGraphic()
-        {
-            Core.Type.Rect sRect;
-            Core.Type.Rect dRect;
-            Bitmap targetBitmap; // Bitmap we draw to
-            Bitmap sourceBitmap; // This is our sprite or tileset that we are drawing from
-            Graphics g; // This is our graphics Job that helps us draw to the targetBitmap
-
-            if (picGraphicSel.Visible)
-            {
-                switch (cmbGraphic.SelectedIndex)
-                {
-                    case 0:
-                        {
-                            // None
-                            picGraphic.BackgroundImage = null;
-                            picGraphicSel.BackgroundImage = null;
-                            break;
-                        }
-                    case 1:
-                        {
-                            if (nudGraphic.Value > 0m & nudGraphic.Value <= GameState.NumCharacters)
-                            {
-                                // Load character from Contents into our sourceBitmap
-                                sourceBitmap = new Bitmap(System.IO.Path.Combine(Core.Path.Characters, nudGraphic.Value + GameState.GfxExt));
-                                targetBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height); // Create our target Bitmap
-
-                                // Create the Graphics object
-                                g = Graphics.FromImage(targetBitmap);
-
-                                // This is the section we are pulling from the source graphic (using RectangleF)
-                                var sourceRect = new RectangleF(0f, 0f, sourceBitmap.Width / 4.0f, sourceBitmap.Height / 4.0f);
-
-                                // This is the rectangle in the target graphic we want to render to (using RectangleF)
-                                var destRect = new RectangleF(0f, 0f, targetBitmap.Width / 4.0f, targetBitmap.Height / 4.0f);
-
-                                // Draw the image using RectangleF for source and destination rectangles
-                                g.DrawImage(sourceBitmap, destRect, sourceRect, GraphicsUnit.Pixel);
-
-                                // Draw a rectangle (using RectangleF)
-                                var graphicRectF = new RectangleF(Event.GraphicSelX, Event.GraphicSelY, Event.GraphicSelX2, Event.GraphicSelY2);
-                                g.DrawRectangle(Pens.Red, graphicRectF);
-
-                                // Set the BackgroundImage properties of the forms
-                                picGraphic.BackgroundImage = targetBitmap;
-                                picGraphicSel.BackgroundImage = null;
-
-                                // Dispose of the Graphics object
-                                g.Dispose();
-                            }
-
-                            else
-                            {
-                                picGraphic.BackgroundImage = null;
-                                picGraphicSel.BackgroundImage = null;
-                                return;
-                            }
-
-                            break;
-                        }
-                    case 2:
-                        {
-                            if (nudGraphic.Value > 0m & nudGraphic.Value <= GameState.NumTileSets)
-                            {
-                                // Load tilesheet from Contents into our sourceBitmap
-                                sourceBitmap = new Bitmap(System.IO.Path.Combine(Core.Path.Tilesets, nudGraphic.Value + GameState.GfxExt));
-                                targetBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height); // Create our target Bitmap
-
-                                if (Event.TmpEvent.Pages[Event.CurPageNum].GraphicX2 == 0 & Event.TmpEvent.Pages[Event.CurPageNum].GraphicY2 == 0)
-                                {
-                                    sRect.Top = Event.TmpEvent.Pages[Event.CurPageNum].GraphicY * 32;
-                                    sRect.Left = Event.TmpEvent.Pages[Event.CurPageNum].GraphicX * 32;
-                                    sRect.Bottom = sRect.Top + 32d;
-                                    sRect.Right = sRect.Left + 32d;
-
-                                    dRect.Top = 193d / 2d - (sRect.Bottom - sRect.Top) / 2d;
-                                    dRect.Bottom = dRect.Top + (sRect.Bottom - sRect.Top);
-                                    dRect.Left = 120d / 2d - (sRect.Right - sRect.Left) / 2d;
-                                    dRect.Right = dRect.Left + (sRect.Right - sRect.Left);
-                                }
-                                else
-                                {
-                                    sRect.Top = Event.TmpEvent.Pages[Event.CurPageNum].GraphicY * 32;
-                                    sRect.Left = Event.TmpEvent.Pages[Event.CurPageNum].GraphicX * 32;
-                                    sRect.Bottom = sRect.Top + (Event.TmpEvent.Pages[Event.CurPageNum].GraphicY2 - Event.TmpEvent.Pages[Event.CurPageNum].GraphicY) * 32;
-                                    sRect.Right = sRect.Left + (Event.TmpEvent.Pages[Event.CurPageNum].GraphicX2 - Event.TmpEvent.Pages[Event.CurPageNum].GraphicX) * 32;
-
-                                    dRect.Top = 193d / 2d - (sRect.Bottom - sRect.Top) / 2d;
-                                    dRect.Bottom = dRect.Top + (sRect.Bottom - sRect.Top);
-                                    dRect.Left = 120d / 2d - (sRect.Right - sRect.Left) / 2d;
-                                    dRect.Right = dRect.Left + (sRect.Right - sRect.Left);
-
-                                }
-
-                                g = Graphics.FromImage(targetBitmap);
-
-                                var sourceRect = new Microsoft.Xna.Framework.Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height);  // This is the section we are pulling from the source graphic
-                                var destRect = new Microsoft.Xna.Framework.Rectangle(0, 0, targetBitmap.Width, targetBitmap.Height);     // This is the rectangle in the target graphic we want to render to
-
-                                // Ensure destRect and sourceRect are RectangleF
-                                var destRectF = new RectangleF(destRect.X, destRect.Y, destRect.Width, destRect.Height);
-                                var sourceRectF = new RectangleF(sourceRect.X, sourceRect.Y, sourceRect.Width, sourceRect.Height);
-
-                                // Call DrawImage with RectangleF
-                                g.DrawImage(sourceBitmap, destRectF, sourceRectF, GraphicsUnit.Pixel);
-
-                                // For DrawRectangle, ensure the rectangle is of type Rectangle
-                                var rectF = new RectangleF(Event.GraphicSelX, Event.GraphicSelY, Event.GraphicSelX2, Event.GraphicSelY2);
-                                g.DrawRectangle(Pens.Red, rectF);
-
-                                g.Dispose();
-
-
-                                picGraphicSel.BackgroundImage = targetBitmap;
-                                picGraphic.BackgroundImage = null;
-                            }
-                            else
-                            {
-                                picGraphicSel.BackgroundImage = null;
-                                picGraphic.BackgroundImage = null;
-                                return;
-                            }
-
-                            break;
-                        }
-                }
-            }
-            else if (Event.TmpEvent.PageCount > 0)
-            {
-                switch (Event.TmpEvent.Pages[Event.CurPageNum].GraphicType)
-                {
-                    case 0:
-                        {
-                            picGraphicSel.BackgroundImage = null;
-                            break;
-                        }
-                    case 1:
-                        {
-                            if (Event.TmpEvent.Pages[Event.CurPageNum].Graphic > 0 & Event.TmpEvent.Pages[Event.CurPageNum].Graphic <= GameState.NumCharacters)
-                            {
-                                // Load character from Contents into our sourceBitmap
-                                sourceBitmap = new Bitmap(System.IO.Path.Combine(Core.Path.Characters, Event.TmpEvent.Pages[Event.CurPageNum].Graphic + GameState.GfxExt));
-                                targetBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height); // Create our target Bitmap
-
-                                g = Graphics.FromImage(targetBitmap);
-
-                                var sourceRect = new System.Drawing.Rectangle(0, 0, (int)Math.Round(sourceBitmap.Width / 4d), (int)Math.Round(sourceBitmap.Height / 4d));  // This is the section we are pulling from the source graphic
-                                var destRect = new System.Drawing.Rectangle(0, 0, (int)Math.Round(targetBitmap.Width / 4d), (int)Math.Round(targetBitmap.Height / 4d));     // This is the rectangle in the target graphic we want to render to
-
-                                g.DrawImage(sourceBitmap, destRect, sourceRect, GraphicsUnit.Pixel);
-                                g.Dispose();
-
-                                picGraphic.BackgroundImage = targetBitmap;
-                            }
-                            else
-                            {
-                                picGraphic.BackgroundImage = null;
-                                return;
-                            }
-
-                            break;
-                        }
-                    case 2:
-                        {
-                            if (Event.TmpEvent.Pages[Event.CurPageNum].Graphic > 0 & Event.TmpEvent.Pages[Event.CurPageNum].Graphic <= GameState.NumTileSets)
-                            {
-                                // Load tilesheet from Contents into our sourceBitmap
-                                sourceBitmap = new Bitmap(Core.Path.Graphics + @"tilesets\" + Event.TmpEvent.Pages[Event.CurPageNum].Graphic + ".png");
-                                targetBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height); // Create our target Bitmap
-
-                                if (Event.TmpEvent.Pages[Event.CurPageNum].GraphicX2 == 0 & Event.TmpEvent.Pages[Event.CurPageNum].GraphicY2 == 0)
-                                {
-                                    sRect.Top = Event.TmpEvent.Pages[Event.CurPageNum].GraphicY * 32;
-                                    sRect.Left = Event.TmpEvent.Pages[Event.CurPageNum].GraphicX * 32;
-                                    sRect.Bottom = sRect.Top + 32d;
-                                    sRect.Right = sRect.Left + 32d;
-
-                                    dRect.Top = 0d;
-                                    dRect.Bottom = GameState.SizeX;
-                                    dRect.Left = 0d;
-                                    dRect.Right = GameState.SizeX;
-                                }
-                                else
-                                {
-                                    sRect.Top = Event.TmpEvent.Pages[Event.CurPageNum].GraphicY * 32;
-                                    sRect.Left = Event.TmpEvent.Pages[Event.CurPageNum].GraphicX * 32;
-                                    sRect.Bottom = Event.TmpEvent.Pages[Event.CurPageNum].GraphicY2 * 32;
-                                    sRect.Right = Event.TmpEvent.Pages[Event.CurPageNum].GraphicX2 * 32;
-
-                                    dRect.Top = 0d;
-                                    dRect.Bottom = sRect.Bottom;
-                                    dRect.Left = 0d;
-                                    dRect.Right = sRect.Right;
-
-                                }
-
-                                g = Graphics.FromImage(targetBitmap);
-
-                                var sourceRect = new System.Drawing.Rectangle((int)Math.Round(sRect.Left), (int)Math.Round(sRect.Top), (int)Math.Round(sRect.Right), (int)Math.Round(sRect.Bottom));  // This is the section we are pulling from the source graphic
-                                var destRect = new System.Drawing.Rectangle((int)Math.Round(dRect.Left), (int)Math.Round(dRect.Top), (int)Math.Round(dRect.Right), (int)Math.Round(dRect.Bottom));     // This is the rectangle in the target graphic we want to render to
-
-                                g.DrawImage(sourceBitmap, destRect, sourceRect, GraphicsUnit.Pixel);
-                                g.Dispose();
-
-                                picGraphic.BackgroundImage = targetBitmap;
-                            }
-
-                            break;
-                        }
-                }
-            }
-
-        }
-
-        private void Editor_Events_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Event.TmpEvent = default;
-        }
+    // WinForms FormClosing removed; handled by Eto partial if needed
 
         private void BtnOK_Click(object sender, EventArgs e)
         {
@@ -497,18 +538,12 @@ namespace Client
             }
         }
 
-        private void TvCommands_AfterSelect(object sender, TreeViewEventArgs e)
+        private void TvCommands_AfterSelect(object? sender, EventArgs e)
         {
-            var x = default(int);
-
-            fraDialogue.Width = Width;
-            fraDialogue.Height = Height;
-
-            fraDialogue.BringToFront();
-
-            // MsgBox(tvCommands.SelectedNode.Text)
-
-            switch (tvCommands.SelectedNode.Text ?? "")
+            // TODO: Implement Eto TreeView selection mapping
+            var x = 0;
+            var selectedText = string.Empty;
+            switch (selectedText)
             {
                 // Messages
 
@@ -560,11 +595,11 @@ namespace Client
                 // player variable
                 case "Set Player Variable":
                     {
-                        nudVariableData0.Value = 0m;
-                        nudVariableData1.Value = 0m;
-                        nudVariableData2.Value = 0m;
-                        nudVariableData3.Value = 0m;
-                        nudVariableData4.Value = 0m;
+                        nudVariableData0.Value = 0;
+                        nudVariableData1.Value = 0;
+                        nudVariableData2.Value = 0;
+                        nudVariableData3.Value = 0;
+                        nudVariableData4.Value = 0;
 
                         cmbVariable.SelectedIndex = 0;
                         optVariableAction0.Checked = true;
@@ -640,7 +675,7 @@ namespace Client
                     {
                         cmbChangeItemIndex.SelectedIndex = 0;
                         optChangeItemSet.Checked = true;
-                        nudChangeItemsAmount.Value = 0m;
+                        nudChangeItemsAmount.Value = 0;
                         fraDialogue.Visible = true;
                         fraChangeItems.Visible = true;
                         fraCommands.Visible = false;
@@ -681,7 +716,7 @@ namespace Client
                 // Change Level
                 case "Change Level":
                     {
-                        nudChangeLevel.Value = 1m;
+                        nudChangeLevel.Value = 1;
                         fraDialogue.Visible = true;
                         fraChangeLevel.Visible = true;
                         fraCommands.Visible = false;
@@ -718,7 +753,7 @@ namespace Client
                 // Change Sprite
                 case "Change Sprite":
                     {
-                        nudChangeSprite.Value = 1m;
+                        nudChangeSprite.Value = 1;
                         fraDialogue.Visible = true;
                         fraChangeSprite.Visible = true;
                         fraCommands.Visible = false;
@@ -745,7 +780,7 @@ namespace Client
                 // Give Exp
                 case "Give Experience":
                     {
-                        nudGiveExp.Value = 0m;
+                        nudGiveExp.Value = 0;
                         fraDialogue.Visible = true;
                         fraGiveExp.Visible = true;
                         fraCommands.Visible = false;
@@ -756,9 +791,9 @@ namespace Client
                 // Warp Player
                 case "Warp Player":
                     {
-                        nudWPMap.Value = 0m;
-                        nudWPX.Value = 0m;
-                        nudWPY.Value = 0m;
+                        nudWPMap.Value = 0;
+                        nudWPX.Value = 0;
+                        nudWPY.Value = 0;
                         cmbWarpPlayerDir.SelectedIndex = 0;
                         fraDialogue.Visible = true;
                         fraPlayerWarp.Visible = true;
@@ -787,7 +822,8 @@ namespace Client
                         Event.TempMoveRouteCount = 0;
                         Event.TempMoveRoute = new Core.Type.MoveRoute[1];
                         fraMoveRoute.Visible = true;
-                        fraMoveRoute.BringToFront();
+                        // fraMoveRoute.BringToFront(); // not available in Eto - rely on container layout & visibility
+                        fraMoveRoute.Visible = true;
                         fraCommands.Visible = false;
                         break;
                     }
@@ -855,10 +891,10 @@ namespace Client
                         cmbPlayAnimEvent.SelectedIndex = 0;
                         cmbAnimTargetType.SelectedIndex = 0;
                         cmbPlayAnim.SelectedIndex = 0;
-                        nudPlayAnimTileX.Value = 0m;
-                        nudPlayAnimTileY.Value = 0m;
-                        nudPlayAnimTileX.Maximum = Data.MyMap.MaxX;
-                        nudPlayAnimTileY.Maximum = Data.MyMap.MaxY;
+                        nudPlayAnimTileX.Value = 0;
+                        nudPlayAnimTileY.Value = 0;
+                        nudPlayAnimTileX.MaxValue = Data.MyMap.MaxX;
+                        nudPlayAnimTileY.MaxValue = Data.MyMap.MaxY;
                         fraDialogue.Visible = true;
                         fraPlayAnimation.Visible = true;
                         fraCommands.Visible = false;
@@ -874,9 +910,9 @@ namespace Client
                 // Set Fog
                 case "Set Fog":
                     {
-                        nudFogData0.Value = 0m;
-                        nudFogData1.Value = 0m;
-                        nudFogData2.Value = 0m;
+                        nudFogData0.Value = 0;
+                        nudFogData1.Value = 0;
+                        nudFogData2.Value = 0;
                         fraDialogue.Visible = true;
                         fraSetFog.Visible = true;
                         fraCommands.Visible = false;
@@ -886,7 +922,7 @@ namespace Client
                 case "Set Weather":
                     {
                         CmbWeather.SelectedIndex = 0;
-                        nudWeatherIntensity.Value = 0m;
+                        nudWeatherIntensity.Value = 0;
                         fraDialogue.Visible = true;
                         fraSetWeather.Visible = true;
                         fraCommands.Visible = false;
@@ -895,10 +931,10 @@ namespace Client
                 // Set Map Tinting
                 case "Set Map Tinting":
                     {
-                        nudMapTintData0.Value = 0m;
-                        nudMapTintData1.Value = 0m;
-                        nudMapTintData2.Value = 0m;
-                        nudMapTintData3.Value = 0m;
+                        nudMapTintData0.Value = 0;
+                        nudMapTintData1.Value = 0;
+                        nudMapTintData2.Value = 0;
+                        nudMapTintData3.Value = 0;
                         fraDialogue.Visible = true;
                         fraMapTint.Visible = true;
                         fraCommands.Visible = false;
@@ -945,7 +981,7 @@ namespace Client
                 // Wait...
                 case "Wait...":
                     {
-                        nudWaitAmount.Value = 1m;
+                        nudWaitAmount.Value = 1;
                         fraDialogue.Visible = true;
                         fraSetWait.Visible = true;
                         fraCommands.Visible = false;
@@ -1008,10 +1044,10 @@ namespace Client
                 // Show pic
                 case "Show Picture":
                     {
-                        nudShowPicture.Value = 0m;
+                        nudShowPicture.Value = 0;
                         cmbPicLoc.SelectedIndex = 0;
-                        nudPicOffsetX.Value = 0m;
-                        nudPicOffsetY.Value = 0m;
+                        nudPicOffsetX.Value = 0;
+                        nudPicOffsetY.Value = 0;
                         fraDialogue.Visible = true;
                         fraShowPic.Visible = true;
                         fraCommands.Visible = false;
@@ -1037,13 +1073,13 @@ namespace Client
 
         #region Page Buttons
 
-        private void TabPages_Click(object sender, EventArgs e)
+    private void TabPages_Click(object? sender, EventArgs e)
         {
             Event.CurPageNum = tabPages.SelectedIndex;
             Event.EventEditorLoadPage(Event.CurPageNum);
         }
 
-        private void BtnNewPage_Click(object sender, EventArgs e)
+    private void BtnNewPage_Click(object? sender, EventArgs e)
         {
             int pageCount;
             int i;
@@ -1062,27 +1098,27 @@ namespace Client
             Event.TmpEvent.PageCount = pageCount;
 
             // set the tabs
-            tabPages.TabPages.Clear();
+            tabPages.Pages.Clear();
 
             var loopTo = Event.TmpEvent.PageCount;
             for (i = 0; i < loopTo; i++)
-                tabPages.TabPages.Add(Conversion.Str(i + 1));
+                tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
             btnDeletePage.Enabled = true;
         }
 
-        private void BtnCopyPage_Click(object sender, EventArgs e)
+    private void BtnCopyPage_Click(object? sender, EventArgs e)
         {
             Event.CopyEventPage = Event.TmpEvent.Pages[Event.CurPageNum];
             btnPastePage.Enabled = true;
         }
 
-        private void BtnPastePage_Click(object sender, EventArgs e)
+    private void BtnPastePage_Click(object? sender, EventArgs e)
         {
             Event.TmpEvent.Pages[Event.CurPageNum] = Event.CopyEventPage;
             Event.EventEditorLoadPage(Event.CurPageNum);
         }
 
-        private void BtnDeletePage_Click(object sender, EventArgs e)
+    private void BtnDeletePage_Click(object? sender, EventArgs e)
         {
             Event.TmpEvent.Pages[Event.CurPageNum] = default;
 
@@ -1097,19 +1133,19 @@ namespace Client
             Event.EventEditorLoadPage(Event.CurPageNum);
 
             // set the tabs
-            tabPages.TabPages.Clear();
+            tabPages.Pages.Clear();
 
             for (int i = 0, loopTo1 = Event.TmpEvent.PageCount; i < loopTo1; i++)
-                tabPages.TabPages.Add("0", Conversion.Str(i + 1), "");
+                tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
 
             // set the tab back
             if (Event.CurPageNum < Event.TmpEvent.PageCount)
             {
-                tabPages.SelectedIndex = tabPages.TabPages.IndexOfKey(Event.CurPageNum.ToString());
+                // maintain selected index
             }
             else
             {
-                tabPages.SelectedIndex = tabPages.TabPages.IndexOfKey(Event.TmpEvent.PageCount.ToString());
+                // maintain selected index
             }
             // make sure we disable
             if (Event.TmpEvent.PageCount == 1)
@@ -1119,13 +1155,13 @@ namespace Client
 
         }
 
-        private void BtnClearPage_Click(object sender, EventArgs e)
+    private void BtnClearPage_Click(object? sender, EventArgs e)
         {
             Event.TmpEvent.Pages[Event.CurPageNum] = default;
             Event.EventEditorLoadPage(Event.CurPageNum);
         }
 
-        private void TxtName_TextChanged(object sender, EventArgs e)
+    private void TxtName_TextChanged(object? sender, EventArgs e)
         {
             Event.TmpEvent.Name = Strings.Trim(txtName.Text);
         }
@@ -1264,7 +1300,7 @@ namespace Client
 
         private void PicGraphic_Click(object sender, EventArgs e)
         {
-            fraGraphic.BringToFront();
+            // BringToFront removed for Eto; ensure visible
             tmpGraphicIndex = Event.TmpEvent.Pages[Event.CurPageNum].Graphic;
             tmpGraphicType = Event.TmpEvent.Pages[Event.CurPageNum].GraphicType;
             fraGraphic.Visible = true;
@@ -1287,13 +1323,13 @@ namespace Client
                     }
                 case 1: // character
                     {
-                        nudGraphic.Maximum = GameState.NumCharacters;
+                        nudGraphic.MaxValue = GameState.NumCharacters;
                         nudGraphic.Enabled = true;
                         break;
                     }
                 case 2: // Tileset
                     {
-                        nudGraphic.Maximum = GameState.NumTileSets;
+                        nudGraphic.MaxValue = GameState.NumTileSets;
                         nudGraphic.Enabled = true;
                         break;
                     }
@@ -1301,13 +1337,13 @@ namespace Client
 
             if (Event.TmpEvent.Pages[Event.CurPageNum].GraphicType == 1)
             {
-                if (nudGraphic.Value <= 0m | nudGraphic.Value > GameState.NumCharacters)
+                if (nudGraphic.Value <= 0 | nudGraphic.Value > GameState.NumCharacters)
                     return;
             }
 
             else if (Event.TmpEvent.Pages[Event.CurPageNum].GraphicType == 2)
             {
-                if (nudGraphic.Value <= 0m | nudGraphic.Value > GameState.NumTileSets)
+                if (nudGraphic.Value <= 0 | nudGraphic.Value > GameState.NumTileSets)
                     return;
 
             }
@@ -1319,32 +1355,19 @@ namespace Client
             int X;
             int Y;
 
-            X = e.Location.X;
-            Y = e.Location.Y;
+            X = (int)e.Location.X;
+            Y = (int)e.Location.Y;
 
             int selW = (int)Math.Round(Math.Ceiling((decimal)(X)) - Event.GraphicSelX);
             int selH = (int)Math.Round(Math.Ceiling((decimal)(Y)) - Event.GraphicSelY);
 
             if (cmbGraphic.SelectedIndex == 2)
             {
-                if (ModifierKeys == Keys.Shift)
-                {
-                    if (Event.GraphicSelX > -1 & Event.GraphicSelY > -1)
-                    {
-                        if (selW >= 0 & selH >= 0)
-                        {
-                            Event.GraphicSelX2 = selW + 1;
-                            Event.GraphicSelY2 = selH + 1;
-                        }
-                    }
-                }
-                else
-                {
-                    Event.GraphicSelX = (int)Math.Round(Math.Ceiling((decimal)(X)));
-                    Event.GraphicSelY = (int)Math.Round(Math.Ceiling((decimal)(Y)));
-                    Event.GraphicSelX2 = 1;
-                    Event.GraphicSelY2 = 1;
-                }
+                // Multi-tile (shift-mod) selection not yet implemented in Eto. Single-tile select:
+                Event.GraphicSelX = (int)Math.Round(Math.Ceiling((decimal)(X)));
+                Event.GraphicSelY = (int)Math.Round(Math.Ceiling((decimal)(Y)));
+                Event.GraphicSelX2 = 1;
+                Event.GraphicSelY2 = 1;
             }
             else if (cmbGraphic.SelectedIndex == 1)
             {
@@ -1353,7 +1376,7 @@ namespace Client
                 Event.GraphicSelX2 = 0;
                 Event.GraphicSelY2 = 0;
 
-                if (nudGraphic.Value <= 0m | nudGraphic.Value > GameState.NumCharacters)
+                if (nudGraphic.Value <= 0 | nudGraphic.Value > GameState.NumCharacters)
                     return;
 
                 for (int i = 0; i <= 3; i++)
@@ -1400,7 +1423,7 @@ namespace Client
 
         private void BtnMoveRoute_Click(object sender, EventArgs e)
         {
-            fraMoveRoute.BringToFront();
+            // BringToFront removed for Eto
             lstMoveRoute.Items.Clear();
             Event.IsMoveRouteCommand = false;
             chkIgnoreMove.Checked = Conversions.ToBoolean(Event.TmpEvent.Pages[Event.CurPageNum].IgnoreMoveRoute);
@@ -1698,10 +1721,10 @@ namespace Client
 
             Event.TmpEvent.PageCount = 1;
             Event.CurPageNum = 0;
-            tabPages.TabPages.Clear();
+            tabPages.Pages.Clear();
 
             for (int i = 0, loopTo = Event.TmpEvent.PageCount; i < loopTo; i++)
-                tabPages.TabPages.Add("0", i.ToString() + 1, "0");
+                tabPages.Pages.Add(new TabPage { Text = (i + 1).ToString() });
             Event.EventEditorLoadPage(Event.CurPageNum);
         }
 
@@ -1805,12 +1828,8 @@ namespace Client
         // 'Renaming Variables/Switches
         private void BtnLabeling_Click(object sender, EventArgs e)
         {
+            // Show variable/switch management panel (Eto: rely on layout, no BringToFront/absolute positioning)
             pnlVariableSwitches.Visible = true;
-            pnlVariableSwitches.BringToFront();
-            pnlVariableSwitches.Top = 0;
-            pnlVariableSwitches.Left = 0;
-            pnlVariableSwitches.Width = Width;
-            pnlVariableSwitches.Height = Height;
             lstSwitches.Items.Clear();
 
             for (int i = 0; i < Constant.MaxSwitches; i++)
@@ -1959,18 +1978,17 @@ namespace Client
         // MoveRoute Commands
         private void LstvwMoveRoute_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // DarkListView does not have SelectedItems, but has SelectedIndices (IList<int>)
-            if (lstvwMoveRoute.SelectedIndices == null || lstvwMoveRoute.SelectedIndices.Count == 0)
+            // Eto ListBox: single SelectedIndex
+            if (lstvwMoveRoute.SelectedIndex < 0)
                 return;
-
-            int selectedIndex = lstvwMoveRoute.SelectedIndices[0];
+            int selectedIndex = lstvwMoveRoute.SelectedIndex;
 
             switch (selectedIndex + 1)
             {
                 // Set Graphic
                 case 43:
                     {
-                        fraGraphic.BringToFront();
+                        // fraGraphic.Visible already controls z-order in Eto layouts
                         Event.GraphicSelType = 1;
                         break;
                     }
@@ -1985,7 +2003,7 @@ namespace Client
 
         private void LstMoveRoute_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Delete)
+            if (e.Key == Keys.Delete)
             {
                 // remove move route command lol
                 if (lstMoveRoute.SelectedIndex > -1)
@@ -2521,14 +2539,14 @@ namespace Client
             if (optVariableAction0.Checked == true)
             {
                 nudVariableData0.Enabled = true;
-                nudVariableData0.Value = 0m;
+                nudVariableData0.Value = 0;
                 nudVariableData1.Enabled = false;
-                nudVariableData1.Value = 0m;
+                nudVariableData1.Value = 0;
                 nudVariableData2.Enabled = false;
-                nudVariableData2.Value = 0m;
-                nudVariableData3.Value = 0m;
+                nudVariableData2.Value = 0;
+                nudVariableData3.Value = 0;
                 nudVariableData4.Enabled = false;
-                nudVariableData4.Value = 0m;
+                nudVariableData4.Value = 0;
             }
         }
 
@@ -2537,15 +2555,15 @@ namespace Client
             if (optVariableAction1.Checked == true)
             {
                 nudVariableData0.Enabled = false;
-                nudVariableData0.Value = 0m;
+                nudVariableData0.Value = 0;
                 nudVariableData1.Enabled = true;
-                nudVariableData1.Value = 0m;
+                nudVariableData1.Value = 0;
                 nudVariableData2.Enabled = false;
-                nudVariableData2.Value = 0m;
+                nudVariableData2.Value = 0;
                 nudVariableData3.Enabled = false;
-                nudVariableData3.Value = 0m;
+                nudVariableData3.Value = 0;
                 nudVariableData4.Enabled = false;
-                nudVariableData4.Value = 0m;
+                nudVariableData4.Value = 0;
             }
         }
 
@@ -2554,15 +2572,15 @@ namespace Client
             if (optVariableAction2.Checked == true)
             {
                 nudVariableData0.Enabled = false;
-                nudVariableData0.Value = 0m;
+                nudVariableData0.Value = 0;
                 nudVariableData1.Enabled = false;
-                nudVariableData1.Value = 0m;
+                nudVariableData1.Value = 0;
                 nudVariableData2.Enabled = true;
-                nudVariableData2.Value = 0m;
+                nudVariableData2.Value = 0;
                 nudVariableData3.Enabled = false;
-                nudVariableData3.Value = 0m;
+                nudVariableData3.Value = 0;
                 nudVariableData4.Enabled = false;
-                nudVariableData4.Value = 0m;
+                nudVariableData4.Value = 0;
             }
         }
 
@@ -2571,15 +2589,15 @@ namespace Client
             if (optVariableAction2.Checked == true)
             {
                 nudVariableData0.Enabled = false;
-                nudVariableData0.Value = 0m;
+                nudVariableData0.Value = 0;
                 nudVariableData1.Enabled = false;
-                nudVariableData1.Value = 0m;
+                nudVariableData1.Value = 0;
                 nudVariableData2.Enabled = false;
-                nudVariableData2.Value = 0m;
+                nudVariableData2.Value = 0;
                 nudVariableData3.Enabled = true;
-                nudVariableData3.Value = 0m;
+                nudVariableData3.Value = 0;
                 nudVariableData4.Enabled = true;
-                nudVariableData4.Value = 0m;
+                nudVariableData4.Value = 0;
             }
         }
 
@@ -3493,15 +3511,22 @@ namespace Client
 
             if (Sprite < 1 | Sprite > GameState.NumPictures)
             {
-                picShowPic.BackgroundImage = null;
+                picShowPic.Image = null;
                 return;
             }
 
             if (File.Exists(System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt)))
             {
-                picShowPic.Width = Image.FromFile(System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt)).Width;
-                picShowPic.Height = Image.FromFile(System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt)).Height;
-                picShowPic.BackgroundImage = Image.FromFile(System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt));
+                var bmpPath = System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt);
+                try
+                {
+                    var bmp = new Eto.Drawing.Bitmap(bmpPath);
+                    picShowPic.Image = bmp;
+                }
+                catch
+                {
+                    picShowPic.Image = null;
+                }
             }
         }
 

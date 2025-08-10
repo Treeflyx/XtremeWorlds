@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
         <RootNamespace>Client</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
@@ -12,9 +12,6 @@
         <UserSecretsId>e1a83a62-5587-413f-8a1a-f277ec156c75</UserSecretsId>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <MonoGamePlatform>OpenGL</MonoGamePlatform>
-        <EnableWindowsFormsHighDpiAutoResizing>true</EnableWindowsFormsHighDpiAutoResizing>
-        <HighDpiMode>SystemAware</HighDpiMode>
-        <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
     
     <PropertyGroup>
@@ -41,77 +38,83 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Content Include="bass.dll" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="bassmidi.dll" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="libbass.dylib" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="libbassmidi.dylib" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="libbass.so" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="libbassmidi.so" CopyToOutputDirectory="PreserveNewest"/>
-        <Content Include="GeneralUser.sf2" CopyToOutputDirectory="PreserveNewest"/>
+        <Content Include="bass.dll" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="bassmidi.dll" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="libbass.dylib" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="libbassmidi.dylib" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="libbass.so" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="libbassmidi.so" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="GeneralUser.sf2" CopyToOutputDirectory="PreserveNewest" />
         <Content Include="Content\**\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
-        <Compile Remove="Content\Crystalshire.cs"/>
-        <Compile Remove="Content\UI.cs"/>
-        <Content Remove="Content\Crystalshire.cs"/>
-        <Content Remove="Content\UI.cs"/>
+        <Compile Remove="Content\Crystalshire.cs" />
+        <Compile Remove="Content\UI.cs" />
+        <Content Remove="Content\Crystalshire.cs" />
+        <Content Remove="Content\UI.cs" />
         <EmbeddedResource Include="Icon.bmp">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Core\Core.csproj"/>
-        <ProjectReference Include="..\Modules\DarkUI\DarkUI\DarkUI.csproj"/>
-        <ProjectReference Include="..\Network\Asfw.csproj"/>
+        <ProjectReference Include="..\Core\Core.csproj" />
+        <ProjectReference Include="..\Network\Asfw.csproj" />
     </ItemGroup>
 
+    <!-- Map editor Eto implementation now active -->
+
     <ItemGroup>
-        <PackageReference Include="ManagedBass"/>
-        <PackageReference Include="ManagedBass.Midi"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets"/>
-        <PackageReference Include="Microsoft.Extensions.Logging.Configuration"/>
-        <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
-        <PackageReference Include="Microsoft.VisualBasic"/>
-        <PackageReference Include="MonoGame.Content.Builder.Task"/>
-        <PackageReference Include="MonoGame.Framework.Content.Pipeline"/>
-        <PackageReference Include="MonoGame.Framework.DesktopGL"/>
-        <PackageReference Include="MonoGame.Library.SDL"/>
-        <PackageReference Include="Ryujinx.SDL2-CS"/>
-        <PackageReference Include="SDL2-CS"/>
-        <PackageReference Include="Serilog"/>
-        <PackageReference Include="Serilog.Enrichers.Environment"/>
-        <PackageReference Include="Serilog.Enrichers.Thread"/>
-        <PackageReference Include="Serilog.Extensions.Logging"/>
-        <PackageReference Include="Serilog.Settings.Configuration"/>
-        <PackageReference Include="Serilog.Sinks.Console"/>
-        <PackageReference Include="Serilog.Sinks.File"/>
-        <PackageReference Include="System.Reflection.Extensions"/>
+        <PackageReference Include="Eto.Forms" />
+    <PackageReference Include="Eto.Platform.Gtk" />
+        <PackageReference Include="ManagedBass" />
+        <PackageReference Include="ManagedBass.Midi" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Configuration" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+        <PackageReference Include="Microsoft.VisualBasic" />
+        <PackageReference Include="MonoGame.Content.Builder.Task" />
+        <PackageReference Include="MonoGame.Framework.Content.Pipeline" />
+        <PackageReference Include="MonoGame.Framework.DesktopGL" />
+        <PackageReference Include="MonoGame.Library.SDL" />
+        <PackageReference Include="Ryujinx.SDL2-CS" />
+        <PackageReference Include="SDL2-CS" />
+        <PackageReference Include="Serilog" />
+        <PackageReference Include="Serilog.Enrichers.Environment" />
+        <PackageReference Include="Serilog.Enrichers.Thread" />
+        <PackageReference Include="Serilog.Extensions.Logging" />
+        <PackageReference Include="Serilog.Settings.Configuration" />
+        <PackageReference Include="Serilog.Sinks.Console" />
+        <PackageReference Include="Serilog.Sinks.File" />
+        <PackageReference Include="System.Drawing.Common" />
+        <PackageReference Include="System.Reflection.Extensions" />
+    <PackageReference Include="System.Resources.Extensions" />
     </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Content\Skins\Crystashire.cs">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Compile>
-        <Compile Update="Properties\Resources.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
+        <Compile Remove="Properties\Resources.Designer.cs" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Update="Properties\Resources.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
+        <None Remove="Properties\Resources.resx" />
+        <EmbeddedResource Remove="Properties\Resources.resx" />
     </ItemGroup>
 
+    <!-- Remove legacy DarkUI WinForms map designer -->
+    <ItemGroup>
+        <Compile Remove="Forms/Editor_Map.designer.cs" />
+    </ItemGroup>
+
+    <!-- Removed legacy WinForms Resources.resx to eliminate System.Resources.Extensions runtime requirement -->
+
     <Target Name="EnsureContentFolderExists" BeforeTargets="Build">
-        <MakeDir Directories="$(OutputPath)Content"/>
+        <MakeDir Directories="$(OutputPath)Content" />
     </Target>
 
 </Project>

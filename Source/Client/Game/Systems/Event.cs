@@ -33,9 +33,9 @@ namespace Client
 
         public static int GraphicSelType;
         public static int TempMoveRouteCount;
-        public static Core.Type.MoveRoute[] TempMoveRoute;
+    public static Core.Type.MoveRoute[] TempMoveRoute = Array.Empty<Core.Type.MoveRoute>();
         public static bool IsMoveRouteCommand;
-        public static int[] ListOfEvents;
+    public static int[] ListOfEvents = Array.Empty<int>();
 
         public static int EventReplyId;
         public static int EventReplyPage;
@@ -46,7 +46,7 @@ namespace Client
         public static int EventChatTimer;
 
         public static bool EventChat;
-        public static string EventText;
+    public static string EventText = string.Empty;
         public static bool ShowEventLbl;
         public static string[] EventChoices = new string[Core.Constant.MaxEventChoices];
         public static bool[] EventChoiceVisible = new bool[Core.Constant.MaxEventChoices];
@@ -59,7 +59,7 @@ namespace Client
 
         public static bool EventCopy;
         public static bool EventPaste;
-        public static Core.Type.EventList[] EventList;
+    public static Core.Type.EventList[] EventList = Array.Empty<Core.Type.EventList>();
         public static Core.Type.Event CopyEvent;
         public static Core.Type.EventPage CopyEventPage;
 
@@ -273,7 +273,7 @@ namespace Client
             Editor_Event.Instance.cmbHasItem.SelectedIndex = withBlock.HasItemIndex;
             if (withBlock.HasItemAmount == 0)
             {
-                Editor_Event.Instance.nudCondition_HasItem.Value = 1m;
+                Editor_Event.Instance.nudCondition_HasItem.Value = 1d;
             }
             else
             {
@@ -657,7 +657,6 @@ namespace Client
                                         conditionalstage[curlist] = 1;
                                         curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.CommandList;
                                         goto newlist;
-                                        break;
                                     }
                                 case 1:
                                     {
@@ -668,7 +667,6 @@ namespace Client
                                         conditionalstage[curlist] = 2;
                                         curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.ElseCommandList;
                                         goto newlist;
-                                        break;
                                     }
                                 case 2:
                                     {
@@ -697,7 +695,6 @@ namespace Client
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 1;
                                         goto newlist;
-                                        break;
                                     }
                                 case 1:
                                     {
@@ -718,11 +715,8 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 2;
-                                            curlist = curlist;
                                             goto newlist;
                                         }
-
-                                        break;
                                     }
                                 case 2:
                                     {
@@ -743,11 +737,8 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 3;
-                                            curlist = curlist;
                                             goto newlist;
                                         }
-
-                                        break;
                                     }
                                 case 3:
                                     {
@@ -768,11 +759,8 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 4;
-                                            curlist = curlist;
                                             goto newlist;
                                         }
-
-                                        break;
                                     }
                                 case 4:
                                     {
@@ -793,11 +781,8 @@ namespace Client
                                             Array.Resize(ref EventList, X + 1);
                                             listleftoff[curlist] = i;
                                             conditionalstage[curlist] = 5;
-                                            curlist = curlist;
                                             goto newlist;
                                         }
-
-                                        break;
                                     }
                                 case 5:
                                     {
@@ -826,17 +811,23 @@ namespace Client
                                         {
                                             case 0:
                                                 {
-                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Player"));
+                                                    var snippet = Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20);
+                                                    var color = GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
+                                                    Editor_Event.Instance.lstCommands.Items.Add($"{indent}@>Add Text - {snippet}... - Color: {color} - Chat Type: Player");
                                                     break;
                                                 }
                                             case 1:
                                                 {
-                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Map"));
+                                                    var snippet = Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20);
+                                                    var color = GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
+                                                    Editor_Event.Instance.lstCommands.Items.Add($"{indent}@>Add Text - {snippet}... - Color: {color} - Chat Type: Map");
                                                     break;
                                                 }
                                             case 2:
                                                 {
-                                                    Editor_Event.Instance.lstCommands.Items.Add(Operators.ConcatenateObject(Operators.ConcatenateObject(indent + "@>" + "Add Text - " + Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20) + "... - Color: ", GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1)), " - Chat Type: Global"));
+                                                    var snippet = Strings.Mid(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Text1, 1, 20);
+                                                    var color = GetColorString(TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].Data1);
+                                                    Editor_Event.Instance.lstCommands.Items.Add($"{indent}@>Add Text - {snippet}... - Color: {color} - Chat Type: Global");
                                                     break;
                                                 }
                                         }
@@ -1417,7 +1408,9 @@ namespace Client
                 for (i = 0; i < loopTo; i++)
                     TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i] = oldCommandList.Commands[i];
 
-                i = EventList[Editor_Event.Instance.lstCommands.SelectedIndex].CommandNum;
+                var selected = Editor_Event.Instance.lstCommands.SelectedIndex;
+                if (EventList == null || selected < 0 || selected >= EventList.Length) return;
+                i = EventList[selected].CommandNum;
                 if (i <= TmpEvent.Pages[CurPageNum].CommandList[curlist].CommandCount)
                 {
 
@@ -1559,11 +1552,9 @@ namespace Client
                 case (int)Core.EventCommand.ShowText:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
-                        string tmptxt = "";
-                        var loopTo2 = Information.UBound(Editor_Event.Instance.txtShowText.Lines);
-                        for (i = 0; i <= loopTo2; i++)
-                            tmptxt = tmptxt + Editor_Event.Instance.txtShowText.Lines[i];
-                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = tmptxt;
+                        // TextArea in Eto doesn't expose Lines; use Text and split on newlines
+                        var tmptxt = Editor_Event.Instance.txtShowText.Text ?? string.Empty;
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Text1 = tmptxt.Replace("\r", string.Empty);
                         break;
                     }
 
@@ -1701,14 +1692,7 @@ namespace Client
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Index = (byte)Index;
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeSkills.SelectedIndex;
-                        if (Editor_Event.Instance.optChangeSkillsAdd.Checked == true)
-                        {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
-                        }
-                        else if (Editor_Event.Instance.optChangeSkillsRemove.Checked == true)
-                        {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
-                        }
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.optChangeSkillsRemove.Checked ? 1 : 0;
 
                         break;
                     }
@@ -1999,7 +1983,8 @@ namespace Client
                 return;
 
             Editor_Event.Instance.fraConditionalBranch.Visible = false;
-            Editor_Event.Instance.fraDialogue.BringToFront();
+            // BringToFront (WinForms) not available in Eto; ensure dialogue panel visible
+            Editor_Event.Instance.fraDialogue.Visible = true;
 
             curlist = EventList[i].CommandList;
             curslot = EventList[i].CommandNum;
@@ -2296,14 +2281,8 @@ namespace Client
                     {
                         IsEdit = true;
                         Editor_Event.Instance.cmbChangeSkills.SelectedIndex = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1;
-                        if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 0)
-                        {
-                            Editor_Event.Instance.optChangeSkillsAdd.Checked = true;
-                        }
-                        else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 1)
-                        {
-                            Editor_Event.Instance.optChangeSkillsRemove.Checked = true;
-                        }
+                        Editor_Event.Instance.optChangeSkillsAdd.Checked = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 0;
+                        Editor_Event.Instance.optChangeSkillsRemove.Checked = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 1;
                         Editor_Event.Instance.fraDialogue.Visible = true;
                         Editor_Event.Instance.fraChangeSkills.Visible = true;
                         Editor_Event.Instance.fraCommands.Visible = false;
@@ -2370,7 +2349,6 @@ namespace Client
                     {
                         IsEdit = true;
                         Editor_Event.Instance.fraMoveRoute.Visible = true;
-                        Editor_Event.Instance.fraMoveRoute.BringToFront();
                         Editor_Event.Instance.lstMoveRoute.Items.Clear();
                         ListOfEvents = new int[Data.MyMap.EventCount];
                         ListOfEvents[0] = EditorEvent;
@@ -2645,8 +2623,8 @@ namespace Client
                         else if (TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 == 2)
                         {
                             Editor_Event.Instance.cmbAnimTargetType.SelectedIndex = 2;
-                            Editor_Event.Instance.nudPlayAnimTileX.Maximum = Data.MyMap.MaxX;
-                            Editor_Event.Instance.nudPlayAnimTileY.Maximum = Data.MyMap.MaxY;
+                            Editor_Event.Instance.nudPlayAnimTileX.MaxValue = Data.MyMap.MaxX;
+                            Editor_Event.Instance.nudPlayAnimTileY.MaxValue = Data.MyMap.MaxY;
                             Editor_Event.Instance.nudPlayAnimTileX.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data3;
                             Editor_Event.Instance.nudPlayAnimTileY.Value = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data4;
                         }
@@ -3092,14 +3070,7 @@ namespace Client
                 case (byte)Core.EventCommand.ChangeSkills:
                     {
                         TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data1 = Editor_Event.Instance.cmbChangeSkills.SelectedIndex;
-                        if (Editor_Event.Instance.optChangeSkillsAdd.Checked == true)
-                        {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 0;
-                        }
-                        else if (Editor_Event.Instance.optChangeSkillsRemove.Checked == true)
-                        {
-                            TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = 1;
-                        }
+                        TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[curslot].Data2 = Editor_Event.Instance.optChangeSkillsRemove.Checked ? 1 : 0;
 
                         break;
                     }
@@ -3804,9 +3775,9 @@ namespace Client
 
         }
 
-        public static object GetColorString(int color)
+        public static string GetColorString(int color)
         {
-            object getColorString = default;
+            string getColorString = "";
 
             switch (color)
             {

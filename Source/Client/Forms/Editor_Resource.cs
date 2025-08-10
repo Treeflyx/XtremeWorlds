@@ -1,196 +1,207 @@
-﻿using Core;
+﻿using Eto.Forms;
+using Eto.Drawing;
 using Microsoft.VisualBasic;
+using Core;
+using System;
+using System.IO;
 
 namespace Client
 {
-    public partial class Editor_Resource
+    public class Editor_Resource : Form
     {
-        public Editor_Resource()
+        private static Editor_Resource? _instance;
+        public static Editor_Resource Instance => _instance ??= new Editor_Resource();
+
+        // Public controls referenced externally (names preserved)
+        public ListBox lstIndex = new ListBox();
+        public TextBox txtName = new TextBox();
+        public TextBox txtMessage = new TextBox();
+        public TextBox txtMessage2 = new TextBox();
+        public ComboBox cmbType = new ComboBox();
+        public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0 };
+        public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0 };
+        public ComboBox cmbRewardItem = new ComboBox();
+        public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
+        public ComboBox cmbTool = new ComboBox();
+        public NumericStepper nudHealth = new NumericStepper { MinValue = 0 };
+        public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
+        public ComboBox cmbAnimation = new ComboBox();
+        public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0 };
+        private Button btnSave = new Button { Text = "Save" };
+        private Button btnDelete = new Button { Text = "Delete" };
+        private Button btnCancel = new Button { Text = "Cancel" };
+        public Drawable picNormalpic = new Drawable { Size = new Size(96, 96) };
+        public Drawable picExhaustedPic = new Drawable { Size = new Size(96, 96) };
+
+        private Editor_Resource()
         {
+            Title = "Resource Editor";
+            ClientSize = new Size(760, 480);
+            Padding = 10;
             InitializeComponent();
         }
 
-        protected override void WndProc(ref Message m)
+        protected override void OnClosed(EventArgs e)
         {
-            const int WM_MOUSEACTIVATE = 0x0021;
-            const int WM_NCHITTEST = 0x0084;
-
-            if (m.Msg == WM_MOUSEACTIVATE)
-            {
-                // Immediately activate and process the click.
-                m.Result = new IntPtr(1); // MA_ACTIVATE
-                return;
-            }
-            else if (m.Msg == WM_NCHITTEST)
-            {
-                // Let the window know the mouse is in client area.
-                m.Result = new IntPtr(1); // HTCLIENT
-                return;
-            }
-
-            base.WndProc(ref m);
-        }
-
-        private void ScrlNormalPic_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ResourceImage = (int)Math.Round(nudNormalPic.Value);
-            DrawSprite();
-        }
-
-        private void CmbType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ResourceType = cmbType.SelectedIndex;
-        }
-
-        private void ScrlExhaustedPic_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ExhaustedImage = (int)Math.Round(nudExhaustedPic.Value);
-            DrawSprite();
-        }
-
-        private void ScrlRewardItem_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ItemReward = cmbRewardItem.SelectedIndex;
-        }
-
-        private void ScrlRewardExp_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ExpReward = (int)Math.Round(nudRewardExp.Value);
-        }
-
-        private void ScrlLvlReq_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].LvlRequired = (int)Math.Round(nudLvlReq.Value);
-        }
-
-        private void CmbTool_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].ToolRequired = cmbTool.SelectedIndex;
-        }
-
-        private void ScrlHealth_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].Health = (int)Math.Round(nudHealth.Value);
-        }
-
-        private void ScrlRespawn_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].RespawnTime = (int)Math.Round(nudRespawn.Value);
-        }
-
-        private void ScrlAnim_Scroll(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex;
-        }
-
-        private void lstIndex_Click(object sender, EventArgs e)
-        {
-            Editors.ResourceEditorInit();
-        }
-
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            Editors.ResourceEditorOK();
-            Dispose();
-        }
-
-        private void BtnDelete_Click(object sender, EventArgs e)
-        {
-            int tmpindex;
-
-            MapResource.ClearResource(GameState.EditorIndex);
-
-            tmpindex = lstIndex.SelectedIndex;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Resource[GameState.EditorIndex].Name);
-            lstIndex.SelectedIndex = tmpindex;
-
-            Editors.ResourceEditorInit();
-        }
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
+            base.OnClosed(e);
+            if (ReferenceEquals(_instance, this)) _instance = null;
             Editors.ResourceEditorCancel();
-            Dispose();
         }
 
-        private void Editor_Resource_Load(object sender, EventArgs e)
+        private void InitializeComponent()
+        {
+            // Events wiring (converted from WinForms)
+            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            txtName.TextChanged += (s, e) => TxtName_TextChanged();
+            txtMessage.TextChanged += (s, e) => TxtMessage_TextChanged();
+            txtMessage2.TextChanged += (s, e) => TxtMessage2_TextChanged();
+            cmbType.SelectedIndexChanged += (s, e) => CmbType_SelectedIndexChanged();
+            nudNormalPic.ValueChanged += (s, e) => NudNormalPic_ValueChanged();
+            nudExhaustedPic.ValueChanged += (s, e) => NudExhaustedPic_ValueChanged();
+            cmbRewardItem.SelectedIndexChanged += (s, e) => CmbRewardItem_SelectedIndexChanged();
+            nudRewardExp.ValueChanged += (s, e) => NudRewardExp_ValueChanged();
+            cmbTool.SelectedIndexChanged += (s, e) => CmbTool_SelectedIndexChanged();
+            nudHealth.ValueChanged += (s, e) => NudHealth_ValueChanged();
+            nudRespawn.ValueChanged += (s, e) => NudRespawn_ValueChanged();
+            cmbAnimation.SelectedIndexChanged += (s, e) => CmbAnimation_SelectedIndexChanged();
+            nudLvlReq.ValueChanged += (s, e) => NudLvlReq_ValueChanged();
+            btnSave.Click += (s, e) => BtnSave_Click();
+            btnDelete.Click += (s, e) => BtnDelete_Click();
+            btnCancel.Click += (s, e) => BtnCancel_Click();
+            Load += (s, e) => Editor_Resource_Load();
+
+            picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
+            picExhaustedPic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudExhaustedPic.Value), picExhaustedPic);
+
+            // Layout definition
+            var listLayout = new DynamicLayout { Spacing = new Size(5, 5) };
+            listLayout.AddRow(new Label { Text = "Resources" });
+            listLayout.Add(lstIndex, yscale: true);
+
+            var imagesLayout = new TableLayout
+            {
+                Spacing = new Size(10, 10),
+                Rows =
+                {
+                    new TableRow(new Label { Text = "Normal Pic:" }, nudNormalPic, picNormalpic,
+                              new Label { Text = "Exhausted Pic:" }, nudExhaustedPic, picExhaustedPic)
+                }
+            };
+
+            var rightLayout = new DynamicLayout { Spacing = new Size(5,5) };
+            rightLayout.AddRow("Name:", txtName);
+            rightLayout.AddRow("Success Msg:", txtMessage);
+            rightLayout.AddRow("Empty Msg:", txtMessage2);
+            rightLayout.AddRow("Type:", cmbType);
+            rightLayout.Add(imagesLayout);
+            rightLayout.AddRow("Reward Item:", cmbRewardItem);
+            rightLayout.AddRow("Reward Exp:", nudRewardExp);
+            rightLayout.AddRow("Tool Req:", cmbTool, "Animation:", cmbAnimation);
+            rightLayout.AddRow("Health:", nudHealth, "Respawn:", nudRespawn);
+            rightLayout.AddRow("Level Req:", nudLvlReq);
+            rightLayout.AddRow(btnSave, btnDelete, btnCancel);
+
+            Content = new TableLayout
+            {
+                Spacing = new Size(10,10),
+                Rows =
+                {
+                    new TableRow(new TableCell(listLayout, true), new TableCell(rightLayout, true))
+                }
+            };
+        }
+
+        private void Editor_Resource_Load()
         {
             lstIndex.Items.Clear();
-
-            // Add the names
             for (int i = 0; i < Constant.MaxResources; i++)
-                lstIndex.Items.Add(i + 1 + ": " + Core.Data.Resource[i].Name);
+                lstIndex.Items.Add($"{i + 1}: {Core.Data.Resource[i].Name}");
 
-            // populate combo boxes
             cmbRewardItem.Items.Clear();
             for (int i = 0; i < Constant.MaxItems; i++)
-                cmbRewardItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
+                cmbRewardItem.Items.Add($"{i + 1}: {Core.Data.Item[i].Name}");
 
             cmbAnimation.Items.Clear();
             for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbAnimation.Items.Add(i + 1 + ": " + Core.Data.Animation[i].Name);
+                cmbAnimation.Items.Add($"{i + 1}: {Core.Data.Animation[i].Name}");
 
-            nudExhaustedPic.Maximum = GameState.NumResources;
-            nudNormalPic.Maximum = GameState.NumResources;
-            nudRespawn.Maximum = 1000000m;
+            cmbType.Items.Clear();
+            cmbType.Items.Add("Tree");
+            cmbType.Items.Add("Mine");
+            cmbType.Items.Add("Herb");
+            cmbType.Items.Add("Other");
+
+            cmbTool.Items.Clear();
+            cmbTool.Items.Add("None");
+            cmbTool.Items.Add("Axe");
+            cmbTool.Items.Add("Pickaxe");
+            cmbTool.Items.Add("Scythe");
+
+            nudExhaustedPic.MaxValue = GameState.NumResources;
+            nudNormalPic.MaxValue = GameState.NumResources;
+            nudRespawn.MaxValue = 1000000;
+
+            if (lstIndex.Items.Count > 0)
+            {
+                lstIndex.SelectedIndex = 0;
+                Editors.ResourceEditorInit();
+            }
         }
 
-        private void TxtName_TextChanged(object sender, EventArgs e)
-        {
-            int tmpindex;
+        private void LstIndex_Click() => Editors.ResourceEditorInit();
+        private void BtnSave_Click() { Editors.ResourceEditorOK(); Close(); }
+        private void BtnCancel_Click() { Editors.ResourceEditorCancel(); Close(); }
 
-            tmpindex = lstIndex.SelectedIndex;
+        private void BtnDelete_Click()
+        {
+            int tmpindex = lstIndex.SelectedIndex;
+            MapResource.ClearResource(GameState.EditorIndex);
+            lstIndex.Items.RemoveAt(GameState.EditorIndex);
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Resource[GameState.EditorIndex].Name}" });
+            lstIndex.SelectedIndex = tmpindex;
+            Editors.ResourceEditorInit();
+        }
+
+        private void TxtName_TextChanged()
+        {
+            if (lstIndex.SelectedIndex < 0) return;
+            int tmpindex = lstIndex.SelectedIndex;
             Core.Data.Resource[GameState.EditorIndex].Name = txtName.Text;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Resource[GameState.EditorIndex].Name);
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
         }
 
-        private void TxtMessage_TextChanged(object sender, EventArgs e)
+        private void TxtMessage_TextChanged() => Core.Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
+        private void TxtMessage2_TextChanged() => Core.Data.Resource[GameState.EditorIndex].EmptyMessage = Strings.Trim(txtMessage2.Text);
+        private void CmbType_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ResourceType = cmbType.SelectedIndex;
+        private void NudNormalPic_ValueChanged() { Core.Data.Resource[GameState.EditorIndex].ResourceImage = (int)Math.Round(nudNormalPic.Value); picNormalpic.Invalidate(); }
+        private void NudExhaustedPic_ValueChanged() { Core.Data.Resource[GameState.EditorIndex].ExhaustedImage = (int)Math.Round(nudExhaustedPic.Value); picExhaustedPic.Invalidate(); }
+        private void CmbRewardItem_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ItemReward = cmbRewardItem.SelectedIndex;
+        private void NudRewardExp_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].ExpReward = (int)Math.Round(nudRewardExp.Value);
+        private void CmbTool_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ToolRequired = cmbTool.SelectedIndex;
+        private void NudHealth_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].Health = (int)Math.Round(nudHealth.Value);
+        private void NudRespawn_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].RespawnTime = (int)Math.Round(nudRespawn.Value);
+        private void CmbAnimation_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex;
+        private void NudLvlReq_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].LvlRequired = (int)Math.Round(nudLvlReq.Value);
+
+        private void DrawSprite(Graphics g, int spriteNum, Drawable target)
         {
-            Core.Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
-        }
-
-        private void TxtMessage2_TextChanged(object sender, EventArgs e)
-        {
-            Core.Data.Resource[GameState.EditorIndex].EmptyMessage = Strings.Trim(txtMessage2.Text);
-        }
-
-        private void Editor_Resource_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Editors.ResourceEditorCancel();
-        }
-
-        private void DrawSprite()
-        {
-            int Sprite;
-
-            // normal sprite
-            Sprite = (int)Math.Round(nudNormalPic.Value);
-
-            if (Sprite < 1 | Sprite > GameState.NumResources)
+            if (spriteNum < 1 || spriteNum > GameState.NumResources)
             {
-                picNormalpic.BackgroundImage = null;
+                g.Clear(Colors.Transparent);
+                return;
             }
-            else if (File.Exists(System.IO.Path.Combine(Core.Path.Resources, Sprite + GameState.GfxExt)))
+            var path = System.IO.Path.Combine(Core.Path.Resources, spriteNum + GameState.GfxExt);
+            if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
+            try
             {
-                picNormalpic.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Resources, Sprite + GameState.GfxExt));
-
+                using (var bmp = new Bitmap(path))
+                {
+                    g.DrawImage(bmp, new RectangleF(0,0,target.Width,target.Height));
+                }
             }
-
-            // exhausted sprite
-            Sprite = (int)Math.Round(nudExhaustedPic.Value);
-
-            if (Sprite < 1 | Sprite > GameState.NumResources)
-            {
-                picExhaustedPic.BackgroundImage = null;
-            }
-            else if (File.Exists(System.IO.Path.Combine(Core.Path.Resources, Sprite + GameState.GfxExt)))
-            {
-                picExhaustedPic.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Resources, Sprite + GameState.GfxExt));
-            }
+            catch { g.Clear(Colors.Transparent); }
         }
-
     }
 }

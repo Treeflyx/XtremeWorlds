@@ -38,7 +38,6 @@ namespace Client
             if (Data.MyMapNpc == null) return;
 
             var npc = Data.MyMapNpc[index];
-            if (npc == null) return;
 
             // Only process active walking state
             if (npc.Moving != (byte)MovementState.Walking) return;
@@ -54,17 +53,13 @@ namespace Client
             int newX = x + dx;
             int newY = y + dy;
 
-            // Clamp to map bounds instead of early-returning
-            if (Data.MyMap != null)
-            {
-                // Keep within 0 .. (Max-1) * TileSize inclusive to match the original coordinate convention.
-                int maxXpx = Math.Max(0, (Data.MyMap.MaxX - 1) * TileSize);
-                int maxYpx = Math.Max(0, (Data.MyMap.MaxY - 1) * TileSize);
+            // Keep within 0 .. (Max-1) * TileSize inclusive to match the original coordinate convention.
+            int maxXpx = Math.Max(0, (Data.MyMap.MaxX - 1) * TileSize);
+            int maxYpx = Math.Max(0, (Data.MyMap.MaxY - 1) * TileSize);
 
-                newX = Math.Clamp(newX, 0, maxXpx);
-                newY = Math.Clamp(newY, 0, maxYpx);
-            }
-
+            newX = Math.Clamp(newX, 0, maxXpx);
+            newY = Math.Clamp(newY, 0, maxYpx);
+            
             // Commit the move (IMPORTANT: commit BEFORE the "aligned" check so we don't get stuck at 31px!)
             npc.X = newX;
             npc.Y = newY;

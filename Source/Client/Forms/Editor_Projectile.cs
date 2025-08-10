@@ -1,137 +1,227 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
-using Core;
+using Eto.Forms;
+using Eto.Drawing;
 using Microsoft.VisualBasic;
+using Core;
 
 namespace Client
 {
-
-    public partial class Editor_Projectile
+    public sealed class Editor_Projectile : Form
     {
+        public static Editor_Projectile? Instance { get; private set; }
+
+        // Public controls referenced externally (names must match Editors.cs usage)
+    public ListBox lstIndex = null!;
+    public TextBox txtName = null!;
+    public NumericStepper nudPic = null!;
+    public NumericStepper nudRange = null!;
+    public NumericStepper nudSpeed = null!;
+    public NumericStepper nudDamage = null!;
+    public Drawable picProjectile = null!;
+
+    private Button btnSave = null!;
+    private Button btnCancel = null!;
+    private Button btnDelete = null!;
+
+        private bool _initializing;
+
         public Editor_Projectile()
         {
+            Instance = this;
+            Title = "Projectile Editor";
+            ClientSize = new Size(750, 430);
+            Resizable = true;
+            MinimumSize = new Size(750, 430);
             InitializeComponent();
         }
 
-        private void Editor_Projectile_Load(object sender, EventArgs e)
+        private void InitializeComponent()
         {
+            // Left list
+            lstIndex = new ListBox { Size = new Size(200, -1) };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                if (lstIndex.SelectedIndex < 0) return;
+                Editors.ProjectileEditorInit();
+            };
+
+            // Right side controls
+            txtName = new TextBox();
+            txtName.TextChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                int tmpindex = lstIndex.SelectedIndex;
+                if (tmpindex < 0) return;
+                Core.Data.Projectile[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
+                RefreshListEntry(GameState.EditorIndex);
+                lstIndex.SelectedIndex = tmpindex;
+                GameState.ProjectileChanged[GameState.EditorIndex] = true;
+            };
+
+            nudPic = new NumericStepper { MinValue = 0, MaxValue = GameState.NumProjectiles, DecimalPlaces = 0, Width = 80 };
+            nudPic.ValueChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                Core.Data.Projectile[GameState.EditorIndex].Sprite = (int)nudPic.Value;
+                Drawicon();
+                GameState.ProjectileChanged[GameState.EditorIndex] = true;
+            };
+
+            nudRange = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 80 };
+            nudRange.ValueChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                Core.Data.Projectile[GameState.EditorIndex].Range = (byte)nudRange.Value;
+                GameState.ProjectileChanged[GameState.EditorIndex] = true;
+            };
+
+            nudSpeed = new NumericStepper { MinValue = 0, MaxValue = 1000, DecimalPlaces = 0, Width = 80 };
+            nudSpeed.ValueChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                Core.Data.Projectile[GameState.EditorIndex].Speed = (int)nudSpeed.Value;
+                GameState.ProjectileChanged[GameState.EditorIndex] = true;
+            };
+
+            nudDamage = new NumericStepper { MinValue = 0, MaxValue = 100000, DecimalPlaces = 0, Width = 80 };
+            nudDamage.ValueChanged += (s, e) =>
+            {
+                if (_initializing) return;
+                Core.Data.Projectile[GameState.EditorIndex].Damage = (int)nudDamage.Value;
+                GameState.ProjectileChanged[GameState.EditorIndex] = true;
+            };
+
+            picProjectile = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Black };
+            picProjectile.Paint += (s, e) =>
+            {
+                if (_iconBitmap != null)
+                {
+                    e.Graphics.DrawImage(_iconBitmap, 0, 0, 96, 96);
+                }
+            };
+
+            btnSave = new Button { Text = "Save" };
+            btnSave.Click += (s, e) =>
+            {
+                Editors.ProjectileEditorOK();
+                Close();
+            };
+
+            btnCancel = new Button { Text = "Cancel" };
+            btnCancel.Click += (s, e) =>
+            {
+                Editors.ProjectileEditorCancel();
+                Close();
+            };
+
+            btnDelete = new Button { Text = "Delete" };
+            btnDelete.Click += (s, e) =>
+            {
+                if (lstIndex.SelectedIndex < 0) return;
+                Projectile.ClearProjectile(GameState.EditorIndex);
+                RefreshListEntry(GameState.EditorIndex);
+                Editors.ProjectileEditorInit();
+            };
+
+            var grid = new TableLayout
+            {
+                Spacing = new Size(6, 6),
+                Padding = new Padding(8),
+                Rows =
+                {
+                    new TableRow(new TableCell(new Label{Text="Name:", VerticalAlignment=VerticalAlignment.Center}, false), txtName),
+                    new TableRow(new TableCell(new Label{Text="Sprite:", VerticalAlignment=VerticalAlignment.Center}, false), nudPic),
+                    new TableRow(new TableCell(new Label{Text="Range:", VerticalAlignment=VerticalAlignment.Center}, false), nudRange),
+                    new TableRow(new TableCell(new Label{Text="Speed:", VerticalAlignment=VerticalAlignment.Center}, false), nudSpeed),
+                    new TableRow(new TableCell(new Label{Text="Damage:", VerticalAlignment=VerticalAlignment.Center}, false), nudDamage),
+                    new TableRow(new TableCell(new Label{Text="Preview:", VerticalAlignment=VerticalAlignment.Center}, false), picProjectile),
+                    new TableRow(new TableCell(null, true), new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 6,
+                        Items = { btnSave, btnCancel, btnDelete }
+                    })
+                }
+            };
+
+            Content = new Splitter
+            {
+                Position = 220,
+                Panel1 = new StackLayout
+                {
+                    Padding = 8,
+                    Items =
+                    {
+                        new Label{ Text = "Projectiles", Font = SystemFonts.Bold(12)},
+                        lstIndex
+                    }
+                },
+                Panel2 = new Scrollable { Content = grid }
+            };
+
+            Shown += (s, e) => LoadData();
+            Closed += (s, e) =>
+            {
+                if (GameState.MyEditorType == EditorType.Projectile)
+                {
+                    Editors.ProjectileEditorCancel();
+                }
+                if (Instance == this) Instance = null;
+            };
+        }
+
+        private void LoadData()
+        {
+            _initializing = true;
             lstIndex.Items.Clear();
-
-            // Add the names
-            for (int i = 0; i < Constant.MaxProjectiles;  i++)
-                lstIndex.Items.Add(i + 1 + ": " + Core.Data.Projectile[i].Name);
-
-            nudPic.Maximum = GameState.NumProjectiles;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            const int WM_MOUSEACTIVATE = 0x0021;
-            const int WM_NCHITTEST = 0x0084;
-
-            if (m.Msg == WM_MOUSEACTIVATE)
+            for (int i = 0; i < Core.Constant.MaxProjectiles; i++)
             {
-                // Immediately activate and process the click.
-                m.Result = new IntPtr(1); // MA_ACTIVATE
-                return;
+                lstIndex.Items.Add(new ListItem { Text = (i + 1) + ": " + Core.Data.Projectile[i].Name });
             }
-            else if (m.Msg == WM_NCHITTEST)
+            if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
+            nudPic.MaxValue = GameState.NumProjectiles;
+            _initializing = false;
+            if (lstIndex.Items.Count > 0) Editors.ProjectileEditorInit();
+        }
+
+        private void RefreshListEntry(int index)
+        {
+            if (index < 0 || index >= lstIndex.Items.Count) return;
+            // Eto ListBox uses ListItem objects; replace the text
+            if (lstIndex.Items[index] is ListItem item)
             {
-                // Let the window know the mouse is in client area.
-                m.Result = new IntPtr(1); // HTCLIENT
-                return;
+                item.Text = (index + 1) + ": " + Core.Data.Projectile[index].Name;
+                lstIndex.Invalidate();
             }
-
-            base.WndProc(ref m);
         }
-
-        private void lstIndex_Click(object sender, EventArgs e)
-        {
-            Editors.ProjectileEditorInit();
-        }
-
-        private void BtnSave_Click(object sender, EventArgs e)
-        {
-            Editors.ProjectileEditorOK();
-            Dispose();
-        }
-
-        private void BtnCancel_Click(object sender, EventArgs e)
-        {
-            Editors.ProjectileEditorCancel();
-            Dispose();
-        }
-
-        private void TxtName_TextChanged(object sender, EventArgs e)
-        {
-            int tmpindex;
-
-            tmpindex = lstIndex.SelectedIndex;
-            Core.Data.Projectile[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Projectile[GameState.EditorIndex].Name);
-            lstIndex.SelectedIndex = tmpindex;
-        }
-
-        private void NudPic_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Projectile[GameState.EditorIndex].Sprite = (int)Math.Round(nudPic.Value);
-            Drawicon();
-        }
-
-        private void NudRange_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Projectile[GameState.EditorIndex].Range = (byte)Math.Round(nudRange.Value);
-        }
-
-        private void NudSpeed_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Projectile[GameState.EditorIndex].Speed = (int)Math.Round(nudSpeed.Value);
-        }
-
-        private void NudDamage_ValueChanged(object sender, EventArgs e)
-        {
-            Core.Data.Projectile[GameState.EditorIndex].Damage = (int)Math.Round(nudDamage.Value);
-        }
-
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            int tmpindex;
-
-            Projectile.ClearProjectile(GameState.EditorIndex);
-
-            tmpindex = lstIndex.SelectedIndex;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, GameState.EditorIndex + 1 + ": " + Core.Data.Projectile[GameState.EditorIndex].Name);
-            lstIndex.SelectedIndex = tmpindex;
-
-            Editors.ProjectileEditorInit();
-        }
-
-        private void Editor_Projectile_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Editors.ProjectileEditorCancel();
-        }
+        private Bitmap? _iconBitmap;
 
         public void Drawicon()
         {
-            int iconNum;
+            int iconNum = (int)nudPic.Value;
 
-            iconNum = (int)Math.Round(nudPic.Value);
+            _iconBitmap = null;
+            picProjectile.Invalidate();
 
-            if (iconNum < 1 | iconNum > GameState.NumProjectiles)
+            if (iconNum < 1 || iconNum > GameState.NumProjectiles) return;
+
+            var path = System.IO.Path.Combine(Core.Path.Projectiles, iconNum + GameState.GfxExt);
+            if (!File.Exists(path)) return;
+
+            try
             {
-                picProjectile.BackgroundImage = null;
-                return;
+                using (var fs = File.OpenRead(path))
+                {
+                    _iconBitmap = new Bitmap(fs);
+                }
             }
-
-            if (File.Exists(System.IO.Path.Combine(Core.Path.Projectiles, iconNum + GameState.GfxExt)))
+            catch
             {
-                picProjectile.BackgroundImage = System.Drawing.Image.FromFile(System.IO.Path.Combine(Core.Path.Projectiles, iconNum + GameState.GfxExt));
+                _iconBitmap = null;
             }
-
+            picProjectile.Invalidate();
         }
-
     }
 }

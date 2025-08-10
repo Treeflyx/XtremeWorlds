@@ -46,5 +46,6 @@ namespace Core
         public const byte MaxEventChoices = 4;
         public const int TileSize = 32;
         public const int MaxWeatherParticles = 1000;
+        public const int MaxVariables = 100;
 	}
 }
