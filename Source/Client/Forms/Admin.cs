@@ -10,14 +10,14 @@ namespace Client
     internal class Admin : Form
     {
         // Controls
-        TextBox txtAdminName;
-        DropDown cmbAccess;
-        NumericStepper nudAdminSprite, nudAdminMap;
-        ListBox lstMaps;
-        TabControl tabControl;
-        Button btnAdminWarpTo, btnAdminBan, btnAdminKick, btnAdminWarp2Me, btnAdminWarpMe2, btnAdminSetAccess, btnAdminSetSprite;
-        Button btnMapReport, btnRespawn, btnALoc, btnLevelUp;
-        Button btnAnimationEditor, btnJobEditor, btnItemEditor, btnMapEditor, btnNpcEditor, btnProjectiles, btnResourceEditor, btnShopEditor, btnSkillEditor, btnMoralEditor, btnScriptEditor;
+    TextBox txtAdminName = null!;
+    DropDown cmbAccess = null!;
+    NumericStepper nudAdminSprite = null!, nudAdminMap = null!;
+    ListBox lstMaps = null!;
+    TabControl tabControl = null!;
+    Button btnAdminWarpTo = null!, btnAdminBan = null!, btnAdminKick = null!, btnAdminWarp2Me = null!, btnAdminWarpMe2 = null!, btnAdminSetAccess = null!, btnAdminSetSprite = null!;
+    Button btnMapReport = null!, btnRespawn = null!, btnALoc = null!, btnLevelUp = null!;
+    Button btnAnimationEditor = null!, btnJobEditor = null!, btnItemEditor = null!, btnMapEditor = null!, btnNpcEditor = null!, btnProjectiles = null!, btnResourceEditor = null!, btnShopEditor = null!, btnSkillEditor = null!, btnMoralEditor = null!, btnScriptEditor = null!;
 
         public Admin()
         {
@@ -30,10 +30,17 @@ namespace Client
         private void InitializeComponents()
         {
             // Moderation Tab
-            nudAdminSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters};
+            // Initialize text and dropdown controls first to avoid null refs in event handlers
+            txtAdminName = new TextBox(); 
+            txtAdminName.Text = GetPlayerName(GameState.MyIndex); 
+            cmbAccess = new DropDown();
+            foreach (var name in Enum.GetNames(typeof(Core.AccessLevel)))
+            {
+                cmbAccess.Items.Add(name);
+            }
+
+            nudAdminSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters };
             nudAdminMap = new NumericStepper { MinValue = 0, MaxValue = Core.Constant.MaxMaps };
-            nudAdminSprite = new NumericUpDown { MinValue = 0, MaxValue = GameState.NumCharacters};
-            nudAdminMap = new NumericUpDown { MinValue = 0, MaxValue = Core.Constant.MaxMaps };
 
             btnAdminWarpTo = new Button { Text = "Warp To Map" };
             btnAdminBan = new Button { Text = "Ban Player" };

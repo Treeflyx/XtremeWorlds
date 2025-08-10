@@ -14,8 +14,6 @@ namespace Client
     private static Editor_Job? _instance;
     public static Editor_Job Instance => _instance ??= new Editor_Job();
 
-    // Initialized in BuildUi(); declared nullable to satisfy compiler before construction completes.
-    // Public for legacy Editors.cs direct field access
     public ListBox? lstJobs, lstStartItems;
     public TextBox? txtName;
     public TextArea? txtDesc;
@@ -55,7 +53,7 @@ namespace Client
         }
 
 
-        Control BuildUi()
+        Eto.Forms.Control BuildUi()
         {
             lstJobs = new ListBox { Width = 220 };
             lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
@@ -91,7 +89,7 @@ namespace Client
             malePreview.Paint += (s, e) => DrawPreview(e.Graphics, maleBmp, malePreview.Size);
             femalePreview.Paint += (s, e) => DrawPreview(e.Graphics, femaleBmp, femalePreview.Size);
 
-            GroupBox Box(string text, Control content) => new GroupBox { Text = text, Content = content };
+            GroupBox Box(string text, Eto.Forms.Control content) => new GroupBox { Text = text, Content = content };
 
             var stats = Box("Stats", new TableLayout
             {

@@ -69,15 +69,15 @@ namespace Client
             public long LinkedToCon { get; set; }
 
             public ControlState State { get; set; }
-            public List<string> List { get; set; }
+            public List<string>? List { get; set; }
 
             // Arrays for states
-            public List<long> Design { get; set; }
-            public List<long> Image { get; set; }
-            public List<Action> CallBack { get; set; }
+            public List<long>? Design { get; set; }
+            public List<long>? Image { get; set; }
+            public List<Action>? CallBack { get; set; }
 
             // Controls in this window
-            public List<Control> Controls { get; set; }
+            public List<Control>? Controls { get; set; }
             public int LastControl { get; set; }
             public int ActiveControl { get; set; }
         }

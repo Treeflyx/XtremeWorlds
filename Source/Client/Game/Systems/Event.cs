@@ -31,9 +31,9 @@ namespace Client
 
         public static int GraphicSelType;
         public static int TempMoveRouteCount;
-        public static Core.Type.MoveRoute[] TempMoveRoute;
+        public static Core.Type.MoveRoute[]? TempMoveRoute;
         public static bool IsMoveRouteCommand;
-        public static int[] ListOfEvents;
+        public static int[]? ListOfEvents;
 
         public static int EventReplyId;
         public static int EventReplyPage;
@@ -57,7 +57,7 @@ namespace Client
 
         public static bool EventCopy;
         public static bool EventPaste;
-        public static Core.Type.EventList[] EventList;
+        public static Core.Type.EventList[]? EventList;
         public static Core.Type.Event CopyEvent;
         public static Core.Type.EventPage CopyEventPage;
 
@@ -661,7 +661,6 @@ namespace Client
                                     conditionalstage[curlist] = 1;
                                     curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.CommandList;
                                     goto newlist;
-                                    break;
                                 }
                                 case 1:
                                 {
@@ -672,7 +671,6 @@ namespace Client
                                     conditionalstage[curlist] = 2;
                                     curlist = TmpEvent.Pages[CurPageNum].CommandList[curlist].Commands[i].ConditionalBranch.ElseCommandList;
                                     goto newlist;
-                                    break;
                                 }
                                 case 2:
                                 {
@@ -701,7 +699,6 @@ namespace Client
                                     listleftoff[curlist] = i;
                                     conditionalstage[curlist] = 1;
                                     goto newlist;
-                                    break;
                                 }
                                 case 1:
                                 {
@@ -722,7 +719,6 @@ namespace Client
                                         Array.Resize(ref EventList, X + 1);
                                         listleftoff[curlist] = i;
                                         conditionalstage[curlist] = 2;
-                                        curlist = curlist;
                                         goto newlist;
                                     }
 

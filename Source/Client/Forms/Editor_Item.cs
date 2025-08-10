@@ -41,7 +41,7 @@ namespace Client
             Shown += (s,e) => InitData();
         }
 
-        Control BuildUi()
+        Eto.Forms.Control BuildUi()
         {
             lstIndex = new ListBox { Width = 220, Height = 500 };
             lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
@@ -97,7 +97,7 @@ namespace Client
             btnSpawn = new Button { Text = "Spawn" }; btnSpawn.Click += (s,e)=> { Sender.SendSpawnItem(GameState.EditorIndex, (int)numSpawnAmount!.Value); };
             numSpawnAmount = Num(1, int.MaxValue); numSpawnAmount.Value = 1;
 
-            fraBasics = Group("Basics", new TableLayout
+            fraBasics = Group("Basics", new Eto.Forms.TableLayout
             {
                 Spacing = new Size(4,4),
                 Rows =
@@ -113,7 +113,7 @@ namespace Client
                 }
             });
 
-            fraEquipment = Group("Equipment", new TableLayout
+            fraEquipment = Group("Equipment", new Eto.Forms.TableLayout
             {
                 Spacing = new Size(4,4),
                 Rows =
@@ -126,17 +126,17 @@ namespace Client
                 }
             });
 
-            fraVitals = Group("Consumable", new TableLayout
+            fraVitals = Group("Consumable", new Eto.Forms.TableLayout
             {
                 Rows = { new TableRow(new Label{Text="Vital Mod"}, numVitalMod) }
             });
 
-            fraSkill = Group("Skill", new TableLayout
+            fraSkill = Group("Skill", new Eto.Forms.TableLayout
             {
                 Rows = { new TableRow(new Label{Text="Skill"}, cmbSkills) }
             });
 
-            fraProjectile = Group("Projectile", new TableLayout
+            fraProjectile = Group("Projectile", new Eto.Forms.TableLayout
             {
                 Rows =
                 {
@@ -145,7 +145,7 @@ namespace Client
                 }
             });
 
-            fraEvents = Group("Event", new TableLayout
+            fraEvents = Group("Event", new Eto.Forms.TableLayout
             {
                 Rows =
                 {
@@ -154,7 +154,7 @@ namespace Client
                 }
             });
 
-            fraRequirements = Group("Requirements", new TableLayout
+            fraRequirements = Group("Requirements", new Eto.Forms.TableLayout
             {
                 Spacing = new Size(4,4),
                 Rows =
@@ -183,7 +183,7 @@ namespace Client
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);
 
-            return new TableLayout
+            return new Eto.Forms.TableLayout
             {
                 Padding = 4,
                 Spacing = new Size(8,8),
@@ -206,7 +206,7 @@ namespace Client
             return n;
         }
 
-        GroupBox Group(string text, Control content) => new GroupBox { Text = text, Content = content };
+        GroupBox Group(string text, Eto.Forms.Control content) => new GroupBox { Text = text, Content = content };
 
     void InitData()
         {
@@ -292,12 +292,13 @@ namespace Client
         void TogglePanels()
         {
             var type = (ItemCategory)cmbType!.SelectedIndex;
-            fraEquipment.Visible = type == ItemCategory.Equipment || type == ItemCategory.Projectile;
-            fraVitals.Visible = type == ItemCategory.Consumable;
-            fraSkill.Visible = type == ItemCategory.Skill;
-            fraProjectile.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
-            fraEvents.Visible = type == ItemCategory.Event;
+            fraEquipment!.Visible = type == ItemCategory.Equipment || type == ItemCategory.Projectile;
+            fraVitals!.Visible = type == ItemCategory.Consumable;
+            fraSkill!.Visible = type == ItemCategory.Skill;
+            fraProjectile!.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
+            fraEvents!.Visible = type == ItemCategory.Event;
         }
+        
 
         void LoadItemIcon()
         {

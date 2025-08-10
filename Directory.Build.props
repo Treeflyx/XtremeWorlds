@@ -15,4 +15,9 @@
         <Trademark>Treefly Studios</Trademark>
     </PropertyGroup>
 
+        <PropertyGroup>
+            <!-- Suppress nullable conversion warning CS8600 as requested -->
+            <NoWarn>$(NoWarn);CS8600</NoWarn>
+        </PropertyGroup>
+
 </Project>

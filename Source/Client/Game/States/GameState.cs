@@ -18,16 +18,16 @@ namespace Client
         public static bool MapAnim;
 
         // Global dialogue index
-        public static string DiaHeader;
-        public static string DiaBody;
-        public static string DiaBody2;
+        public static string? DiaHeader;
+        public static string? DiaBody;
+        public static string? DiaBody2;
         public static long DiaIndex;
         public static long DiaData1;
         public static long DiaData2;
         public static long DiaData3;
         public static long DiaData4;
         public static long DiaData5;
-        public static string DiaDataString;
+        public static string? DiaDataString;
         public static byte DiaStyle;
 
         // shop
@@ -43,7 +43,7 @@ namespace Client
         public static long DescItem;
         public static byte DescLastType;
         public static long DescLastItem;
-        public static Core.Type.Text[] Description;
+        public static Core.Type.Text[]? Description;
 
         // New char
         public static long NewCharSprite;
@@ -51,7 +51,7 @@ namespace Client
         public static long NewCnarGender;
 
         // chars
-        public static string[] CharName = new string[(Core.Constant.MaxChars)];
+        public static string?[] CharName = new string?[Core.Constant.MaxChars];
         public static long[] CharSprite = new long[(Core.Constant.MaxChars)];
         public static long[] CharAccess = new long[(Core.Constant.MaxChars)];
         public static long[] CharJob = new long[(Core.Constant.MaxChars)];
@@ -89,9 +89,9 @@ namespace Client
         // Chat bubble
         public static int ChatBubbleindex;
 
-        public static string ChatShowLine;
+    public static string? ChatShowLine;
 
-        public static string[] MapNames = new string[Core.Constant.MaxMaps];
+    public static string?[] MapNames = new string?[Core.Constant.MaxMaps];
 
         // chat
         public static bool InSmallChat;
@@ -200,7 +200,7 @@ namespace Client
         public static byte ActionMsgIndex;
         public static byte BloodIndex;
 
-        public static byte[] TempMapData;
+    public static byte[]? TempMapData;
 
         public static bool ShakeTimerEnabled;
         public static int ShakeTimer;
