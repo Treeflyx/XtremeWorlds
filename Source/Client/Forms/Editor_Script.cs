@@ -6,11 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Client.Net;
 
 namespace Client
@@ -37,7 +35,7 @@ namespace Client
         {
             base.OnClosed(e);
             if (ReferenceEquals(_instance, this)) _instance = null;
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
             GameState.MyEditorType = EditorType.None;
         }
 
@@ -88,7 +86,7 @@ namespace Client
             try
             {
                 Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
-                NetworkSend.SendSaveScript();
+                Sender.SendSaveScript();
                 RefreshPreview();
             }
             catch (Exception ex)

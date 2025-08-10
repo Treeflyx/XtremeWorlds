@@ -1,9 +1,10 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 using Client.Net;
+using Eto.Forms;
 using Core;
 using Microsoft.VisualBasic;
+using Eto.Drawing;
 
 namespace Client
 {
@@ -13,21 +14,21 @@ namespace Client
         public static Editor_Item Instance => _instance ??= new Editor_Item();
 
         // Core lists/controls
-    public ListBox? lstIndex; // legacy name used by Editors.cs
-    public TextBox? txtName;
-    public TextArea? txtDescription;
-    public NumericStepper? numIcon, numPaperdoll, numItemLvl, numPrice, numRarity, numSpeed, numDamage, numVitalMod, numEventId, numEventValue;
-    public CheckBox? chkStackable, chkKnockBack;
-    public ComboBox? cmbType, cmbSubType, cmbAnimation, cmbBind, cmbJobReq, cmbAccessReq, cmbTool, cmbSkills, cmbProjectile, cmbAmmo, cmbKnockBackTiles;
-    public NumericStepper? numStrReq, numVitReq, numLuckReq, numIntReq, numSprReq, numLevelReq;
-    public NumericStepper? numStrAdd, numVitAdd, numLuckAdd, numIntAdd, numSprAdd;
-    public Drawable? iconPreview, paperdollPreview;
-    public Button? btnSave, btnCancel, btnDelete;
-    public Button? btnSpawn;
-    public NumericStepper? numSpawnAmount;
+        public ListBox? lstIndex; // legacy name used by Editors.cs
+        public TextBox? txtName;
+        public TextArea? txtDescription;
+        public NumericStepper? numIcon, numPaperdoll, numItemLvl, numPrice, numRarity, numSpeed, numDamage, numVitalMod, numEventId, numEventValue;
+        public CheckBox? chkStackable, chkKnockBack;
+        public ComboBox? cmbType, cmbSubType, cmbAnimation, cmbBind, cmbJobReq, cmbAccessReq, cmbTool, cmbSkills, cmbProjectile, cmbAmmo, cmbKnockBackTiles;
+        public NumericStepper? numStrReq, numVitReq, numLuckReq, numIntReq, numSprReq, numLevelReq;
+        public NumericStepper? numStrAdd, numVitAdd, numLuckAdd, numIntAdd, numSprAdd;
+        public Drawable? iconPreview, paperdollPreview;
+        public Button? btnSave, btnCancel, btnDelete;
+        public Button? btnSpawn;
+        public NumericStepper? numSpawnAmount;
 
         // Frames (logical group visibility mimic of old design)
-    public GroupBox? fraEquipment, fraVitals, fraSkill, fraProjectile, fraEvents, fraRequirements, fraBasics;
+        public GroupBox? fraEquipment, fraVitals, fraSkill, fraProjectile, fraEvents, fraRequirements, fraBasics;
 
         Bitmap? itemBmp, paperdollBmp;
 
@@ -93,7 +94,7 @@ namespace Client
             btnSave = new Button { Text = "Save" }; btnSave.Click += (s,e)=> { Editors.ItemEditorOK(); Close(); };
             btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s,e)=> { Editors.ItemEditorCancel(); Close(); };
             btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s,e)=> { Item.ClearItem(GameState.EditorIndex); Editors.ItemEditorInit(); MarkChanged(); };
-            btnSpawn = new Button { Text = "Spawn" }; btnSpawn.Click += (s,e)=> { NetworkSend.SendSpawnItem(GameState.EditorIndex, (int)numSpawnAmount!.Value); };
+            btnSpawn = new Button { Text = "Spawn" }; btnSpawn.Click += (s,e)=> { Sender.SendSpawnItem(GameState.EditorIndex, (int)numSpawnAmount!.Value); };
             numSpawnAmount = Num(1, int.MaxValue); numSpawnAmount.Value = 1;
 
             fraBasics = Group("Basics", new TableLayout

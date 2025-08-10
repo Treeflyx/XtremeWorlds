@@ -200,7 +200,6 @@ public static class Program
             GameState.MyEditorType = Core.EditorType.Script;
             GameState.EditorIndex = 1;
             scr?.Show();
-            if (scr != null) Script.ScriptEditorInit();
             GameState.InitScriptEditor = false;
         }
 

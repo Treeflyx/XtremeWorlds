@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Windows.Forms;
 using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
-using Core;
+using Eto.Forms;
 using System;
 using System.IO;
+using Eto.Drawing;
 
 namespace Client
 {
@@ -189,7 +189,7 @@ namespace Client
             lstIndex.SelectedIndex = tmpindex;
             Editors.SkillEditorInit();
         }
-        private void BtnLearn_Click() => NetworkSend.SendLearnSkill(GameState.EditorIndex);
+        private void BtnLearn_Click() => Sender.SendLearnSkill(GameState.EditorIndex);
 
         private void TxtName_TextChanged()
         {
