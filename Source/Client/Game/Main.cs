@@ -207,8 +207,8 @@ public static class Program
         try
         {
             Editor_Map.Instance?.picBackSelect.Invalidate();
-            Editor_Animation.Instance?.picSprite0.Invalidate();
-            Editor_Animation.Instance?.picSprite1.Invalidate();
+            Editor_Animation.Instance?.picSprite0?.Invalidate();
+            Editor_Animation.Instance?.picSprite1?.Invalidate();
         }
         catch { /* some editors may not be instantiated yet */ }
         if (GameState.InGame)
