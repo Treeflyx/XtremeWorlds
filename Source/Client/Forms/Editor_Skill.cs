@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
 
@@ -253,7 +254,7 @@ namespace Client
 
         private void btnLearn_Click(object sender, EventArgs e)
         {
-            NetworkSend.SendLearnSkill(GameState.EditorIndex);
+            Sender.SendLearnSkill(GameState.EditorIndex);
         }
 
         private void nudIcon_Click(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
 
@@ -422,7 +423,7 @@ namespace Client
 
         private void btnSpawn_Click(object sender, EventArgs e)
         {
-            NetworkSend.SendSpawnItem(GameState.EditorIndex, (int)Math.Round(nudSpanwAmount.Value));
+            Sender.SendSpawnItem(GameState.EditorIndex, (int)Math.Round(nudSpanwAmount.Value));
         }
 
         private void Editor_Item_FormClosing(object sender, FormClosingEventArgs e)

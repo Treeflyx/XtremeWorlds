@@ -225,7 +225,6 @@ namespace Client
                     GameState.EditorIndex = 1;
                     withBlock12.Owner = (Form)Control.FromHandle(General.Client.Window?.Handle ?? IntPtr.Zero);
                     withBlock12.Show();
-                    Script.ScriptEditorInit();
 
                     GameState.InitScriptEditor = false;
 

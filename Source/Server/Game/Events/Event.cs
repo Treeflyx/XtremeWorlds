@@ -1,8 +1,8 @@
 using Core;
 using Core.Serialization;
 using Microsoft.Extensions.Logging;
-using Mirage.Sharp.Asfw;
 using System.Collections.Concurrent;
+using Core.Net;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
@@ -168,7 +168,7 @@ namespace Server
 
         private static bool IsNpcBlocking(int mapNum, int x, int y)
         {
-            for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
+            for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
             {
                 if (Data.MapNpc[mapNum].Npc[i].X == x && Data.MapNpc[mapNum].Npc[i].Y == y)
                     return true;
@@ -209,7 +209,7 @@ namespace Server
         {
             if (!IsValidMapAndDirection(mapNum, (byte)dir)) return;
 
-            int eventIndex = GetEventIndex(playerIndex, eventId, globalEvent);
+            var eventIndex = GetEventIndex(playerIndex, eventId, globalEvent);
             if (eventIndex == -1) return;
 
             lock (TempEventLock)
@@ -223,7 +223,7 @@ namespace Server
                     Core.Data.TempPlayer[playerIndex].EventMap.EventPages[eventIndex].Dir = dir;
             }
 
-            SendEventDirection(mapNum, eventId, dir, globalEvent ? TempEventMap[mapNum].Event[eventId].Dir : Core.Data.TempPlayer[playerIndex].EventMap.EventPages[eventIndex].Dir);
+            SendEventDirection(mapNum, eventId, globalEvent ? TempEventMap[mapNum].Event[eventId].Dir : Core.Data.TempPlayer[playerIndex].EventMap.EventPages[eventIndex].Dir);
         }
 
         private static int GetEventIndex(int playerIndex, int eventId, bool globalEvent)
@@ -231,7 +231,7 @@ namespace Server
             if (globalEvent) return eventId;
             if (Core.Data.TempPlayer[playerIndex].EventMap.CurrentEvents <= 0) return -1;
 
-            for (int i = 0; i < Core.Data.TempPlayer[playerIndex].EventMap.CurrentEvents; i++)
+            for (var i = 0; i < Core.Data.TempPlayer[playerIndex].EventMap.CurrentEvents; i++)
             {
                 if (eventId == i)
                     return i;
@@ -239,21 +239,22 @@ namespace Server
             return -1;
         }
 
-        private static void SendEventDirection(int mapNum, int eventId, int dir, int currentDir)
+        private static void SendEventDirection(int mapNum, int eventId, int currentDir)
         {
-            var buffer = new ByteStream(12);
-            buffer.WriteInt32((int)ServerPackets.SEventDir);
-            buffer.WriteInt32(eventId);
-            buffer.WriteInt32(currentDir);
-            NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            var packetWriter = new PacketWriter(12);
+            
+            packetWriter.WriteEnum(ServerPackets.SEventDir);
+            packetWriter.WriteInt32(eventId);
+            packetWriter.WriteInt32(currentDir);
+            
+            NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
         }
 
         public static void EventMove(int index, int mapNum, int eventId, int dir, int movementSpeed, bool globalEvent = false)
         {
             if (!IsValidMapAndDirection(mapNum, (byte)dir)) return;
 
-            int eventIndex = GetEventIndex(index, eventId, globalEvent);
+            var eventIndex = GetEventIndex(index, eventId, globalEvent);
             if (eventIndex == -1) return;
 
             lock (TempEventLock)
@@ -295,19 +296,24 @@ namespace Server
 
         private static void SendEventMove(int mapNum, int eventId, int x, int y, int dir, int currentDir, int speed, int index = -1)
         {
-            var buffer = new ByteStream(24);
-            buffer.WriteInt32((int)ServerPackets.SEventMove);
-            buffer.WriteInt32(eventId);
-            buffer.WriteInt32(x);
-            buffer.WriteInt32(y);
-            buffer.WriteInt32(dir);
-            buffer.WriteInt32(currentDir);
-            buffer.WriteInt32(speed);
+            var packetWriter = new PacketWriter(24);
+            
+            packetWriter.WriteEnum(ServerPackets.SEventMove);
+            packetWriter.WriteInt32(eventId);
+            packetWriter.WriteInt32(x);
+            packetWriter.WriteInt32(y);
+            packetWriter.WriteInt32(dir);
+            packetWriter.WriteInt32(currentDir);
+            packetWriter.WriteInt32(speed);
+            
             if (index == -1)
-                NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
+            {
+                NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
+            }
             else
-                PlayerService.Instance.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            {
+                PlayerService.Instance.SendDataTo(index, packetWriter.GetBytes());
+            }
         }
 
         public static bool IsOneBlockAway(int x1, int y1, int x2, int y2) =>
@@ -316,7 +322,7 @@ namespace Server
         public static byte GetNpcDir(int x, int y, int x1, int y1)
         {
             byte direction = (int)Direction.Right;
-            int maxDistance = 0;
+            var maxDistance = 0;
             UpdateDirectionAndDistance(x - x1, (int)Direction.Right, (int)Direction.Left, ref direction, ref maxDistance);
             UpdateDirectionAndDistance(y - y1, (int)Direction.Down, (int)Direction.Up, ref direction, ref maxDistance);
             return direction;
@@ -324,7 +330,7 @@ namespace Server
 
         private static void UpdateDirectionAndDistance(int diff, int posDir, int negDir, ref byte direction, ref int maxDistance)
         {
-            int absDiff = Math.Abs(diff);
+            var absDiff = Math.Abs(diff);
             if (absDiff > maxDistance)
             {
                 direction = (byte)(diff > 0 ? posDir : negDir);
@@ -361,7 +367,7 @@ namespace Server
 
         private static int RandomMoveTowardsPlayer(int playerId, int mapNum, int eventId, int ex, int ey, int px, int py, int walkThrough)
         {
-            int i = General.GetRandom.NextInt(0, 4);
+            var i = General.GetRandom.NextInt(0, 4);
             foreach (var dir in GetDirectionOrder(i))
             {
                 if (ShouldMoveTowards(ex, ey, px, py, dir) && CanEventMove(playerId, mapNum, ex, ey, eventId, walkThrough, (byte)dir, false))
@@ -449,7 +455,7 @@ namespace Server
                     int nx = x + dx, ny = y + dy;
                     if (!IsWithinMapBounds(mapNum, nx, ny) || !CanEventMove(playerId, mapNum, x, y, eventId, walkThrough, (byte)dir, false)) continue;
 
-                    int tentativeGScore = gScore[(x, y)] + 1;
+                    var tentativeGScore = gScore[(x, y)] + 1;
                     if (!gScore.ContainsKey((nx, ny)) || tentativeGScore < gScore[(nx, ny)])
                     {
                         cameFrom[(nx, ny)] = (x, y);
@@ -474,7 +480,7 @@ namespace Server
             if (!IsValidPlayerEvent(playerId, mapNum, eventId)) return 5;
 
             var (px, py, ex, ey, walkThrough) = GetPlayerAndEventPositions(playerId, mapNum, eventId);
-            int i = General.GetRandom.NextInt(0, 4);
+            var i = General.GetRandom.NextInt(0, 4);
             foreach (var dir in GetDirectionOrder(i))
             {
                 if (ShouldMoveAway(ex, ey, px, py, dir) && CanEventMove(playerId, mapNum, ex, ey, eventId, walkThrough, (byte)dir, false))
@@ -505,7 +511,7 @@ namespace Server
             if (!IsValidPlayerEvent(playerId, mapNum, eventId)) return (int)Direction.Right;
             var (px, py, ex, ey, _) = GetPlayerAndEventPositions(playerId, mapNum, eventId);
             byte direction = (int)Direction.Right;
-            int maxDistance = 0;
+            var maxDistance = 0;
             UpdateDirectionAndDistance(px - ex, (int)Direction.Left, (int)Direction.Right, ref direction, ref maxDistance);
             UpdateDirectionAndDistance(py - ey, (int)Direction.Up, (int)Direction.Down, ref direction, ref maxDistance);
             return direction;
@@ -515,9 +521,9 @@ namespace Server
         public static void PatrolEvent(int index, int mapNum, int eventId, List<(int x, int y)> patrolPath, int speed, bool globalEvent = false)
         {
             if (!patrolPath.Any()) return;
-            int currentStep = TempEventMap[mapNum].Event[eventId].PatrolStep % patrolPath.Count;
+            var currentStep = TempEventMap[mapNum].Event[eventId].PatrolStep % patrolPath.Count;
             var (targetX, targetY) = patrolPath[currentStep];
-            int dir = GetDirectionToTarget(TempEventMap[mapNum].Event[eventId].X, TempEventMap[mapNum].Event[eventId].Y, targetX, targetY);
+            var dir = GetDirectionToTarget(TempEventMap[mapNum].Event[eventId].X, TempEventMap[mapNum].Event[eventId].Y, targetX, targetY);
             if (CanEventMove(index, mapNum, TempEventMap[mapNum].Event[eventId].X, TempEventMap[mapNum].Event[eventId].Y, eventId, 0, (byte)dir, globalEvent))
             {
                 EventMove(index, mapNum, eventId, dir, speed, globalEvent);
@@ -531,7 +537,7 @@ namespace Server
 
         public static void FollowPlayer(int index, int mapNum, int eventId, int targetPlayerId, int speed, bool globalEvent = false)
         {
-            int dir = CanEventMoveTowardsPlayer(targetPlayerId, mapNum, eventId);
+            var dir = CanEventMoveTowardsPlayer(targetPlayerId, mapNum, eventId);
             if (dir != 4)
                 EventMove(index, mapNum, eventId, dir, speed, globalEvent);
         }
@@ -540,7 +546,7 @@ namespace Server
 
         #region Incoming Packets
 
-        public static void Packet_EventChatReply(GameSession session, ReadOnlySpan<byte> bytes)
+        public static void Packet_EventChatReply(GameSession session, ReadOnlyMemory<byte> bytes)
         {
             var buffer = new PacketReader(bytes);
             int eventId = buffer.ReadInt32(), pageId = buffer.ReadInt32(), reply = buffer.ReadInt32();
@@ -551,7 +557,7 @@ namespace Server
 
         private static void ProcessEventReply(int index, int eventId, int pageId, int reply)
         {
-            for (int i = 0; i < Core.Data.TempPlayer[index].EventProcessingCount; i++)
+            for (var i = 0; i < Core.Data.TempPlayer[index].EventProcessingCount; i++)
             {
                 var proc = Core.Data.TempPlayer[index].EventProcessing[i];
                 if (proc.EventId != eventId || proc.PageId != pageId || proc.WaitingForResponse != 1) continue;
@@ -580,20 +586,20 @@ namespace Server
             proc.WaitingForResponse = 0;
         }
 
-        public static void Packet_Event(GameSession session, ReadOnlySpan<byte> bytes)
+        public static void Packet_Event(GameSession session, ReadOnlyMemory<byte> bytes)
         {
             var buffer = new PacketReader(bytes);
-            int eventId = buffer.ReadInt32();
+            var eventId = buffer.ReadInt32();
             EventLogic.TriggerEvent(session.Id, eventId, 0, GetPlayerX(session.Id), GetPlayerY(session.Id));
         }
 
-        public static void Packet_RequestSwitchesAndVariables(GameSession session, ReadOnlySpan<byte> bytes) => SendSwitchesAndVariables(session.Id);
+        public static void Packet_RequestSwitchesAndVariables(GameSession session, ReadOnlyMemory<byte> bytes) => SendSwitchesAndVariables(session.Id);
 
-        public static void Packet_SwitchesAndVariables(GameSession session, ReadOnlySpan<byte> bytes)
+        public static void Packet_SwitchesAndVariables(GameSession session, ReadOnlyMemory<byte> bytes)
         {
             var buffer = new PacketReader(bytes);
-            for (int i = 0; i < Core.Constant.MaxSwitches; i++) Switches[i] = buffer.ReadString();
-            for (int i = 0; i < Core.Constant.NaxVariables; i++) Variables[i] = buffer.ReadString();
+            for (var i = 0; i < Core.Constant.MaxSwitches; i++) Switches[i] = buffer.ReadString();
+            for (var i = 0; i < Core.Constant.NaxVariables; i++) Variables[i] = buffer.ReadString();
 
             SaveSwitches();
             SaveVariables();
@@ -606,8 +612,9 @@ namespace Server
 
         public static void SendSpecialEffect(int index, int effectType, int data1 = 0, int data2 = 0, int data3 = 0, int data4 = 0)
         {
-            var buffer = new ByteStream(24);
-            buffer.WriteInt32((int)ServerPackets.SSpecialEffect);
+            var buffer = new PacketWriter(24);
+            
+            buffer.WriteEnum(ServerPackets.SSpecialEffect);
             buffer.WriteInt32(effectType);
 
             switch (effectType)
@@ -640,29 +647,33 @@ namespace Server
                     return;
             }
 
-            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            PlayerService.Instance.SendDataTo(index, buffer.GetBytes());
         }
 
         public static void SendSwitchesAndVariables(int index, bool everyone = false)
         {
-            var buffer = new ByteStream(4 + (Core.Constant.MaxSwitches + Core.Constant.NaxVariables) * 256);
-            buffer.WriteInt32((int)ServerPackets.SSwitchesAndVariables);
-            for (int i = 0; i < Core.Constant.MaxSwitches; i++) buffer.WriteString(Switches[i]);
-            for (int i = 0; i < Core.Constant.NaxVariables; i++) buffer.WriteString(Variables[i]);
+            var buffer = new PacketWriter(4 + (Core.Constant.MaxSwitches + Core.Constant.NaxVariables) * 256);
+            buffer.WriteEnum(ServerPackets.SSwitchesAndVariables);
+            for (var i = 0; i < Core.Constant.MaxSwitches; i++) buffer.WriteString(Switches[i]);
+            for (var i = 0; i < Core.Constant.NaxVariables; i++) buffer.WriteString(Variables[i]);
 
             if (everyone)
-                NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
+            {
+                PlayerService.Instance.SendDataToAll(buffer.GetBytes());
+            }
             else
-                NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            {
+                PlayerService.Instance.SendDataTo(index, buffer.GetBytes());
+            }
         }
 
         public static void SendMapEventData(int index)
         {
-            var buffer = new ByteStream(4);
-            int mapNum = GetPlayerMap(index);
-            buffer.WriteInt32((int)ServerPackets.SMapEventData);
+            var buffer = new PacketWriter(4);
+            
+            var mapNum = GetPlayerMap(index);
+            
+            buffer.WriteEnum(ServerPackets.SMapEventData);
             buffer.WriteInt32(Data.Map[mapNum].EventCount);
 
             if (Data.Map[mapNum].EventCount > 0)
@@ -670,16 +681,17 @@ namespace Server
                 SerializeMapEvents(buffer, mapNum);
             }
 
-            NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            PlayerService.Instance.SendDataTo(index, buffer.GetBytes());
+
             SendSwitchesAndVariables(index);
         }
 
-        private static void SerializeMapEvents(ByteStream buffer, int mapNum)
+        private static void SerializeMapEvents(PacketWriter buffer, int mapNum)
         {
-            for (int i = 0; i < Data.Map[mapNum].EventCount; i++)
+            for (var i = 0; i < Data.Map[mapNum].EventCount; i++)
             {
                 var ev = Data.Map[mapNum].Event[i];
+                
                 buffer.WriteString(ev.Name);
                 buffer.WriteByte(ev.Globals);
                 buffer.WriteInt32(ev.X);
@@ -691,9 +703,9 @@ namespace Server
             }
         }
 
-        private static void SerializeEventPages(ByteStream buffer, int mapNum, int eventIndex, int pageCount)
+        private static void SerializeEventPages(PacketWriter buffer, int mapNum, int eventIndex, int pageCount)
         {
-            for (int x = 0; x < pageCount; x++)
+            for (var x = 0; x < pageCount; x++)
             {
                 var page = Data.Map[mapNum].Event[eventIndex].Pages[x];
                 SerializePageConditions(buffer, page);
@@ -703,7 +715,7 @@ namespace Server
             }
         }
 
-        private static void SerializePageConditions(ByteStream buffer, EventPage page)
+        private static void SerializePageConditions(PacketWriter buffer, EventPage page)
         {
             buffer.WriteInt32(page.ChkVariable);
             buffer.WriteInt32(page.VariableIndex);
@@ -720,67 +732,71 @@ namespace Server
             buffer.WriteInt32(page.SelfSwitchCompare);
         }
 
-        private static void SerializePageGraphics(ByteStream buffer, EventPage page)
+        private static void SerializePageGraphics(PacketWriter packetWriter, EventPage page)
         {
-            buffer.WriteByte(page.GraphicType);
-            buffer.WriteInt32(page.Graphic);
-            buffer.WriteInt32(page.GraphicX);
-            buffer.WriteInt32(page.GraphicY);
-            buffer.WriteInt32(page.GraphicX2);
-            buffer.WriteInt32(page.GraphicY2);
+            packetWriter.WriteByte(page.GraphicType);
+            packetWriter.WriteInt32(page.Graphic);
+            packetWriter.WriteInt32(page.GraphicX);
+            packetWriter.WriteInt32(page.GraphicY);
+            packetWriter.WriteInt32(page.GraphicX2);
+            packetWriter.WriteInt32(page.GraphicY2);
         }
 
-        private static void SerializePageMovement(ByteStream buffer, EventPage page)
+        private static void SerializePageMovement(PacketWriter packetWriter, EventPage page)
         {
-            buffer.WriteByte(page.MoveType);
-            buffer.WriteByte(page.MoveSpeed);
-            buffer.WriteByte(page.MoveFreq);
-            buffer.WriteInt32(page.MoveRouteCount);
-            buffer.WriteInt32(page.IgnoreMoveRoute);
-            buffer.WriteInt32(page.RepeatMoveRoute);
+            packetWriter.WriteByte(page.MoveType);
+            packetWriter.WriteByte(page.MoveSpeed);
+            packetWriter.WriteByte(page.MoveFreq);
+            packetWriter.WriteInt32(page.MoveRouteCount);
+            packetWriter.WriteInt32(page.IgnoreMoveRoute);
+            packetWriter.WriteInt32(page.RepeatMoveRoute);
+            
             if (page.MoveRouteCount > 0)
             {
-                for (int y = 0; y < page.MoveRouteCount; y++)
+                for (var y = 0; y < page.MoveRouteCount; y++)
                 {
-                    var route = page.MoveRoute[y];
-                    buffer.WriteInt32(route.Index);
-                    buffer.WriteInt32(route.Data1);
-                    buffer.WriteInt32(route.Data2);
-                    buffer.WriteInt32(route.Data3);
-                    buffer.WriteInt32(route.Data4);
-                    buffer.WriteInt32(route.Data5);
-                    buffer.WriteInt32(route.Data6);
+                    ref var route = ref page.MoveRoute[y];
+                    
+                    packetWriter.WriteInt32(route.Index);
+                    packetWriter.WriteInt32(route.Data1);
+                    packetWriter.WriteInt32(route.Data2);
+                    packetWriter.WriteInt32(route.Data3);
+                    packetWriter.WriteInt32(route.Data4);
+                    packetWriter.WriteInt32(route.Data5);
+                    packetWriter.WriteInt32(route.Data6);
                 }
             }
-            buffer.WriteInt32(page.WalkAnim);
-            buffer.WriteInt32(page.DirFix);
-            buffer.WriteInt32(page.WalkThrough);
-            buffer.WriteInt32(page.ShowName);
-            buffer.WriteByte(page.Trigger);
-            buffer.WriteInt32(page.CommandListCount);
-            buffer.WriteByte(page.Position);
+            
+            packetWriter.WriteInt32(page.WalkAnim);
+            packetWriter.WriteInt32(page.DirFix);
+            packetWriter.WriteInt32(page.WalkThrough);
+            packetWriter.WriteInt32(page.ShowName);
+            packetWriter.WriteByte(page.Trigger);
+            packetWriter.WriteInt32(page.CommandListCount);
+            packetWriter.WriteByte(page.Position);
         }
 
-        private static void SerializePageCommands(ByteStream buffer, int mapNum, int eventIndex, int pageIndex, EventPage page)
+        private static void SerializePageCommands(PacketWriter buffer, int mapNum, int eventIndex, int pageIndex, EventPage page)
         {
             if (page.CommandListCount <= 0) return;
-            for (int y = 0; y < page.CommandListCount; y++)
+            for (var y = 0; y < page.CommandListCount; y++)
             {
                 var cmdList = Data.Map[mapNum].Event[eventIndex].Pages[pageIndex].CommandList[y];
                 buffer.WriteInt32(cmdList.CommandCount);
                 buffer.WriteInt32(cmdList.ParentList);
                 if (cmdList.CommandCount > 0)
                 {
-                    for (int z = 0; z < cmdList.CommandCount; z++)
+                    for (var z = 0; z < cmdList.CommandCount; z++)
                     {
                         var cmd = cmdList.Commands[z];
+                        
                         SerializeCommand(buffer, cmd);
                     }
                 }
             }
         }
 
-        private static void SerializeCommand(ByteStream buffer, Core.Type.EventCommand cmd)
+        private static void SerializeCommand(PacketWriter buffer, Core.Type.EventCommand cmd)
         {
             buffer.WriteInt32(cmd.Index);
             buffer.WriteString(cmd.Text1);
@@ -803,7 +819,7 @@ namespace Server
             buffer.WriteInt32(cmd.MoveRouteCount);
             if (cmd.MoveRouteCount > 0)
             {
-                for (int w = 0; w < cmd.MoveRouteCount; w++)
+                for (var w = 0; w < cmd.MoveRouteCount; w++)
                 {
                     var route = cmd.MoveRoute[w];
                     buffer.WriteInt32(route.Index);
@@ -861,8 +877,8 @@ namespace Server
         // Action-Based Triggers
         public static void TriggerOnPlayerAction(int index, string actionType, int value)
         {
-            int mapNum = GetPlayerMap(index);
-            for (int i = 0; i < Data.Map[mapNum].EventCount; i++)
+            var mapNum = GetPlayerMap(index);
+            for (var i = 0; i < Data.Map[mapNum].EventCount; i++)
             {
                 var page = Data.Map[mapNum].Event[i].Pages[Core.Data.TempPlayer[index].EventMap.EventPages[i].PageId];
                 if (page.ChkVariable == 1 && page.VariableIndex == GetActionVariableIndex(actionType) && page.VariableCompare == value)

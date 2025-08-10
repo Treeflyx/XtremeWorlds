@@ -1,73 +1,61 @@
 ﻿using System;
 using Client.Net;
 using Core;
+using Core.Net;
 using static Core.Global.Command;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 
 namespace Client
 {
-
     public class Projectile
     {
-
         #region Sending
+
         public static void SendRequestEditProjectiles()
         {
-            ByteStream buffer;
+            var packetWriter = new PacketWriter(4);
 
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestEditProjectile);
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestEditProjectile);
 
+            Network.Send(packetWriter);
         }
 
         public static void SendSaveProjectile(int projectileNum)
         {
-            ByteStream buffer;
+            var packetWriter = new PacketWriter();
 
-            buffer = new ByteStream(4);
+            packetWriter.WriteEnum(Packets.ClientPackets.CSaveProjectile);
+            packetWriter.WriteInt32(projectileNum);
+            packetWriter.WriteString(Data.Projectile[projectileNum].Name);
+            packetWriter.WriteInt32(Data.Projectile[projectileNum].Sprite);
+            packetWriter.WriteInt32(Data.Projectile[projectileNum].Range);
+            packetWriter.WriteInt32(Data.Projectile[projectileNum].Speed);
+            packetWriter.WriteInt32(Data.Projectile[projectileNum].Damage);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSaveProjectile);
-            buffer.WriteInt32(projectileNum);
-
-            buffer.WriteString(Data.Projectile[projectileNum].Name);
-            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Sprite);
-            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Range);
-            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Speed);
-            buffer.WriteInt32(Core.Data.Projectile[projectileNum].Damage);
-
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-
+            Network.Send(packetWriter);
         }
 
         public static void SendRequestProjectile(int projectileNum)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestProjectile);
-            buffer.WriteInt32(projectileNum);
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestProjectile);
+            packetWriter.WriteInt32(projectileNum);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-
+            Network.Send(packetWriter);
         }
 
         public static void SendClearProjectile(int projectileNum, int collisionindex, byte collisionType, int collisionZone)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(20);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CClearProjectile);
-            buffer.WriteInt32(projectileNum);
-            buffer.WriteInt32(collisionindex);
-            buffer.WriteInt32(collisionType);
-            buffer.WriteInt32(collisionZone);
+            packetWriter.WriteEnum(Packets.ClientPackets.CClearProjectile);
+            packetWriter.WriteInt32(projectileNum);
+            packetWriter.WriteInt32(collisionindex);
+            packetWriter.WriteInt32(collisionType);
+            packetWriter.WriteInt32(collisionZone);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
-
+            Network.Send(packetWriter);
         }
 
         #endregion
@@ -82,10 +70,9 @@ namespace Client
 
             Core.Data.Projectile[projectileNum].Name = buffer.ReadString();
             Core.Data.Projectile[projectileNum].Sprite = buffer.ReadInt32();
-            Core.Data.Projectile[projectileNum].Range = (byte)buffer.ReadInt32();
+            Core.Data.Projectile[projectileNum].Range = (byte) buffer.ReadInt32();
             Core.Data.Projectile[projectileNum].Speed = buffer.ReadInt32();
             Core.Data.Projectile[projectileNum].Damage = buffer.ReadInt32();
-
         }
 
         public static void HandleMapProjectile(ReadOnlyMemory<byte> data)
@@ -115,9 +102,8 @@ namespace Client
         {
             int i;
 
-            for (i = 0; i < Constant.MaxProjectiles;  i++)
+            for (i = 0; i < Constant.MaxProjectiles; i++)
                 ClearProjectile(i);
-
         }
 
         public static void ClearProjectile(int index)
@@ -127,7 +113,6 @@ namespace Client
             Core.Data.Projectile[index].Range = 0;
             Core.Data.Projectile[index].Speed = 0;
             Core.Data.Projectile[index].Damage = 0;
-
         }
 
         public static void ClearMapProjectile(int projectileNum)
@@ -139,7 +124,6 @@ namespace Client
             Core.Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Y = 0;
             Core.Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Dir = 0;
             Core.Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Timer = 0;
-
         }
 
         public static void StreamProjectile(int projectileNum)
@@ -154,6 +138,7 @@ namespace Client
         #endregion
 
         #region Drawing
+
         public static void DrawProjectile(int projectileNum)
         {
             Core.Type.Rect rec;
@@ -175,27 +160,28 @@ namespace Client
             {
                 switch (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Dir)
                 {
-                    case (byte)Direction.Up:
-                        {
-                            Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Y -= 1;
-                            break;
-                        }
-                    case (byte)Direction.Down:
-                        {
-                            Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Y += 1;
-                            break;
-                        }
-                    case (byte)Direction.Left:
-                        {
-                            Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].X -= 1;
-                            break;
-                        }
-                    case (byte)Direction.Right:
-                        {
-                            Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].X += 1;
-                            break;
-                        }
+                    case (byte) Direction.Up:
+                    {
+                        Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Y -= 1;
+                        break;
+                    }
+                    case (byte) Direction.Down:
+                    {
+                        Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Y += 1;
+                        break;
+                    }
+                    case (byte) Direction.Left:
+                    {
+                        Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].X -= 1;
+                        break;
+                    }
+                    case (byte) Direction.Right:
+                    {
+                        Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].X += 1;
+                        break;
+                    }
                 }
+
                 Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime = General.GetTickCount() + Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed;
                 Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Range = Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Range + 1;
             }
@@ -229,7 +215,7 @@ namespace Client
                 {
                     canClearProjectile = true;
                     collisionindex = i;
-                    collisionType = (byte)TargetType.Npc;
+                    collisionType = (byte) TargetType.Npc;
                     collisionZone = -1;
                     break;
                 }
@@ -244,16 +230,16 @@ namespace Client
                     {
                         canClearProjectile = true;
                         collisionindex = i;
-                        collisionType = (byte)TargetType.Player;
+                        collisionType = (byte) TargetType.Player;
                         collisionZone = -1;
-                        if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].OwnerType == (byte)TargetType.Player)
+                        if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].OwnerType == (byte) TargetType.Player)
                         {
                             if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Owner == i)
                                 canClearProjectile = false; // Reset if its the owner of projectile
                         }
+
                         break;
                     }
-
                 }
             }
 
@@ -265,7 +251,7 @@ namespace Client
             if (Conversions.ToInteger(canClearProjectile) == 1)
             {
                 // Only send the clear to the server if you're the projectile caster or the one hit (only if owner is not a player)
-                if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].OwnerType == (byte)TargetType.Player & Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Owner == GameState.MyIndex)
+                if (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].OwnerType == (byte) TargetType.Player & Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Owner == GameState.MyIndex)
                 {
                     SendClearProjectile(projectileNum, collisionindex, collisionType, collisionZone);
                 }
@@ -285,6 +271,7 @@ namespace Client
             {
                 return;
             }
+
             rec.Bottom = gfxInfo.Height;
             rec.Left = Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Dir * GameState.SizeX;
             rec.Right = rec.Left + GameState.SizeX;
@@ -292,26 +279,26 @@ namespace Client
             // Find the offset
             switch (Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].Dir)
             {
-                case (byte)Direction.Up:
-                    {
-                        yOffset = (int)Math.Round((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double)Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed * GameState.SizeY);
-                        break;
-                    }
-                case (byte)Direction.Down:
-                    {
-                        yOffset = (int)Math.Round(-((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double)Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed) * GameState.SizeY);
-                        break;
-                    }
-                case (byte)Direction.Left:
-                    {
-                        xOffset = (int)Math.Round((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double)Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed);
-                        break;
-                    }
-                case (byte)Direction.Right:
-                    {
-                        xOffset = (int)Math.Round(-((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double)Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed));
-                        break;
-                    }
+                case (byte) Direction.Up:
+                {
+                    yOffset = (int) Math.Round((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double) Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed * GameState.SizeY);
+                    break;
+                }
+                case (byte) Direction.Down:
+                {
+                    yOffset = (int) Math.Round(-((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double) Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed) * GameState.SizeY);
+                    break;
+                }
+                case (byte) Direction.Left:
+                {
+                    xOffset = (int) Math.Round((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double) Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed);
+                    break;
+                }
+                case (byte) Direction.Right:
+                {
+                    xOffset = (int) Math.Round(-((Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].TravelTime - General.GetTickCount()) / (double) Data.Projectile[Data.MapProjectile[Core.Data.Player[GameState.MyIndex].Map, projectileNum].ProjectileNum].Speed));
+                    break;
+                }
             }
 
             // Convert coordinates
@@ -320,11 +307,9 @@ namespace Client
 
             // Render texture
             string argpath = System.IO.Path.Combine(Core.Path.Projectiles, sprite.ToString());
-            GameClient.RenderTexture(ref argpath, x, y, (int)Math.Round(rec.Left), (int)Math.Round(rec.Top), 32, 32);
-
+            GameClient.RenderTexture(ref argpath, x, y, (int) Math.Round(rec.Left), (int) Math.Round(rec.Top), 32, 32);
         }
 
         #endregion
-
     }
 }

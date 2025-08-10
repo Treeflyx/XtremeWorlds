@@ -64,7 +64,6 @@
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.csproj"/>
         <ProjectReference Include="..\Modules\DarkUI\DarkUI\DarkUI.csproj"/>
-        <ProjectReference Include="..\Network\Asfw.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

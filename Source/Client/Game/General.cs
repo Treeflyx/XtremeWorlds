@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
+using Client.Net;
 using static Core.Global.Command;
 
 namespace Client
@@ -69,7 +70,7 @@ namespace Client
             CheckGradients();
             CheckDesigns();
             Sound.InitializeBass();
-            _ = NetworkConfig.InitNetwork();
+            _ = Network.Start();
             Ui.Load();
             Gui.Init();
             GameState.Ping = -1;
@@ -254,7 +255,7 @@ namespace Client
             {
                 if (GetPlayerAccess(GameState.MyIndex) > 0)
                 {
-                    NetworkSend.SendRequestAdmin();
+                    Sender.SendRequestAdmin();
                 }
             }
         }
@@ -265,7 +266,7 @@ namespace Client
             GameState.InGame = false;
             GameState.InMenu = false;
             Sound.FreeBass();
-            NetworkConfig.DestroyNetwork();
+            Network.Stop();
             Environment.Exit(0);
         }
 

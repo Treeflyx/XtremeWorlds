@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Client.Net;
 
 namespace Client
 {
@@ -43,12 +44,12 @@ namespace Client
 
             // Read the script file and set the script code to the file contents
             Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
-            NetworkSend.SendSaveScript();
+            Sender.SendSaveScript();
         }
 
         private void Editor_Script_FormClosing(object sender, FormClosingEventArgs e)
         {
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
             GameState.MyEditorType = EditorType.None;
             Dispose();
         }

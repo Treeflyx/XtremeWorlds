@@ -1,7 +1,7 @@
 ﻿using Client.Net;
 using Core;
+using Core.Net;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 
 namespace Client
 {
@@ -10,7 +10,7 @@ namespace Client
     {
         public static void CloseShop()
         {
-            NetworkSend.SendCloseShop();
+            Sender.SendCloseShop();
             Gui.HideWindow(Gui.GetWindowIndex("winShop"));
             Gui.HideWindow(Gui.GetWindowIndex("winDescription"));
             GameState.ShopSelectedSlot = 0L;
@@ -100,35 +100,32 @@ namespace Client
 
         public static void SendRequestShop(int shopNum)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestShop);
-            buffer.WriteInt32(shopNum);
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestShop);
+            packetWriter.WriteInt32(shopNum);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void BuyItem(int shopSlot)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CBuyItem);
-            buffer.WriteInt32(shopSlot);
+            packetWriter.WriteEnum(Packets.ClientPackets.CBuyItem);
+            packetWriter.WriteInt32(shopSlot);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SellItem(int invslot)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CSellItem);
-            buffer.WriteInt32(invslot);
+            packetWriter.WriteEnum(Packets.ClientPackets.CSellItem);
+            packetWriter.WriteInt32(invslot);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         #endregion

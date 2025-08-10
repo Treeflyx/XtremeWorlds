@@ -1,7 +1,7 @@
 ﻿using Client.Net;
 using Core;
+using Core.Net;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 
 namespace Client
 {
@@ -110,13 +110,12 @@ namespace Client
 
         public static void SendRequestItem(int itemNum)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestItem);
-            buffer.WriteInt32(itemNum);
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestItem);
+            packetWriter.WriteInt32(itemNum);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         #endregion

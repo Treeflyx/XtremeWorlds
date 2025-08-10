@@ -2,8 +2,8 @@
 using System.Drawing;
 using Client.Net;
 using Core;
+using Core.Net;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 
 namespace Client
 {
@@ -94,13 +94,12 @@ namespace Client
 
         public static void SendRequestResource(int resourceNum)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestResource);
-
-            buffer.WriteInt32(resourceNum);
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            packetWriter.WriteInt32((int)Packets.ClientPackets.CRequestResource);
+            packetWriter.WriteInt32(resourceNum);
+            
+            Network.Send(packetWriter);
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using Client.Net;
 using Core;
-using Mirage.Sharp.Asfw;
+using Core.Net;
 
 namespace Client
 {
@@ -95,53 +95,49 @@ namespace Client
 
         public static void SendPartyRequest(string name)
         {
-            var buffer = new ByteStream(4);
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestParty);
-            buffer.WriteString(name);
+            var packetWriter = new PacketWriter();
+            
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestParty);
+            packetWriter.WriteString(name);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendAcceptParty()
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAcceptParty);
+            packetWriter.WriteEnum(Packets.ClientPackets.CAcceptParty);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendDeclineParty()
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CDeclineParty);
+            packetWriter.WriteEnum(Packets.ClientPackets.CDeclineParty);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendLeaveParty()
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CLeaveParty);
+            packetWriter.WriteEnum(Packets.ClientPackets.CLeaveParty);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendPartyChatMsg(string text)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter();
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CPartyChatMsg);
-            buffer.WriteString(text);
+            packetWriter.WriteInt32((int)Packets.ClientPackets.CPartyChatMsg);
+            packetWriter.WriteString(text);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         #endregion

@@ -1,8 +1,8 @@
 ﻿using Client.Net;
 using Core;
+using Core.Net;
 using static Core.Global.Command;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 
 namespace Client
 {
@@ -59,38 +59,35 @@ namespace Client
 
         public static void DepositItem(int invslot, int amount)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(12);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CDepositItem);
-            buffer.WriteInt32(invslot);
-            buffer.WriteInt32(amount);
+            packetWriter.WriteEnum(Packets.ClientPackets.CDepositItem);
+            packetWriter.WriteInt32(invslot);
+            packetWriter.WriteInt32(amount);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void WithdrawItem(byte bankSlot, int amount)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(9);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CWithdrawItem);
-            buffer.WriteByte(bankSlot);
-            buffer.WriteInt32(amount);
+            packetWriter.WriteEnum(Packets.ClientPackets.CWithdrawItem);
+            packetWriter.WriteByte(bankSlot);
+            packetWriter.WriteInt32(amount);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void ChangeBankSlots(int oldSlot, int newSlot)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(12);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CChangeBankSlots);
-            buffer.WriteInt32(oldSlot);
-            buffer.WriteInt32(newSlot);
+            packetWriter.WriteEnum(Packets.ClientPackets.CChangeBankSlots);
+            packetWriter.WriteInt32(oldSlot);
+            packetWriter.WriteInt32(newSlot);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void CloseBank()
@@ -101,12 +98,11 @@ namespace Client
                 Gui.HideWindow(Gui.GetWindowIndex("winDescription"));
             }
 
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CCloseBank);
+            packetWriter.WriteEnum(Packets.ClientPackets.CCloseBank);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
 
             GameState.InBank = false;
         }

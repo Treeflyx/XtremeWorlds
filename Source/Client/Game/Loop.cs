@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
+using Client.Net;
 using static Core.Global.Command;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Path = Core.Path;
@@ -44,7 +45,7 @@ namespace Client
             {
                 if (_tmr1000 < _tick)
                 {
-                    NetworkSend.GetPing();
+                    Sender.GetPing();
                     _tmr1000 = _tick + 1000;
                 }
 

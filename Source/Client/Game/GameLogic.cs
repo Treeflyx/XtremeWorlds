@@ -3,9 +3,10 @@ using Core.Localization;
 using Microsoft.Toolkit.HighPerformance;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 using System;
 using System.Data.Common;
+using Client.Net;
+using Core.Net;
 using static Core.Global.Command;
 using static Core.Type;
 using Color = Core.Color;
@@ -127,7 +128,6 @@ namespace Client
             int i;
             int n;
             string[] command;
-            ByteStream buffer;
 
             if (GameState.InGame)
             {
@@ -154,7 +154,7 @@ namespace Client
 
                 if (Strings.Len(chatText) > 0)
                 {
-                    NetworkSend.AdminMsg(chatText);
+                    Sender.AdminMsg(chatText);
                 }
 
                 Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
@@ -168,7 +168,7 @@ namespace Client
 
                 if (Strings.Len(chatText) > 0)
                 {
-                    NetworkSend.BroadcastMsg(chatText);
+                    Sender.BroadcastMsg(chatText);
                 }
 
                 Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
@@ -217,7 +217,7 @@ namespace Client
                 if (Strings.Len(chatText) > 0)
                 {
                     // Send the message to the player
-                    NetworkSend.PlayerMsg(chatText, name);
+                    Sender.PlayerMsg(chatText, name);
                 }
                 else
                 {
@@ -242,7 +242,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendUseEmote(Conversions.ToInteger(command[1]));
+                            Sender.SendUseEmote(Conversions.ToInteger(command[1]));
                             break;
                         }
 
@@ -263,7 +263,7 @@ namespace Client
                             {
                                 if (GameState.MyTargetType == (int)TargetType.Player)
                                 {
-                                    NetworkSend.SendPlayerInfo(GetPlayerName(GameState.MyTarget));
+                                    Sender.SendPlayerInfo(GetPlayerName(GameState.MyTarget));
                                     goto Continue1;
                                 }
                             }
@@ -275,21 +275,21 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendPlayerInfo(command[1]);
+                            Sender.SendPlayerInfo(command[1]);
                             break;
                         }
 
                     // Whos Online
                     case "/who":
                         {
-                            NetworkSend.SendWhosOnline();
+                            Sender.SendWhosOnline();
                             break;
                         }
 
                     // Requets level up
                     case "/levelup":
                         {
-                            NetworkSend.SendRequestLevelUp();
+                            Sender.SendRequestLevelUp();
                             break;
                         }
 
@@ -308,13 +308,10 @@ namespace Client
 
                     // Request stats
                     case "/stats":
-                        {
-                            buffer = new ByteStream(4);
-                            buffer.WriteInt32((int)Packets.ClientPackets.CGetStats);
-                            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-                            buffer.Dispose();
-                            break;
-                        }
+                        var packetWriter = new PacketWriter(4);
+                        packetWriter.WriteEnum(Packets.ClientPackets.CGetStats);
+                        Network.Send(packetWriter);
+                        break;
 
                     case "/party":
                         {
@@ -394,7 +391,7 @@ namespace Client
 
                     case "/acp":
                         {
-                            NetworkSend.SendRequestAdmin();
+                            Sender.SendRequestAdmin();
                             break;
                         }
 
@@ -414,7 +411,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendKick(command[1]);
+                            Sender.SendKick(command[1]);
                             break;
                         }
 
@@ -449,7 +446,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.WarpMeTo(command[1]);
+                            Sender.WarpMeTo(command[1]);
                             break;
                         }
 
@@ -469,7 +466,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.WarpToMe(command[1]);
+                            Sender.WarpToMe(command[1]);
                             break;
                         }
 
@@ -494,7 +491,7 @@ namespace Client
                             // Check to make sure its a valid map #
                             if (n >= 0 & n < Constant.MaxMaps)
                             {
-                                NetworkSend.WarpTo(n);
+                                Sender.WarpTo(n);
                             }
                             else
                             {
@@ -520,7 +517,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendSetSprite(Conversions.ToInteger(command[1]));
+                            Sender.SendSetSprite(Conversions.ToInteger(command[1]));
                             break;
                         }
 
@@ -534,7 +531,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestMapReport();
+                            Sender.SendRequestMapReport();
                             break;
                         }
 
@@ -572,7 +569,7 @@ namespace Client
                                 Text.AddText(LocalesManager.Get("AccessDenied"), (int)Core.Color.BrightRed);
                             }
 
-                            NetworkSend.SendRequestEditScript(0);
+                            Sender.SendRequestEditScript(0);
                             break;
                         }
 
@@ -593,7 +590,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendMotdChange(Strings.Right(chatText, Strings.Len(chatText) - 5));
+                            Sender.SendMotdChange(Strings.Right(chatText, Strings.Len(chatText) - 5));
                             break;
                         }
 
@@ -607,7 +604,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendBanList();
+                            Sender.SendBanList();
                             break;
                         }
 
@@ -627,7 +624,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendBan(command[1]);
+                            Sender.SendBan(command[1]);
                             break;
                         }
 
@@ -642,7 +639,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendBanDestroy();
+                            Sender.SendBanDestroy();
                             break;
                         }
 
@@ -661,7 +658,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendSetAccess(command[1], (byte)Conversions.ToLong(command[2]));
+                            Sender.SendSetAccess(command[1], (byte)Conversions.ToLong(command[2]));
                             break;
                         }
 
@@ -675,7 +672,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditResource();
+                            Sender.SendRequestEditResource();
                             break;
                         }
 
@@ -688,7 +685,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditAnimation();
+                            Sender.SendRequestEditAnimation();
                             break;
                         }
 
@@ -701,7 +698,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditItem();
+                            Sender.SendRequestEditItem();
                             break;
                         }
 
@@ -727,7 +724,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditNpc();
+                            Sender.SendRequestEditNpc();
                             break;
                         }
 
@@ -740,7 +737,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditJob();
+                            Sender.SendRequestEditJob();
                             break;
                         }
 
@@ -753,7 +750,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditSkill();
+                            Sender.SendRequestEditSkill();
                             break;
                         }
 
@@ -765,7 +762,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditShop();
+                            Sender.SendRequestEditShop();
                             break;
                         }
 
@@ -777,7 +774,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            NetworkSend.SendRequestEditMoral();
+                            Sender.SendRequestEditMoral();
                             break;
                         }
 
@@ -796,7 +793,7 @@ namespace Client
 
             else if (Strings.Len(chatText) > 0) // Say message
             {
-                NetworkSend.SayMsg(chatText);
+                Sender.SayMsg(chatText);
             }
 
         Continue1:
@@ -807,17 +804,18 @@ namespace Client
 
         public static void CheckMapGetItem()
         {
-            var buffer = new ByteStream(4);
-            buffer = new ByteStream(4);
-
-            if (General.GetTickCount() > Core.Data.Player[GameState.MyIndex].MapGetTimer + 250)
+            if (General.GetTickCount() <= Core.Data.Player[GameState.MyIndex].MapGetTimer + 250)
             {
-                Core.Data.Player[GameState.MyIndex].MapGetTimer = General.GetTickCount();
-                buffer.WriteInt32((int)Packets.ClientPackets.CMapGetItem);
-                NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
+                return;
             }
-
-            buffer.Dispose();
+            
+            Data.Player[GameState.MyIndex].MapGetTimer = General.GetTickCount();
+            
+            var packetWriter = new PacketWriter(4);
+            
+            packetWriter.WriteEnum(Packets.ClientPackets.CMapGetItem);
+            
+            Network.Send(packetWriter);
         }
 
         public static void ClearActionMsg(byte index)
@@ -1162,7 +1160,7 @@ namespace Client
                     case (long)DialogueType.DropItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
-                            NetworkSend.SendDropItem((int)GameState.DiaData1, (int)value);
+                            Sender.SendDropItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
@@ -1187,7 +1185,7 @@ namespace Client
 
                     case (long)DialogueType.ForgetSkill:
                         {
-                            NetworkSend.ForgetSkill((int)GameState.DiaData1);
+                            Sender.ForgetSkill((int)GameState.DiaData1);
                             break;
                         }
 
@@ -1205,7 +1203,7 @@ namespace Client
 
                     case (long)DialogueType.DeleteCharacter:
                         {
-                            NetworkSend.SendDelChar((byte)GameState.DiaData1);
+                            Sender.SendDelChar((byte)GameState.DiaData1);
                             break;
                         }
 
@@ -1433,9 +1431,9 @@ namespace Client
 
         public static void AddChar(string name, int sex, int job, int sprite)
         {
-            if (NetworkConfig.IsConnected == true)
+            if (Network.IsConnected == true)
             {
-                NetworkSend.SendAddChar(name, sex, job);
+                Sender.SendAddChar(name, sex, job);
             }
             else
             {

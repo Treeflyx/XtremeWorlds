@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace Client
@@ -31,7 +32,7 @@ namespace Client
             if (moralNum >= 0 & string.IsNullOrEmpty(Data.Moral[moralNum].Name) && GameState.MoralLoaded[moralNum] == 0)
             {
                 GameState.MoralLoaded[moralNum] = 1;
-                NetworkSend.SendRequestMoral(moralNum);
+                Sender.SendRequestMoral(moralNum);
             }
         }
 

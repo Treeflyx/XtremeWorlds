@@ -86,7 +86,7 @@ public class Script
             {
                 SetPlayerInvValue(index, invSlot, playerInvValue - amount);
             }
-            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1} ({2}x).", GetPlayerName(index), GameLogic.CheckGrammar(item.Name), amount), (int)Color.Yellow);
+            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1} ({2}x).", GetPlayerName(index), GameLogic.CheckGrammar(item.Name), amount));
         }
         else
         {
@@ -94,7 +94,7 @@ public class Script
             SetPlayerInv(index, invSlot, -1);
             SetPlayerInvValue(index, invSlot, 0);
 
-            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1}.", GetPlayerName(index), GameLogic.CheckGrammar(item.Name)), (int)Color.Yellow);
+            NetworkSend.MapMsg(mapNum, string.Format("{0} has dropped {1}.", GetPlayerName(index), GameLogic.CheckGrammar(item.Name)));
         }
 
         // Send inventory update
@@ -513,9 +513,8 @@ public class Script
                 {
                     if (GetPlayerMap(player.Id) == mapNum)
                     {
-                        data = PlayerData(player.Id);
-                        dataSize = data.Length;
-                        NetworkConfig.SendDataTo(index, data, dataSize);
+                        data = GetPlayerDataPacket(player.Id);
+                        PlayerService.Instance.SendDataTo(index, data);
                         SendPlayerXyTo(index, player.Id);
                         NetworkSend.SendMapEquipmentTo(index, player.Id);
                     }
@@ -526,8 +525,8 @@ public class Script
         EventLogic.SpawnMapEventsFor(index, GetPlayerMap(index));
 
         // Send index's player data to everyone on the map including himself
-        data = PlayerData(index);
-        NetworkConfig.SendDataToMap(mapNum, data, data.Length);
+        data = GetPlayerDataPacket(index);
+        NetworkConfig.SendDataToMap(mapNum, data);
         SendPlayerXyToMap(index);
         NetworkSend.SendMapEquipment(index);
         NetworkSend.SendVitals(index);

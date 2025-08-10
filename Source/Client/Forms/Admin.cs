@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Core.Localization;
 using Microsoft.VisualBasic;
 using static Core.Global.Command;
@@ -36,7 +37,7 @@ namespace Client
 
         private void FrmAdmin_Load(object sender, EventArgs e)
         {
-            NetworkSend.SendRequestMapReport();
+            Sender.SendRequestMapReport();
             cmbAccess.SelectedIndex = 0;
         }
 
@@ -51,7 +52,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.WarpTo((int)Math.Round(nudAdminMap.Value));
+            Sender.WarpTo((int)Math.Round(nudAdminMap.Value));
         }
 
         private void BtnAdminBan_Click(object sender, EventArgs e)
@@ -62,7 +63,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendBan(Strings.Trim(txtAdminName.Text));
+            Sender.SendBan(Strings.Trim(txtAdminName.Text));
         }
 
         private void BtnAdminKick_Click(object sender, EventArgs e)
@@ -73,7 +74,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendKick(Strings.Trim(txtAdminName.Text));
+            Sender.SendKick(Strings.Trim(txtAdminName.Text));
         }
 
         private void BtnAdminWarp2Me_Click(object sender, EventArgs e)
@@ -87,7 +88,7 @@ namespace Client
             if (Information.IsNumeric(Strings.Trim(txtAdminName.Text)))
                 return;
 
-            NetworkSend.WarpToMe(Strings.Trim(txtAdminName.Text));
+            Sender.WarpToMe(Strings.Trim(txtAdminName.Text));
         }
 
         private void BtnAdminWarpMe2_Click(object sender, EventArgs e)
@@ -103,7 +104,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.WarpMeTo(Strings.Trim(txtAdminName.Text));
+            Sender.WarpMeTo(Strings.Trim(txtAdminName.Text));
         }
 
         private void BtnAdminSetAccess_Click(object sender, EventArgs e)
@@ -119,7 +120,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendSetAccess(txtAdminName.Text, (byte)(cmbAccess.SelectedIndex + 1));
+            Sender.SendSetAccess(txtAdminName.Text, (byte)(cmbAccess.SelectedIndex + 1));
         }
 
         private void BtnAdminSetSprite_Click(object sender, EventArgs e)
@@ -130,7 +131,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendSetSprite((int)Math.Round(nudAdminSprite.Value));
+            Sender.SendSetSprite((int)Math.Round(nudAdminSprite.Value));
         }
 
         #endregion
@@ -145,7 +146,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditAnimation();
+            Sender.SendRequestEditAnimation();
         }
 
         private void btnJobEditor_Click(object sender, EventArgs e)
@@ -156,7 +157,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditJob();
+            Sender.SendRequestEditJob();
         }
 
         private void btnItemEditor_Click(object sender, EventArgs e)
@@ -167,7 +168,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditItem();
+            Sender.SendRequestEditItem();
         }
 
         private void BtnMapEditor_Click(object sender, EventArgs e)
@@ -189,7 +190,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditNpc();
+            Sender.SendRequestEditNpc();
         }
         private void btnProjectiles_Click(object sender, EventArgs e)
         {
@@ -210,7 +211,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditResource();
+            Sender.SendRequestEditResource();
         }
 
         private void btnShopEditor_Click(object sender, EventArgs e)
@@ -221,7 +222,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditShop();
+            Sender.SendRequestEditShop();
         }
 
         private void btnSkillEditor_Click(object sender, EventArgs e)
@@ -232,7 +233,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditSkill();
+            Sender.SendRequestEditSkill();
         }
 
         private void FrmAdmin_FormClosing(object sender, FormClosingEventArgs e)
@@ -247,7 +248,7 @@ namespace Client
                 Client.Text.AddText(LocalesManager.Get("AccessDenied"), (int)Core.Color.BrightRed);
                 return;
             }
-            NetworkSend.SendRequestMapReport();
+            Sender.SendRequestMapReport();
         }
 
         private void LstMaps_DoubleClick(object sender, EventArgs e)
@@ -261,7 +262,7 @@ namespace Client
             if (lstMaps.SelectedIndices.Count == 0 || lstMaps.SelectedIndices[0] == 0)
                 return;
 
-            NetworkSend.WarpTo(lstMaps.SelectedIndices[0] + 1);
+            Sender.WarpTo(lstMaps.SelectedIndices[0] + 1);
         }
 
         #endregion
@@ -275,7 +276,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestLevelUp();
+            Sender.SendRequestLevelUp();
         }
 
         private void BtnALoc_Click(object sender, EventArgs e)
@@ -308,7 +309,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditMoral();
+            Sender.SendRequestEditMoral();
         }
 
 
@@ -320,7 +321,7 @@ namespace Client
                 return;
             }
 
-            NetworkSend.SendRequestEditScript(0);
+            Sender.SendRequestEditScript(0);
         }
 
         #endregion

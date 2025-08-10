@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 using Newtonsoft.Json.Linq;
 using Server.Net;
 using System;
 using System.Reflection;
+using Core.Net;
 using static Core.Global.Command;
 using Type = Core.Type;
 
@@ -141,12 +141,12 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Bind(GamePacketId.FromClient.CCloseEditor, Packet_CloseEditor);
     }
 
-    private static void Packet_Ping(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_Ping(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         Data.TempPlayer[session.Id].DataPackets += 1;
     }
 
-    private static void Packet_Login(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_Login(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var reader = new PacketReader(bytes);
 
@@ -231,7 +231,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendJobs(session);
     }
 
-    private static void Packet_Register(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_Register(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -309,7 +309,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendJobs(session);
     }
 
-    private static void Packet_AddChar(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_AddChar(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         string name;
         byte slot;
@@ -392,7 +392,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_UseChar(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_UseChar(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var reader = new PacketReader(bytes);
 
@@ -407,7 +407,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     return;
                 }
 
-                NetworkConfig.LoadAccount(session, Core.Data.Account[session.Id].Login, slot);
+                NetworkConfig.LoadAccount(session, Data.Account[session.Id].Login, slot);
             }
         }
         else
@@ -416,7 +416,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_DelChar(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_DelChar(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -443,7 +443,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_Logout(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_Logout(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (!NetworkConfig.IsPlaying(session.Id))
         {
@@ -457,7 +457,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         task.Wait();
     }
 
-    private static void Packet_SayMessage(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_SayMessage(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -469,7 +469,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendChatBubble(GetPlayerMap(session.Id), session.Id, (int) TargetType.Player, msg, (int) Color.White);
     }
 
-    private static void Packet_BroadCastMsg(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_BroadCastMsg(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -481,7 +481,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Console.WriteLine(s);
     }
 
-    public static void Packet_PlayerMsg(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_PlayerMsg(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -508,23 +508,23 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_AdminMsg(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_AdminMsg(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var s = default(string);
         var buffer = new PacketReader(bytes);
 
         var msg = buffer.ReadString();
 
-        NetworkSend.AdminMsg(GetPlayerMap(session.Id), msg, (int) Color.BrightCyan);
+        NetworkSend.AdminMsg(msg);
         Log.Add(s, Constant.PlayerLog);
         Console.WriteLine(s);
     }
 
-    private static void Packet_PlayerMove(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_PlayerMove(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
-        if (Core.Data.TempPlayer[session.Id].GettingMap)
+        if (Data.TempPlayer[session.Id].GettingMap)
             return;
 
         var dir = buffer.ReadByte();
@@ -533,25 +533,25 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var tmpY = buffer.ReadInt32();
 
         SetPlayerDir(session.Id, dir);
-        Core.Data.Player[session.Id].Moving = movement;
+        Data.Player[session.Id].Moving = movement;
     }
 
-    public static void Packet_StopPlayerMove(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_StopPlayerMove(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
-        if (Core.Data.TempPlayer[session.Id].GettingMap)
+        if (Data.TempPlayer[session.Id].GettingMap)
             return;
 
-        Core.Data.Player[session.Id].IsMoving = false;
-        Core.Data.Player[session.Id].Moving = 0;
+        Data.Player[session.Id].IsMoving = false;
+        Data.Player[session.Id].Moving = 0;
     }
 
-    public static void Packet_PlayerDirection(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_PlayerDirection(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
-        if (Core.Data.TempPlayer[session.Id].GettingMap == true)
+        if (Data.TempPlayer[session.Id].GettingMap == true)
             return;
 
         var dir = buffer.ReadInt32();
@@ -562,14 +562,16 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         SetPlayerDir(session.Id, dir);
 
-        using var buffer2 = new ByteStream(4);
-        buffer2.WriteInt32((int) Packets.ServerPackets.SPlayerDir);
-        buffer2.WriteInt32(session.Id);
-        buffer2.WriteByte(GetPlayerDir(session.Id));
-        NetworkConfig.SendDataToMapBut(session.Id, GetPlayerMap(session.Id), buffer2.UnreadData, buffer2.WritePosition);
+        var packetWriter = new PacketWriter(12);
+        
+        packetWriter.WriteEnum( Packets.ServerPackets.SPlayerDir);
+        packetWriter.WriteInt32(session.Id);
+        packetWriter.WriteByte(GetPlayerDir(session.Id));
+        
+        NetworkConfig.SendDataToMapBut(session.Id, GetPlayerMap(session.Id), packetWriter.GetBytes());
     }
 
-    public static void Packet_UseItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_UseItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -578,17 +580,17 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.UseItem(session.Id, invNum);
     }
 
-    public static void Packet_Attack(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Attack(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var x = 0;
         var y = 0;
 
         // can't attack whilst casting
-        if (Core.Data.TempPlayer[session.Id].SkillBuffer >= 0)
+        if (Data.TempPlayer[session.Id].SkillBuffer >= 0)
             return;
 
         // can't attack whilst stunned
-        if (Core.Data.TempPlayer[session.Id].StunDuration > 0)
+        if (Data.TempPlayer[session.Id].StunDuration > 0)
             return;
 
         NetworkSend.SendPlayerAttack(session.Id);
@@ -596,19 +598,19 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // Projectile check
         if (GetPlayerEquipment(session.Id, Equipment.Weapon) >= 0)
         {
-            if (Core.Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Projectile > 0) // Item has a projectile
+            if (Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Projectile > 0) // Item has a projectile
             {
-                if (Core.Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo > 0)
+                if (Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo > 0)
                 {
-                    if (Conversions.ToBoolean(global::Server.Player.HasItem(session.Id, Core.Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
+                    if (Conversions.ToBoolean(global::Server.Player.HasItem(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
                     {
-                        global::Server.Player.TakeInv(session.Id, Core.Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo, 1);
+                        global::Server.Player.TakeInv(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo, 1);
                         Projectile.PlayerFireProjectile(session.Id);
                         return;
                     }
                     else
                     {
-                        NetworkSend.PlayerMsg(session.Id, "No more " + Core.Data.Item[Core.Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo].Name + " !", (int) Core.Color.BrightRed);
+                        NetworkSend.PlayerMsg(session.Id, "No more " + Data.Item[Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo].Name + " !", (int) Color.BrightRed);
                         return;
                     }
                 }
@@ -704,7 +706,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Resource.CheckResource(session.Id, x, y);
     }
 
-    public static void Packet_PlayerInfo(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_PlayerInfo(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         int n;
         var buffer = new PacketReader(bytes);
@@ -738,7 +740,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_WarpMeTo(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_WarpMeTo(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -770,7 +772,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_WarpToMe(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_WarpToMe(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -802,7 +804,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_WarpTo(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_WarpTo(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -823,7 +825,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Log.Add(GetPlayerName(session.Id) + " warped to map #" + n + ".", Constant.AdminLog);
     }
 
-    public static void Packet_SetSprite(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SetSprite(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -839,7 +841,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendPlayerData(session.Id);
     }
 
-    public static void Packet_GetStats(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_GetStats(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         NetworkSend.PlayerMsg(session.Id, "Stats: " + GetPlayerName(session.Id), (int) Color.Yellow);
         NetworkSend.PlayerMsg(session.Id, "Level: " + GetPlayerLevel(session.Id) + "  Exp: " + GetPlayerExp(session.Id) + "/" + GetPlayerNextLevel(session.Id), (int) Color.Yellow);
@@ -855,7 +857,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.PlayerMsg(session.Id, "Critical Hit Chance: " + n + "%, Block Chance: " + i + "%", (int) Color.Yellow);
     }
 
-    public static void Packet_RequestNewMap(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestNewMap(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -865,60 +867,62 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.PlayerMove(session.Id, dir, 1, true);
     }
 
-    public static void Packet_MapData(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_MapData(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         int x;
         int y;
 
-        // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
+        {
             return;
+        }
 
-        var buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(bytes.ToArray()));
 
         var mapNum = GetPlayerMap(session.Id);
 
         var ii = Data.Map[mapNum].Revision + 1;
         Database.ClearMap(mapNum);
+        
+        var packetReader = new PacketReader(bytes);
 
-        Data.Map[mapNum].Name = buffer.ReadString();
-        Data.Map[mapNum].Music = buffer.ReadString();
+        Data.Map[mapNum].Name = packetReader.ReadString();
+        Data.Map[mapNum].Music = packetReader.ReadString();
         Data.Map[mapNum].Revision = ii;
-        Data.Map[mapNum].Moral = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].Tileset = buffer.ReadInt32();
-        Data.Map[mapNum].Up = buffer.ReadInt32();
-        Data.Map[mapNum].Down = buffer.ReadInt32();
-        Data.Map[mapNum].Left = buffer.ReadInt32();
-        Data.Map[mapNum].Right = buffer.ReadInt32();
-        Data.Map[mapNum].BootMap = buffer.ReadInt32();
-        Data.Map[mapNum].BootX = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].BootY = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MaxX = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MaxY = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].Weather = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].Fog = buffer.ReadInt32();
-        Data.Map[mapNum].WeatherIntensity = buffer.ReadInt32();
-        Data.Map[mapNum].FogOpacity = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].FogSpeed = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MapTint = buffer.ReadBoolean();
-        Data.Map[mapNum].MapTintR = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MapTintG = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MapTintB = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].MapTintA = (byte) buffer.ReadInt32();
-        Data.Map[mapNum].Panorama = buffer.ReadByte();
-        Data.Map[mapNum].Parallax = buffer.ReadByte();
-        Data.Map[mapNum].Brightness = buffer.ReadByte();
-        Data.Map[mapNum].NoRespawn = buffer.ReadBoolean();
-        Data.Map[mapNum].Indoors = buffer.ReadBoolean();
-        Data.Map[mapNum].Shop = buffer.ReadInt32();
+        Data.Map[mapNum].Moral = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].Tileset = packetReader.ReadInt32();
+        Data.Map[mapNum].Up = packetReader.ReadInt32();
+        Data.Map[mapNum].Down = packetReader.ReadInt32();
+        Data.Map[mapNum].Left = packetReader.ReadInt32();
+        Data.Map[mapNum].Right = packetReader.ReadInt32();
+        Data.Map[mapNum].BootMap = packetReader.ReadInt32();
+        Data.Map[mapNum].BootX = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].BootY = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MaxX = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MaxY = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].Weather = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].Fog = packetReader.ReadInt32();
+        Data.Map[mapNum].WeatherIntensity = packetReader.ReadInt32();
+        Data.Map[mapNum].FogOpacity = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].FogSpeed = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MapTint = packetReader.ReadBoolean();
+        Data.Map[mapNum].MapTintR = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MapTintG = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MapTintB = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].MapTintA = (byte) packetReader.ReadInt32();
+        Data.Map[mapNum].Panorama = packetReader.ReadByte();
+        Data.Map[mapNum].Parallax = packetReader.ReadByte();
+        Data.Map[mapNum].Brightness = packetReader.ReadByte();
+        Data.Map[mapNum].NoRespawn = packetReader.ReadBoolean();
+        Data.Map[mapNum].Indoors = packetReader.ReadBoolean();
+        Data.Map[mapNum].Shop = packetReader.ReadInt32();
 
-        Data.Map[mapNum].Tile = new Core.Type.Tile[(Data.Map[mapNum].MaxX), (Data.Map[mapNum].MaxY)];
-
-        var loopTo = Core.Constant.MaxMapNpcs;
-        for (x = 0; x < loopTo; x++)
+        Data.Map[mapNum].Tile = new Type.Tile[Data.Map[mapNum].MaxX, Data.Map[mapNum].MaxY];
+        
+        for (x = 0; x < Core.Constant.MaxMapNpcs; x++)
         {
             Database.ClearMapNpc(x, mapNum);
-            Data.Map[mapNum].Npc[x] = buffer.ReadInt32();
+            
+            Data.Map[mapNum].Npc[x] = packetReader.ReadInt32();
         }
 
         {
@@ -929,30 +933,30 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 var loopTo2 = (int) withBlock.MaxY;
                 for (y = 0; y < loopTo2; y++)
                 {
-                    withBlock.Tile[x, y].Data1 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].Data2 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].Data3 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].Data1_2 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].Data2_2 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].Data3_2 = buffer.ReadInt32();
-                    withBlock.Tile[x, y].DirBlock = (byte) buffer.ReadInt32();
-                    var loopTo3 = System.Enum.GetValues(typeof(MapLayer)).Length;
-                    withBlock.Tile[x, y].Layer = new Core.Type.Layer[loopTo3];
+                    withBlock.Tile[x, y].Data1 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Data2 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Data3 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Data1_2 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Data2_2 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Data3_2 = packetReader.ReadInt32();
+                    withBlock.Tile[x, y].DirBlock = (byte) packetReader.ReadInt32();
+                    var loopTo3 = Enum.GetValues(typeof(MapLayer)).Length;
+                    withBlock.Tile[x, y].Layer = new Type.Layer[loopTo3];
                     for (var i = 0; i < (int) loopTo3; i++)
                     {
-                        withBlock.Tile[x, y].Layer[i].Tileset = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Layer[i].X = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Layer[i].Y = buffer.ReadInt32();
-                        withBlock.Tile[x, y].Layer[i].AutoTile = (byte) buffer.ReadInt32();
+                        withBlock.Tile[x, y].Layer[i].Tileset = packetReader.ReadInt32();
+                        withBlock.Tile[x, y].Layer[i].X = packetReader.ReadInt32();
+                        withBlock.Tile[x, y].Layer[i].Y = packetReader.ReadInt32();
+                        withBlock.Tile[x, y].Layer[i].AutoTile = (byte) packetReader.ReadInt32();
                     }
 
-                    withBlock.Tile[x, y].Type = (TileType) buffer.ReadInt32();
-                    withBlock.Tile[x, y].Type2 = (TileType) buffer.ReadInt32();
+                    withBlock.Tile[x, y].Type = (TileType) packetReader.ReadInt32();
+                    withBlock.Tile[x, y].Type2 = (TileType) packetReader.ReadInt32();
                 }
             }
         }
 
-        Data.Map[mapNum].EventCount = buffer.ReadInt32();
+        Data.Map[mapNum].EventCount = packetReader.ReadInt32();
 
         if (Data.Map[mapNum].EventCount > 0)
         {
@@ -962,87 +966,87 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             {
                 {
                     ref var withBlock1 = ref Data.Map[mapNum].Event[i];
-                    withBlock1.Name = buffer.ReadString();
-                    withBlock1.Globals = buffer.ReadByte();
-                    withBlock1.X = buffer.ReadInt32();
-                    withBlock1.Y = buffer.ReadInt32();
-                    withBlock1.PageCount = buffer.ReadInt32();
+                    withBlock1.Name = packetReader.ReadString();
+                    withBlock1.Globals = packetReader.ReadByte();
+                    withBlock1.X = packetReader.ReadInt32();
+                    withBlock1.Y = packetReader.ReadInt32();
+                    withBlock1.PageCount = packetReader.ReadInt32();
                 }
 
                 if (Data.Map[mapNum].Event[i].PageCount > 0)
                 {
-                    Data.Map[mapNum].Event[i].Pages = new Core.Type.EventPage[Data.Map[mapNum].Event[i].PageCount];
-                    Array.Resize(ref Core.Data.TempPlayer[i].EventMap.EventPages, Data.Map[mapNum].Event[i].PageCount);
+                    Data.Map[mapNum].Event[i].Pages = new Type.EventPage[Data.Map[mapNum].Event[i].PageCount];
+                    Array.Resize(ref Data.TempPlayer[i].EventMap.EventPages, Data.Map[mapNum].Event[i].PageCount);
 
                     var loopTo5 = Data.Map[mapNum].Event[i].PageCount;
                     for (x = 0; x < (int) loopTo5; x++)
                     {
                         {
                             ref var withBlock2 = ref Data.Map[mapNum].Event[i].Pages[x];
-                            withBlock2.ChkVariable = buffer.ReadInt32();
-                            withBlock2.VariableIndex = buffer.ReadInt32();
-                            withBlock2.VariableCondition = buffer.ReadInt32();
-                            withBlock2.VariableCompare = buffer.ReadInt32();
+                            withBlock2.ChkVariable = packetReader.ReadInt32();
+                            withBlock2.VariableIndex = packetReader.ReadInt32();
+                            withBlock2.VariableCondition = packetReader.ReadInt32();
+                            withBlock2.VariableCompare = packetReader.ReadInt32();
 
-                            withBlock2.ChkSwitch = buffer.ReadInt32();
-                            withBlock2.SwitchIndex = buffer.ReadInt32();
-                            withBlock2.SwitchCompare = buffer.ReadInt32();
+                            withBlock2.ChkSwitch = packetReader.ReadInt32();
+                            withBlock2.SwitchIndex = packetReader.ReadInt32();
+                            withBlock2.SwitchCompare = packetReader.ReadInt32();
 
-                            withBlock2.ChkHasItem = buffer.ReadInt32();
-                            withBlock2.HasItemIndex = buffer.ReadInt32();
-                            withBlock2.HasItemAmount = buffer.ReadInt32();
+                            withBlock2.ChkHasItem = packetReader.ReadInt32();
+                            withBlock2.HasItemIndex = packetReader.ReadInt32();
+                            withBlock2.HasItemAmount = packetReader.ReadInt32();
 
-                            withBlock2.ChkSelfSwitch = buffer.ReadInt32();
-                            withBlock2.SelfSwitchIndex = buffer.ReadInt32();
-                            withBlock2.SelfSwitchCompare = buffer.ReadInt32();
+                            withBlock2.ChkSelfSwitch = packetReader.ReadInt32();
+                            withBlock2.SelfSwitchIndex = packetReader.ReadInt32();
+                            withBlock2.SelfSwitchCompare = packetReader.ReadInt32();
 
-                            withBlock2.GraphicType = buffer.ReadByte();
-                            withBlock2.Graphic = buffer.ReadInt32();
-                            withBlock2.GraphicX = buffer.ReadInt32();
-                            withBlock2.GraphicY = buffer.ReadInt32();
-                            withBlock2.GraphicX2 = buffer.ReadInt32();
-                            withBlock2.GraphicY2 = buffer.ReadInt32();
+                            withBlock2.GraphicType = packetReader.ReadByte();
+                            withBlock2.Graphic = packetReader.ReadInt32();
+                            withBlock2.GraphicX = packetReader.ReadInt32();
+                            withBlock2.GraphicY = packetReader.ReadInt32();
+                            withBlock2.GraphicX2 = packetReader.ReadInt32();
+                            withBlock2.GraphicY2 = packetReader.ReadInt32();
 
-                            withBlock2.MoveType = buffer.ReadByte();
-                            withBlock2.MoveSpeed = buffer.ReadByte();
-                            withBlock2.MoveFreq = buffer.ReadByte();
-                            withBlock2.MoveRouteCount = buffer.ReadInt32();
-                            withBlock2.IgnoreMoveRoute = buffer.ReadInt32();
-                            withBlock2.RepeatMoveRoute = buffer.ReadInt32();
+                            withBlock2.MoveType = packetReader.ReadByte();
+                            withBlock2.MoveSpeed = packetReader.ReadByte();
+                            withBlock2.MoveFreq = packetReader.ReadByte();
+                            withBlock2.MoveRouteCount = packetReader.ReadInt32();
+                            withBlock2.IgnoreMoveRoute = packetReader.ReadInt32();
+                            withBlock2.RepeatMoveRoute = packetReader.ReadInt32();
 
                             if (withBlock2.MoveRouteCount > 0)
                             {
-                                Data.Map[mapNum].Event[i].Pages[x].MoveRoute = new Core.Type.MoveRoute[withBlock2.MoveRouteCount];
+                                Data.Map[mapNum].Event[i].Pages[x].MoveRoute = new Type.MoveRoute[withBlock2.MoveRouteCount];
                                 var loopTo6 = withBlock2.MoveRouteCount;
                                 for (y = 0; y < (int) loopTo6; y++)
                                 {
-                                    withBlock2.MoveRoute[y].Index = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data1 = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data2 = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data3 = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data4 = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data5 = buffer.ReadInt32();
-                                    withBlock2.MoveRoute[y].Data6 = buffer.ReadInt32();
+                                    withBlock2.MoveRoute[y].Index = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data1 = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data2 = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data3 = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data4 = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data5 = packetReader.ReadInt32();
+                                    withBlock2.MoveRoute[y].Data6 = packetReader.ReadInt32();
                                 }
                             }
 
-                            withBlock2.WalkAnim = buffer.ReadInt32();
-                            withBlock2.DirFix = buffer.ReadInt32();
-                            withBlock2.WalkThrough = buffer.ReadInt32();
-                            withBlock2.ShowName = buffer.ReadInt32();
-                            withBlock2.Trigger = buffer.ReadByte();
-                            withBlock2.CommandListCount = buffer.ReadInt32();
-                            withBlock2.Position = buffer.ReadByte();
+                            withBlock2.WalkAnim = packetReader.ReadInt32();
+                            withBlock2.DirFix = packetReader.ReadInt32();
+                            withBlock2.WalkThrough = packetReader.ReadInt32();
+                            withBlock2.ShowName = packetReader.ReadInt32();
+                            withBlock2.Trigger = packetReader.ReadByte();
+                            withBlock2.CommandListCount = packetReader.ReadInt32();
+                            withBlock2.Position = packetReader.ReadByte();
                         }
 
                         if (Data.Map[mapNum].Event[i].Pages[x].CommandListCount > 0)
                         {
-                            Data.Map[mapNum].Event[i].Pages[x].CommandList = new Core.Type.CommandList[Data.Map[mapNum].Event[i].Pages[x].CommandListCount];
+                            Data.Map[mapNum].Event[i].Pages[x].CommandList = new Type.CommandList[Data.Map[mapNum].Event[i].Pages[x].CommandListCount];
                             var loopTo7 = Data.Map[mapNum].Event[i].Pages[x].CommandListCount;
                             for (y = 0; y < (int) loopTo7; y++)
                             {
-                                Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount = buffer.ReadInt32();
-                                Data.Map[mapNum].Event[i].Pages[x].CommandList[y].ParentList = buffer.ReadInt32();
+                                Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount = packetReader.ReadInt32();
+                                Data.Map[mapNum].Event[i].Pages[x].CommandList[y].ParentList = packetReader.ReadInt32();
                                 if (Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount > 0)
                                 {
                                     Data.Map[mapNum].Event[i].Pages[x].CommandList[y].Commands = new Core.Type.EventCommand[Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount];
@@ -1050,38 +1054,38 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                                     {
                                         {
                                             ref var withBlock3 = ref Data.Map[mapNum].Event[i].Pages[x].CommandList[y].Commands[z];
-                                            withBlock3.Index = buffer.ReadInt32();
-                                            withBlock3.Text1 = buffer.ReadString();
-                                            withBlock3.Text2 = buffer.ReadString();
-                                            withBlock3.Text3 = buffer.ReadString();
-                                            withBlock3.Text4 = buffer.ReadString();
-                                            withBlock3.Text5 = buffer.ReadString();
-                                            withBlock3.Data1 = buffer.ReadInt32();
-                                            withBlock3.Data2 = buffer.ReadInt32();
-                                            withBlock3.Data3 = buffer.ReadInt32();
-                                            withBlock3.Data4 = buffer.ReadInt32();
-                                            withBlock3.Data5 = buffer.ReadInt32();
-                                            withBlock3.Data6 = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.CommandList = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.Condition = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.Data1 = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.Data2 = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.Data3 = buffer.ReadInt32();
-                                            withBlock3.ConditionalBranch.ElseCommandList = buffer.ReadInt32();
-                                            withBlock3.MoveRouteCount = buffer.ReadInt32();
+                                            withBlock3.Index = packetReader.ReadInt32();
+                                            withBlock3.Text1 = packetReader.ReadString();
+                                            withBlock3.Text2 = packetReader.ReadString();
+                                            withBlock3.Text3 = packetReader.ReadString();
+                                            withBlock3.Text4 = packetReader.ReadString();
+                                            withBlock3.Text5 = packetReader.ReadString();
+                                            withBlock3.Data1 = packetReader.ReadInt32();
+                                            withBlock3.Data2 = packetReader.ReadInt32();
+                                            withBlock3.Data3 = packetReader.ReadInt32();
+                                            withBlock3.Data4 = packetReader.ReadInt32();
+                                            withBlock3.Data5 = packetReader.ReadInt32();
+                                            withBlock3.Data6 = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.CommandList = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.Condition = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.Data1 = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.Data2 = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.Data3 = packetReader.ReadInt32();
+                                            withBlock3.ConditionalBranch.ElseCommandList = packetReader.ReadInt32();
+                                            withBlock3.MoveRouteCount = packetReader.ReadInt32();
                                             var tmpCount = withBlock3.MoveRouteCount;
                                             if (tmpCount > 0)
                                             {
                                                 Array.Resize(ref withBlock3.MoveRoute, tmpCount);
                                                 for (int w = 0, loopTo9 = tmpCount; w < (int) loopTo9; w++)
                                                 {
-                                                    withBlock3.MoveRoute[w].Index = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data1 = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data2 = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data3 = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data4 = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data5 = buffer.ReadInt32();
-                                                    withBlock3.MoveRoute[w].Data6 = buffer.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Index = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data1 = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data2 = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data3 = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data4 = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data5 = packetReader.ReadInt32();
+                                                    withBlock3.MoveRoute[w].Data6 = packetReader.ReadInt32();
                                                 }
                                             }
                                         }
@@ -1114,7 +1118,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (NetworkConfig.IsPlaying(i))
             {
-                if (Core.Data.Player[i].Map == mapNum)
+                if (Data.Player[i].Map == mapNum)
                 {
                     EventLogic.SpawnMapEventsFor(i, mapNum);
                 }
@@ -1144,7 +1148,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_NeedMap(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_NeedMap(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1166,15 +1170,15 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (!string.IsNullOrEmpty(Data.Shop[Data.Map[GetPlayerMap(session.Id)].Shop].Name))
             {
-                Core.Data.TempPlayer[session.Id].InShop = Data.Map[GetPlayerMap(session.Id)].Shop;
+                Data.TempPlayer[session.Id].InShop = Data.Map[GetPlayerMap(session.Id)].Shop;
                 NetworkSend.SendOpenShop(session.Id, Data.Map[GetPlayerMap(session.Id)].Shop);
             }
         }
 
-        Core.Data.TempPlayer[session.Id].GettingMap = false;
+        Data.TempPlayer[session.Id].GettingMap = false;
     }
 
-    public static void Packet_RespawnMap(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RespawnMap(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         int i;
         var buffer = new PacketReader(bytes);
@@ -1206,7 +1210,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Log.Add(GetPlayerName(session.Id) + " has respawned map #" + GetPlayerMap(session.Id), Constant.AdminLog);
     }
 
-    public static void Packet_MapReport(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_MapReport(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
@@ -1215,7 +1219,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendMapReport(session.Id);
     }
 
-    public static void Packet_KickPlayer(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_KickPlayer(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1255,7 +1259,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_Banlist(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Banlist(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Moderator)
@@ -1266,7 +1270,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.PlayerMsg(session.Id, "Command /banlist is not available.", (int) Color.Yellow);
     }
 
-    public static void Packet_DestroyBans(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_DestroyBans(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Owner)
@@ -1280,7 +1284,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.PlayerMsg(session.Id, "Ban list destroyed.", (int) Color.BrightGreen);
     }
 
-    public static void Packet_BanPlayer(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_BanPlayer(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1315,7 +1319,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    private static void Packet_RequestEditMap(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_RequestEditMap(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
@@ -1337,15 +1341,16 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Event.SendMapEventData(session.Id);
         Moral.SendMorals(session.Id);
 
-        Core.Data.TempPlayer[session.Id].Editor = EditorType.Map;
+        Data.TempPlayer[session.Id].Editor = EditorType.Map;
 
-        var buffer = new ByteStream(4);
-        buffer.WriteInt32((int) Packets.ServerPackets.SEditMap);
+        var packetWriter = new PacketWriter(4);
+        
+        packetWriter.WriteEnum(Packets.ServerPackets.SEditMap);
 
-        NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
+        PlayerService.Instance.SendDataTo(session.Id, packetWriter.GetBytes());
     }
 
-    public static void Packet_RequestEditShop(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestEditShop(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
@@ -1359,17 +1364,19 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
         }
 
-        Core.Data.TempPlayer[session.Id].Editor = EditorType.Shop;
+        Data.TempPlayer[session.Id].Editor = EditorType.Shop;
 
         Item.SendItems(session.Id);
         NetworkSend.SendShops(session.Id);
 
-        var buffer = new ByteStream(4);
-        buffer.WriteInt32((int) Packets.ServerPackets.SShopEditor);
-        NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
+        var packetWriter = new PacketWriter(4);
+        
+        packetWriter.WriteEnum(Packets.ServerPackets.SShopEditor);
+        
+        PlayerService.Instance.SendDataTo(session.Id, packetWriter.GetBytes());
     }
 
-    public static void Packet_SaveShop(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SaveShop(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1401,7 +1408,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Log.Add(GetAccountLogin(session.Id) + " saving shop #" + shopNum + ".", Constant.AdminLog);
     }
 
-    public static void Packet_RequestEditSkill(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestEditSkill(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
@@ -1415,19 +1422,21 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
         }
 
-        Core.Data.TempPlayer[session.Id].Editor = EditorType.Skill;
+        Data.TempPlayer[session.Id].Editor = EditorType.Skill;
 
         NetworkSend.SendJobs(session);
         Projectile.SendProjectiles(session.Id);
         Animation.SendAnimations(session.Id);
         NetworkSend.SendSkills(session.Id);
 
-        var buffer = new ByteStream(4);
-        buffer.WriteInt32((int) Packets.ServerPackets.SSkillEditor);
-        NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
+        var packetWriter = new PacketWriter(4);
+        
+        packetWriter.WriteEnum(Packets.ServerPackets.SSkillEditor);
+        
+        PlayerService.Instance.SendDataTo(session.Id, packetWriter.GetBytes());
     }
 
-    public static void Packet_SaveSkill(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SaveSkill(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1473,7 +1482,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Log.Add(GetAccountLogin(session.Id) + " saved Skill #" + skillNum + ".", Constant.AdminLog);
     }
 
-    public static void Packet_SetAccess(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SetAccess(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1498,7 +1507,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     // check to see if same level access is trying to change another access of the very same level and boot them if they are.
                     if (GetPlayerAccess(n) == GetPlayerAccess(session.Id))
                     {
-                        NetworkSend.PlayerMsg(session.Id, "Invalid access level.", (int) Core.Color.BrightRed);
+                        NetworkSend.PlayerMsg(session.Id, "Invalid access level.", (int) Color.BrightRed);
                         return;
                     }
                 }
@@ -1523,12 +1532,12 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_WhosOnline(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_WhosOnline(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         NetworkSend.SendWhosOnline(session.Id);
     }
 
-    public static void Packet_SetMotd(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SetMotd(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1543,7 +1552,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Log.Add(GetPlayerName(session.Id) + " changed welcome to: " + SettingsManager.Instance.Welcome, Constant.AdminLog);
     }
 
-    public static void Packet_PlayerSearch(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_PlayerSearch(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1594,23 +1603,23 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                         }
 
                         // Change target
-                        if (Core.Data.TempPlayer[session.Id].TargetType == 0 | i != Core.Data.TempPlayer[session.Id].Target)
+                        if (Data.TempPlayer[session.Id].TargetType == 0 | i != Data.TempPlayer[session.Id].Target)
                         {
-                            Core.Data.TempPlayer[session.Id].Target = i;
-                            Core.Data.TempPlayer[session.Id].TargetType = (byte) TargetType.Player;
+                            Data.TempPlayer[session.Id].Target = i;
+                            Data.TempPlayer[session.Id].TargetType = (byte) TargetType.Player;
                         }
                         else
                         {
-                            Core.Data.TempPlayer[session.Id].Target = -1;
-                            Core.Data.TempPlayer[session.Id].TargetType = 0;
+                            Data.TempPlayer[session.Id].Target = -1;
+                            Data.TempPlayer[session.Id].TargetType = 0;
                         }
 
-                        if (Core.Data.TempPlayer[session.Id].Target >= 0)
+                        if (Data.TempPlayer[session.Id].Target >= 0)
                         {
-                            NetworkSend.PlayerMsg(session.Id, "Your target is now " + GetPlayerName(i) + ".", (int) Core.Color.Yellow);
+                            NetworkSend.PlayerMsg(session.Id, "Your target is now " + GetPlayerName(i) + ".", (int) Color.Yellow);
                         }
 
-                        NetworkSend.SendTarget(session.Id, Core.Data.TempPlayer[session.Id].Target, Core.Data.TempPlayer[session.Id].TargetType);
+                        NetworkSend.SendTarget(session.Id, Data.TempPlayer[session.Id].Target, Data.TempPlayer[session.Id].TargetType);
                         if (rclick == 1)
                             NetworkSend.SendRightClick(session.Id);
                         return;
@@ -1625,13 +1634,13 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (Data.MapItem[GetPlayerMap(session.Id), i].Num >= 0)
             {
-                if (!string.IsNullOrEmpty(Core.Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name))
+                if (!string.IsNullOrEmpty(Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name))
                 {
                     if ((int) Data.MapItem[GetPlayerMap(session.Id), i].X == x)
                     {
                         if ((int) Data.MapItem[GetPlayerMap(session.Id), i].Y == y)
                         {
-                            NetworkSend.PlayerMsg(session.Id, "You see " + Data.MapItem[GetPlayerMap(session.Id), i].Value + " " + Core.Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name + ".", (int) Color.BrightGreen);
+                            NetworkSend.PlayerMsg(session.Id, "You see " + Data.MapItem[GetPlayerMap(session.Id), i].Value + " " + Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name + ".", (int) Color.BrightGreen);
                             return;
                         }
                     }
@@ -1650,23 +1659,23 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     if (Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Y == y)
                     {
                         // Change target
-                        if (Core.Data.TempPlayer[session.Id].TargetType == 0)
+                        if (Data.TempPlayer[session.Id].TargetType == 0)
                         {
-                            Core.Data.TempPlayer[session.Id].Target = i;
-                            Core.Data.TempPlayer[session.Id].TargetType = (byte) TargetType.Npc;
+                            Data.TempPlayer[session.Id].Target = i;
+                            Data.TempPlayer[session.Id].TargetType = (byte) TargetType.Npc;
                         }
                         else
                         {
-                            Core.Data.TempPlayer[session.Id].Target = -1;
-                            Core.Data.TempPlayer[session.Id].TargetType = 0;
+                            Data.TempPlayer[session.Id].Target = -1;
+                            Data.TempPlayer[session.Id].TargetType = 0;
                         }
 
-                        if (Core.Data.TempPlayer[session.Id].Target >= 0)
+                        if (Data.TempPlayer[session.Id].Target >= 0)
                         {
-                            NetworkSend.PlayerMsg(session.Id, "Your target is now " + GameLogic.CheckGrammar(Data.Npc[(int) Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Num].Name) + ".", (int) Core.Color.Yellow);
+                            NetworkSend.PlayerMsg(session.Id, "Your target is now " + GameLogic.CheckGrammar(Data.Npc[(int) Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Num].Name) + ".", (int) Color.Yellow);
                         }
 
-                        NetworkSend.SendTarget(session.Id, Core.Data.TempPlayer[session.Id].Target, Core.Data.TempPlayer[session.Id].TargetType);
+                        NetworkSend.SendTarget(session.Id, Data.TempPlayer[session.Id].Target, Data.TempPlayer[session.Id].TargetType);
                         return;
                     }
                 }
@@ -1674,12 +1683,12 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_Skills(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Skills(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         NetworkSend.SendPlayerSkills(session.Id);
     }
 
-    public static void Packet_Cast(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Cast(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1703,11 +1712,11 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_SwapInvSlots(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SwapInvSlots(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
-        if (Core.Data.TempPlayer[session.Id].InTrade >= 0 | Core.Data.TempPlayer[session.Id].InBank | Core.Data.TempPlayer[session.Id].InShop >= 0)
+        if (Data.TempPlayer[session.Id].InTrade >= 0 | Data.TempPlayer[session.Id].InBank | Data.TempPlayer[session.Id].InShop >= 0)
             return;
 
         // Old Slot
@@ -1718,11 +1727,11 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.PlayerSwitchInvSlots(session.Id, (int) oldSlot, (int) newSlot);
     }
 
-    public static void Packet_SwapSkillSlots(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SwapSkillSlots(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
-        if (Core.Data.TempPlayer[session.Id].InTrade >= 0 | Core.Data.TempPlayer[session.Id].InBank | Core.Data.TempPlayer[session.Id].InShop >= 0)
+        if (Data.TempPlayer[session.Id].InTrade >= 0 | Data.TempPlayer[session.Id].InBank | Data.TempPlayer[session.Id].InShop >= 0)
             return;
 
         // Old Slot
@@ -1733,27 +1742,28 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.PlayerSwitchSkillSlots(session.Id, (int) oldSlot, (int) newSlot);
     }
 
-    public static void Packet_CheckPing(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_CheckPing(GameSession session, ReadOnlyMemory<byte> bytes)
     {
-        var buffer = new ByteStream(4);
-        buffer.WriteInt32((int) Packets.ServerPackets.SSendPing);
+        var packetWriter = new PacketWriter(4);
+        
+        packetWriter.WriteEnum(Packets.ServerPackets.SSendPing);
 
-        NetworkConfig.SendDataTo(session.Id, buffer.UnreadData, buffer.WritePosition);
+        PlayerService.Instance.SendDataTo(session.Id, packetWriter.GetBytes());
     }
 
-    public static void Packet_Unequip(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Unequip(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
         Server.Player.UnequipItem(session.Id, buffer.ReadInt32());
     }
 
-    public static void Packet_RequestPlayerData(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestPlayerData(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         NetworkSend.SendPlayerData(session.Id);
     }
 
-    public static void Packet_RequestNpc(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestNpc(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1765,7 +1775,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Npc.SendUpdateNpcTo(session.Id, n);
     }
 
-    public static void Packet_SpawnItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SpawnItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1779,7 +1789,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Item.SpawnItem(tmpItem, tmpAmount, GetPlayerMap(session.Id), GetPlayerX(session.Id), GetPlayerY(session.Id));
     }
 
-    public static void Packet_TrainStat(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_TrainStat(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1800,7 +1810,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_RequestSkill(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestSkill(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1812,7 +1822,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendUpdateSkillTo(session.Id, n);
     }
 
-    public static void Packet_RequestShop(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestShop(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1824,7 +1834,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendUpdateShopTo(session.Id, n);
     }
 
-    public static void Packet_RequestLevelUp(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestLevelUp(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
@@ -1834,7 +1844,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Server.Player.CheckPlayerLevelUp(session.Id);
     }
 
-    public static void Packet_ForgetSkill(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_ForgetSkill(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1845,36 +1855,36 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
 
         // dont let them forget a skill which is in CD
-        if (Core.Data.TempPlayer[session.Id].SkillCd[skillSlot] > 0)
+        if (Data.TempPlayer[session.Id].SkillCd[skillSlot] > 0)
         {
             NetworkSend.PlayerMsg(session.Id, "Cannot forget a skill which is cooling down!", (int) Color.BrightRed);
             return;
         }
 
         // dont let them forget a skill which is buffered
-        if (Core.Data.TempPlayer[session.Id].SkillBuffer == skillSlot)
+        if (Data.TempPlayer[session.Id].SkillBuffer == skillSlot)
         {
             NetworkSend.PlayerMsg(session.Id, "Cannot forget a skill which you are casting!", (int) Color.BrightRed);
             return;
         }
 
-        Core.Data.Player[session.Id].Skill[skillSlot].Num = -1;
+        Data.Player[session.Id].Skill[skillSlot].Num = -1;
         NetworkSend.SendPlayerSkills(session.Id);
     }
 
-    public static void Packet_CloseShop(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_CloseShop(GameSession session, ReadOnlyMemory<byte> bytes)
     {
-        Core.Data.TempPlayer[session.Id].InShop = -1;
+        Data.TempPlayer[session.Id].InShop = -1;
     }
 
-    public static void Packet_BuyItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_BuyItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
         var shopSlot = buffer.ReadInt32();
 
         // not in shop, exit out
-        var shopMum = Core.Data.TempPlayer[session.Id].InShop;
+        var shopMum = Data.TempPlayer[session.Id].InShop;
 
         if (shopMum < 0 | shopMum > Core.Constant.MaxShops)
             return;
@@ -1890,7 +1900,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (itemAmount == 0 | itemAmount < withBlock.CostValue)
         {
             NetworkSend.PlayerMsg(session.Id, "You do not have enough to buy this item.", (int) Color.BrightRed);
-            NetworkSend.ResetShopAction(session.Id);
+            NetworkSend.ResetShopAction();
             return;
         }
 
@@ -1901,10 +1911,10 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // send confirmation message & reset their shop action
         NetworkSend.PlayerMsg(session.Id, "Trade successful.", (int) Color.BrightGreen);
-        NetworkSend.ResetShopAction(session.Id);
+        NetworkSend.ResetShopAction();
     }
 
-    public static void Packet_SellItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SellItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1920,7 +1930,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // seems to be valid
         double itemNum = GetPlayerInv(session.Id, invSlot);
-        var shopNum = Core.Data.TempPlayer[session.Id].InShop;
+        var shopNum = Data.TempPlayer[session.Id].InShop;
 
         if (shopNum < 0 || shopNum > Core.Constant.MaxShops)
         {
@@ -1929,13 +1939,13 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // work out price
         var multiplier = Data.Shop[(int) shopNum].BuyRate / 100d;
-        var price = (int) Math.Round(Core.Data.Item[(int) itemNum].Price * multiplier);
+        var price = (int) Math.Round(Data.Item[(int) itemNum].Price * multiplier);
 
         // item has cost?
         if (price < 0)
         {
             NetworkSend.PlayerMsg(session.Id, "The shop doesn't want that item.", (int) Color.Yellow);
-            NetworkSend.ResetShopAction(session.Id);
+            NetworkSend.ResetShopAction();
             return;
         }
 
@@ -1944,11 +1954,11 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.GiveInv(session.Id, 0, price);
 
         // send confirmation message & reset their shop action
-        NetworkSend.PlayerMsg(session.Id, "Sold the " + Core.Data.Item[(int) itemNum].Name + " for " + price + " " + Core.Data.Item[(int) itemNum].Name + "!", (int) Color.BrightGreen);
-        NetworkSend.ResetShopAction(session.Id);
+        NetworkSend.PlayerMsg(session.Id, "Sold the " + Data.Item[(int) itemNum].Name + " for " + price + " " + Data.Item[(int) itemNum].Name + "!", (int) Color.BrightGreen);
+        NetworkSend.ResetShopAction();
     }
 
-    public static void Packet_ChangeBankSlots(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_ChangeBankSlots(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1958,7 +1968,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.PlayerSwitchbankSlots(session.Id, oldslot, newslot);
     }
 
-    public static void Packet_DepositItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_DepositItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1968,7 +1978,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.GiveBank(session.Id, invslot, amount);
     }
 
-    public static void Packet_WithdrawItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_WithdrawItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1978,12 +1988,12 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         global::Server.Player.TakeBank(session.Id, bankSlot, amount);
     }
 
-    public static void Packet_CloseBank(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_CloseBank(GameSession session, ReadOnlyMemory<byte> bytes)
     {
-        Core.Data.TempPlayer[session.Id].InBank = false;
+        Data.TempPlayer[session.Id].InBank = false;
     }
 
-    public static void Packet_AdminWarp(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_AdminWarp(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -1998,7 +2008,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         if (GetPlayerAccess(session.Id) >= (byte) AccessLevel.Mapper)
         {
-            Core.Data.Player[session.Id].IsMoving = false;
+            Data.Player[session.Id].IsMoving = false;
 
             // Set the information
             SetPlayerX(session.Id, x);
@@ -2008,7 +2018,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_TradeInvite(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_TradeInvite(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2029,8 +2039,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
 
         // send the trade request
-        Core.Data.TempPlayer[session.Id].TradeRequest = tradeTarget;
-        Core.Data.TempPlayer[tradeTarget].TradeRequest = session.Id;
+        Data.TempPlayer[session.Id].TradeRequest = tradeTarget;
+        Data.TempPlayer[tradeTarget].TradeRequest = session.Id;
 
         NetworkSend.PlayerMsg(tradeTarget, GetPlayerName(session.Id) + " has invited you to trade.", (int) Color.Yellow);
         NetworkSend.PlayerMsg(session.Id, "You have invited " + GetPlayerName(tradeTarget) + " to trade.", (int) Color.BrightGreen);
@@ -2038,14 +2048,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendTradeInvite(tradeTarget, session.Id);
     }
 
-    public static void Packet_HandleTradeInvite(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_HandleTradeInvite(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
         var status = (byte) buffer.ReadInt32();
 
 
-        var tradeTarget = Core.Data.TempPlayer[session.Id].TradeRequest;
+        var tradeTarget = Data.TempPlayer[session.Id].TradeRequest;
 
         if (tradeTarget < 0 | tradeTarget >= Core.Constant.MaxPlayers)
             return;
@@ -2054,36 +2064,36 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             NetworkSend.PlayerMsg(tradeTarget, GetPlayerName(session.Id) + " has declined your trade request.", (int) Color.BrightRed);
             NetworkSend.PlayerMsg(session.Id, "You have declined the trade with " + GetPlayerName(tradeTarget) + ".", (int) Color.BrightRed);
-            Core.Data.TempPlayer[session.Id].TradeRequest = -1;
+            Data.TempPlayer[session.Id].TradeRequest = -1;
             return;
         }
 
         // Let them tradetradeTarget
-        if (Core.Data.TempPlayer[tradeTarget].TradeRequest == session.Id)
+        if (Data.TempPlayer[tradeTarget].TradeRequest == session.Id)
         {
             // let them know they're trading
             NetworkSend.PlayerMsg(session.Id, "You have accepted " + GetPlayerName(tradeTarget) + "'s trade request.", (int) Color.Yellow);
             NetworkSend.PlayerMsg(tradeTarget, GetPlayerName(session.Id) + " has accepted your trade request.", (int) Color.BrightGreen);
 
             // clear the tradeRequest server-side
-            Core.Data.TempPlayer[session.Id].TradeRequest = -1;
-            Core.Data.TempPlayer[tradeTarget].TradeRequest = -1;
+            Data.TempPlayer[session.Id].TradeRequest = -1;
+            Data.TempPlayer[tradeTarget].TradeRequest = -1;
 
             // set that they're trading with each other
-            Core.Data.TempPlayer[session.Id].InTrade = tradeTarget;
+            Data.TempPlayer[session.Id].InTrade = tradeTarget;
 
             // clear out their trade offers
-            Core.Data.TempPlayer[tradeTarget].InTrade = session.Id;
+            Data.TempPlayer[tradeTarget].InTrade = session.Id;
             ;
-            Array.Resize(ref Core.Data.TempPlayer[session.Id].TradeOffer, Core.Constant.MaxInv);
-            Array.Resize(ref Core.Data.TempPlayer[tradeTarget].TradeOffer, Core.Constant.MaxInv);
+            Array.Resize(ref Data.TempPlayer[session.Id].TradeOffer, Core.Constant.MaxInv);
+            Array.Resize(ref Data.TempPlayer[tradeTarget].TradeOffer, Core.Constant.MaxInv);
 
             for (int i = 0, loopTo = Core.Constant.MaxInv; i < loopTo; i++)
             {
-                Core.Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
-                Core.Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
-                Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
-                Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
+                Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
+                Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
+                Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
+                Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
             }
 
             // Used to init the trade window clientside
@@ -2098,24 +2108,24 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_TradeInviteDecline(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_TradeInviteDecline(GameSession session, ReadOnlyMemory<byte> bytes)
     {
-        Core.Data.TempPlayer[session.Id].TradeRequest = -1;
+        Data.TempPlayer[session.Id].TradeRequest = -1;
     }
 
-    public static void Packet_AcceptTrade(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_AcceptTrade(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         int itemNum;
         int i;
         var tmpTradeItem = new Type.PlayerInv[Core.Constant.MaxInv];
         var tmpTradeItem2 = new Type.PlayerInv[Core.Constant.MaxInv];
 
-        Core.Data.TempPlayer[session.Id].AcceptTrade = true;
+        Data.TempPlayer[session.Id].AcceptTrade = true;
 
-        var tradeTarget = (int) Core.Data.TempPlayer[session.Id].InTrade;
+        var tradeTarget = (int) Data.TempPlayer[session.Id].InTrade;
 
         // if not both of them accept, then exit
-        if (!Core.Data.TempPlayer[tradeTarget].AcceptTrade)
+        if (!Data.TempPlayer[tradeTarget].AcceptTrade)
         {
             NetworkSend.SendTradeStatus(session.Id, 2);
             NetworkSend.SendTradeStatus(tradeTarget, 1);
@@ -2130,30 +2140,30 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             tmpTradeItem2[i].Num = -1;
 
             // player
-            if (Core.Data.TempPlayer[session.Id].TradeOffer[i].Num >= 0)
+            if (Data.TempPlayer[session.Id].TradeOffer[i].Num >= 0)
             {
-                itemNum = (int) Core.Data.Player[session.Id].Inv[(int) Core.Data.TempPlayer[session.Id].TradeOffer[i].Num].Num;
+                itemNum = (int) Data.Player[session.Id].Inv[(int) Data.TempPlayer[session.Id].TradeOffer[i].Num].Num;
                 if (itemNum >= 0)
                 {
                     // store temp
                     tmpTradeItem[i].Num = itemNum;
-                    tmpTradeItem[i].Value = Core.Data.TempPlayer[session.Id].TradeOffer[i].Value;
+                    tmpTradeItem[i].Value = Data.TempPlayer[session.Id].TradeOffer[i].Value;
                     // take item
-                    global::Server.Player.TakeInvSlot(session.Id, (int) Core.Data.TempPlayer[session.Id].TradeOffer[i].Num, tmpTradeItem[i].Value);
+                    global::Server.Player.TakeInvSlot(session.Id, (int) Data.TempPlayer[session.Id].TradeOffer[i].Num, tmpTradeItem[i].Value);
                 }
             }
 
             // target
-            if (Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num >= 0)
+            if (Data.TempPlayer[tradeTarget].TradeOffer[i].Num >= 0)
             {
-                itemNum = GetPlayerInv(tradeTarget, (int) Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num);
+                itemNum = GetPlayerInv(tradeTarget, (int) Data.TempPlayer[tradeTarget].TradeOffer[i].Num);
                 if (itemNum >= 0)
                 {
                     // store temp
                     tmpTradeItem2[i].Num = itemNum;
-                    tmpTradeItem2[i].Value = Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Value;
+                    tmpTradeItem2[i].Value = Data.TempPlayer[tradeTarget].TradeOffer[i].Value;
                     // take item
-                    global::Server.Player.TakeInvSlot(tradeTarget, (int) Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num, tmpTradeItem2[i].Value);
+                    global::Server.Player.TakeInvSlot(tradeTarget, (int) Data.TempPlayer[tradeTarget].TradeOffer[i].Num, tmpTradeItem2[i].Value);
                 }
             }
         }
@@ -2184,14 +2194,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var loopTo2 = Core.Constant.MaxInv;
         for (i = 0; i < loopTo2; i++)
         {
-            Core.Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
-            Core.Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
-            Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
-            Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
+            Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
+            Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
+            Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
+            Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
         }
 
-        Core.Data.TempPlayer[session.Id].InTrade = -1;
-        Core.Data.TempPlayer[tradeTarget].InTrade = -1;
+        Data.TempPlayer[session.Id].InTrade = -1;
+        Data.TempPlayer[tradeTarget].InTrade = -1;
 
         NetworkSend.PlayerMsg(session.Id, "Trade completed.", (int) Color.BrightGreen);
         NetworkSend.PlayerMsg(tradeTarget, "Trade completed.", (int) Color.BrightGreen);
@@ -2200,20 +2210,20 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendCloseTrade(tradeTarget);
     }
 
-    public static void Packet_DeclineTrade(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_DeclineTrade(GameSession session, ReadOnlyMemory<byte> bytes)
     {
-        var tradeTarget = (int) Core.Data.TempPlayer[session.Id].InTrade;
+        var tradeTarget = (int) Data.TempPlayer[session.Id].InTrade;
 
         for (int i = 0, loopTo = Core.Constant.MaxInv; i < loopTo; i++)
         {
-            Core.Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
-            Core.Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
-            Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
-            Core.Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
+            Data.TempPlayer[session.Id].TradeOffer[i].Num = -1;
+            Data.TempPlayer[session.Id].TradeOffer[i].Value = 0;
+            Data.TempPlayer[tradeTarget].TradeOffer[i].Num = -1;
+            Data.TempPlayer[tradeTarget].TradeOffer[i].Value = 0;
         }
 
-        Core.Data.TempPlayer[session.Id].InTrade = -1;
-        Core.Data.TempPlayer[tradeTarget].InTrade = -1;
+        Data.TempPlayer[session.Id].InTrade = -1;
+        Data.TempPlayer[tradeTarget].InTrade = -1;
 
         NetworkSend.PlayerMsg(session.Id, "You declined the trade.", (int) Color.BrightRed);
         NetworkSend.PlayerMsg(tradeTarget, GetPlayerName(session.Id) + " has declined the trade.", (int) Color.BrightRed);
@@ -2222,7 +2232,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendCloseTrade(tradeTarget);
     }
 
-    public static void Packet_TradeItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_TradeItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var emptyslot = default(int);
         int i;
@@ -2244,34 +2254,34 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (amount < 0 | amount > GetPlayerInvValue(session.Id, invslot))
             return;
 
-        if (Core.Data.Item[itemnum].Type == (byte) ItemCategory.Currency | Core.Data.Item[itemnum].Stackable == 1)
+        if (Data.Item[itemnum].Type == (byte) ItemCategory.Currency | Data.Item[itemnum].Stackable == 1)
         {
             // check if already offering same currency item
             var loopTo = Core.Constant.MaxInv;
             for (i = 0; i < loopTo; i++)
             {
-                if (Core.Data.TempPlayer[session.Id].TradeOffer[i].Num == invslot)
+                if (Data.TempPlayer[session.Id].TradeOffer[i].Num == invslot)
                 {
                     // add amount
-                    Core.Data.TempPlayer[session.Id].TradeOffer[i].Value = Core.Data.TempPlayer[session.Id].TradeOffer[i].Value + amount;
+                    Data.TempPlayer[session.Id].TradeOffer[i].Value = Data.TempPlayer[session.Id].TradeOffer[i].Value + amount;
 
                     // clamp to limits
-                    if (Core.Data.TempPlayer[session.Id].TradeOffer[i].Value > GetPlayerInvValue(session.Id, invslot))
+                    if (Data.TempPlayer[session.Id].TradeOffer[i].Value > GetPlayerInvValue(session.Id, invslot))
                     {
-                        Core.Data.TempPlayer[session.Id].TradeOffer[i].Value = GetPlayerInvValue(session.Id, invslot);
+                        Data.TempPlayer[session.Id].TradeOffer[i].Value = GetPlayerInvValue(session.Id, invslot);
                     }
 
                     // cancel any trade agreement
-                    Core.Data.TempPlayer[session.Id].AcceptTrade = false;
-                    Core.Data.TempPlayer[(int) Core.Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
+                    Data.TempPlayer[session.Id].AcceptTrade = false;
+                    Data.TempPlayer[(int) Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
 
                     NetworkSend.SendTradeStatus(session.Id, 0);
-                    NetworkSend.SendTradeStatus((int) Core.Data.TempPlayer[session.Id].InTrade, 1);
+                    NetworkSend.SendTradeStatus((int) Data.TempPlayer[session.Id].InTrade, 1);
 
                     NetworkSend.SendTradeUpdate(session.Id, 0);
                     NetworkSend.SendTradeUpdate(session.Id, 1);
-                    NetworkSend.SendTradeUpdate((int) Core.Data.TempPlayer[session.Id].InTrade, 0);
-                    NetworkSend.SendTradeUpdate((int) Core.Data.TempPlayer[session.Id].InTrade, 1);
+                    NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 0);
+                    NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 1);
                     return;
                 }
             }
@@ -2282,7 +2292,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             var loopTo1 = Core.Constant.MaxInv;
             for (i = 0; i < loopTo1; i++)
             {
-                if (Core.Data.TempPlayer[session.Id].TradeOffer[i].Num == invslot)
+                if (Data.TempPlayer[session.Id].TradeOffer[i].Num == invslot)
                 {
                     NetworkSend.PlayerMsg(session.Id, "You've already offered this item.", (int) Color.BrightRed);
                     return;
@@ -2294,30 +2304,30 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var loopTo2 = Core.Constant.MaxInv;
         for (i = 0; i < loopTo2; i++)
         {
-            if (Core.Data.TempPlayer[session.Id].TradeOffer[i].Num == -1)
+            if (Data.TempPlayer[session.Id].TradeOffer[i].Num == -1)
             {
                 emptyslot = i;
                 break;
             }
         }
 
-        Core.Data.TempPlayer[session.Id].TradeOffer[emptyslot].Num = invslot;
-        Core.Data.TempPlayer[session.Id].TradeOffer[emptyslot].Value = amount;
+        Data.TempPlayer[session.Id].TradeOffer[emptyslot].Num = invslot;
+        Data.TempPlayer[session.Id].TradeOffer[emptyslot].Value = amount;
 
         // cancel any trade agreement and send new data
-        Core.Data.TempPlayer[session.Id].AcceptTrade = false;
-        Core.Data.TempPlayer[(int) Core.Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
+        Data.TempPlayer[session.Id].AcceptTrade = false;
+        Data.TempPlayer[(int) Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
 
         NetworkSend.SendTradeStatus(session.Id, 0);
-        NetworkSend.SendTradeStatus((int) Core.Data.TempPlayer[session.Id].InTrade, 0);
+        NetworkSend.SendTradeStatus((int) Data.TempPlayer[session.Id].InTrade, 0);
 
         NetworkSend.SendTradeUpdate(session.Id, 0);
         NetworkSend.SendTradeUpdate(session.Id, 1);
-        NetworkSend.SendTradeUpdate((int) Core.Data.TempPlayer[session.Id].InTrade, 0);
-        NetworkSend.SendTradeUpdate((int) Core.Data.TempPlayer[session.Id].InTrade, 1);
+        NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 0);
+        NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 1);
     }
 
-    public static void Packet_UntradeItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_UntradeItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2327,22 +2337,22 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (tradeslot < 0 | tradeslot > Core.Constant.MaxInv)
             return;
 
-        if (Core.Data.TempPlayer[session.Id].TradeOffer[tradeslot].Num < 0)
+        if (Data.TempPlayer[session.Id].TradeOffer[tradeslot].Num < 0)
             return;
 
-        Core.Data.TempPlayer[session.Id].TradeOffer[tradeslot].Num = -1;
-        Core.Data.TempPlayer[session.Id].TradeOffer[tradeslot].Value = 0;
+        Data.TempPlayer[session.Id].TradeOffer[tradeslot].Num = -1;
+        Data.TempPlayer[session.Id].TradeOffer[tradeslot].Value = 0;
 
-        if (Core.Data.TempPlayer[session.Id].AcceptTrade)
-            Core.Data.TempPlayer[session.Id].AcceptTrade = false;
-        if (Core.Data.TempPlayer[(int) Core.Data.TempPlayer[session.Id].InTrade].AcceptTrade)
-            Core.Data.TempPlayer[(int) Core.Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
+        if (Data.TempPlayer[session.Id].AcceptTrade)
+            Data.TempPlayer[session.Id].AcceptTrade = false;
+        if (Data.TempPlayer[(int) Data.TempPlayer[session.Id].InTrade].AcceptTrade)
+            Data.TempPlayer[(int) Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
 
         NetworkSend.SendTradeStatus(session.Id, 0);
-        NetworkSend.SendTradeStatus((int) Core.Data.TempPlayer[session.Id].InTrade, 0);
+        NetworkSend.SendTradeStatus((int) Data.TempPlayer[session.Id].InTrade, 0);
 
         NetworkSend.SendTradeUpdate(session.Id, 0);
-        NetworkSend.SendTradeUpdate((int) Core.Data.TempPlayer[session.Id].InTrade, 1);
+        NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 1);
     }
 
     public static void HackingAttempt(int index, string reason)
@@ -2355,7 +2365,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_Admin(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_Admin(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Moderator)
@@ -2364,7 +2374,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendAdminPanel(session.Id);
     }
 
-    public static void Packet_SetHotbarSlot(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SetHotbarSlot(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2381,27 +2391,27 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             if (oldSlot < 0 | oldSlot > Core.Constant.MaxHotbar)
                 return;
 
-            var oldItem = Core.Data.Player[session.Id].Hotbar[oldSlot].Slot;
-            var oldType = Core.Data.Player[session.Id].Hotbar[oldSlot].SlotType;
-            var newItem = Core.Data.Player[session.Id].Hotbar[newSlot].Slot;
-            var newType = Core.Data.Player[session.Id].Hotbar[newSlot].SlotType;
+            var oldItem = Data.Player[session.Id].Hotbar[oldSlot].Slot;
+            var oldType = Data.Player[session.Id].Hotbar[oldSlot].SlotType;
+            var newItem = Data.Player[session.Id].Hotbar[newSlot].Slot;
+            var newType = Data.Player[session.Id].Hotbar[newSlot].SlotType;
 
-            Core.Data.Player[session.Id].Hotbar[newSlot].Slot = oldItem;
-            Core.Data.Player[session.Id].Hotbar[newSlot].SlotType = oldType;
+            Data.Player[session.Id].Hotbar[newSlot].Slot = oldItem;
+            Data.Player[session.Id].Hotbar[newSlot].SlotType = oldType;
 
-            Core.Data.Player[session.Id].Hotbar[oldSlot].Slot = newItem;
-            Core.Data.Player[session.Id].Hotbar[oldSlot].SlotType = newType;
+            Data.Player[session.Id].Hotbar[oldSlot].Slot = newItem;
+            Data.Player[session.Id].Hotbar[oldSlot].SlotType = newType;
         }
         else
         {
-            Core.Data.Player[session.Id].Hotbar[newSlot].Slot = skill;
-            Core.Data.Player[session.Id].Hotbar[newSlot].SlotType = type;
+            Data.Player[session.Id].Hotbar[newSlot].Slot = skill;
+            Data.Player[session.Id].Hotbar[newSlot].SlotType = type;
         }
 
         NetworkSend.SendHotbar(session.Id);
     }
 
-    public static void Packet_DeleteHotbarSlot(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_DeleteHotbarSlot(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2410,13 +2420,13 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (slot < 0 | slot > Core.Constant.MaxHotbar)
             return;
 
-        Core.Data.Player[session.Id].Hotbar[slot].Slot = -1;
-        Core.Data.Player[session.Id].Hotbar[slot].SlotType = 0;
+        Data.Player[session.Id].Hotbar[slot].Slot = -1;
+        Data.Player[session.Id].Hotbar[slot].SlotType = 0;
 
         NetworkSend.SendHotbar(session.Id);
     }
 
-    public static void Packet_UseHotbarSlot(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_UseHotbarSlot(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2426,18 +2436,18 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (slot < 0 | slot > Core.Constant.MaxHotbar)
             return;
 
-        if (Core.Data.Player[session.Id].Hotbar[slot].Slot >= 0)
+        if (Data.Player[session.Id].Hotbar[slot].Slot >= 0)
         {
-            if (Core.Data.Player[session.Id].Hotbar[slot].SlotType == (byte) DraggablePartType.Item)
+            if (Data.Player[session.Id].Hotbar[slot].SlotType == (byte) DraggablePartType.Item)
             {
-                global::Server.Player.UseItem(session.Id, global::Server.Player.FindItemSlot(session.Id, (int) Core.Data.Player[session.Id].Hotbar[slot].Slot));
+                global::Server.Player.UseItem(session.Id, global::Server.Player.FindItemSlot(session.Id, (int) Data.Player[session.Id].Hotbar[slot].Slot));
             }
         }
 
         NetworkSend.SendHotbar(session.Id);
     }
 
-    public static void Packet_SkillLearn(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SkillLearn(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2457,7 +2467,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
     }
 
-    public static void Packet_RequestEditJob(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_RequestEditJob(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
@@ -2474,14 +2484,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Item.SendItems(session.Id);
         NetworkSend.SendJobs(session);
 
-        Core.Data.TempPlayer[session.Id].Editor = EditorType.Job;
+        Data.TempPlayer[session.Id].Editor = EditorType.Job;
 
         NetworkSend.SendJobs(session);
 
         NetworkSend.SendJobEditor(session.Id);
     }
 
-    public static void Packet_SaveJob(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void Packet_SaveJob(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         int i;
         int z;
@@ -2523,7 +2533,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendJobToAll(session.Id);
     }
 
-    private static void Packet_Emote(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_Emote(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 
@@ -2532,15 +2542,15 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         NetworkSend.SendEmote(session.Id, emote);
     }
 
-    private static void Packet_CloseEditor(GameSession session, ReadOnlySpan<byte> bytes)
+    private static void Packet_CloseEditor(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         // Prevent hacking
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
             return;
 
-        if (Core.Data.TempPlayer[session.Id].Editor == EditorType.None)
+        if (Data.TempPlayer[session.Id].Editor == EditorType.None)
             return;
 
-        Core.Data.TempPlayer[session.Id].Editor = EditorType.None;
+        Data.TempPlayer[session.Id].Editor = EditorType.None;
     }
 }
