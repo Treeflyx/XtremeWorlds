@@ -1,4 +1,6 @@
-﻿namespace Server.Net;
+﻿using Core.Net;
+
+namespace Server.Net;
 
 public interface IPacket
 {

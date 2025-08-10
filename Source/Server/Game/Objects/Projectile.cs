@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Server.Game;
@@ -65,7 +66,7 @@ public static class Projectile
         Data.Projectile[projectileNum].Damage = 0;
     }
 
-    public static void HandleRequestEditProjectile(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditProjectile(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
@@ -90,7 +91,7 @@ public static class Projectile
         PlayerService.Instance.SendDataTo(session.Id, buffer.GetBytes());
     }
 
-    public static void HandleSaveProjectile(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveProjectile(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -119,7 +120,7 @@ public static class Projectile
         SendUpdateProjectileToAll(projectileNum);
     }
 
-    public static void HandleRequestProjectile(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestProjectile(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -128,7 +129,7 @@ public static class Projectile
         SendUpdateProjectileTo(session.Id, projectileNum);
     }
 
-    public static void HandleClearProjectile(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleClearProjectile(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 

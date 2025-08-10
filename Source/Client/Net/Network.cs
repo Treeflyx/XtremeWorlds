@@ -1,9 +1,9 @@
-﻿using Client.Net;
-using Core;
+﻿using Core;
+using Core.Net;
 
-namespace Client;
+namespace Client.Net;
 
-public static class NetworkConfig
+public static class Network
 {
     private sealed class NetworkEventHandler : INetworkEventHandler
     {
@@ -52,7 +52,7 @@ public static class NetworkConfig
 
     public static bool IsConnected => Client.Connected;
     
-    public static async Task InitNetwork()
+    public static async Task Start()
     {
         await Client.StartAsync(
             SettingsManager.Instance.Ip,
@@ -61,29 +61,18 @@ public static class NetworkConfig
             CancellationTokenSource.Token);
     }
 
-    public static void DestroyNetwork()
+    public static void Stop()
     {
         CancellationTokenSource.Cancel();
     }
 
-    public static void SendData(byte[] data)
+    public static void Send(byte[] data)
     {
         Client.Send(data);
     }
-
-    public static void SendData(ReadOnlySpan<byte> data, int head)
+    
+    public static void Send(PacketWriter data)
     {
-        if (data.Length < head)
-        {
-            Console.WriteLine("Invalid data length.");
-            return;
-        }
-
-        var buffer = new byte[head + 4];
-        
-        Buffer.BlockCopy(BitConverter.GetBytes(head), 0, buffer, 0, 4);
-        Buffer.BlockCopy(data[..head].ToArray(), 0, buffer, 4, head);
-        
-        SendData(buffer);
+        Send(data.GetBytes());
     }
 }

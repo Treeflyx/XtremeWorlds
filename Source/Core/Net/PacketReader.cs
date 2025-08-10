@@ -1,16 +1,18 @@
-﻿using System.Buffers.Binary;
+﻿using System;
+using System.Buffers.Binary;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Server.Net;
+namespace Core.Net;
 
-public ref struct PacketReader(ReadOnlySpan<byte> data)
+public ref struct PacketReader(ReadOnlyMemory<byte> memory)
 {
-    private ReadOnlySpan<byte> _data = data;
+    private ReadOnlyMemory<byte> _memory = memory;
 
     private void EnsureBytesAvailable(int count)
     {
-        if (count > _data.Length)
+        if (count > _memory.Length)
         {
             throw new EndOfStreamException("Not enough data available");
         }
@@ -25,11 +27,11 @@ public ref struct PacketReader(ReadOnlySpan<byte> data)
 
         EnsureBytesAvailable(size);
 
-        var span = _data[..size];
+        var span = _memory[..size];
 
-        _data = _data[size..];
+        _memory = _memory[size..];
 
-        return span;
+        return span.Span;
     }
 
     public ReadOnlySpan<byte> ReadBytes()
@@ -56,8 +58,8 @@ public ref struct PacketReader(ReadOnlySpan<byte> data)
     private T Read<T>(Func<ReadOnlySpan<byte>, T> converter) where T : allows ref struct
     {
         EnsureBytesAvailable(Unsafe.SizeOf<T>());
-        var value = converter(_data);
-        _data = _data[Unsafe.SizeOf<T>()..];
+        var value = converter(_memory.Span);
+        _memory = _memory[Unsafe.SizeOf<T>()..];
         return value;
     }
 

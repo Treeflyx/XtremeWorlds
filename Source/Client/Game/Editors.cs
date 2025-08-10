@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
@@ -64,13 +65,13 @@ namespace Client
             {
                 if (GameState.AnimationChanged[i])
                 {
-                    NetworkSend.SendSaveAnimation(i);
+                    Sender.SendSaveAnimation(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Animation();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void AnimationEditorCancel()
@@ -78,7 +79,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Animation();
             Animation.ClearAnimations();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ClearChanged_Animation()
@@ -143,13 +144,13 @@ namespace Client
             {
                 if (GameState.NpcChanged[i])
                 {
-                    NetworkSend.SendSaveNpc(i);
+                    Sender.SendSaveNpc(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Npc();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void NpcEditorCancel()
@@ -157,7 +158,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Npc();
             Database.ClearNpcs();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ClearChanged_Npc()
@@ -208,13 +209,13 @@ namespace Client
             {
                 if (GameState.ResourceChanged[i])
                 {
-                    NetworkSend.SendSaveResource(i);
+                    Sender.SendSaveResource(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Resource();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ResourceEditorCancel()
@@ -222,7 +223,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Resource();
             MapResource.ClearResources();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         #endregion
@@ -296,13 +297,13 @@ namespace Client
             {
                 if (GameState.SkillChanged[i])
                 {
-                    NetworkSend.SendSaveSkill(i);
+                    Sender.SendSaveSkill(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Skill();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void SkillEditorCancel()
@@ -310,7 +311,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Skill();
             Database.ClearSkills();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ClearChanged_Skill()
@@ -378,13 +379,13 @@ namespace Client
             {
                 if (GameState.ShopChanged[i])
                 {
-                    NetworkSend.SendSaveShop(i);
+                    Sender.SendSaveShop(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Shop();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ShopEditorCancel()
@@ -392,7 +393,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Shop();
             Shop.ClearShops();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ClearChanged_Shop()
@@ -410,11 +411,11 @@ namespace Client
             {
                 if (GameState.JobChanged[i])
                 {
-                    NetworkSend.SendSaveJob(i);
+                    Sender.SendSaveJob(i);
                 }
             }
             GameState.MyEditorType = EditorType.None;
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void JobEditorCancel()
@@ -422,7 +423,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Job();
             Database.ClearJobs();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void JobEditorInit()
@@ -627,7 +628,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             Item.ClearChangedItem();
             Item.ClearItems();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ItemEditorOK()
@@ -638,13 +639,13 @@ namespace Client
             {
                 if (GameState.ItemChanged[i])
                 {
-                    NetworkSend.SendSaveItem(i);
+                    Sender.SendSaveItem(i);
                 }
             }
 
             GameState.MyEditorType = EditorType.None;
             Item.ClearChangedItem();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         #endregion
@@ -656,11 +657,11 @@ namespace Client
             {
                 if (GameState.MoralChanged[i])
                 {
-                    NetworkSend.SendSaveMoral(i);
+                    Sender.SendSaveMoral(i);
                 }
             }
             GameState.MyEditorType = EditorType.None;
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void MoralEditorCancel()
@@ -668,7 +669,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Moral();
             Moral.ClearMorals();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void MoralEditorInit()
@@ -730,7 +731,7 @@ namespace Client
 
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Projectile();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ProjectileEditorCancel()
@@ -738,7 +739,7 @@ namespace Client
             GameState.MyEditorType = EditorType.None;
             ClearChanged_Projectile();
             Projectile.ClearProjectile();
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
         }
 
         public static void ClearChanged_Projectile()

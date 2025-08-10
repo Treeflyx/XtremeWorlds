@@ -32,7 +32,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.csproj"/>
-        <ProjectReference Include="..\Network\Asfw.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

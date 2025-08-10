@@ -1,7 +1,7 @@
 ﻿using Client.Net;
 using Core;
 using Core.Localization;
-using Mirage.Sharp.Asfw;
+using Core.Net;
 
 namespace Client
 {
@@ -115,69 +115,63 @@ namespace Client
 
         public static void SendAcceptTrade()
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CAcceptTrade);
+            packetWriter.WriteEnum(Packets.ClientPackets.CAcceptTrade);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendDeclineTrade()
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(4);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CDeclineTrade);
+            packetWriter.WriteEnum(Packets.ClientPackets.CDeclineTrade);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void SendTradeRequest(string name)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter();
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CTradeInvite);
-            buffer.WriteString(name);
+            packetWriter.WriteEnum(Packets.ClientPackets.CTradeInvite);
+            packetWriter.WriteString(name);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
 
         }
 
         public static void SendHandleTradeInvite(byte answer)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CHandleTradeInvite);
-            buffer.WriteInt32(answer);
+            packetWriter.WriteEnum(Packets.ClientPackets.CHandleTradeInvite);
+            packetWriter.WriteInt32(answer);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
 
         }
 
         public static void TradeItem(int invslot, int amount)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(12);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CTradeItem);
-            buffer.WriteInt32(invslot);
-            buffer.WriteInt32(amount);
+            packetWriter.WriteEnum(Packets.ClientPackets.CTradeItem);
+            packetWriter.WriteInt32(invslot);
+            packetWriter.WriteInt32(amount);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         public static void UntradeItem(int invslot)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CUntradeItem);
-            buffer.WriteInt32(invslot);
+            packetWriter.WriteEnum(Packets.ClientPackets.CUntradeItem);
+            packetWriter.WriteInt32(invslot);
 
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         #endregion

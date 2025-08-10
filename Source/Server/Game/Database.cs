@@ -5,7 +5,6 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Mirage.Sharp.Asfw;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -21,6 +20,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Core.Net;
+using Server.Net;
 using static Core.Global.Command;
 using static Core.Type;
 using static System.Net.Mime.MediaTypeNames;
@@ -29,9 +30,10 @@ using File=System.IO.File;
 using Path = System.IO.Path;
 namespace Server
 {
-
     public class Database
     {
+        private static readonly int StatCount = Enum.GetValues<Stat>().Length;
+        
         private static readonly SemaphoreSlim ConnectionSemaphore = new SemaphoreSlim(SettingsManager.Instance.MaxSqlClients, SettingsManager.Instance.MaxSqlClients);
 
         public static string ConnectionString { get; set; } = string.Empty;
@@ -1824,8 +1826,7 @@ namespace Server
         }
 
         #endregion
-
-        #region Bank
+        
         public static void LoadBank(int index)
         {
             JObject data;
@@ -2036,11 +2037,7 @@ namespace Server
             }
 
         }
-
-        #endregion
-
-        #region Ban
-
+        
         public static bool IsBanned(int index, string ip)
         {
             bool isBanned = default;
@@ -2122,168 +2119,29 @@ namespace Server
             var task = Server.Player.LeftGame(banPlayerIndex);
             task.Wait();
         }
-
-        #endregion
-
-        #region Data Functions
-        public static byte[] JobData(int jobNum)
+        
+        public static void WriteJobDataToPacket(int jobNum, PacketWriter packetWriter)
         {
-            int n;
-            int q;
-            var buffer = new ByteStream(4);
-
-            buffer.WriteString(Data.Job[jobNum].Name);
-            buffer.WriteString(Data.Job[jobNum].Desc);
-
-            buffer.WriteInt32(Data.Job[jobNum].MaleSprite);
-            buffer.WriteInt32(Data.Job[jobNum].FemaleSprite);
-
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
-            for (int i = 0, loopTo = statCount; i < loopTo; i++)
-                buffer.WriteInt32(Data.Job[jobNum].Stat[i]);
-
-            for (q = 0; q < Core.Constant.MaxStartItems; q++)
+            packetWriter.WriteString(Data.Job[jobNum].Name);
+            packetWriter.WriteString(Data.Job[jobNum].Desc);
+            packetWriter.WriteInt32(Data.Job[jobNum].MaleSprite);
+            packetWriter.WriteInt32(Data.Job[jobNum].FemaleSprite);
+            
+            for (var i = 0; i < StatCount; i++)
             {
-                buffer.WriteInt32(Data.Job[jobNum].StartItem[q]);
-                buffer.WriteInt32(Data.Job[jobNum].StartValue[q]);
+                packetWriter.WriteInt32(Data.Job[jobNum].Stat[i]);
             }
 
-            buffer.WriteInt32(Data.Job[jobNum].StartMap);
-            buffer.WriteByte(Data.Job[jobNum].StartX);
-            buffer.WriteByte(Data.Job[jobNum].StartY);
-            buffer.WriteInt32(Data.Job[jobNum].BaseExp);
-
-            return buffer.ToArray();
-        }
-
-        public static byte[] NpcsData()
-        {
-            var buffer = new ByteStream(4);
-
-            for (int i = 0, loopTo = Core.Constant.MaxNpcs; i < loopTo; i++)
+            for (var q = 0; q < Core.Constant.MaxStartItems; q++)
             {
-                if (!(Strings.Len(Data.Npc[i].Name) > 0))
-                    continue;
-                buffer.WriteBlock(NpcData(i));
-            }
-            return buffer.ToArray();
-        }
-
-        public static byte[] NpcData(int npcNum)
-        {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32(npcNum);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Animation);
-            buffer.WriteString(Data.Npc[(int)npcNum].AttackSay);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Behaviour);
-
-            for (int i = 0, loopTo = Core.Constant.MaxDropItems; i < loopTo; i++)
-            {
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropChance[i]);
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItem[i]);
-                buffer.WriteInt32(Data.Npc[(int)npcNum].DropItemValue[i]);
+                packetWriter.WriteInt32(Data.Job[jobNum].StartItem[q]);
+                packetWriter.WriteInt32(Data.Job[jobNum].StartValue[q]);
             }
 
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Exp);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Faction);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Hp);
-            buffer.WriteString(Data.Npc[(int)npcNum].Name);
-            buffer.WriteByte(Data.Npc[(int)npcNum].Range);
-            buffer.WriteByte(Data.Npc[(int)npcNum].SpawnTime);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].SpawnSecs);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Sprite);
-
-            for (int i = 0, loopTo1 = System.Enum.GetValues(typeof(Stat)).Length; i < loopTo1; i++)
-                buffer.WriteByte(Data.Npc[(int)npcNum].Stat[i]);
-
-            for (int i = 0, loopTo2 = Core.Constant.MaxNpcSkills; i < loopTo2; i++)
-                buffer.WriteByte(Data.Npc[(int)npcNum].Skill[i]);
-
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Level);
-            buffer.WriteInt32(Data.Npc[(int)npcNum].Damage);
-            return buffer.ToArray();
+            packetWriter.WriteInt32(Data.Job[jobNum].StartMap);
+            packetWriter.WriteByte(Data.Job[jobNum].StartX);
+            packetWriter.WriteByte(Data.Job[jobNum].StartY);
+            packetWriter.WriteInt32(Data.Job[jobNum].BaseExp);
         }
-
-        public static byte[] ShopsData()
-        {
-            var buffer = new ByteStream(4);
-
-            for (int i = 0, loopTo = Core.Constant.MaxShops; i < loopTo; i++)
-            {
-                if (!(Strings.Len(Data.Shop[i].Name) > 0))
-                    continue;
-                buffer.WriteBlock(ShopData(i));
-            }
-            return buffer.ToArray();
-        }
-
-        public static byte[] ShopData(int shopNum)
-        {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32(shopNum);
-            buffer.WriteInt32(Data.Shop[shopNum].BuyRate);
-            buffer.WriteString(Data.Shop[shopNum].Name);
-
-            for (int i = 0, loopTo = Core.Constant.MaxTrades; i < loopTo; i++)
-            {
-                buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
-                buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
-                buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].Item);
-                buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].ItemValue);
-            }
-            return buffer.ToArray();
-        }
-
-        public static byte[] SkillsData()
-        {
-            var buffer = new ByteStream(4);
-
-            for (int i = 0, loopTo = Core.Constant.MaxSkills; i < loopTo; i++)
-            {
-                if (!(Strings.Len(Data.Skill[i].Name) > 0))
-                    continue;
-                buffer.WriteBlock(SkillData(i));
-            }
-            return buffer.ToArray();
-        }
-
-        public static byte[] SkillData(int skillNum)
-        {
-            var buffer = new ByteStream(4);
-
-            buffer.WriteInt32(skillNum);
-            buffer.WriteInt32(Data.Skill[skillNum].AccessReq);
-            buffer.WriteInt32(Data.Skill[skillNum].AoE);
-            buffer.WriteInt32(Data.Skill[skillNum].CastAnim);
-            buffer.WriteInt32(Data.Skill[skillNum].CastTime);
-            buffer.WriteInt32(Data.Skill[skillNum].CdTime);
-            buffer.WriteInt32(Data.Skill[skillNum].JobReq);
-            buffer.WriteInt32(Data.Skill[skillNum].Dir);
-            buffer.WriteInt32(Data.Skill[skillNum].Duration);
-            buffer.WriteInt32(Data.Skill[skillNum].Icon);
-            buffer.WriteInt32(Data.Skill[skillNum].Interval);
-            buffer.WriteInt32(Conversions.ToInteger(Data.Skill[skillNum].IsAoE));
-            buffer.WriteInt32(Data.Skill[skillNum].LevelReq);
-            buffer.WriteInt32(Data.Skill[skillNum].Map);
-            buffer.WriteInt32(Data.Skill[skillNum].MpCost);
-            buffer.WriteString(Data.Skill[skillNum].Name);
-            buffer.WriteInt32(Data.Skill[skillNum].Range);
-            buffer.WriteInt32(Data.Skill[skillNum].SkillAnim);
-            buffer.WriteInt32(Data.Skill[skillNum].StunDuration);
-            buffer.WriteInt32(Data.Skill[skillNum].Type);
-            buffer.WriteInt32(Data.Skill[skillNum].Vital);
-            buffer.WriteInt32(Data.Skill[skillNum].X);
-            buffer.WriteInt32(Data.Skill[skillNum].Y);
-            buffer.WriteInt32(Data.Skill[skillNum].IsProjectile);
-            buffer.WriteInt32(Data.Skill[skillNum].Projectile);
-            buffer.WriteInt32(Data.Skill[skillNum].KnockBack);
-            buffer.WriteInt32(Data.Skill[skillNum].KnockBackTiles);
-            return buffer.ToArray();
-        }
-
-        #endregion
-
     }
 }

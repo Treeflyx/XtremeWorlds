@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Net;
 
 public class Crystalshire
 {
@@ -55,7 +56,7 @@ public class Crystalshire
         Client.Gui.UpdateButton(Client.Gui.Windows.Count, "btnClose", Client.Gui.Windows[Client.Gui.Windows.Count].Width - 19L, 5L, 16L, 16L, imageNorm: 8L, imageHover: 9L, imageMousedown: 10L, callbackNorm: ref argcallbackNorm3, callbackHover: ref argcallbackHover3, callbackMousedown: ref argcallbackMousedown3, callbackMousemove: ref argcallbackMousemove3, callbackDblclick: ref argcallbackDblclick3);
 
         // Buttons
-        var argcallbackMousedown4 = new Action(Client.NetworkSend.btnLogin_Click);
+        var argcallbackMousedown4 = new Action(Sender.btnLogin_Click);
         Action argcallbackMousemove4 = null;
         Action argcallbackDblclick4 = null;
         Action argcallbackNorm4 = null;

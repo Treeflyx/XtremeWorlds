@@ -1,11 +1,16 @@
-﻿using System.Buffers.Binary;
+﻿using System;
+using System.Buffers.Binary;
+using System.IO;
+using System.IO.Compression;
 using System.Text;
 
-namespace Server.Net;
+namespace Core.Net;
 
 public sealed class PacketWriter(int capacity = PacketWriter.InitialCapacity)
 {
     private const int InitialCapacity = 8192;
+    private const int CompressionThreshold = 128;
+    private const uint CompressionFlag = 1u << 31;
 
     private byte[] _buffer = new byte[capacity];
     private int _offset;
@@ -25,8 +30,13 @@ public sealed class PacketWriter(int capacity = PacketWriter.InitialCapacity)
 
     public byte[] GetBytes()
     {
+        if (_offset > CompressionThreshold)
+        {
+            return GetBytesCompressed();
+        }
+
         var packet = new byte[4 + _offset];
-        
+
         BinaryPrimitives.WriteInt32LittleEndian(packet.AsSpan(0, 4), _offset);
         if (_offset > 0)
         {
@@ -36,6 +46,42 @@ public sealed class PacketWriter(int capacity = PacketWriter.InitialCapacity)
         return packet;
     }
     
+    private byte[] GetBytesCompressed()
+    {
+        var packetId = BinaryPrimitives.ReadUInt32LittleEndian(_buffer.AsSpan(0, 4));
+
+        packetId |= CompressionFlag;
+
+        var uncompressedSize = _offset - 4;
+        var compressedBytes = Compress(_buffer, 4, uncompressedSize);
+        var compressedSize = 8 + compressedBytes.Length;
+
+        var packet = new byte[4 + compressedSize];
+
+        BinaryPrimitives.WriteInt32LittleEndian(packet.AsSpan(0, 4), compressedSize);
+        BinaryPrimitives.WriteUInt32LittleEndian(packet.AsSpan(4, 4), packetId);
+        BinaryPrimitives.WriteInt32LittleEndian(packet.AsSpan(8, 4), uncompressedSize);
+
+        if (_offset > 0)
+        {
+            compressedBytes.CopyTo(packet.AsSpan(12));
+        }
+
+        return packet;
+    }
+
+    private static byte[] Compress(byte[] src, int offset, int count)
+    {
+        using var memoryStream = new MemoryStream();
+
+        using (var gzipStream = new GZipStream(memoryStream, CompressionMode.Compress))
+        {
+            gzipStream.Write(src, offset, count);
+        }
+
+        return memoryStream.ToArray();
+    }
+
     public void WriteRaw(ReadOnlySpan<byte> bytes)
     {
         if (bytes.IsEmpty)
@@ -117,7 +163,7 @@ public sealed class PacketWriter(int capacity = PacketWriter.InitialCapacity)
         BinaryPrimitives.WriteInt32LittleEndian(_buffer.AsSpan(_offset), value);
         _offset += sizeof(int);
     }
-    
+
     public void WriteEnum<T>(T value) where T : Enum
     {
         WriteInt32(Convert.ToInt32(value));

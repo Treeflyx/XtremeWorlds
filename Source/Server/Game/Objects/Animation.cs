@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -56,7 +57,7 @@ public static class Animation
         Data.Animation[animationNum].LoopTime = [0, 0];
     }
 
-    public static void HandleRequestEditAnimation(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditAnimation(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
@@ -81,7 +82,7 @@ public static class Animation
         PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
     }
 
-    public static void HandleSaveAnimation(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveAnimation(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -118,7 +119,7 @@ public static class Animation
         SendUpdateAnimationToAll(animationNum);
     }
 
-    public static void HandleRequestAnimation(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestAnimation(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 

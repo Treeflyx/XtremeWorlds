@@ -18,8 +18,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Core;
-using Mirage.Sharp.Asfw;
+using Core.Net;
 using Server.Game;
+using Server.Net;
 using static Core.Packets;
 
 namespace Server;
@@ -184,19 +185,19 @@ public sealed class TimeManager : IDisposable
 
     public void SendClock(int index)
     {
-        using var bs = new ByteStream(PacketReserve);
-        bs.WriteInt32((int)ServerPackets.SClock);
+        var bs = new PacketWriter(PacketReserve);
+        bs.WriteEnum(ServerPackets.SClock);
         bs.WriteInt32(GameSpeed);
         bs.WriteInt64(_clock.Time.Ticks);
-        NetworkConfig.SendDataTo(index, bs.UnreadData, bs.WritePosition);
+        PlayerService.Instance.SendDataTo(index, bs.GetBytes());
     }
 
     public void SendTime(int index)
     {
-        using var bs = new ByteStream(PacketReserve);
-        bs.WriteInt32((int)ServerPackets.STime);
+        var bs = new PacketWriter(PacketReserve);
+        bs.WriteEnum(ServerPackets.STime);
         bs.WriteByte((byte)TimeOfDay);
-        NetworkConfig.SendDataTo(index, bs.UnreadData, bs.WritePosition);
+        PlayerService.Instance.SendDataTo(index, bs.GetBytes());
     }
 
     #endregion

@@ -1,724 +1,624 @@
 ﻿using Core;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
-using Mirage.Sharp.Asfw.IO;
-using static Core.Packets;
-using static Core.Global.Command;
+using Core.Net;
 using Server.Game;
 using Server.Game.Net;
-using Server.Net;
+using static Core.Packets;
+using static Core.Global.Command;
 
 namespace Server;
 
-public class NetworkSend
+public static class NetworkSend
 {
-    public static void AlertMsg(GameSession session, SystemMessage  menuNo, Menu menuReset = 0, bool kick = true)
+    private static readonly int EquipmentCount = Enum.GetValues<Equipment>().Length;
+    private static readonly int StatCount = Enum.GetValues<Stat>().Length;
+    private static readonly int VitalCount = Enum.GetValues<Vital>().Length;
+    private static readonly int MapLayerCount = Enum.GetValues<MapLayer>().Length;
+    private static readonly int ResourceSkillCount = Enum.GetValues<ResourceSkill>().Length;
+
+    public static void AlertMsg(GameSession session, SystemMessage menuNo, Menu menuReset = 0, bool kick = true)
     {
-        var writer = new PacketWriter(16);
+        var packetWriter = new PacketWriter(16);
 
-        writer.WriteInt32((int) ServerPackets.SAlertMsg);
-        writer.WriteByte((byte) menuNo);
-        writer.WriteInt32((byte) menuReset);
-        writer.WriteInt32(kick ? 1 : 0);
+        packetWriter.WriteEnum(ServerPackets.SAlertMsg);
+        packetWriter.WriteByte((byte) menuNo);
+        packetWriter.WriteInt32((byte) menuReset);
+        packetWriter.WriteInt32(kick ? 1 : 0);
 
-        session.Channel.Send(writer.GetBytes());
+        session.Channel.Send(packetWriter.GetBytes());
 
-        Player.LeftGame(session.Id);
+        _ = Player.LeftGame(session.Id);
     }
 
-    public static void GlobalMsg(string msg)
+    public static void GlobalMsg(string message)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SGlobalMsg);
-        buffer.WriteString(msg);
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.SGlobalMsg);
+        packetWriter.WriteString(message);
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void PlayerMsg(int index, string msg, int color)
+    public static void PlayerMsg(int playerId, string message, int color)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerMsg);
-        buffer.WriteString(msg);
-        buffer.WriteInt32(color);
+        packetWriter.WriteEnum(ServerPackets.SPlayerMsg);
+        packetWriter.WriteString(message);
+        packetWriter.WriteInt32(color);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
     public static void SendPlayerChars(GameSession session)
     {
-        var writer = new PacketWriter(4);
+        var packetWriter = new PacketWriter();
 
-        writer.WriteEnum(ServerPackets.SPlayerChars);
+        packetWriter.WriteEnum(ServerPackets.SPlayerChars);
 
         for (var i = 0; i < Core.Constant.MaxChars; i++)
         {
             Database.LoadCharacter(session.Id, i + 1);
 
-            writer.WriteString(Data.Player[session.Id].Name);
-            writer.WriteInt32(Data.Player[session.Id].Sprite);
-            writer.WriteInt32(Data.Player[session.Id].Access);
-            writer.WriteInt32(Data.Player[session.Id].Job);
+            packetWriter.WriteString(Data.Player[session.Id].Name);
+            packetWriter.WriteInt32(Data.Player[session.Id].Sprite);
+            packetWriter.WriteInt32(Data.Player[session.Id].Access);
+            packetWriter.WriteInt32(Data.Player[session.Id].Job);
 
             Database.ClearCharacter(session.Id);
         }
 
-        session.Channel.Send(writer.GetBytes());
+        session.Channel.Send(packetWriter.GetBytes());
     }
 
-    public static void SendUpdateJob(int index, int jobNum)
+    public static void SendCloseTrade(int playerId)
     {
-        int i;
-        int n;
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SUpdateJob);
-        buffer.WriteInt32(jobNum);
+        packetWriter.WriteEnum(ServerPackets.SCloseTrade);
 
-        buffer.WriteString(Data.Job[jobNum].Name);
-        buffer.WriteString(Data.Job[jobNum].Desc);
-
-        buffer.WriteInt32(Data.Job[jobNum].MaleSprite);
-        buffer.WriteInt32(Data.Job[jobNum].FemaleSprite);
-
-        int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
-        for (int q = 0, loopTo = statCount; q < loopTo; q++)
-            buffer.WriteInt32(Data.Job[jobNum].Stat[Conversions.ToInteger(q)]);
-
-        for (int q = 0; q < Core.Constant.MaxStartItems; q++)
-        {
-            buffer.WriteInt32(Data.Job[jobNum].StartItem[q]);
-            buffer.WriteInt32(Data.Job[jobNum].StartValue[q]);
-        }
-
-        buffer.WriteInt32(Data.Job[jobNum].StartMap);
-        buffer.WriteByte(Data.Job[jobNum].StartX);
-        buffer.WriteByte(Data.Job[jobNum].StartY);
-        buffer.WriteInt32(Data.Job[jobNum].BaseExp);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendCloseTrade(int index)
+    public static void SendExp(int playerId)
     {
-        var buffer = new ByteStream(4);
-        buffer.WriteInt32((int) ServerPackets.SCloseTrade);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        var packetWriter = new PacketWriter(16);
 
-        buffer.Dispose();
+        packetWriter.WriteEnum(ServerPackets.SPlayerExp);
+        packetWriter.WriteInt32(playerId);
+        packetWriter.WriteInt32(GetPlayerExp(playerId));
+        packetWriter.WriteInt32(GetPlayerNextLevel(playerId));
+
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendExp(int index)
+    public static void SendLoginOk(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerExp);
-        buffer.WriteInt32(index);
-        buffer.WriteInt32(GetPlayerExp(index));
-        buffer.WriteInt32(GetPlayerNextLevel(index));
+        packetWriter.WriteEnum(ServerPackets.SLoginOk);
+        packetWriter.WriteInt32(playerId);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendLoginOk(int index)
+    public static void SendInGame(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SLoginOk);
-        buffer.WriteInt32(index);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.SInGame);
 
-        buffer.Dispose();
-    }
-
-    public static void SendInGame(int index)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SInGame);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
     public static void SendJobs(GameSession session)
     {
-        var writer = new PacketWriter();
+        var packetWriter = new PacketWriter();
 
-        writer.WriteEnum(ServerPackets.SJobData);
+        packetWriter.WriteEnum(ServerPackets.SJobData);
 
         for (var i = 0; i < Core.Constant.MaxJobs; i++)
         {
-            writer.WriteRaw(Database.JobData(i));
+            Database.WriteJobDataToPacket(i, packetWriter);
         }
 
-        session.Channel.Send(writer.GetBytes());
+        session.Channel.Send(packetWriter.GetBytes());
     }
 
     public static void SendJobToAll(int jobNum)
     {
-        int i;
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SJobData);
-        buffer.WriteBlock(Database.JobData(jobNum));
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        packetWriter.WriteEnum(ServerPackets.SJobData);
+
+        Database.WriteJobDataToPacket(jobNum, packetWriter);
+
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void SendUpdateJobTo(int index, int jobNum)
+    public static void SendInventory(int playerId)
     {
-        ByteStream buffer;
-        buffer = new ByteStream(4);
-        buffer.WriteInt32((int) ServerPackets.SUpdateJob);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteBlock(Database.JobData(jobNum));
+        packetWriter.WriteEnum(ServerPackets.SPlayerInv);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
-    }
-
-    public static void SendUpdateJobToAll(int jobNum)
-    {
-        ByteStream buffer;
-        buffer = new ByteStream(4);
-        buffer.WriteInt32((int) ServerPackets.SUpdateJob);
-
-        buffer.WriteBlock(Database.JobData(jobNum));
-
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
-    }
-
-    public static void SendInventory(int index)
-    {
-        int i;
-        int n;
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SPlayerInv);
-
-        var loopTo = Core.Constant.MaxInv;
-        for (i = 0; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxInv; i++)
         {
-            buffer.WriteInt32(GetPlayerInv(index, i));
-            buffer.WriteInt32(GetPlayerInvValue(index, i));
+            packetWriter.WriteInt32(GetPlayerInv(playerId, i));
+            packetWriter.WriteInt32(GetPlayerInvValue(playerId, i));
         }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendLeftMap(int index)
+    public static void SendLeftGame(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SLeftMap);
-        buffer.WriteInt32(index);
-        NetworkConfig.SendDataToAllBut(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.SLeftGame);
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendLeftGame(int index)
+    public static void SendMapEquipment(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SLeftGame);
+        packetWriter.WriteEnum(ServerPackets.SMapWornEq);
+        packetWriter.WriteInt32(playerId);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        for (var i = 0; i < EquipmentCount; i++)
+        {
+            packetWriter.WriteInt32(GetPlayerEquipment(playerId, (Equipment) i));
+        }
+
+        NetworkConfig.SendDataToMap(GetPlayerMap(playerId), packetWriter.GetBytes());
     }
 
-    public static void SendMapEquipment(int index)
+    public static void SendMapEquipmentTo(int equipmentPlayerId, int sendToPlayerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SMapWornEq);
-        buffer.WriteInt32(index);
-        int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-        for (int i = 0; i < equipmentCount; i++)
-            buffer.WriteInt32(GetPlayerEquipment(index, (Equipment) i));
+        packetWriter.WriteEnum(ServerPackets.SMapWornEq);
+        packetWriter.WriteInt32(equipmentPlayerId);
 
-        NetworkConfig.SendDataToMap(GetPlayerMap(index), buffer.UnreadData, buffer.WritePosition);
+        for (var i = 0; i < EquipmentCount; i++)
+        {
+            packetWriter.WriteInt32(GetPlayerEquipment(equipmentPlayerId, (Equipment) i));
+        }
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(sendToPlayerId, packetWriter.GetBytes());
     }
 
-    public static void SendMapEquipmentTo(int playerNum, int index)
+    public static void SendShops(int playerId)
     {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SMapWornEq);
-        buffer.WriteInt32(playerNum);
-        int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-        for (int i = 0; i < equipmentCount; i++)
-            buffer.WriteInt32(GetPlayerEquipment(playerNum, (Equipment) i));
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendShops(int index)
-    {
-        int i;
-
-        var loopTo = Core.Constant.MaxShops;
-        for (i = 0; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxShops; i++)
         {
             if (Data.Shop[i].Name.Length > 0)
             {
-                SendUpdateShopTo(index, i);
+                SendUpdateShopTo(playerId, i);
             }
         }
     }
 
-    public static void SendUpdateShopTo(int index, int shopNum)
+    public static void SendUpdateShopTo(int playerId, int shopNum)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SUpdateShop);
+        packetWriter.WriteEnum(ServerPackets.SUpdateShop);
+        packetWriter.WriteInt32(shopNum);
+        packetWriter.WriteInt32(Data.Shop[shopNum].BuyRate);
+        packetWriter.WriteString(Data.Shop[shopNum].Name);
 
-        buffer.WriteInt32(shopNum);
-
-        buffer.WriteInt32(Data.Shop[shopNum].BuyRate);
-        buffer.WriteString(Data.Shop[shopNum].Name);
-
-        for (int i = 0, loopTo = Core.Constant.MaxTrades; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxTrades; i++)
         {
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].Item);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].ItemValue);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].Item);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].ItemValue);
         }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
     public static void SendUpdateShopToAll(int shopNum)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SUpdateShop);
+        packetWriter.WriteEnum(ServerPackets.SUpdateShop);
+        packetWriter.WriteInt32(shopNum);
+        packetWriter.WriteInt32(Data.Shop[shopNum].BuyRate);
+        packetWriter.WriteString(Data.Shop[shopNum].Name);
 
-        buffer.WriteInt32(shopNum);
-        buffer.WriteInt32(Data.Shop[shopNum].BuyRate);
-        buffer.WriteString(Data.Shop[shopNum].Name);
-
-        for (int i = 0, loopTo = Core.Constant.MaxTrades; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxTrades; i++)
         {
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].Item);
-            buffer.WriteInt32(Data.Shop[shopNum].TradeItem[i].ItemValue);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].Item);
+            packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].ItemValue);
         }
 
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void SendSkills(int index)
+    public static void SendSkills(int playerId)
     {
-        int i;
-
-        var loopTo = Core.Constant.MaxSkills;
-        for (i = 0; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxSkills; i++)
         {
             if (Data.Skill[i].Name.Length > 0)
             {
-                SendUpdateSkillTo(index, i);
+                SendUpdateSkillTo(playerId, i);
             }
         }
     }
 
-    public static void SendUpdateSkillTo(int index, int skillNum)
+    public static void SendUpdateSkillTo(int playerId, int skillNum)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SUpdateSkill);
-        buffer.WriteInt32(skillNum);
-        buffer.WriteInt32(Data.Skill[skillNum].AccessReq);
-        buffer.WriteInt32(Data.Skill[skillNum].AoE);
-        buffer.WriteInt32(Data.Skill[skillNum].CastAnim);
-        buffer.WriteInt32(Data.Skill[skillNum].CastTime);
-        buffer.WriteInt32(Data.Skill[skillNum].CdTime);
-        buffer.WriteInt32(Data.Skill[skillNum].JobReq);
-        buffer.WriteInt32(Data.Skill[skillNum].Dir);
-        buffer.WriteInt32(Data.Skill[skillNum].Duration);
-        buffer.WriteInt32(Data.Skill[skillNum].Icon);
-        buffer.WriteInt32(Data.Skill[skillNum].Interval);
-        buffer.WriteInt32(Conversions.ToInteger(Data.Skill[skillNum].IsAoE));
-        buffer.WriteInt32(Data.Skill[skillNum].LevelReq);
-        buffer.WriteInt32(Data.Skill[skillNum].Map);
-        buffer.WriteInt32(Data.Skill[skillNum].MpCost);
-        buffer.WriteString(Data.Skill[skillNum].Name);
-        buffer.WriteInt32(Data.Skill[skillNum].Range);
-        buffer.WriteInt32(Data.Skill[skillNum].SkillAnim);
-        buffer.WriteInt32(Data.Skill[skillNum].StunDuration);
-        buffer.WriteInt32(Data.Skill[skillNum].Type);
-        buffer.WriteInt32(Data.Skill[skillNum].Vital);
-        buffer.WriteInt32(Data.Skill[skillNum].X);
-        buffer.WriteInt32(Data.Skill[skillNum].Y);
+        packetWriter.WriteEnum(ServerPackets.SUpdateSkill);
+        packetWriter.WriteInt32(skillNum);
+        packetWriter.WriteInt32(Data.Skill[skillNum].AccessReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].AoE);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CastAnim);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CastTime);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CdTime);
+        packetWriter.WriteInt32(Data.Skill[skillNum].JobReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Dir);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Duration);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Icon);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Interval);
+        packetWriter.WriteInt32(Data.Skill[skillNum].IsAoE ? 1 : 0);
+        packetWriter.WriteInt32(Data.Skill[skillNum].LevelReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Map);
+        packetWriter.WriteInt32(Data.Skill[skillNum].MpCost);
+        packetWriter.WriteString(Data.Skill[skillNum].Name);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Range);
+        packetWriter.WriteInt32(Data.Skill[skillNum].SkillAnim);
+        packetWriter.WriteInt32(Data.Skill[skillNum].StunDuration);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Type);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Vital);
+        packetWriter.WriteInt32(Data.Skill[skillNum].X);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Y);
+        packetWriter.WriteInt32(Data.Skill[skillNum].IsProjectile);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Projectile);
+        packetWriter.WriteInt32(Data.Skill[skillNum].KnockBack);
+        packetWriter.WriteInt32(Data.Skill[skillNum].KnockBackTiles);
 
-        // projectiles
-        buffer.WriteInt32(Data.Skill[skillNum].IsProjectile);
-        buffer.WriteInt32(Data.Skill[skillNum].Projectile);
-
-        buffer.WriteInt32(Data.Skill[skillNum].KnockBack);
-        buffer.WriteInt32(Data.Skill[skillNum].KnockBackTiles);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
     public static void SendUpdateSkillToAll(int skillNum)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SUpdateSkill);
-        buffer.WriteInt32(skillNum);
-        buffer.WriteInt32(Data.Skill[skillNum].AccessReq);
-        buffer.WriteInt32(Data.Skill[skillNum].AoE);
-        buffer.WriteInt32(Data.Skill[skillNum].CastAnim);
-        buffer.WriteInt32(Data.Skill[skillNum].CastTime);
-        buffer.WriteInt32(Data.Skill[skillNum].CdTime);
-        buffer.WriteInt32(Data.Skill[skillNum].JobReq);
-        buffer.WriteInt32(Data.Skill[skillNum].Dir);
-        buffer.WriteInt32(Data.Skill[skillNum].Duration);
-        buffer.WriteInt32(Data.Skill[skillNum].Icon);
-        buffer.WriteInt32(Data.Skill[skillNum].Interval);
-        buffer.WriteInt32(Conversions.ToInteger(Data.Skill[skillNum].IsAoE));
-        buffer.WriteInt32(Data.Skill[skillNum].LevelReq);
-        buffer.WriteInt32(Data.Skill[skillNum].Map);
-        buffer.WriteInt32(Data.Skill[skillNum].MpCost);
-        buffer.WriteString(Data.Skill[skillNum].Name);
-        buffer.WriteInt32(Data.Skill[skillNum].Range);
-        buffer.WriteInt32(Data.Skill[skillNum].SkillAnim);
-        buffer.WriteInt32(Data.Skill[skillNum].StunDuration);
-        buffer.WriteInt32(Data.Skill[skillNum].Type);
-        buffer.WriteInt32(Data.Skill[skillNum].Vital);
-        buffer.WriteInt32(Data.Skill[skillNum].X);
-        buffer.WriteInt32(Data.Skill[skillNum].Y);
+        packetWriter.WriteEnum(ServerPackets.SUpdateSkill);
+        packetWriter.WriteInt32(skillNum);
+        packetWriter.WriteInt32(Data.Skill[skillNum].AccessReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].AoE);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CastAnim);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CastTime);
+        packetWriter.WriteInt32(Data.Skill[skillNum].CdTime);
+        packetWriter.WriteInt32(Data.Skill[skillNum].JobReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Dir);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Duration);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Icon);
+        packetWriter.WriteInt32(Data.Skill[skillNum].IsAoE ? 1 : 0);
+        packetWriter.WriteInt32(Data.Skill[skillNum].LevelReq);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Map);
+        packetWriter.WriteInt32(Data.Skill[skillNum].MpCost);
+        packetWriter.WriteString(Data.Skill[skillNum].Name);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Range);
+        packetWriter.WriteInt32(Data.Skill[skillNum].SkillAnim);
+        packetWriter.WriteInt32(Data.Skill[skillNum].StunDuration);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Type);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Vital);
+        packetWriter.WriteInt32(Data.Skill[skillNum].X);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Y);
+        packetWriter.WriteInt32(Data.Skill[skillNum].IsProjectile);
+        packetWriter.WriteInt32(Data.Skill[skillNum].Projectile);
+        packetWriter.WriteInt32(Data.Skill[skillNum].KnockBack);
+        packetWriter.WriteInt32(Data.Skill[skillNum].KnockBackTiles);
 
-        buffer.WriteInt32(Data.Skill[skillNum].IsProjectile);
-        buffer.WriteInt32(Data.Skill[skillNum].Projectile);
-
-        buffer.WriteInt32(Data.Skill[skillNum].KnockBack);
-        buffer.WriteInt32(Data.Skill[skillNum].KnockBackTiles);
-
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void SendStats(int index)
+    public static void SendStats(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerStats);
-        buffer.WriteInt32(index);
+        packetWriter.WriteEnum(ServerPackets.SPlayerStats);
+        packetWriter.WriteInt32(playerId);
 
-        int statCount = Enum.GetValues(typeof(Stat)).Length;
-        for (int i = 0; i < statCount; i++)
-            buffer.WriteInt32(GetPlayerStat(index, (Stat) i));
+        for (var i = 0; i < StatCount; i++)
+        {
+            packetWriter.WriteInt32(GetPlayerStat(playerId, (Stat) i));
+        }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendVitals(int index)
+    public static void SendVitals(int playerId)
     {
-        var vitalCount = Enum.GetValues(typeof(Vital)).Length;
-        for (int i = 0; i < vitalCount; i++)
-            SendVital(index, (Vital) i);
+        for (var i = 0; i < VitalCount; i++)
+        {
+            SendVital(playerId, (Vital) i);
+        }
     }
 
-    public static void SendVital(int index, Vital vital)
+    public static void SendVital(int playerId, Vital vital)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        // Get our packet type.
         switch (vital)
         {
             case Vital.Health:
-            {
-                buffer.WriteInt32((int) ServerPackets.SPlayerHp);
+                packetWriter.WriteEnum(ServerPackets.SPlayerHp);
                 break;
-            }
+
             case Vital.Mana:
-            {
-                buffer.WriteInt32((int) ServerPackets.SPlayerMp);
+                packetWriter.WriteEnum(ServerPackets.SPlayerMp);
                 break;
-            }
+
             case Vital.Stamina:
-            {
-                buffer.WriteInt32((int) ServerPackets.SPlayerSp);
+                packetWriter.WriteEnum(ServerPackets.SPlayerSp);
                 break;
-            }
         }
 
-        // Set and send related data.
-        buffer.WriteInt32(GetPlayerVital(index, vital));
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteInt32(GetPlayerVital(playerId, vital));
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
 
-        // send vitals to party if in one
-        if (Core.Data.TempPlayer[index].InParty >= 0)
-            Party.SendPartyVitals(Core.Data.TempPlayer[index].InParty, index);
+        if (Data.TempPlayer[playerId].InParty >= 0)
+        {
+            Party.SendPartyVitals(Data.TempPlayer[playerId].InParty, playerId);
+        }
     }
 
-    public static void SendWelcome(int index)
+    public static void SendWelcome(int playerId)
     {
-        // Send them welcome
         if (SettingsManager.Instance.Welcome.Length > 0)
         {
-            PlayerMsg(index, SettingsManager.Instance.Welcome, (int) (int) Core.Color.BrightCyan);
+            PlayerMsg(playerId, SettingsManager.Instance.Welcome, (int) Color.BrightCyan);
         }
 
-        // Send whos online
-        SendWhosOnline(index);
+        SendWhosOnline(playerId);
     }
 
-    public static void SendWhosOnline(int index)
+    public static void SendWhosOnline(int playerId)
     {
-        string s = "";
-        var n = default(int);
-
-        if (GetPlayerAccess(index) < (int) AccessLevel.Moderator)
-            return;
-
-        foreach (var i in PlayerService.Instance.PlayerIds)
+        if (GetPlayerAccess(playerId) < (int) AccessLevel.Moderator)
         {
-            if (i != index & GetPlayerName(i) != "")
-            {
-                s = s + GetPlayerName(i) + ", ";
-                n = n + 1;
-            }
+            return;
         }
 
-        if (n == 0)
+        var playerNames = PlayerService.Instance.PlayerIds
+            .Where(otherPlayerId => otherPlayerId != playerId)
+            .Select(GetPlayerName)
+            .ToArray();
+        
+        string message;
+        if (playerNames.Length == 0)
         {
-            s = "There are no other players online.";
+            message = "There are no other players online.";
         }
         else
         {
-            s = Strings.Mid(s, 1, Strings.Len(s) - 2);
-            s = "There are " + n + " other players online: " + s + ".";
+            message = "There are " + playerNames.Length + " other players online: " + string.Join(", ", playerNames) + ".";
         }
 
-        PlayerMsg(index, s, (int) (int) Core.Color.White);
+        PlayerMsg(playerId, message, (int) Color.White);
     }
 
-    public static void SendWornEquipment(int index)
+    public static void SendWornEquipment(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerWornEq);
+        packetWriter.WriteEnum(ServerPackets.SPlayerWornEq);
 
-        int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-        for (int i = 0; i < equipmentCount; i++)
-            buffer.WriteInt32(GetPlayerEquipment(index, (Equipment) i));
+        for (var i = 0; i < EquipmentCount; i++)
+        {
+            packetWriter.WriteInt32(GetPlayerEquipment(playerId, (Equipment) i));
+        }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendMapData(int index, int mapNum, bool sendMap)
+    public static void SendMapData(int playerId, int mapNum, bool sendMap)
     {
-        var buffer = new ByteStream(4);
-        byte[] data;
+        var packetWriter = new PacketWriter();
+        
+        packetWriter.WriteEnum(ServerPackets.SMapData);
 
         if (sendMap)
         {
-            buffer.WriteInt32(1);
-            buffer.WriteInt32(mapNum);
-            buffer.WriteString(Data.Map[mapNum].Name);
-            buffer.WriteString(Data.Map[mapNum].Music);
-            buffer.WriteInt32(Data.Map[mapNum].Revision);
-            buffer.WriteInt32(Data.Map[mapNum].Moral);
-            buffer.WriteInt32(Data.Map[mapNum].Tileset);
-            buffer.WriteInt32(Data.Map[mapNum].Up);
-            buffer.WriteInt32(Data.Map[mapNum].Down);
-            buffer.WriteInt32(Data.Map[mapNum].Left);
-            buffer.WriteInt32(Data.Map[mapNum].Right);
-            buffer.WriteInt32(Data.Map[mapNum].BootMap);
-            buffer.WriteInt32(Data.Map[mapNum].BootX);
-            buffer.WriteInt32(Data.Map[mapNum].BootY);
-            buffer.WriteInt32(Data.Map[mapNum].MaxX);
-            buffer.WriteInt32(Data.Map[mapNum].MaxY);
-            buffer.WriteInt32(Data.Map[mapNum].Weather);
-            buffer.WriteInt32(Data.Map[mapNum].Fog);
-            buffer.WriteInt32(Data.Map[mapNum].WeatherIntensity);
-            buffer.WriteInt32(Data.Map[mapNum].FogOpacity);
-            buffer.WriteInt32(Data.Map[mapNum].FogSpeed);
-            buffer.WriteBoolean(Data.Map[mapNum].MapTint);
-            buffer.WriteInt32(Data.Map[mapNum].MapTintR);
-            buffer.WriteInt32(Data.Map[mapNum].MapTintG);
-            buffer.WriteInt32(Data.Map[mapNum].MapTintB);
-            buffer.WriteInt32(Data.Map[mapNum].MapTintA);
-            buffer.WriteByte(Data.Map[mapNum].Panorama);
-            buffer.WriteByte(Data.Map[mapNum].Parallax);
-            buffer.WriteByte(Data.Map[mapNum].Brightness);
-            buffer.WriteBoolean(Data.Map[mapNum].NoRespawn);
-            buffer.WriteBoolean(Data.Map[mapNum].Indoors);
-            buffer.WriteInt32(Data.Map[mapNum].Shop);
+            packetWriter.WriteInt32(1);
+            packetWriter.WriteInt32(mapNum);
+            packetWriter.WriteString(Data.Map[mapNum].Name);
+            packetWriter.WriteString(Data.Map[mapNum].Music);
+            packetWriter.WriteInt32(Data.Map[mapNum].Revision);
+            packetWriter.WriteInt32(Data.Map[mapNum].Moral);
+            packetWriter.WriteInt32(Data.Map[mapNum].Tileset);
+            packetWriter.WriteInt32(Data.Map[mapNum].Up);
+            packetWriter.WriteInt32(Data.Map[mapNum].Down);
+            packetWriter.WriteInt32(Data.Map[mapNum].Left);
+            packetWriter.WriteInt32(Data.Map[mapNum].Right);
+            packetWriter.WriteInt32(Data.Map[mapNum].BootMap);
+            packetWriter.WriteInt32(Data.Map[mapNum].BootX);
+            packetWriter.WriteInt32(Data.Map[mapNum].BootY);
+            packetWriter.WriteInt32(Data.Map[mapNum].MaxX);
+            packetWriter.WriteInt32(Data.Map[mapNum].MaxY);
+            packetWriter.WriteInt32(Data.Map[mapNum].Weather);
+            packetWriter.WriteInt32(Data.Map[mapNum].Fog);
+            packetWriter.WriteInt32(Data.Map[mapNum].WeatherIntensity);
+            packetWriter.WriteInt32(Data.Map[mapNum].FogOpacity);
+            packetWriter.WriteInt32(Data.Map[mapNum].FogSpeed);
+            packetWriter.WriteBoolean(Data.Map[mapNum].MapTint);
+            packetWriter.WriteInt32(Data.Map[mapNum].MapTintR);
+            packetWriter.WriteInt32(Data.Map[mapNum].MapTintG);
+            packetWriter.WriteInt32(Data.Map[mapNum].MapTintB);
+            packetWriter.WriteInt32(Data.Map[mapNum].MapTintA);
+            packetWriter.WriteByte(Data.Map[mapNum].Panorama);
+            packetWriter.WriteByte(Data.Map[mapNum].Parallax);
+            packetWriter.WriteByte(Data.Map[mapNum].Brightness);
+            packetWriter.WriteBoolean(Data.Map[mapNum].NoRespawn);
+            packetWriter.WriteBoolean(Data.Map[mapNum].Indoors);
+            packetWriter.WriteInt32(Data.Map[mapNum].Shop);
 
-            for (int i = 0, loopTo = Core.Constant.MaxMapNpcs; i < loopTo; i++)
-                buffer.WriteInt32(Data.Map[mapNum].Npc[i]);
-
-            for (int x = 0, loopTo1 = Data.Map[mapNum].MaxX; x < (int) loopTo1; x++)
+            for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
             {
-                for (int y = 0, loopTo2 = Data.Map[mapNum].MaxY; y < (int) loopTo2; y++)
+                packetWriter.WriteInt32(Data.Map[mapNum].Npc[i]);
+            }
+
+            for (var x = 0; x < Data.Map[mapNum].MaxX; x++)
+            {
+                for (var y = 0; y < Data.Map[mapNum].MaxY; y++)
                 {
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1_2);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2_2);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3_2);
-                    buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].DirBlock);
-                    for (int i = 0, loopTo3 = (int) Enum.GetValues(typeof(MapLayer)).Length; i < loopTo3; i++)
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data1_2);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data2_2);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Data3_2);
+                    packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].DirBlock);
+
+                    for (var i = 0; i < MapLayerCount; i++)
                     {
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].Tileset);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].X);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].Y);
-                        buffer.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].AutoTile);
+                        packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].Tileset);
+                        packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].X);
+                        packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].Y);
+                        packetWriter.WriteInt32(Data.Map[mapNum].Tile[x, y].Layer[i].AutoTile);
                     }
 
-                    buffer.WriteInt32((int) Data.Map[mapNum].Tile[x, y].Type);
-                    buffer.WriteInt32((int) Data.Map[mapNum].Tile[x, y].Type2);
+                    packetWriter.WriteInt32((int) Data.Map[mapNum].Tile[x, y].Type);
+                    packetWriter.WriteInt32((int) Data.Map[mapNum].Tile[x, y].Type2);
                 }
             }
 
-            buffer.WriteInt32(Data.Map[mapNum].EventCount);
+            packetWriter.WriteInt32(Data.Map[mapNum].EventCount);
 
             if (Data.Map[mapNum].EventCount > 0)
             {
-                for (int i = 0, loopTo4 = Data.Map[mapNum].EventCount; i < loopTo4; i++)
+                for (var i = 0; i < Data.Map[mapNum].EventCount; i++)
                 {
+                    ref var @event = ref Data.Map[mapNum].Event[i];
+
+                    packetWriter.WriteString(@event.Name);
+                    packetWriter.WriteByte(@event.Globals);
+                    packetWriter.WriteInt32(@event.X);
+                    packetWriter.WriteInt32(@event.Y);
+                    packetWriter.WriteInt32(@event.PageCount);
+
+                    if (Data.Map[mapNum].Event[i].PageCount == 0)
                     {
-                        ref var withBlock = ref Data.Map[mapNum].Event[i];
-                        buffer.WriteString(withBlock.Name);
-                        buffer.WriteByte(withBlock.Globals);
-                        buffer.WriteInt32(withBlock.X);
-                        buffer.WriteInt32(withBlock.Y);
-                        buffer.WriteInt32(withBlock.PageCount);
+                        continue;
                     }
 
-                    if (Data.Map[mapNum].Event[i].PageCount > 0)
+                    for (var x = 0; x < Data.Map[mapNum].Event[i].PageCount; x++)
                     {
-                        for (int x = 0, loopTo5 = Data.Map[mapNum].Event[i].PageCount; x < loopTo5; x++)
+                        ref var eventPage = ref Data.Map[mapNum].Event[i].Pages[x];
+
+                        packetWriter.WriteInt32(eventPage.ChkVariable);
+                        packetWriter.WriteInt32(eventPage.VariableIndex);
+                        packetWriter.WriteInt32(eventPage.VariableCondition);
+                        packetWriter.WriteInt32(eventPage.VariableCompare);
+                        packetWriter.WriteInt32(eventPage.ChkSwitch);
+                        packetWriter.WriteInt32(eventPage.SwitchIndex);
+                        packetWriter.WriteInt32(eventPage.SwitchCompare);
+                        packetWriter.WriteInt32(eventPage.ChkHasItem);
+                        packetWriter.WriteInt32(eventPage.HasItemIndex);
+                        packetWriter.WriteInt32(eventPage.HasItemAmount);
+                        packetWriter.WriteInt32(eventPage.ChkSelfSwitch);
+                        packetWriter.WriteInt32(eventPage.SelfSwitchIndex);
+                        packetWriter.WriteInt32(eventPage.SelfSwitchCompare);
+                        packetWriter.WriteByte(eventPage.GraphicType);
+                        packetWriter.WriteInt32(eventPage.Graphic);
+                        packetWriter.WriteInt32(eventPage.GraphicX);
+                        packetWriter.WriteInt32(eventPage.GraphicY);
+                        packetWriter.WriteInt32(eventPage.GraphicX2);
+                        packetWriter.WriteInt32(eventPage.GraphicY2);
+                        packetWriter.WriteByte(eventPage.MoveType);
+                        packetWriter.WriteByte(eventPage.MoveSpeed);
+                        packetWriter.WriteByte(eventPage.MoveFreq);
+                        packetWriter.WriteInt32(eventPage.MoveRouteCount);
+                        packetWriter.WriteInt32(eventPage.IgnoreMoveRoute);
+                        packetWriter.WriteInt32(eventPage.RepeatMoveRoute);
+
+                        if (eventPage.MoveRouteCount > 0)
                         {
+                            for (int y = 0, loopTo6 = eventPage.MoveRouteCount; y < loopTo6; y++)
                             {
-                                ref var withBlock1 = ref Data.Map[mapNum].Event[i].Pages[x];
-                                buffer.WriteInt32(withBlock1.ChkVariable);
-                                buffer.WriteInt32(withBlock1.VariableIndex);
-                                buffer.WriteInt32(withBlock1.VariableCondition);
-                                buffer.WriteInt32(withBlock1.VariableCompare);
-                                buffer.WriteInt32(withBlock1.ChkSwitch);
-                                buffer.WriteInt32(withBlock1.SwitchIndex);
-                                buffer.WriteInt32(withBlock1.SwitchCompare);
-                                buffer.WriteInt32(withBlock1.ChkHasItem);
-                                buffer.WriteInt32(withBlock1.HasItemIndex);
-                                buffer.WriteInt32(withBlock1.HasItemAmount);
-                                buffer.WriteInt32(withBlock1.ChkSelfSwitch);
-                                buffer.WriteInt32(withBlock1.SelfSwitchIndex);
-                                buffer.WriteInt32(withBlock1.SelfSwitchCompare);
-                                buffer.WriteByte(withBlock1.GraphicType);
-                                buffer.WriteInt32(withBlock1.Graphic);
-                                buffer.WriteInt32(withBlock1.GraphicX);
-                                buffer.WriteInt32(withBlock1.GraphicY);
-                                buffer.WriteInt32(withBlock1.GraphicX2);
-                                buffer.WriteInt32(withBlock1.GraphicY2);
-                                buffer.WriteByte(withBlock1.MoveType);
-                                buffer.WriteByte(withBlock1.MoveSpeed);
-                                buffer.WriteByte(withBlock1.MoveFreq);
-                                buffer.WriteInt32(withBlock1.MoveRouteCount);
-                                buffer.WriteInt32(withBlock1.IgnoreMoveRoute);
-                                buffer.WriteInt32(withBlock1.RepeatMoveRoute);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Index);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data1);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data2);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data3);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data4);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data5);
+                                packetWriter.WriteInt32(eventPage.MoveRoute[y].Data6);
+                            }
+                        }
 
-                                if (withBlock1.MoveRouteCount > 0)
-                                {
-                                    for (int y = 0, loopTo6 = withBlock1.MoveRouteCount; y < (int) loopTo6; y++)
-                                    {
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Index);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data1);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data2);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data3);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data4);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data5);
-                                        buffer.WriteInt32(withBlock1.MoveRoute[y].Data6);
-                                    }
-                                }
+                        packetWriter.WriteInt32(eventPage.WalkAnim);
+                        packetWriter.WriteInt32(eventPage.DirFix);
+                        packetWriter.WriteInt32(eventPage.WalkThrough);
+                        packetWriter.WriteInt32(eventPage.ShowName);
+                        packetWriter.WriteByte(eventPage.Trigger);
+                        packetWriter.WriteInt32(eventPage.CommandListCount);
+                        packetWriter.WriteByte(eventPage.Position);
 
-                                buffer.WriteInt32(withBlock1.WalkAnim);
-                                buffer.WriteInt32(withBlock1.DirFix);
-                                buffer.WriteInt32(withBlock1.WalkThrough);
-                                buffer.WriteInt32(withBlock1.ShowName);
-                                buffer.WriteByte(withBlock1.Trigger);
-                                buffer.WriteInt32(withBlock1.CommandListCount);
-                                buffer.WriteByte(withBlock1.Position);
+                        if (Data.Map[mapNum].Event[i].Pages[x].CommandListCount == 0)
+                        {
+                            continue;
+                        }
+
+                        for (var y = 0; y < Data.Map[mapNum].Event[i].Pages[x].CommandListCount; y++)
+                        {
+                            packetWriter.WriteInt32(Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount);
+                            packetWriter.WriteInt32(Data.Map[mapNum].Event[i].Pages[x].CommandList[y].ParentList);
+
+                            if (Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount == 0)
+                            {
+                                continue;
                             }
 
-                            if (Data.Map[mapNum].Event[i].Pages[x].CommandListCount > 0)
+                            for (var z = 0; z < Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount; z++)
                             {
-                                for (int y = 0, loopTo7 = Data.Map[mapNum].Event[i].Pages[x].CommandListCount; y < loopTo7; y++)
+                                ref var eventCommand = ref Data.Map[mapNum].Event[i].Pages[x].CommandList[y].Commands[z];
+
+                                packetWriter.WriteInt32(eventCommand.Index);
+                                packetWriter.WriteString(eventCommand.Text1);
+                                packetWriter.WriteString(eventCommand.Text2);
+                                packetWriter.WriteString(eventCommand.Text3);
+                                packetWriter.WriteString(eventCommand.Text4);
+                                packetWriter.WriteString(eventCommand.Text5);
+                                packetWriter.WriteInt32(eventCommand.Data1);
+                                packetWriter.WriteInt32(eventCommand.Data2);
+                                packetWriter.WriteInt32(eventCommand.Data3);
+                                packetWriter.WriteInt32(eventCommand.Data4);
+                                packetWriter.WriteInt32(eventCommand.Data5);
+                                packetWriter.WriteInt32(eventCommand.Data6);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.CommandList);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.Condition);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.Data1);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.Data2);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.Data3);
+                                packetWriter.WriteInt32(eventCommand.ConditionalBranch.ElseCommandList);
+                                packetWriter.WriteInt32(eventCommand.MoveRouteCount);
+
+                                if (eventCommand.MoveRouteCount == 0)
                                 {
-                                    buffer.WriteInt32(Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount);
-                                    buffer.WriteInt32(Data.Map[mapNum].Event[i].Pages[x].CommandList[y].ParentList);
-                                    if (Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount > 0)
-                                    {
-                                        for (int z = 0, loopTo8 = Data.Map[mapNum].Event[i].Pages[x].CommandList[y].CommandCount; z < loopTo8; z++)
-                                        {
-                                            {
-                                                ref var withBlock2 = ref Data.Map[mapNum].Event[i].Pages[x].CommandList[y].Commands[z];
-                                                buffer.WriteInt32(withBlock2.Index);
-                                                buffer.WriteString(withBlock2.Text1);
-                                                buffer.WriteString(withBlock2.Text2);
-                                                buffer.WriteString(withBlock2.Text3);
-                                                buffer.WriteString(withBlock2.Text4);
-                                                buffer.WriteString(withBlock2.Text5);
-                                                buffer.WriteInt32(withBlock2.Data1);
-                                                buffer.WriteInt32(withBlock2.Data2);
-                                                buffer.WriteInt32(withBlock2.Data3);
-                                                buffer.WriteInt32(withBlock2.Data4);
-                                                buffer.WriteInt32(withBlock2.Data5);
-                                                buffer.WriteInt32(withBlock2.Data6);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.CommandList);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.Condition);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.Data1);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.Data2);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.Data3);
-                                                buffer.WriteInt32(withBlock2.ConditionalBranch.ElseCommandList);
-                                                buffer.WriteInt32(withBlock2.MoveRouteCount);
-                                                if (withBlock2.MoveRouteCount > 0)
-                                                {
-                                                    for (int w = 0, loopTo9 = withBlock2.MoveRouteCount; w < loopTo9; w++)
-                                                    {
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Index);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data1);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data2);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data3);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data4);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data5);
-                                                        buffer.WriteInt32(withBlock2.MoveRoute[w].Data6);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                    continue;
+                                }
+
+                                for (var w = 0; w < eventCommand.MoveRouteCount; w++)
+                                {
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Index);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data1);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data2);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data3);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data4);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data5);
+                                    packetWriter.WriteInt32(eventCommand.MoveRoute[w].Data6);
                                 }
                             }
                         }
@@ -728,62 +628,55 @@ public class NetworkSend
         }
         else
         {
-            buffer.WriteInt32(0);
+            packetWriter.WriteInt32(0);
         }
 
-        for (int i = 0, loopTo10 = Core.Constant.MaxMapItems; i < loopTo10; i++)
+        for (var i = 0; i < Core.Constant.MaxMapItems; i++)
         {
-            buffer.WriteInt32((int) Data.MapItem[mapNum, i].Num);
-            buffer.WriteInt32(Data.MapItem[mapNum, i].Value);
-            buffer.WriteInt32(Data.MapItem[mapNum, i].X);
-            buffer.WriteInt32(Data.MapItem[mapNum, i].Y);
+            packetWriter.WriteInt32(Data.MapItem[mapNum, i].Num);
+            packetWriter.WriteInt32(Data.MapItem[mapNum, i].Value);
+            packetWriter.WriteInt32(Data.MapItem[mapNum, i].X);
+            packetWriter.WriteInt32(Data.MapItem[mapNum, i].Y);
         }
 
-        var vitalCount = System.Enum.GetNames(typeof(Vital)).Length;
-
-        for (int i = 0, loopTo11 = Core.Constant.MaxMapNpcs; i < loopTo11; i++)
+        for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
         {
-            buffer.WriteInt32((int) Data.MapNpc[mapNum].Npc[i].Num);
-            buffer.WriteInt32(Data.MapNpc[mapNum].Npc[i].X);
-            buffer.WriteInt32(Data.MapNpc[mapNum].Npc[i].Y);
-            buffer.WriteByte(Data.MapNpc[mapNum].Npc[i].Dir);
-            for (int x = 0; x < vitalCount; x++)
+            packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].Num);
+            packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].X);
+            packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].Y);
+            packetWriter.WriteByte(Data.MapNpc[mapNum].Npc[i].Dir);
+
+            for (var x = 0; x < VitalCount; x++)
             {
-                buffer.WriteInt32(Data.MapNpc[mapNum].Npc[i].Vital[x]);
+                packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].Vital[x]);
             }
         }
 
-        if (Data.MapResource[GetPlayerMap(index)].ResourceCount > 0)
+        if (Data.MapResource[GetPlayerMap(playerId)].ResourceCount > 0)
         {
-            buffer.WriteInt32(1);
-            buffer.WriteInt32(Data.MapResource[GetPlayerMap(index)].ResourceCount);
+            packetWriter.WriteInt32(1);
+            packetWriter.WriteInt32(Data.MapResource[GetPlayerMap(playerId)].ResourceCount);
 
-            for (int i = 0, loopTo12 = Data.MapResource[GetPlayerMap(index)].ResourceCount; i < loopTo12; i++)
+            for (var i = 0; i < Data.MapResource[GetPlayerMap(playerId)].ResourceCount; i++)
             {
-                buffer.WriteByte(Data.MapResource[GetPlayerMap(index)].ResourceData[i].State);
-                buffer.WriteInt32(Data.MapResource[GetPlayerMap(index)].ResourceData[i].X);
-                buffer.WriteInt32(Data.MapResource[GetPlayerMap(index)].ResourceData[i].Y);
+                packetWriter.WriteByte(Data.MapResource[GetPlayerMap(playerId)].ResourceData[i].State);
+                packetWriter.WriteInt32(Data.MapResource[GetPlayerMap(playerId)].ResourceData[i].X);
+                packetWriter.WriteInt32(Data.MapResource[GetPlayerMap(playerId)].ResourceData[i].Y);
             }
         }
         else
         {
-            buffer.WriteInt32(0);
+            packetWriter.WriteInt32(0);
         }
-
-        data = Compression.CompressBytes(buffer.ToArray());
-        buffer = new ByteStream(4);
-        buffer.WriteInt32((int) ServerPackets.SMapData);
-        buffer.WriteBlock(data);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendJoinMap(int index)
+    public static void SendJoinMap(int playerId)
     {
         try
         {
-            Script.Instance?.JoinMap(index);
+            Script.Instance?.JoinMap(playerId);
         }
         catch (Exception ex)
         {
@@ -791,579 +684,428 @@ public class NetworkSend
         }
     }
 
-    public static byte[] PlayerData(int index)
+    public static byte[] GetPlayerDataPacket(int playerId)
     {
-        byte[] playerData = default;
-        var buffer = new ByteStream(4);
-        int i;
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerData);
-        buffer.WriteInt32(index);
-        buffer.WriteString(GetPlayerName(index));
-        buffer.WriteInt32(GetPlayerJob(index));
-        buffer.WriteInt32(GetPlayerLevel(index));
-        buffer.WriteInt32(GetPlayerPoints(index));
-        buffer.WriteInt32(GetPlayerSprite(index));
-        buffer.WriteInt32(GetPlayerMap(index));
-        buffer.WriteByte(GetPlayerAccess(index));
-        buffer.WriteBoolean(GetPlayerPk(index));
+        packetWriter.WriteEnum(ServerPackets.SPlayerData);
+        packetWriter.WriteInt32(playerId);
+        packetWriter.WriteString(GetPlayerName(playerId));
+        packetWriter.WriteInt32(GetPlayerJob(playerId));
+        packetWriter.WriteInt32(GetPlayerLevel(playerId));
+        packetWriter.WriteInt32(GetPlayerPoints(playerId));
+        packetWriter.WriteInt32(GetPlayerSprite(playerId));
+        packetWriter.WriteInt32(GetPlayerMap(playerId));
+        packetWriter.WriteByte(GetPlayerAccess(playerId));
+        packetWriter.WriteBoolean(GetPlayerPk(playerId));
 
-        var statCount = Enum.GetValues(typeof(Stat)).Length;
-        for (i = 0; i < statCount; i++)
-            buffer.WriteInt32(GetPlayerStat(index, (Stat) i));
-
-        var resourceCount = Enum.GetValues(typeof(ResourceSkill)).Length;
-        for (i = 0; i < resourceCount; i++)
+        for (var i = 0; i < StatCount; i++)
         {
-            buffer.WriteInt32(GetPlayerGatherSkillLvl(index, i));
-            buffer.WriteInt32(GetPlayerGatherSkillExp(index, i));
-            buffer.WriteInt32(GetPlayerGatherSkillMaxExp(index, i));
+            packetWriter.WriteInt32(GetPlayerStat(playerId, (Stat) i));
         }
 
-        playerData = buffer.ToArray();
-
-        buffer.Dispose();
-        return playerData;
-    }
-
-    public static void SendPlayerXy(int index)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SPlayerXy);
-        buffer.WriteInt32(index);
-        buffer.WriteInt32(GetPlayerRawX(index));
-        buffer.WriteInt32(GetPlayerRawY(index));
-        buffer.WriteByte(GetPlayerDir(index));
-        buffer.WriteByte(Data.Player[index].Moving);
-        buffer.WriteBoolean(Data.Player[index].IsMoving);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendPlayerXyTo(int index, int playerNum)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SPlayerXy);
-        buffer.WriteInt32(playerNum);
-        buffer.WriteInt32(GetPlayerRawX(playerNum));
-        buffer.WriteInt32(GetPlayerRawY(playerNum));
-        buffer.WriteByte(GetPlayerDir(playerNum));
-        buffer.WriteByte(Data.Player[index].Moving);
-        buffer.WriteBoolean(Data.Player[index].IsMoving);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendPlayerXyToMap(int index)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SPlayerXy);
-        buffer.WriteInt32(index);
-        buffer.WriteInt32(GetPlayerRawX(index));
-        buffer.WriteInt32(GetPlayerRawY(index));
-        buffer.WriteByte(GetPlayerDir(index));
-        buffer.WriteByte(Data.Player[index].Moving);
-        buffer.WriteBoolean(Data.Player[index].IsMoving);
-
-        NetworkConfig.SendDataToMap(GetPlayerMap(index), buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void MapMsg(int mapNum, string msg, byte color)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SMapMsg);
-        buffer.WriteString(msg);
-
-        NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void AdminMsg(int mapNum, string msg, byte color)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SAdminMsg);
-        buffer.WriteString(msg);
-
-        foreach (var i in PlayerService.Instance.PlayerIds)
+        for (var i = 0; i < ResourceSkillCount; i++)
         {
-            if (GetPlayerAccess(i) >= (int) AccessLevel.Moderator)
+            packetWriter.WriteInt32(GetPlayerGatherSkillLvl(playerId, i));
+            packetWriter.WriteInt32(GetPlayerGatherSkillExp(playerId, i));
+            packetWriter.WriteInt32(GetPlayerGatherSkillMaxExp(playerId, i));
+        }
+
+        return packetWriter.GetBytes();
+    }
+
+    public static void SendPlayerXy(int playerId)
+    {
+        SendPlayerXyTo(playerId, playerId);
+    }
+
+    public static void SendPlayerXyTo(int sendToPlayerId, int positionPlayerId)
+    {
+        var packetWriter = new PacketWriter();
+
+        packetWriter.WriteEnum(ServerPackets.SPlayerXy);
+        packetWriter.WriteInt32(positionPlayerId);
+        packetWriter.WriteInt32(GetPlayerRawX(positionPlayerId));
+        packetWriter.WriteInt32(GetPlayerRawY(positionPlayerId));
+        packetWriter.WriteByte(GetPlayerDir(positionPlayerId));
+        packetWriter.WriteByte(Data.Player[sendToPlayerId].Moving);
+        packetWriter.WriteBoolean(Data.Player[sendToPlayerId].IsMoving);
+
+        PlayerService.Instance.SendDataTo(sendToPlayerId, packetWriter.GetBytes());
+    }
+
+    public static void SendPlayerXyToMap(int playerId)
+    {
+        var packetWriter = new PacketWriter(4);
+
+        packetWriter.WriteEnum(ServerPackets.SPlayerXy);
+        packetWriter.WriteInt32(playerId);
+        packetWriter.WriteInt32(GetPlayerRawX(playerId));
+        packetWriter.WriteInt32(GetPlayerRawY(playerId));
+        packetWriter.WriteByte(GetPlayerDir(playerId));
+        packetWriter.WriteByte(Data.Player[playerId].Moving);
+        packetWriter.WriteBoolean(Data.Player[playerId].IsMoving);
+
+        NetworkConfig.SendDataToMap(GetPlayerMap(playerId), packetWriter.GetBytes());
+    }
+
+    public static void MapMsg(int mapNum, string message)
+    {
+        var packetWriter = new PacketWriter();
+
+        packetWriter.WriteEnum(ServerPackets.SMapMsg);
+        packetWriter.WriteString(message);
+
+        NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
+    }
+
+    public static void AdminMsg(string message)
+    {
+        var packetWriter = new PacketWriter();
+
+        packetWriter.WriteEnum(ServerPackets.SAdminMsg);
+        packetWriter.WriteString(message);
+
+        foreach (var playerId in PlayerService.Instance.PlayerIds)
+        {
+            if (GetPlayerAccess(playerId) >= (int) AccessLevel.Moderator)
             {
-                NetworkConfig.SendDataTo(i, buffer.UnreadData, buffer.WritePosition);
+                PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
             }
         }
-
-        buffer.Dispose();
     }
 
     public static void SendActionMsg(int mapNum, string message, int color, int msgType, int x, int y, int playerOnlyNum = -1)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SActionMsg);
-        buffer.WriteString(message);
-        buffer.WriteInt32(color);
-        buffer.WriteInt32(msgType);
-        buffer.WriteInt32(x);
-        buffer.WriteInt32(y);
+        packetWriter.WriteEnum(ServerPackets.SActionMsg);
+        packetWriter.WriteString(message);
+        packetWriter.WriteInt32(color);
+        packetWriter.WriteInt32(msgType);
+        packetWriter.WriteInt32(x);
+        packetWriter.WriteInt32(y);
 
         if (playerOnlyNum >= 0)
         {
-            NetworkConfig.SendDataTo(playerOnlyNum, buffer.UnreadData, buffer.WritePosition);
+            PlayerService.Instance.SendDataTo(playerOnlyNum, packetWriter.GetBytes());
         }
         else
         {
-            NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
+            NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
         }
-
-        buffer.Dispose();
     }
 
-    public static void SayMsg_Map(int mapNum, int index, string message, int sayColor)
+    public static void SayMsg_Map(int mapNum, int playerId, string message, int sayColor)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SSayMsg);
-        buffer.WriteString(GetPlayerName(index));
-        buffer.WriteInt32(GetPlayerAccess(index));
-        buffer.WriteBoolean(GetPlayerPk(index));
-        buffer.WriteString(message);
-        buffer.WriteString("[Map]:");
-        buffer.WriteInt32(sayColor);
+        packetWriter.WriteEnum(ServerPackets.SSayMsg);
+        packetWriter.WriteString(GetPlayerName(playerId));
+        packetWriter.WriteInt32(GetPlayerAccess(playerId));
+        packetWriter.WriteBoolean(GetPlayerPk(playerId));
+        packetWriter.WriteString(message);
+        packetWriter.WriteString("[Map]:");
+        packetWriter.WriteInt32(sayColor);
 
-        NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
     }
 
-    public static void SayMsg_Global(int index, string message, int sayColor)
+    public static void SayMsg_Global(int playerId, string message, int sayColor)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SSayMsg);
-        buffer.WriteString(GetPlayerName(index));
-        buffer.WriteInt32(GetPlayerAccess(index));
-        buffer.WriteBoolean(GetPlayerPk(index));
-        buffer.WriteString(message);
-        buffer.WriteString("[Global]:");
-        buffer.WriteInt32(sayColor);
+        packetWriter.WriteEnum(ServerPackets.SSayMsg);
+        packetWriter.WriteString(GetPlayerName(playerId));
+        packetWriter.WriteInt32(GetPlayerAccess(playerId));
+        packetWriter.WriteBoolean(GetPlayerPk(playerId));
+        packetWriter.WriteString(message);
+        packetWriter.WriteString("[Global]:");
+        packetWriter.WriteInt32(sayColor);
 
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void SendPlayerData(int index)
+    public static void SendPlayerData(int playerId)
     {
-        byte[] data = PlayerData(index);
-        NetworkConfig.SendDataToMap(GetPlayerMap(index), data, data.Length);
+        NetworkConfig.SendDataToMap(GetPlayerMap(playerId), GetPlayerDataPacket(playerId));
     }
 
-    public static void SendInventoryUpdate(int index, int invSlot)
+    public static void SendInventoryUpdate(int playerId, int invSlot)
     {
-        var buffer = new ByteStream(4);
-        int n;
+        var packetWriter = new PacketWriter(16);
 
-        buffer.WriteInt32((int) ServerPackets.SPlayerInvUpdate);
+        packetWriter.WriteEnum(ServerPackets.SPlayerInvUpdate);
+        packetWriter.WriteInt32(invSlot);
+        packetWriter.WriteInt32(GetPlayerInv(playerId, invSlot));
+        packetWriter.WriteInt32(GetPlayerInvValue(playerId, invSlot));
 
-        buffer.WriteInt32(invSlot);
-
-        buffer.WriteInt32(GetPlayerInv(index, invSlot));
-        buffer.WriteInt32(GetPlayerInvValue(index, invSlot));
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendOpenShop(int index, int shopNum)
+    public static void SendOpenShop(int playerId, int shopNum)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SOpenShop);
-        buffer.WriteInt32(shopNum);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.SOpenShop);
+        packetWriter.WriteInt32(shopNum);
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void ResetShopAction(int index)
+    public static void ResetShopAction()
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SResetShopAction);
+        packetWriter.WriteEnum(ServerPackets.SResetShopAction);
 
-        NetworkConfig.SendDataToAll(buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataToAll(packetWriter.GetBytes());
     }
 
-    public static void SendBank(int index)
+    public static void SendBank(int playerId)
     {
-        var buffer = new ByteStream(4);
-        int i;
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SBank);
+        packetWriter.WriteEnum(ServerPackets.SBank);
 
-        var loopTo = Core.Constant.MaxBank;
-        for (i = 0; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxBank; i++)
         {
-            buffer.WriteInt32((int) Data.Bank[index].Item[i].Num);
-            buffer.WriteInt32(Data.Bank[index].Item[i].Value);
+            packetWriter.WriteInt32(Data.Bank[playerId].Item[i].Num);
+            packetWriter.WriteInt32(Data.Bank[playerId].Item[i].Value);
         }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendClearSkillBuffer(int index)
+    public static void SendTradeInvite(int playerId, int tradeindex)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        buffer.WriteInt32((int) ServerPackets.SClearSkillBuffer);
+        packetWriter.WriteEnum(ServerPackets.STradeInvite);
+        packetWriter.WriteInt32(tradeindex);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendTradeInvite(int index, int tradeindex)
+    public static void SendTrade(int playerId, int tradeTarget)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        buffer.WriteInt32((int) ServerPackets.STradeInvite);
-        buffer.WriteInt32(tradeindex);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.STrade);
+        packetWriter.WriteInt32(tradeTarget);
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendTrade(int index, int tradeTarget)
+    public static void SendTradeUpdate(int playerId, byte dataType)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.STrade);
-        buffer.WriteInt32(tradeTarget);
+        var totalWorth = 0;
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendTradeUpdate(int index, byte dataType)
-    {
-        var buffer = new ByteStream(4);
-        int i;
-        double tradeTarget;
-        var totalWorth = default(int);
-
-        tradeTarget = Core.Data.TempPlayer[index].InTrade;
-
+        var tradeTarget = Data.TempPlayer[playerId].InTrade;
         if (tradeTarget == -1)
+        {
             return;
-
-        buffer.WriteInt32((int) ServerPackets.STradeUpdate);
-        buffer.WriteInt32(dataType);
-
-        if (dataType == 0) // own inventory
-        {
-            var loopTo = Core.Constant.MaxInv;
-            for (i = 0; i < loopTo; i++)
-            {
-                if (Core.Data.TempPlayer[index].TradeOffer[i].Num >= 0)
-                {
-                    buffer.WriteInt32((int) Core.Data.TempPlayer[index].TradeOffer[i].Num);
-                    buffer.WriteInt32(Core.Data.TempPlayer[index].TradeOffer[i].Value);
-
-                    // add total worth
-                    // currency?
-                    if (Core.Data.Item[(int) Core.Data.TempPlayer[index].TradeOffer[i].Num].Type == (int) ItemCategory.Currency || Core.Data.Item[(int) Core.Data.TempPlayer[index].TradeOffer[i].Num].Stackable == 1)
-                    {
-                        if (Core.Data.TempPlayer[index].TradeOffer[i].Value == 0)
-                            Core.Data.TempPlayer[index].TradeOffer[i].Value = 0;
-                        totalWorth = totalWorth + Core.Data.Item[GetPlayerInv(index, (int) Core.Data.TempPlayer[index].TradeOffer[i].Num)].Price * Core.Data.TempPlayer[index].TradeOffer[i].Value;
-                    }
-                    else
-                    {
-                        totalWorth = totalWorth + Core.Data.Item[GetPlayerInv(index, (int) Core.Data.TempPlayer[index].TradeOffer[i].Num)].Price;
-                    }
-                }
-                else
-                {
-                    buffer.WriteInt32(-1);
-                    buffer.WriteInt32(0);
-                }
-            }
         }
-        else if (dataType == 1) // other inventory
-        {
-            var loopTo1 = Core.Constant.MaxInv;
-            for (i = 0; i < loopTo1; i++)
-            {
-                if (Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num >= 0)
-                {
-                    buffer.WriteInt32(GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num));
-                    buffer.WriteInt32(Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value);
 
-                    // add total worth
-                    if (GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num) >= 0)
+        packetWriter.WriteEnum(ServerPackets.STradeUpdate);
+        packetWriter.WriteInt32(dataType);
+
+        switch (dataType)
+        {
+            // own inventory
+            case 0:
+            {
+                for (var i = 0; i < Core.Constant.MaxInv; i++)
+                {
+                    if (Data.TempPlayer[playerId].TradeOffer[i].Num >= 0)
                     {
-                        // currency?
-                        if (Core.Data.Item[GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Type == (int) ItemCategory.Currency || Core.Data.Item[GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Stackable == 1)
+                        packetWriter.WriteInt32(Data.TempPlayer[playerId].TradeOffer[i].Num);
+                        packetWriter.WriteInt32(Data.TempPlayer[playerId].TradeOffer[i].Value);
+
+                        if (Data.Item[Data.TempPlayer[playerId].TradeOffer[i].Num].Type == (int) ItemCategory.Currency || Data.Item[Data.TempPlayer[playerId].TradeOffer[i].Num].Stackable == 1)
                         {
-                            if (Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value == 0)
-                                Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value = 0;
-                            totalWorth = totalWorth + Core.Data.Item[GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Price * Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value;
+                            totalWorth += Data.Item[GetPlayerInv(playerId, Data.TempPlayer[playerId].TradeOffer[i].Num)].Price * Data.TempPlayer[playerId].TradeOffer[i].Value;
                         }
                         else
                         {
-                            totalWorth = totalWorth + Core.Data.Item[GetPlayerInv((int) tradeTarget, (int) Core.Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Price;
+                            totalWorth += Data.Item[GetPlayerInv(playerId, Data.TempPlayer[playerId].TradeOffer[i].Num)].Price;
                         }
                     }
+                    else
+                    {
+                        packetWriter.WriteInt32(-1);
+                        packetWriter.WriteInt32(0);
+                    }
                 }
-                else
+
+                break;
+            }
+
+            // other inventory
+            case 1:
+            {
+                for (var i = 0; i < Core.Constant.MaxInv; i++)
                 {
-                    buffer.WriteInt32(-1);
-                    buffer.WriteInt32(0);
+                    if (Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num >= 0)
+                    {
+                        packetWriter.WriteInt32(GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num));
+                        packetWriter.WriteInt32(Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value);
+
+                        if (GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num) < 0)
+                        {
+                            continue;
+                        }
+
+                        if (Data.Item[GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Type == (int) ItemCategory.Currency || Data.Item[GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Stackable == 1)
+                        {
+                            totalWorth += Data.Item[GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Price * Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Value;
+                        }
+                        else
+                        {
+                            totalWorth += Data.Item[GetPlayerInv((int) tradeTarget, Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num)].Price;
+                        }
+                    }
+                    else
+                    {
+                        packetWriter.WriteInt32(-1);
+                        packetWriter.WriteInt32(0);
+                    }
                 }
+
+                break;
             }
         }
 
         // send total worth of trade
-        buffer.WriteInt32(totalWorth);
+        packetWriter.WriteInt32(totalWorth);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendTradeStatus(int index, byte status)
+    public static void SendTradeStatus(int playerId, byte status)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        buffer.WriteInt32((int) ServerPackets.STradeStatus);
-        buffer.WriteInt32(status);
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        packetWriter.WriteEnum(ServerPackets.STradeStatus);
+        packetWriter.WriteInt32(status);
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendStunned(int index)
+    public static void SendPlayerSkills(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SStunned);
-        buffer.WriteInt32(Core.Data.TempPlayer[index].StunDuration);
+        packetWriter.WriteEnum(ServerPackets.SSkills);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendBlood(int mapNum, int x, int y)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SBlood);
-        buffer.WriteInt32(x);
-        buffer.WriteInt32(y);
-
-        NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendPlayerSkills(int index)
-    {
-        int i;
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SSkills);
-
-        var loopTo = Core.Constant.MaxPlayerSkills;
-        for (i = 0; i < loopTo; i++)
-            buffer.WriteInt32(GetPlayerSkill(index, i));
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
-    }
-
-    public static void SendCooldown(int index, int slot)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SCooldown);
-        buffer.WriteInt32(slot);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendTarget(int index, int target, int targetType)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.STarget);
-        buffer.WriteInt32(target);
-        buffer.WriteInt32(targetType);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendMapReport(int index)
-    {
-        var buffer = new ByteStream(4);
-        int I;
-
-        buffer.WriteInt32((int) ServerPackets.SMapReport);
-
-        var loopTo = Core.Constant.MaxMaps;
-        for (var i = 0; i < loopTo; i++)
-            buffer.WriteString(Data.Map[i].Name);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendAdminPanel(int index)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SAdmin);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendMapNames(int index)
-    {
-        var buffer = new ByteStream(4);
-        int I;
-
-        buffer.WriteInt32((int) ServerPackets.SMapNames);
-
-        var loopTo = Core.Constant.MaxMaps;
-        for (var i = 0; i < loopTo; i++)
-            buffer.WriteString(Data.Map[i].Name);
-
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
-    }
-
-    public static void SendHotbar(int index)
-    {
-        var buffer = new ByteStream(4);
-        int i;
-
-        buffer.WriteInt32((int) ServerPackets.SHotbar);
-
-        var loopTo = Core.Constant.MaxHotbar;
-        for (i = 0; i < loopTo; i++)
+        for (var i = 0; i < Core.Constant.MaxPlayerSkills; i++)
         {
-            buffer.WriteInt32(Core.Data.Player[index].Hotbar[i].Slot);
-            buffer.WriteInt32(Core.Data.Player[index].Hotbar[i].SlotType);
+            packetWriter.WriteInt32(GetPlayerSkill(playerId, i));
         }
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendCritical(int index)
+    public static void SendTarget(int playerId, int target, int targetType)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(12);
 
-        buffer.WriteInt32((int) ServerPackets.SCritical);
+        packetWriter.WriteEnum(ServerPackets.STarget);
+        packetWriter.WriteInt32(target);
+        packetWriter.WriteInt32(targetType);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendRightClick(int index)
+    public static void SendMapReport(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SrClick);
+        packetWriter.WriteEnum(ServerPackets.SMapReport);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
+        for (var i = 0; i < Core.Constant.MaxMaps; i++)
+        {
+            packetWriter.WriteString(Data.Map[i].Name);
+        }
 
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendJobEditor(int index)
+    public static void SendAdminPanel(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4);
 
-        buffer.WriteInt32((int) ServerPackets.SJobEditor);
+        packetWriter.WriteEnum(ServerPackets.SAdmin);
 
-        NetworkConfig.SendDataTo(index, buffer.UnreadData, buffer.WritePosition);
-
-        buffer.Dispose();
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
     }
 
-    public static void SendEmote(int index, int emote)
+    public static void SendHotbar(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(4 + Core.Constant.MaxHotbar * 8);
 
-        buffer.WriteInt32((int) ServerPackets.SEmote);
+        packetWriter.WriteEnum(ServerPackets.SHotbar);
 
-        buffer.WriteInt32(index);
-        buffer.WriteInt32(emote);
+        for (var i = 0; i < Core.Constant.MaxHotbar; i++)
+        {
+            packetWriter.WriteInt32(Data.Player[playerId].Hotbar[i].Slot);
+            packetWriter.WriteInt32(Data.Player[playerId].Hotbar[i].SlotType);
+        }
 
-        NetworkConfig.SendDataToMap(GetPlayerMap(index), buffer.UnreadData, buffer.WritePosition);
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
+    }
 
-        buffer.Dispose();
+    public static void SendRightClick(int playerId)
+    {
+        var packetWriter = new PacketWriter(4);
+
+        packetWriter.WriteEnum(ServerPackets.SrClick);
+
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
+    }
+
+    public static void SendJobEditor(int playerId)
+    {
+        var packetWriter = new PacketWriter(4);
+
+        packetWriter.WriteEnum(ServerPackets.SJobEditor);
+
+        PlayerService.Instance.SendDataTo(playerId, packetWriter.GetBytes());
+    }
+
+    public static void SendEmote(int playerId, int emote)
+    {
+        var packetWriter = new PacketWriter(12);
+
+        packetWriter.WriteEnum(ServerPackets.SEmote);
+        packetWriter.WriteInt32(playerId);
+        packetWriter.WriteInt32(emote);
+
+        NetworkConfig.SendDataToMap(GetPlayerMap(playerId), packetWriter.GetBytes());
     }
 
     public static void SendChatBubble(int mapNum, int target, int targetType, string message, int color)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter();
 
-        buffer.WriteInt32((int) ServerPackets.SChatBubble);
+        packetWriter.WriteEnum(ServerPackets.SChatBubble);
+        packetWriter.WriteInt32(target);
+        packetWriter.WriteInt32(targetType);
+        packetWriter.WriteString(message);
+        packetWriter.WriteInt32(color);
 
-        buffer.WriteInt32(target);
-        buffer.WriteInt32(targetType);
-        buffer.WriteString(message);
-        buffer.WriteInt32(color);
-        NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        NetworkConfig.SendDataToMap(mapNum, packetWriter.GetBytes());
     }
 
-    public static void SendPlayerAttack(int index)
+    public static void SendPlayerAttack(int playerId)
     {
-        var buffer = new ByteStream(4);
+        var packetWriter = new PacketWriter(8);
 
-        buffer.WriteInt32((int) ServerPackets.SAttack);
-        buffer.WriteInt32(index);
-        NetworkConfig.SendDataToMapBut(index, GetPlayerMap(index), buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
-    }
+        packetWriter.WriteEnum(ServerPackets.SAttack);
+        packetWriter.WriteInt32(playerId);
 
-    public static void SendNpcAttack(int mapNum, int npcIndex)
-    {
-        var buffer = new ByteStream(4);
-
-        buffer.WriteInt32((int) ServerPackets.SNpcAttack);
-        buffer.WriteInt32(npcIndex);
-        NetworkConfig.SendDataToMap(mapNum, buffer.UnreadData, buffer.WritePosition);
-        buffer.Dispose();
+        NetworkConfig.SendDataToMapBut(playerId, GetPlayerMap(playerId), packetWriter.GetBytes());
     }
 }

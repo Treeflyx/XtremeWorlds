@@ -1,6 +1,5 @@
 ﻿using System;
-using Eto.Forms;
-using Eto.Drawing;
+using Client.Net;
 using Core.Localization;
 using static Core.Global.Command;
 

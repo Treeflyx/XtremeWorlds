@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using Eto.Forms;
-using Eto.Drawing;
+using System.Windows.Forms;
+using Client.Net;
 using Core;
 using Microsoft.VisualBasic;
 

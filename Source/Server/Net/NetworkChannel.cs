@@ -1,6 +1,8 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 
 namespace Server.Net;
@@ -23,7 +25,7 @@ internal sealed class NetworkChannel<TSession>(ILogger<NetworkChannel<TSession>>
             return;
         }
 
-        if (System.Diagnostics.Debugger.IsAttached)
+        if (Debugger.IsAttached)
         {
             await channelProxy.OnConnectedAsync(this, cancellationToken);
 

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using Client.Net;
 using CSScriptLib;
 using static Core.Global.Command;
 using Color = Microsoft.Xna.Framework.Color;
@@ -2037,7 +2038,7 @@ namespace Client
 
         public static void btnRegister_Click()
         {
-            if (!NetworkConfig.IsConnected)
+            if (!Network.IsConnected)
             {
                 GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte)DialogueType.Alert);
                 return;
@@ -2091,9 +2092,9 @@ namespace Client
                     return;
                 }
 
-                if (NetworkConfig.IsConnected == true)
+                if (Network.IsConnected == true)
                 {
-                    NetworkSend.SendRegister(user, pass);
+                    Sender.SendRegister(user, pass);
                 }
                 else
                 {
@@ -2192,7 +2193,7 @@ namespace Client
         {
             HideWindows();
             ShowWindow(GetWindowIndex("winLogin"));
-            NetworkSend.SendLogout();
+            Sender.SendLogout();
         }
 
         public static void btnEscMenu_Exit()
@@ -2203,17 +2204,17 @@ namespace Client
 
         public static void btnAcceptChar_1()
         {
-            NetworkSend.SendUseChar(1);
+            Sender.SendUseChar(1);
         }
 
         public static void btnAcceptChar_2()
         {
-            NetworkSend.SendUseChar(2);
+            Sender.SendUseChar(2);
         }
 
         public static void btnAcceptChar_3()
         {
-            NetworkSend.SendUseChar(3);
+            Sender.SendUseChar(3);
         }
 
         public static void btnDelChar_1()
@@ -2807,7 +2808,7 @@ namespace Client
                 }
             }
 
-            NetworkSend.SendUseItem((int)invNum);
+            Sender.SendUseItem((int)invNum);
 
             Inventory_MouseMove();
         }
@@ -3145,7 +3146,7 @@ namespace Client
                                             {
                                                 // switch the slots
                                                 if (DragBox.Slot != i)
-                                                    NetworkSend.SendChangeInvSlots((int)DragBox.Slot, (int)i);
+                                                    Sender.SendChangeInvSlots((int)DragBox.Slot, (int)i);
                                                 break;
                                             }
                                         }
@@ -3193,7 +3194,7 @@ namespace Client
                                             {
                                                 // switch the slots
                                                 if (DragBox.Slot != i)
-                                                    NetworkSend.SendChangeSkillSlots((int)DragBox.Slot, (int)i);
+                                                    Sender.SendChangeSkillSlots((int)DragBox.Slot, (int)i);
                                                 break;
                                             }
                                         }
@@ -3227,15 +3228,15 @@ namespace Client
                                                 {
                                                     if (DragBox.Type == DraggablePartType.Item)
                                                     {
-                                                        NetworkSend.SendSetHotbarSlot((int)PartOrigin.Inventory, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
+                                                        Sender.SendSetHotbarSlot((int)PartOrigin.Inventory, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
                                                     }
                                                     else if (DragBox.Type == DraggablePartType.Skill)
                                                     {
-                                                        NetworkSend.SendSetHotbarSlot((int)PartOrigin.SkillTree, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
+                                                        Sender.SendSetHotbarSlot((int)PartOrigin.SkillTree, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
                                                     }
                                                 }
                                                 else if (DragBox.Slot != i)
-                                                    NetworkSend.SendSetHotbarSlot((int)PartOrigin.Hotbar, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
+                                                    Sender.SendSetHotbarSlot((int)PartOrigin.Hotbar, (int)i, (int)DragBox.Slot, (int)DragBox.Value);
                                                 break;
                                             }
                                         }
@@ -3256,7 +3257,7 @@ namespace Client
                         {
                             if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
                             {
-                                NetworkSend.SendDropItem((int)DragBox.Slot, GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot));
+                                Sender.SendDropItem((int)DragBox.Slot, GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot));
                             }
                             else
                             {
@@ -3268,13 +3269,13 @@ namespace Client
 
                     case PartOrigin.SkillTree:
                         {
-                            NetworkSend.ForgetSkill((int)DragBox.Slot);
+                            Sender.ForgetSkill((int)DragBox.Slot);
                             break;
                         }
 
                     case PartOrigin.Hotbar:
                         {
-                            NetworkSend.SendSetHotbarSlot((int)DragBox.Origin, (int)DragBox.Slot, (int)DragBox.Slot, 0);
+                            Sender.SendSetHotbarSlot((int)DragBox.Origin, (int)DragBox.Slot, (int)DragBox.Slot, 0);
                             break;
                         }
                 }
@@ -3432,7 +3433,7 @@ namespace Client
 
             if (slotNum >= 0L)
             {
-                NetworkSend.SendUseHotbarSlot((int)slotNum);
+                Sender.SendUseHotbarSlot((int)slotNum);
             }
 
             Hotbar_MouseMove();
@@ -3588,7 +3589,7 @@ namespace Client
 
             if (itemNum >= 0L)
             {
-                NetworkSend.SendUnequip((int)itemNum);
+                Sender.SendUnequip((int)itemNum);
             }
 
             Character_MouseMove();
@@ -3636,7 +3637,7 @@ namespace Client
 
             if (itemNum >= 0L)
             {
-                NetworkSend.SendUnequip((int)itemNum);
+                Sender.SendUnequip((int)itemNum);
             }
 
             Character_MouseMove();
@@ -3644,27 +3645,27 @@ namespace Client
 
         public static void Character_SpendPoint1()
         {
-            NetworkSend.SendTrainStat(0);
+            Sender.SendTrainStat(0);
         }
 
         public static void Character_SpendPoint2()
         {
-            NetworkSend.SendTrainStat(1);
+            Sender.SendTrainStat(1);
         }
 
         public static void Character_SpendPoint3()
         {
-            NetworkSend.SendTrainStat(2);
+            Sender.SendTrainStat(2);
         }
 
         public static void Character_SpendPoint4()
         {
-            NetworkSend.SendTrainStat(3);
+            Sender.SendTrainStat(3);
         }
 
         public static void Character_SpendPoint5()
         {
-            NetworkSend.SendTrainStat(4);
+            Sender.SendTrainStat(4);
         }
 
         public static void DrawInventory()

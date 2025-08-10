@@ -1,12 +1,13 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
 using Assimp.Configs;
+using Client.Net;
 using Core;
+using Core.Net;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Mirage.Sharp.Asfw;
 using MonoGame.Extended.Collisions.Layers;
 using MonoGame.Extended.Content.Tiled;
 using static Core.Type;
@@ -1529,18 +1530,22 @@ namespace Client
 
         public static void MapEditorCancel()
         {
-            ByteStream buffer;
-
             if (GameState.MyEditorType != EditorType.Map)
+            {
                 return;
+            }
 
-            buffer = new ByteStream(4);
-            buffer.WriteInt32((int)Packets.ClientPackets.CNeedMap);
-            buffer.WriteInt32(1);
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
+            var packetWriter = new PacketWriter(8);
+            
+            packetWriter.WriteEnum(Packets.ClientPackets.CNeedMap);
+            packetWriter.WriteInt32(1);
+            
+            Network.Send(packetWriter);
+            
             GameState.MyEditorType = EditorType.None;
             GameState.GettingMap = true;
-            NetworkSend.SendCloseEditor();
+            
+            Sender.SendCloseEditor();
 
             // show gui
             Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
@@ -1559,7 +1564,7 @@ namespace Client
             Map.SendMap();
             GameState.MyEditorType = EditorType.None;
             GameState.GettingMap = true;
-            NetworkSend.SendCloseEditor();
+            Sender.SendCloseEditor();
 
             // show gui
             Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);

@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Server.Game;
 using Server.Game.Net;
@@ -353,7 +354,7 @@ public static class Npc
         NetworkConfig.SendDataToMap(mapNum, packet.GetBytes());
     }
 
-    public static void HandleRequestEditNpc(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditNpc(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
@@ -382,7 +383,7 @@ public static class Npc
         PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
     }
 
-    public static void HandleSaveNpc(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveNpc(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 

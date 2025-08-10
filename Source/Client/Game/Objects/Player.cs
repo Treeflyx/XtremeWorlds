@@ -1,9 +1,9 @@
 ﻿using System.Data;
 using Core;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 using System.Net.Security;
 using Client.Net;
+using Core.Net;
 using static Core.Global.Command;
 
 namespace Client
@@ -112,7 +112,7 @@ namespace Client
                         {
                             if (GameState.DirUp && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -120,7 +120,7 @@ namespace Client
                         {
                             if (GameState.DirDown && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -128,7 +128,7 @@ namespace Client
                         {
                             if (GameState.DirLeft && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -136,7 +136,7 @@ namespace Client
                         {
                             if (GameState.DirRight && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -144,7 +144,7 @@ namespace Client
                         {
                             if (GameState.DirUp && GameState.DirRight && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -152,7 +152,7 @@ namespace Client
                         {
                             if (GameState.DirUp && GameState.DirLeft && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -160,7 +160,7 @@ namespace Client
                         {
                             if (GameState.DirDown && GameState.DirRight && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -168,7 +168,7 @@ namespace Client
                         {
                             if (GameState.DirDown && GameState.DirLeft && Data.Player[GameState.MyIndex].IsMoving)
                             {
-                                NetworkSend.SendPlayerMove();
+                                Sender.SendPlayerMove();
                             }
                             break;
                         }
@@ -176,7 +176,7 @@ namespace Client
 
                 if (!Data.Player[GameState.MyIndex].IsMoving)
                 {
-                    NetworkSend.SendPlayerMove();
+                    Sender.SendPlayerMove();
                 }
 
                 if (Data.MyMap.Tile[GetPlayerX(GameState.MyIndex), GetPlayerY(GameState.MyIndex)].Type == TileType.Warp | Data.MyMap.Tile[GetPlayerX(GameState.MyIndex), GetPlayerY(GameState.MyIndex)].Type2 == TileType.Warp)
@@ -198,7 +198,7 @@ namespace Client
             {
                 if (Data.Player[GameState.MyIndex].IsMoving)
                 {
-                    NetworkSend.SendStopPlayerMove();
+                    Sender.SendStopPlayerMove();
                     Data.Player[GameState.MyIndex].IsMoving = false;
                 }
             }
@@ -453,7 +453,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.Up)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -476,7 +476,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.Down)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -499,7 +499,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.Left)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -522,7 +522,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.Right)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -546,7 +546,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.UpRight)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -568,7 +568,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.UpLeft)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -590,7 +590,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.DownRight)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -612,7 +612,7 @@ namespace Client
                         canMove = false;
                         if (d != (int)Direction.DownLeft)
                         {
-                            NetworkSend.SendPlayerDir();
+                            Sender.SendPlayerDir();
                         }
                         return canMove;
                     }
@@ -835,7 +835,6 @@ namespace Client
             int attackSpeed;
             var x = default(int);
             var y = default(int);
-            var buffer = new ByteStream(4);
 
             if (GameState.VbKeyControl | mouse)
             {
@@ -871,7 +870,7 @@ namespace Client
                             withBlock.AttackTimer = General.GetTickCount();
                         }
 
-                        NetworkSend.SendAttack();
+                        Sender.SendAttack();
                     }
                 }
 
@@ -953,11 +952,13 @@ namespace Client
                             // For now, assume all are pixel coordinates
                             if (Math.Abs(px - eventX) <= GameState.SizeX && Math.Abs(py - eventY) <= GameState.SizeY)
                             {
-                                buffer = new ByteStream(4);
-                                buffer.WriteInt32((int)Packets.ClientPackets.CEvent);
-                                buffer.WriteInt32(i);
-                                NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-                                buffer.Dispose();
+                                var packetWriter = new PacketWriter(8);
+                                
+                                packetWriter.WriteEnum(Packets.ClientPackets.CEvent);
+                                packetWriter.WriteInt32(i);
+                                
+                                Network.Send(packetWriter);
+                                
                                 Core.Data.Player[GameState.MyIndex].EventTimer = General.GetTickCount() + 200;
                             }
                         }
@@ -969,8 +970,6 @@ namespace Client
 
         public static void PlayerCastSkill(int skillSlot)
         {
-            var buffer = new ByteStream(4);
-
             // Check for subscript out of range
             if (skillSlot < 0 | skillSlot > Constant.MaxPlayerSkills)
                 return;
@@ -1001,7 +1000,7 @@ namespace Client
                         {
                             if (Data.Moral[Data.MyMap.Moral].CanCast)
                             {
-                                NetworkSend.SendCast(skillSlot);
+                                Sender.SendCast(skillSlot);
                             }
                             else
                             {

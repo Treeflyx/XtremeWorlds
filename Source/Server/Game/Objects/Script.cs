@@ -1,11 +1,9 @@
 ﻿using System.Text;
 using Core;
+using Core.Net;
 using CSScriptLib;
 using Microsoft.Extensions.Logging;
-using Mirage.Sharp.Asfw;
-using Mirage.Sharp.Asfw.IO;
 using Server.Game.Net;
-using Server.Net;
 using static Core.Packets;
 using static Core.Global.Command;
 using Path = Core.Path;
@@ -14,9 +12,11 @@ namespace Server;
 
 public static class Script
 {
+    private const int MaxScriptLinesPerChunk = 100;
+
     public static dynamic? Instance { get; private set; }
 
-    public static void HandleRequestEditScript(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditScript(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Owner)
         {
@@ -30,40 +30,38 @@ public static class Script
             return;
         }
 
-        var packetReader = new PacketReader(bytes);
-        var lineNum = packetReader.ReadInt32();
-
         Data.TempPlayer[session.Id].Editor = EditorType.Script;
 
-        var codeLines = Data.Script.Code ?? [];
-        int count = 0;
+        var lines = Data.Script.Code ?? [];
 
-        var buffer = new ByteStream(4);
+        var packetReader = new PacketReader(bytes);
 
-        buffer.WriteInt32(codeLines.Length);
-
-        for (int i = lineNum; i < codeLines.Length; i++)
+        var requestedChunk = packetReader.ReadInt32();
+        var numberOfChunks = (int) Math.Ceiling((double) lines.Length / MaxScriptLinesPerChunk);
+        var offset = requestedChunk * MaxScriptLinesPerChunk;
+        var chunkLines = lines.Skip(offset).Take(MaxScriptLinesPerChunk).ToArray();
+        if (chunkLines.Length == 0)
         {
-            buffer.WriteInt32(i);
-            buffer.WriteString(codeLines[i] ?? string.Empty);
-            count++;
-
-            if (count == 256 || i == codeLines.Length - 1)
-            {
-                var data = Compression.CompressBytes(buffer.ToArray());
-                buffer = new ByteStream(4);
-                var packet = new PacketWriter();
-
-                packet.WriteEnum(ServerPackets.SScriptEditor);
-                packet.WriteRaw(data);
-
-                session.Channel.Send(packet.GetBytes());
-                break;
-            }
+            return;
         }
+
+        var packetWriter = new PacketWriter();
+
+        packetWriter.WriteEnum(ServerPackets.SScriptEditor);
+        packetWriter.WriteInt32(requestedChunk < numberOfChunks - 1 ? requestedChunk + 1 : -1);
+        packetWriter.WriteInt32(offset);
+        packetWriter.WriteInt32(lines.Length);
+        packetWriter.WriteInt32(chunkLines.Length);
+
+        foreach (var line in chunkLines)
+        {
+            packetWriter.WriteString(line);
+        }
+
+        session.Channel.Send(packetWriter.GetBytes());
     }
 
-    public static void HandleSaveScript(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveScript(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 

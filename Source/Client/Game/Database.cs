@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using Client.Net;
+using Core;
 
 namespace Client
 {
@@ -45,7 +46,7 @@ namespace Client
             if (npcNum >= 0 && string.IsNullOrEmpty(Data.Npc[npcNum].Name) && GameState.NpcLoaded[npcNum] == 0)
             {
                 GameState.NpcLoaded[(int)npcNum] = 1;
-                NetworkSend.SendRequestNpc(npcNum);
+                Sender.SendRequestNpc(npcNum);
             }
         }
 
@@ -96,7 +97,7 @@ namespace Client
             if (skillNum >= 0 && string.IsNullOrEmpty(Data.Skill[skillNum].Name) && GameState.SkillLoaded[skillNum] == 0)
             {
                 GameState.SkillLoaded[skillNum] = 1;
-                NetworkSend.SendRequestSkill(skillNum);
+                Sender.SendRequestSkill(skillNum);
             }
         }
         #endregion

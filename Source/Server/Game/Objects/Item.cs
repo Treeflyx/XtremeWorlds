@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -185,7 +186,7 @@ public static class Item
         }
     }
 
-    public static void HandleRequestItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -198,7 +199,7 @@ public static class Item
         SendUpdateItemTo(session.Id, itemNum);
     }
 
-    public static void HandleRequestEditItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Mapper)
         {
@@ -227,7 +228,7 @@ public static class Item
         PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
     }
 
-    public static void HandleSaveItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -288,12 +289,12 @@ public static class Item
         SendUpdateItemToAll(itemNum);
     }
 
-    public static void HandleGetItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleGetItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         Player.MapGetItem(session.Id);
     }
 
-    public static void HandleDropItem(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleDropItem(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var buffer = new PacketReader(bytes);
 

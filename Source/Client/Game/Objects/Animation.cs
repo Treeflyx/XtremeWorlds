@@ -1,8 +1,8 @@
 ﻿using Client.Net;
 using Core;
+using Core.Net;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using Mirage.Sharp.Asfw;
 using static Core.Global.Command;
 using Path = Core.Path;
 using Point = Microsoft.Xna.Framework.Point;
@@ -436,14 +436,12 @@ namespace Client
 
         public static void SendRequestAnimation(int animationNum)
         {
-            var buffer = new ByteStream(4);
+            var packetWriter = new PacketWriter(8);
 
-            buffer.WriteInt32((int)Packets.ClientPackets.CRequestAnimation);
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestAnimation);
+            packetWriter.WriteInt32(animationNum);
 
-            buffer.WriteInt32(animationNum);
-
-            NetworkConfig.SendData(buffer.UnreadData, buffer.WritePosition);
-            buffer.Dispose();
+            Network.Send(packetWriter);
         }
 
         #endregion

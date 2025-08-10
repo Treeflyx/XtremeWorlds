@@ -1,54 +1,41 @@
-﻿using Assimp;
-using Core;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using Mirage.Sharp.Asfw;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core;
+using Client.Net;
+using Core.Net;
 
-namespace Client
+namespace Client;
+
+public class Script
 {
-    public class Script
+    public static string TempFile = System.IO.Path.GetTempFileName() + ".cs";
+
+    public static void Packet_EditScript(ReadOnlyMemory<byte> data)
     {
-        public static string TempFile = System.IO.Path.GetTempFileName() + ".cs";
+        var packetReader = new PacketReader(data);
 
-        public static void Packet_EditScript(ReadOnlyMemory<byte> data)
+        var nextChunk = packetReader.ReadInt32();
+        var lineOffset = packetReader.ReadInt32();
+        var numberOfLinesTotal = packetReader.ReadInt32();
+        var numberOfLinesReceived = packetReader.ReadInt32();
+
+        Array.Resize(ref Data.Script.Code, numberOfLinesTotal);
+
+        for (var i = 0; i < numberOfLinesReceived; i++)
         {
-            ByteStream buffer;
-            buffer = new ByteStream(Mirage.Sharp.Asfw.IO.Compression.DecompressBytes(data.ToArray()));
-
-            int lineCount = buffer.ReadInt32();
-            string[] lines = new string[lineCount];
-            Array.Resize(ref Data.Script.Code, lineCount); 
-            int line = 0;
-
-            for (int i = 0; i < 256; i++)
-            {
-                line = buffer.ReadInt32();
-                lines[line] = buffer.ReadString();
-                Data.Script.Code[line] = lines[line];
-
-                if (line == lineCount)
-                {
-                    break;
-                }
-            }
-
-            if (line != lineCount)
-            {
-                NetworkSend.SendRequestEditScript(line + 1);
-            }
-
-            buffer.Dispose();
-
-            GameState.InitScriptEditor = true;
+            Data.Script.Code[lineOffset + i] = packetReader.ReadString();
         }
 
-        public static void ScriptEditorInit()
+        if (nextChunk != -1) /* Request the next chunk if there is more data... */
         {
+            var packetWriter = new PacketWriter(8);
 
+            packetWriter.WriteEnum(Packets.ClientPackets.CRequestEditScript);
+            packetWriter.WriteInt32(nextChunk);
+
+            Network.Send(packetWriter);
+
+            return;
         }
+
+        GameState.InitScriptEditor = true;
     }
 }

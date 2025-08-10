@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -110,7 +111,7 @@ public static class Moral
         packet.WriteBoolean(Data.Moral[moralNum].LoseExp);
     }
 
-    public static void HandleRequestEditMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditMoral(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
@@ -135,7 +136,7 @@ public static class Moral
         PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
     }
 
-    public static void HandleSaveMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveMoral(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -173,7 +174,7 @@ public static class Moral
         SendMorals(session.Id);
     }
 
-    public static void HandleRequestMoral(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestMoral(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         SendMorals(session.Id);
     }

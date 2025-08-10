@@ -13,6 +13,7 @@ using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using Client.Game.Objects;
+using Client.Net;
 using SDL2;
 
 namespace Client
@@ -648,7 +649,7 @@ static void LoadFonts()
 
             if (CurrentKeyboardState.IsKeyDown(Keys.Insert))
             {
-                NetworkSend.SendRequestAdmin();
+                Sender.SendRequestAdmin();
             }
 
             HandleMouseInputs();
@@ -784,7 +785,7 @@ static void LoadFonts()
                     // Check if the corresponding hotbar key is pressed
                     if (CurrentKeyboardState.IsKeyDown((Keys)((int)Keys.D0 + i)))
                     {
-                        NetworkSend.SendUseHotbarSlot(i);
+                        Sender.SendUseHotbarSlot(i);
                         return; // Exit once the matching slot is used
                     }
                 }
@@ -1034,7 +1035,7 @@ static void LoadFonts()
                     if (IsMouseButtonDown(MouseButton.Left))
                     {
                         Player.CheckAttack(true);
-                        NetworkSend.PlayerSearch(GameState.CurX, GameState.CurY, 0);
+                        Sender.PlayerSearch(GameState.CurX, GameState.CurY, 0);
                         _lastSearchTime = DateTime.Now;
                     }
                 }
@@ -1047,7 +1048,7 @@ static void LoadFonts()
 
                     if (slotNum >= 0L)
                     {
-                        NetworkSend.SendDeleteHotbar(slotNum);
+                        Sender.SendDeleteHotbar(slotNum);
                     }
 
                     if (GameState.VbKeyShift == true)
@@ -1055,7 +1056,7 @@ static void LoadFonts()
                         // Admin warp if Shift is held and the player has moderator access
                         if (GetPlayerAccess(GameState.MyIndex) >= (int)AccessLevel.Moderator)
                         {
-                            NetworkSend.AdminWarp(GameState.CurX, GameState.CurY);
+                            Sender.AdminWarp(GameState.CurX, GameState.CurY);
                         }
                     }
                     else
@@ -1083,7 +1084,7 @@ static void LoadFonts()
             }
 
             // Perform player search at the current cursor position
-            NetworkSend.PlayerSearch(GameState.CurX, GameState.CurY, 1);
+            Sender.PlayerSearch(GameState.CurX, GameState.CurY, 1);
         }
 
         private static void OnWindowClose(object sender, EventArgs e)

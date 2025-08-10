@@ -9,7 +9,7 @@ public sealed class GameSession(int id, INetworkChannel channel, GameSessionMana
 
     private readonly GamePacketParser _parser = new();
     private readonly byte[] _buffer = new byte[BufferSize];
-    private int _bufferOffset = 0;
+    private int _bufferOffset;
     private bool _disposed;
 
     public int Id { get; } = id;
@@ -50,7 +50,7 @@ public sealed class GameSession(int id, INetworkChannel channel, GameSessionMana
             return;
         }
 
-        var count = _parser.Parse(this, _buffer.AsSpan(0, _bufferOffset));
+        var count = _parser.Parse(this, _buffer.AsMemory(0, _bufferOffset));
         if (count == 0)
         {
             return;

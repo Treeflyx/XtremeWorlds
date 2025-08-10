@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
@@ -113,7 +114,7 @@ public static class Resource
         NetworkSend.SendPlayerData(playerId);
     }
 
-    public static void HandleRequestEditResource(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestEditResource(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         if (GetPlayerAccess(session.Id) < (byte) AccessLevel.Developer)
         {
@@ -141,7 +142,7 @@ public static class Resource
         PlayerService.Instance.SendDataTo(session.Id, packet.GetBytes());
     }
 
-    public static void HandleSaveResource(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleSaveResource(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
@@ -179,7 +180,7 @@ public static class Resource
         SendUpdateResourceToAll(resourcenum);
     }
 
-    public static void HandleRequestResource(GameSession session, ReadOnlySpan<byte> bytes)
+    public static void HandleRequestResource(GameSession session, ReadOnlyMemory<byte> bytes)
     {
         var packetReader = new PacketReader(bytes);
 
