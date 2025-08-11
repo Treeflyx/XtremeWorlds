@@ -166,10 +166,11 @@ namespace Client
             {
                 if (_spriteBitmap != null)
                 {
-                    // Show first frame (image assumed 4x4 frames as original code divides by 4)
+                    // Show only the first frame at native size (4x4 spritesheet)
                     int frameW = _spriteBitmap.Width / 4;
                     int frameH = _spriteBitmap.Height / 4;
-                    e.Graphics.DrawImage(_spriteBitmap, new Rectangle(0,0, frameW, frameH));
+                    picSprite.Size = new Size(frameW, frameH);
+                    e.Graphics.DrawImage(_spriteBitmap, new Rectangle(0,0, frameW, frameH), new Rectangle(0,0, frameW, frameH));
                 }
             };
 

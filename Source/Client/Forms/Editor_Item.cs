@@ -92,7 +92,23 @@ namespace Client
             numSprAdd = StatAdd(Stat.Spirit);
 
             iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Black }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
-            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black }; paperdollPreview.Paint += (s,e)=> { if(paperdollBmp!=null) e.Graphics.DrawImage(paperdollBmp,0,0,64,64); };
+            iconPreview.Paint += (s,e)=> {
+                if(itemBmp!=null) {
+                    int fw = itemBmp.Width / 4;
+                    int fh = itemBmp.Height / 4;
+                    iconPreview.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(itemBmp, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                }
+            };
+            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black };
+            paperdollPreview.Paint += (s,e)=> {
+                if(paperdollBmp!=null) {
+                    int fw = paperdollBmp.Width / 4;
+                    int fh = paperdollBmp.Height / 4;
+                    paperdollPreview.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(paperdollBmp, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                }
+            };
 
             btnSave = new Button { Text = "Save" }; btnSave.Click += (s,e)=> { Editors.ItemEditorOK(); Close(); };
             btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s,e)=> { Editors.ItemEditorCancel(); Close(); };

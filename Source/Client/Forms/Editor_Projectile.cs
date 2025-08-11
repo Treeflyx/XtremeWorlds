@@ -98,7 +98,11 @@ namespace Client
             {
                 if (_iconBitmap != null)
                 {
-                    e.Graphics.DrawImage(_iconBitmap, 0, 0, 96, 96);
+                    // Assume 1 row, 4 columns (1x4 spritesheet)
+                    int fw = _iconBitmap.Width / 4;
+                    int fh = _iconBitmap.Height;
+                    picProjectile.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(_iconBitmap, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
                 }
             };
 

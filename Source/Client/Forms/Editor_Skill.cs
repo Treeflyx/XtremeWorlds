@@ -242,7 +242,13 @@ namespace Client
             {
                 using (var bmp = new Bitmap(path))
                 {
-                    g.DrawImage(bmp, new RectangleF(0,0,picSprite.Width,picSprite.Height));
+                    // Assume 2 icons side by side
+                    int fw = bmp.Width / 2;
+                    int fh = bmp.Height;
+                    picSprite.Size = new Size(fw * 2, fh);
+                    // Draw both icons
+                    g.DrawImage(bmp, new RectangleF(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                    g.DrawImage(bmp, new RectangleF(fw,0,fw,fh), new Rectangle(fw,0,fw,fh));
                 }
             }
             catch { g.Clear(Colors.Transparent); }

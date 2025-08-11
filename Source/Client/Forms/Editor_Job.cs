@@ -56,9 +56,10 @@ namespace Client
 
     Eto.Forms.Control BuildUi()
     {
+        
         lstJobs = new ListBox { Width = 220 };
         lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
-    txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
+        txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
         numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);
@@ -76,7 +77,7 @@ namespace Client
         numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
         numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
 
-        lstStartItems = new ListBox { Height = 140 };
+    lstStartItems = new ListBox { Height = 140, Width = 420 };
         cmbItems = new ComboBox { Width = 180 };
         numItemAmount = new NumericStepper { MinValue = 1, MaxValue = 999, Value = 1 };
         btnSetItem = new Button { Text = "Set Slot" }; btnSetItem.Click += (s, e) => SetStartItem();
@@ -116,20 +117,14 @@ namespace Client
             Rows = { new TableRow(new Label{Text="Male"}, numMaleSprite, malePreview, new Label{Text="Female"}, numFemaleSprite, femalePreview) }
         });
 
-        var items = Box("Start Items", new TableLayout
-        {
-            Spacing = new Size(4,4),
-            Rows =
-            {
-                new TableRow(lstStartItems),
-                new TableRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amt"}, numItemAmount, btnSetItem)
-            }
-        });
+    var itemsLayout = new DynamicLayout { Spacing = new Size(4,4) };
+    itemsLayout.AddRow(lstStartItems);
+    itemsLayout.AddRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amount"}, numItemAmount, btnSetItem);
+    var items = Box("Start Items", itemsLayout);
 
-        var left = new DynamicLayout { Spacing = new Size(4,4) };
-        left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(11)});
-        left.Add(lstJobs, yscale:true);
-        left.Add(null);
+    var left = new DynamicLayout { Spacing = new Size(4,4) };
+    left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(12)});
+    left.Add(lstJobs, yscale: true);
 
         var right = new DynamicLayout { Spacing = new Size(6,6) };
         right.AddRow(stats);
@@ -216,6 +211,18 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
             string femalePath = System.IO.Path.Combine(DataPath.Characters, Data.Job[GameState.EditorIndex].FemaleSprite + GameState.GfxExt);
             maleBmp = File.Exists(malePath) ? new Bitmap(malePath) : null;
             femaleBmp = File.Exists(femalePath) ? new Bitmap(femalePath) : null;
+            if (maleBmp != null)
+            {
+                int fw = maleBmp.Width / 4;
+                int fh = maleBmp.Height / 4;
+                malePreview!.Size = new Size(fw, fh);
+            }
+            if (femaleBmp != null)
+            {
+                int fw = femaleBmp.Width / 4;
+                int fh = femaleBmp.Height / 4;
+                femalePreview!.Size = new Size(fw, fh);
+            }
             malePreview!.Invalidate(); femalePreview!.Invalidate();
         }
 
@@ -223,8 +230,10 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
         {
             g.Clear(Colors.Black);
             if (bmp == null) return;
-            int fw = bmp.Width / 4; int fh = bmp.Height / 4;
-            g.DrawImage(bmp, new RectangleF(0,0,size.Width,size.Height), new Rectangle(0,0,fw,fh));
+            int fw = bmp.Width / 4;
+            int fh = bmp.Height / 4;
+            // Draw only the first frame at 0,0, at its native size
+            g.DrawImage(bmp, new RectangleF(0, 0, fw, fh), new Rectangle(0, 0, fw, fh));
         }
 
         // Parameterless wrapper used by Editors.cs legacy call pattern
