@@ -37,10 +37,10 @@ namespace Client
         {
             _instance = this;
             Title = "Item Editor";
-            ClientSize = new Size(1100, 700);
+            ClientSize = new Size(1400, 900); // Increased size for more center controls
             Padding = 6;
             Content = BuildUi();
-            Editors.AutoSizeWindow(this, 880, 560);
+            Editors.AutoSizeWindow(this, 1400, 900);
             Shown += (s,e) => InitData();
         }
 
