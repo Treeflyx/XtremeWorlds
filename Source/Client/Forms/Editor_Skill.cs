@@ -49,7 +49,7 @@ namespace Client
         private Button btnLearn = new Button { Text = "Learn" };
         public Drawable picSprite = new Drawable { Size = new Size(64, 64) };
 
-        private Editor_Skill()
+        public Editor_Skill()
         {
             Title = "Skill Editor";
             ClientSize = new Size(900, 560);

@@ -25,11 +25,11 @@ namespace Client
         public CheckBox chkLoseExp = new CheckBox { Text = "Lose Exp" };
         public CheckBox chkPlayerBlock = new CheckBox { Text = "Player Block" };
         public CheckBox chkNpcBlock = new CheckBox { Text = "Npc Block" };
-        private Button btnSave = new Button { Text = "Save" };
-        private Button btnDelete = new Button { Text = "Delete" };
-        private Button btnCancel = new Button { Text = "Cancel" };
+        public Button btnSave = new Button { Text = "Save" };
+        public Button btnDelete = new Button { Text = "Delete" };
+        public Button btnCancel = new Button { Text = "Cancel" };
 
-        private Editor_Moral()
+        public Editor_Moral()
         {
             Title = "Moral Editor";
             ClientSize = new Size(500, 420);

@@ -8,7 +8,7 @@ using Microsoft.VisualBasic;
 
 namespace Client
 {
-    public sealed class Editor_Job : Form
+    public class Editor_Job : Form
     {
     // Singleton access to mirror legacy usage pattern in Main.cs
     private static Editor_Job? _instance;

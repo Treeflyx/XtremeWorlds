@@ -8,7 +8,7 @@ using Eto.Drawing;
 
 namespace Client
 {
-    public sealed class Editor_Item : Form
+    public class Editor_Item : Form
     {
         private static Editor_Item? _instance;
         public static Editor_Item Instance => _instance ??= new Editor_Item();
@@ -32,7 +32,7 @@ namespace Client
 
         Bitmap? itemBmp, paperdollBmp;
 
-        private Editor_Item()
+        public Editor_Item()
         {
             Title = "Item Editor";
             ClientSize = new Size(1100, 700);
@@ -298,7 +298,7 @@ namespace Client
             fraProjectile!.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
             fraEvents!.Visible = type == ItemCategory.Event;
         }
-        
+
 
         void LoadItemIcon()
         {

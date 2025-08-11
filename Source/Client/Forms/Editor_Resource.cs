@@ -27,13 +27,13 @@ namespace Client
         public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
         public ComboBox cmbAnimation = new ComboBox();
         public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0 };
-        private Button btnSave = new Button { Text = "Save" };
-        private Button btnDelete = new Button { Text = "Delete" };
-        private Button btnCancel = new Button { Text = "Cancel" };
+        public Button btnSave = new Button { Text = "Save" };
+        public Button btnDelete = new Button { Text = "Delete" };
+        public Button btnCancel = new Button { Text = "Cancel" };
         public Drawable picNormalpic = new Drawable { Size = new Size(96, 96) };
         public Drawable picExhaustedPic = new Drawable { Size = new Size(96, 96) };
 
-        private Editor_Resource()
+        public Editor_Resource()
         {
             Title = "Resource Editor";
             ClientSize = new Size(760, 480);

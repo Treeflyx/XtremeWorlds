@@ -26,7 +26,7 @@ namespace Client
         private Button btnDelete = new Button { Text = "Delete" };
         private Button btnCancel = new Button { Text = "Cancel" };
 
-        private Editor_Shop()
+        public Editor_Shop()
         {
             Title = "Shop Editor";
             ClientSize = new Size(800, 500);

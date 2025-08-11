@@ -18,12 +18,12 @@ namespace Client
         private static Editor_Script? _instance;
         public static Editor_Script Instance => _instance ??= new Editor_Script();
 
-        private Button btnOpenScript = new Button { Text = "Open Script" };
-        private Button btnSaveScript = new Button { Text = "Save Script" };
-        private TextArea txtPreview = new TextArea { ReadOnly = true, Wrap = false, Size = new Size(600,400) };
-        private Label lblInfo = new Label { Text = "Open the script in your external editor, then Save to reload and send." };
+        public Button btnOpenScript = new Button { Text = "Open Script" };
+        public Button btnSaveScript = new Button { Text = "Save Script" };
+        public TextArea txtPreview = new TextArea { ReadOnly = true, Wrap = false, Size = new Size(600,400) };
+        public Label lblInfo = new Label { Text = "Open the script in your external editor, then Save to reload and send." };
 
-        private Editor_Script()
+        public Editor_Script()
         {
             Title = "Script Editor";
             ClientSize = new Size(700, 520);

@@ -16,14 +16,14 @@ public static class Program
         gameThread.Start();
 
         // Start Eto application & periodic UI updater
-    // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
-    // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
-    var app = new Application(Eto.Platform.Detect);
-        _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
-        _uiTimer.Elapsed += (_, _) => SafeUpdateEditors();
-        _uiTimer.Start();
+        // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
+        // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
+        var app = new Application(Eto.Platform.Detect);
+            _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
+            _uiTimer.Elapsed += (_, _) => SafeUpdateEditors();
+            _uiTimer.Start();
 
-        app.Run();
+            app.Run();
     }
 
     private static void RunGame()
@@ -46,7 +46,7 @@ public static class Program
         // Event Editor
         if (GameState.InitEventEditor)
         {
-            var ev = Editor_Event.Instance ?? new Editor_Event(); // Event editor is sealed; its constructor is public here.
+            var ev = Editor_Event.Instance;
             ev.Show();
             GameState.InitEventEditor = false;
         }
@@ -66,7 +66,7 @@ public static class Program
 
         if (GameState.InitMapEditor)
         {
-            var map = Editor_Map.Instance ?? new Editor_Map();
+            var map = Editor_Map.Instance;
             GameState.MyEditorType = Core.EditorType.Map;
             GameState.EditorIndex = 1;
             map.Show();
@@ -76,7 +76,7 @@ public static class Program
 
         if (GameState.InitAnimationEditor)
         {
-            var anim = Editor_Animation.Instance; // singleton Instance property handles creation
+            var anim = Editor_Animation.Instance;
             GameState.MyEditorType = Core.EditorType.Animation;
             GameState.EditorIndex = 1;
             anim?.Show();
@@ -90,21 +90,21 @@ public static class Program
 
         if (GameState.InitItemEditor)
         {
-            var item = Editor_Item.Instance; // private ctor, use Instance
+            var item = Editor_Item.Instance;
             GameState.MyEditorType = Core.EditorType.Item;
             GameState.EditorIndex = 1;
             item?.Show();
             if (item?.lstIndex != null)
             {
                 item.lstIndex.SelectedIndex = 0;
-                Editors.ItemEditorInit();
+                Editors.ItemEditorInit();   
             }
             GameState.InitItemEditor = false;
         }
 
         if (GameState.InitJobEditor)
         {
-            var job = Editor_Job.Instance; // assume singleton pattern similar to others
+            var job = Editor_Job.Instance;
             GameState.MyEditorType = Core.EditorType.Job;
             GameState.EditorIndex = 1;
             job?.Show();
@@ -146,7 +146,7 @@ public static class Program
 
         if (GameState.InitNpcEditor)
         {
-            var npc = Editor_Npc.Instance ?? new Editor_Npc(); // public ctor we created
+            var npc = Editor_Npc.Instance;
             GameState.MyEditorType = Core.EditorType.Npc;
             GameState.EditorIndex = 1;
             npc.Show();
@@ -185,7 +185,7 @@ public static class Program
 
         if (GameState.InitProjectileEditor)
         {
-            var proj = Editor_Projectile.Instance ?? new Editor_Projectile();
+            var proj = Editor_Projectile.Instance;
             GameState.MyEditorType = Core.EditorType.Projectile;
             GameState.EditorIndex = 1;
             proj.Show();
@@ -196,7 +196,7 @@ public static class Program
 
         if (GameState.InitScriptEditor)
         {
-            var scr = Editor_Script.Instance; // private ctor singleton
+            var scr = Editor_Script.Instance;
             GameState.MyEditorType = Core.EditorType.Script;
             GameState.EditorIndex = 1;
             scr?.Show();

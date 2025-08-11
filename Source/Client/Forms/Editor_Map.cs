@@ -20,6 +20,10 @@ namespace Client
 
     public partial class Editor_Map : Form
     {
+
+        // Singleton instance for legacy static access
+        private static Editor_Map? _instance;
+        public static Editor_Map Instance => _instance ??= new Editor_Map();
         private static readonly int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
 
@@ -75,7 +79,6 @@ namespace Client
         public Slider scrlTrap = new   Slider();
         public Label lblTrap = new Label();
         public ToolBar? toolbar;
-        public static Editor_Map Instance { get; private set; } = null!; // set in ctor
         public TabControl tabPages = new TabControl();
         public TabPage tpTiles = new TabPage{ Text = "Tiles" };
         public ComboBox cmbAutoTile = new ComboBox();
@@ -171,7 +174,7 @@ namespace Client
 
         public Editor_Map()
         {
-            Instance = this;
+            _instance = this;
             Title = "Map Editor";
             ClientSize = new Size(1200, 800);
             InitializeToolbar();
