@@ -30,8 +30,7 @@ namespace Client
         {
             _instance = this;
             Title = "Admin Panel";
-            ClientSize = new Size(640, 360); // wider to accommodate scalable editor buttons
-            Resizable = true;
+            ClientSize = new Size(640, 600);
             InitializeComponents();
         }
 

@@ -12,7 +12,7 @@ namespace Client
         private static Editor_Shop? _instance;
         public static Editor_Shop Instance => _instance ??= new Editor_Shop();
         public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public NumericStepper nudBuy = new NumericStepper { MinValue = 0, MaxValue = 10000, Increment = 1 };
         public ComboBox cmbItem = new ComboBox();
         public ComboBox cmbCostItem = new ComboBox();

@@ -58,7 +58,7 @@ namespace Client
             btnSave = new Button { Text = "Save" };
             btnDelete = new Button { Text = "Delete" };
             btnCancel = new Button { Text = "Cancel" };
-            txtName = new TextBox();
+            txtName = new TextBox { Width = 200 };
             lstIndex = new ListBox();
             cmbSound = new ComboBox();
             picSprite0 = new Drawable { Size = new Size(96, 96) };

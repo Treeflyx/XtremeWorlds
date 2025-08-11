@@ -128,7 +128,7 @@ namespace Client
         public Button btnPastePage = new Button { Text = "Paste Page" };
         public NumericStepper nudShowPicture = new NumericStepper();
         public ComboBox cmbPicLoc = new ComboBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public ImageView picGraphicSel = new ImageView();
         public ImageView picGraphic = new ImageView();
         public Panel fraGraphic = new Panel();

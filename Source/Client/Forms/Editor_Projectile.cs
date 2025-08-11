@@ -31,8 +31,7 @@ namespace Client
         {
             _instance = this;
             Title = "Projectile Editor";
-            ClientSize = new Size(750, 430);
-            Resizable = true;
+            ClientSize = new Size(750, 430);           
             MinimumSize = new Size(750, 430);
             InitializeComponent();
         }
@@ -49,7 +48,7 @@ namespace Client
             };
 
             // Right side controls
-            txtName = new TextBox();
+            txtName = new TextBox { Width = 200 };
             txtName.TextChanged += (s, e) =>
             {
                 if (_initializing) return;

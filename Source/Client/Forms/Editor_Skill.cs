@@ -17,7 +17,7 @@ namespace Client
         private static Editor_Skill? _instance;
         public static Editor_Skill Instance => _instance ??= new Editor_Skill();
         public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbType = new ComboBox();
         public NumericStepper nudMp = new NumericStepper { MinValue = 0 };
         public NumericStepper nudLevel = new NumericStepper { MinValue = 0 };

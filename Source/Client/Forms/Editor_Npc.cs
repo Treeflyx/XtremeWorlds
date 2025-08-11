@@ -70,7 +70,7 @@ namespace Client
                 Editors.NpcEditorInit();
             };
 
-            txtName = new TextBox();
+            txtName = new TextBox { Width = 200 };
             txtName.TextChanged += (s, e) =>
             {
                 if (_initializing) return;

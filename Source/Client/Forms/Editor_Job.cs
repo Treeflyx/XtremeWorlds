@@ -58,7 +58,7 @@ namespace Client
     {
         lstJobs = new ListBox { Width = 220 };
         lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
-        txtName = new TextBox(); txtName.TextChanged += (s, e) => UpdateName();
+    txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
         numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);

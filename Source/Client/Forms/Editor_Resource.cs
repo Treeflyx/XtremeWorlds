@@ -14,7 +14,7 @@ namespace Client
         private static Editor_Resource? _instance;
         public static Editor_Resource Instance => _instance ??= new Editor_Resource();
         public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public TextBox txtMessage = new TextBox();
         public TextBox txtMessage2 = new TextBox();
         public ComboBox cmbType = new ComboBox();

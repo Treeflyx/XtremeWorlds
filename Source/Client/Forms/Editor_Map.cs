@@ -130,7 +130,7 @@ namespace Client
         public GroupBox GroupBox2 = new GroupBox{ Text = "Music" };
         public ListBox lstMusic = new ListBox();
         public Button btnPreview = new Button{ Text = "Preview" };
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public Label Label6 = new Label();
         public TabPage tpDirBlock = new TabPage{ Text = "Dir Block" };
         public Label Label12 = new Label();
