@@ -1643,8 +1643,8 @@ static void LoadFonts()
                         Data.MyMapNpc[(int)i].Vital[(int)Vital.Health] < Data.Npc[(int)npcNum].Hp)
                     {
                         // lock to Npc
-                        tmpX = (long)Math.Round(Data.MyMapNpc[(int)i].X * GameState.SizeX + 16 - width / 2d);
-                        tmpY = Data.MyMapNpc[(int)i].Y * GameState.SizeY + 35;
+                        tmpX = (long)Math.Round(Data.MyMapNpc[(int)i].X + 16 - width / 2d);
+                        tmpY = Data.MyMapNpc[(int)i].Y + 35;
 
                         // calculate the width to fill
                         if (width > 0L)
@@ -1678,9 +1678,9 @@ static void LoadFonts()
                         GetPlayerVital((int)i, Vital.Health) < GetPlayerMaxVital((int)i, Vital.Health))
                     {
                         // lock to Player
-                        tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX +
+                        tmpX = (long)Math.Round(GetPlayerRawX((int)i) +
                             16 - width / 2d);
-                        tmpY = GetPlayerY((int)i) * GameState.SizeY + 35;
+                        tmpY = GetPlayerRawY((int)i) + 35;
 
                         // calculate the width to fill
                         if (width > 0L)
