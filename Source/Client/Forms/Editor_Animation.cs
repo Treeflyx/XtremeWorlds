@@ -12,22 +12,22 @@ namespace Client
         private static Editor_Animation? _instance;
         public static Editor_Animation Instance => _instance ??= new Editor_Animation();
 
-    public NumericStepper nudSprite0 = new();
-    public NumericStepper nudSprite1 = new();
-    public NumericStepper nudLoopCount0 = new();
-    public NumericStepper nudLoopCount1 = new();
-    public NumericStepper nudFrameCount0 = new();
-    public NumericStepper nudFrameCount1 = new();
-    public NumericStepper nudLoopTime0 = new();
-    public NumericStepper nudLoopTime1 = new();
-    public Button btnSave = new();
-    public Button btnDelete = new();
-    public Button btnCancel = new();
-    public TextBox txtName = new();
-    public ListBox lstIndex = new();
-    public ComboBox cmbSound = new();
-    public Drawable picSprite0 = new() { Size = new Size(96,96) };
-    public Drawable picSprite1 = new() { Size = new Size(96,96) };
+        public NumericStepper nudSprite0 = new();
+        public NumericStepper nudSprite1 = new();
+        public NumericStepper nudLoopCount0 = new();
+        public NumericStepper nudLoopCount1 = new();
+        public NumericStepper nudFrameCount0 = new();
+        public NumericStepper nudFrameCount1 = new();
+        public NumericStepper nudLoopTime0 = new();
+        public NumericStepper nudLoopTime1 = new();
+        public Button btnSave = new();
+        public Button btnDelete = new();
+        public Button btnCancel = new();
+        public TextBox txtName = new();
+        public ListBox lstIndex = new();
+        public ComboBox cmbSound = new();
+        public Drawable picSprite0 = new() { Size = new Size(96,96) };
+        public Drawable picSprite1 = new() { Size = new Size(96,96) };
 
         public Editor_Animation()
         {

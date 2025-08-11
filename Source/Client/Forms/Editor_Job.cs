@@ -126,17 +126,17 @@ namespace Client
             }
         });
 
-    var left = new DynamicLayout { Spacing = new Size(4,4) };
-    left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(11)});
-    left.Add(lstJobs, yscale:true);
-    left.Add(null);
+        var left = new DynamicLayout { Spacing = new Size(4,4) };
+        left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(11)});
+        left.Add(lstJobs, yscale:true);
+        left.Add(null);
 
         var right = new DynamicLayout { Spacing = new Size(6,6) };
         right.AddRow(stats);
         right.AddRow(start);
         right.AddRow(sprites);
-    right.AddRow(items);
-    right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+        right.AddRow(items);
+        right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
 
         return new TableLayout
         {
