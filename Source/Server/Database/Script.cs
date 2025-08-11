@@ -427,13 +427,6 @@ public class Script
                     PlayerLearnSkill(index, itemNum);
                     break;
                 }
-
-            case (byte)ItemCategory.Pet:
-                {
-                    TakeInv(index, itemNum, 1);
-                    n = Data.Item[itemNum].Data1;
-                    break;
-                }
         }
     }
 

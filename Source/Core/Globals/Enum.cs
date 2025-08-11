@@ -95,7 +95,6 @@ public enum ItemCategory : byte
     Currency,
     Skill,
     Projectile,
-    Pet
 }
 
 /// <summary>

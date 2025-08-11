@@ -1690,12 +1690,7 @@ namespace Client
                     {
                         AddDescInfo("Projectile", Microsoft.Xna.Framework.Color.White);
                         break;
-                    }
-                case (byte)ItemCategory.Pet:
-                    {
-                        AddDescInfo("Pet", Microsoft.Xna.Framework.Color.White);
-                        break;
-                    }
+                    }       
             }
 
             // more info

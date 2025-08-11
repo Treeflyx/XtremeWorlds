@@ -215,25 +215,6 @@ public static class Type
         public int BaseExp;
     }
 
-    public struct Pet
-    {
-        public int Num;
-        public string Name;
-        public int Sprite;
-        public int Range;
-        public byte Level;
-        public int MaxLevel;
-        public int ExpGain;
-        public byte Points;
-        public byte StatType;
-        public byte LevelingType;
-        public byte[] Stat;
-        public int[] Skill;
-        public byte Evolvable;
-        public int EvolveLevel;
-        public int EvolveNum;
-    }
-
     public struct Account
     {
         public string Login;
@@ -312,11 +293,6 @@ public static class Type
         public int TmpY;
         public int GoToX;
         public int GoToY;
-        public SkillBuffer PetSkillBuffer;
-        public DoT[] PetDoT;
-        public DoT[] PetHoT;
-        public bool PetStopRegen;
-        public int PetStopRegenTimer;
         public EditorType Editor;
         public byte Slot;
     }
