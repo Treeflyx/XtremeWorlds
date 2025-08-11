@@ -1,9 +1,10 @@
-﻿using Core;
+﻿using Client.Game.UI;
+using Client.Game.UI.Windows;
+using Core;
 using Core.Configurations;
 using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
-using Color = Core.Globals.Color;
 
 namespace Client.Net;
 
@@ -333,7 +334,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
         Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
         Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
-        Gui.HideChat();
+        WinChat.Hide();
 
         General.GameInit();
     }
@@ -435,7 +436,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) Color.Yellow, channel: (byte) ChatChannel.Broadcast);
+        Text.AddText(message, (int) ColorName.Yellow, channel: (byte) ChatChannel.Broadcast);
     }
 
     private static void Packet_MapMsg(ReadOnlyMemory<byte> data)
@@ -444,7 +445,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) Color.White, channel: (byte) ChatChannel.Map);
+        Text.AddText(message, (int) ColorName.White, channel: (byte) ChatChannel.Map);
     }
 
     private static void Packet_AdminMsg(ReadOnlyMemory<byte> data)
@@ -453,7 +454,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) Color.BrightCyan, channel: (byte) ChatChannel.Broadcast);
+        Text.AddText(message, (int) ColorName.BrightCyan, channel: (byte) ChatChannel.Broadcast);
     }
 
     private static void Packet_PlayerMsg(ReadOnlyMemory<byte> data)
@@ -683,17 +684,17 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         // Check access level
         var color = access switch
         {
-            AccessLevel.Player => (byte) Color.White,
-            AccessLevel.Moderator => (byte) Color.Cyan,
-            AccessLevel.Mapper => (byte) Color.Green,
-            AccessLevel.Developer => (byte) Color.BrightBlue,
-            AccessLevel.Owner => (byte) Color.Yellow,
-            _ => (byte) Color.White
+            AccessLevel.Player => (byte) ColorName.White,
+            AccessLevel.Moderator => (byte) ColorName.Cyan,
+            AccessLevel.Mapper => (byte) ColorName.Green,
+            AccessLevel.Developer => (byte) ColorName.BrightBlue,
+            AccessLevel.Owner => (byte) ColorName.Yellow,
+            _ => (byte) ColorName.White
         };
 
         if (pk)
         {
-            color = (byte) Color.BrightRed;
+            color = (byte) ColorName.BrightRed;
         }
 
         var channelType = header switch
@@ -851,19 +852,19 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         switch (Clock.Instance.TimeOfDay)
         {
             case TimeOfDay.Dawn:
-                Text.AddText("A chilling, refreshing, breeze has come with the morning.", (int) Color.DarkGray);
+                Text.AddText("A chilling, refreshing, breeze has come with the morning.", (int) ColorName.DarkGray);
                 break;
 
             case TimeOfDay.Day:
-                Text.AddText("Day has dawned in this region.", (int) Color.DarkGray);
+                Text.AddText("Day has dawned in this region.", (int) ColorName.DarkGray);
                 break;
 
             case TimeOfDay.Dusk:
-                Text.AddText("Dusk has begun darkening the skies...", (int) Color.DarkGray);
+                Text.AddText("Dusk has begun darkening the skies...", (int) ColorName.DarkGray);
                 break;
 
             default:
-                Text.AddText("Night has fallen upon the weary travelers.", (int) Color.DarkGray);
+                Text.AddText("Night has fallen upon the weary travelers.", (int) ColorName.DarkGray);
                 break;
         }
     }

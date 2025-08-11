@@ -2,6 +2,7 @@
 using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using System.Net.Security;
+using Client.Game.UI;
 using Client.Net;
 using Core.Globals;
 using Core.Net;
@@ -978,7 +979,7 @@ namespace Client
 
             if (Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
             {
-                Text.AddText("Skill has not cooled down yet!", (int)Color.BrightRed);
+                Text.AddText("Skill has not cooled down yet!", (int)ColorName.BrightRed);
                 return;
             }
 
@@ -988,7 +989,7 @@ namespace Client
             // Check if player has enough MP
             if (GetPlayerVital(GameState.MyIndex, Vital.Stamina) < Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[skillSlot].Num].MpCost)
             {
-                Text.AddText("Not enough MP to cast " + Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int)Color.BrightRed);
+                Text.AddText("Not enough MP to cast " + Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int)ColorName.BrightRed);
                 return;
             }
 
@@ -1006,19 +1007,19 @@ namespace Client
                             }
                             else
                             {
-                                Text.AddText("Cannot cast here!", (int)Color.BrightRed);
+                                Text.AddText("Cannot cast here!", (int)ColorName.BrightRed);
                             }
                         }
                     }
                     else
                     {
-                        Text.AddText("Cannot cast while walking!", (int)Color.BrightRed);
+                        Text.AddText("Cannot cast while walking!", (int)ColorName.BrightRed);
                     }
                 }
             }
             else
             {
-                Text.AddText("No skill here.", (int)Color.BrightRed);
+                Text.AddText("No skill here.", (int)ColorName.BrightRed);
             }
 
         }

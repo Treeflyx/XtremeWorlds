@@ -1,4 +1,5 @@
-﻿using Client.Net;
+﻿using Client.Game.UI;
+using Client.Net;
 using Core;
 using Core.Globals;
 using Core.Net;
@@ -32,7 +33,7 @@ namespace Client
             var buffer = new PacketReader(data);
 
             name = buffer.ReadString();
-            GameLogic.Dialogue("Party Invite", name + " has invited you to a party.", "Would you like to join?", (byte)DialogueType.PartyInvite, (byte)DialogueStyle.YesNo);
+            GameLogic.Dialogue("Party Invite", name + " has invited you to a party.", "Would you like to join?", DialogueType.PartyInvite, DialogueStyle.YesNo);
         }
 
         public static void Packet_PartyUpdate(ReadOnlyMemory<byte> data)

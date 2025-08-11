@@ -4,13 +4,15 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
 using System.Data.Common;
+using Client.Game.UI;
+using Client.Game.UI.Windows;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
 using static Core.Globals.Type;
-using Color = Core.Globals.Color;
+using Text = Client.Game.UI.Text;
 using Type = Core.Globals.Type;
 
 namespace Client
@@ -133,7 +135,7 @@ namespace Client
 
             if (GameState.InGame)
             {
-                chatText = Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text;
+                chatText = Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text;
             }
 
             if (chatText != null)
@@ -144,8 +146,8 @@ namespace Client
             {
                 if (Gui.Windows[Gui.GetWindowIndex("winChat")].Visible == true)
                 {
-                    Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
-                    Gui.HideChat();
+                    Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                    WinChat.Hide();
                     return;
                 }
             }
@@ -160,7 +162,7 @@ namespace Client
                     Sender.AdminMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
                 return;
             }
 
@@ -174,7 +176,7 @@ namespace Client
                     Sender.BroadcastMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
                 return;
             }
 
@@ -188,7 +190,7 @@ namespace Client
                     Party.SendPartyChatMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
                 return;
             }
 
@@ -224,7 +226,7 @@ namespace Client
                 }
                 else
                 {
-                    Text.AddText(LocalesManager.Get("PlayerMsg"), (int)Color.Yellow);
+                    Text.AddText(LocalesManager.Get("PlayerMsg"), (int)ColorName.Yellow);
                 }
 
                 goto Continue1;
@@ -241,7 +243,7 @@ namespace Client
                             // Checks to make sure we have more than one string in the array
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Emote"), (int)Color.Yellow);
+                                Text.AddText(LocalesManager.Get("Emote"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -251,12 +253,12 @@ namespace Client
 
                     case "/help":
                         {
-                            Text.AddText(LocalesManager.Get("Help1"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Help2"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Help3"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Help4"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Help5"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Help6"), (int)Color.Yellow);
+                            Text.AddText(LocalesManager.Get("Help1"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Help2"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Help3"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Help4"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Help5"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Help6"), (int)ColorName.Yellow);
                             break;
                         }
 
@@ -274,7 +276,7 @@ namespace Client
                             // Checks to make sure we have more than one string in the array
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Info"), (int)Color.Yellow);
+                                Text.AddText(LocalesManager.Get("Info"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -330,7 +332,7 @@ namespace Client
                             // Make sure they are actually sending something
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Party"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("Party"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -367,7 +369,7 @@ namespace Client
                             // Make sure they are actually sending something
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Trade"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("Trade"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -381,14 +383,14 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
-                            Text.AddText(LocalesManager.Get("Admin1"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("Admin2"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("AdminGblMsg"), (int)Color.Yellow);
-                            Text.AddText(LocalesManager.Get("AdminPvtMsg"), (int)Color.Yellow);
+                            Text.AddText(LocalesManager.Get("Admin1"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("Admin2"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("AdminGblMsg"), (int)ColorName.Yellow);
+                            Text.AddText(LocalesManager.Get("AdminPvtMsg"), (int)ColorName.Yellow);
                             break;
                         }
 
@@ -404,13 +406,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessAlert"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessAlert"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Kick"), (int)Color.Yellow);
+                                Text.AddText(LocalesManager.Get("Kick"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -425,7 +427,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -439,13 +441,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpMeTo"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("WarpMeTo"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -459,13 +461,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpToMe"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("WarpToMe"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -479,13 +481,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpTo"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("WarpTo"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -498,7 +500,7 @@ namespace Client
                             }
                             else
                             {
-                                Text.AddText(LocalesManager.Get("InvalidMap"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("InvalidMap"), (int)ColorName.BrightRed);
                             }
 
                             break;
@@ -510,13 +512,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Sprite"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("Sprite"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -530,7 +532,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -544,7 +546,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -557,7 +559,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -569,7 +571,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                             }
 
                             Sender.SendRequestEditScript(0);
@@ -583,13 +585,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1)
                             {
-                                Text.AddText(LocalesManager.Get("Welcome"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("Welcome"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -603,7 +605,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -617,13 +619,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1)
                             {
-                                Text.AddText(LocalesManager.Get("Ban"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("Ban"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -638,7 +640,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -651,13 +653,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if ((Information.UBound(command) < 2 || Information.IsNumeric(command[1])) | !Information.IsNumeric(command[2]))
                             {
-                                Text.AddText(LocalesManager.Get("Access"), (int)Color.Yellow);
+                                Text.AddText(LocalesManager.Get("Access"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -671,7 +673,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -684,7 +686,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -697,7 +699,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -710,7 +712,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -723,7 +725,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -736,7 +738,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -749,7 +751,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -761,7 +763,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -773,7 +775,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -788,7 +790,7 @@ namespace Client
 
                     default:
                         {
-                            Text.AddText(LocalesManager.Get("InvalidCmd"), (int)Color.BrightRed);
+                            Text.AddText(LocalesManager.Get("InvalidCmd"), (int)ColorName.BrightRed);
                             break;
                         }
                 }
@@ -802,7 +804,7 @@ namespace Client
         Continue1:
             ;
 
-            Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int)Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+            Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
         }
 
         public static void CheckMapGetItem()
@@ -989,7 +991,7 @@ namespace Client
                         header = "Invalid Login";
                         body = "Invalid username or password.";
                         body2 = "Please try again.";
-                        Gui.ClearPasswordTexts();
+                        WinRegister.ClearPasswords();
                         break;
                     }
 
@@ -1054,7 +1056,7 @@ namespace Client
             }
 
             // set the dialogue up!
-            Dialogue(header, body, body2, (byte)DialogueType.Alert);
+            Dialogue(header, body, body2, DialogueType.Alert);
         }
 
         public static void CloseDialogue()
@@ -1062,7 +1064,7 @@ namespace Client
             Gui.HideWindow(Gui.GetWindowIndex("winDialogue"));
         }
 
-        public static void Dialogue(string header, string body, string body2, byte index, byte style = 0, long data1 = 0L, long data2 = 0L, long data3 = 0L, long data4 = 0L, long data5 = 0L)
+        public static void Dialogue(string header, string body, string body2, DialogueType index, DialogueStyle style = 0, long data1 = 0L, long data2 = 0L, long data3 = 0L, long data4 = 0L, long data5 = 0L)
         {
             if (Gui.Windows[Gui.GetWindowIndex("winDialogue")].Visible == true)
                 return;
@@ -1070,36 +1072,36 @@ namespace Client
             // set buttons
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winDialogue")];
-                if (style == (int)DialogueStyle.YesNo)
+                if (style == DialogueStyle.YesNo)
                 {
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnYes")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnNo")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
                 }
-                else if (style == (int)DialogueStyle.Okay)
+                else if (style == DialogueStyle.Okay)
                 {
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
                 }
-                else if (style == (int)DialogueStyle.Input)
+                else if (style == DialogueStyle.Input)
                 {
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "txtInput")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = false;
                 }
 
                 // set labels
-                withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblHeader")].Text = header;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblBody_1")].Text = body;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "lblBody_2")].Text = body2;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDialogue", "txtInput")].Text = "";
+                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblHeader")].Text = header;
+                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_1")].Text = body;
+                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Text = body2;
+                withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Text = "";
             }
 
             // set it all up
@@ -1122,7 +1124,7 @@ namespace Client
             int x;
             int y;
 
-            diaInput = Gui.Windows[Gui.GetWindowIndex("winDialogue")].Controls[(int)Gui.GetControlIndex("winDialogue", "txtInput")].Text;
+            diaInput = Gui.Windows[Gui.GetWindowIndex("winDialogue")].Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Text;
 
             // Find out which button
             if (index == 1L) // Okay button
@@ -1130,35 +1132,35 @@ namespace Client
                 // Dialogue index
                 switch (GameState.DiaIndex)
                 {
-                    case (long)DialogueType.TradeAmount:
+                    case DialogueType.TradeAmount:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
                             Trade.TradeItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
-                    case (long)DialogueType.DepositItem:
+                    case DialogueType.DepositItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
                             Bank.DepositItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
-                    case (long)DialogueType.WithdrawItem:
+                    case DialogueType.WithdrawItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
                             Bank.WithdrawItem((byte)(int)GameState.DiaData1, (int)value);
                             break;
                         }
 
-                    case (long)DialogueType.DropItem:
+                    case DialogueType.DropItem:
                         {
                             value = (long)Math.Round(Conversion.Val(diaInput));
                             Sender.SendDropItem((int)GameState.DiaData1, (int)value);
                             break;
                         }
 
-                    case (long)DialogueType.Information:
+                    case DialogueType.Information:
                         {
                             GameState.Info = true;
                             break;
@@ -1171,37 +1173,37 @@ namespace Client
                 // Dialogue index
                 switch (GameState.DiaIndex)
                 {
-                    case (long)DialogueType.Trade:
+                    case DialogueType.Trade:
                         {
                             Trade.SendHandleTradeInvite(1);
                             break;
                         }
 
-                    case (long)DialogueType.ForgetSkill:
+                    case DialogueType.ForgetSkill:
                         {
                             Sender.ForgetSkill((int)GameState.DiaData1);
                             break;
                         }
 
-                    case (long)DialogueType.PartyInvite:
+                    case DialogueType.PartyInvite:
                         {
                             Party.SendAcceptParty();
                             break;
                         }
 
-                    case (long)DialogueType.LootConfirmation:
+                    case DialogueType.LootConfirmation:
                         {
                             CheckMapGetItem();
                             break;
                         }
 
-                    case (long)DialogueType.DeleteCharacter:
+                    case DialogueType.DeleteCharacter:
                         {
                             Sender.SendDelChar((byte)GameState.DiaData1);
                             break;
                         }
 
-                    case (long)DialogueType.FillLayer:
+                    case DialogueType.FillLayer:
                         {
                             if (GameState.DiaData2 > 0L)
                             {
@@ -1242,7 +1244,7 @@ namespace Client
                             break;
                         }
 
-                    case (long)DialogueType.ClearLayer:
+                    case DialogueType.ClearLayer:
                         {
                             var loopTo4 = (int)Data.MyMap.MaxX;
                             for (x = 0; x < loopTo4; x++)
@@ -1264,7 +1266,7 @@ namespace Client
                             break;
                         }
 
-                    case (long)DialogueType.ClearAttributes:
+                    case DialogueType.ClearAttributes:
                         {
                             var loopTo6 = (int)Data.MyMap.MaxX;
                             for (x = 0; x < loopTo6; x++)
@@ -1280,7 +1282,7 @@ namespace Client
                             break;
                         }
 
-                    case (long)DialogueType.FillAttributes:
+                    case DialogueType.FillAttributes:
                         {
                             TileType type = TileType.None;
                             var loopTo6 = (int)Data.MyMap.MaxX;
@@ -1377,7 +1379,7 @@ namespace Client
                             break;
                         }
 
-                    case (long)DialogueType.ClearMap:
+                    case DialogueType.ClearMap:
                         Map.ClearMap();
                         Map.ClearMapNpcs();
                         Map.ClearMapItems();
@@ -1390,13 +1392,13 @@ namespace Client
                 // Dialogue index
                 switch (GameState.DiaIndex)
                 {
-                    case (long)DialogueType.Trade:
+                    case DialogueType.Trade:
                         {
                             Trade.SendHandleTradeInvite(0);
                             break;
                         }
 
-                    case (long)DialogueType.PartyInvite:
+                    case DialogueType.PartyInvite:
                         {
                             Party.SendDeclineParty();
                             break;
@@ -1412,10 +1414,10 @@ namespace Client
         public static void ShowJobs()
         {
             Gui.HideWindows();
-            GameState.NewCharJob = 0L;
-            GameState.NewCharSprite = 1L;
+            GameState.NewCharJob = 0;
+            GameState.NewCharSprite = 1;
             GameState.NewCnarGender = (long)Sex.Male;
-            Gui.Windows[Gui.GetWindowIndex("winJobs")].Controls[(int)Gui.GetControlIndex("winJobs", "lblJobName")].Text = Data.Job[(int)GameState.NewCharJob].Name;
+            Gui.Windows[Gui.GetWindowIndex("winJobs")].Controls[Gui.GetControlIndex("winJobs", "lblJobName")].Text = Data.Job[(int)GameState.NewCharJob].Name;
             Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
         }
 
@@ -1427,7 +1429,7 @@ namespace Client
             }
             else
             {
-                Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte)DialogueType.Alert);
+                Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", DialogueType.Alert);
             }
         }
 
@@ -1459,36 +1461,33 @@ namespace Client
             }
         }
 
-        public static long IsHotbar(long startX, long startY)
+        public static int IsHotbar(long startX, long startY)
         {
-            long isHotbar = default;
-            Type.Rectangle tempRec;
-            long i;
-
-            for (i = 0L; i < Constant.MaxHotbar; i++)
+            for (var i = 0; i < Constant.MaxHotbar; i++)
             {
-                tempRec.Top = (int)(startY + GameState.HotbarTop);
-                tempRec.Left = (int)(startX + i * GameState.HotbarOffsetX);
-                tempRec.Right = tempRec.Left + GameState.SizeX;
-                tempRec.Bottom = tempRec.Top + GameState.SizeY;
+                Rectangle rec;
+                
+                rec.Top = (int)(startY + GameState.HotbarTop);
+                rec.Left = (int)(startX + i * GameState.HotbarOffsetX);
+                rec.Right = rec.Left + GameState.SizeX;
+                rec.Bottom = rec.Top + GameState.SizeY;
 
-                if (Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot >= 0)
+                if (Data.Player[GameState.MyIndex].Hotbar[i].Slot < 0)
                 {
-                    if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
-                    {
-                        if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                        {
-                            isHotbar = i;
-                            return isHotbar;
-                        }
-                    }
+                    continue;
+                }
+                
+                if (GameState.CurMouseX >= rec.Left & GameState.CurMouseX <= rec.Right && 
+                    GameState.CurMouseY >= rec.Top & GameState.CurMouseY <= rec.Bottom)
+                {
+                    return i;
                 }
             }
 
             return -1;
         }
 
-        public static void ShowInvDesc(long x, long y, long invNum)
+        public static void ShowInvDesc(int x, int y, int invNum)
         {
             bool soulBound;
 
@@ -1496,15 +1495,15 @@ namespace Client
                 return;
 
             // show
-            if (GetPlayerInv(GameState.MyIndex, (int)invNum) >= 0)
+            if (GetPlayerInv(GameState.MyIndex, invNum) >= 0)
             {
-                if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)invNum)].BindType > 0 & Data.Player[GameState.MyIndex].Inv[(int)invNum].Bound > 0)
+                if (Data.Item[GetPlayerInv(GameState.MyIndex, invNum)].BindType > 0 & Data.Player[GameState.MyIndex].Inv[invNum].Bound > 0)
                     soulBound = true;
-                ShowItemDesc(x, y, (long)GetPlayerInv(GameState.MyIndex, (int)invNum));
+                ShowItemDesc(x, y, GetPlayerInv(GameState.MyIndex, invNum));
             }
         }
 
-        public static void ShowItemDesc(long x, long y, long itemNum)
+        public static void ShowItemDesc(int x, int y, int itemNum)
         {
             var color = default(Microsoft.Xna.Framework.Color);
             string theName;
@@ -1532,9 +1531,9 @@ namespace Client
             GameState.DescLastItem = GameState.DescItem;
 
             // show req. labels
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Visible = true;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Visible = false;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Visible = true;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = false;
 
             // set variables
             {
@@ -1545,7 +1544,7 @@ namespace Client
                 // Else
                 // theName = "(SB) " & Item(itemNum).Name)
                 // End If
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Text = theName;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Text = theName;
                 switch (Data.Item[(int)itemNum].Rarity)
                 {
                     case 0: // white
@@ -1579,7 +1578,7 @@ namespace Client
                             break;
                         }
                 }
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Color = color;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Color = color;
 
                 // class req
                 if (Data.Item[(int)itemNum].JobReq > 0)
@@ -1601,8 +1600,8 @@ namespace Client
                     color = Microsoft.Xna.Framework.Color.Green;
                 }
 
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Text = jobName;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Color = color;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Text = jobName;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Color = color;
 
                 // level
                 if (Data.Item[(int)itemNum].LevelReq > 0)
@@ -1623,8 +1622,8 @@ namespace Client
                     levelTxt = "No Level Req.";
                     color = Microsoft.Xna.Framework.Color.Green;
                 }
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Text = levelTxt;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Color = color;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Text = levelTxt;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Color = color;
             }
 
             // clear
@@ -1835,14 +1834,14 @@ namespace Client
             }
         }
 
-        public static void ShowSkillDesc(long x, long y, long skillNum, long skillSlot)
+        public static void ShowSkillDesc(int x, int y, int skillNum, long skillSlot)
         {
             long color;
             string theName;
             string sUse;
             long i;
-            long barWidth;
-            long tmpWidth;
+            int barWidth;
+            int tmpWidth;
 
             if (skillNum < 0 || skillNum > Constant.MaxSkills)
                 return;
@@ -1866,30 +1865,30 @@ namespace Client
             GameState.Description = new Type.Text[2];
 
             // hide req. labels
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "lblLevel")].Visible = false;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Visible = true;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Visible = false;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = true;
 
             // set variables
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winDescription")];
                 // set name
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Text = Data.Skill[(int)skillNum].Name;
-                withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblName")].Color = Microsoft.Xna.Framework.Color.White;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Text = Data.Skill[(int)skillNum].Name;
+                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Color = Microsoft.Xna.Framework.Color.White;
 
                 // find ranks
                 if (skillSlot >= 0L)
                 {
                     // draw the rank bar
-                    barWidth = 66L;
+                    barWidth = 66;
                     // If Type.Skill(skillNum).rank > 0 Then
                     // tmpWidth = ((PlayerSkills(SkillSlot).Uses / barWidth) / (Type.Skill(skillNum).NextUses / barWidth)) * barWidth
                     // Else
-                    tmpWidth = 66L;
+                    tmpWidth = 66;
                     // End If
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Value = tmpWidth;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "picBar")].Value = tmpWidth;
                     // does it rank up?
                     // If Type.Skill(skillNum).NextRank > 0 Then
-                    color = (long)Color.White;
+                    color = (long)ColorName.White;
                     // sUse = "Uses: " & PlayerSkills(SkillSlot).Uses & "/" & Type.Skill(skillNum).NextUses
                     // If PlayerSkills(SkillSlot).Uses = Type.Skill(skillNum).NextUses Then
                     // If Not GetPlayerLevel(GameState.MyIndex) >= Skill(Type.Skill(skillNum).NextRank).LevelReq Then
@@ -1898,21 +1897,21 @@ namespace Client
                     // End If
                     // End If
                     // Else
-                    color = (long)Color.Gray;
+                    color = (long)ColorName.Gray;
                     sUse = "Max Rank";
                     // End If
                     // show controls
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = true;
                     // set vals
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Text = sUse;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Color = Microsoft.Xna.Framework.Color.White;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Text = sUse;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Color = Microsoft.Xna.Framework.Color.White;
                 }
                 else
                 {
                     // hide some controls
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "lblJob")].Visible = false;
-                    withBlock.Controls[(int)Gui.GetControlIndex("winDescription", "picBar")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "lblJob")].Visible = false;
+                    withBlock.Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = false;
                 }
             }
 
@@ -1988,7 +1987,7 @@ namespace Client
             }
         }
 
-        public static void ShowShopDesc(long x, long y, long itemNum)
+        public static void ShowShopDesc(int x, int y, int itemNum)
         {
             if (itemNum < 0L | itemNum > Constant.MaxItems)
                 return;
@@ -1996,7 +1995,7 @@ namespace Client
             ShowItemDesc(x, y, itemNum);
         }
 
-        public static void ShowEqDesc(long x, long y, long eqNum)
+        public static void ShowEqDesc(int x, int y, long eqNum)
         {
             bool soulBound;
 
@@ -2011,9 +2010,9 @@ namespace Client
             // show
             if (Conversions.ToBoolean(Data.Player[GameState.MyIndex].Equipment[(int)eqNum]))
             {
-                if (Data.Item[(int)Data.Player[GameState.MyIndex].Equipment[(int)eqNum]].BindType > 0)
+                if (Data.Item[Data.Player[GameState.MyIndex].Equipment[(int)eqNum]].BindType > 0)
                     soulBound = true;
-                ShowItemDesc(x, y, (long)Data.Player[GameState.MyIndex].Equipment[(int)eqNum]);
+                ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum]);
             }
         }
 
@@ -2055,11 +2054,11 @@ namespace Client
             // fill the options screen
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winOptions")];
-                withBlock.Controls[(int)Gui.GetControlIndex("winOptions", "chkMusic")].Value = Conversions.ToLong(SettingsManager.Instance.Music);
-                withBlock.Controls[(int)Gui.GetControlIndex("winOptions", "chkSound")].Value = Conversions.ToLong(SettingsManager.Instance.Sound);
-                withBlock.Controls[(int)Gui.GetControlIndex("winOptions", "chkAutotile")].Value = Conversions.ToLong(SettingsManager.Instance.Autotile);
-                withBlock.Controls[(int)Gui.GetControlIndex("winOptions", "chkFullscreen")].Value = Conversions.ToLong(SettingsManager.Instance.Fullscreen);
-                withBlock.Controls[(int)Gui.GetControlIndex("winOptions", "cmbRes")].Value = SettingsManager.Instance.Resolution;
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkMusic")].Value = Conversions.ToInteger(SettingsManager.Instance.Music);
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkSound")].Value = Conversions.ToInteger(SettingsManager.Instance.Sound);
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkAutotile")].Value = Conversions.ToInteger(SettingsManager.Instance.Autotile);
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkFullscreen")].Value = Conversions.ToInteger(SettingsManager.Instance.Fullscreen);
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "cmbRes")].Value = SettingsManager.Instance.Resolution;
             }
         }
 
@@ -2067,16 +2066,16 @@ namespace Client
         {
             // set globals
             GameState.InShop = (int)shopNum;
-            GameState.ShopSelectedSlot = 0L;
+            GameState.ShopSelectedSlot = 0;
             GameState.ShopSelectedItem = Data.Shop[GameState.InShop].TradeItem[1].Item;
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "CheckboxSelling")].Value = 0L;
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "CheckboxBuying")].Value = 0L;
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "btnSell")].Visible = false;
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "btnBuy")].Visible = true;
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[Gui.GetControlIndex("winShop", "CheckboxSelling")].Value = 0;
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[Gui.GetControlIndex("winShop", "CheckboxBuying")].Value = 0;
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[Gui.GetControlIndex("winShop", "btnSell")].Visible = false;
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[Gui.GetControlIndex("winShop", "btnBuy")].Visible = true;
             GameState.ShopIsSelling = false;
 
             // set the current item
-            Gui.UpdateShop();
+            WinShop.UpdateShop();
 
             // show the window
             Gui.ShowWindow(Gui.GetWindowIndex("winShop"));
@@ -2086,8 +2085,8 @@ namespace Client
         {
             long i;
             long pIndex;
-            long barWidth;
-            long width;
+            int barWidth;
+            int width;
 
             // unload it if we're not in a party
             if (Data.MyParty.Leader == 0)
@@ -2096,7 +2095,7 @@ namespace Client
             }
 
             // max bar width
-            barWidth = 173L;
+            barWidth = 173;
 
             // make sure we're in a party
             {
@@ -2104,9 +2103,9 @@ namespace Client
                 for (i = 0L; i <= 3L; i++)
                 {
                     // get the pIndex from the control
-                    if (withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picChar" + i)].Visible == true)
+                    if (withBlock.Controls[Gui.GetControlIndex("winParty", "picChar" + i)].Visible == true)
                     {
-                        pIndex = withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picChar" + i)].Value;
+                        pIndex = withBlock.Controls[Gui.GetControlIndex("winParty", "picChar" + i)].Value;
                         // make sure they exist
                         if (pIndex > 0L)
                         {
@@ -2115,22 +2114,22 @@ namespace Client
                                 // get their health
                                 if (GetPlayerVital((int)pIndex, Vital.Health) > 0 & GetPlayerMaxVital((int)pIndex, Vital.Health) > 0)
                                 {
-                                    width = (long)Math.Round(GetPlayerVital((int)pIndex, Vital.Health) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Vital.Health) / (double)barWidth) * barWidth);
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = width;
+                                    width = (int)Math.Round(GetPlayerVital((int)pIndex, Vital.Health) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Vital.Health) / (double)barWidth) * barWidth);
+                                    withBlock.Controls[Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = width;
                                 }
                                 else
                                 {
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = 0L;
+                                    withBlock.Controls[Gui.GetControlIndex("winParty", "picBar_HP" + i)].Width = 0;
                                 }
                                 // get their spirit
                                 if (GetPlayerVital((int)pIndex, Vital.Stamina) > 0 & GetPlayerMaxVital((int)pIndex, Vital.Stamina) > 0)
                                 {
-                                    width = (long)Math.Round(GetPlayerVital((int)pIndex, Vital.Stamina) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Vital.Stamina) / (double)barWidth) * barWidth);
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = width;
+                                    width = (int)Math.Round(GetPlayerVital((int)pIndex, Vital.Stamina) / (double)barWidth / (GetPlayerMaxVital((int)pIndex, Vital.Stamina) / (double)barWidth) * barWidth);
+                                    withBlock.Controls[Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = width;
                                 }
                                 else
                                 {
-                                    withBlock.Controls[(int)Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = 0L;
+                                    withBlock.Controls[Gui.GetControlIndex("winParty", "picBar_SP" + i)].Width = 0;
                                 }
                             }
                         }
@@ -2148,22 +2147,22 @@ namespace Client
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winTrade")];
                 withBlock.Text = "Trading with " + GetPlayerName(Trade.InTrade);
-                withBlock.Controls[(int)Gui.GetControlIndex("winTrade", "lblYourTrade")].Text = GetPlayerName(GameState.MyIndex) + "'s Offer";
-                withBlock.Controls[(int)Gui.GetControlIndex("winTrade", "lblTheirTrade")].Text = GetPlayerName(Trade.InTrade) + "'s Offer";
-                withBlock.Controls[(int)Gui.GetControlIndex("winTrade", "lblYourValue")].Text = "0g";
-                withBlock.Controls[(int)Gui.GetControlIndex("winTrade", "lblTheirValue")].Text = "0g";
-                withBlock.Controls[(int)Gui.GetControlIndex("winTrade", "lblStatus")].Text = "Choose items to offer.";
+                withBlock.Controls[Gui.GetControlIndex("winTrade", "lblYourTrade")].Text = GetPlayerName(GameState.MyIndex) + "'s Offer";
+                withBlock.Controls[Gui.GetControlIndex("winTrade", "lblTheirTrade")].Text = GetPlayerName(Trade.InTrade) + "'s Offer";
+                withBlock.Controls[Gui.GetControlIndex("winTrade", "lblYourValue")].Text = "0g";
+                withBlock.Controls[Gui.GetControlIndex("winTrade", "lblTheirValue")].Text = "0g";
+                withBlock.Controls[Gui.GetControlIndex("winTrade", "lblStatus")].Text = "Choose items to offer.";
             }
         }
 
-        public static void ShowPlayerMenu(long index, long x, long y)
+        public static void ShowPlayerMenu(long index, int x, int y)
         {
             GameState.PlayerMenuIndex = index;
             if (GameState.PlayerMenuIndex == 0L | GameState.PlayerMenuIndex == GameState.MyIndex)
                 return;
-            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Left = x - 5L;
-            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Top = y - 5L;
-            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Controls[(int)Gui.GetControlIndex("winPlayerMenu", "btnName")].Text = GetPlayerName((int)GameState.PlayerMenuIndex);
+            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Left = x - 5;
+            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Top = y - 5;
+            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Controls[Gui.GetControlIndex("winPlayerMenu", "btnName")].Text = GetPlayerName((int)GameState.PlayerMenuIndex);
             Gui.ShowWindow(Gui.GetWindowIndex("winRightClickBG"));
             Gui.ShowWindow(Gui.GetWindowIndex("winPlayerMenu"));
         }
@@ -2220,8 +2219,8 @@ namespace Client
                     amount = GetPlayerInvValue(GameState.MyIndex, (int)i);
                 }
             }
-            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[(int)Gui.GetControlIndex("winShop", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
-            Gui.Windows[Gui.GetWindowIndex("winInventory")].Controls[(int)Gui.GetControlIndex("winInventory", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
+            Gui.Windows[Gui.GetWindowIndex("winShop")].Controls[Gui.GetControlIndex("winShop", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
+            Gui.Windows[Gui.GetWindowIndex("winInventory")].Controls[Gui.GetControlIndex("winInventory", "lblGold")].Text = Strings.Format(amount, "#,###,###,###") + "g";
         }
 
         public static int Clamp(int value, int min, int max)

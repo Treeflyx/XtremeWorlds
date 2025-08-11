@@ -1,11 +1,11 @@
 ﻿using System;
+using Client.Game.UI;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;
 using static Core.Globals.Command;
 using Eto.Forms;
 using Eto.Drawing;
-using Color = Core.Globals.Color;
 
 namespace Client
 {
@@ -160,7 +160,7 @@ namespace Client
 
         private void ShowDenied()
         {
-            Client.Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
+            Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
         }
 
         private bool IsNumeric(string s)

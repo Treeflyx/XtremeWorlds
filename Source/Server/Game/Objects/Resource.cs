@@ -110,7 +110,7 @@ public static class Resource
 
         NetworkSend.PlayerMsg(playerId, levels == 1
             ? $"Your {GetResourceSkillName((ResourceSkill) skillSlot)} has gone up a level!"
-            : $"Your {GetResourceSkillName((ResourceSkill) skillSlot)} has gone up by {levels} levels!", (int) Color.BrightGreen);
+            : $"Your {GetResourceSkillName((ResourceSkill) skillSlot)} has gone up by {levels} levels!", (int) ColorName.BrightGreen);
 
         NetworkSend.SendPlayerData(playerId);
     }
@@ -125,7 +125,7 @@ public static class Resource
         var user = IsEditorLocked(session.Id, EditorType.Resource);
         if (!string.IsNullOrEmpty(user))
         {
-            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) ColorName.BrightRed);
             return;
         }
 
@@ -301,13 +301,13 @@ public static class Resource
 
         if (GetPlayerEquipment(playerId, Equipment.Weapon) < 0 && Data.Resource[resourceIndex].ToolRequired != 0)
         {
-            NetworkSend.PlayerMsg(playerId, "You need a tool to gather this resource.", (int) Color.Yellow);
+            NetworkSend.PlayerMsg(playerId, "You need a tool to gather this resource.", (int) ColorName.Yellow);
             return;
         }
 
         if (Data.Item[GetPlayerEquipment(playerId, Equipment.Weapon)].Data3 != Data.Resource[resourceIndex].ToolRequired)
         {
-            NetworkSend.PlayerMsg(playerId, "You have the wrong type of tool equiped.", (int) Color.Yellow);
+            NetworkSend.PlayerMsg(playerId, "You have the wrong type of tool equiped.", (int) ColorName.Yellow);
             return;
         }
 
@@ -315,20 +315,20 @@ public static class Resource
         {
             if (Player.FindOpenInvSlot(playerId, Data.Resource[resourceIndex].ItemReward) == 0)
             {
-                NetworkSend.PlayerMsg(playerId, "You have no inventory space.", (int) Color.Yellow);
+                NetworkSend.PlayerMsg(playerId, "You have no inventory space.", (int) ColorName.Yellow);
                 return;
             }
         }
 
         if (Data.Resource[resourceIndex].LvlRequired > GetPlayerGatherSkillLvl(playerId, resourceType))
         {
-            NetworkSend.PlayerMsg(playerId, "Your level is too low!", (int) Color.Yellow);
+            NetworkSend.PlayerMsg(playerId, "Your level is too low!", (int) ColorName.Yellow);
             return;
         }
 
         if (Data.MapResource[mapNum].ResourceData[resourceNum].State != 0)
         {
-            NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].EmptyMessage, (int) Color.BrightRed, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
+            NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].EmptyMessage, (int) ColorName.BrightRed, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
             return;
         }
 
@@ -347,14 +347,14 @@ public static class Resource
 
         if (damage <= 0)
         {
-            NetworkSend.SendActionMsg(mapNum, "Miss!", (int) Color.BrightRed, 1, resourceX * 32, resourceY * 32);
+            NetworkSend.SendActionMsg(mapNum, "Miss!", (int) ColorName.BrightRed, 1, resourceX * 32, resourceY * 32);
             return;
         }
 
         if (Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage >= 0)
         {
             Data.MapResource[mapNum].ResourceData[resourceNum].Health = (byte) (Data.MapResource[mapNum].ResourceData[resourceNum].Health - damage);
-            NetworkSend.SendActionMsg(mapNum, "-" + damage, (int) Color.BrightRed, 1, resourceX * 32, resourceY * 32);
+            NetworkSend.SendActionMsg(mapNum, "-" + damage, (int) ColorName.BrightRed, 1, resourceX * 32, resourceY * 32);
             Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, resourceX, resourceY);
 
             return;
@@ -365,13 +365,13 @@ public static class Resource
 
         SendMapResourceToMap(mapNum);
 
-        NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].SuccessMessage, (int) Color.BrightGreen, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
+        NetworkSend.SendActionMsg(mapNum, Data.Resource[resourceIndex].SuccessMessage, (int) ColorName.BrightGreen, 1, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32);
         Player.GiveInv(playerId, Data.Resource[resourceIndex].ItemReward, 1);
         Animation.SendAnimation(mapNum, Data.Resource[resourceIndex].Animation, resourceX, resourceY);
 
         SetPlayerGatherSkillExp(playerId, resourceType, GetPlayerGatherSkillExp(playerId, resourceType) + Data.Resource[resourceIndex].ExpReward);
 
-        NetworkSend.PlayerMsg(playerId, $"Your {GetResourceSkillName((ResourceSkill) resourceType)} has earned {Data.Resource[resourceIndex].ExpReward} experience. ({GetPlayerGatherSkillExp(playerId, resourceType)}/{GetPlayerGatherSkillMaxExp(playerId, resourceType)})", (int) Color.BrightGreen);
+        NetworkSend.PlayerMsg(playerId, $"Your {GetResourceSkillName((ResourceSkill) resourceType)} has earned {Data.Resource[resourceIndex].ExpReward} experience. ({GetPlayerGatherSkillExp(playerId, resourceType)}/{GetPlayerGatherSkillMaxExp(playerId, resourceType)})", (int) ColorName.BrightGreen);
         NetworkSend.SendPlayerData(playerId);
 
         CheckResourceLevelUp(playerId, resourceType);

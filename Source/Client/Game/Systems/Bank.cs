@@ -1,4 +1,5 @@
-﻿using Client.Net;
+﻿using Client.Game.UI;
+using Client.Net;
 using Core;
 using Core.Globals;
 using Core.Net;
@@ -69,12 +70,12 @@ namespace Client
             Network.Send(packetWriter);
         }
 
-        public static void WithdrawItem(byte bankSlot, int amount)
+        public static void WithdrawItem(int bankSlot, int amount)
         {
             var packetWriter = new PacketWriter(9);
 
             packetWriter.WriteEnum(Packets.ClientPackets.CWithdrawItem);
-            packetWriter.WriteByte(bankSlot);
+            packetWriter.WriteByte((byte) bankSlot);
             packetWriter.WriteInt32(amount);
 
             Network.Send(packetWriter);

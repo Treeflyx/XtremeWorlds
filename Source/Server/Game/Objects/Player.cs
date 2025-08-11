@@ -438,18 +438,18 @@ public static class Player
                     int color;
                     if (vital == (byte) Vital.Health)
                     {
-                        color = (int) Color.BrightGreen;
+                        color = (int) ColorName.BrightGreen;
                     }
                     else
                     {
-                        color = (int) Color.BrightBlue;
+                        color = (int) ColorName.BrightBlue;
                     }
 
                     NetworkSend.SendActionMsg(GetPlayerMap(playerId), "+" + amount, color, (byte) ActionMessageType.Scroll, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32, 1);
 
                     SetPlayerVital(playerId, (Vital) vital, GetPlayerVital(playerId, (Vital) vital) + amount);
 
-                    NetworkSend.PlayerMsg(playerId, "You feel rejuvenating forces coursing through your body.", (int) Color.BrightGreen);
+                    NetworkSend.PlayerMsg(playerId, "You feel rejuvenating forces coursing through your body.", (int) ColorName.BrightGreen);
                     NetworkSend.SendVital(playerId, (Vital) vital);
                 }
 
@@ -469,16 +469,16 @@ public static class Player
 
             if (amount > 0)
             {
-                NetworkSend.SendActionMsg(GetPlayerMap(playerId), "-" + amount, (int) Color.BrightRed, (byte) ActionMessageType.Scroll, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32, 1);
+                NetworkSend.SendActionMsg(GetPlayerMap(playerId), "-" + amount, (int) ColorName.BrightRed, (byte) ActionMessageType.Scroll, GetPlayerX(playerId) * 32, GetPlayerY(playerId) * 32, 1);
                 if (GetPlayerVital(playerId, Vital.Health) - amount < 0)
                 {
                     KillPlayer(playerId);
-                    NetworkSend.PlayerMsg(playerId, "You've been killed by a trap.", (int) Color.BrightRed);
+                    NetworkSend.PlayerMsg(playerId, "You've been killed by a trap.", (int) ColorName.BrightRed);
                 }
                 else
                 {
                     SetPlayerVital(playerId, Vital.Health, GetPlayerVital(playerId, Vital.Health) - amount);
-                    NetworkSend.PlayerMsg(playerId, "You've been injured by a trap.", (int) Color.BrightRed);
+                    NetworkSend.PlayerMsg(playerId, "You've been injured by a trap.", (int) ColorName.BrightRed);
                     NetworkSend.SendVital(playerId, Vital.Health);
                 }
 
@@ -681,7 +681,7 @@ public static class Player
             var slot = FindOpenInvSlot(playerId, Data.MapItem[mapNum, mapItemNum].Num);
             if (slot == -1)
             {
-                NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) ColorName.BrightRed);
                 break;
             }
 
@@ -709,7 +709,7 @@ public static class Player
 
         if (!Data.Moral[Data.Map[mapNum].Moral].CanPickupItem)
         {
-            NetworkSend.PlayerMsg(playerId, "You can't pickup items here!", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You can't pickup items here!", (int) ColorName.BrightRed);
             return false;
         }
 
@@ -815,7 +815,7 @@ public static class Player
         var slot = FindOpenInvSlot(playerId, itemNum);
         if (slot == -1)
         {
-            NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) ColorName.BrightRed);
             return false;
         }
 
@@ -849,7 +849,7 @@ public static class Player
 
         if (!Data.Moral[GetPlayerMap(playerId)].CanDropItem)
         {
-            NetworkSend.PlayerMsg(playerId, "You can't drop items here!", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You can't drop items here!", (int) ColorName.BrightRed);
             return;
         }
 
@@ -886,7 +886,7 @@ public static class Player
         }
         else
         {
-            NetworkSend.PlayerMsg(playerId, "Too many items already on the ground.", (int) Color.Yellow);
+            NetworkSend.PlayerMsg(playerId, "Too many items already on the ground.", (int) ColorName.Yellow);
         }
     }
 
@@ -936,7 +936,7 @@ public static class Player
         {
             if (!Data.Moral[Data.Map[GetPlayerMap(playerId)].Moral].CanUseItem)
             {
-                NetworkSend.PlayerMsg(playerId, "You can't use items here!", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(playerId, "You can't use items here!", (int) ColorName.BrightRed);
                 return false;
             }
         }
@@ -949,25 +949,25 @@ public static class Player
                 continue;
             }
 
-            NetworkSend.PlayerMsg(playerId, "You do not meet the stat requirements to use this item.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You do not meet the stat requirements to use this item.", (int) ColorName.BrightRed);
             return false;
         }
 
         if (Data.Item[itemNum].LevelReq > GetPlayerLevel(playerId))
         {
-            NetworkSend.PlayerMsg(playerId, "You do not meet the level requirements to use this item.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You do not meet the level requirements to use this item.", (int) ColorName.BrightRed);
             return false;
         }
 
         if (Data.Item[itemNum].JobReq != -1 && Data.Item[itemNum].JobReq != GetPlayerJob(playerId))
         {
-            NetworkSend.PlayerMsg(playerId, "You do not meet the job requirements to use this item.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You do not meet the job requirements to use this item.", (int) ColorName.BrightRed);
             return false;
         }
 
         if (GetPlayerAccess(playerId) < Data.Item[itemNum].AccessReq)
         {
-            NetworkSend.PlayerMsg(playerId, "You do not meet the access requirement to equip this item.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "You do not meet the access requirement to equip this item.", (int) ColorName.BrightRed);
             return false;
         }
 
@@ -976,7 +976,7 @@ public static class Player
             return true;
         }
 
-        NetworkSend.PlayerMsg(playerId, "You can't use items while in a bank, shop, or trade!", (int) Color.BrightRed);
+        NetworkSend.PlayerMsg(playerId, "You can't use items while in a bank, shop, or trade!", (int) ColorName.BrightRed);
         return false;
     }
 
@@ -1135,7 +1135,7 @@ public static class Player
         }
         else
         {
-            NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) ColorName.BrightRed);
         }
     }
 

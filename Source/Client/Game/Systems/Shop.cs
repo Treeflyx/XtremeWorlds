@@ -1,4 +1,5 @@
-﻿using Client.Net;
+﻿using Client.Game.UI;
+using Client.Net;
 using Core;
 using Core.Globals;
 using Core.Net;
@@ -15,8 +16,8 @@ namespace Client
             Sender.SendCloseShop();
             Gui.HideWindow(Gui.GetWindowIndex("winShop"));
             Gui.HideWindow(Gui.GetWindowIndex("winDescription"));
-            GameState.ShopSelectedSlot = 0L;
-            GameState.ShopSelectedItem = 0L;
+            GameState.ShopSelectedSlot = 0;
+            GameState.ShopSelectedItem = 0;
             GameState.ShopIsSelling = false;
             GameState.InShop = -1;
         }

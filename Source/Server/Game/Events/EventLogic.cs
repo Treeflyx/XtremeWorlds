@@ -13,7 +13,6 @@ using Core.Globals;
 using Core.Net;
 using Server.Game;
 using Server.Net;
-using Color = Core.Globals.Color;
 using EventCommand = Core.Globals.EventCommand;
 
 namespace Server
@@ -2082,7 +2081,7 @@ namespace Server
 
                                         case (byte) EventCommand.ShowChatBubble:
                                         {
-                                            Color color = Color.Blue; // Or any default color you prefer
+                                            ColorName color = ColorName.Blue; // Or any default color you prefer
                                             switch (command.Data1)
                                             {
                                                 case (byte) TargetType.Player:

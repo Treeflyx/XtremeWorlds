@@ -1,6 +1,8 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
 using Assimp.Configs;
+using Client.Game.UI;
+using Client.Game.UI.Windows;
 using Client.Net;
 using Core;
 using Core.Configurations;
@@ -634,7 +636,7 @@ namespace Client
 
         private void BtnClearAttribute_Click(object sender, EventArgs e)
         {
-            GameLogic.Dialogue("Map Editor", "Clear Attributes: ", "Are you sure you wish to clear attributes?", (byte)DialogueType.ClearAttributes, (byte)DialogueStyle.YesNo);
+            GameLogic.Dialogue("Map Editor", "Clear Attributes: ", "Are you sure you wish to clear attributes?", DialogueType.ClearAttributes, DialogueStyle.YesNo);
         }
 
         private void ScrlNpcDir_Scroll(object sender, EventArgs e)
@@ -1128,11 +1130,11 @@ namespace Client
                     {
                         if (GameState.EditorAttribute == 1)
                         {
-                            GameLogic.Dialogue("Map Editor", "Info: " + System.Enum.GetName(Data.MyMap.Tile[GameState.CurX, GameState.CurY].Type), " Data 1: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data1 + " Data 2: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data2 + " Data 3: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data3, (byte)DialogueType.Information, (byte)DialogueStyle.Okay);
+                            GameLogic.Dialogue("Map Editor", "Info: " + System.Enum.GetName(Data.MyMap.Tile[GameState.CurX, GameState.CurY].Type), " Data 1: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data1 + " Data 2: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data2 + " Data 3: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data3, DialogueType.Information, (byte)DialogueStyle.Okay);
                         }
                         else
                         {
-                            GameLogic.Dialogue("Map Editor", "Info: " + System.Enum.GetName(Data.MyMap.Tile[GameState.CurX, GameState.CurY].Type2), " Data 1: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data1_2 + " Data 2: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data2_2 + " Data 3: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data3_2, (byte)DialogueType.Information, (byte)DialogueStyle.Okay);
+                            GameLogic.Dialogue("Map Editor", "Info: " + System.Enum.GetName(Data.MyMap.Tile[GameState.CurX, GameState.CurY].Type2), " Data 1: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data1_2 + " Data 2: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data2_2 + " Data 3: " + Data.MyMap.Tile[GameState.CurX, GameState.CurY].Data3_2, DialogueType.Information, (byte)DialogueStyle.Okay);
                         }
                     }
                 }
@@ -1552,7 +1554,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
             Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
-            Gui.HideChat();
+            WinChat.Hide();
 
             Editor_Event.Instance?.Dispose();
 
@@ -1571,7 +1573,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
             Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
-            Gui.HideChat();
+            WinChat.Hide();
 
             Editor_Event.Instance?.Dispose();
 
@@ -1696,12 +1698,12 @@ namespace Client
 
         public static void MapEditorClearLayer(MapLayer layer)
         {
-            GameLogic.Dialogue("Map Editor", "Clear Layer: " + layer.ToString(), "Are you sure you wish to clear this layer?", (byte)DialogueType.ClearLayer, (byte)DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType);
+            GameLogic.Dialogue("Map Editor", "Clear Layer: " + layer.ToString(), "Are you sure you wish to clear this layer?", DialogueType.ClearLayer, DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType);
         }
 
         public static void MapEditorFillLayer(MapLayer layer, byte theAutotile = 0, byte tileX = 0, byte tileY = 0)
         {
-            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", (byte)DialogueType.FillLayer, (byte)DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, (Instance?.cmbTileSets.SelectedIndex ?? -1) + 1);
+            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", DialogueType.FillLayer, DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, (Instance?.cmbTileSets.SelectedIndex ?? -1) + 1);
         }
 
         public static void MapEditorEyeDropper()
@@ -1942,7 +1944,7 @@ namespace Client
                 }
 
                 GameState.CopyMap = true;
-                GameLogic.Dialogue("Map Editor", "Map Copy: ", "Press the button again to paste.", (byte)DialogueType.CopyMap, (byte)DialogueStyle.Okay);
+                GameLogic.Dialogue("Map Editor", "Map Copy: ", "Press the button again to paste.", DialogueType.CopyMap, (byte)DialogueStyle.Okay);
             }
             else
             {
@@ -1980,7 +1982,7 @@ namespace Client
                     }
                 }
 
-                GameLogic.Dialogue("Map Editor", "Map Paste: ", "Map has been updated.", (byte)DialogueType.PasteMap, (byte)DialogueStyle.Okay);
+                GameLogic.Dialogue("Map Editor", "Map Paste: ", "Map has been updated.", DialogueType.PasteMap, (byte)DialogueStyle.Okay);
 
                 // do a re-init so we can see our changes
                 Autotile.InitAutotiles();
@@ -2083,13 +2085,13 @@ namespace Client
 
         private void tsbDeleteMap_Click(object sender, EventArgs e)
         {
-            GameLogic.Dialogue("Map Editor", "Clear Map: ", "Are you sure you want to clear this map?", (byte)DialogueType.ClearMap, (byte)DialogueStyle.YesNo);
+            GameLogic.Dialogue("Map Editor", "Clear Map: ", "Are you sure you want to clear this map?", DialogueType.ClearMap, DialogueStyle.YesNo);
         }
     // Removed obsolete WinForms Paint handler (ImageView has no Paint event in Eto)
 
         private void btnFillAttributes_Click(object sender, EventArgs e)
         {
-            GameLogic.Dialogue("Map Editor", "Fill Attributes: ", "Are you sure you wish to fill attributes?", (byte)DialogueType.FillAttributes, (byte)DialogueStyle.YesNo);
+            GameLogic.Dialogue("Map Editor", "Fill Attributes: ", "Are you sure you wish to fill attributes?", DialogueType.FillAttributes, DialogueStyle.YesNo);
         }
 
         private void ToolStrip_MouseHover(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using Client.Game.Objects;
 using Core;
 using System.Runtime.InteropServices;
+using Client.Game.UI;
 using Client.Net;
 using Core.Common;
 using Core.Configurations;
@@ -10,18 +11,17 @@ using Type = Core.Globals.Type;
 
 namespace Client
 {
-
     public class General
     {
         public static GameClient Client = new GameClient();
         public static GameState State = new GameState();
         public static RandomUtility Random = new RandomUtility();
         public static Gui Gui = new Gui();
-        
+
         public static byte[] AesKey = new byte[32];
         public static byte[] AesIV = new byte[16];
 
-		public static int GetTickCount()
+        public static int GetTickCount()
         {
             return Environment.TickCount;
         }
@@ -256,124 +256,85 @@ namespace Client
         // Get the shifted version of a digit key (for symbols)
         public static char GetShiftedDigit(char digit)
         {
-            switch (digit)
+            return digit switch
             {
-                case '1':
-                    {
-                        return '!';
-                    }
-                case '2':
-                    {
-                        return '@';
-                    }
-                case '3':
-                    {
-                        return '#';
-                    }
-                case '4':
-                    {
-                        return '$';
-                    }
-                case '5':
-                    {
-                        return '%';
-                    }
-                case '6':
-                    {
-                        return '^';
-                    }
-                case '7':
-                    {
-                        return '&';
-                    }
-                case '8':
-                    {
-                        return '*';
-                    }
-                case '9':
-                    {
-                        return '(';
-                    }
-                case '0':
-                    {
-                        return ')';
-                    }
-
-                default:
-                    {
-                        return digit;
-                    }
-            }
+                '1' => '!',
+                '2' => '@',
+                '3' => '#',
+                '4' => '$',
+                '5' => '%',
+                '6' => '^',
+                '7' => '&',
+                '8' => '*',
+                '9' => '(',
+                '0' => ')',
+                _ => digit
+            };
         }
 
-        public static long IsEq(long startX, long startY)
+        public static int IsEq(long startX, long startY)
         {
-            long isEq = default;
-            Type.Rect tempRec;
-            long i;
+            var equipmentCount = Enum.GetValues<Equipment>().Length;
 
-            int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
-            for (i = 0L; i < equipmentCount; i++)
+            for (var i = 0; i < equipmentCount; i++)
             {
-                if (GetPlayerEquipment(GameState.MyIndex, (Equipment)i) >= 0)
+                if (GetPlayerEquipment(GameState.MyIndex, (Equipment) i) < 0)
                 {
-                    tempRec.Top = startY + GameState.EqTop + GameState.SizeY * (i / GameState.EqColumns);
-                    tempRec.Bottom = tempRec.Top + GameState.SizeY;
-                    tempRec.Left = startX + GameState.EqLeft + (GameState.EqOffsetX + GameState.SizeX) * (i % GameState.EqColumns);
-                    tempRec.Right = tempRec.Left + GameState.SizeX;
+                    continue;
+                }
 
-                    if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
-                    {
-                        if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                        {
-                            isEq = i;
-                            return isEq;
-                        }
-                    }
+                Type.Rect rec;
+
+                rec.Top = startY + GameState.EqTop + GameState.SizeY * (i / GameState.EqColumns);
+                rec.Bottom = rec.Top + GameState.SizeY;
+                rec.Left = startX + GameState.EqLeft + (GameState.EqOffsetX + GameState.SizeX) * (i % GameState.EqColumns);
+                rec.Right = rec.Left + GameState.SizeX;
+
+                if (GameState.CurMouseX >= rec.Left && GameState.CurMouseX <= rec.Right &&
+                    GameState.CurMouseY >= rec.Top && GameState.CurMouseY <= rec.Bottom)
+                {
+                    return i;
                 }
             }
 
-            return isEq;
+            return 0;
         }
 
-        public static long IsInv(long startX, long startY)
+        public static int IsInv(long startX, long startY)
         {
-            long isInv = default;
-            Type.Rect tempRec;
-            long i;
-
-            for (i = 0L; i < Constant.MaxInv; i++)
+            for (var i = 0; i < Constant.MaxInv; i++)
             {
-                if (GetPlayerInv(GameState.MyIndex, (int)i) >= 0)
+                if (GetPlayerInv(GameState.MyIndex, i) < 0)
                 {
-                    tempRec.Top = startY + GameState.InvTop + (GameState.InvOffsetY) * (i / GameState.InvColumns);
-                    tempRec.Bottom = tempRec.Top;
-                    tempRec.Left = startX + GameState.InvLeft + (GameState.InvOffsetX) * (i % GameState.InvColumns);
-                    tempRec.Right = tempRec.Left;
+                    continue;
+                }
 
-                    if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
-                    {
-                        if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                        {
-                            isInv = i;
-                            return isInv;
-                        }
-                    }
+                Type.Rect rec;
+                
+                rec.Top = startY + GameState.InvTop + (GameState.InvOffsetY) * (i / GameState.InvColumns);
+                rec.Bottom = rec.Top;
+                rec.Left = startX + GameState.InvLeft + (GameState.InvOffsetX) * (i % GameState.InvColumns);
+                rec.Right = rec.Left;
+
+                if (GameState.CurMouseX >= rec.Left && GameState.CurMouseX <= rec.Right && 
+                    GameState.CurMouseY >= rec.Top && GameState.CurMouseY <= rec.Bottom)
+                {
+                    return i;
                 }
             }
 
             return -1;
         }
 
-        public static long IsSkill(long startX, long startY)
+        public static int IsSkill(long startX, long startY)
         {
-            long isSkill = default;
+            int isSkill = default;
             Type.Rect tempRec;
-            long i;
+            int i;
 
-            for (i = 0L; i < Constant.MaxPlayerSkills; i++)
+            for (i = 0; i < Constant.MaxPlayerSkills; i++)
             {
-                if (Data.Player[GameState.MyIndex].Skill[(int)i].Num >= 0)
+                if (Data.Player[GameState.MyIndex].Skill[(int) i].Num >= 0)
                 {
                     tempRec.Top = startY + GameState.SkillTop + (GameState.SkillOffsetY + GameState.SizeY) * (i / GameState.SkillColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
@@ -394,14 +355,14 @@ namespace Client
             return -1;
         }
 
-        public static long IsBank(long startX, long startY)
+        public static int IsBank(long startX, long startY)
         {
-            byte isBank = default;
+            int isBank = default;
             Type.Rect tempRec;
 
-            for (byte i = 0; i < Constant.MaxBank; i++)
+            for (int i = 0; i < Constant.MaxBank; i++)
             {
-                if (GetBank(GameState.MyIndex, (byte)i) >= 0)
+                if (GetBank(GameState.MyIndex, i) >= 0)
                 {
                     tempRec.Top = startY + GameState.BankTop + (GameState.BankOffsetY + GameState.SizeY) * (i / GameState.BankColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
@@ -417,20 +378,18 @@ namespace Client
                         }
                     }
                 }
-
             }
 
             return -1;
-
         }
 
-        public static long IsShop(long startX, long startY)
+        public static int IsShop(long startX, long startY)
         {
-            long isShop = default;
+            int isShop = default;
             Type.Rect tempRec;
-            long i;
+            int i;
 
-            for (i = 0L; i < Constant.MaxTrades; i++)
+            for (i = 0; i < Constant.MaxTrades; i++)
             {
                 tempRec.Top = startY + GameState.ShopTop + (GameState.ShopOffsetY + GameState.SizeY) * (i / GameState.ShopColumns);
                 tempRec.Bottom = tempRec.Top + GameState.SizeY;
@@ -450,13 +409,13 @@ namespace Client
             return -1;
         }
 
-        public static long IsTrade(long startX, long startY)
+        public static int IsTrade(long startX, long startY)
         {
-            long isTrade = default;
+            int isTrade = default;
             Type.Rect tempRec;
-            long i;
+            int i;
 
-            for (i = 0L; i < Constant.MaxInv; i++)
+            for (i = 0; i < Constant.MaxInv; i++)
             {
                 tempRec.Top = startY + GameState.TradeTop + (GameState.TradeOffsetY + GameState.SizeY) * (i / GameState.TradeColumns);
                 tempRec.Bottom = tempRec.Top + GameState.SizeY;
@@ -475,6 +434,5 @@ namespace Client
 
             return -1;
         }
-
     }
 }

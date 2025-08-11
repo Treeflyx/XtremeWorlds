@@ -381,7 +381,7 @@ public static class NetworkSend
     {
         if (SettingsManager.Instance.Welcome.Length > 0)
         {
-            PlayerMsg(playerId, SettingsManager.Instance.Welcome, (int) Color.BrightCyan);
+            PlayerMsg(playerId, SettingsManager.Instance.Welcome, (int) ColorName.BrightCyan);
         }
 
         SendWhosOnline(playerId);
@@ -409,7 +409,7 @@ public static class NetworkSend
             message = "There are " + playerNames.Length + " other players online: " + string.Join(", ", playerNames) + ".";
         }
 
-        PlayerMsg(playerId, message, (int) Color.White);
+        PlayerMsg(playerId, message, (int) ColorName.White);
     }
 
     public static void SendWornEquipment(int playerId)

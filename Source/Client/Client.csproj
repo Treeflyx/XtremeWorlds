@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <OutputType>Exe</OutputType>
         <RootNamespace>Client</RootNamespace>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -57,6 +58,7 @@
     <ItemGroup>
         <PackageReference Include="Eto.Forms"/>
         <PackageReference Include="Eto.Platform.Gtk"/>
+        <PackageReference Include="Eto.Platform.Windows" />
         <PackageReference Include="ManagedBass"/>
         <PackageReference Include="ManagedBass.Midi"/>
         <PackageReference Include="Microsoft.VisualBasic"/>

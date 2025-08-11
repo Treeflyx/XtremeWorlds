@@ -2,6 +2,7 @@
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
+using Client.Game.UI;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;

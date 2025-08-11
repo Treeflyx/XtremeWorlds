@@ -131,7 +131,7 @@ public class Script
         // Erase item from the map
         Server.Item.SpawnItemSlot(mapSlot, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, mapSlot].X, Data.MapItem[mapNum, mapSlot].Y);
         NetworkSend.SendInventoryUpdate(index, invSlot);
-        NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int)Color.White, (byte)ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+        NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int)ColorName.White, (byte)ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
     }
 
     public void UnEquipItem(int index, int itemNum, int eqSlot)
@@ -144,7 +144,7 @@ public class Script
         SetPlayerInv(index, m, Data.Player[index].Equipment[eqSlot]);
         SetPlayerInvValue(index, m, 0);
 
-        NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int)Color.Yellow);
+        NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int)ColorName.Yellow);
 
         // remove equipment
         SetPlayerEquipment(index, -1, (Equipment)eqSlot);
@@ -183,7 +183,7 @@ public class Script
 
                                 SetPlayerEquipment(index, itemNum, Equipment.Weapon);
 
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)Color.BrightGreen);
+                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
                                 TakeInv(index, itemNum, 1);
 
                                 if (tempItem >= 0) // give back the stored item
@@ -213,7 +213,7 @@ public class Script
 
                                 SetPlayerEquipment(index, itemNum, Equipment.Armor);
 
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)Color.BrightGreen);
+                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
                                 TakeInv(index, itemNum, 1);
 
                                 if (tempItem >= 0) // Return their old equipment to their inventory.
@@ -243,7 +243,7 @@ public class Script
 
                                 SetPlayerEquipment(index, itemNum, Equipment.Helmet);
 
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)Color.BrightGreen);
+                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
                                 TakeInv(index, itemNum, 1);
 
                                 if (tempItem >= 0) // give back the stored item
@@ -272,7 +272,7 @@ public class Script
 
                                 SetPlayerEquipment(index, itemNum, Equipment.Shield);
 
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)Color.BrightGreen);
+                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
                                 TakeInv(index, itemNum, 1);
 
                                 if (tempItem >= 0) // give back the stored item
@@ -303,7 +303,7 @@ public class Script
                     {
                         case (byte)ConsumableEffect.RestoresHealth:
                             {
-                                NetworkSend.SendActionMsg(GetPlayerMap(index), "+" + Data.Item[itemNum].Data1, (int)Color.BrightGreen, (byte)ActionMessageType.Scroll, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+                                NetworkSend.SendActionMsg(GetPlayerMap(index), "+" + Data.Item[itemNum].Data1, (int)ColorName.BrightGreen, (byte)ActionMessageType.Scroll, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
                                 Server.Animation.SendAnimation(GetPlayerMap(index), Data.Item[itemNum].Animation, 0, 0, (byte)TargetType.Player, index);
                                 SetPlayerVital(index, Vital.Health, GetPlayerVital(index, Vital.Health) + Data.Item[itemNum].Data1);
                                 if (Data.Item[itemNum].Stackable == 1)
@@ -320,7 +320,7 @@ public class Script
 
                         case (byte)ConsumableEffect.RestoresMana:
                             {
-                                NetworkSend.SendActionMsg(GetPlayerMap(index), "+" + Data.Item[itemNum].Data1, (int)Color.BrightBlue, (byte)ActionMessageType.Scroll, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+                                NetworkSend.SendActionMsg(GetPlayerMap(index), "+" + Data.Item[itemNum].Data1, (int)ColorName.BrightBlue, (byte)ActionMessageType.Scroll, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
                                 Server.Animation.SendAnimation(GetPlayerMap(index), Data.Item[itemNum].Animation, 0, 0, (byte)TargetType.Player, index);
                                 SetPlayerVital(index, Vital.Stamina, GetPlayerVital(index, Vital.Stamina) + Data.Item[itemNum].Data1);
                                 if (Data.Item[itemNum].Stackable == 1)
@@ -383,7 +383,7 @@ public class Script
                         }
                         else
                         {
-                            NetworkSend.PlayerMsg(index, "No More " + Data.Item[Data.Item[GetPlayerEquipment(index, Equipment.Weapon)].Ammo].Name + " !", (int)Color.BrightRed);
+                            NetworkSend.PlayerMsg(index, "No More " + Data.Item[Data.Item[GetPlayerEquipment(index, Equipment.Weapon)].Ammo].Name + " !", (int)ColorName.BrightRed);
                             return;
                         }
                     }
@@ -477,28 +477,28 @@ public class Script
                             Server.Animation.SendAnimation(GetPlayerMap(index), Data.Item[itemNum].Animation, 0, 0, (byte)TargetType.Player, index);
                             TakeInv(index, itemNum, 0);
                         }
-                        NetworkSend.PlayerMsg(index, "You study the skill carefully.", (int)Color.Yellow);
-                        NetworkSend.PlayerMsg(index, "You have learned a new skill!", (int)Color.BrightGreen);
+                        NetworkSend.PlayerMsg(index, "You study the skill carefully.", (int)ColorName.Yellow);
+                        NetworkSend.PlayerMsg(index, "You have learned a new skill!", (int)ColorName.BrightGreen);
                         NetworkSend.SendPlayerSkills(index);
                     }
                     else
                     {
-                        NetworkSend.PlayerMsg(index, "You have already learned this skill!", (int)Color.BrightRed);
+                        NetworkSend.PlayerMsg(index, "You have already learned this skill!", (int)ColorName.BrightRed);
                     }
                 }
                 else
                 {
-                    NetworkSend.PlayerMsg(index, "You have learned all that you can learn!", (int)Color.BrightRed);
+                    NetworkSend.PlayerMsg(index, "You have learned all that you can learn!", (int)ColorName.BrightRed);
                 }
             }
             else
             {
-                NetworkSend.PlayerMsg(index, "You must be level " + i + " to learn this skill.", (int)Color.Yellow);
+                NetworkSend.PlayerMsg(index, "You must be level " + i + " to learn this skill.", (int)ColorName.Yellow);
             }
         }
         else
         {
-            NetworkSend.PlayerMsg(index, string.Format("Only {0} can use this skill.", GameLogic.CheckGrammar(Data.Job[Data.Skill[n].JobReq].Name, 1)), (int)Color.BrightRed);
+            NetworkSend.PlayerMsg(index, string.Format("Only {0} can use this skill.", GameLogic.CheckGrammar(Data.Job[Data.Skill[n].JobReq].Name, 1)), (int)ColorName.BrightRed);
         }
     }
 
@@ -589,12 +589,12 @@ public class Script
         
         if (exp == 0)
         {
-            NetworkSend.PlayerMsg(index, "You've lost no experience.", (int)Color.BrightGreen);
+            NetworkSend.PlayerMsg(index, "You've lost no experience.", (int)ColorName.BrightGreen);
         }
         else
         {                   
             NetworkSend.SendExp(index);
-            NetworkSend.PlayerMsg(index, string.Format("You've lost {0} experience.", exp), (int)Color.BrightRed);
+            NetworkSend.PlayerMsg(index, string.Format("You've lost {0} experience.", exp), (int)ColorName.BrightRed);
         }
 
         return exp;
@@ -605,7 +605,7 @@ public class Script
         // make sure their stats are not maxed
         if (GetPlayerRawStat(index, (Stat)tmpStat) >= Constant.MaxStats)
         {
-            NetworkSend.PlayerMsg(index, "You cannot spend any more points on that stat.", (int)Color.BrightRed);
+            NetworkSend.PlayerMsg(index, "You cannot spend any more points on that stat.", (int)ColorName.BrightRed);
             return;
         }
 
@@ -679,7 +679,7 @@ public class Script
                                         {
                                             if (!string.IsNullOrEmpty(entity.AttackSay))
                                             {
-                                                NetworkSend.PlayerMsg(player.Id, GameLogic.CheckGrammar(entity.Name, 1) + " says, '" + entity.AttackSay + "' to you.", (int)Color.Yellow);
+                                                NetworkSend.PlayerMsg(player.Id, GameLogic.CheckGrammar(entity.Name, 1) + " says, '" + entity.AttackSay + "' to you.", (int)ColorName.Yellow);
                                             }
                                             entity.TargetType = (byte)TargetType.Player;
                                             entity.Target = player.Id;
@@ -926,7 +926,7 @@ public class Script
                 // plural
                 NetworkSend.GlobalMsg(GetPlayerName(index) + " has gained " + level_count + " levels!");
             }
-            NetworkSend.SendActionMsg(GetPlayerMap(index), "Level Up", (int) Color.Yellow, 1, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+            NetworkSend.SendActionMsg(GetPlayerMap(index), "Level Up", (int) ColorName.Yellow, 1, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
             NetworkSend.SendExp(index);
             NetworkSend.SendPlayerData(index);
         }

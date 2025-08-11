@@ -156,7 +156,7 @@ namespace Server
             {
                 if (Data.Party[partyNum].Member[i] >= 0)
                 {
-                    NetworkSend.PlayerMsg(Data.Party[partyNum].Member[i], msg, (int) Color.BrightBlue);
+                    NetworkSend.PlayerMsg(Data.Party[partyNum].Member[i], msg, (int) ColorName.BrightBlue);
                 }
             }
         }
@@ -249,7 +249,7 @@ namespace Server
             if (Data.TempPlayer[target].PartyInvite >= 0 | Data.TempPlayer[target].TradeRequest >= 0)
             {
                 // they've already got a request for trade/party
-                NetworkSend.PlayerMsg(index, "This player is busy.", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(index, "This player is busy.", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -257,7 +257,7 @@ namespace Server
             if (Data.TempPlayer[target].InParty >= 0)
             {
                 // they're already in a party
-                NetworkSend.PlayerMsg(index, "This player is already in a party.", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(index, "This player is already in a party.", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -281,18 +281,18 @@ namespace Server
                             Data.TempPlayer[target].PartyInvite = index;
 
                             // let them know
-                            NetworkSend.PlayerMsg(index, "Party invitation sent.", (int) Color.Pink);
+                            NetworkSend.PlayerMsg(index, "Party invitation sent.", (int) ColorName.Pink);
                             return;
                         }
                     }
 
                     // no room
-                    NetworkSend.PlayerMsg(index, "Party is full.", (int) Color.BrightRed);
+                    NetworkSend.PlayerMsg(index, "Party is full.", (int) ColorName.BrightRed);
                     return;
                 }
 
                 // not the leader
-                NetworkSend.PlayerMsg(index, "You are not the party leader.", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(index, "You are not the party leader.", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -303,7 +303,7 @@ namespace Server
             Data.TempPlayer[target].PartyInvite = index;
 
             // let them know
-            NetworkSend.PlayerMsg(index, "Party invitation sent.", (int) Color.Pink);
+            NetworkSend.PlayerMsg(index, "Party invitation sent.", (int) ColorName.Pink);
         }
 
         public static void InviteAccept(int index, int target)
@@ -341,8 +341,8 @@ namespace Server
                 }
 
                 // no empty slots - let them know
-                NetworkSend.PlayerMsg(index, "Party is full.", (int) Color.BrightRed);
-                NetworkSend.PlayerMsg(target, "Party is full.", (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(index, "Party is full.", (int) ColorName.BrightRed);
+                NetworkSend.PlayerMsg(target, "Party is full.", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -381,8 +381,8 @@ namespace Server
 
         public static void InviteDecline(int index, int target)
         {
-            NetworkSend.PlayerMsg(index, string.Format("{0} has declined to join your party.", GetPlayerName(target)), (int) Color.BrightRed);
-            NetworkSend.PlayerMsg(target, "You declined to join the party.", (int) Color.Yellow);
+            NetworkSend.PlayerMsg(index, string.Format("{0} has declined to join your party.", GetPlayerName(target)), (int) ColorName.BrightRed);
+            NetworkSend.PlayerMsg(target, "You declined to join the party.", (int) ColorName.Yellow);
 
             // clear the invitation
             Data.TempPlayer[target].PartyInvite = -1;

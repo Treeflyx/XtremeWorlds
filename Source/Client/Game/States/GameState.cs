@@ -24,18 +24,18 @@ namespace Client
         public static string? DiaHeader;
         public static string? DiaBody;
         public static string? DiaBody2;
-        public static long DiaIndex;
+        public static DialogueType DiaIndex;
         public static long DiaData1;
         public static long DiaData2;
         public static long DiaData3;
         public static long DiaData4;
         public static long DiaData5;
         public static string? DiaDataString;
-        public static byte DiaStyle;
+        public static DialogueStyle DiaStyle;
 
         // shop
-        public static long ShopSelectedSlot;
-        public static long ShopSelectedItem;
+        public static int ShopSelectedSlot;
+        public static int ShopSelectedItem;
         public static bool ShopIsSelling;
 
         // right click menu
@@ -43,15 +43,15 @@ namespace Client
 
         // description
         public static byte DescType;
-        public static long DescItem;
+        public static int DescItem;
         public static byte DescLastType;
         public static long DescLastItem;
         public static Type.Text[]? Description;
 
         // New char
-        public static long NewCharSprite;
-        public static long NewCharJob;
-        public static long NewCnarGender;
+        public static int NewCharSprite;
+        public static int NewCharJob;
+        public static Sex NewCnarGender;
 
         // chars
         public static string?[] CharName = new string?[Constant.MaxChars];
@@ -271,50 +271,50 @@ namespace Client
         public const int EffectTypeTint = 6;
 
         // Bank constants
-        public const long BankTop = 28L;
-        public const long BankLeft = 9L;
-        public const long BankOffsetY = 6L;
-        public const long BankOffsetX = 6L;
-        public const long BankColumns = 10L;
+        public const int BankTop = 28;
+        public const int BankLeft = 9;
+        public const int BankOffsetY = 6;
+        public const int BankOffsetX = 6;
+        public const int BankColumns = 10;
 
         // Inventory constants
-        public const long InvTop = 28L;
-        public const long InvLeft = 9L;
-        public const long InvOffsetY = 6L;
-        public const long InvOffsetX = 6L;
-        public const long InvColumns = 5L;
+        public const int InvTop = 28;
+        public const int InvLeft = 9;
+        public const int InvOffsetY = 6;
+        public const int InvOffsetX = 6;
+        public const int InvColumns = 5;
 
         // Character consts
-        public const long EqTop = 315L;
-        public const long EqLeft = 10L;
-        public const long EqOffsetX = 8L;
-        public const long EqColumns = 4L;
+        public const int EqTop = 315;
+        public const int EqLeft = 10;
+        public const int EqOffsetX = 8;
+        public const int EqColumns = 4;
 
         // Skill constants
-        public const long SkillTop = 28L;
-        public const long SkillLeft = 9L;
-        public const long SkillOffsetY = 6L;
-        public const long SkillOffsetX = 6L;
-        public const long SkillColumns = 5L;
+        public const int SkillTop = 28;
+        public const int SkillLeft = 9;
+        public const int SkillOffsetY = 6;
+        public const int SkillOffsetX = 6;
+        public const int SkillColumns = 5;
 
         // Hotbar constants
-        public const long HotbarTop = 0L;
-        public const long HotbarLeft = 8L;
-        public const long HotbarOffsetX = 40L;
+        public const int HotbarTop = 0;
+        public const int HotbarLeft = 8;
+        public const int HotbarOffsetX = 40;
 
         // Shop constants
-        public const long ShopTop = 28L;
-        public const long ShopLeft = 9L;
-        public const long ShopOffsetY = 6L;
-        public const long ShopOffsetX = 6L;
-        public const long ShopColumns = 7L;
+        public const int ShopTop = 28;
+        public const int ShopLeft = 9;
+        public const int ShopOffsetY = 6;
+        public const int ShopOffsetX = 6;
+        public const int ShopColumns = 7;
 
         // Trade
-        public const long TradeTop = 0L;
-        public const long TradeLeft = 0L;
-        public const long TradeOffsetY = 6L;
-        public const long TradeOffsetX = 6L;
-        public const long TradeColumns = 5L;
+        public const int TradeTop = 0;
+        public const int TradeLeft = 0;
+        public const int TradeOffsetY = 6;
+        public const int TradeOffsetX = 6;
+        public const int TradeColumns = 5;
 
         // Gfx Path and variables
         public const string GfxExt = ".png";

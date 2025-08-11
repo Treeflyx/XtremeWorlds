@@ -365,7 +365,7 @@ public static class Npc
         var user = IsEditorLocked(session.Id, EditorType.Npc);
         if (!string.IsNullOrEmpty(user))
         {
-            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) ColorName.BrightRed);
             return;
         }
 

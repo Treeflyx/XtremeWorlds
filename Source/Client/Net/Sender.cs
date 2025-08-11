@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using Client.Game.UI;
 using Core;
 using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
-using Color = Core.Globals.Color;
 
 namespace Client.Net;
 
@@ -122,7 +122,7 @@ public static class Sender
         }
         else
         {
-            GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", (byte) DialogueType.Alert);
+            GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", DialogueType.Alert);
         }
     }
 
@@ -505,20 +505,20 @@ public static class Sender
         // Dont let them forget a skill which is in CD
         if (Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
         {
-            Text.AddText("Cannot forget a skill which is cooling down!", (int) Color.Red);
+            Text.AddText("Cannot forget a skill which is cooling down!", (int) ColorName.Red);
             return;
         }
 
         // Dont let them forget a skill which is buffered
         if (GameState.SkillBuffer == skillSlot)
         {
-            Text.AddText("Cannot forget a skill which you are casting!", (int) Color.Red);
+            Text.AddText("Cannot forget a skill which you are casting!", (int) ColorName.Red);
             return;
         }
 
         if (Data.Player[GameState.MyIndex].Skill[skillSlot].Num < 0)
         {
-            Text.AddText("No skill found.", (int) Color.Red);
+            Text.AddText("No skill found.", (int) ColorName.Red);
             return;
         }
 

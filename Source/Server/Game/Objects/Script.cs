@@ -26,7 +26,7 @@ public static class Script
         var user = IsEditorLocked(session.Id, EditorType.Script);
         if (!string.IsNullOrEmpty(user))
         {
-            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(session.Id, "The game editor is locked and being used by " + user + ".", (int) ColorName.BrightRed);
             return;
         }
 
@@ -103,7 +103,7 @@ public static class Script
 
         if (string.IsNullOrWhiteSpace(script))
         {
-            NetworkSend.PlayerMsg(playerId, "No script code found to compile.", (int) Color.BrightRed);
+            NetworkSend.PlayerMsg(playerId, "No script code found to compile.", (int) ColorName.BrightRed);
 
             General.Logger.LogWarning("No script code found to compile");
             return;
@@ -125,7 +125,7 @@ public static class Script
 
                 if (playerId > 0)
                 {
-                    NetworkSend.PlayerMsg(playerId, "Script saved successfully!", (int) Color.Yellow);
+                    NetworkSend.PlayerMsg(playerId, "Script saved successfully!", (int) ColorName.Yellow);
                 }
             }
         }
@@ -133,7 +133,7 @@ public static class Script
         {
             if (playerId > 0)
             {
-                NetworkSend.PlayerMsg(playerId, ex.Message, (int) Color.BrightRed);
+                NetworkSend.PlayerMsg(playerId, ex.Message, (int) ColorName.BrightRed);
             }
 
             General.Logger.LogError(ex, "[Script] Failed to load script");
