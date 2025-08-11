@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using Client.Net;
 using Core.Globals;
 
@@ -61,17 +62,33 @@ namespace Client
             Content = layout;
             Load += (s, e) => RefreshPreview();
         }
-
         private void OpenScript()
         {
-            File.WriteAllLines(Script.TempFile, Data.Script.Code);
             try
             {
-                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                var dir = Path.GetDirectoryName(Script.TempFile);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+
+                File.WriteAllLines(Script.TempFile, Data.Script.Code ?? Array.Empty<string>());
+
+                if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
                 {
-                    FileName = Script.TempFile,
-                    UseShellExecute = true
-                });
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = Script.TempFile,
+                        UseShellExecute = true
+                    });
+                }
+                else if (OperatingSystem.IsLinux())
+                {
+                    // Use xdg-open to launch the associated application on Linux
+                    System.Diagnostics.Process.Start("xdg-open", Script.TempFile);
+                }
+                else
+                {
+                    Interaction.MsgBox("Unsupported platform for automatic script opening.");
+                }
             }
             catch (Exception ex)
             {
