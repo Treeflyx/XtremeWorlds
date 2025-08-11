@@ -64,7 +64,7 @@ namespace Client
             numEventValue = Num(0, 100000); numEventValue.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data2 = (int)numEventValue.Value; MarkChanged(); };
 
             chkStackable = new CheckBox { Text = "Stackable" }; chkStackable.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Stackable = chkStackable.Checked==true? (byte)1:(byte)0; MarkChanged(); };
-            chkKnockBack = new CheckBox { Text = "KnockBack" }; chkKnockBack.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
+            chkKnockBack = new CheckBox { Text = "Knockback" }; chkKnockBack.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
 
             cmbType = new ComboBox(); cmbType.SelectedIndexChanged += (s,e)=> ChangeType();
             cmbSubType = new ComboBox(); cmbSubType.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex; TogglePanels(); MarkChanged(); };
