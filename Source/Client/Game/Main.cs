@@ -52,8 +52,7 @@ public static class Program
         // Event Editor
         if (GameState.InitEventEditor)
         {
-            var ev = Editor_Event.Instance;
-            ev.Show();
+            new Editor_Event().Show();
             GameState.InitEventEditor = false;
         }
 
@@ -78,140 +77,99 @@ public static class Program
 
         if (GameState.InitMapEditor)
         {
-            var map = Editor_Map.Instance;
             GameState.MyEditorType = Core.EditorType.Map;
-            GameState.EditorIndex = 1;
-            map.Show();
+            GameState.EditorIndex = 0;
+            new Editor_Map().Show();
             Editor_Map.MapEditorInit();
             GameState.InitMapEditor = false;
         }
 
         if (GameState.InitAnimationEditor)
         {
-            var anim = Editor_Animation.Instance;
             GameState.MyEditorType = Core.EditorType.Animation;
-            GameState.EditorIndex = 1;
-            anim?.Show();
-            if (anim != null)
-            {
-                anim.lstIndex.SelectedIndex = 0;
-                Editors.AnimationEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Animation().Show();
+            Editors.AnimationEditorInit();
             GameState.InitAnimationEditor = false;
         }
 
         if (GameState.InitItemEditor)
         {
-            var item = Editor_Item.Instance;
             GameState.MyEditorType = Core.EditorType.Item;
-            GameState.EditorIndex = 1;
-            item?.Show();
-            if (item?.lstIndex != null)
-            {
-                item.lstIndex.SelectedIndex = 0;
-                Editors.ItemEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Item().Show();
+            Editors.ItemEditorInit();
             GameState.InitItemEditor = false;
         }
 
         if (GameState.InitJobEditor)
         {
-            var job = Editor_Job.Instance;
             GameState.MyEditorType = Core.EditorType.Job;
-            GameState.EditorIndex = 1;
-            job?.Show();
-            if (job?.lstIndex != null)
-            {
-                job.lstIndex.SelectedIndex = 0;
-                Editors.JobEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Job().Show();
+            Editors.JobEditorInit();
             GameState.InitJobEditor = false;
         }
 
         if (GameState.InitMoralEditor)
         {
-            var moral = Editor_Moral.Instance;
             GameState.MyEditorType = Core.EditorType.Moral;
-            GameState.EditorIndex = 1;
-            moral?.Show();
-            if (moral?.lstIndex != null)
-            {
-                moral.lstIndex.SelectedIndex = 0;
-                Editors.MoralEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Moral().Show();
+            Editors.MoralEditorInit();
             GameState.InitMoralEditor = false;
         }
 
         if (GameState.InitResourceEditor)
         {
-            var res = Editor_Resource.Instance;
             GameState.MyEditorType = Core.EditorType.Resource;
-            GameState.EditorIndex = 1;
-            res?.Show();
-            if (res?.lstIndex != null)
-            {
-                res.lstIndex.SelectedIndex = 0;
-                Editors.ResourceEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Resource().Show();
+            Editors.ResourceEditorInit();
             GameState.InitResourceEditor = false;
         }
 
         if (GameState.InitNpcEditor)
         {
-            var npc = Editor_Npc.Instance;
             GameState.MyEditorType = Core.EditorType.Npc;
-            GameState.EditorIndex = 1;
-            npc.Show();
-            npc.lstIndex.SelectedIndex = 0;
+            GameState.EditorIndex = 0;
+            new Editor_Npc().Show();
             Editors.NpcEditorInit();
             GameState.InitNpcEditor = false;
         }
 
         if (GameState.InitSkillEditor)
         {
-            var skill = Editor_Skill.Instance;
             GameState.MyEditorType = Core.EditorType.Skill;
-            GameState.EditorIndex = 1;
-            skill?.Show();
-            if (skill?.lstIndex != null)
-            {
-                skill.lstIndex.SelectedIndex = 0;
-                Editors.SkillEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Skill().Show();
+            Editors.SkillEditorInit();
             GameState.InitSkillEditor = false;
         }
 
         if (GameState.InitShopEditor)
         {
-            var shop = Editor_Shop.Instance;
             GameState.MyEditorType = Core.EditorType.Shop;
-            GameState.EditorIndex = 1;
-            shop?.Show();
-            if (shop?.lstIndex != null)
-            {
-                shop.lstIndex.SelectedIndex = 0;
-                Editors.ShopEditorInit();
-            }
+            GameState.EditorIndex = 0;
+            new Editor_Shop().Show();
+            Editors.ShopEditorInit();
             GameState.InitShopEditor = false;
         }
 
         if (GameState.InitProjectileEditor)
         {
-            var proj = Editor_Projectile.Instance;
             GameState.MyEditorType = Core.EditorType.Projectile;
-            GameState.EditorIndex = 1;
-            proj.Show();
-            proj.lstIndex.SelectedIndex = 0;
+            GameState.EditorIndex = 0;
+            new Editor_Projectile().Show();
             Editors.ProjectileEditorInit();
             GameState.InitProjectileEditor = false;
         }
 
         if (GameState.InitScriptEditor)
         {
-            var scr = Editor_Script.Instance;
             GameState.MyEditorType = Core.EditorType.Script;
-            GameState.EditorIndex = 1;
-            scr?.Show();
+            GameState.EditorIndex = 0;
+            new Editor_Script().Show();
             GameState.InitScriptEditor = false;
         }
 
