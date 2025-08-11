@@ -42,10 +42,6 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Link>Content\%(RecursiveDir)%(Filename)%(Extension)</Link>
         </Content>
-        <EmbeddedResource Include="Icon.bmp">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <Visible>False</Visible>
-        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

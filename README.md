@@ -1,3 +1,9 @@
+![.NET](https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet)
+![C#](https://img.shields.io/badge/C%23-13.0-239120?style=flat-square&logo=c-sharp)
+![License](https://img.shields.io/github/license/Treeflyx/XtremeWorlds?style=flat-square)
+![GitHub contributors](https://img.shields.io/github/contributors/Treeflyx/XtremeWorlds?style=flat-square)
+![GitHub downloads](https://img.shields.io/github/downloads/Treeflyx/XtremeWorlds/total?style=flat-square)
+
 # XtremeWorlds Game Engine
 
 A simple 2D MMORPG game engine written in C# (.NET 9.0).
