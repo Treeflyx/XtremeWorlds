@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Net;
 using Eto.Forms;
 
 namespace Client;
@@ -59,6 +60,7 @@ public static class Program
         if (GameState.InitAdminForm)
         {
             new Admin().Show();
+            Sender.SendRequestMapReport();
             GameState.AdminPanel = true;
             GameState.InitAdminForm = false;
         }
