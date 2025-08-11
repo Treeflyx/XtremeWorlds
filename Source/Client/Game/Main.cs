@@ -19,16 +19,21 @@ public static class Program
         // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
         // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
         var app = new Application(Eto.Platform.Detect);
-            _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
-            _uiTimer.Elapsed += (_, _) => SafeUpdateEditors();
-            _uiTimer.Start();
+        _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
+        _uiTimer.Elapsed += UiTimerOnElapsed;
+        _uiTimer.Start();
 
-            app.Run();
+        app.Run();
     }
 
     private static void RunGame()
     {
         General.Client.Run();
+    }
+
+    private static void UiTimerOnElapsed(object? sender, EventArgs e)
+    {
+        SafeUpdateEditors();
     }
 
     private static void SafeUpdateEditors()
@@ -60,7 +65,12 @@ public static class Program
 
         if (GameState.InitMapReport)
         {
-            // TODO: Populate map report Eto form
+            for (int i = 1, loopTo = GameState.MapNames.Length; i < loopTo; i++)
+            {
+                var admin = Admin.Instance;
+                admin.lstMaps.Items.Add(new ListItem { Text = $"{i}: {GameState.MapNames[i]}" });
+            }
+                
             GameState.InitMapReport = false;
         }
 
@@ -97,7 +107,7 @@ public static class Program
             if (item?.lstIndex != null)
             {
                 item.lstIndex.SelectedIndex = 0;
-                Editors.ItemEditorInit();   
+                Editors.ItemEditorInit();
             }
             GameState.InitItemEditor = false;
         }

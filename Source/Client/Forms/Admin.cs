@@ -9,15 +9,20 @@ namespace Client
 {
     internal class Admin : Form
     {
+
+        // Singleton instance for legacy static access
+        private static Admin? _instance;
+        public static Admin Instance => _instance ??= new Admin();
+
         // Controls
-    TextBox txtAdminName = null!;
-    DropDown cmbAccess = null!;
-    NumericStepper nudAdminSprite = null!, nudAdminMap = null!;
-    ListBox lstMaps = null!;
-    TabControl tabControl = null!;
-    Button btnAdminWarpTo = null!, btnAdminBan = null!, btnAdminKick = null!, btnAdminWarp2Me = null!, btnAdminWarpMe2 = null!, btnAdminSetAccess = null!, btnAdminSetSprite = null!;
-    Button btnMapReport = null!, btnRespawn = null!, btnALoc = null!, btnLevelUp = null!;
-    Button btnAnimationEditor = null!, btnJobEditor = null!, btnItemEditor = null!, btnMapEditor = null!, btnNpcEditor = null!, btnProjectiles = null!, btnResourceEditor = null!, btnShopEditor = null!, btnSkillEditor = null!, btnMoralEditor = null!, btnScriptEditor = null!;
+        public TextBox txtAdminName = null!;
+        public DropDown cmbAccess = null!;
+        public NumericStepper nudAdminSprite = null!, nudAdminMap = null!;
+        public ListBox lstMaps = null!;
+        public TabControl tabControl = null!;
+        public Button btnAdminWarpTo = null!, btnAdminBan = null!, btnAdminKick = null!, btnAdminWarp2Me = null!, btnAdminWarpMe2 = null!, btnAdminSetAccess = null!, btnAdminSetSprite = null!;
+        public Button btnMapReport = null!, btnRespawn = null!, btnALoc = null!, btnLevelUp = null!;
+        public Button btnAnimationEditor = null!, btnJobEditor = null!, btnItemEditor = null!, btnMapEditor = null!, btnNpcEditor = null!, btnProjectiles = null!, btnResourceEditor = null!, btnShopEditor = null!, btnSkillEditor = null!, btnMoralEditor = null!, btnScriptEditor = null!;
 
         public Admin()
         {

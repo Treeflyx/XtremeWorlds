@@ -11,8 +11,6 @@ namespace Client
         private static Editor_Animation? _instance;
         public static Editor_Animation Instance => _instance ??= new Editor_Animation();
 
-        // Eto.Forms controls
-        // Make legacy-referenced controls public to satisfy Editors.cs expectations
         public NumericStepper? nudSprite0;
         public NumericStepper? nudSprite1;
         public NumericStepper? nudLoopCount0;
