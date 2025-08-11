@@ -282,7 +282,7 @@ namespace Client
         #region Globals
 
         public static byte AnimationIndex;
-        public static Core.Type.AnimInstance[] AnimInstance;
+        public static Core.Type.AnimInstance[]? AnimInstance;
 
         #endregion
 
