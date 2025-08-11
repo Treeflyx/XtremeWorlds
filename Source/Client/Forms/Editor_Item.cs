@@ -222,9 +222,13 @@ namespace Client
             cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
             cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
             cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
-            cmbAccessReq!.Items.Clear(); for (int i=0;i<10;i++) cmbAccessReq.Items.Add(i.ToString());
+            cmbAccessReq!.Items.Clear();
+            foreach (var name in Enum.GetNames(typeof(Core.Globals.AccessLevel)))
+                cmbAccessReq.Items.Add(name);
             cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
-            cmbTool!.Items.Clear(); for(int i=0;i<20;i++) cmbTool.Items.Add("Tool "+i);
+            cmbTool!.Items.Clear();
+            foreach (var name in Enum.GetNames(typeof(ToolType)))
+                cmbTool.Items.Add(name);
             cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
 
             cmbType!.Items.Clear();

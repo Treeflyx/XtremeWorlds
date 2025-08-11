@@ -290,6 +290,14 @@ public enum ResourceSkill : byte
     Fishing
 }
 
+public enum ToolType : byte
+{
+    None,
+    Axe,
+    Pickaxe,
+    Rod
+}
+
 /// <summary>
 /// Defines the rarity levels of items or loot.
 /// </summary>
