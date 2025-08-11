@@ -35,6 +35,7 @@ namespace Client
             ClientSize = new Size(500, 420);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 460, 360);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -74,7 +75,7 @@ namespace Client
 
             // Layout
             var leftPanel = new DynamicLayout { Spacing = new Size(5, 5) };
-            leftPanel.AddRow(new Label { Text = "Morals" });
+            leftPanel.AddRow(new Label { Text = "Morals", Font = SystemFonts.Bold(11) });
             leftPanel.Add(lstIndex, yscale: true);
 
             var right = new DynamicLayout { Spacing = new Size(5, 5) };
@@ -85,7 +86,9 @@ namespace Client
             right.AddRow(chkCanUseItem, chkDropItems);
             right.AddRow(chkLoseExp, null);
             right.AddRow(chkPlayerBlock, chkNpcBlock);
-            right.AddRow(btnSave, btnDelete, btnCancel);
+
+            // Buttons now placed at bottom of right panel
+            right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
 
             Content = new TableLayout
             {

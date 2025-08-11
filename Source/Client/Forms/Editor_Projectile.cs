@@ -40,7 +40,7 @@ namespace Client
         private void InitializeComponent()
         {
             // Left list
-            lstIndex = new ListBox { Size = new Size(200, -1) };
+            lstIndex = new ListBox { Width = 220 }; // make width consistent and allow vertical expansion via StackLayoutItem
             lstIndex.SelectedIndexChanged += (s, e) =>
             {
                 if (_initializing) return;
@@ -142,21 +142,22 @@ namespace Client
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 6,
-                        Items = { btnSave, btnCancel, btnDelete }
+                        Items = { btnSave, btnDelete, btnCancel } // enforce order
                     })
                 }
             };
 
             Content = new Splitter
             {
-                Position = 220,
+                Position = 240,
                 Panel1 = new StackLayout
                 {
                     Padding = 8,
+                    Spacing = 4,
                     Items =
                     {
                         new Label{ Text = "Projectiles", Font = SystemFonts.Bold(12)},
-                        lstIndex
+                        new StackLayoutItem(lstIndex, expand: true)
                     }
                 },
                 Panel2 = new Scrollable { Content = grid }

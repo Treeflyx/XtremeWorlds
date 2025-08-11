@@ -40,6 +40,7 @@ namespace Client
             ClientSize = new Size(760, 480);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 680, 440);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -76,7 +77,7 @@ namespace Client
 
             // Layout definition
             var listLayout = new DynamicLayout { Spacing = new Size(5, 5) };
-            listLayout.AddRow(new Label { Text = "Resources" });
+            listLayout.AddRow(new Label { Text = "Resources", Font = SystemFonts.Bold(12) });
             listLayout.Add(lstIndex, yscale: true);
 
             var imagesLayout = new TableLayout
@@ -100,7 +101,8 @@ namespace Client
             rightLayout.AddRow("Tool Req:", cmbTool, "Animation:", cmbAnimation);
             rightLayout.AddRow("Health:", nudHealth, "Respawn:", nudRespawn);
             rightLayout.AddRow("Level Req:", nudLvlReq);
-            rightLayout.AddRow(btnSave, btnDelete, btnCancel);
+            // buttons moved to right panel bottom (main control view)
+            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
 
             Content = new TableLayout
             {

@@ -4,12 +4,32 @@ using Core;
 using Core.Globals;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Eto.Forms;
+using Eto.Drawing;
 
 namespace Client
 {
 
     static class Editors
     {
+        // Auto size helper: adjusts window size to preferred content size within bounds on first show
+        public static void AutoSizeWindow(Form form, int minWidth = 400, int minHeight = 300, int maxWidth = 1600, int maxHeight = 1000)
+        {
+            form.Shown += (s, e) =>
+            {
+                try
+                {
+                    if (form.Content == null) return;
+                    var pref = form.Content.GetPreferredSize(Size.MaxValue);
+                    int w = Math.Min(Math.Max((int)pref.Width + form.Padding.Left + form.Padding.Right, minWidth), maxWidth);
+                    int h = Math.Min(Math.Max((int)pref.Height + form.Padding.Top + form.Padding.Bottom, minHeight), maxHeight);
+                    // Only enlarge; don't shrink below current if user already resized
+                    if (w > form.ClientSize.Width || h > form.ClientSize.Height)
+                        form.ClientSize = new Size(w, h);
+                }
+                catch { /* ignore sizing errors */ }
+            };
+        }
 
         #region Animation Editor
 

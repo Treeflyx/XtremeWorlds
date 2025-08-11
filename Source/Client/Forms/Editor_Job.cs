@@ -50,6 +50,7 @@ namespace Client
         ClientSize = new Size(880, 600);
         Padding = 6;
         Content = BuildUi();
+        Editors.AutoSizeWindow(this, 760, 520);
         Shown += (s, e) => InitData();
     }
 
@@ -125,18 +126,17 @@ namespace Client
             }
         });
 
-        var left = new DynamicLayout { Spacing = new Size(4,4) };
-        left.AddRow(new Label{Text="Jobs"}); left.AddRow(lstJobs);
-        left.AddRow(new Label{Text="Name"}); left.AddRow(txtName);
-        left.AddRow(new Label{Text="Description"}); left.AddRow(txtDesc);
-        left.Add(null);
+    var left = new DynamicLayout { Spacing = new Size(4,4) };
+    left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(11)});
+    left.Add(lstJobs, yscale:true);
+    left.Add(null);
 
         var right = new DynamicLayout { Spacing = new Size(6,6) };
         right.AddRow(stats);
         right.AddRow(start);
         right.AddRow(sprites);
-        right.AddRow(items);
-        right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+    right.AddRow(items);
+    right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
 
         return new TableLayout
         {

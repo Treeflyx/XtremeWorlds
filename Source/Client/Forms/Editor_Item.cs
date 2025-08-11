@@ -40,6 +40,7 @@ namespace Client
             ClientSize = new Size(1100, 700);
             Padding = 6;
             Content = BuildUi();
+            Editors.AutoSizeWindow(this, 880, 560);
             Shown += (s,e) => InitData();
         }
 
@@ -48,7 +49,7 @@ namespace Client
             lstIndex = new ListBox { Width = 220, Height = 500 };
             lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
 
-            txtName = new TextBox(); txtName.TextChanged += (s,e)=> UpdateName();
+            txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s,e)=> UpdateName();
             txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
 
             numIcon = Num(0, GameState.NumItems); numIcon.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Icon = (int)numIcon.Value; LoadItemIcon(); MarkChanged(); };
@@ -170,9 +171,8 @@ namespace Client
             });
 
             var left = new DynamicLayout { Spacing = new Size(4,4) };
-            left.AddRow(new Label{Text="Items"});
-            left.AddRow(lstIndex);
-            left.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=4,Items={btnSave,btnDelete,btnCancel}});
+            left.AddRow(new Label{Text="Items", Font = SystemFonts.Bold(12)});
+            left.Add(lstIndex, yscale:true);
 
             var mid = new DynamicLayout { Spacing = new Size(6,6) };
             mid.AddRow(fraBasics);
@@ -181,6 +181,7 @@ namespace Client
             mid.AddRow(fraSkill);
             mid.AddRow(fraProjectile);
             mid.AddRow(fraEvents);
+            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCancel}});
 
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);

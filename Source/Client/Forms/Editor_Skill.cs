@@ -56,6 +56,7 @@ namespace Client
             ClientSize = new Size(900, 560);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 820, 520);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -124,7 +125,7 @@ namespace Client
 
             // Layouts
             var listLayout = new DynamicLayout { Spacing = new Size(5,5) };
-            listLayout.AddRow(new Label { Text = "Skills" });
+            listLayout.AddRow(new Label { Text = "Skills", Font = SystemFonts.Bold(12) });
             listLayout.Add(lstIndex, yscale: true);
 
             var general = new DynamicLayout { Spacing = new Size(4,4) };
@@ -136,10 +137,11 @@ namespace Client
             general.AddRow("Cast Anim:", cmbAnimCast, "Skill Anim:", cmbAnim, "Stun:", nudStun);
             general.AddRow(chkProjectile, "Projectile:", cmbProjectile, chkKnockBack, "KB Tiles:", cmbKnockBackTiles);
 
-            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCancel, btnLearn } };
+            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCancel, btnLearn } }; // order enforced
 
             var rightLayout = new DynamicLayout { Spacing = new Size(6,6) };
             rightLayout.Add(general);
+            // buttons moved to right layout bottom (main control view)
             rightLayout.Add(buttons);
 
             Content = new TableLayout
