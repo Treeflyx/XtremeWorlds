@@ -36,7 +36,6 @@ namespace Client
         public static void Packet_OpenBank(ReadOnlyMemory<byte> data)
         {
             int i;
-            int x;
             var buffer = new PacketReader(data);
 
             for (i = 0; i < Constant.MaxBank; i++)

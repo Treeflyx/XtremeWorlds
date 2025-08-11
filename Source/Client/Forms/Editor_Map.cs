@@ -1104,8 +1104,6 @@ namespace Client
             int i;
             bool isModified = false;
 
-            General.SetWindowFocus(General.Client.Window.Handle);
-
             if (GameState.CurX < 0 || GameState.CurY < 0 || GameState.CurX >= Data.MyMap.MaxX || GameState.CurY >= Data.MyMap.MaxY)
                 return;
 
@@ -1724,7 +1722,6 @@ namespace Client
 
             if (GameState.TileHistoryIndex <= 0)
             {
-                General.SetWindowFocus(General.Client.Window.Handle);
                 return;
             }
 
@@ -1788,10 +1785,10 @@ namespace Client
 
             GameState.TileHistoryIndex -= 1;
 
-            if (isModified)
-                General.SetWindowFocus(General.Client.Window.Handle);
-            else
+            if (!isModified)
+            {
                 MapEditorUndo();
+            }
         }
 
         public static void MapEditorRedo()
@@ -1801,7 +1798,6 @@ namespace Client
             if (GameState.TileHistoryIndex > GameState.TileHistoryHighIndex)
             {
                 GameState.TileHistoryIndex--;
-                General.SetWindowFocus(General.Client.Window.Handle);
                 return;
             }
 
@@ -1865,10 +1861,10 @@ namespace Client
 
             GameState.TileHistoryIndex++;
 
-            if (isModified)
-                General.SetWindowFocus(General.Client.Window.Handle);
-            else
+            if (!isModified)
+            {
                 MapEditorRedo();
+            }
         }
 
         public void ClearAttributeDialogue()
