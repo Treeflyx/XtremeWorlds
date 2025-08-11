@@ -30,6 +30,7 @@ namespace Client
 
         public Editor_Animation()
         {
+            _instance = this;
             Title = "Animation Editor";
             ClientSize = new Size(600, 400);
             Padding = 10;

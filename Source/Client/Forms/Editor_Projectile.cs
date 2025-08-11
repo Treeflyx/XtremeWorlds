@@ -9,26 +9,26 @@ namespace Client
 {
     public sealed class Editor_Projectile : Form
     {
-        public static Editor_Projectile? Instance { get; private set; }
+        // Singleton access for legacy usage
+        private static Editor_Projectile? _instance;
+        public static Editor_Projectile Instance => _instance ??= new Editor_Projectile();
+        public ListBox lstIndex = null!;
+        public TextBox txtName = null!;
+        public NumericStepper nudPic = null!;
+        public NumericStepper nudRange = null!;
+        public NumericStepper nudSpeed = null!;
+        public NumericStepper nudDamage = null!;
+        public Drawable picProjectile = null!;
 
-        // Public controls referenced externally (names must match Editors.cs usage)
-    public ListBox lstIndex = null!;
-    public TextBox txtName = null!;
-    public NumericStepper nudPic = null!;
-    public NumericStepper nudRange = null!;
-    public NumericStepper nudSpeed = null!;
-    public NumericStepper nudDamage = null!;
-    public Drawable picProjectile = null!;
-
-    private Button btnSave = null!;
-    private Button btnCancel = null!;
-    private Button btnDelete = null!;
+        public Button btnSave = null!;
+        public Button btnCancel = null!;
+        public Button btnDelete = null!;
 
         private bool _initializing;
 
         public Editor_Projectile()
         {
-            Instance = this;
+            _instance = this;
             Title = "Projectile Editor";
             ClientSize = new Size(750, 430);
             Resizable = true;
@@ -168,7 +168,7 @@ namespace Client
                 {
                     Editors.ProjectileEditorCancel();
                 }
-                if (Instance == this) Instance = null;
+                if (_instance == this) _instance = null;
             };
         }
 

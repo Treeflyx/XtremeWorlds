@@ -15,6 +15,7 @@ namespace Client
 {
     public class Editor_Script : Form
     {
+        // Singleton access for legacy usage
         private static Editor_Script? _instance;
         public static Editor_Script Instance => _instance ??= new Editor_Script();
 
@@ -25,6 +26,7 @@ namespace Client
 
         public Editor_Script()
         {
+            _instance = this;
             Title = "Script Editor";
             ClientSize = new Size(700, 520);
             Padding = 10;

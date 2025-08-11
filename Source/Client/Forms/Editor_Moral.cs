@@ -11,8 +11,6 @@ namespace Client
         // Singleton instance for legacy static access
         private static Editor_Moral? _instance;
         public static Editor_Moral Instance => _instance ??= new Editor_Moral();
-
-        // Public controls referenced externally (names preserved from WinForms version)
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox();
         public ComboBox cmbColor = new ComboBox();
@@ -31,6 +29,7 @@ namespace Client
 
         public Editor_Moral()
         {
+            _instance = this;
             Title = "Moral Editor";
             ClientSize = new Size(500, 420);
             Padding = 10;

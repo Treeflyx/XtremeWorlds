@@ -34,6 +34,7 @@ namespace Client
 
         public Editor_Item()
         {
+            _instance = this;
             Title = "Item Editor";
             ClientSize = new Size(1100, 700);
             Padding = 6;

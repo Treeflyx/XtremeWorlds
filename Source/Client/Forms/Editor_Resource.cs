@@ -9,10 +9,9 @@ namespace Client
 {
     public class Editor_Resource : Form
     {
+        // Singleton access for legacy usage
         private static Editor_Resource? _instance;
         public static Editor_Resource Instance => _instance ??= new Editor_Resource();
-
-        // Public controls referenced externally (names preserved)
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox();
         public TextBox txtMessage = new TextBox();
@@ -35,6 +34,7 @@ namespace Client
 
         public Editor_Resource()
         {
+            _instance = this;
             Title = "Resource Editor";
             ClientSize = new Size(760, 480);
             Padding = 10;

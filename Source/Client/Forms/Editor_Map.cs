@@ -20,13 +20,11 @@ namespace Client
 
     public partial class Editor_Map : Form
     {
-
         // Singleton instance for legacy static access
         private static Editor_Map? _instance;
         public static Editor_Map Instance => _instance ??= new Editor_Map();
         private static readonly int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
-
         public RadioButton optTrap = new RadioButton{ Text = "Trap" };
         public RadioButton optHeal = new RadioButton{ Text = "Heal" };
         public RadioButton optBank = new RadioButton{ Text = "Bank" };

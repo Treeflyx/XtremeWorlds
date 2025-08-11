@@ -71,28 +71,11 @@ Global
 		{8A65A1A1-43C8-049F-31D6-E02C2A04749F}.RelWithDebInfo|Any CPU.Build.0 = Release|Any CPU
 		{8A65A1A1-43C8-049F-31D6-E02C2A04749F}.RelWithDebInfo|x64.ActiveCfg = Release|Any CPU
 		{8A65A1A1-43C8-049F-31D6-E02C2A04749F}.RelWithDebInfo|x64.Build.0 = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Debug|x64.Build.0 = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.MinSizeRel|Any CPU.ActiveCfg = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.MinSizeRel|Any CPU.Build.0 = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.MinSizeRel|x64.ActiveCfg = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.MinSizeRel|x64.Build.0 = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Release|x64.ActiveCfg = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.Release|x64.Build.0 = Release|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.RelWithDebInfo|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.RelWithDebInfo|Any CPU.Build.0 = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.RelWithDebInfo|x64.ActiveCfg = Debug|Any CPU
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64}.RelWithDebInfo|x64.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{AB6712D4-A6D3-8CC4-C9FD-4DD2D2515E64} = {17067D41-98EF-470E-8A86-9C6587C3C69F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34F4C6E4-D681-43B9-A894-4D9A534ABC40}

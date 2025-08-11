@@ -7,10 +7,9 @@ namespace Client
 {
     public class Editor_Shop : Form
     {
+        // Singleton access for legacy usage
         private static Editor_Shop? _instance;
         public static Editor_Shop Instance => _instance ??= new Editor_Shop();
-
-        // Public controls referenced by Editors.cs
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox();
         public NumericStepper nudBuy = new NumericStepper { MinValue = 0, MaxValue = 10000, Increment = 1 };
@@ -28,6 +27,7 @@ namespace Client
 
         public Editor_Shop()
         {
+            _instance = this;
             Title = "Shop Editor";
             ClientSize = new Size(800, 500);
             Padding = 10;

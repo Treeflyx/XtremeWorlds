@@ -12,10 +12,9 @@ namespace Client
 {
     public class Editor_Skill : Form
     {
+        // Singleton access for legacy usage
         private static Editor_Skill? _instance;
         public static Editor_Skill Instance => _instance ??= new Editor_Skill();
-
-        // Public controls (names preserved)
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox();
         public ComboBox cmbType = new ComboBox();
@@ -51,6 +50,7 @@ namespace Client
 
         public Editor_Skill()
         {
+            _instance = this;
             Title = "Skill Editor";
             ClientSize = new Size(900, 560);
             Padding = 10;

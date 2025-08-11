@@ -9,9 +9,9 @@ namespace Client
 {
     public sealed class Editor_Npc : Form
     {
-        public static Editor_Npc? Instance { get; private set; }
-
-        // Public controls referenced externally
+        // Singleton access for legacy usage
+        private static Editor_Npc? _instance;
+        public static Editor_Npc Instance => _instance ??= new Editor_Npc();
         public ListBox lstIndex = null!;
         public TextBox txtName = null!;
         public TextBox txtAttackSay = null!;
@@ -52,7 +52,7 @@ namespace Client
 
         public Editor_Npc()
         {
-            Instance = this;
+            _instance = this;
             Title = "NPC Editor";
             ClientSize = new Size(1050, 600);
             MinimumSize = new Size(1050, 600);
@@ -283,7 +283,7 @@ namespace Client
                 {
                     Editors.NpcEditorCancel();
                 }
-                if (Instance == this) Instance = null;
+                if (_instance == this) _instance = null;
             };
         }
 

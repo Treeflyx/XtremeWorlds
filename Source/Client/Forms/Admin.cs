@@ -26,6 +26,7 @@ namespace Client
 
         public Admin()
         {
+            _instance = this;
             Title = "Admin Panel";
             ClientSize = new Size(600, 700);
             Resizable = false;

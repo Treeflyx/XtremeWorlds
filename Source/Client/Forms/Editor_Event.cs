@@ -12,6 +12,10 @@ namespace Client
 
     public partial class Editor_Event : Form
     {
+        // Singleton access for legacy usage
+        private static Editor_Event? _instance;
+        public static Editor_Event Instance => _instance ??= new Editor_Event();
+
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 
@@ -134,7 +138,7 @@ namespace Client
         public Button btnEditCommand = new Button { Text = "Edit" };
         public Button btnDeleteComand = new Button { Text = "Delete" };
         public Button btnClearCommand = new Button { Text = "Clear" };
-        public TreeView tvCommands = new TreeView();
+        public TreeGridView tvCommands = new TreeGridView();
 
         // Numerous frame panels placeholders (keep as Panel)
         public Panel fraShowText = new Panel();
@@ -227,11 +231,9 @@ namespace Client
 
         public CheckBox chkGlobal = new CheckBox { Text = "Global" };
 
-    public static Editor_Event Instance { get; private set; } = null!; // assigned in ctor
-
         public Editor_Event()
         {
-            Instance = this;
+            _instance = this;
             Title = "Event Editor";
             ClientSize = new Size(1100, 750);
             InitializeComponent();
