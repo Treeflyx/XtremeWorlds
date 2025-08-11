@@ -1,49 +1,70 @@
-XtremeWorlds Game Engine
-=================
+# XtremeWorlds Game Engine
 
-A simple 2D MMORPG game engine is written in C#!
-Based on the Orion+ conversion and MirageBasic.
+A simple 2D MMORPG game engine written in C# (.NET 9.0).
 
-What is it?
-===========
-This is a tile-based 2D MMORPG game engine. It features a client and server application setup with a basic GUI. It has live editing built-in, with team-based features to allow fluid updating.
+Based on the Orion+ conversion and MirageBasic frameworks.
 
-Setup
-===========
-Install PostgreSQL, then use the database's password as mirage. You can change this in the source code or by modifying the server settings JSON.<br/>
-[PostgreSQL](https://www.postgresql.org/download/)<br/>
+## Overview
 
-Build
-===========
-If you don't pull the repo with a proper Git client, you need to init the submodules by running the following command in the terminal.  
-```
-git submodule update --init
-dotnet build
-```
+XtremeWorlds is a tile-based 2D MMORPG game engine designed for ease of use and
+rapid development. The engine provides both client and server applications with
+an intuitive GUI and built-in live editing features that enable seamless 
+collaborative development.
 
-Game Features:
-==============
-Basic Character Creation/Class Selection
-Movement/Attacking
-NPC/Computer Characters for attacking
-Items & Spells
-Event System
+## Game Features
 
-Creation Features:
-==================
+- Basic Character Creation/Class Selection
+- Movement/Attacking
+- NPC/Computer Characters for attacking
+- Items & Spells
+- Event System
+
+## Creation Features
+
 The client has editors for the world (maps), items, spells, animations, NPCs, and more from the in-game admin panel.
 
-How do I use this software?
-===========================
-If you are a programmer, then you will probably prefer to compile the most recent version from the source. Download the engine here, open up the solution in Visual Studio, compile both projects, and start the client and server application. They should connect automatically. IP and Port options are stored in the root/data (files)/config.ini files.
+### How do I access the editors?
 
-How do I access the editors?
-============================
 Log in to the game with the client. On the server, type the command /access name 5 to promote yourself to owner. Now, go back to the client and tap Insert for each of the editor options.
 
-Support & Updates:
-==================
-Visit our website or go to our Discord for support.
-https://discord.gg/ARYaWbN6b2
+## Quick Start
 
-I'm working on updating it to a more usable base.
+### Prerequisites
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [PostgreSQL](https://www.postgresql.org/download/)
+- Git
+
+### Installation
+
+#### 1. Clone the repository
+   ```bash
+   git clone https://github.com/Treeflyx/XtremeWorlds.git
+   cd XtremeWorlds
+   ```
+
+#### 2. Set up PostgreSQL
+
+- Install [PostgreSQL](https://www.postgresql.org/download/)
+- Create a database with password: `mirage`
+- *Note: You can modify database credentials in the server settings JSON file*
+
+#### 3. Build the solution
+   ```bash
+   dotnet build
+   ```
+
+#### 4. Run the applications
+
+- Start the server application first
+- Launch the client application
+- They will connect automatically using default settings
+
+## Support & Community
+
+- **Discord**: [Join our community](https://discord.gg/ARYaWbN6b2)
+- **Issues**: Report bugs and request features through GitHub Issues
+- **Updates**: Check releases for the latest improvements and features
+
+## License
+
+See the [LICENSE](LICENSE) file for details.
