@@ -1,5 +1,6 @@
 ﻿using System;
 using Client.Net;
+using Core.Globals;
 using Eto.Forms;
 
 namespace Client;
@@ -77,7 +78,7 @@ public static class Program
 
         if (GameState.InitMapEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Map;
+            GameState.MyEditorType = EditorType.Map;
             GameState.EditorIndex = 0;
             new Editor_Map().Show();
             Editor_Map.MapEditorInit();
@@ -86,7 +87,7 @@ public static class Program
 
         if (GameState.InitAnimationEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Animation;
+            GameState.MyEditorType = EditorType.Animation;
             GameState.EditorIndex = 0;
             new Editor_Animation().Show();
             Editors.AnimationEditorInit();
@@ -95,7 +96,7 @@ public static class Program
 
         if (GameState.InitItemEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Item;
+            GameState.MyEditorType = EditorType.Item;
             GameState.EditorIndex = 0;
             new Editor_Item().Show();
             Editors.ItemEditorInit();
@@ -104,7 +105,7 @@ public static class Program
 
         if (GameState.InitJobEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Job;
+            GameState.MyEditorType = EditorType.Job;
             GameState.EditorIndex = 0;
             new Editor_Job().Show();
             Editors.JobEditorInit();
@@ -113,7 +114,7 @@ public static class Program
 
         if (GameState.InitMoralEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Moral;
+            GameState.MyEditorType = EditorType.Moral;
             GameState.EditorIndex = 0;
             new Editor_Moral().Show();
             Editors.MoralEditorInit();
@@ -122,7 +123,7 @@ public static class Program
 
         if (GameState.InitResourceEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Resource;
+            GameState.MyEditorType = EditorType.Resource;
             GameState.EditorIndex = 0;
             new Editor_Resource().Show();
             Editors.ResourceEditorInit();
@@ -131,7 +132,7 @@ public static class Program
 
         if (GameState.InitNpcEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Npc;
+            GameState.MyEditorType = EditorType.Npc;
             GameState.EditorIndex = 0;
             new Editor_Npc().Show();
             Editors.NpcEditorInit();
@@ -140,7 +141,7 @@ public static class Program
 
         if (GameState.InitSkillEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Skill;
+            GameState.MyEditorType = EditorType.Skill;
             GameState.EditorIndex = 0;
             new Editor_Skill().Show();
             Editors.SkillEditorInit();
@@ -149,7 +150,7 @@ public static class Program
 
         if (GameState.InitShopEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Shop;
+            GameState.MyEditorType = EditorType.Shop;
             GameState.EditorIndex = 0;
             new Editor_Shop().Show();
             Editors.ShopEditorInit();
@@ -158,7 +159,7 @@ public static class Program
 
         if (GameState.InitProjectileEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Projectile;
+            GameState.MyEditorType = EditorType.Projectile;
             GameState.EditorIndex = 0;
             new Editor_Projectile().Show();
             Editors.ProjectileEditorInit();
@@ -167,7 +168,7 @@ public static class Program
 
         if (GameState.InitScriptEditor)
         {
-            GameState.MyEditorType = Core.EditorType.Script;
+            GameState.MyEditorType = EditorType.Script;
             GameState.EditorIndex = 0;
             new Editor_Script().Show();
             GameState.InitScriptEditor = false;

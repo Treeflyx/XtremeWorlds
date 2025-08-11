@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -6,9 +7,9 @@ using Newtonsoft.Json.Linq;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Packets;
-using static Core.Global.Command;
-using Type = Core.Type;
+using static Core.Net.Packets;
+using static Core.Globals.Command;
+using Type = Core.Globals.Type;
 
 namespace Server;
 
@@ -30,7 +31,7 @@ public static class Animation
 
     public static Task LoadAnimationsAsync()
     {
-        return Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxAnimations), LoadAnimationAsync);
+        return Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxAnimations), LoadAnimationAsync);
     }
 
     private static async ValueTask LoadAnimationAsync(int animationNum, CancellationToken cancellationToken)
@@ -124,7 +125,7 @@ public static class Animation
         var packetReader = new PacketReader(bytes);
 
         var animationNum = packetReader.ReadInt32();
-        if (animationNum is < 0 or > Core.Constant.MaxAnimations)
+        if (animationNum is < 0 or > Core.Globals.Constant.MaxAnimations)
         {
             return;
         }
@@ -148,7 +149,7 @@ public static class Animation
 
     public static void SendAnimations(int playerId)
     {
-        for (var animationNum = 0; animationNum < Core.Constant.MaxAnimations; animationNum++)
+        for (var animationNum = 0; animationNum < Core.Globals.Constant.MaxAnimations; animationNum++)
         {
             if (Data.Animation[animationNum].Name.Length > 0)
             {

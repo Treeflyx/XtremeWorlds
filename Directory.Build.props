@@ -1,11 +1,13 @@
 ﻿<Project>
-    
+
     <PropertyGroup>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <TargetFramework>net9.0</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <Title>XtremeWorlds</Title>
         <Description>2-D MMORPG Game Engine</Description>
@@ -15,9 +17,9 @@
         <Trademark>Treefly Studios</Trademark>
     </PropertyGroup>
 
-        <PropertyGroup>
-            <!-- Suppress nullable conversion warning CS8600 as requested -->
-            <NoWarn>$(NoWarn);CS8600</NoWarn>
-        </PropertyGroup>
+    <PropertyGroup>
+        <!-- Suppress nullable conversion warning CS8600 as requested -->
+        <NoWarn>$(NoWarn);CS8600</NoWarn>
+    </PropertyGroup>
 
 </Project>

@@ -1,9 +1,11 @@
 ﻿using System;
 using Client.Net;
-using Core.Localization;
-using static Core.Global.Command;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Command;
 using Eto.Forms;
 using Eto.Drawing;
+using Color = Core.Globals.Color;
 
 namespace Client
 {
@@ -40,13 +42,13 @@ namespace Client
             txtAdminName = new TextBox(); 
             txtAdminName.Text = GetPlayerName(GameState.MyIndex); 
             cmbAccess = new DropDown();
-            foreach (var name in Enum.GetNames(typeof(Core.AccessLevel)))
+            foreach (var name in Enum.GetNames(typeof(AccessLevel)))
             {
                 cmbAccess.Items.Add(name);
             }
 
             nudAdminSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters };
-            nudAdminMap = new NumericStepper { MinValue = 0, MaxValue = Core.Constant.MaxMaps };
+            nudAdminMap = new NumericStepper { MinValue = 0, MaxValue = Constant.MaxMaps };
 
             btnAdminWarpTo = new Button { Text = "Warp To Map" };
             btnAdminBan = new Button { Text = "Ban Player" };
@@ -56,13 +58,13 @@ namespace Client
             btnAdminSetAccess = new Button { Text = "Set Access" };
             btnAdminSetSprite = new Button { Text = "Set Player Sprite" };
 
-            btnAdminWarpTo.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Sender.WarpTo((int)nudAdminMap.Value); };
-            btnAdminBan.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Sender.SendBan(txtAdminName.Text.Trim()); };
-            btnAdminKick.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Sender.SendKick(txtAdminName.Text.Trim()); };
-            btnAdminWarp2Me.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim())) Sender.WarpToMe(txtAdminName.Text.Trim()); };
-            btnAdminWarpMe2.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim())) Sender.WarpMeTo(txtAdminName.Text.Trim()); };
-            btnAdminSetAccess.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Owner) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim()) && cmbAccess.SelectedIndex >= 0) Sender.SendSetAccess(txtAdminName.Text, (byte)(cmbAccess.SelectedIndex + 1)); };
-            btnAdminSetSprite.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Sender.SendSetSprite((int)nudAdminSprite.Value); };
+            btnAdminWarpTo.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.WarpTo((int)nudAdminMap.Value); };
+            btnAdminBan.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendBan(txtAdminName.Text.Trim()); };
+            btnAdminKick.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendKick(txtAdminName.Text.Trim()); };
+            btnAdminWarp2Me.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim())) Sender.WarpToMe(txtAdminName.Text.Trim()); };
+            btnAdminWarpMe2.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim())) Sender.WarpMeTo(txtAdminName.Text.Trim()); };
+            btnAdminSetAccess.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner) ShowDenied(); else if (!IsNumeric(txtAdminName.Text.Trim()) && cmbAccess.SelectedIndex >= 0) Sender.SendSetAccess(txtAdminName.Text, (byte)(cmbAccess.SelectedIndex + 1)); };
+            btnAdminSetSprite.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendSetSprite((int)nudAdminSprite.Value); };
 
             var moderationLayout = new TableLayout
             {
@@ -81,8 +83,8 @@ namespace Client
             // Map List Tab
             lstMaps = new ListBox();
             btnMapReport = new Button { Text = "Refresh List" };
-            btnMapReport.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Sender.SendRequestMapReport(); };
-            lstMaps.MouseDoubleClick += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else if (lstMaps.SelectedIndex >= 0) Sender.WarpTo(lstMaps.SelectedIndex + 1); };
+            btnMapReport.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendRequestMapReport(); };
+            lstMaps.MouseDoubleClick += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else if (lstMaps.SelectedIndex >= 0) Sender.WarpTo(lstMaps.SelectedIndex + 1); };
             var mapListLayout = new TableLayout
             {
                 Padding = 10,
@@ -93,8 +95,8 @@ namespace Client
             // Map Tools Tab
             btnRespawn = new Button { Text = "Respawn Map" };
             btnALoc = new Button { Text = "Location" };
-            btnRespawn.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Map.SendMapRespawn(); };
-            btnALoc.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else GameState.BLoc = !GameState.BLoc; };
+            btnRespawn.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Map.SendMapRespawn(); };
+            btnALoc.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else GameState.BLoc = !GameState.BLoc; };
             var mapToolsLayout = new TableLayout
             {
                 Padding = 10,
@@ -116,18 +118,18 @@ namespace Client
             btnMoralEditor = new Button { Text = "Moral Editor" };
             btnScriptEditor = new Button { Text = "Script Editor" };
 
-            btnLevelUp.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestLevelUp(); };
-            btnAnimationEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditAnimation(); };
-            btnJobEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditJob(); };
-            btnItemEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditItem(); };
-            btnMapEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Mapper) ShowDenied(); else Map.SendRequestEditMap(); };
-            btnNpcEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditNpc(); };
-            btnProjectiles.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Projectile.SendRequestEditProjectiles(); };
-            btnResourceEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditResource(); };
-            btnShopEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditShop(); };
-            btnSkillEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditSkill(); };
-            btnMoralEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditMoral(); };
-            btnScriptEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)Core.AccessLevel.Owner) ShowDenied(); else Sender.SendRequestEditScript(0); };
+            btnLevelUp.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestLevelUp(); };
+            btnAnimationEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditAnimation(); };
+            btnJobEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditJob(); };
+            btnItemEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditItem(); };
+            btnMapEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Map.SendRequestEditMap(); };
+            btnNpcEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditNpc(); };
+            btnProjectiles.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Projectile.SendRequestEditProjectiles(); };
+            btnResourceEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditResource(); };
+            btnShopEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditShop(); };
+            btnSkillEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditSkill(); };
+            btnMoralEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditMoral(); };
+            btnScriptEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner) ShowDenied(); else Sender.SendRequestEditScript(0); };
 
             var editorsLayout = new TableLayout
             {
@@ -158,7 +160,7 @@ namespace Client
 
         private void ShowDenied()
         {
-            Client.Text.AddText(LocalesManager.Get("AccessDenied"), (int)Core.Color.BrightRed);
+            Client.Text.AddText(LocalesManager.Get("AccessDenied"), (int)Color.BrightRed);
         }
 
         private bool IsNumeric(string s)

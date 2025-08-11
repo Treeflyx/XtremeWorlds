@@ -1,7 +1,9 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.VisualBasic.CompilerServices;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -25,7 +27,7 @@ namespace Client
         {
             Data.Shop[index] = default;
             Data.Shop[index].Name = "";
-            Data.Shop[index].TradeItem = new Core.Type.TradeItem[Constant.MaxTrades];
+            Data.Shop[index].TradeItem = new Type.TradeItem[Constant.MaxTrades];
             for (int x = 0; x < Constant.MaxTrades; x++)
             {            
                 Data.Shop[index].TradeItem[x].Item = -1;
@@ -38,7 +40,7 @@ namespace Client
         {
             int i;
 
-            Data.Shop = new Core.Type.Shop[Constant.MaxShops];
+            Data.Shop = new Type.Shop[Constant.MaxShops];
 
             for (i = 0; i < Constant.MaxShops; i++)
                 ClearShop(i);

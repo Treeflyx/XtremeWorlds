@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Core.Packets;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Net.Packets;
 
 namespace Client.Game.Objects
 {
@@ -17,25 +19,25 @@ namespace Client.Game.Objects
         public static void Load()
         {
             // Load the script file
-            var scriptPath = System.IO.Path.Combine(Core.Path.Skins, SettingsManager.Instance.Skin + ".cs");
+            var scriptPath = System.IO.Path.Combine(DataPath.Skins, SettingsManager.Instance.Skin + ".cs");
             if (File.Exists(scriptPath))
             {
                 var lines = File.ReadLines(scriptPath, Encoding.UTF8).ToArray();
                 if (lines.Length > 0)
                 {
-                    Core.Data.Ui.Code = lines;
+                    Data.Ui.Code = lines;
                 }
                 else
                 {
-                    Core.Data.Ui.Code = Array.Empty<string>();
+                    Data.Ui.Code = Array.Empty<string>();
                 }
             }
             else
             {
-                Core.Data.Ui.Code = Array.Empty<string>();
+                Data.Ui.Code = Array.Empty<string>();
             }
 
-            string code = (Core.Data.Ui.Code != null && Core.Data.Ui.Code.Length > 0) ? string.Join(Environment.NewLine, Core.Data.Ui.Code) : string.Empty;
+            string code = (Data.Ui.Code != null && Data.Ui.Code.Length > 0) ? string.Join(Environment.NewLine, Data.Ui.Code) : string.Empty;
 
             try
             {

@@ -1,6 +1,8 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
 using Core.Net;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -12,7 +14,7 @@ namespace Client
 
         public static void ClearParty()
         {
-            Data.MyParty = new Core.Type.Party()
+            Data.MyParty = new Type.Party()
             {
                 Leader = 0,
                 MemberCount = 0
@@ -82,9 +84,9 @@ namespace Client
                 return;
 
             // set vitals
-            var vitalCount = Enum.GetNames(typeof(Core.Vital)).Length;
+            var vitalCount = Enum.GetNames(typeof(Vital)).Length;
             for (int i = 0; i < vitalCount; i++)
-                Core.Data.Player[playerNum].Vital[i] = buffer.ReadInt32();
+                Data.Player[playerNum].Vital[i] = buffer.ReadInt32();
 
             GameLogic.UpdatePartyBars();
         }

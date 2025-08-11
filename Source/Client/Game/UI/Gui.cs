@@ -10,11 +10,13 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using Client.Net;
+using Core.Configurations;
+using Core.Globals;
 using CSScriptLib;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 using Color = Microsoft.Xna.Framework.Color;
-using Path = Core.Path;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -26,7 +28,7 @@ namespace Client
         public static long ActiveWindow;
 
         // GUi parts
-        public static Core.Type.ControlPart DragBox;
+        public static Type.ControlPart DragBox;
 
         // Used for automatically the zOrder
         public static long ZOrderWin;
@@ -52,7 +54,7 @@ namespace Client
             public long Height { get; set; }
             public bool Visible { get; set; }
             public bool CanDrag { get; set; }
-            public Core.Font Font { get; set; }
+            public Font Font { get; set; }
             public string Text { get; set; }
             public long XOffset { get; set; }
             public long YOffset { get; set; }
@@ -102,7 +104,7 @@ namespace Client
             public string Text { get; set; }
             public byte Length { get; set; }
             public Alignment Align { get; set; }
-            public Core.Font Font { get; set; }
+            public Font Font { get; set; }
             public Color Color { get; set; }
             public long Alpha { get; set; }
             public bool ClickThrough { get; set; }
@@ -126,7 +128,7 @@ namespace Client
             public List<Action> CallBack { get; set; }
         }
 
-        public static void UpdateControl(long winNum, long zOrder, string name, Color color, ControlType tType, List<long> design, List<long> image, List<string> texture, List<Action> callback, long left = 0L, long top = 0L, long width = 0L, long height = 0L, bool visible = true, bool canDrag = false, long max = 0L, long min = 0L, long value = 0L, string text = "", Alignment align = 0, Core.Font font = Core.Font.Georgia, long alpha = 255L, bool clickThrough = false, long xOffset = 0L, long yOffset = 0L, byte zChange = 0, bool censor = false, long icon = 0L, Action onDraw = null, bool isActive = true, string tooltip = "", long @group = 0L, byte length = Constant.NameLength, bool enabled = true)
+        public static void UpdateControl(long winNum, long zOrder, string name, Color color, ControlType tType, List<long> design, List<long> image, List<string> texture, List<Action> callback, long left = 0L, long top = 0L, long width = 0L, long height = 0L, bool visible = true, bool canDrag = false, long max = 0L, long min = 0L, long value = 0L, string text = "", Alignment align = 0, Font font = Font.Georgia, long alpha = 255L, bool clickThrough = false, long xOffset = 0L, long yOffset = 0L, byte zChange = 0, bool censor = false, long icon = 0L, Action onDraw = null, bool isActive = true, string tooltip = "", long @group = 0L, byte length = Constant.NameLength, bool enabled = true)
         {
 
             // Ensure the window exists in the Windows collection
@@ -253,12 +255,12 @@ namespace Client
             Windows[Conversions.ToLong(winName)].Controls[(int)controlIndex].List.Add(text);
         }
 
-        public static void UpdateWindow(string name, string caption, Core.Font font, long zOrder, long left, long top, long width, long height, long icon, bool visible = true, long xOffset = 0L, long yOffset = 0L, long designNorm = 0L, long designHover = 0L, long designMousedown = 0L, long imageNorm = 0L, long imageHover = 0L, long imageMousedown = 0L, Action callbackNorm = null, Action callbackHover = null, Action callbackMousemove = null, Action callbackMousedown = null, Action callbackDblclick = null, Action onDraw = null, bool canDrag = true, byte zChange = 1, bool isActive = true, bool clickThrough = false)
+        public static void UpdateWindow(string name, string caption, Font font, long zOrder, long left, long top, long width, long height, long icon, bool visible = true, long xOffset = 0L, long yOffset = 0L, long designNorm = 0L, long designHover = 0L, long designMousedown = 0L, long imageNorm = 0L, long imageHover = 0L, long imageMousedown = 0L, Action callbackNorm = null, Action callbackHover = null, Action callbackMousemove = null, Action callbackMousedown = null, Action callbackDblclick = null, Action onDraw = null, bool canDrag = true, byte zChange = 1, bool isActive = true, bool clickThrough = false)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount));
             var image = new List<long>(Enumerable.Repeat(0L, stateCount));
-            var texture = new List<string>(Enumerable.Repeat(Path.Designs, stateCount));
+            var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount));
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount));
 
             // Assign specific values for each state
@@ -310,12 +312,12 @@ namespace Client
                 ActiveWindow = Gui.Windows.Count;
         }
 
-        public static void UpdateTextbox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool isActive, [Optional, DefaultParameterValue(0L)] long xOffset, [Optional, DefaultParameterValue(0L)] long yOffset, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional, DefaultParameterValue(false)] bool censor, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(Constant.NameLength)] byte length, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref Action callbackEnter)
+        public static void UpdateTextbox(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Font.Georgia)] Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(true)] bool isActive, [Optional, DefaultParameterValue(0L)] long xOffset, [Optional, DefaultParameterValue(0L)] long yOffset, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional, DefaultParameterValue(false)] bool censor, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(Constant.NameLength)] byte length, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref Action callbackEnter)
         {
             var stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
             var image = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
-            var texture = new List<string>(Enumerable.Repeat(Path.Designs, stateCount).ToList());
+            var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
             // Assign specific values for each state
@@ -347,7 +349,7 @@ namespace Client
 
             if (string.IsNullOrEmpty(texturePath))
             {
-                texturePath = Path.Gui;
+                texturePath = DataPath.Gui;
             }
 
             // fill temp arrays
@@ -371,12 +373,12 @@ namespace Client
             UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.PictureBox, design, image, texture, callback, left, top, width, height, visible, canDrag, alpha: alpha, clickThrough: clickThrough, xOffset: 0L, yOffset: 0L, onDraw: onDraw);
         }
 
-        public static void UpdateButton(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, long xOffset = 0L, long yOffset = 0L, string tooltip = "", bool censor = false)
+        public static void UpdateButton(long winNum, string name, long left, long top, long width, long height, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Font.Georgia)] Font font, [Optional, DefaultParameterValue(0L)] long icon, [Optional, DefaultParameterValue(0L)] long imageNorm, [Optional, DefaultParameterValue(0L)] long imageHover, [Optional, DefaultParameterValue(0L)] long imageMousedown, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long designNorm, [Optional, DefaultParameterValue(0L)] long designHover, [Optional, DefaultParameterValue(0L)] long designMousedown, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, long xOffset = 0L, long yOffset = 0L, string tooltip = "", bool censor = false)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
             var image = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
-            var texture = new List<string>(Enumerable.Repeat(Path.Designs, stateCount).ToList());
+            var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
             // fill temp arrays
@@ -386,9 +388,9 @@ namespace Client
             image[(int)ControlState.Normal] = imageNorm;
             image[(int)ControlState.Hover] = imageHover;
             image[(int)ControlState.MouseDown] = imageMousedown;
-            texture[(int)ControlState.Normal] = Path.Gui;
-            texture[(int)ControlState.Hover] = Path.Gui;
-            texture[(int)ControlState.MouseDown] = Path.Gui;
+            texture[(int)ControlState.Normal] = DataPath.Gui;
+            texture[(int)ControlState.Hover] = DataPath.Gui;
+            texture[(int)ControlState.MouseDown] = DataPath.Gui;
             callback[(int)ControlState.Normal] = callbackNorm;
             callback[(int)ControlState.Hover] = callbackHover;
             callback[(int)ControlState.MouseDown] = callbackMousedown;
@@ -399,12 +401,12 @@ namespace Client
             UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.Button, design, image, texture, callback, left, top, width, height, visible, text: text, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, tooltip: tooltip);
         }
 
-        public static void UpdateLabel(long winNum, string name, long left, long top, long width, long height, string text, Core.Font font, Color color, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(false)] bool clickThrough, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref bool enabled)
+        public static void UpdateLabel(long winNum, string name, long left, long top, long width, long height, string text, Font font, Color color, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(false)] bool clickThrough, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick, [Optional] ref bool enabled)
         {
             int controlStateCount = Enum.GetValues(typeof(ControlState)).Length;
             var designLabel = new List<long>(Enumerable.Repeat(0L, controlStateCount).ToList());
             var imageLabel = new List<long>(Enumerable.Repeat(0L, controlStateCount).ToList());
-            var textureLabel = new List<string>(Enumerable.Repeat(Path.Designs, controlStateCount).ToList());
+            var textureLabel = new List<string>(Enumerable.Repeat(DataPath.Designs, controlStateCount).ToList());
             var callbackLabel = new List<Action>(Enumerable.Repeat((Action)null, controlStateCount).ToList());
 
             // fill temp arrays
@@ -418,16 +420,16 @@ namespace Client
             UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.Label, designLabel, imageLabel, textureLabel, callbackLabel, left, top, width, height, visible, text: text, align: align, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: Conversions.ToLong(clickThrough), censor: censor, enabled: enabled);
         }
 
-        public static void UpdateCheckBox(long winNum, string name, long left, long top, long width, [Optional, DefaultParameterValue(15L)] long height, [Optional, DefaultParameterValue(0L)] long value, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Core.Font.Georgia)] Core.Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long theDesign, [Optional, DefaultParameterValue(0L)] long @group, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick)
+        public static void UpdateCheckBox(long winNum, string name, long left, long top, long width, [Optional, DefaultParameterValue(15L)] long height, [Optional, DefaultParameterValue(0L)] long value, [Optional, DefaultParameterValue("")] string text, [Optional, DefaultParameterValue(Font.Georgia)] Font font, [Optional, DefaultParameterValue(Alignment.Left)] Alignment align, [Optional, DefaultParameterValue(true)] bool visible, [Optional, DefaultParameterValue(255L)] long alpha, [Optional, DefaultParameterValue(0L)] long theDesign, [Optional, DefaultParameterValue(0L)] long @group, [Optional, DefaultParameterValue(false)] bool censor, [Optional] ref Action callbackNorm, [Optional] ref Action callbackHover, [Optional] ref Action callbackMousedown, [Optional] ref Action callbackMousemove, [Optional] ref Action callbackDblclick)
         {
             int stateCount = Enum.GetValues(typeof(ControlState)).Length;
             var design = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
             var image = new List<long>(Enumerable.Repeat(0L, stateCount).ToList());
-            var texture = new List<string>(Enumerable.Repeat(Path.Designs, stateCount).ToList());
+            var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
             var callback = new List<Action>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
             design[0] = theDesign;
-            texture[0] = Path.Gui;
+            texture[0] = DataPath.Gui;
 
             // fill temp arrays
             callback[(int)ControlState.Normal] = callbackNorm;
@@ -448,12 +450,12 @@ namespace Client
             // Initialize lists for the control states
             var theDesign = new List<long>(Enumerable.Repeat(0L, controlStateCount).ToList());
             var image = new List<long>(Enumerable.Repeat(0L, controlStateCount).ToList());
-            var texture = new List<string>(Enumerable.Repeat(Path.Gui, controlStateCount).ToList());
+            var texture = new List<string>(Enumerable.Repeat(DataPath.Gui, controlStateCount).ToList());
             var callback = new List<Action>(Enumerable.Repeat((Action)null, controlStateCount).ToList());
 
             // Set the design for the normal state
             theDesign[0] = design;
-            texture[0] = Path.Gui;
+            texture[0] = DataPath.Gui;
 
             // Update the control in the window using the updated lists
             UpdateControl(winNum, ZOrderCon, name, Color.White, ControlType.ComboMenu, theDesign, image, texture, callback, left, top, width, height);
@@ -1092,13 +1094,13 @@ namespace Client
                             // Render the icon if available
                             if (withBlock.Icon > 0L)
                             {
-                                var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString()));
+                                var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Items, withBlock.Icon.ToString()));
                                 if (gfxInfo == null)
                                     break;
                                 int iconWidth = gfxInfo.Width;
                                 int iconHeight = gfxInfo.Height;
 
-                                string argpath3 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
+                                string argpath3 = System.IO.Path.Combine(DataPath.Items, withBlock.Icon.ToString());
                                 GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + xO + withBlock.XOffset), (int)(withBlock.Top + yO + withBlock.YOffset), 0, 0, iconWidth, iconHeight, iconWidth, iconHeight);
                             }
 
@@ -1274,7 +1276,7 @@ namespace Client
                                             withBlock.Alpha = 255L;
 
                                         // render box
-                                        string argpath5 = System.IO.Path.Combine(Path.Gui, 51.ToString());
+                                        string argpath5 = System.IO.Path.Combine(DataPath.Gui, 51.ToString());
                                         GameClient.RenderTexture(ref argpath5, (int)(withBlock.Left + xO), (int)(withBlock.Top + yO), 0, 0, 49, 23, 49, 23);
 
                                         // render text
@@ -1370,7 +1372,7 @@ namespace Client
                 {
                     case (long)UiDesign.ComboMenuNormal:
                         {
-                            string argpath = System.IO.Path.Combine(Path.Gui, "1");
+                            string argpath = System.IO.Path.Combine(DataPath.Gui, "1");
                             GameClient.RenderTexture(ref argpath, (int)withBlock.Left, (int)withBlock.Top, 0, 0, (int)withBlock.Width, (int)withBlock.Height, 157, 0, 0, 0);
 
                             // Render text
@@ -1385,7 +1387,7 @@ namespace Client
                                     // Render selection
                                     if (i == withBlock.Value || i == withBlock.Group)
                                     {
-                                        string argpath1 = System.IO.Path.Combine(Path.Gui, "1");
+                                        string argpath1 = System.IO.Path.Combine(DataPath.Gui, "1");
                                         GameClient.RenderTexture(ref argpath1, (int)x, (int)(y - 1L), 0, 0, (int)withBlock.Width, 15, 255, 0, 0, 0);
                                     }
 
@@ -1405,7 +1407,7 @@ namespace Client
                 {
                     case (long)UiDesign.WindowBlack:
                         {
-                            string argpath2 = System.IO.Path.Combine(Path.Gui, "61");
+                            string argpath2 = System.IO.Path.Combine(DataPath.Gui, "61");
                             GameClient.RenderTexture(ref argpath2, (int)withBlock.Left, (int)withBlock.Top, 0, 0, (int)withBlock.Width, (int)withBlock.Height, 190, 255, 255, 255);
                             break;
                         }
@@ -1414,7 +1416,7 @@ namespace Client
                         {
                             RenderDesign((long)UiDesign.Wood, withBlock.Left, withBlock.Top, withBlock.Width, withBlock.Height);
                             RenderDesign((long)UiDesign.Green, withBlock.Left, withBlock.Top, withBlock.Width, 23L);
-                            string argpath3 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
+                            string argpath3 = System.IO.Path.Combine(DataPath.Items, withBlock.Icon.ToString());
                             GameClient.RenderTexture(ref argpath3, (int)(withBlock.Left + withBlock.XOffset), (int)(withBlock.Top - 16L + withBlock.YOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
                             Text.RenderText(withBlock.Text, (int)(withBlock.Left + 32L), (int)(withBlock.Top + 4L), Color.White, Color.Black);
                             break;
@@ -1430,7 +1432,7 @@ namespace Client
                         {
                             RenderDesign((long)UiDesign.WoodEmpty, withBlock.Left, withBlock.Top, withBlock.Width, withBlock.Height);
                             RenderDesign((long)UiDesign.Green, withBlock.Left, withBlock.Top, withBlock.Width, 23L);
-                            string argpath4 = System.IO.Path.Combine(Path.Items, withBlock.Icon.ToString());
+                            string argpath4 = System.IO.Path.Combine(DataPath.Items, withBlock.Icon.ToString());
                             GameClient.RenderTexture(ref argpath4, (int)(withBlock.Left + withBlock.XOffset), (int)(withBlock.Top - 16L + withBlock.YOffset), 0, 0, (int)withBlock.Width, (int)withBlock.Height, (int)withBlock.Width, (int)withBlock.Height);
                             Text.RenderText(withBlock.Text, (int)(withBlock.Left + 32L), (int)(withBlock.Top + 4L), Color.White, Color.Black);
                             break;
@@ -1470,7 +1472,7 @@ namespace Client
                 case (long)UiDesign.MenuHeader:
                     {
                         // render the header
-                        string argpath = System.IO.Path.Combine(Path.Designs, "61");
+                        string argpath = System.IO.Path.Combine(DataPath.Designs, "61");
                         GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, (int)width, (int)height, (int)width, (int)height, 200, 47, 77, 29);
                         break;
                     }
@@ -1478,7 +1480,7 @@ namespace Client
                 case (long)UiDesign.MenuOption:
                     {
                         // render the option
-                        string argpath1 = System.IO.Path.Combine(Path.Designs, "61");
+                        string argpath1 = System.IO.Path.Combine(DataPath.Designs, "61");
                         GameClient.RenderTexture(ref argpath1, (int)left, (int)top, 0, 0, (int)width, (int)height, (int)width, (int)height, 200, 98, 98, 98);
                         break;
                     }
@@ -1490,7 +1492,7 @@ namespace Client
                         RenderControl_Square(1, left, top, width, height, bs, alpha);
 
                         // render wood texture
-                        string argpath2 = System.IO.Path.Combine(Path.Gui, "1");
+                        string argpath2 = System.IO.Path.Combine(DataPath.Gui, "1");
                         GameClient.RenderTexture(ref argpath2, (int)(left + bs), (int)(top + bs), 100, 100, (int)(width - bs * 2L), (int)(height - bs * 2L), (int)(width - bs * 2L), (int)(height - bs * 2L), (byte)alpha);
                         break;
                     }
@@ -1502,7 +1504,7 @@ namespace Client
                         RenderControl_Square(8, left + bs, top + bs, width, height, bs, alpha);
 
                         // render wood texture
-                        string argpath3 = System.IO.Path.Combine(Path.Gui, "1");
+                        string argpath3 = System.IO.Path.Combine(DataPath.Gui, "1");
                         GameClient.RenderTexture(ref argpath3, (int)(left + bs), (int)(top + bs), 100, 100, (int)(width - bs * 2L), (int)(height - bs * 2L), (int)(width - bs * 2L), (int)(height - bs * 2L), (byte)alpha);
                         break;
                     }
@@ -1522,7 +1524,7 @@ namespace Client
                         RenderControl_Square(2, left, top, width, height, bs, alpha);
 
                         // render green gradient overlay
-                        string argpath4 = System.IO.Path.Combine(Path.Gradients, "1");
+                        string argpath4 = System.IO.Path.Combine(DataPath.Gradients, "1");
                         GameClient.RenderTexture(ref argpath4, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1534,7 +1536,7 @@ namespace Client
                         RenderControl_Square(2, left, top, width, height, bs, alpha);
 
                         // render green gradient overlay
-                        string argpath5 = System.IO.Path.Combine(Path.Gradients, "2");
+                        string argpath5 = System.IO.Path.Combine(DataPath.Gradients, "2");
                         GameClient.RenderTexture(ref argpath5, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1546,7 +1548,7 @@ namespace Client
                         RenderControl_Square(2, left, top, width, height, bs, alpha);
 
                         // render green gradient overlay
-                        string argpath6 = System.IO.Path.Combine(Path.Gradients, "3");
+                        string argpath6 = System.IO.Path.Combine(DataPath.Gradients, "3");
                         GameClient.RenderTexture(ref argpath6, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1558,7 +1560,7 @@ namespace Client
                         RenderControl_Square(3, left, top, width, height, bs, alpha);
 
                         // render red gradient overlay
-                        string argpath7 = System.IO.Path.Combine(Path.Gradients, "4");
+                        string argpath7 = System.IO.Path.Combine(DataPath.Gradients, "4");
                         GameClient.RenderTexture(ref argpath7, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1570,7 +1572,7 @@ namespace Client
                         RenderControl_Square(3, left, top, width, height, bs, alpha);
 
                         // render red gradient overlay
-                        string argpath8 = System.IO.Path.Combine(Path.Gradients, "5");
+                        string argpath8 = System.IO.Path.Combine(DataPath.Gradients, "5");
                         GameClient.RenderTexture(ref argpath8, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1582,7 +1584,7 @@ namespace Client
                         RenderControl_Square(3, left, top, width, height, bs, alpha);
 
                         // render red gradient overlay
-                        string argpath9 = System.IO.Path.Combine(Path.Gradients, "6");
+                        string argpath9 = System.IO.Path.Combine(DataPath.Gradients, "6");
                         GameClient.RenderTexture(ref argpath9, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1594,7 +1596,7 @@ namespace Client
                         RenderControl_Square(14, left, top, width, height, bs, alpha);
 
                         // render Blue gradient overlay
-                        string argpath10 = System.IO.Path.Combine(Path.Gradients, "8");
+                        string argpath10 = System.IO.Path.Combine(DataPath.Gradients, "8");
                         GameClient.RenderTexture(ref argpath10, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1606,7 +1608,7 @@ namespace Client
                         RenderControl_Square(14, left, top, width, height, bs, alpha);
 
                         // render Blue gradient overlay
-                        string argpath11 = System.IO.Path.Combine(Path.Gradients, "9");
+                        string argpath11 = System.IO.Path.Combine(DataPath.Gradients, "9");
                         GameClient.RenderTexture(ref argpath11, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1618,7 +1620,7 @@ namespace Client
                         RenderControl_Square(14, left, top, width, height, bs, alpha);
 
                         // render Blue gradient overlay
-                        string argpath12 = System.IO.Path.Combine(Path.Gradients, "10");
+                        string argpath12 = System.IO.Path.Combine(DataPath.Gradients, "10");
                         GameClient.RenderTexture(ref argpath12, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1630,7 +1632,7 @@ namespace Client
                         RenderControl_Square(15, left, top, width, height, bs, alpha);
 
                         // render Orange gradient overlay
-                        string argpath13 = System.IO.Path.Combine(Path.Gradients, "11");
+                        string argpath13 = System.IO.Path.Combine(DataPath.Gradients, "11");
                         GameClient.RenderTexture(ref argpath13, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1642,7 +1644,7 @@ namespace Client
                         RenderControl_Square(15, left, top, width, height, bs, alpha);
 
                         // render Orange gradient overlay
-                        string argpath14 = System.IO.Path.Combine(Path.Gradients, "12");
+                        string argpath14 = System.IO.Path.Combine(DataPath.Gradients, "12");
                         GameClient.RenderTexture(ref argpath14, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1654,7 +1656,7 @@ namespace Client
                         RenderControl_Square(15, left, top, width, height, bs, alpha);
 
                         // render Orange gradient overlay
-                        string argpath15 = System.IO.Path.Combine(Path.Gradients, "13");
+                        string argpath15 = System.IO.Path.Combine(DataPath.Gradients, "13");
                         GameClient.RenderTexture(ref argpath15, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1666,7 +1668,7 @@ namespace Client
                         RenderControl_Square(17, left, top, width, height, bs, alpha);
 
                         // render Orange gradient overlay
-                        string argpath16 = System.IO.Path.Combine(Path.Gradients, "14");
+                        string argpath16 = System.IO.Path.Combine(DataPath.Gradients, "14");
                         GameClient.RenderTexture(ref argpath16, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1726,7 +1728,7 @@ namespace Client
                         RenderControl_Square(12, left, top, width, height, bs, alpha);
 
                         // render green gradient overlay
-                        string argpath17 = System.IO.Path.Combine(Path.Gradients, "7");
+                        string argpath17 = System.IO.Path.Combine(DataPath.Gradients, "7");
                         GameClient.RenderTexture(ref argpath17, (int)(left + bs), (int)(top + bs), 0, 0, (int)(width - bs * 2L), (int)(height - bs * 2L), 128, 128, (byte)alpha);
                         break;
                     }
@@ -1766,39 +1768,39 @@ namespace Client
             bs = borderSize;
 
             // Draw center
-            string argpath = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath, (int)(x + bs), (int)(y + bs), (int)(bs + 1L), (int)(bs + 1L), (int)(width - bs * 2L), (int)(height - bs * 2L), alpha: (byte)alpha);
 
             // Draw top side
-            string argpath1 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath1 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(x + bs), (int)y, (int)bs, 0, (int)(width - bs * 2L), (int)bs, 1, (int)bs, (byte)alpha);
 
             // Draw left side
-            string argpath2 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath2 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath2, (int)x, (int)(y + bs), 0, (int)bs, (int)bs, (int)(height - bs * 2L), (int)bs, alpha: (byte)alpha);
 
             // Draw right side
-            string argpath3 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath3 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath3, (int)(x + width - bs), (int)(y + bs), (int)(bs + 3L), (int)bs, (int)bs, (int)(height - bs * 2L), (int)bs, alpha: (byte)alpha);
 
             // Draw bottom side
-            string argpath4 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath4 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath4, (int)(x + bs), (int)(y + height - bs), (int)bs, (int)(bs + 3L), (int)(width - bs * 2L), (int)bs, 1, (int)bs, (byte)alpha);
 
             // Draw top left corner
-            string argpath5 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath5 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath5, (int)x, (int)y, 0, 0, (int)bs, (int)bs, (int)bs, (int)bs, (byte)alpha);
 
             // Draw top right corner
-            string argpath6 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath6 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath6, (int)(x + width - bs), (int)y, (int)(bs + 3L), 0, (int)bs, (int)bs, (int)bs, (int)bs, (byte)alpha);
 
             // Draw bottom left corner
-            string argpath7 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath7 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath7, (int)x, (int)(y + height - bs), 0, (int)(bs + 3L), (int)bs, (int)bs, (int)bs, (int)bs, (byte)alpha);
 
             // Draw bottom right corner
-            string argpath8 = System.IO.Path.Combine(Path.Designs, sprite.ToString());
+            string argpath8 = System.IO.Path.Combine(DataPath.Designs, sprite.ToString());
             GameClient.RenderTexture(ref argpath8, (int)(x + width - bs), (int)(y + height - bs), (int)(bs + 3L), (int)(bs + 3L), (int)bs, (int)bs, (int)bs, (int)bs, (byte)alpha);
         }
 
@@ -2269,11 +2271,11 @@ namespace Client
             yO = Windows[GetWindowIndex("winBars")].Top;
 
             // Bars
-            string argpath = System.IO.Path.Combine(Path.Gui, 27.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 27.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 15L), (int)(yO + 15L), 0, 0, (int)GameState.BarWidthGuiHp, 13, (int)GameState.BarWidthGuiHp, 13);
-            string argpath1 = System.IO.Path.Combine(Path.Gui, 28.ToString());
+            string argpath1 = System.IO.Path.Combine(DataPath.Gui, 28.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(xO + 15L), (int)(yO + 32L), 0, 0, (int)GameState.BarWidthGuiSp, 13, (int)GameState.BarWidthGuiSp, 13);
-            string argpath2 = System.IO.Path.Combine(Path.Gui, 29.ToString());
+            string argpath2 = System.IO.Path.Combine(DataPath.Gui, 29.ToString());
             GameClient.RenderTexture(ref argpath2, (int)(xO + 15L), (int)(yO + 49L), 0, 0, (int)GameState.BarWidthGuiExp, 13, (int)GameState.BarWidthGuiExp, 13);
         }
 
@@ -2303,13 +2305,13 @@ namespace Client
                     if (GameState.CharSprite[(int)i] > 0L) // Ensure character sprite is valid
                     {
                         // Define the rectangle for the character sprite
-                        var rect = new Rectangle((int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, GameState.CharSprite[(int)i].ToString())).Width / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, GameState.CharSprite[(int)i].ToString())).Height / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, GameState.CharSprite[(int)i].ToString())).Width / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, GameState.CharSprite[(int)i].ToString())).Height / 4d));
+                        var rect = new Rectangle((int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, GameState.CharSprite[(int)i].ToString())).Width / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, GameState.CharSprite[(int)i].ToString())).Height / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, GameState.CharSprite[(int)i].ToString())).Width / 4d), (int)Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, GameState.CharSprite[(int)i].ToString())).Height / 4d));
 
                         // Ensure the sprite index is within bounds
                         if (GameState.CharSprite[(int)i] <= GameState.NumCharacters)
                         {
                             // Render the character sprite
-                            string argpath = System.IO.Path.Combine(Path.Characters, GameState.CharSprite[(int)i].ToString());
+                            string argpath = System.IO.Path.Combine(DataPath.Characters, GameState.CharSprite[(int)i].ToString());
                             GameClient.RenderTexture(ref argpath, (int)(x + 30L), (int)(yO + 100L), 0, 0, rect.Width, rect.Height, rect.Width, rect.Height);
                         }
                     }
@@ -2355,9 +2357,9 @@ namespace Client
             }
 
             // Render the character's face
-            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, imageChar.ToString()));
+            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, imageChar.ToString()));
 
-            string argpath = System.IO.Path.Combine(Path.Characters, imageChar.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Characters, imageChar.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 50L), (int)(yO + 90L), 0, 0, (int)Math.Round(gfxInfo.Width / 4d), (int)Math.Round(gfxInfo.Height / 4d), (int)Math.Round(gfxInfo.Width / 4d), (int)Math.Round(gfxInfo.Height / 4d));
 
         }
@@ -2485,9 +2487,9 @@ namespace Client
             RenderDesign((long)UiDesign.WindowDescription, xO, yO, 352L, 152L);
 
             // draw the input box
-            string argpath = System.IO.Path.Combine(Path.Gui, 46.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 46.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 7L), (int)(yO + 123L), 0, 0, 171, 22, 171, 22);
-            string argpath1 = System.IO.Path.Combine(Path.Gui, 46.ToString());
+            string argpath1 = System.IO.Path.Combine(DataPath.Gui, 46.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(xO + 174L), (int)(yO + 123L), 0, 22, 171, 22, 171, 22);
 
             // call the chat render
@@ -2594,7 +2596,7 @@ namespace Client
             if (imageChar == 0)
                 imageChar = 1;
 
-            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, imageChar.ToString()));
+            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, imageChar.ToString()));
             if (gfxInfo is null)
             {
                 return; // Or handle this case gracefully
@@ -2603,7 +2605,7 @@ namespace Client
             var rect = new Rectangle((int)Math.Round(gfxInfo.Width / 4d), (int)Math.Round(gfxInfo.Height / 4d), (int)Math.Round(gfxInfo.Width / 4d), (int)Math.Round(gfxInfo.Height / 4d));
 
             // render char
-            string argpath = System.IO.Path.Combine(Path.Characters, imageChar.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Characters, imageChar.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 190L), (int)(yO + 100L), 0, 0, rect.Width, rect.Height, rect.Width, rect.Height);
         }
 
@@ -2780,7 +2782,7 @@ namespace Client
                         if (Data.TradeYourOffer[(int)i].Num == invNum)
                         {
                             // is currency?
-                            if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num)].Type == (byte)ItemCategory.Currency)
+                            if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num)].Type == (byte)ItemCategory.Currency)
                             {
                                 // only exit out if we're offering all of it
                                 if (Data.TradeYourOffer[(int)i].Value == GetPlayerInvValue(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num))
@@ -2796,7 +2798,7 @@ namespace Client
                     }
 
                     // currency handler
-                    if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)invNum)].Type == (byte)ItemCategory.Currency)
+                    if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)invNum)].Type == (byte)ItemCategory.Currency)
                     {
                         GameLogic.Dialogue("Select Amount", "Please choose how many to offer.", "", (byte)DialogueType.TradeAmount, (byte)DialogueStyle.Input, invNum);
                         return;
@@ -2835,7 +2837,7 @@ namespace Client
                         if (Data.TradeYourOffer[(int)i].Num == itemNum)
                         {
                             // is currency?
-                            if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num)].Type == (byte)ItemCategory.Currency)
+                            if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num)].Type == (byte)ItemCategory.Currency)
                             {
                                 // only exit out if we're offering all of it
                                 if (Data.TradeYourOffer[(int)i].Value == GetPlayerInvValue(GameState.MyIndex, (int)Data.TradeYourOffer[(int)i].Num))
@@ -3007,8 +3009,8 @@ namespace Client
                         {
                             if (withBlock.Value >= 0)
                             {
-                                texNum = Core.Data.Item[(int)withBlock.Value].Icon;
-                                string argpath = System.IO.Path.Combine(Path.Items, texNum.ToString());
+                                texNum = Data.Item[(int)withBlock.Value].Icon;
+                                string argpath = System.IO.Path.Combine(DataPath.Items, texNum.ToString());
                                 GameClient.RenderTexture(ref argpath, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
                             }
 
@@ -3020,7 +3022,7 @@ namespace Client
                             if (withBlock.Value >= 0)
                             {
                                 texNum = Data.Skill[(int)withBlock.Value].Icon;
-                                string argpath1 = System.IO.Path.Combine(Path.Skills, texNum.ToString());
+                                string argpath1 = System.IO.Path.Combine(DataPath.Skills, texNum.ToString());
                                 GameClient.RenderTexture(ref argpath1, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
                             }
 
@@ -3036,7 +3038,7 @@ namespace Client
             long i;
             var curWindow = default(long);
             long curControl;
-            Core.Type.Rect tmpRec;
+            Type.Rect tmpRec;
 
             winIndex = GetWindowIndex("winDragBox");
 
@@ -3110,7 +3112,7 @@ namespace Client
                                 if (DragBox.Type == DraggablePartType.Item)
                                 {
 
-                                    if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
+                                    if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
                                     {
                                         Bank.DepositItem((int)DragBox.Slot, 1);
                                     }
@@ -3159,7 +3161,7 @@ namespace Client
                                 if (DragBox.Type == DraggablePartType.Item)
                                 {
 
-                                    if (Core.Data.Item[GetBank(GameState.MyIndex, (byte)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
+                                    if (Data.Item[GetBank(GameState.MyIndex, (byte)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
                                     {
                                         Bank.WithdrawItem((byte)DragBox.Slot, 0);
                                     }
@@ -3255,7 +3257,7 @@ namespace Client
                 {
                     case PartOrigin.Inventory:
                         {
-                            if (Core.Data.Item[GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
+                            if (Data.Item[GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot)].Type != (byte)ItemCategory.Currency)
                             {
                                 Sender.SendDropItem((int)DragBox.Slot, GetPlayerInv(GameState.MyIndex, (int)DragBox.Slot));
                             }
@@ -3308,7 +3310,7 @@ namespace Client
             {
                 ref var withBlock = ref DragBox;
                 withBlock.Type = DraggablePartType.Skill;
-                withBlock.Value = (long)Core.Data.Player[GameState.MyIndex].Skill[(int)slotNum].Num;
+                withBlock.Value = (long)Data.Player[GameState.MyIndex].Skill[(int)slotNum].Num;
                 withBlock.Origin = PartOrigin.SkillTree;
                 withBlock.Slot = slotNum;
                 
@@ -3396,15 +3398,15 @@ namespace Client
             if (slotNum >= 0L)
             {
                 ref var withBlock = ref DragBox;
-                if (Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType == 1) // inventory
+                if (Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType == 1) // inventory
                 {
                     withBlock.Type = (DraggablePartType)PartOrigin.Inventory;
                 }
-                else if (Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType == 2) // Skill
+                else if (Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType == 2) // Skill
                 {
                     withBlock.Type = (DraggablePartType)PartOrigin.SkillTree;
                 }
-                withBlock.Value = (long)Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot;
+                withBlock.Value = (long)Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot;
                 withBlock.Origin = PartOrigin.Hotbar;
                 withBlock.Slot = slotNum;
                 
@@ -3469,16 +3471,16 @@ namespace Client
                 }
 
                 // go go go
-                switch (Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType)
+                switch (Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].SlotType)
                 {
                     case 1: // inventory
                         {
-                            GameLogic.ShowItemDesc(x, y, (long)Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot);
+                            GameLogic.ShowItemDesc(x, y, (long)Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot);
                             break;
                         }
                     case 2: // skill
                         {
-                            GameLogic.ShowSkillDesc(x, y, (long)Core.Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot, 0L);
+                            GameLogic.ShowSkillDesc(x, y, (long)Data.Player[GameState.MyIndex].Hotbar[(int)slotNum].Slot, 0L);
                             break;
                         }
                 }
@@ -3509,8 +3511,8 @@ namespace Client
             // set the bar labels
             {
                 var withBlock = Windows[GetWindowIndex("winBars")];
-                withBlock.Controls[GetControlIndex("winBars", "lblHP")].Text = GetPlayerVital(GameState.MyIndex, Core.Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Health);
-                withBlock.Controls[GetControlIndex("winBars", "lblMP")].Text = GetPlayerVital(GameState.MyIndex, Core.Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Stamina);
+                withBlock.Controls[GetControlIndex("winBars", "lblHP")].Text = GetPlayerVital(GameState.MyIndex, Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Health);
+                withBlock.Controls[GetControlIndex("winBars", "lblMP")].Text = GetPlayerVital(GameState.MyIndex, Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Stamina);
                 withBlock.Controls[GetControlIndex("winBars", "lblEXP")].Text = GetPlayerExp(GameState.MyIndex) + "/" + GameState.NextlevelExp;
             }
 
@@ -3520,9 +3522,9 @@ namespace Client
                 withBlock1.Controls[GetControlIndex("winCharacter", "lblHealth")].Text = "Health";
                 withBlock1.Controls[GetControlIndex("winCharacter", "lblSpirit")].Text = "Spirit";
                 withBlock1.Controls[GetControlIndex("winCharacter", "lblExperience")].Text = "Exp";
-                withBlock1.Controls[GetControlIndex("winCharacter", "lblHealth2")].Text = GetPlayerVital(GameState.MyIndex, Core.Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Health);
-                withBlock1.Controls[GetControlIndex("winCharacter", "lblSpirit2")].Text = GetPlayerVital(GameState.MyIndex, Core.Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Stamina);
-                withBlock1.Controls[GetControlIndex("winCharacter", "lblExperience2")].Text = Core.Data.Player[GameState.MyIndex].Exp + "/" + GameState.NextlevelExp;
+                withBlock1.Controls[GetControlIndex("winCharacter", "lblHealth2")].Text = GetPlayerVital(GameState.MyIndex, Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Health);
+                withBlock1.Controls[GetControlIndex("winCharacter", "lblSpirit2")].Text = GetPlayerVital(GameState.MyIndex, Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Stamina);
+                withBlock1.Controls[GetControlIndex("winCharacter", "lblExperience2")].Text = Data.Player[GameState.MyIndex].Exp + "/" + GameState.NextlevelExp;
 
             }
         }
@@ -3548,17 +3550,17 @@ namespace Client
             yO = Windows[GetWindowIndex("winCharacter")].Top;
 
             // Render bottom
-            string argpath = System.IO.Path.Combine(Path.Gui, "37");
+            string argpath = System.IO.Path.Combine(DataPath.Gui, "37");
             GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 314L), 0, 0, 40, 38, 40, 38);
-            string argpath1 = System.IO.Path.Combine(Path.Gui, "37");
+            string argpath1 = System.IO.Path.Combine(DataPath.Gui, "37");
             GameClient.RenderTexture(ref argpath1, (int)(xO + 44L), (int)(yO + 314L), 0, 0, 40, 38, 40, 38);
-            string argpath2 = System.IO.Path.Combine(Path.Gui, "37");
+            string argpath2 = System.IO.Path.Combine(DataPath.Gui, "37");
             GameClient.RenderTexture(ref argpath2, (int)(xO + 84L), (int)(yO + 314L), 0, 0, 40, 38, 40, 38);
-            string argpath3 = System.IO.Path.Combine(Path.Gui, "37");
+            string argpath3 = System.IO.Path.Combine(DataPath.Gui, "37");
             GameClient.RenderTexture(ref argpath3, (int)(xO + 124L), (int)(yO + 314L), 0, 0, 46, 38, 46, 38);
 
             // render top wood
-            string argpath4 = System.IO.Path.Combine(Path.Gui, "1");
+            string argpath4 = System.IO.Path.Combine(DataPath.Gui, "1");
             GameClient.RenderTexture(ref argpath4, (int)(xO + 4L), (int)(yO + 23L), 100, 100, 166, 291, 166, 291);
 
             // loop through equipment
@@ -3568,13 +3570,13 @@ namespace Client
 
                 if (itemNum >= 0L)
                 {
-                    itemIcon = Core.Data.Item[(int)itemNum].Icon;
+                    itemIcon = Data.Item[(int)itemNum].Icon;
 
                     if (itemIcon > 0 && itemIcon < GameState.NumItems)
                     {
                         yO = Windows[GetWindowIndex("winCharacter")].Top + GameState.EqTop;
                         xO = Windows[GetWindowIndex("winCharacter")].Left + GameState.EqLeft + (GameState.EqOffsetX + 32L) * (i % GameState.EqColumns);
-                        string argpath5 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
+                        string argpath5 = System.IO.Path.Combine(DataPath.Items, itemIcon.ToString());
                         GameClient.RenderTexture(ref argpath5, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
                     }
                 }
@@ -3696,7 +3698,7 @@ namespace Client
             height = Windows[GetWindowIndex("winInventory")].Height;
 
             // render green
-            string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 34.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             width = 76L;
@@ -3708,17 +3710,17 @@ namespace Client
             {
                 if (i == 3L)
                     height = 38L;
-                string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath2 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
 
             // render bottom wood
-            string argpath4 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath4 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath4, (int)(xO + 4L), (int)(yO + 289L), 100, 100, 194, 26, 194, 26);
 
             // actually draw the icons
@@ -3733,7 +3735,7 @@ namespace Client
                     // not dragging?
                     if (!(DragBox.Origin == PartOrigin.Inventory & DragBox.Slot == i))
                     {
-                        itemIcon = Core.Data.Item[(int)itemNum].Icon;
+                        itemIcon = Data.Item[(int)itemNum].Icon;
 
                         // exit out if we're offering item in a trade.
                         amountModifier = 0L;
@@ -3747,7 +3749,7 @@ namespace Client
                                     if (Data.TradeYourOffer[(int)x].Num == i)
                                     {
                                         // check if currency
-                                        if (!(Core.Data.Item[(int)tmpItem].Type == (byte)ItemCategory.Currency))
+                                        if (!(Data.Item[(int)tmpItem].Type == (byte)ItemCategory.Currency))
                                         {
                                             // normal item, exit out
                                             skipItem = true;
@@ -3775,7 +3777,7 @@ namespace Client
                                 left = xO + GameState.InvLeft + (GameState.InvOffsetX + 32L) * (i % GameState.InvColumns);
 
                                 // draw icon
-                                string argpath5 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
+                                string argpath5 = System.IO.Path.Combine(DataPath.Items, itemIcon.ToString());
                                 GameClient.RenderTexture(ref argpath5, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                                 // If item is a stack - draw the amount you have
@@ -3788,18 +3790,18 @@ namespace Client
                                     // Draw currency but with k, m, b etc. using a convertion function
                                     if (Conversions.ToLong(amount) < 1000000L)
                                     {
-                                        color = GameClient.QbColorToXnaColor((int)Core.Color.White);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Globals.Color.White);
                                     }
                                     else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                                     {
-                                        color = GameClient.QbColorToXnaColor((int)Core.Color.Yellow);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Globals.Color.Yellow);
                                     }
                                     else if (Conversions.ToLong(amount) > 10000000L)
                                     {
-                                        color = GameClient.QbColorToXnaColor((int)Core.Color.BrightGreen);
+                                        color = GameClient.QbColorToXnaColor((int)Core.Globals.Color.BrightGreen);
                                     }
 
-                                    Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, color, color, Core.Font.Georgia);
+                                    Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, color, color, Font.Georgia);
                                 }
                             }
                         }
@@ -3834,10 +3836,10 @@ namespace Client
             {
                 case 1: // Inventory Item
                     {
-                        texNum = Core.Data.Item[(int)GameState.DescItem].Icon;
+                        texNum = Data.Item[(int)GameState.DescItem].Icon;
 
                         // render sprite
-                        string argpath = System.IO.Path.Combine(Path.Items, texNum.ToString());
+                        string argpath = System.IO.Path.Combine(DataPath.Items, texNum.ToString());
                         GameClient.RenderTexture(ref argpath, (int)(xO + 20L), (int)(yO + 34L), 0, 0, 64, 64, 32, 32);
                         break;
                     }
@@ -3851,13 +3853,13 @@ namespace Client
                             var withBlock = Windows[GetWindowIndex("winDescription")].Controls[GetControlIndex("winDescription", "picBar")];
                             if (withBlock.Visible == true)
                             {
-                                string argpath1 = System.IO.Path.Combine(Path.Gui, 45.ToString());
+                                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 45.ToString());
                                 GameClient.RenderTexture(ref argpath1, (int)(xO + withBlock.Left), (int)(yO + withBlock.Top), 0, 12, (int)withBlock.Value, 12, (int)withBlock.Value, 12);
                             }
                         }
 
                         // render sprite
-                        string argpath2 = System.IO.Path.Combine(Path.Skills, texNum.ToString());
+                        string argpath2 = System.IO.Path.Combine(DataPath.Skills, texNum.ToString());
                         GameClient.RenderTexture(ref argpath2, (int)(xO + 20L), (int)(yO + 34L), 0, 0, 64, 64, 32, 32);
                         break;
                     }
@@ -4078,7 +4080,7 @@ namespace Client
             height = Windows[GetWindowIndex("winSkills")].Height;
 
             // render green
-            string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 34.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO + 4L), (int)(yO + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             width = 76L;
@@ -4090,11 +4092,11 @@ namespace Client
             {
                 if (i == 3L)
                     height = 42L;
-                string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath1, (int)(xO + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath2 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath2, (int)(xO + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath3, (int)(xO + 156L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
@@ -4102,7 +4104,7 @@ namespace Client
             // actually draw the icons
             for (i = 0L; i < Constant.MaxPlayerSkills; i++)
             {
-                skillNum = (long)Core.Data.Player[GameState.MyIndex].Skill[(int)i].Num;
+                skillNum = (long)Data.Player[GameState.MyIndex].Skill[(int)i].Num;
                 if (skillNum >= 0L & skillNum < Constant.MaxSkills)
                 {
                     Database.StreamSkill((int)skillNum);
@@ -4117,7 +4119,7 @@ namespace Client
                             top = yO + GameState.SkillTop + (GameState.SkillOffsetY + 32L) * (i / GameState.SkillColumns);
                             left = xO + GameState.SkillLeft + (GameState.SkillOffsetX + 32L) * (i % GameState.SkillColumns);
 
-                            string argpath4 = System.IO.Path.Combine(Path.Skills, skillPic.ToString());
+                            string argpath4 = System.IO.Path.Combine(DataPath.Skills, skillPic.ToString());
                             GameClient.RenderTexture(ref argpath4, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                         }
                     }
@@ -4150,12 +4152,12 @@ namespace Client
                 // let them know
                 if (value == 0L)
                 {
-                    Text.AddText("Music turned off.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Music turned off.", (int)Core.Globals.Color.BrightGreen);
                     Sound.StopMusic();
                 }
                 else
                 {
-                    Text.AddText("Music tured on.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Music tured on.", (int)Core.Globals.Color.BrightGreen);
                     // play music
                     if (GameState.InGame)
                         musicFile = Data.MyMap.Music;
@@ -4180,11 +4182,11 @@ namespace Client
                 // let them know
                 if (value == 0L)
                 {
-                    Text.AddText("Sound turned off.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Sound turned off.", (int)Core.Globals.Color.BrightGreen);
                 }
                 else
                 {
-                    Text.AddText("Sound tured on.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Sound tured on.", (int)Core.Globals.Color.BrightGreen);
                 }
             }
 
@@ -4198,13 +4200,13 @@ namespace Client
                 {
                     if (GameState.InGame)
                     {
-                        Text.AddText("Autotiles turned off.", (int)Core.Color.BrightGreen);
+                        Text.AddText("Autotiles turned off.", (int)Core.Globals.Color.BrightGreen);
                         Autotile.InitAutotiles();
                     }
                 }
                 else if (GameState.InGame)
                 {
-                    Text.AddText("Autotiles turned on.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Autotiles turned on.", (int)Core.Globals.Color.BrightGreen);
                     Autotile.InitAutotiles();
                 }
             }
@@ -4233,7 +4235,7 @@ namespace Client
             if (GameState.InGame)
             {
                 if (message)
-                    Text.AddText("Some changes will take effect next time you load the game.", (int)Core.Color.BrightGreen);
+                    Text.AddText("Some changes will take effect next time you load the game.", (int)Core.Globals.Color.BrightGreen);
             }
 
             // close
@@ -4264,13 +4266,13 @@ namespace Client
         public static void PlayerMenu_Guild()
         {
             RightClick_Close();
-            Text.AddText("System not yet in place.", (int)Core.Color.BrightRed);
+            Text.AddText("System not yet in place.", (int)Core.Globals.Color.BrightRed);
         }
 
         public static void PlayerMenu_Player()
         {
             RightClick_Close();
-            Text.AddText("System not yet in place.", (int)Core.Color.BrightRed);
+            Text.AddText("System not yet in place.", (int)Core.Globals.Color.BrightRed);
         }
 
         public static void UpdateShop()
@@ -4290,7 +4292,7 @@ namespace Client
                     // labels
                     if (GameState.ShopSelectedItem >= 0L)
                     {
-                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.ShopSelectedItem].Name;
+                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Data.Item[(int)GameState.ShopSelectedItem].Name;
                         // check if it's gold
                         if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem == 0)
                         {
@@ -4300,18 +4302,18 @@ namespace Client
                         // if it's one then just print the name
                         else if (Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue == 1)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
+                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
                         }
                         else
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue + " " + Core.Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
+                            withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostValue + " " + Data.Item[Data.Shop[GameState.InShop].TradeItem[(int)GameState.ShopSelectedSlot].CostItem].Name;
                         }
 
                         // draw the item
                         for (i = 0L; i <= 4L; i++)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.ShopSelectedItem].Icon;
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = Path.Items;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Data.Item[(int)GameState.ShopSelectedItem].Icon;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = DataPath.Items;
                         }
                     }
                     else
@@ -4333,16 +4335,16 @@ namespace Client
                     // labels
                     if (GameState.ShopSelectedItem >= 0L)
                     {
-                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Core.Data.Item[(int)GameState.ShopSelectedItem].Name;
+                        withBlock.Controls[GetControlIndex("winShop", "lblName")].Text = Data.Item[(int)GameState.ShopSelectedItem].Name;
                         // calc cost
-                        costValue = (long)Math.Round(Core.Data.Item[(int)GameState.ShopSelectedItem].Price / 100d * Data.Shop[GameState.InShop].BuyRate);
+                        costValue = (long)Math.Round(Data.Item[(int)GameState.ShopSelectedItem].Price / 100d * Data.Shop[GameState.InShop].BuyRate);
                         withBlock.Controls[GetControlIndex("winShop", "lblCost")].Text = costValue + "g";
 
                         // draw the item
                         for (i = 0L; i <= 4L; i++)
                         {
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Core.Data.Item[(int)GameState.ShopSelectedItem].Icon;
-                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = Path.Items;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Image[(int)i] = Data.Item[(int)GameState.ShopSelectedItem].Icon;
+                            withBlock.Controls[GetControlIndex("winShop", "picItem")].Texture[(int)i] = DataPath.Items;
                         }
                     }
                     else
@@ -4421,7 +4423,7 @@ namespace Client
                                 for (x = 0L; x <= 4L; x++)
                                 {
                                     withBlock.Controls[GetControlIndex("winParty", "picChar" + cIn)].Image[(int)x] = GetPlayerSprite((int)pIndex);
-                                    withBlock.Controls[GetControlIndex("winParty", "picChar" + cIn)].Texture[(int)x] = Path.Characters;
+                                    withBlock.Controls[GetControlIndex("winParty", "picChar" + cIn)].Texture[(int)x] = DataPath.Characters;
                                 }
                                 // bars
                                 withBlock.Controls[GetControlIndex("winParty", "picEmptyBar_HP" + cIn)].Visible = true;
@@ -4464,33 +4466,33 @@ namespace Client
         public static void DrawMenuBg()
         {
             // row 1
-            string argpath = System.IO.Path.Combine(Path.Pictures, "1");
+            string argpath = System.IO.Path.Combine(DataPath.Pictures, "1");
             GameClient.RenderTexture(ref argpath, GameState.ResolutionWidth - 512, GameState.ResolutionHeight - 512, 0, 0, 512, 512, 512, 512);
-            string argpath1 = System.IO.Path.Combine(Path.Pictures, "2");
+            string argpath1 = System.IO.Path.Combine(DataPath.Pictures, "2");
             GameClient.RenderTexture(ref argpath1, GameState.ResolutionWidth - 1024, GameState.ResolutionHeight - 512, 0, 0, 512, 512, 512, 512);
-            string argpath2 = System.IO.Path.Combine(Path.Pictures, "3");
+            string argpath2 = System.IO.Path.Combine(DataPath.Pictures, "3");
             GameClient.RenderTexture(ref argpath2, GameState.ResolutionWidth - 1536, GameState.ResolutionHeight - 512, 0, 0, 512, 512, 512, 512);
-            string argpath3 = System.IO.Path.Combine(Path.Pictures, "4");
+            string argpath3 = System.IO.Path.Combine(DataPath.Pictures, "4");
             GameClient.RenderTexture(ref argpath3, GameState.ResolutionWidth - 2048, GameState.ResolutionHeight - 512, 0, 0, 512, 512, 512, 512);
 
             // row 2
-            string argpath4 = System.IO.Path.Combine(Path.Pictures, "5");
+            string argpath4 = System.IO.Path.Combine(DataPath.Pictures, "5");
             GameClient.RenderTexture(ref argpath4, GameState.ResolutionWidth - 512, GameState.ResolutionHeight - 1024, 0, 0, 512, 512, 512, 512);
-            string argpath5 = System.IO.Path.Combine(Path.Pictures, "6");
+            string argpath5 = System.IO.Path.Combine(DataPath.Pictures, "6");
             GameClient.RenderTexture(ref argpath5, GameState.ResolutionWidth - 1024, GameState.ResolutionHeight - 1024, 0, 0, 512, 512, 512, 512);
-            string argpath6 = System.IO.Path.Combine(Path.Pictures, "7");
+            string argpath6 = System.IO.Path.Combine(DataPath.Pictures, "7");
             GameClient.RenderTexture(ref argpath6, GameState.ResolutionWidth - 1536, GameState.ResolutionHeight - 1024, 0, 0, 512, 512, 512, 512);
-            string argpath7 = System.IO.Path.Combine(Path.Pictures, "8");
+            string argpath7 = System.IO.Path.Combine(DataPath.Pictures, "8");
             GameClient.RenderTexture(ref argpath7, GameState.ResolutionWidth - 2048, GameState.ResolutionHeight - 1024, 0, 0, 512, 512, 512, 512);
 
             // row 3
-            string argpath8 = System.IO.Path.Combine(Path.Pictures, "9");
+            string argpath8 = System.IO.Path.Combine(DataPath.Pictures, "9");
             GameClient.RenderTexture(ref argpath8, GameState.ResolutionWidth - 512, GameState.ResolutionHeight - 1088, 0, 0, 512, 64, 512, 64);
-            string argpath9 = System.IO.Path.Combine(Path.Pictures, "10");
+            string argpath9 = System.IO.Path.Combine(DataPath.Pictures, "10");
             GameClient.RenderTexture(ref argpath9, GameState.ResolutionWidth - 1024, GameState.ResolutionHeight - 1088, 0, 0, 512, 64, 512, 64);
-            string argpath10 = System.IO.Path.Combine(Path.Pictures, "11");
+            string argpath10 = System.IO.Path.Combine(DataPath.Pictures, "11");
             GameClient.RenderTexture(ref argpath10, GameState.ResolutionWidth - 1536, GameState.ResolutionHeight - 1088, 0, 0, 512, 64, 512, 64);
-            string argpath11 = System.IO.Path.Combine(Path.Pictures, "12");
+            string argpath11 = System.IO.Path.Combine(DataPath.Pictures, "12");
             GameClient.RenderTexture(ref argpath11, GameState.ResolutionWidth - 2048, GameState.ResolutionHeight - 1088, 0, 0, 512, 64, 512, 64);
         }
 
@@ -4511,9 +4513,9 @@ namespace Client
             yO = Windows[GetWindowIndex("winHotbar")].Top;
 
             // Render start + end wood
-            string argpath = System.IO.Path.Combine(Path.Gui, 31.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 31.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xO - 1L), (int)(yO + 3L), 0, 0, 11, 26, 11, 26);
-            string argpath1 = System.IO.Path.Combine(Path.Gui, 31.ToString());
+            string argpath1 = System.IO.Path.Combine(DataPath.Gui, 31.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(xO + 407L), (int)(yO + 3L), 0, 0, 11, 26, 11, 26);
             for (i = 0L; i < Constant.MaxHotbar; i++)
             {
@@ -4526,25 +4528,25 @@ namespace Client
                 if (i != Constant.MaxHotbar)
                 {
                     // Render wood
-                    string argpath2 = System.IO.Path.Combine(Path.Gui, 32.ToString());
+                    string argpath2 = System.IO.Path.Combine(DataPath.Gui, 32.ToString());
                     GameClient.RenderTexture(ref argpath2, (int)(xO + 30L), (int)(yO + 3L), 0, 0, 13, 26, 13, 26);
                 }
 
                 // Render box
-                string argpath3 = System.IO.Path.Combine(Path.Gui, 30.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 30.ToString());
                 GameClient.RenderTexture(ref argpath3, (int)(xO - 2L), (int)(yO - 2L), 0, 0, (int)width, (int)height, (int)width, (int)height);
 
                 // Render icon
                 if (!(DragBox.Origin == PartOrigin.Hotbar & DragBox.Slot == i))
                 {
-                    switch (Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].SlotType)
+                    switch (Data.Player[GameState.MyIndex].Hotbar[(int)i].SlotType)
                     {
                         case (byte)PartOrigin.Inventory:
                             {
-                                Item.StreamItem((int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot);
-                                if (Strings.Len(Core.Data.Item[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Name) > 0 & Core.Data.Item[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon > 0)
+                                Item.StreamItem((int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot);
+                                if (Strings.Len(Data.Item[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Name) > 0 & Data.Item[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon > 0)
                                 {
-                                    string argpath4 = System.IO.Path.Combine(Path.Items, Core.Data.Item[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
+                                    string argpath4 = System.IO.Path.Combine(DataPath.Items, Data.Item[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
                                     GameClient.RenderTexture(ref argpath4, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
                                 }
 
@@ -4553,18 +4555,18 @@ namespace Client
 
                         case (byte)PartOrigin.SkillTree:
                             {
-                                Database.StreamSkill((int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot);
-                                if (Strings.Len(Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Name) > 0 & Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon > 0)
+                                Database.StreamSkill((int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot);
+                                if (Strings.Len(Data.Skill[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Name) > 0 & Data.Skill[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon > 0)
                                 {
-                                    string argpath5 = System.IO.Path.Combine(Path.Skills, Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
+                                    string argpath5 = System.IO.Path.Combine(DataPath.Skills, Data.Skill[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
                                     GameClient.RenderTexture(ref argpath5, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32);
                                     for (t = 0L; t < Constant.MaxPlayerSkills; t++)
                                     {
                                         if (GetPlayerSkill(GameState.MyIndex, (int)t) >= 0)
                                         {
-                                            if (GetPlayerSkill(GameState.MyIndex, (int)t) == Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot & GetPlayerSkillCd(GameState.MyIndex, (int)t) > 0)
+                                            if (GetPlayerSkill(GameState.MyIndex, (int)t) == Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot & GetPlayerSkillCd(GameState.MyIndex, (int)t) > 0)
                                             {
-                                                string argpath6 = System.IO.Path.Combine(Path.Skills, Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
+                                                string argpath6 = System.IO.Path.Combine(DataPath.Skills, Data.Skill[(int)Data.Player[GameState.MyIndex].Hotbar[(int)i].Slot].Icon.ToString());
                                                 GameClient.RenderTexture(ref argpath6, (int)xO, (int)yO, 0, 0, 32, 32, 32, 32, 255, 100, 100, 100);
                                             }
                                         }
@@ -4620,18 +4622,18 @@ namespace Client
                     // draw selected square
                     if (GameState.ShopSelectedSlot == i)
                     {
-                        string argpath = System.IO.Path.Combine(Path.Gui, 61.ToString());
+                        string argpath = System.IO.Path.Combine(DataPath.Gui, 61.ToString());
                         GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                     }
 
                     if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
-                        itemIcon = Core.Data.Item[(int)itemNum].Icon;
+                        itemIcon = Data.Item[(int)itemNum].Icon;
                         if (itemIcon > 0L & itemIcon <= GameState.NumItems)
                         {
                             // draw item
-                            string argpath1 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
+                            string argpath1 = System.IO.Path.Combine(DataPath.Items, itemIcon.ToString());
                             GameClient.RenderTexture(ref argpath1, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                         }
                     }
@@ -4651,18 +4653,18 @@ namespace Client
                     // draw selected square
                     if (GameState.ShopSelectedSlot == i)
                     {
-                        string argpath2 = System.IO.Path.Combine(Path.Gui, 61.ToString());
+                        string argpath2 = System.IO.Path.Combine(DataPath.Gui, 61.ToString());
                         GameClient.RenderTexture(ref argpath2, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
                     }
 
                     if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
-                        itemIcon = Core.Data.Item[(int)itemNum].Icon;
+                        itemIcon = Data.Item[(int)itemNum].Icon;
                         if (itemIcon > 0L & itemIcon <= GameState.NumItems)
                         {
                             // draw item
-                            string argpath3 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
+                            string argpath3 = System.IO.Path.Combine(DataPath.Items, itemIcon.ToString());
                             GameClient.RenderTexture(ref argpath3, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
@@ -4675,15 +4677,15 @@ namespace Client
                                 // Draw currency but with k, m, b etc. using a conversion function
                                 if (amount < 1000000L)
                                 {
-                                    color = (long)Core.Color.White;
+                                    color = (long)Core.Globals.Color.White;
                                 }
                                 else if (amount > 1000000L & amount < 10000000L)
                                 {
-                                    color = (long)Core.Color.Yellow;
+                                    color = (long)Core.Globals.Color.Yellow;
                                 }
                                 else if (amount > 10000000L)
                                 {
-                                    color = (long)Core.Color.BrightGreen;
+                                    color = (long)Core.Globals.Color.BrightGreen;
                                 }
 
                                 Text.RenderText(GameLogic.ConvertCurrency((int)amount), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
@@ -4709,7 +4711,7 @@ namespace Client
             height = Windows[GetWindowIndex("winShop")].Height;
 
             // render green
-            string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 34.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             width = 76L;
@@ -4721,19 +4723,19 @@ namespace Client
             {
                 if (i == 3L)
                     height = 42L;
-                string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath2 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath2, (int)(xo + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath3, (int)(xo + 156L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath4 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath4 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath4, (int)(xo + 232L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
 
             // render bottom wood
-            string argpath5 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath5 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath5, (int)(xo + 4L), (int)(y - 34L), 0, 0, 270, 72, 270, 72);
         }
 
@@ -4765,7 +4767,7 @@ namespace Client
             height = Windows[GetWindowIndex("winBank")].Height;
 
             // render green
-            string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 34.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             width = 76L;
@@ -4777,15 +4779,15 @@ namespace Client
             {
                 if (i == 4L)
                     height = 42L;
-                string argpath1 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath2 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath2 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath2, (int)(xo + 80L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath3 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath3, (int)(xo + 156L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath4 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath4 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath4, (int)(xo + 232L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath5 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath5 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath5, (int)(xo + 308L), (int)y, 0, 0, 79, (int)height, 79, (int)height);
                 y = y + 76L;
             }
@@ -4802,7 +4804,7 @@ namespace Client
                     // not dragging?
                     if (!(DragBox.Origin == PartOrigin.Bank & DragBox.Slot == i))
                     {
-                        itemIcon = Core.Data.Item[(int)itemNum].Icon;
+                        itemIcon = Data.Item[(int)itemNum].Icon;
 
                         if (itemIcon > 0L & itemIcon <= GameState.NumItems)
                         {
@@ -4810,7 +4812,7 @@ namespace Client
                             left = xo + GameState.BankLeft + (GameState.BankOffsetX + 32L) * (i % GameState.BankColumns);
 
                             // draw icon
-                            string argpath6 = System.IO.Path.Combine(Path.Items, itemIcon.ToString());
+                            string argpath6 = System.IO.Path.Combine(DataPath.Items, itemIcon.ToString());
                             GameClient.RenderTexture(ref argpath6, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
@@ -4823,15 +4825,15 @@ namespace Client
                                 // Draw currency but with k, m, b etc. using a convertion function
                                 if (amount < 1000000L)
                                 {
-                                    color = (long)Core.Color.White;
+                                    color = (long)Core.Globals.Color.White;
                                 }
                                 else if (amount > 1000000L & amount < 10000000L)
                                 {
-                                    color = (long)Core.Color.Yellow;
+                                    color = (long)Core.Globals.Color.Yellow;
                                 }
                                 else if (amount > 10000000L)
                                 {
-                                    color = (long)Core.Color.BrightGreen;
+                                    color = (long)Core.Globals.Color.BrightGreen;
                                 }
 
                                 Text.RenderText(GameLogic.ConvertCurrency((int)amount), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
@@ -4859,27 +4861,27 @@ namespace Client
             height = Windows[GetWindowIndex("winTrade")].Height;
 
             // render green
-            string argpath = System.IO.Path.Combine(Path.Gui, 34.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Gui, 34.ToString());
             GameClient.RenderTexture(ref argpath, (int)(xo + 4L), (int)(yo + 23L), 0, 0, (int)(width - 8L), (int)(height - 27L), 4, 4);
 
             // top wood
-            string argpath1 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath1 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath1, (int)(xo + 4L), (int)(yo + 23L), 100, 100, (int)(width - 8L), 18, (int)(width - 8L), 18);
 
             // left wood
-            string argpath2 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath2 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath2, (int)(xo + 4L), (int)(yo + 40L), 350, 0, 5, (int)(height - 45L), 5, (int)(height - 45L));
 
             // right wood
-            string argpath3 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath3 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath3, (int)(xo + width - 9L), (int)(yo + 40L), 350, 0, 5, (int)(height - 45L), 5, (int)(height - 45L));
 
             // centre wood
-            string argpath4 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath4 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath4, (int)(xo + 203L), (int)(yo + 40L), 350, 0, 6, (int)(height - 45L), 6, (int)(height - 45L));
 
             // bottom wood
-            string argpath5 = System.IO.Path.Combine(Path.Gui, 1.ToString());
+            string argpath5 = System.IO.Path.Combine(DataPath.Gui, 1.ToString());
             GameClient.RenderTexture(ref argpath5, (int)(xo + 4L), (int)(yo + 307L), 100, 100, (int)(width - 8L), 75, (int)(width - 8L), 75);
 
             // left
@@ -4890,11 +4892,11 @@ namespace Client
             {
                 if (i == 4L)
                     height = 38L;
-                string argpath6 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath6 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath6, (int)(xo + 4L + 5L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath7 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath7 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath7, (int)(xo + 80L + 5L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath8 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath8 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath8, (int)(xo + 156L + 5L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
                 y = y + 76L;
             }
@@ -4907,11 +4909,11 @@ namespace Client
             {
                 if (i == 4L)
                     height = 38L;
-                string argpath9 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath9 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath9, (int)(xo + 4L + 205L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath10 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath10 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath10, (int)(xo + 80L + 205L), (int)y, 0, 0, (int)width, (int)height, (int)width, (int)height);
-                string argpath11 = System.IO.Path.Combine(Path.Gui, 35.ToString());
+                string argpath11 = System.IO.Path.Combine(DataPath.Gui, 35.ToString());
                 GameClient.RenderTexture(ref argpath11, (int)(xo + 156L + 205L), (int)y, 0, 0, 42, (int)height, 42, (int)height);
 
                 y = y + 76L;
@@ -4944,7 +4946,7 @@ namespace Client
                     if (itemNum >= 0L & itemNum < Constant.MaxItems)
                     {
                         Item.StreamItem((int)itemNum);
-                        itemPic = Core.Data.Item[(int)itemNum].Icon;
+                        itemPic = Data.Item[(int)itemNum].Icon;
 
                         if (itemPic > 0L & itemPic <= GameState.NumItems)
                         {
@@ -4952,7 +4954,7 @@ namespace Client
                             left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                             // draw icon
-                            string argpath = System.IO.Path.Combine(Path.Items, itemPic.ToString());
+                            string argpath = System.IO.Path.Combine(DataPath.Items, itemPic.ToString());
                             GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                             // If item is a stack - draw the amount you have
@@ -4965,15 +4967,15 @@ namespace Client
                                 // Draw currency but with k, m, b etc. using a convertion function
                                 if (Conversions.ToLong(amount) < 1000000L)
                                 {
-                                    color = (long)Core.Color.White;
+                                    color = (long)Core.Globals.Color.White;
                                 }
                                 else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                                 {
-                                    color = (long)Core.Color.Yellow;
+                                    color = (long)Core.Globals.Color.Yellow;
                                 }
                                 else if (Conversions.ToLong(amount) > 10000000L)
                                 {
-                                    color = (long)Core.Color.BrightGreen;
+                                    color = (long)Core.Globals.Color.BrightGreen;
                                 }
 
                                 Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
@@ -5008,7 +5010,7 @@ namespace Client
                 if (itemNum >= 0L & itemNum < Constant.MaxItems)
                 {
                     Item.StreamItem((int)itemNum);
-                    itemPic = Core.Data.Item[(int)itemNum].Icon;
+                    itemPic = Data.Item[(int)itemNum].Icon;
 
                     if (itemPic > 0L & itemPic <= GameState.NumItems)
                     {
@@ -5016,7 +5018,7 @@ namespace Client
                         left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                         // draw icon
-                        string argpath = System.IO.Path.Combine(Path.Items, itemPic.ToString());
+                        string argpath = System.IO.Path.Combine(DataPath.Items, itemPic.ToString());
                         GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                         // If item is a stack - draw the amount you have
@@ -5029,15 +5031,15 @@ namespace Client
                             // Draw currency but with k, m, b etc. using a convertion function
                             if (Conversions.ToLong(amount) < 1000000L)
                             {
-                                color = (long)Core.Color.White;
+                                color = (long)Core.Globals.Color.White;
                             }
                             else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                             {
-                                color = (long)Core.Color.Yellow;
+                                color = (long)Core.Globals.Color.Yellow;
                             }
                             else if (Conversions.ToLong(amount) > 10000000L)
                             {
-                                color = (long)Core.Color.BrightGreen;
+                                color = (long)Core.Globals.Color.BrightGreen;
                             }
 
                             Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
@@ -5096,7 +5098,7 @@ namespace Client
             GameState.ChatScroll = 0L;
         }
 
-        private static string FilterUnsupportedCharacters(string text, Core.Font fontType)
+        private static string FilterUnsupportedCharacters(string text, Font fontType)
         {
             if (text == null)
             {

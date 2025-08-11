@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 using Color = Microsoft.Xna.Framework.Color;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = Microsoft.Xna.Framework.Point;
@@ -14,7 +14,10 @@ using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
 using Client.Game.Objects;
 using Client.Net;
+using Core.Configurations;
+using Core.Globals;
 using SDL2;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -189,9 +192,9 @@ namespace Client
 static void LoadFonts()
         {
             // Get all defined font enum values except None (assumed to be 0)
-            var fontValues = Enum.GetValues(typeof(Core.Font));
+            var fontValues = Enum.GetValues(typeof(Font));
             for (int i = 1; i < fontValues.Length; i++)
-                Text.Fonts[(Core.Font)fontValues.GetValue(i)] = LoadFont(Core.Path.Fonts, (Core.Font)fontValues.GetValue(i));
+                Text.Fonts[(Font)fontValues.GetValue(i)] = LoadFont(DataPath.Fonts, (Font)fontValues.GetValue(i));
         }
 
         protected override void LoadContent()
@@ -207,7 +210,7 @@ static void LoadFonts()
             General.Startup();
         }
 
-        public static SpriteFont LoadFont(string path, Core.Font font)
+        public static SpriteFont LoadFont(string path, Font font)
         {
             return General.Client.Content.Load<SpriteFont>(System.IO.Path.Combine(path, ((int)font).ToString()));
         }
@@ -285,7 +288,7 @@ static void LoadFonts()
         public static void RenderTexture(ref string path, int dX, int dY, int sX, int sY, int dW, int dH, int sW = 1,
             int sH = 1, float alpha = 1.0f, byte red = 255, byte green = 255, byte blue = 255)
         {
-            path = Core.Path.EnsureFileExtension(path);
+            path = DataPath.EnsureFileExtension(path);
             
             // Retrieve the texture
             var texture = GetTexture(path);
@@ -545,7 +548,7 @@ static void LoadFonts()
 
             if (IsKeyStateActive(Keys.F8))
             {
-                var uiPath = System.IO.Path.Combine(Core.Path.Skins, SettingsManager.Instance.Skin + ".cs");
+                var uiPath = System.IO.Path.Combine(DataPath.Skins, SettingsManager.Instance.Skin + ".cs");
 
                 if (!File.Exists(uiPath))
                 {
@@ -1222,67 +1225,67 @@ static void LoadFonts()
         {
             switch (qbColor)
             {
-                case (int)Core.Color.Black:
+                case (int)Core.Globals.Color.Black:
                 {
                     return Color.Black;
                 }
-                case (int)Core.Color.Blue:
+                case (int)Core.Globals.Color.Blue:
                 {
                     return Color.Blue;
                 }
-                case (int)Core.Color.Green:
+                case (int)Core.Globals.Color.Green:
                 {
                     return Color.Green;
                 }
-                case (int)Core.Color.Cyan:
+                case (int)Core.Globals.Color.Cyan:
                 {
                     return Color.Cyan;
                 }
-                case (int)Core.Color.Red:
+                case (int)Core.Globals.Color.Red:
                 {
                     return Color.Red;
                 }
-                case (int)Core.Color.Magenta:
+                case (int)Core.Globals.Color.Magenta:
                 {
                     return Color.Magenta;
                 }
-                case (int)Core.Color.Brown:
+                case (int)Core.Globals.Color.Brown:
                 {
                     return Color.Brown;
                 }
-                case (int)Core.Color.Gray:
+                case (int)Core.Globals.Color.Gray:
                 {
                     return Color.LightGray;
                 }
-                case (int)Core.Color.DarkGray:
+                case (int)Core.Globals.Color.DarkGray:
                 {
                     return Color.Gray;
                 }
-                case (int)Core.Color.BrightBlue:
+                case (int)Core.Globals.Color.BrightBlue:
                 {
                     return Color.LightBlue;
                 }
-                case (int)Core.Color.BrightGreen:
+                case (int)Core.Globals.Color.BrightGreen:
                 {
                     return Color.LightGreen;
                 }
-                case (int)Core.Color.BrightCyan:
+                case (int)Core.Globals.Color.BrightCyan:
                 {
                     return Color.LightCyan;
                 }
-                case (int)Core.Color.BrightRed:
+                case (int)Core.Globals.Color.BrightRed:
                 {
                     return Color.LightCoral;
                 }
-                case (int)Core.Color.Pink:
+                case (int)Core.Globals.Color.Pink:
                 {
                     return Color.Orchid;
                 }
-                case (int)Core.Color.Yellow:
+                case (int)Core.Globals.Color.Yellow:
                 {
                     return Color.Yellow;
                 }
-                case (int)Core.Color.White:
+                case (int)Core.Globals.Color.White:
                 {
                     return Color.White;
                 }
@@ -1316,15 +1319,15 @@ static void LoadFonts()
             rec.Y = 0;
             rec.Height = GameState.SizeX;
             rec.X = (int)Math.Round(anim *
-                                    (GetGfxInfo(System.IO.Path.Combine(Core.Path.Emotes, sprite.ToString())).Width /
+                                    (GetGfxInfo(System.IO.Path.Combine(DataPath.Emotes, sprite.ToString())).Width /
                                      2d));
-            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Emotes, sprite.ToString())).Width /
+            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Emotes, sprite.ToString())).Width /
                                         2d);
 
             x = GameLogic.ConvertMapX(x2);
             y = GameLogic.ConvertMapY(y2) - (GameState.SizeY + 16);
 
-            string argpath = System.IO.Path.Combine(Core.Path.Emotes, sprite.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Emotes, sprite.ToString());
             RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
@@ -1339,7 +1342,7 @@ static void LoadFonts()
             rec.Width = 32;
             rec.Height = 32;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Misc, "Direction");
+            string argpath = System.IO.Path.Combine(DataPath.Misc, "Direction");
             RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX),
                 GameLogic.ConvertMapY(y * GameState.SizeY),
                 rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
@@ -1369,7 +1372,7 @@ static void LoadFonts()
 
                 rec.Height = 8;
 
-                string argpath1 = System.IO.Path.Combine(Core.Path.Misc, "Direction");
+                string argpath1 = System.IO.Path.Combine(DataPath.Misc, "Direction");
                 RenderTexture(ref argpath1, GameLogic.ConvertMapX(x * GameState.SizeX) + GameState.DirArrowX[i],
                     GameLogic.ConvertMapY(y * GameState.SizeY) + GameState.DirArrowY[i], rec.X, rec.Y, rec.Width,
                     rec.Height,
@@ -1389,14 +1392,14 @@ static void LoadFonts()
                 return;
 
             rec.Y = (int)Math.Round(spritetop *
-                GetGfxInfo(System.IO.Path.Combine(Core.Path.Paperdolls, sprite.ToString())).Height / 4d);
+                GetGfxInfo(System.IO.Path.Combine(DataPath.Paperdolls, sprite.ToString())).Height / 4d);
             rec.Height =
-                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Paperdolls, sprite.ToString())).Height /
+                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Paperdolls, sprite.ToString())).Height /
                                 4d);
             rec.X = (int)Math.Round(anim *
-                GetGfxInfo(System.IO.Path.Combine(Core.Path.Paperdolls, sprite.ToString())).Width / 4d);
+                GetGfxInfo(System.IO.Path.Combine(DataPath.Paperdolls, sprite.ToString())).Width / 4d);
             rec.Width = (int)Math.Round(
-                GetGfxInfo(System.IO.Path.Combine(Core.Path.Paperdolls, sprite.ToString())).Width /
+                GetGfxInfo(System.IO.Path.Combine(DataPath.Paperdolls, sprite.ToString())).Width /
                 4d);
 
             x = GameLogic.ConvertMapX(x2);
@@ -1404,7 +1407,7 @@ static void LoadFonts()
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Paperdolls, sprite.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Paperdolls, sprite.ToString());
             RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
@@ -1497,26 +1500,26 @@ static void LoadFonts()
             // Create the rectangle for rendering the sprite
             rect = new Rectangle(
                 (int)Math.Round(anim *
-                                (GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Width /
+                                (GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Width /
                                  4d)),
                 (int)Math.Round(spriteLeft *
-                                (GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Height /
+                                (GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Height /
                                  4d)),
-                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Width / 4d),
-                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Height /
+                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Width / 4d),
+                (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Height /
                                 4d));
 
             // Calculate X and Y coordinates for rendering
             x = (int)Math.Round(Data.MyMapNpc[(int)mapNpcNum].X -
-                                (GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Width /
+                                (GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Width /
                                  4d -
                                  32d) / 2d);
 
-            if (GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString())).Height / 4d > 32d)
+            if (GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString())).Height / 4d > 32d)
             {
                 // Larger sprites need an offset for height adjustment
                 y = (int)Math.Round(Data.MyMapNpc[(int)mapNpcNum].Y -
-                                    (GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, sprite.ToString()))
+                                    (GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, sprite.ToString()))
                                             .Height /
                                         4d - 32d));
             }
@@ -1564,7 +1567,7 @@ static void LoadFonts()
             x = GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X * GameState.SizeX);
             y = GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y * GameState.SizeY);
 
-            string argpath = System.IO.Path.Combine(Core.Path.Items, picNum.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Items, picNum.ToString());
             RenderTexture(ref argpath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height, srcrec.Width,
                 srcrec.Height);
         }
@@ -1580,7 +1583,7 @@ static void LoadFonts()
             x = GameLogic.ConvertMapX(x2);
             y = GameLogic.ConvertMapY(y2);
 
-            string argpath = System.IO.Path.Combine(Core.Path.Characters, sprite.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Characters, sprite.ToString());
             RenderTexture(ref argpath, x, y, sRect.X, sRect.Y, sRect.Width, sRect.Height, sRect.Width, sRect.Height);
         }
 
@@ -1609,7 +1612,7 @@ static void LoadFonts()
                 destrec = new Rectangle(GameLogic.ConvertMapX(withBlock.X),
                     GameLogic.ConvertMapY(withBlock.Y), GameState.SizeX, GameState.SizeY);
 
-                string argpath = System.IO.Path.Combine(Core.Path.Misc, "Blood");
+                string argpath = System.IO.Path.Combine(DataPath.Misc, "Blood");
                 RenderTexture(ref argpath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height);
 
             }
@@ -1628,8 +1631,8 @@ static void LoadFonts()
             long npcNum;
 
             // dynamic bar calculations
-            width = GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Width;
-            height = (long)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Bars")).Height / 4d);
+            width = GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Bars")).Width;
+            height = (long)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Bars")).Height / 4d);
 
             // render Npc health bars
             for (i = 0L; i < Constant.MaxMapNpcs; i++)
@@ -1655,14 +1658,14 @@ static void LoadFonts()
                         // draw bar background
                         top = height * 3L; // HP bar background
                         left = 0L;
-                        string argpath = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
                         top = 0L; // HP bar
                         left = 0L;
-                        string argpath1 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath1 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath1, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)GameState.BarWidthNpcHp[(int)i], (int)height,
                             (int)GameState.BarWidthNpcHp[(int)i], (int)height);
@@ -1691,14 +1694,14 @@ static void LoadFonts()
                         // draw bar background
                         top = height * 3L; // HP bar background
                         left = 0L;
-                        string argpath2 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath2 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath2, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
                         top = 0L; // HP bar
                         left = 0L;
-                        string argpath3 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath3 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath3, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)GameState.BarWidthPlayerHp[(int)i], (int)height,
                             (int)GameState.BarWidthPlayerHp[(int)i], (int)height);
@@ -1721,14 +1724,14 @@ static void LoadFonts()
                         // draw bar background
                         top = height * 3L; // SP bar background
                         left = 0L;
-                        string argpath4 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath4 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath4, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)width, (int)height, (int)width, (int)height);
 
                         // draw the bar proper
                         top = height * 0L; // SP bar
                         left = 0L;
-                        string argpath5 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                        string argpath5 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argpath5, GameLogic.ConvertMapX((int)tmpX), GameLogic.ConvertMapY((int)tmpY),
                             (int)left, (int)top, (int)GameState.BarWidthPlayerSp[(int)i], (int)height,
                             (int)GameState.BarWidthPlayerSp[(int)i], (int)height);
@@ -1758,7 +1761,7 @@ static void LoadFonts()
                                 // draw bar background
                                 top = height * 3L; // cooldown bar background
                                 left = 0L;
-                                string argpath6 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                                string argpath6 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                                 RenderTexture(ref argpath6, GameLogic.ConvertMapX((int)tmpX),
                                     GameLogic.ConvertMapY((int)tmpY), (int)left, (int)top, (int)width, (int)height,
                                     (int)width, (int)height);
@@ -1766,7 +1769,7 @@ static void LoadFonts()
                                 // draw the bar proper
                                 top = height * 2L; // cooldown bar
                                 left = 0L;
-                                string argpath7 = System.IO.Path.Combine(Core.Path.Misc, "Bars");
+                                string argpath7 = System.IO.Path.Combine(DataPath.Misc, "Bars");
                                 RenderTexture(ref argpath7, GameLogic.ConvertMapX((int)tmpX),
                                     GameLogic.ConvertMapY((int)tmpY), (int)left, (int)top, (int)barWidth, (int)height,
                                     (int)barWidth, (int)height);
@@ -1846,15 +1849,15 @@ static void LoadFonts()
             int height;
 
             rec.Y = 0;
-            rec.Height = GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Height;
+            rec.Height = GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Height;
             rec.X = 0;
-            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Width / 2d);
+            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Width / 2d);
             x = GameLogic.ConvertMapX(x2 + 4);
             y = GameLogic.ConvertMapY(y2 - 32);
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Misc, "Target");
+            string argpath = System.IO.Path.Combine(DataPath.Misc, "Target");
             RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
@@ -1872,17 +1875,17 @@ static void LoadFonts()
             int height;
 
             rec.Y = 0;
-            rec.Height = GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Height;
-            rec.X = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Width / 2d);
-            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Width / 2d +
-                                        GetGfxInfo(System.IO.Path.Combine(Core.Path.Misc, "Target")).Width / 2d);
+            rec.Height = GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Height;
+            rec.X = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Width / 2d);
+            rec.Width = (int)Math.Round(GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Width / 2d +
+                                        GetGfxInfo(System.IO.Path.Combine(DataPath.Misc, "Target")).Width / 2d);
 
             x = GameLogic.ConvertMapX(x2 + 4);
             y = GameLogic.ConvertMapY(y2 - 32);
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Misc, "Target");
+            string argpath = System.IO.Path.Combine(DataPath.Misc, "Target");
             RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
@@ -1946,7 +1949,7 @@ static void LoadFonts()
                 withBlock.Msg = withBlock.Msg.Replace("\0", string.Empty);
 
                 // word wrap
-                Text.WordWrap(withBlock.Msg, Core.Font.Georgia, GameState.ChatBubbleWidth, ref theArray);
+                Text.WordWrap(withBlock.Msg, Font.Georgia, GameState.ChatBubbleWidth, ref theArray);
 
                 // find max width
                 tmpNum = Information.UBound(theArray);
@@ -1954,8 +1957,8 @@ static void LoadFonts()
                 var loopTo = tmpNum;
                 for (i = 0L; i <= loopTo; i++)
                 {
-                    if (Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia) > maxWidth)
-                        maxWidth = Text.GetTextWidth(theArray[(int)i], Core.Font.Georgia);
+                    if (Text.GetTextWidth(theArray[(int)i], Font.Georgia) > maxWidth)
+                        maxWidth = Text.GetTextWidth(theArray[(int)i], Font.Georgia);
                 }
 
                 // calculate the new position 
@@ -1963,52 +1966,52 @@ static void LoadFonts()
                 y2 = y - (Information.UBound(theArray) + 1) * 12;
 
                 // render bubble - top left
-                string argpath = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath, (int)(x2 - 9L), (int)(y2 - 5L), 0, 0, 9, 5, 9, 5);
 
                 // top right
-                string argpath1 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath1 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath1, (int)(x2 + maxWidth), (int)(y2 - 5L), 119, 0, 9, 5, 9, 5);
 
                 // top
-                string argpath2 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath2 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath2, (int)x2, (int)(y2 - 5L), 9, 0, (int)maxWidth, 5, 5, 5);
 
                 // bottom left
-                string argpath3 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath3 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath3, (int)(x2 - 9L), (int)y, 0, 19, 9, 6, 9, 6);
 
                 // bottom right
-                string argpath4 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath4 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath4, (int)(x2 + maxWidth), (int)y, 119, 19, 9, 6, 9, 6);
 
                 // bottom - left half
-                string argpath5 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath5 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath5, (int)x2, (int)y, 9, 19, (int)(maxWidth / 2L - 5L), 6, 6, 6);
 
                 // bottom - right half
-                string argpath6 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath6 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath6, (int)(x2 + maxWidth / 2L + 6L), (int)y, 9, 19, (int)(maxWidth / 2L - 5L), 6,
                     9,
                     6);
 
                 // left
-                string argpath7 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath7 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath7, (int)(x2 - 9L), (int)y2, 0, 6, 9, (Information.UBound(theArray) + 1) * 12, 9, 6);
 
                 // right
-                string argpath8 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath8 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath8, (int)(x2 + maxWidth), (int)y2, 119, 6, 9, (Information.UBound(theArray) + 1) * 12,
                     9,
                     6);
 
                 // center
-                string argpath9 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath9 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath9, (int)x2, (int)y2, 9, 5, (int)maxWidth, (Information.UBound(theArray) + 1) * 12, 9,
                     5);
 
                 // little pointy bit
-                string argpath10 = System.IO.Path.Combine(Core.Path.Gui, 33.ToString());
+                string argpath10 = System.IO.Path.Combine(DataPath.Gui, 33.ToString());
                 RenderTexture(ref argpath10, (int)(x - 5L), (int)y, 58, 19, 11, 11, 11, 11);
 
                 // render each line centralized
@@ -2021,7 +2024,7 @@ static void LoadFonts()
                         continue;
 
                     // Measure button text size and apply padding
-                    var textSize = Text.Fonts[Core.Font.Georgia].MeasureString(theArray[(int)i]);
+                    var textSize = Text.Fonts[Font.Georgia].MeasureString(theArray[(int)i]);
                     float actualWidth = textSize.X;
                     float actualHeight = textSize.Y;
 
@@ -2143,7 +2146,7 @@ static void LoadFonts()
                 }
             }
 
-            var gfxInfo = GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, spriteNum.ToString()));
+            var gfxInfo = GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, spriteNum.ToString()));
             if (gfxInfo == null)
             {
                 // Handle the case where the graphic information is not found
@@ -2253,7 +2256,7 @@ static void LoadFonts()
             }
         }
 
-        public static void RenderCharacterGraphic(Core.Type.Event eventData, int x, int y)
+        public static void RenderCharacterGraphic(Type.Event eventData, int x, int y)
         {
             // Get the graphic index from the event's first page
             int gfxIndex = eventData.Pages[0].Graphic;
@@ -2265,7 +2268,7 @@ static void LoadFonts()
             // Get animation details (frame index and columns) from the event
             int frameIndex = eventData.Pages[0].GraphicX; // Example frame index
             int columns = 4;
-            var gfxInfo = GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, gfxIndex.ToString()));
+            var gfxInfo = GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, gfxIndex.ToString()));
             if (gfxInfo == null)
             {
                 // Handle the case where the graphic information is not found
@@ -2284,13 +2287,13 @@ static void LoadFonts()
             // Define the position on the map where the graphic will be drawn
             var position = new Vector2(x, y);
 
-            string argpath = System.IO.Path.Combine(Core.Path.Characters, gfxIndex.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Characters, gfxIndex.ToString());
             RenderTexture(ref argpath, (int)Math.Round(position.X), (int)Math.Round(position.Y), sourceRect.X,
                 sourceRect.Y,
                 frameWidth, frameHeight, sourceRect.Width, sourceRect.Height);
         }
 
-        private static void RenderTilesetGraphic(Core.Type.Event eventData, int x, int y)
+        private static void RenderTilesetGraphic(Type.Event eventData, int x, int y)
         {
             int gfxIndex = eventData.Pages[0].Graphic;
 
@@ -2307,7 +2310,7 @@ static void LoadFonts()
                 // Define destination rectangle
                 var destRect = new Rectangle(x, y, srcRect.Width, srcRect.Height);
 
-                string argpath = System.IO.Path.Combine(Core.Path.Tilesets, gfxIndex.ToString());
+                string argpath = System.IO.Path.Combine(DataPath.Tilesets, gfxIndex.ToString());
                 RenderTexture(ref argpath, destRect.X, destRect.Y, srcRect.X, srcRect.Y, destRect.Width,
                     destRect.Height,
                     srcRect.Width, srcRect.Height);
@@ -2375,7 +2378,7 @@ static void LoadFonts()
                             }
                         }
 
-                        var gfxInfo = GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters,
+                        var gfxInfo = GetGfxInfo(System.IO.Path.Combine(DataPath.Characters,
                             Data.MapEvents[id].Graphic.ToString()));
 
                         if (gfxInfo == null)
@@ -2437,7 +2440,7 @@ static void LoadFonts()
 
                         if (Data.MapEvents[id].GraphicY2 > 1)
                         {
-                            string argpath = System.IO.Path.Combine(Core.Path.Tilesets,
+                            string argpath = System.IO.Path.Combine(DataPath.Tilesets,
                                 Data.MapEvents[id].Graphic.ToString());
                             RenderTexture(ref argpath,
                                 GameLogic.ConvertMapX(Data.MapEvents[id].X),
@@ -2446,7 +2449,7 @@ static void LoadFonts()
                         }
                         else
                         {
-                            string argpath1 = System.IO.Path.Combine(Core.Path.Tilesets,
+                            string argpath1 = System.IO.Path.Combine(DataPath.Tilesets,
                                 Data.MapEvents[id].Graphic.ToString());
                             RenderTexture(ref argpath1,
                                 GameLogic.ConvertMapX(Data.MapEvents[id].X),
@@ -2825,7 +2828,7 @@ static void LoadFonts()
             DrawBars();
             Map.DrawMapFade();
             Gui.Render();
-            string argpath = System.IO.Path.Combine(Core.Path.Misc, "Cursor");
+            string argpath = System.IO.Path.Combine(DataPath.Misc, "Cursor");
             RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
         }
 
@@ -2833,7 +2836,7 @@ static void LoadFonts()
         {
             Gui.DrawMenuBg();
             Gui.Render();
-            string argpath = System.IO.Path.Combine(Core.Path.Misc, "Cursor");
+            string argpath = System.IO.Path.Combine(DataPath.Misc, "Cursor");
             RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
         }
 

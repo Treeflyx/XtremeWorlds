@@ -3,6 +3,7 @@ using Eto.Drawing;
 using Microsoft.VisualBasic;
 using Core;
 using System;
+using Core.Globals;
 
 namespace Client
 {

@@ -1,194 +1,103 @@
-﻿using System;
-// MIT License
-// 
-// Copyright (c) 2017 Robert Lodico
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-using System.Timers;
+﻿using System.Timers;
+using Timer = System.Timers.Timer;
 
-namespace Core
+namespace Core;
+
+public enum TimeOfDay : byte
 {
+    None = 0,
+    Day,
+    Night,
+    Dawn,
+    Dusk
+}
 
-    public enum TimeOfDay : byte
+public delegate void HandleTimeEvent(Clock source);
+
+public sealed class Clock
+{
+    private static Clock? _instance;
+    private readonly Timer _timer;
+    private DateTime _time;
+    private double _gameSpeed;
+    private TimeOfDay _timeOfDay;
+
+    public event HandleTimeEvent? OnTimeChanged;
+    public event HandleTimeEvent? OnTimeOfDayChanged;
+    public event HandleTimeEvent? OnTimeSync;
+
+    public static Clock Instance => _instance ??= new Clock();
+
+    public DateTime Time
     {
-        None = 0,
-        Day,
-        Night,
-        Dawn,
-        Dusk
+        get => _time;
+        set
+        {
+            _time = value;
+
+            TimeOfDay = GetTimeOfDay(Time.Hour);
+
+            OnTimeChanged?.Invoke(this);
+        }
     }
 
-    public delegate void HandleTimeEvent(ref Clock source);
-
-    public class Clock
+    public double GameSpeed
     {
-        private static Clock _mInstance = null;
-
-        public static Clock Instance
+        get => _gameSpeed;
+        set
         {
-            get
-            {
-                if (_mInstance is null)
-                {
-                    _mInstance = new Clock();
-                }
+            _gameSpeed = value;
 
-                return _mInstance;
-            }
+            OnTimeSync?.Invoke(this);
         }
+    }
 
-        public event HandleTimeEvent OnTimeChanged;
-        public event HandleTimeEvent OnTimeOfDayChanged;
-        public event HandleTimeEvent OnTimeSync;
-
-        private readonly Timer _mTimer;
-
-        private DateTime _mTime;
-
-        public DateTime Time
+    public TimeOfDay TimeOfDay
+    {
+        get => _timeOfDay;
+        set
         {
-            get
-            {
-                return _mTime;
-            }
-            set
-            {
-                _mTime = value;
+            _timeOfDay = value;
 
-                int arghours = Time.Hour;
-                var newTimeOfDay = GetTimeOfDay(ref arghours);
-                if (TimeOfDay != newTimeOfDay)
-                    TimeOfDay = newTimeOfDay;
-
-                var argsource = this;
-                OnTimeChanged?.Invoke(ref argsource);
-            }
+            OnTimeOfDayChanged?.Invoke(this);
         }
+    }
 
-        private double _mGameSpeed;
+    public Clock()
+    {
+        _timer = new Timer(6000);
+        _timer.Elapsed += HandleTimerElapsed;
+        _timer.Start();
+    }
 
-        public double GameSpeed
+    private void HandleTimerElapsed(object? sender, ElapsedEventArgs e)
+    {
+        OnTimeSync?.Invoke(this);
+    }
+
+    public override string ToString()
+    {
+        return ToString("h:mm:ss tt");
+    }
+
+    public string ToString(string format)
+    {
+        return Time.ToString(format);
+    }
+
+    public void Tick()
+    {
+        Time = Time.AddSeconds(GameSpeed);
+    }
+
+    public static TimeOfDay GetTimeOfDay(int hours)
+    {
+        return hours switch
         {
-            get
-            {
-                return _mGameSpeed;
-            }
-            set
-            {
-                _mGameSpeed = value;
-                var argsource = this;
-                OnTimeSync?.Invoke(ref argsource);
-            }
-        }
-
-        private int _mSyncInterval;
-
-        public int SyncInterval
-        {
-            get
-            {
-                return _mSyncInterval;
-            }
-            set
-            {
-                _mSyncInterval = value;
-
-                _mTimer.Stop();
-                _mTimer.Interval = _mSyncInterval;
-                _mTimer.Start();
-                var argsource = this;
-                OnTimeSync?.Invoke(ref argsource);
-            }
-        }
-
-        private TimeOfDay _mTimeOfDay;
-
-        public TimeOfDay TimeOfDay
-        {
-            get
-            {
-                return _mTimeOfDay;
-            }
-            set
-            {
-                _mTimeOfDay = value;
-                var argsource = this;
-                OnTimeOfDayChanged?.Invoke(ref argsource);
-            }
-        }
-
-        public Clock()
-        {
-            _mSyncInterval = (int)Math.Round(6000.0);
-
-            _mTimer = new Timer(SyncInterval);
-
-            _mTimer.Elapsed += HandleTimerElapsed;
-
-            _mTimer.Start();
-        }
-
-        private void HandleTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            var argsource = this;
-            OnTimeSync?.Invoke(ref argsource);
-        }
-
-        public override string ToString()
-        {
-            string argformat = "h:mm:ss tt";
-            return ToString(ref argformat);
-        }
-
-        public string ToString(ref string format)
-        {
-            return Time.ToString(format);
-        }
-
-        public void Reset()
-        {
-            Time = new DateTime(0L);
-        }
-
-        public void Tick()
-        {
-            Time = Time.AddSeconds(GameSpeed);
-        }
-
-        public static TimeOfDay GetTimeOfDay(ref int hours)
-        {
-            if (hours < 6)
-            {
-                return TimeOfDay.Night;
-            }
-            else if (6 <= hours & hours <= 9)
-            {
-                return TimeOfDay.Dawn;
-            }
-            else if (9 < hours & hours < 18)
-            {
-                return TimeOfDay.Day;
-            }
-            else
-            {
-                return TimeOfDay.Dusk;
-            }
-        }
+            < 6 => TimeOfDay.Night,
+            <= 9 => TimeOfDay.Dawn,
+            < 18 => TimeOfDay.Day,
+            _ => TimeOfDay.Dusk
+        };
     }
 }

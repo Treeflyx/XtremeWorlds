@@ -1,12 +1,12 @@
 ﻿using System.Text;
 using Core;
+using Core.Globals;
 using Core.Net;
 using CSScriptLib;
 using Microsoft.Extensions.Logging;
 using Server.Game.Net;
-using static Core.Packets;
-using static Core.Global.Command;
-using Path = Core.Path;
+using static Core.Net.Packets;
+using static Core.Globals.Command;
 
 namespace Server;
 
@@ -70,7 +70,7 @@ public static class Script
             return;
         }
 
-        var path = Path.Database;
+        var path = DataPath.Database;
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -87,7 +87,7 @@ public static class Script
 
     public static async Task LoadScriptAsync(int playerId)
     {
-        var path = System.IO.Path.Combine(Path.Database, "Script.cs");
+        var path = System.IO.Path.Combine(DataPath.Database, "Script.cs");
         if (File.Exists(path))
         {
             Data.Script.Code = await File.ReadAllLinesAsync(path, Encoding.UTF8);

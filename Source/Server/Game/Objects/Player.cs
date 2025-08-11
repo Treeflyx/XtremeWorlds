@@ -1,11 +1,13 @@
 ﻿using Core;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Global.Command;
-using static Core.Packets;
+using static Core.Globals.Command;
+using static Core.Net.Packets;
 
 namespace Server;
 
@@ -52,7 +54,7 @@ public static class Player
 
     public static void PlayerWarp(int playerId, int mapNum, int x, int y, int dir)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum >= Core.Constant.MaxMaps)
+        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps)
         {
             return;
         }
@@ -106,7 +108,7 @@ public static class Player
         if (GameLogic.GetTotalMapPlayers(oldMapNum) == 0)
         {
             // Regenerate all Npcs' health
-            for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
+            for (var mapNpcNum = 0; mapNpcNum < Core.Globals.Constant.MaxMapNpcs; mapNpcNum++)
             {
                 if (Data.MapNpc[oldMapNum].Npc[mapNpcNum].Num >= 0)
                 {
@@ -377,7 +379,7 @@ public static class Player
                 y = tile.Data3_2;
             }
 
-            if (mapNum >= 0 && mapNum < Core.Constant.MaxMaps)
+            if (mapNum >= 0 && mapNum < Core.Globals.Constant.MaxMaps)
             {
                 PlayerWarp(playerId, mapNum, x, y, (int) Direction.Down);
 
@@ -582,7 +584,7 @@ public static class Player
 
             if (Data.Moral[Data.Map[mapNum].Moral].NpcBlock)
             {
-                for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
+                for (var mapNpcNum = 0; mapNpcNum < Core.Globals.Constant.MaxMapNpcs; mapNpcNum++)
                 {
                     if (Data.MapNpc[mapNum].Npc[mapNpcNum].Num >= 0 &&
                         Data.MapNpc[mapNum].Npc[mapNpcNum].X == x &&
@@ -594,7 +596,7 @@ public static class Player
             }
 
             // Check to make sure that the tile is walkable
-            if (IsDirBlocked(ref Data.Map[mapNum].Tile[x, y].DirBlock, (byte)dir))
+            if (IsDirBlocked(Data.Map[mapNum].Tile[x, y].DirBlock, dir))
             {
                 return true;
             }
@@ -610,13 +612,13 @@ public static class Player
 
     public static int HasItem(int playerId, int itemNum)
     {
-        if (itemNum is < 0 or > Core.Constant.MaxItems)
+        if (itemNum is < 0 or > Core.Globals.Constant.MaxItems)
         {
             return 0;
         }
 
         var totalQuantity = 0;
-        for (var invSlot = 0; invSlot < Core.Constant.MaxInv; invSlot++)
+        for (var invSlot = 0; invSlot < Core.Globals.Constant.MaxInv; invSlot++)
         {
             if (GetPlayerInv(playerId, invSlot) != itemNum)
             {
@@ -638,12 +640,12 @@ public static class Player
 
     public static int FindItemSlot(int playerId, int itemNum)
     {
-        if (itemNum is < 0 or > Core.Constant.MaxItems)
+        if (itemNum is < 0 or > Core.Globals.Constant.MaxItems)
         {
             return -1;
         }
 
-        for (var invSlot = 0; invSlot < Core.Constant.MaxInv; invSlot++)
+        for (var invSlot = 0; invSlot < Core.Globals.Constant.MaxInv; invSlot++)
         {
             if (GetPlayerInv(playerId, invSlot) == itemNum)
             {
@@ -658,10 +660,10 @@ public static class Player
     {
         var mapNum = GetPlayerMap(playerId);
 
-        for (var mapItemNum = 0; mapItemNum < Core.Constant.MaxMapItems; mapItemNum++)
+        for (var mapItemNum = 0; mapItemNum < Core.Globals.Constant.MaxMapItems; mapItemNum++)
         {
             if (Data.MapItem[mapNum, mapItemNum].Num < 0 ||
-                Data.MapItem[mapNum, mapItemNum].Num >= Core.Constant.MaxItems)
+                Data.MapItem[mapNum, mapItemNum].Num >= Core.Globals.Constant.MaxItems)
             {
                 continue;
             }
@@ -722,7 +724,7 @@ public static class Player
 
     public static int FindOpenInvSlot(int playerId, int itemNum)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Constant.MaxItems)
+        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Globals.Constant.MaxItems)
         {
             return -1;
         }
@@ -730,7 +732,7 @@ public static class Player
         if (Data.Item[itemNum].Type == (byte) ItemCategory.Currency ||
             Data.Item[itemNum].Stackable == 1)
         {
-            for (var invSlot = 0; invSlot < Core.Constant.MaxInv; invSlot++)
+            for (var invSlot = 0; invSlot < Core.Globals.Constant.MaxInv; invSlot++)
             {
                 if (GetPlayerInv(playerId, invSlot) == itemNum)
                 {
@@ -739,7 +741,7 @@ public static class Player
             }
         }
 
-        for (var invSlot = 0; invSlot < Core.Constant.MaxInv; invSlot++)
+        for (var invSlot = 0; invSlot < Core.Globals.Constant.MaxInv; invSlot++)
         {
             if (GetPlayerInv(playerId, invSlot) == -1)
             {
@@ -752,14 +754,14 @@ public static class Player
 
     public static bool TakeInv(int playerId, int itemNum, int itemVal)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Constant.MaxItems)
+        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Globals.Constant.MaxItems)
         {
             return false;
         }
 
         var clearInvSlot = false;
 
-        for (var invSlot = 0; invSlot < Core.Constant.MaxInv; invSlot++)
+        for (var invSlot = 0; invSlot < Core.Globals.Constant.MaxInv; invSlot++)
         {
             // Check to see if the player has the item
             if (GetPlayerInv(playerId, invSlot) != itemNum)
@@ -805,7 +807,7 @@ public static class Player
 
     public static bool GiveInv(int playerId, int itemNum, int itemVal, bool sendUpdate = true)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Constant.MaxItems)
+        if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Globals.Constant.MaxItems)
         {
             return false;
         }
@@ -832,7 +834,7 @@ public static class Player
 
     public static void MapDropItem(int playerId, int invNum, int amount)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || invNum < 0 || invNum > Core.Constant.MaxInv)
+        if (!NetworkConfig.IsPlaying(playerId) || invNum < 0 || invNum > Core.Globals.Constant.MaxInv)
         {
             return;
         }
@@ -852,7 +854,7 @@ public static class Player
         }
 
         var itemNum = GetPlayerInv(playerId, invNum);
-        if (itemNum is < 0 or >= Core.Constant.MaxItems)
+        if (itemNum is < 0 or >= Core.Globals.Constant.MaxItems)
         {
             return;
         }
@@ -892,7 +894,7 @@ public static class Player
     {
         var takeInvSlot = false;
 
-        if (!NetworkConfig.IsPlaying(playerId) || invSlot < 0 || invSlot > Core.Constant.MaxItems)
+        if (!NetworkConfig.IsPlaying(playerId) || invSlot < 0 || invSlot > Core.Globals.Constant.MaxItems)
         {
             return false;
         }
@@ -980,13 +982,13 @@ public static class Player
 
     public static void UseItem(int playerId, int invNum)
     {
-        if (invNum is < 0 or > Core.Constant.MaxInv)
+        if (invNum is < 0 or > Core.Globals.Constant.MaxInv)
         {
             return;
         }
 
         var itemNum = GetPlayerInv(playerId, invNum);
-        if (itemNum is < 0 or > Core.Constant.MaxItems)
+        if (itemNum is < 0 or > Core.Globals.Constant.MaxItems)
         {
             return;
         }
@@ -1115,7 +1117,7 @@ public static class Player
         }
 
         var itemNum = GetPlayerEquipment(playerId, (Equipment) eqSlot);
-        if (itemNum is < 0 or > Core.Constant.MaxItems)
+        if (itemNum is < 0 or > Core.Globals.Constant.MaxItems)
         {
             return;
         }
@@ -1197,7 +1199,7 @@ public static class Player
 
     public static void GiveBank(int playerId, int invSlot, int amount)
     {
-        if (invSlot is < 0 or > Core.Constant.MaxInv)
+        if (invSlot is < 0 or > Core.Globals.Constant.MaxInv)
         {
             return;
         }
@@ -1272,7 +1274,7 @@ public static class Player
 
     public static int FindOpenbankSlot(int playerId, int itemNum)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || itemNum is < 0 or > Core.Constant.MaxItems)
+        if (!NetworkConfig.IsPlaying(playerId) || itemNum is < 0 or > Core.Globals.Constant.MaxItems)
         {
             return -1;
         }
@@ -1280,7 +1282,7 @@ public static class Player
         if (Data.Item[itemNum].Type == (byte) ItemCategory.Currency ||
             Data.Item[itemNum].Stackable == 1)
         {
-            for (var bankSlot = 0; bankSlot < Core.Constant.MaxBank; bankSlot++)
+            for (var bankSlot = 0; bankSlot < Core.Globals.Constant.MaxBank; bankSlot++)
             {
                 if (GetPlayerBank(playerId, bankSlot) == itemNum)
                 {
@@ -1289,7 +1291,7 @@ public static class Player
             }
         }
 
-        for (var bankSlot = 0; bankSlot < Core.Constant.MaxBank; bankSlot++)
+        for (var bankSlot = 0; bankSlot < Core.Globals.Constant.MaxBank; bankSlot++)
         {
             if (GetPlayerBank(playerId, bankSlot) == -1)
             {
@@ -1302,7 +1304,7 @@ public static class Player
 
     public static void TakeBank(int playerId, int bankSlot, int amount)
     {
-        if (bankSlot is < 0 or > Core.Constant.MaxBank)
+        if (bankSlot is < 0 or > Core.Globals.Constant.MaxBank)
         {
             return;
         }

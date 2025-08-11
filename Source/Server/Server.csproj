@@ -3,14 +3,11 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <RootNamespace>Server</RootNamespace>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
         <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
         <OutputPath>..\..\Build\Server\</OutputPath>
         <DefineConstants>SERVER</DefineConstants>
-        <UserSecretsId>a9b4e14a-d9b6-4b78-9584-b1c168aefeeb</UserSecretsId>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <Title>XtremeWorlds Server</Title>
         <Product>Game Server</Product>
@@ -35,11 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets"/>
         <PackageReference Include="Microsoft.Extensions.Hosting"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json"/>
-        <PackageReference Include="MonoGame.Framework.DesktopGL"/>
         <PackageReference Include="MonoGame.Library.SDL"/>
         <PackageReference Include="Serilog"/>
         <PackageReference Include="Serilog.Enrichers.Environment"/>
@@ -49,6 +42,9 @@
         <PackageReference Include="Serilog.Settings.Configuration"/>
         <PackageReference Include="Serilog.Sinks.Console"/>
         <PackageReference Include="Serilog.Sinks.File"/>
+        <PackageReference Include="Npgsql"/>
+        <PackageReference Include="CS-Script"/>
+        <PackageReference Include="Newtonsoft.Json"/>
     </ItemGroup>
 
     <ItemGroup>

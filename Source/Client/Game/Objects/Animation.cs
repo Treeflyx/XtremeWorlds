@@ -1,12 +1,13 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using static Core.Global.Command;
-using Path = Core.Path;
+using static Core.Globals.Command;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -20,7 +21,7 @@ namespace Client
             if (sprite < 1 | sprite > GameState.NumAnimations)
                 return;
 
-            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Animations, sprite.ToString()));
+            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Animations, sprite.ToString()));
 
             if (gfxInfo == null)
                 return;
@@ -86,7 +87,7 @@ namespace Client
             y = GameLogic.ConvertMapY(y);
 
             // Render the frame using the calculated source rectangle and position
-            string argpath = System.IO.Path.Combine(Path.Animations, sprite.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Animations, sprite.ToString());
             GameClient.RenderTexture(ref argpath, x, y, sRect.X, sRect.Y, frameWidth, frameHeight, frameWidth, frameHeight);
         }
 
@@ -109,7 +110,7 @@ namespace Client
                     }
                 case (byte)TargetType.Npc:
                     {
-                        if (Data.MyMapNpc[lockindex].Num >= 0 && Data.MyMapNpc[lockindex].Vital[(int)Core.Vital.Health] > 0)
+                        if (Data.MyMapNpc[lockindex].Num >= 0 && Data.MyMapNpc[lockindex].Vital[(int)Vital.Health] > 0)
                         {
                             x = (int)Math.Round(Data.MyMapNpc[lockindex].X + 16 - width / 2d);
                             y = (int)Math.Round(Data.MyMapNpc[lockindex].Y + 16 - height / 2d);
@@ -138,8 +139,8 @@ namespace Client
                 return;
 
             // Get dimensions and column count from controls and graphic info
-            int totalWidth = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Animations, Data.Animation[AnimInstance[index].Animation].Sprite[layer].ToString())).Width;
-            int totalHeight = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Animations, Data.Animation[AnimInstance[index].Animation].Sprite[layer].ToString())).Height;
+            int totalWidth = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Animations, Data.Animation[AnimInstance[index].Animation].Sprite[layer].ToString())).Width;
+            int totalHeight = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Animations, Data.Animation[AnimInstance[index].Animation].Sprite[layer].ToString())).Height;
             int columns = Data.Animation[AnimInstance[index].Animation].Frames[layer];
 
             // Calculate frame dimensions
@@ -224,7 +225,7 @@ namespace Client
             if (sprite == 0)
                 return 0;
 
-            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Animations, sprite.ToString()));
+            var gfxInfo = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Animations, sprite.ToString()));
 
             if (gfxInfo == null)
                 return 0;        
@@ -282,7 +283,7 @@ namespace Client
         #region Globals
 
         public static byte AnimationIndex;
-        public static Core.Type.AnimInstance[]? AnimInstance;
+        public static Type.AnimInstance[]? AnimInstance;
 
         #endregion
 
@@ -291,7 +292,7 @@ namespace Client
         public static void ClearAnimation(int index)
         {
             Data.Animation[index] = default;
-            Data.Animation[index] = new Core.Type.Animation();
+            Data.Animation[index] = new Type.Animation();
 
             for (int x = 0; x <= 1; x++)
                 Data.Animation[index].Sprite = new int[x + 1];
@@ -320,7 +321,7 @@ namespace Client
         {
             int i;
 
-            Data.Animation = new Core.Type.Animation[Core.Constant.MaxAnimations];
+            Data.Animation = new Type.Animation[Constant.MaxAnimations];
 
             for (i = 0; i < Constant.MaxAnimations; i++)
                 ClearAnimation(i);
@@ -330,7 +331,7 @@ namespace Client
         {
             int i;
 
-            AnimInstance = new Core.Type.AnimInstance[(byte.MaxValue)];
+            AnimInstance = new Type.AnimInstance[(byte.MaxValue)];
 
             for (i = 0; i < byte.MaxValue; i++)
             {

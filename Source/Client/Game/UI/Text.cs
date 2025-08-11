@@ -6,16 +6,17 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Text;
-using static Core.Global.Command;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Command;
 using Color = Microsoft.Xna.Framework.Color;
-using Path = Core.Path;
 
 namespace Client
 {
 
     public class Text
     {
-        public static Dictionary<Core.Font, SpriteFont> Fonts = new Dictionary<Core.Font, SpriteFont>();
+        public static Dictionary<Font, SpriteFont> Fonts = new Dictionary<Font, SpriteFont>();
 
         internal const byte MaxChatDisplayLines = 11;
         internal const byte ChatLineSpacing = 10; // Should be same height as font
@@ -49,7 +50,7 @@ namespace Client
         }
 
         // Get the width of the text with optional scaling
-        public static int GetTextWidth(string text, Core.Font font = Core.Font.Georgia, float textSize = 1.0f)
+        public static int GetTextWidth(string text, Font font = Font.Georgia, float textSize = 1.0f)
         {
             if (!Fonts.ContainsKey(font))
                 throw new ArgumentException("Font not found.");
@@ -59,7 +60,7 @@ namespace Client
         }
 
         // Get the height of the text with optional scaling
-        public static int TextHeight(string text, Core.Font font = Core.Font.Georgia, float textSize = 1.0f)
+        public static int TextHeight(string text, Font font = Font.Georgia, float textSize = 1.0f)
         {
             if (!Fonts.ContainsKey(font))
                 throw new ArgumentException("Font not found.");
@@ -71,7 +72,7 @@ namespace Client
         {
             // wordwrap
             string[] wrappedLines = null;
-            WordWrap(text, Core.Font.Georgia, Gui.Windows[Gui.GetWindowIndex("winChat")].Width, ref wrappedLines);
+            WordWrap(text, Font.Georgia, Gui.Windows[Gui.GetWindowIndex("winChat")].Width, ref wrappedLines);
 
             GameState.ChatHighIndex += wrappedLines.Length;
 
@@ -87,15 +88,15 @@ namespace Client
             for (int i = (int)wrappedLines.Length - 1, chatIndex = 0; i >= 0; i--, chatIndex++)
             {
                 // Add the wrapped line to the chat
-                Core.Data.Chat[chatIndex].Text = wrappedLines[i];
-                Core.Data.Chat[chatIndex].Color = color;
-                Core.Data.Chat[chatIndex].Visible = true;
-                Core.Data.Chat[chatIndex].Timer = General.GetTickCount();
-                Core.Data.Chat[chatIndex].Channel = channel;
+                Data.Chat[chatIndex].Text = wrappedLines[i];
+                Data.Chat[chatIndex].Color = color;
+                Data.Chat[chatIndex].Visible = true;
+                Data.Chat[chatIndex].Timer = General.GetTickCount();
+                Data.Chat[chatIndex].Channel = channel;
             }
         }
 
-        public static void WordWrap(string text, Core.Font font, long maxLineLen, ref string[] theArray)
+        public static void WordWrap(string text, Font font, long maxLineLen, ref string[] theArray)
         {
             var lineCount = default(long);
             long i;
@@ -226,7 +227,7 @@ namespace Client
 
         }
 
-        public static void RenderText(string text, int x, int y, Color frontColor, Color backColor, Core.Font font = Core.Font.Georgia)
+        public static void RenderText(string text, int x, int y, Color frontColor, Color backColor, Font font = Font.Georgia)
         {
             if (text == null) return;
             string sanitizedText = new string(text.Where(c => Fonts[font].Characters.Contains(c)).ToArray());
@@ -344,10 +345,10 @@ namespace Client
 
             npcNum = (int)Data.MyMapNpc[(int)mapNpcNum].Num;
 
-            if (npcNum < 0 | npcNum > Core.Constant.MaxNpcs)
+            if (npcNum < 0 | npcNum > Constant.MaxNpcs)
                 return;
 
-            switch (Core.Data.Npc[(int)npcNum].Behaviour)
+            switch (Data.Npc[(int)npcNum].Behaviour)
             {
                 case 0: // attack on sight
                     {
@@ -372,19 +373,19 @@ namespace Client
                     }
             }
             textX = GameLogic.ConvertMapX(Data.MyMapNpc[(int)mapNpcNum].X) + GameState.SizeX / 2 - 6;
-            textX -= (int)(GetTextWidth(Core.Data.Npc[(int)npcNum].Name) / 6d);
+            textX -= (int)(GetTextWidth(Data.Npc[(int)npcNum].Name) / 6d);
 
-            if (Core.Data.Npc[(int)npcNum].Sprite < 1 | Core.Data.Npc[(int)npcNum].Sprite > GameState.NumCharacters)
+            if (Data.Npc[(int)npcNum].Sprite < 1 | Data.Npc[(int)npcNum].Sprite > GameState.NumCharacters)
             {
                 textY = GameLogic.ConvertMapY(Data.MyMapNpc[(int)mapNpcNum].Y) - 16;
             }
             else
             {
-                textY = (int)GameLogic.ConvertMapY((int)(Data.MyMapNpc[(int)mapNpcNum].Y - GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, Core.Data.Npc[(int)npcNum].Sprite.ToString())).Height / 4d + 16d));
+                textY = (int)GameLogic.ConvertMapY((int)(Data.MyMapNpc[(int)mapNpcNum].Y - GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, Data.Npc[(int)npcNum].Sprite.ToString())).Height / 4d + 16d));
             }
 
             // Draw name
-            RenderText(Core.Data.Npc[(int)npcNum].Name, textX, textY, color, backColor);
+            RenderText(Data.Npc[(int)npcNum].Name, textX, textY, color, backColor);
         }
 
         public static void DrawEventName(int index)
@@ -417,7 +418,7 @@ namespace Client
                 else
                 {
                     // Determine location for text
-                    textY = GameLogic.ConvertMapY(Data.MapEvents[index].Y) - GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, Data.MapEvents[index].Graphic.ToString())).Height / 4 + 16;
+                    textY = GameLogic.ConvertMapY(Data.MapEvents[index].Y) - GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, Data.MapEvents[index].Graphic.ToString())).Height / 4 + 16;
                 }
             }
             else if (Data.MapEvents[index].GraphicType == 2)
@@ -447,7 +448,7 @@ namespace Client
             // how long we want each message to appear
             switch (Data.ActionMsg[index].Type)
             {
-                case (int)Core.ActionMessageType.Static:
+                case (int)ActionMessageType.Static:
                     {
                         time = 1500;
 
@@ -465,7 +466,7 @@ namespace Client
                         break;
                     }
 
-                case (int)Core.ActionMessageType.Scroll:
+                case (int)ActionMessageType.Scroll:
                     {
                         time = 1500;
 
@@ -485,14 +486,14 @@ namespace Client
                         break;
                     }
 
-                case (int)Core.ActionMessageType.Screen:
+                case (int)ActionMessageType.Screen:
                     {
                         time = 3000;
 
                         // This will kill any action screen messages that there in the system
                         for (i = byte.MaxValue; i >= 0; i -= 1)
                         {
-                            if (Data.ActionMsg[i].Type == (int)Core.ActionMessageType.Screen)
+                            if (Data.ActionMsg[i].Type == (int)ActionMessageType.Screen)
                             {
                                 if (i != index)
                                 {
@@ -556,33 +557,33 @@ namespace Client
                 lineCount = 1;
 
                 // exit out early if we come to a blank string
-                if (Strings.Len(Core.Data.Chat[(int)i].Text) == 0)
+                if (Strings.Len(Data.Chat[(int)i].Text) == 0)
                     break;
 
                 // get visible state
                 isVisible = true;
                 if (GameState.InSmallChat == true)
                 {
-                    if (!(Core.Data.Chat[(int)i].Visible == true))
+                    if (!(Data.Chat[(int)i].Visible == true))
                         isVisible = false;
                 }
 
-                if (SettingsManager.Instance.ChannelState[Core.Data.Chat[i].Channel] == 0)
+                if (SettingsManager.Instance.ChannelState[Data.Chat[i].Channel] == 0)
                     isVisible = false;
 
                 // make sure it's visible
                 if (isVisible == true)
                 {
                     // render line
-                    color = Core.Data.Chat[(int)i].Color;
+                    color = Data.Chat[(int)i].Color;
                     color2 = GameClient.QbColorToXnaColor(color);
 
                     // check if we need to word wrap
-                    if (GetTextWidth(Core.Data.Chat[i].Text) > width)
+                    if (GetTextWidth(Data.Chat[i].Text) > width)
                     {
                         // word wrap
                         string[] wrappedLines = null;
-                        WordWrap(Core.Data.Chat[(int)i].Text, Core.Font.Georgia, width, ref wrappedLines);
+                        WordWrap(Data.Chat[(int)i].Text, Font.Georgia, width, ref wrappedLines);
 
                         // continue on
                         yOffset = yOffset - 10 * wrappedLines.Length;
@@ -605,12 +606,12 @@ namespace Client
                         // normal
                         yOffset = yOffset - 12L; // Adjusted spacing from 14 to 12
 
-                        RenderText(Core.Data.Chat[(int)i].Text, (int)xO, (int)(yO + yOffset), color2, color2);
+                        RenderText(Data.Chat[(int)i].Text, (int)xO, (int)(yO + yOffset), color2, color2);
                         rLines = rLines + 1;
 
                         // set the top width
-                        if (GetTextWidth(Core.Data.Chat[(int)i].Text) > topWidth)
-                            topWidth = GetTextWidth(Core.Data.Chat[(int)i].Text);
+                        if (GetTextWidth(Data.Chat[(int)i].Text) > topWidth)
+                            topWidth = GetTextWidth(Data.Chat[(int)i].Text);
                     }
                 }
                 // increment chat pointer
@@ -677,7 +678,7 @@ namespace Client
                 color = Color.Red;
             }
 
-            name = Core.Data.Player[index].Name;
+            name = Data.Player[index].Name;
 
             // calc pos
             textX = GameLogic.ConvertMapX(GetPlayerRawX(index)) + 8;
@@ -690,7 +691,7 @@ namespace Client
             else
             {
                 // Determine location for text
-                textY = (int)Math.Round((decimal)GameLogic.ConvertMapY((int)(GetPlayerRawY(index) - GameClient.GetGfxInfo(System.IO.Path.Combine(Path.Characters, GetPlayerSprite(index).ToString())).Height / 4d + 16d)));
+                textY = (int)Math.Round((decimal)GameLogic.ConvertMapY((int)(GetPlayerRawY(index) - GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, GetPlayerSprite(index).ToString())).Height / 4d + 16d)));
             }
 
             // Draw name

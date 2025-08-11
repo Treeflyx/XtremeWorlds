@@ -1,9 +1,11 @@
 ﻿using Core;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
 using Server.Game;
 using Server.Game.Net;
-using static Core.Packets;
-using static Core.Global.Command;
+using static Core.Net.Packets;
+using static Core.Globals.Command;
 
 namespace Server;
 
@@ -56,7 +58,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SPlayerChars);
 
-        for (var i = 0; i < Core.Constant.MaxChars; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxChars; i++)
         {
             Database.LoadCharacter(session.Id, i + 1);
 
@@ -117,7 +119,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SJobData);
 
-        for (var i = 0; i < Core.Constant.MaxJobs; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxJobs; i++)
         {
             Database.WriteJobDataToPacket(i, packetWriter);
         }
@@ -142,7 +144,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SPlayerInv);
 
-        for (var i = 0; i < Core.Constant.MaxInv; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxInv; i++)
         {
             packetWriter.WriteInt32(GetPlayerInv(playerId, i));
             packetWriter.WriteInt32(GetPlayerInvValue(playerId, i));
@@ -192,7 +194,7 @@ public static class NetworkSend
 
     public static void SendShops(int playerId)
     {
-        for (var i = 0; i < Core.Constant.MaxShops; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxShops; i++)
         {
             if (Data.Shop[i].Name.Length > 0)
             {
@@ -210,7 +212,7 @@ public static class NetworkSend
         packetWriter.WriteInt32(Data.Shop[shopNum].BuyRate);
         packetWriter.WriteString(Data.Shop[shopNum].Name);
 
-        for (var i = 0; i < Core.Constant.MaxTrades; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxTrades; i++)
         {
             packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
             packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
@@ -230,7 +232,7 @@ public static class NetworkSend
         packetWriter.WriteInt32(Data.Shop[shopNum].BuyRate);
         packetWriter.WriteString(Data.Shop[shopNum].Name);
 
-        for (var i = 0; i < Core.Constant.MaxTrades; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxTrades; i++)
         {
             packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostItem);
             packetWriter.WriteInt32(Data.Shop[shopNum].TradeItem[i].CostValue);
@@ -243,7 +245,7 @@ public static class NetworkSend
 
     public static void SendSkills(int playerId)
     {
-        for (var i = 0; i < Core.Constant.MaxSkills; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxSkills; i++)
         {
             if (Data.Skill[i].Name.Length > 0)
             {
@@ -465,7 +467,7 @@ public static class NetworkSend
             packetWriter.WriteBoolean(Data.Map[mapNum].Indoors);
             packetWriter.WriteInt32(Data.Map[mapNum].Shop);
 
-            for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
+            for (var i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
             {
                 packetWriter.WriteInt32(Data.Map[mapNum].Npc[i]);
             }
@@ -631,7 +633,7 @@ public static class NetworkSend
             packetWriter.WriteInt32(0);
         }
 
-        for (var i = 0; i < Core.Constant.MaxMapItems; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxMapItems; i++)
         {
             packetWriter.WriteInt32(Data.MapItem[mapNum, i].Num);
             packetWriter.WriteInt32(Data.MapItem[mapNum, i].Value);
@@ -639,7 +641,7 @@ public static class NetworkSend
             packetWriter.WriteInt32(Data.MapItem[mapNum, i].Y);
         }
 
-        for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
         {
             packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].Num);
             packetWriter.WriteInt32(Data.MapNpc[mapNum].Npc[i].X);
@@ -868,7 +870,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SBank);
 
-        for (var i = 0; i < Core.Constant.MaxBank; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxBank; i++)
         {
             packetWriter.WriteInt32(Data.Bank[playerId].Item[i].Num);
             packetWriter.WriteInt32(Data.Bank[playerId].Item[i].Value);
@@ -917,7 +919,7 @@ public static class NetworkSend
             // own inventory
             case 0:
             {
-                for (var i = 0; i < Core.Constant.MaxInv; i++)
+                for (var i = 0; i < Core.Globals.Constant.MaxInv; i++)
                 {
                     if (Data.TempPlayer[playerId].TradeOffer[i].Num >= 0)
                     {
@@ -946,7 +948,7 @@ public static class NetworkSend
             // other inventory
             case 1:
             {
-                for (var i = 0; i < Core.Constant.MaxInv; i++)
+                for (var i = 0; i < Core.Globals.Constant.MaxInv; i++)
                 {
                     if (Data.TempPlayer[(int) tradeTarget].TradeOffer[i].Num >= 0)
                     {
@@ -1000,7 +1002,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SSkills);
 
-        for (var i = 0; i < Core.Constant.MaxPlayerSkills; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxPlayerSkills; i++)
         {
             packetWriter.WriteInt32(GetPlayerSkill(playerId, i));
         }
@@ -1025,7 +1027,7 @@ public static class NetworkSend
 
         packetWriter.WriteEnum(ServerPackets.SMapReport);
 
-        for (var i = 0; i < Core.Constant.MaxMaps; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxMaps; i++)
         {
             packetWriter.WriteString(Data.Map[i].Name);
         }
@@ -1044,11 +1046,11 @@ public static class NetworkSend
 
     public static void SendHotbar(int playerId)
     {
-        var packetWriter = new PacketWriter(4 + Core.Constant.MaxHotbar * 8);
+        var packetWriter = new PacketWriter(4 + Core.Globals.Constant.MaxHotbar * 8);
 
         packetWriter.WriteEnum(ServerPackets.SHotbar);
 
-        for (var i = 0; i < Core.Constant.MaxHotbar; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxHotbar; i++)
         {
             packetWriter.WriteInt32(Data.Player[playerId].Hotbar[i].Slot);
             packetWriter.WriteInt32(Data.Player[playerId].Hotbar[i].SlotType);

@@ -1,8 +1,9 @@
 ﻿using Core;
+using Core.Globals;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Server.Game;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 
 namespace Server
 {
@@ -27,23 +28,23 @@ namespace Server
             return getTotalMapPlayers;
         }
 
-        public static int GetNpcMaxVital(double npcNum, Core.Vital vital)
+        public static int GetNpcMaxVital(double npcNum, Vital vital)
         {
             int getNpcMaxVital = default;
             // Prevent subscript out of range
-            if (npcNum < 0 | npcNum > Core.Constant.MaxNpcs)
+            if (npcNum < 0 | npcNum > Core.Globals.Constant.MaxNpcs)
                 return getNpcMaxVital;
 
             switch (vital)
             {
-                case Core.Vital.Health:
+                case Vital.Health:
                     {
-                        getNpcMaxVital = Core.Data.Npc[(int)npcNum].Hp;
+                        getNpcMaxVital = Data.Npc[(int)npcNum].Hp;
                         break;
                     }
-                case Core.Vital.Stamina:
+                case Vital.Stamina:
                     {
-                        getNpcMaxVital = (int)Core.Data.Npc[(int)npcNum].Stat[(byte)Core.Stat.Intelligence] * 2;
+                        getNpcMaxVital = (int)Data.Npc[(int)npcNum].Stat[(byte)Stat.Intelligence] * 2;
                         break;
                     }
             }

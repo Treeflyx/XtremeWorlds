@@ -2,11 +2,14 @@
 using System.Drawing;
 using Client.Net;
 using Core;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.VisualBasic;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -60,7 +63,7 @@ namespace Client
                         spriteLeft = GameState.WeatherParticle[i].Type - 1;
                     }
 
-                    string argpath = System.IO.Path.Combine(Core.Path.Misc, "Weather");
+                    string argpath = System.IO.Path.Combine(DataPath.Misc, "Weather");
                     GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(GameState.WeatherParticle[i].X), GameLogic.ConvertMapY(GameState.WeatherParticle[i].Y), spriteLeft * 32, 0, 32, 32, 32, 32);
                 }
             }
@@ -75,16 +78,16 @@ namespace Client
 
             int sX = 0;
             int sY = 0;
-            int sW = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Fogs, fogNum.ToString())).Width; // Using the full width of the fog texture
-            int sH = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Fogs, fogNum.ToString())).Height; // Using the full height of the fog texture
+            int sW = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Width; // Using the full width of the fog texture
+            int sH = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Height; // Using the full height of the fog texture
 
             // These should match the scale calculations for full coverage plus extra area
             int dX = (int) Math.Round(GameState.FogOffsetX * 2.5d - 50d);
             int dY = (int) Math.Round(GameState.FogOffsetY * 3.5d - 50d);
-            int dW = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Fogs, fogNum.ToString())).Width + 200;
-            int dH = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Fogs, fogNum.ToString())).Height + 200;
+            int dW = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Width + 200;
+            int dH = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Height + 200;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Fogs, fogNum.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString());
             GameClient.RenderTexture(ref argpath, dX, dY, sX, sY, dW, dH, sW, sH, (byte) GameState.CurrentFogOpacity);
         }
 
@@ -171,7 +174,7 @@ namespace Client
                             }
 
                             // Render the tile
-                            string argpath = System.IO.Path.Combine(Core.Path.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
+                            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
                             GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
                         }
 
@@ -277,7 +280,7 @@ namespace Client
                             }
 
                             // Render the tile with the calculated rectangle and transparency
-                            string argpath = System.IO.Path.Combine(Core.Path.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
+                            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
                             GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
                         }
                         // Handle autotile rendering
@@ -370,7 +373,7 @@ namespace Client
 
             if (Data.MyMap.Tile[x, y].Layer is null)
                 return;
-            string argpath = System.IO.Path.Combine(Core.Path.Tilesets, Data.MyMap.Tile[x, y].Layer[layerNum].Tileset.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerNum].Tileset.ToString());
             GameClient.RenderTexture(ref argpath, dX, dY, Data.Autotile[x, y].Layer[layerNum].SrcX[quarterNum] + xOffset, Data.Autotile[x, y].Layer[layerNum].SrcY[quarterNum] + yOffset, 16, 16, 16, 16);
         }
 
@@ -441,8 +444,8 @@ namespace Client
             if (index < 1 | index > GameState.NumPanoramas)
                 return;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Panoramas, index.ToString());
-            GameClient.RenderTexture(ref argpath, 0, 0, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Panoramas, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Panoramas, index.ToString())).Height);
+            string argpath = System.IO.Path.Combine(DataPath.Panoramas, index.ToString());
+            GameClient.RenderTexture(ref argpath, 0, 0, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height);
         }
 
         public static void DrawParallax(int index)
@@ -461,8 +464,8 @@ namespace Client
             horz = GameLogic.ConvertMapX(GetPlayerX(GameState.MyIndex)) * 2.5f - 50f;
             vert = GameLogic.ConvertMapY(GetPlayerY(GameState.MyIndex)) * 2.5f - 50f;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Parallax, index.ToString());
-            GameClient.RenderTexture(ref argpath, (int) Math.Round(horz), (int) Math.Round(vert), 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Parallax, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Parallax, index.ToString())).Height);
+            string argpath = System.IO.Path.Combine(DataPath.Parallax, index.ToString());
+            GameClient.RenderTexture(ref argpath, (int) Math.Round(horz), (int) Math.Round(vert), 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height);
         }
 
         public static void DrawPicture(int index = 0, int type = 0)
@@ -496,8 +499,8 @@ namespace Client
                     break;
 
                 case PictureOrigin.CenterScreen:
-                    posX = (int) Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Width / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Width / 2d - Event.Picture.XOffset);
-                    posY = (int) Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Height / 2d - GameClient.GetGfxInfo(Core.Path.Pictures + index).Height / 2d - Event.Picture.YOffset);
+                    posX = (int) Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width / 2d - GameClient.GetGfxInfo(DataPath.Pictures + index).Width / 2d - Event.Picture.XOffset);
+                    posY = (int) Math.Round(GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height / 2d - GameClient.GetGfxInfo(DataPath.Pictures + index).Height / 2d - Event.Picture.YOffset);
                     break;
 
                 case PictureOrigin.CenterOnEvent:
@@ -522,8 +525,8 @@ namespace Client
                     break;
             }
 
-            string argpath = System.IO.Path.Combine(Core.Path.Pictures, index.ToString());
-            GameClient.RenderTexture(ref argpath, posX, posY, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Pictures, index.ToString())).Height);
+            string argpath = System.IO.Path.Combine(DataPath.Pictures, index.ToString());
+            GameClient.RenderTexture(ref argpath, posX, posY, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height);
         }
 
         public static void ClearMap()
@@ -552,15 +555,15 @@ namespace Client
                 Data.MyMap.Npc[i] = -1;
             }
 
-            Data.MyMap.Tile = new Core.Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
-            Data.TileHistory = new Core.Type.TileHistory[GameState.MaxTileHistory]; // Fixed type name
+            Data.MyMap.Tile = new Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
+            Data.TileHistory = new Type.TileHistory[GameState.MaxTileHistory]; // Fixed type name
 
             // Reset tile history indices
             GameState.TileHistoryIndex = 0;
 
             for (int i = 0; i < GameState.MaxTileHistory; i++)
             {
-                Data.TileHistory[i].Tile = new Core.Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
+                Data.TileHistory[i].Tile = new Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
             }
 
 
@@ -579,13 +582,13 @@ namespace Client
             ClearMapEvents();
         }
 
-        private static void ResetTile(ref Core.Type.Tile tile, int maxLayers)
+        private static void ResetTile(ref Type.Tile tile, int maxLayers)
         {
-            tile.Layer = new Core.Type.Layer[maxLayers];
+            tile.Layer = new Type.Layer[maxLayers];
 
             for (int l = 0; l < maxLayers; l++)
             {
-                tile.Layer[l] = new Core.Type.Layer
+                tile.Layer[l] = new Type.Layer
                 {
                     Tileset = 0,
                     X = 0,
@@ -752,12 +755,12 @@ namespace Client
                 Data.MyMap.Indoors = buffer.ReadBoolean();
                 Data.MyMap.Shop = buffer.ReadInt32();
 
-                Data.MyMap.Tile = new Core.Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
-                Data.TileHistory = new Core.Type.TileHistory[GameState.MaxTileHistory];
+                Data.MyMap.Tile = new Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
+                Data.TileHistory = new Type.TileHistory[GameState.MaxTileHistory];
 
                 for (i = 0; i < GameState.MaxTileHistory; i++)
                 {
-                    Data.TileHistory[i].Tile = new Core.Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
+                    Data.TileHistory[i].Tile = new Type.Tile[Data.MyMap.MaxX, Data.MyMap.MaxY];
                 }
 
                 int layerCount = Enum.GetValues(typeof(MapLayer)).Length;
@@ -831,7 +834,7 @@ namespace Client
 
                 if (Data.MyMap.EventCount > 0)
                 {
-                    Data.MyMap.Event = new Core.Type.Event[Data.MyMap.EventCount];
+                    Data.MyMap.Event = new Type.Event[Data.MyMap.EventCount];
                     var loopTo2 = Data.MyMap.EventCount;
                     for (i = 0; i < loopTo2; i++)
                     {
@@ -846,7 +849,7 @@ namespace Client
 
                         if (Data.MyMap.Event[i].PageCount > 0)
                         {
-                            Data.MyMap.Event[i].Pages = new Core.Type.EventPage[Data.MyMap.Event[i].PageCount];
+                            Data.MyMap.Event[i].Pages = new Type.EventPage[Data.MyMap.Event[i].PageCount];
                             var loopTo3 = Data.MyMap.Event[i].PageCount;
                             for (x = 0; x < loopTo3; x++)
                             {
@@ -885,7 +888,7 @@ namespace Client
 
                                     if (withBlock1.MoveRouteCount > 0)
                                     {
-                                        Data.MyMap.Event[i].Pages[x].MoveRoute = new Core.Type.MoveRoute[withBlock1.MoveRouteCount];
+                                        Data.MyMap.Event[i].Pages[x].MoveRoute = new Type.MoveRoute[withBlock1.MoveRouteCount];
                                         var loopTo4 = withBlock1.MoveRouteCount;
                                         for (y = 0; y < loopTo4; y++)
                                         {
@@ -910,7 +913,7 @@ namespace Client
 
                                 if (Data.MyMap.Event[i].Pages[x].CommandListCount > 0)
                                 {
-                                    Data.MyMap.Event[i].Pages[x].CommandList = new Core.Type.CommandList[Data.MyMap.Event[i].Pages[x].CommandListCount];
+                                    Data.MyMap.Event[i].Pages[x].CommandList = new Type.CommandList[Data.MyMap.Event[i].Pages[x].CommandListCount];
                                     var loopTo5 = Data.MyMap.Event[i].Pages[x].CommandListCount;
                                     for (y = 0; y < loopTo5; y++)
                                     {
@@ -918,7 +921,7 @@ namespace Client
                                         Data.MyMap.Event[i].Pages[x].CommandList[y].ParentList = buffer.ReadInt32();
                                         if (Data.MyMap.Event[i].Pages[x].CommandList[y].CommandCount > 0)
                                         {
-                                            Data.MyMap.Event[i].Pages[x].CommandList[y].Commands = new Core.Type.EventCommand[Data.MyMap.Event[i].Pages[x].CommandList[y].CommandCount];
+                                            Data.MyMap.Event[i].Pages[x].CommandList[y].Commands = new Type.EventCommand[Data.MyMap.Event[i].Pages[x].CommandList[y].CommandCount];
                                             for (int z = 0, loopTo6 = Data.MyMap.Event[i].Pages[x].CommandList[y].CommandCount; z < loopTo6; z++)
                                             {
                                                 {
@@ -991,8 +994,8 @@ namespace Client
             {
                 GameState.ResourceIndex = buffer.ReadInt32();
                 GameState.ResourcesInit = false;
-                Data.MapResource = new Core.Type.MapResource[GameState.ResourceIndex];
-                Data.MyMapResource = new Core.Type.MapResourceCache[Constant.MaxResources];
+                Data.MapResource = new Type.MapResource[GameState.ResourceIndex];
+                Data.MyMapResource = new Type.MapResourceCache[Constant.MaxResources];
 
                 if (GameState.ResourceIndex > 0)
                 {
@@ -1306,7 +1309,7 @@ namespace Client
 
         public static void ClearMapEvents()
         {
-            Data.MapEvents = new Core.Type.MapEvent[Data.MyMap.EventCount];
+            Data.MapEvents = new Type.MapEvent[Data.MyMap.EventCount];
 
             for (int i = 0, loopTo = Data.MyMap.EventCount; i < loopTo; i++)
             {

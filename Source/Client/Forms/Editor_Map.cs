@@ -3,17 +3,19 @@ using Eto.Drawing;
 using Assimp.Configs;
 using Client.Net;
 using Core;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collisions.Layers;
-using MonoGame.Extended.Content.Tiled;
-using static Core.Type;
+using static Core.Globals.Type;
 using Color = Microsoft.Xna.Framework.Color;
+using Command = Eto.Forms.Command;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -305,12 +307,12 @@ namespace Client
                 withBlock.MaxX = (byte)Math.Round(Conversion.Val(Instance.txtMaxX.Text));
                 withBlock.MaxY = (byte)Math.Round(Conversion.Val(Instance.txtMaxY.Text));
 
-                withBlock.Tile = new Core.Type.Tile[(withBlock.MaxX), (withBlock.MaxY)];
+                withBlock.Tile = new Type.Tile[(withBlock.MaxX), (withBlock.MaxY)];
 
                 for (int i = 0; i < GameState.MaxTileHistory; i++)
                     Data.TileHistory[i].Tile = new Tile[(withBlock.MaxX), (withBlock.MaxY)];
 
-                Data.Autotile = new Core.Type.Autotile[(withBlock.MaxX), (withBlock.MaxY)];
+                Data.Autotile = new Type.Autotile[(withBlock.MaxX), (withBlock.MaxY)];
 
                 if (x2 > withBlock.MaxX)
                     x2 = withBlock.MaxX;
@@ -326,11 +328,11 @@ namespace Client
                     var loopTo1 = (int)withBlock.MaxY;
                     for (int y = 0; y < loopTo1; y++)
                     {
-                        withBlock.Tile[x, y].Layer = new Core.Type.Layer[layerCount];
-                        Data.Autotile[x, y].Layer = new Core.Type.QuarterTile[layerCount];
+                        withBlock.Tile[x, y].Layer = new Type.Layer[layerCount];
+                        Data.Autotile[x, y].Layer = new Type.QuarterTile[layerCount];
 
                         for (int i = 0; i < GameState.MaxTileHistory; i++)
-                            Data.TileHistory[i].Tile[x, y].Layer = new Core.Type.Layer[layerCount];
+                            Data.TileHistory[i].Tile[x, y].Layer = new Type.Layer[layerCount];
 
                         if (x < x2)
                         {
@@ -466,7 +468,7 @@ namespace Client
 
         private void ScrlMapItem_ValueChanged(object sender, EventArgs e)
         {
-            if (Core.Data.Item[scrlMapItem.Value].Type == (byte)ItemCategory.Currency | Core.Data.Item[scrlMapItem.Value].Stackable == 1)
+            if (Data.Item[scrlMapItem.Value].Type == (byte)ItemCategory.Currency | Data.Item[scrlMapItem.Value].Stackable == 1)
             {
                 scrlMapItemValue.Enabled = true;
             }
@@ -477,12 +479,12 @@ namespace Client
             }
 
             // DrawItem removed in refactor (image updated elsewhere)
-            lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Core.Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
+            lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
         }
 
         private void ScrlMapItemValue_ValueChanged(object sender, EventArgs e)
         {
-            lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Core.Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
+            lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
         }
 
         private void BtnMapItem_Click(object sender, EventArgs e)
@@ -502,7 +504,7 @@ namespace Client
             pnlAttributes.Visible = true;
             fraMapItem.Visible = true;
 
-            lblMapItem.Text = Core.Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
+            lblMapItem.Text = Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
             ScrlMapItem_ValueChanged(sender, e);
             // DrawItem removed in refactor (image updated elsewhere)
     }
@@ -691,7 +693,7 @@ namespace Client
                 // If the selected music file is a MIDI file
                 if (SettingsManager.Instance.MusicExt == ".mid")
                 {
-                    Sound.PlayMidi(System.IO.Path.Combine(Core.Path.Music, selectedFile));
+                    Sound.PlayMidi(System.IO.Path.Combine(DataPath.Music, selectedFile));
                 }
                 else
                 {
@@ -904,7 +906,7 @@ namespace Client
                     continue;
                 }
 
-                if (Data.MyMap.Npc[x] >= 0 && Data.MyMap.Npc[x] <= Core.Constant.MaxNpcs)
+                if (Data.MyMap.Npc[x] >= 0 && Data.MyMap.Npc[x] <= Constant.MaxNpcs)
                 {
                     Instance.lstMapNpc.Items.Add(x + ": " + Strings.Trim(Data.Npc[Data.MyMap.Npc[x]].Name));
                 }
@@ -1158,7 +1160,7 @@ namespace Client
                     {
                         if (GameState.EditorAttribute == 1)
                         {
-                            withBlock1.Type = Core.TileType.Blocked;
+                            withBlock1.Type = TileType.Blocked;
                         }
                         else
                         {
@@ -1917,7 +1919,7 @@ namespace Client
                     for (y = 0; y < loopTo1; y++)
                     {
                         ref var withBlock = ref Data.MyMap.Tile[x, y];
-                        Data.TempTile[x, y].Layer = new Core.Type.Layer[layerCount];
+                        Data.TempTile[x, y].Layer = new Type.Layer[layerCount];
 
                         Data.TempTile[x, y].Data1 = withBlock.Data1;
                         Data.TempTile[x, y].Data2 = withBlock.Data2;
@@ -2121,7 +2123,7 @@ namespace Client
         /// <param name="layer">The layer to update.</param>
         /// <param name="tileX">The new X coordinate to set.</param>
         /// <param name="tileY">The new Y coordinate to set.</param>
-        public static void MapEditorReplaceTile(MapLayer layer, int tileX, int tileY, Core.Type.Tile oldTile)
+        public static void MapEditorReplaceTile(MapLayer layer, int tileX, int tileY, Type.Tile oldTile)
         {
             int maxX = Data.MyMap.MaxX;
             int maxY = Data.MyMap.MaxY;

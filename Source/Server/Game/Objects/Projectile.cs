@@ -1,13 +1,14 @@
 ﻿using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Global.Command;
-using static Core.Packets;
-using Type = Core.Type;
+using static Core.Globals.Command;
+using static Core.Net.Packets;
+using Type = Core.Globals.Type;
 
 namespace Server;
 
@@ -29,7 +30,7 @@ public static class Projectile
 
     public static async Task LoadProjectilesAsync()
     {
-        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxProjectiles), LoadProjectileAsync);
+        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxProjectiles), LoadProjectileAsync);
     }
 
     private static async ValueTask LoadProjectileAsync(int projectileNum, CancellationToken cancellationToken)
@@ -101,7 +102,7 @@ public static class Projectile
         }
 
         var projectileNum = packetReader.ReadInt32();
-        if (projectileNum is < 0 or > Core.Constant.MaxProjectiles)
+        if (projectileNum is < 0 or > Core.Globals.Constant.MaxProjectiles)
         {
             return;
         }
@@ -175,7 +176,7 @@ public static class Projectile
 
     public static void SendProjectiles(int playerId)
     {
-        for (var projectileNum = 0; projectileNum < Core.Constant.MaxProjectiles; projectileNum++)
+        for (var projectileNum = 0; projectileNum < Core.Globals.Constant.MaxProjectiles; projectileNum++)
         {
             if (Data.Projectile[projectileNum].Name.Length > 0)
             {
@@ -207,7 +208,7 @@ public static class Projectile
         var mapNum = GetPlayerMap(playerId);
         var mapProjectileNum = 0;
 
-        for (var i = 0; i < Core.Constant.MaxProjectiles; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxProjectiles; i++)
         {
             if (Data.MapProjectile[mapNum, i].ProjectileNum != -1)
             {

@@ -3,10 +3,11 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
 using Client.Net;
-using static Core.Global.Command;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Command;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using Path = Core.Path;
-using Type = Core.Type;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -138,13 +139,13 @@ namespace Client
                 {
                     for (_i = 0; _i < Constant.MaxPlayerSkills; _i++)
                     {
-                        if (Core.Data.Player[GameState.MyIndex].Skill[_i].Num >= 0)
+                        if (Data.Player[GameState.MyIndex].Skill[_i].Num >= 0)
                         {
-                            if (Core.Data.Player[GameState.MyIndex].Skill[_i].Cd > 0)
+                            if (Data.Player[GameState.MyIndex].Skill[_i].Cd > 0)
                             {
-                                if (Core.Data.Player[GameState.MyIndex].Skill[_i].Cd + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[_i].Num].CdTime * 1000 < _tick)
+                                if (Data.Player[GameState.MyIndex].Skill[_i].Cd + Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[_i].Num].CdTime * 1000 < _tick)
                                 {
-                                    Core.Data.Player[GameState.MyIndex].Skill[_i].Cd = 0;
+                                    Data.Player[GameState.MyIndex].Skill[_i].Cd = 0;
                                 }
                             }
                         }
@@ -154,7 +155,7 @@ namespace Client
                 // check if we need to unlock the player's skill casting restriction
                 if (GameState.SkillBuffer >= 0)
                 {
-                    if (GameState.SkillBufferTimer + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[GameState.SkillBuffer].Num].CastTime * 1000 < _tick)
+                    if (GameState.SkillBufferTimer + Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[GameState.SkillBuffer].Num].CastTime * 1000 < _tick)
                     {
                         GameState.SkillBuffer = -1;
                         GameState.SkillBufferTimer = 0;
@@ -324,13 +325,13 @@ namespace Client
                             if (GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                             {
                                 // Check if completed walking over to the next tile
-                                if (Core.Data.Player[i].Steps == 3)
+                                if (Data.Player[i].Steps == 3)
                                 {
-                                    Core.Data.Player[i].Steps = 0;
+                                    Data.Player[i].Steps = 0;
                                 }
                                 else
                                 {
-                                    Core.Data.Player[i].Steps++;
+                                    Data.Player[i].Steps++;
                                 }                              
                             }
                         }

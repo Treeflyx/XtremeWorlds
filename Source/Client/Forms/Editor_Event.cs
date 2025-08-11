@@ -3,9 +3,12 @@ using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using System;
 using System.IO;
+using Core.Globals;
 using Eto.Forms;
 using Eto.Drawing;
-using static Core.Type;
+using static Core.Globals.Type;
+using EventCommand = Core.Globals.EventCommand;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -299,7 +302,7 @@ namespace Client
             cmbCondition_PlayerVarIndex.Enabled = false;
             cmbCondition_PlayerVarIndex.Items.Clear();
 
-            for (i = 0; i < Core.Constant.NaxVariables; i++)
+            for (i = 0; i < Constant.MaxVariables; i++)
                 cmbCondition_PlayerVarIndex.Items.Add(i + 1 + ". " + Event.Variables[i]);
             cmbCondition_PlayerVarIndex.SelectedIndex = 0;
             cmbCondition_PlayerVarCompare.SelectedIndex = 0;
@@ -318,7 +321,7 @@ namespace Client
             cmbCondition_HasItem.Items.Clear();
 
             for (i = 0; i < Constant.MaxItems; i++)
-                cmbCondition_HasItem.Items.Add(i + 1 + ". " + Core.Data.Item[i].Name);
+                cmbCondition_HasItem.Items.Add(i + 1 + ". " + Data.Item[i].Name);
             cmbCondition_HasItem.SelectedIndex = 0;
             nudCondition_HasItem.Enabled = false;
             nudCondition_HasItem.Value = 1;
@@ -369,12 +372,12 @@ namespace Client
             cmbSwitch.SelectedIndex = 0;
             cmbVariable.Items.Clear();
 
-            for (i = 0; i < Constant.NaxVariables; i++)
+            for (i = 0; i < Constant.MaxVariables; i++)
                 cmbVariable.Items.Add(i + 1 + ". " + Event.Variables[i]);
             cmbVariable.SelectedIndex = 0;
             cmbChangeItemIndex.Items.Clear();
             for (i = 0; i < Constant.MaxItems; i++)
-                cmbChangeItemIndex.Items.Add(Core.Data.Item[i].Name);
+                cmbChangeItemIndex.Items.Add(Data.Item[i].Name);
             cmbChangeItemIndex.SelectedIndex = 0;
             nudChangeLevel.MinValue = 1;
             nudChangeLevel.MaxValue = Constant.MaxLevel;
@@ -412,7 +415,7 @@ namespace Client
             cmbPlaySound.SelectedIndex = 0;
             cmbOpenShop.Items.Clear();
 
-            for (i = 0; i < Constant.NaxVariables; i++)
+            for (i = 0; i < Constant.MaxVariables; i++)
                 cmbOpenShop.Items.Add(i + 1 + ". " + Data.Shop[i].Name);
             cmbOpenShop.SelectedIndex = 0;
             cmbSpawnNpc.Items.Clear();
@@ -421,7 +424,7 @@ namespace Client
             {
                 if (Data.MyMap.Npc[i] > 0)
                 {
-                    cmbSpawnNpc.Items.Add(i + 1 + ". " + Core.Data.Npc[Data.MyMap.Npc[i]].Name);
+                    cmbSpawnNpc.Items.Add(i + 1 + ". " + Data.Npc[Data.MyMap.Npc[i]].Name);
                 }
                 else
                 {
@@ -431,7 +434,7 @@ namespace Client
 
             cmbSpawnNpc.SelectedIndex = 0;
             nudFogData0.MaxValue = GameState.NumFogs;
-            nudWPMap.MaxValue = Core.Constant.NaxVariables;
+            nudWPMap.MaxValue = Constant.MaxVariables;
 
             // Layout sizing handled by Eto containers
 
@@ -448,11 +451,11 @@ namespace Client
             // items
             cmbHasItem.Items.Clear();
             for (i = 0; i < Constant.MaxItems; i++)
-                cmbHasItem.Items.Add(i + 1 + ": " + Core.Data.Item[i].Name);
+                cmbHasItem.Items.Add(i + 1 + ": " + Data.Item[i].Name);
 
             // variables
             cmbPlayerVar.Items.Clear();
-            for (i = 0; i < Constant.NaxVariables; i++)
+            for (i = 0; i < Constant.MaxVariables; i++)
                 cmbPlayerVar.Items.Add(i + 1 + ". " + Event.Variables[i]);
             // switches
             cmbPlayerSwitch.Items.Clear();
@@ -647,7 +650,7 @@ namespace Client
                 // Exit Event Process
                 case "Stop Event Processing":
                     {
-                        Event.AddCommand((int)Core.EventCommand.ExitEventProcess);
+                        Event.AddCommand((int)EventCommand.ExitEventProcess);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -686,7 +689,7 @@ namespace Client
                 // Restore HP
                 case "Restore HP":
                     {
-                        Event.AddCommand((int)Core.EventCommand.RestoreHealth);
+                        Event.AddCommand((int)EventCommand.RestoreHealth);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -694,7 +697,7 @@ namespace Client
                 // Restore MP
                 case "Restore MP":
                     {
-                        Event.AddCommand((int)Core.EventCommand.RestoreMana);
+                        Event.AddCommand((int)EventCommand.RestoreMana);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -702,7 +705,7 @@ namespace Client
                 // Restore SP
                 case "Restore SP":
                     {
-                        Event.AddCommand((int)Core.EventCommand.RestoreStamina);
+                        Event.AddCommand((int)EventCommand.RestoreStamina);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -710,7 +713,7 @@ namespace Client
                 // Level Up
                 case "Level Up":
                     {
-                        Event.AddCommand((int)Core.EventCommand.ChangeLevel);
+                        Event.AddCommand((int)EventCommand.ChangeLevel);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -822,7 +825,7 @@ namespace Client
                         chkIgnoreMove.Checked = false;
                         chkRepeatRoute.Checked = false;
                         Event.TempMoveRouteCount = 0;
-                        Event.TempMoveRoute = new Core.Type.MoveRoute[1];
+                        Event.TempMoveRoute = new Type.MoveRoute[1];
                         fraMoveRoute.Visible = true;
                         // fraMoveRoute.BringToFront(); // not available in Eto - rely on container layout & visibility
                         fraMoveRoute.Visible = true;
@@ -857,8 +860,8 @@ namespace Client
                     {
                         // lets populate the combobox
                         cmbSpawnNpc.Items.Clear();
-                        for (int i = 0; i < Core.Constant.NaxVariables; i++)
-                            cmbSpawnNpc.Items.Add(Strings.Trim(Core.Data.Npc[i].Name));
+                        for (int i = 0; i < Constant.MaxVariables; i++)
+                            cmbSpawnNpc.Items.Add(Strings.Trim(Data.Npc[i].Name));
                         cmbSpawnNpc.SelectedIndex = 0;
                         fraDialogue.Visible = true;
                         fraSpawnNpc.Visible = true;
@@ -868,7 +871,7 @@ namespace Client
                 // Hold Player
                 case "Hold Player":
                     {
-                        Event.AddCommand((int)Core.EventCommand.HoldPlayer);
+                        Event.AddCommand((int)EventCommand.HoldPlayer);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -876,7 +879,7 @@ namespace Client
                 // Release Player
                 case "Release Player":
                     {
-                        Event.AddCommand((int)Core.EventCommand.ReleasePlayer);
+                        Event.AddCommand((int)EventCommand.ReleasePlayer);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -956,7 +959,7 @@ namespace Client
                 // Stop BGM
                 case "Stop BGM":
                     {
-                        Event.AddCommand((int)Core.EventCommand.FadeOutBgm);
+                        Event.AddCommand((int)EventCommand.FadeOutBgm);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -973,7 +976,7 @@ namespace Client
                 // Stop Sounds
                 case "Stop Sounds":
                     {
-                        Event.AddCommand((int)Core.EventCommand.StopSound);
+                        Event.AddCommand((int)EventCommand.StopSound);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1003,7 +1006,7 @@ namespace Client
                 // Open bank
                 case "Open Bank":
                     {
-                        Event.AddCommand((int)Core.EventCommand.OpenBank);
+                        Event.AddCommand((int)EventCommand.OpenBank);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1022,7 +1025,7 @@ namespace Client
                 // Fade in
                 case "Fade In":
                     {
-                        Event.AddCommand((int)Core.EventCommand.FadeIn);
+                        Event.AddCommand((int)EventCommand.FadeIn);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1030,7 +1033,7 @@ namespace Client
                 // Fade out
                 case "Fade Out":
                     {
-                        Event.AddCommand((int)Core.EventCommand.FadeOut);
+                        Event.AddCommand((int)EventCommand.FadeOut);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1038,7 +1041,7 @@ namespace Client
                 // Flash white
                 case "Flash White":
                     {
-                        Event.AddCommand((int)Core.EventCommand.FlashScreen);
+                        Event.AddCommand((int)EventCommand.FlashScreen);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1058,7 +1061,7 @@ namespace Client
                 // Hide pic
                 case "Hide Picture":
                     {
-                        Event.AddCommand((int)Core.EventCommand.HidePicture);
+                        Event.AddCommand((int)EventCommand.HidePicture);
                         fraCommands.Visible = false;
                         fraDialogue.Visible = false;
                         break;
@@ -1383,14 +1386,14 @@ namespace Client
 
                 for (int i = 0; i <= 3; i++)
                 {
-                    if (Event.GraphicSelX >= GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, nudGraphic.Value.ToString())).Width / 4d * i & Event.GraphicSelX < GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, nudGraphic.Value.ToString())).Width / 4d * (i + 1))
+                    if (Event.GraphicSelX >= GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, nudGraphic.Value.ToString())).Width / 4d * i & Event.GraphicSelX < GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, nudGraphic.Value.ToString())).Width / 4d * (i + 1))
                     {
                         Event.GraphicSelX = i;
                     }
                 }
                 for (int i = 0; i <= 3; i++)
                 {
-                    if (Event.GraphicSelY >= GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, nudGraphic.Value.ToString())).Height / 4d * i & Event.GraphicSelY < GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Characters, nudGraphic.Value.ToString())).Height / 4d * (i + 1))
+                    if (Event.GraphicSelY >= GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, nudGraphic.Value.ToString())).Height / 4d * i & Event.GraphicSelY < GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Characters, nudGraphic.Value.ToString())).Height / 4d * (i + 1))
                     {
                         Event.GraphicSelY = i;
                     }
@@ -1838,7 +1841,7 @@ namespace Client
                 lstSwitches.Items.Add((i + 1).ToString()  + ". " + Event.Switches[i]);
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NaxVariables; i++)
+            for (int i = 0; i < Constant.MaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Event.Variables[i]);
 
         }
@@ -1853,7 +1856,7 @@ namespace Client
                 case 1:
                     {
                         // Variable
-                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.NaxVariables)
+                        if (Event.RenameIndex >= 0 & Event.RenameIndex < Constant.MaxVariables)
                         {
                             Event.Variables[Event.RenameIndex] = txtRename.Text;
                             FraRenaming.Visible = false;
@@ -1885,7 +1888,7 @@ namespace Client
             lstSwitches.SelectedIndex = 0;
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NaxVariables; i++)
+            for (int i = 0; i < Constant.MaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Strings.Trim(Event.Variables[i]));
             lstVariables.SelectedIndex = 0;
         }
@@ -1904,7 +1907,7 @@ namespace Client
             lstSwitches.SelectedIndex = 0;
             lstVariables.Items.Clear();
 
-            for (int i = 0; i < Constant.NaxVariables; i++)
+            for (int i = 0; i < Constant.MaxVariables; i++)
                 lstVariables.Items.Add((i + 1).ToString() + ". " + Event.Variables[i]);
             lstVariables.SelectedIndex = 0;
         }
@@ -1916,7 +1919,7 @@ namespace Client
 
         private void LstVariables_DoubleClick(object sender, EventArgs e)
         {
-            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NaxVariables)
+            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.MaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
@@ -1942,7 +1945,7 @@ namespace Client
 
         private void BtnRenameVariable_Click(object sender, EventArgs e)
         {
-            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.NaxVariables)
+            if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.MaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
@@ -2075,7 +2078,7 @@ namespace Client
                 Event.TempMoveRouteCount = Event.TempMoveRouteCount - 1;
                 if (Event.TempMoveRouteCount == 0)
                 {
-                    Event.TempMoveRoute = new Core.Type.MoveRoute[1];
+                    Event.TempMoveRoute = new Type.MoveRoute[1];
                 }
                 else
                 {
@@ -2347,14 +2350,14 @@ namespace Client
             {
                 if (!Event.IsEdit)
                 {
-                    Event.AddCommand((int)Core.EventCommand.SetMoveRoute);
+                    Event.AddCommand((int)EventCommand.SetMoveRoute);
                 }
                 else
                 {
                     Event.EditCommand();
                 }
                 Event.TempMoveRouteCount = 0;
-                Event.TempMoveRoute = new Core.Type.MoveRoute[1];
+                Event.TempMoveRoute = new Type.MoveRoute[1];
                 fraMoveRoute.Visible = false;
             }
             else
@@ -2362,7 +2365,7 @@ namespace Client
                 Event.TmpEvent.Pages[Event.CurPageNum].MoveRouteCount = Event.TempMoveRouteCount;
                 Event.TmpEvent.Pages[Event.CurPageNum].MoveRoute = Event.TempMoveRoute;
                 Event.TempMoveRouteCount = 0;
-                Event.TempMoveRoute = new Core.Type.MoveRoute[1];
+                Event.TempMoveRoute = new Type.MoveRoute[1];
                 fraMoveRoute.Visible = false;
             }
         }
@@ -2370,7 +2373,7 @@ namespace Client
         private void BtnMoveRouteCancel_Click(object sender, EventArgs e)
         {
             Event.TempMoveRouteCount = 0;
-            Event.TempMoveRoute = new Core.Type.MoveRoute[1];
+            Event.TempMoveRoute = new Type.MoveRoute[1];
             fraMoveRoute.Visible = false;
         }
 
@@ -2384,7 +2387,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ShowText);
+                Event.AddCommand((int)EventCommand.ShowText);
             }
             else
             {
@@ -2415,7 +2418,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.AddText);
+                Event.AddCommand((int)EventCommand.AddText);
             }
             else
             {
@@ -2444,7 +2447,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ShowChoices);
+                Event.AddCommand((int)EventCommand.ShowChoices);
             }
             else
             {
@@ -2489,7 +2492,7 @@ namespace Client
                     }
                     else
                     {
-                        cmbChatBubbleTarget.Items.Add(i + 1 + ". " + Core.Data.Npc[Data.MyMap.Npc[i]].Name);
+                        cmbChatBubbleTarget.Items.Add(i + 1 + ". " + Data.Npc[Data.MyMap.Npc[i]].Name);
                     }
                 }
                 cmbChatBubbleTarget.SelectedIndex = 0;
@@ -2510,7 +2513,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ShowChatBubble);
+                Event.AddCommand((int)EventCommand.ShowChatBubble);
             }
             else
             {
@@ -2607,7 +2610,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ModifyVariable);
+                Event.AddCommand((int)EventCommand.ModifyVariable);
             }
             else
             {
@@ -2637,7 +2640,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ModifySwitch);
+                Event.AddCommand((int)EventCommand.ModifySwitch);
             }
             else
             {
@@ -2667,7 +2670,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ModifySelfSwitch);
+                Event.AddCommand((int)EventCommand.ModifySelfSwitch);
             }
             else
             {
@@ -2791,7 +2794,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ConditionalBranch);
+                Event.AddCommand((int)EventCommand.ConditionalBranch);
             }
             else
             {
@@ -2821,7 +2824,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.Label);
+                Event.AddCommand((int)EventCommand.Label);
             }
             else
             {
@@ -2851,7 +2854,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.GoToLabel);
+                Event.AddCommand((int)EventCommand.GoToLabel);
             }
             else
             {
@@ -2881,7 +2884,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeItems);
+                Event.AddCommand((int)EventCommand.ChangeItems);
             }
             else
             {
@@ -2911,7 +2914,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeLevel);
+                Event.AddCommand((int)EventCommand.ChangeLevel);
             }
             else
             {
@@ -2941,7 +2944,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeSkills);
+                Event.AddCommand((int)EventCommand.ChangeSkills);
             }
             else
             {
@@ -2971,7 +2974,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeJob);
+                Event.AddCommand((int)EventCommand.ChangeJob);
             }
             else
             {
@@ -3001,7 +3004,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeSprite);
+                Event.AddCommand((int)EventCommand.ChangeSprite);
             }
             else
             {
@@ -3031,7 +3034,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.ChangeSex);
+                Event.AddCommand((int)EventCommand.ChangeSex);
             }
             else
             {
@@ -3061,7 +3064,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.SetPlayerKillable);
+                Event.AddCommand((int)EventCommand.SetPlayerKillable);
             }
             else
             {
@@ -3091,7 +3094,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.GiveExperience);
+                Event.AddCommand((int)EventCommand.GiveExperience);
             }
             else
             {
@@ -3121,7 +3124,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.WarpPlayer);
+                Event.AddCommand((int)EventCommand.WarpPlayer);
             }
             else
             {
@@ -3151,7 +3154,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.WaitMovementCompletion);
+                Event.AddCommand((int)EventCommand.WaitMovementCompletion);
             }
             else
             {
@@ -3181,7 +3184,7 @@ namespace Client
         {
             if (Event.IsEdit == false)
             {
-                Event.AddCommand((int)Core.EventCommand.SpawnNpc);
+                Event.AddCommand((int)EventCommand.SpawnNpc);
             }
             else
             {
@@ -3238,7 +3241,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.PlayAnimation);
+                Event.AddCommand((int)EventCommand.PlayAnimation);
             }
             else
             {
@@ -3268,7 +3271,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.SetFog);
+                Event.AddCommand((int)EventCommand.SetFog);
             }
             else
             {
@@ -3298,7 +3301,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.SetWeather);
+                Event.AddCommand((int)EventCommand.SetWeather);
             }
             else
             {
@@ -3328,7 +3331,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.SetScreenTint);
+                Event.AddCommand((int)EventCommand.SetScreenTint);
             }
             else
             {
@@ -3358,7 +3361,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.PlayBgm);
+                Event.AddCommand((int)EventCommand.PlayBgm);
             }
             else
             {
@@ -3388,7 +3391,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.PlaySound);
+                Event.AddCommand((int)EventCommand.PlaySound);
             }
             else
             {
@@ -3418,7 +3421,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.Wait);
+                Event.AddCommand((int)EventCommand.Wait);
             }
             else
             {
@@ -3448,7 +3451,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.SetAccessLevel);
+                Event.AddCommand((int)EventCommand.SetAccessLevel);
             }
             else
             {
@@ -3478,7 +3481,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.ShowPicture);
+                Event.AddCommand((int)EventCommand.ShowPicture);
             }
             else
             {
@@ -3517,9 +3520,9 @@ namespace Client
                 return;
             }
 
-            if (File.Exists(System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt)))
+            if (File.Exists(System.IO.Path.Combine(DataPath.Pictures, Sprite + GameState.GfxExt)))
             {
-                var bmpPath = System.IO.Path.Combine(Core.Path.Pictures, Sprite + GameState.GfxExt);
+                var bmpPath = System.IO.Path.Combine(DataPath.Pictures, Sprite + GameState.GfxExt);
                 try
                 {
                     var bmp = new Eto.Drawing.Bitmap(bmpPath);
@@ -3540,7 +3543,7 @@ namespace Client
         {
             if (!Event.IsEdit)
             {
-                Event.AddCommand((int)Core.EventCommand.OpenShop);
+                Event.AddCommand((int)EventCommand.OpenShop);
             }
             else
             {

@@ -1,5 +1,7 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -20,7 +22,7 @@ namespace Client
 
         public static void ClearNpcs()
         {
-            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
+            Data.Npc = new Type.Npc[Constant.MaxNpcs];
 
             for (int i = 0; i < Constant.MaxNpcs; i++)
                 ClearNpc(i);
@@ -29,7 +31,7 @@ namespace Client
 
         public static void ClearNpc(int index)
         {
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             Data.Npc[index].AttackSay = "";
             Data.Npc[index].Name = "";
             Data.Npc[index] = default;

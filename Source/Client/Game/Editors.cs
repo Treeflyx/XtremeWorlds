@@ -1,6 +1,7 @@
 ﻿using System;
 using Client.Net;
 using Core;
+using Core.Globals;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -133,11 +134,11 @@ namespace Client
 
             withBlock.cmbAnimation.SelectedIndex = Data.Npc[GameState.EditorIndex].Animation;
 
-            withBlock.nudStrength.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Strength];
-            withBlock.nudIntelligence.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Intelligence];
-            withBlock.nudSpirit.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Spirit];
-            withBlock.nudLuck.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Luck];
-            withBlock.nudVitality.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Vitality];
+            withBlock.nudStrength.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Strength];
+            withBlock.nudIntelligence.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Intelligence];
+            withBlock.nudSpirit.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Spirit];
+            withBlock.nudLuck.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Luck];
+            withBlock.nudVitality.Value = Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Vitality];
 
             withBlock.cmbSkill1.SelectedIndex = Data.Npc[GameState.EditorIndex].Skill[0];
             withBlock.cmbSkill2.SelectedIndex = Data.Npc[GameState.EditorIndex].Skill[1];
@@ -394,7 +395,7 @@ namespace Client
                     }
                     else
                     {
-                        Editor_Shop.Instance.lstTradeItem.Items.Add(i + 1 + ": " + withBlock.ItemValue + "x " + Core.Data.Item[withBlock.Item].Name + " for " + withBlock.CostValue + "x " + Core.Data.Item[withBlock.CostItem].Name);
+                        Editor_Shop.Instance.lstTradeItem.Items.Add(i + 1 + ": " + withBlock.ItemValue + "x " + Data.Item[withBlock.Item].Name + " for " + withBlock.CostValue + "x " + Data.Item[withBlock.CostItem].Name);
                     }
                 }
             }
@@ -480,18 +481,18 @@ namespace Client
 
             withBlock.cmbItems!.SelectedIndex = 0;
 
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             for (int i = 0; i < statCount; i++)
             {
                 if (Data.Job[GameState.EditorIndex].Stat[i] == 0)
                     Data.Job[GameState.EditorIndex].Stat[i] = 1;
             }
 
-            withBlock.nudStrength!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Core.Stat.Strength];
-            withBlock.nudLuck!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Core.Stat.Luck];
-            withBlock.nudIntelligence!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Core.Stat.Intelligence];
-            withBlock.nudVitality!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Core.Stat.Vitality];
-            withBlock.nudSpirit!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Core.Stat.Spirit];
+            withBlock.nudStrength!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Stat.Strength];
+            withBlock.nudLuck!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Stat.Luck];
+            withBlock.nudIntelligence!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Stat.Intelligence];
+            withBlock.nudVitality!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Stat.Vitality];
+            withBlock.nudSpirit!.Value = Data.Job[GameState.EditorIndex].Stat[(int)Stat.Spirit];
             withBlock.nudBaseExp!.Value = Data.Job[GameState.EditorIndex].BaseExp;
 
             if (Data.Job[GameState.EditorIndex].StartMap == 0)
@@ -521,7 +522,7 @@ namespace Client
                 if (listItem.Items.Count > 0) listItem.SelectedIndex = 0;
             }
             GameState.EditorIndex = idx;
-            ref var withBlock = ref Core.Data.Item[GameState.EditorIndex];
+            ref var withBlock = ref Data.Item[GameState.EditorIndex];
             Editor_Item.Instance!.txtName!.Text = withBlock.Name;
             Editor_Item.Instance!.txtDescription!.Text = withBlock.Description;
 
@@ -553,11 +554,11 @@ namespace Client
                     withBlock.Speed = (int)Math.Round(Editor_Item.Instance!.nudSpeed!.MaxValue);
                 Editor_Item.Instance!.nudSpeed!.Value = withBlock.Speed;
 
-                Editor_Item.Instance!.nudStrength!.Value = withBlock.AddStat[(int)Core.Stat.Strength];
-                Editor_Item.Instance!.nudIntelligence!.Value = withBlock.AddStat[(int)Core.Stat.Intelligence];
-                Editor_Item.Instance!.nudVitality!.Value = withBlock.AddStat[(int)Core.Stat.Vitality];
-                Editor_Item.Instance!.nudLuck!.Value = withBlock.AddStat[(int)Core.Stat.Luck];
-                Editor_Item.Instance!.nudSpirit!.Value = withBlock.AddStat[(int)Core.Stat.Spirit];
+                Editor_Item.Instance!.nudStrength!.Value = withBlock.AddStat[(int)Stat.Strength];
+                Editor_Item.Instance!.nudIntelligence!.Value = withBlock.AddStat[(int)Stat.Intelligence];
+                Editor_Item.Instance!.nudVitality!.Value = withBlock.AddStat[(int)Stat.Vitality];
+                Editor_Item.Instance!.nudLuck!.Value = withBlock.AddStat[(int)Stat.Luck];
+                Editor_Item.Instance!.nudSpirit!.Value = withBlock.AddStat[(int)Stat.Spirit];
 
                 if (withBlock.KnockBack == 1)
                 {
@@ -633,11 +634,11 @@ namespace Client
             Editor_Item.Instance!.cmbAccessReq!.SelectedIndex = withBlock.AccessReq;
             Editor_Item.Instance!.nudLevelReq!.Value = withBlock.LevelReq;
 
-            Editor_Item.Instance!.nudStrReq!.Value = withBlock.StatReq[(int)Core.Stat.Strength];
-            Editor_Item.Instance!.nudVitReq!.Value = withBlock.StatReq[(int)Core.Stat.Vitality];
-            Editor_Item.Instance!.nudLuckReq!.Value = withBlock.StatReq[(int)Core.Stat.Luck];
-            Editor_Item.Instance!.nudIntReq!.Value = withBlock.StatReq[(int)Core.Stat.Intelligence];
-            Editor_Item.Instance!.nudSprReq!.Value = withBlock.StatReq[(int)Core.Stat.Spirit];
+            Editor_Item.Instance!.nudStrReq!.Value = withBlock.StatReq[(int)Stat.Strength];
+            Editor_Item.Instance!.nudVitReq!.Value = withBlock.StatReq[(int)Stat.Vitality];
+            Editor_Item.Instance!.nudLuckReq!.Value = withBlock.StatReq[(int)Stat.Luck];
+            Editor_Item.Instance!.nudIntReq!.Value = withBlock.StatReq[(int)Stat.Intelligence];
+            Editor_Item.Instance!.nudSprReq!.Value = withBlock.StatReq[(int)Stat.Spirit];
 
             // Build cmbJobReq
             Editor_Item.Instance!.cmbJobReq!.Items.Clear();
@@ -739,7 +740,7 @@ namespace Client
 
         public static void ClearChanged_Moral()
         {
-            for (int i = 0; i < Core.Constant.MaxMorals; i++)
+            for (int i = 0; i < Constant.MaxMorals; i++)
                 GameState.MoralChanged[i] = false;
         }
         #endregion

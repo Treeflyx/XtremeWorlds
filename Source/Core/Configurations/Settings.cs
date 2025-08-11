@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 
-namespace Core;
+namespace Core.Configurations;
 
 public class SettingsManager
 {
@@ -14,8 +12,7 @@ public class SettingsManager
     };
     
     public static SettingsManager Instance { get; } = Load();
-
-    // Settings fields
+    
     public string Language { get; set; } = "English";
     public string Username { get; set; } = "";
     public bool SaveUsername { get; set; } = true;
@@ -33,8 +30,8 @@ public class SettingsManager
     public byte CameraWidth { get; set; } = 32;
     public byte CameraHeight { get; set; } = 24;
     public bool OpenAdminPanelOnLogin { get; set; } = true;
-    public byte[] ChannelState { get; set; } = { 1, 1, 1, 1, 1, 1, 1 };
-    public string Ip { get; set; } = "127.0.0.1"; // 135.148.120.99
+    public byte[] ChannelState { get; set; } = [1, 1, 1, 1, 1, 1, 1];
+    public string Ip { get; set; } = "127.0.0.1";
     public int Port { get; set; } = 7001;
     public string GameName { get; set; } = "XtremeWorlds";
     public string Website { get; set; } = "https://xtremeworlds.com/";
@@ -47,18 +44,17 @@ public class SettingsManager
     public int MaxSqlClients { get; set; } = 10;
     public string Skin { get; set; } = "Crystalshire";
     
-    
     private static SettingsManager Load()
     {
         try
         {
-            var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XtremeWorlds");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XtremeWorlds");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
             
-            path = System.IO.Path.Combine(path, FileName);
+            path = Path.Combine(path, FileName);
             if (!File.Exists(path))
             {
                 return CreateDefaults();
@@ -79,13 +75,13 @@ public class SettingsManager
     {
         try
         {
-            var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XtremeWorlds");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "XtremeWorlds");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            path = System.IO.Path.Combine(path, FileName);
+            path = Path.Combine(path, FileName);
 
             var settingsJson = JsonSerializer.Serialize(settings, JsonSerializerOptions);
 

@@ -1,6 +1,8 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
 using Microsoft.VisualBasic.CompilerServices;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -21,7 +23,7 @@ namespace Client
         {
             int i;
 
-            Data.Moral = new Core.Type.Moral[(Constant.MaxMorals)];
+            Data.Moral = new Type.Moral[(Constant.MaxMorals)];
 
             for (i = 0; i < Constant.MaxMorals; i++)
                 ClearMoral(i);

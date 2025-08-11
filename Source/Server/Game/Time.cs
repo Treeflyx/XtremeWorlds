@@ -21,7 +21,7 @@ using Core;
 using Core.Net;
 using Server.Game;
 using Server.Net;
-using static Core.Packets;
+using static Core.Net.Packets;
 
 namespace Server;
 
@@ -157,11 +157,11 @@ public sealed class TimeManager : IDisposable
 
     #region Event forwarding
 
-    private void OnTimeChanged(ref Clock _) => General.UpdateCaption();
+    private void OnTimeChanged(Clock _) => General.UpdateCaption();
 
-    private void OnTimeOfDayChanged(ref Clock _) => BroadcastTime();
+    private void OnTimeOfDayChanged(Clock _) => BroadcastTime();
 
-    private void OnTimeSync(ref Clock _) => BroadcastClock();
+    private void OnTimeSync(Clock _) => BroadcastClock();
 
     #endregion
 

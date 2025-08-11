@@ -10,8 +10,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using static Core.Type;
-using static Core.Global.Command;
+using Core.Common;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Type;
+using static Core.Globals.Command;
+using Type = Core.Globals.Type;
 
 namespace Server
 {
@@ -70,7 +74,7 @@ namespace Server
             if (string.IsNullOrWhiteSpace(username))
                 return -1;
 
-            if (username.Length < Core.Constant.MinNameLength || username.Length > Core.Constant.NameLength)
+            if (username.Length < Core.Globals.Constant.MinNameLength || username.Length > Core.Globals.Constant.NameLength)
                 return 0;
 
             return Regex.IsMatch(username, @"^[a-zA-Z0-9_ ]+$") ? 1 : -1;
@@ -133,63 +137,63 @@ namespace Server
 
         public static void InitalizeCoreData()
         {
-            Data.Job = new Core.Type.Job[Core.Constant.MaxJobs];
-            Data.Moral = new Core.Type.Moral[Core.Constant.MaxMorals];
-            Data.Map = new Core.Type.Map[Core.Constant.MaxMaps];
-            Data.Item = new Core.Type.Item[Core.Constant.MaxItems];
-            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
-            Data.Resource = new Core.Type.Resource[Core.Constant.MaxResources];
-            Data.Projectile = new Core.Type.Projectile[Core.Constant.MaxProjectiles];
-            Data.Animation = new Core.Type.Animation[Core.Constant.MaxAnimations];
-            Data.Shop = new Core.Type.Shop[Core.Constant.MaxShops];
-            Core.Data.Player = new Core.Type.Player[Core.Constant.MaxPlayers];
-            Data.Party = new Core.Type.Party[Core.Constant.MaxParty];
-            Data.MapItem = new Core.Type.MapItem[Core.Constant.MaxMaps, Core.Constant.MaxMapItems];
-            Data.Npc = new Core.Type.Npc[Core.Constant.MaxNpcs];
-            Data.MapNpc = new MapData[Core.Constant.MaxMaps];
+            Data.Job = new Type.Job[Core.Globals.Constant.MaxJobs];
+            Data.Moral = new Type.Moral[Core.Globals.Constant.MaxMorals];
+            Data.Map = new Type.Map[Core.Globals.Constant.MaxMaps];
+            Data.Item = new Type.Item[Core.Globals.Constant.MaxItems];
+            Data.Npc = new Type.Npc[Core.Globals.Constant.MaxNpcs];
+            Data.Resource = new Type.Resource[Core.Globals.Constant.MaxResources];
+            Data.Projectile = new Type.Projectile[Core.Globals.Constant.MaxProjectiles];
+            Data.Animation = new Type.Animation[Core.Globals.Constant.MaxAnimations];
+            Data.Shop = new Type.Shop[Core.Globals.Constant.MaxShops];
+            Data.Player = new Type.Player[Core.Globals.Constant.MaxPlayers];
+            Data.Party = new Type.Party[Core.Globals.Constant.MaxParty];
+            Data.MapItem = new Type.MapItem[Core.Globals.Constant.MaxMaps, Core.Globals.Constant.MaxMapItems];
+            Data.Npc = new Type.Npc[Core.Globals.Constant.MaxNpcs];
+            Data.MapNpc = new MapData[Core.Globals.Constant.MaxMaps];
 
-            for (int i = 0; i < Core.Constant.MaxMaps; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxMaps; i++)
             {
-                Data.MapNpc[i].Npc = new MapNpc[Core.Constant.MaxMapNpcs];
-                for (int x = 0; x < Core.Constant.MaxMapNpcs; x++)
+                Data.MapNpc[i].Npc = new MapNpc[Core.Globals.Constant.MaxMapNpcs];
+                for (int x = 0; x < Core.Globals.Constant.MaxMapNpcs; x++)
                 {
-                    Data.MapNpc[i].Npc[x].Vital = new int[Enum.GetValues(typeof(Core.Vital)).Length];
-                    Data.MapNpc[i].Npc[x].SkillCd = new int[Core.Constant.MaxNpcSkills];
+                    Data.MapNpc[i].Npc[x].Vital = new int[Enum.GetValues(typeof(Vital)).Length];
+                    Data.MapNpc[i].Npc[x].SkillCd = new int[Core.Globals.Constant.MaxNpcSkills];
                     Data.MapNpc[i].Npc[x].Num = -1;
                     Data.MapNpc[i].Npc[x].SkillBuffer = -1;
                 }
 
                 var statCount = Enum.GetNames(typeof(Stat)).Length;
-                for (int x = 0; x < Core.Constant.MaxItems; x++)
+                for (int x = 0; x < Core.Globals.Constant.MaxItems; x++)
                 {
-                    Core.Data.Item[x].AddStat = new byte[statCount];
-                    Core.Data.Item[x].StatReq = new byte[statCount];
+                    Data.Item[x].AddStat = new byte[statCount];
+                    Data.Item[x].StatReq = new byte[statCount];
                 }
 
-                for (int x = 0; x < Core.Constant.MaxMapItems; x++)
+                for (int x = 0; x < Core.Globals.Constant.MaxMapItems; x++)
                 {
                     Data.MapItem[i, x].Num = -1;
                 }
             }
 
-            Data.Shop = new Core.Type.Shop[Core.Constant.MaxShops];
-            Data.Skill = new Skill[Core.Constant.MaxSkills];
-            Data.MapResource = new Core.Type.MapResource[Core.Constant.MaxMaps];
-            Core.Data.TempPlayer = new Core.Type.TempPlayer[Core.Constant.MaxPlayers];
-            Core.Data.Account = new Core.Type.Account[Core.Constant.MaxPlayers];
+            Data.Shop = new Type.Shop[Core.Globals.Constant.MaxShops];
+            Data.Skill = new Skill[Core.Globals.Constant.MaxSkills];
+            Data.MapResource = new Type.MapResource[Core.Globals.Constant.MaxMaps];
+            Data.TempPlayer = new Type.TempPlayer[Core.Globals.Constant.MaxPlayers];
+            Data.Account = new Type.Account[Core.Globals.Constant.MaxPlayers];
 
-            for (int i = 0; i < Core.Constant.MaxPlayers; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxPlayers; i++)
             {
                 Database.ClearPlayer(i);
             }
 
-            for (int i = 0; i < Core.Constant.MaxPartyMembers; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxPartyMembers; i++)
             {
                 Party.ClearParty(i);
             }
 
-            Event.TempEventMap = new Core.Type.GlobalEvents[Core.Constant.MaxMaps];
-            Data.MapProjectile = new Core.Type.MapProjectile[Core.Constant.MaxMaps, Core.Constant.MaxProjectiles];
+            Event.TempEventMap = new Type.GlobalEvents[Core.Globals.Constant.MaxMaps];
+            Data.MapProjectile = new Type.MapProjectile[Core.Globals.Constant.MaxMaps, Core.Globals.Constant.MaxProjectiles];
         }
 
         private static async System.Threading.Tasks.Task LoadGameDataAsync()
@@ -242,7 +246,7 @@ namespace Server
 
             try
             {
-                await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
+                await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                 {
                     NetworkSend.SendLeftGame(i);
                     await Player.LeftGame(i);
@@ -316,7 +320,7 @@ namespace Server
         private static async System.Threading.Tasks.Task LoadCharacterListAsync()
         {
            var ids = await Database.GetDataAsync("account");
-            Data.Char = new CharList();
+            Data.Char = new CharacterNameList();
             const int maxConcurrency = 4;
             using var semaphore = new SemaphoreSlim(maxConcurrency);
 
@@ -325,7 +329,7 @@ namespace Server
                 await semaphore.WaitAsync(Cts.Token);
                 try
                 {
-                    for (int i = 0; i < Core.Constant.MaxChars; i++)
+                    for (int i = 0; i < Core.Globals.Constant.MaxChars; i++)
                     {
                         var data = await Database.SelectRowByColumnAsync("id", id, "account", $"character{i + 1}");
                         if (data != null && data["Name"] != null)
@@ -490,10 +494,10 @@ namespace Server
 
         private static async System.Threading.Tasks.Task SendServerAnnouncementAsync(string message)
         {
-            await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
+            await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
             {
                 if (NetworkConfig.IsPlaying(i))
-                    NetworkSend.PlayerMsg(i, message, (int)Core.Color.Yellow);
+                    NetworkSend.PlayerMsg(i, message, (int)Color.Yellow);
             });
             Logger.LogInformation("Server announcement sent.");
         }
@@ -598,7 +602,7 @@ namespace Server
                         // SetPlayerAccess implementation stub
                         void SetPlayerAccess(int idx, byte lvl)
                         {
-                            Core.Data.Player[idx].Access = lvl;
+                            Data.Player[idx].Access = lvl;
                         }
 
                         switch (access)
@@ -606,31 +610,31 @@ namespace Server
                             case (byte)AccessLevel.Player:
                                 SetPlayerAccess(playerIndex, access);
                                 NetworkSend.SendPlayerData(playerIndex);
-                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Player!", (int)Core.Color.Yellow);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Player!", (int)Color.Yellow);
                                 Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
                                 break;
                             case (byte)AccessLevel.Moderator:
                                 SetPlayerAccess(playerIndex, access);
                                 NetworkSend.SendPlayerData(playerIndex);
-                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Moderator!", (int)Core.Color.Yellow);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Moderator!", (int)Color.Yellow);
                                 Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
                                 break;
                             case (byte)AccessLevel.Mapper:
                                 SetPlayerAccess(playerIndex, access);
                                 NetworkSend.SendPlayerData(playerIndex);
-                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Mapper!", (int)Core.Color.Yellow);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Mapper!", (int)Color.Yellow);
                                 Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
                                 break;
                             case (byte)AccessLevel.Developer:
                                 SetPlayerAccess(playerIndex, access);
                                 NetworkSend.SendPlayerData(playerIndex);
-                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Developer!", (int)Core.Color.Yellow);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Developer!", (int)Color.Yellow);
                                 Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
                                 break;
                             case (byte)AccessLevel.Owner:
                                 SetPlayerAccess(playerIndex, access);
                                 NetworkSend.SendPlayerData(playerIndex);
-                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Owner!", (int)Core.Color.Yellow);
+                                NetworkSend.PlayerMsg(playerIndex, "Your access has been set to Owner!", (int)Color.Yellow);
                                 Console.WriteLine("Successfully set the access level to " + access + " for player " + GetPlayerName(playerIndex));
                                 break;
                             default:
@@ -643,7 +647,7 @@ namespace Server
 
                 case "/ban":
                     {
-                        Core.Data.Account[playerIndex].Banned = true;
+                        Data.Account[playerIndex].Banned = true;
                         var task = Server.Player.LeftGame(playerIndex);
                         task.Wait();
                         Console.WriteLine($"Player {GetPlayerName(playerIndex)} has been banned by the server.");
@@ -667,7 +671,7 @@ namespace Server
                     }
 
                 default:
-                    Console.WriteLine("Unknown command. Use /help for assistance.", (int)Core.Color.BrightRed);
+                    Console.WriteLine("Unknown command. Use /help for assistance.", (int)Color.BrightRed);
                     break;
             }
         }
@@ -676,11 +680,11 @@ namespace Server
         {
             try
             {               
-                ref var player = ref Core.Data.Player[playerIndex];
+                ref var player = ref Data.Player[playerIndex];
 
                 if (x < 0 || x >= Data.Map[player.Map].MaxX || y < 0 || y >= Data.Map[player.Map].MaxY)
                 {
-                    NetworkSend.PlayerMsg(playerIndex, "Invalid coordinates for teleportation.", (int)Core.Color.BrightRed);
+                    NetworkSend.PlayerMsg(playerIndex, "Invalid coordinates for teleportation.", (int)Color.BrightRed);
                     return;
                 }
 
@@ -692,7 +696,7 @@ namespace Server
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to teleport player {playerIndex}");
-                NetworkSend.PlayerMsg(playerIndex, "Teleport failed.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Teleport failed.", (int)Color.BrightRed);
             }
         }
 
@@ -705,17 +709,17 @@ namespace Server
                     NetworkSend.SendLeftGame(playerIndex);
                     await Player.LeftGame(playerIndex);
                     Logger.LogInformation($"Player {playerIndex} kicked by server!");
-                    NetworkSend.PlayerMsg(playerIndex, $"Player {playerIndex} has been kicked.", (int)Core.Color.BrightGreen);
+                    NetworkSend.PlayerMsg(playerIndex, $"Player {playerIndex} has been kicked.", (int)Color.BrightGreen);
                 }
                 else
                 {
-                    NetworkSend.PlayerMsg(playerIndex, "Target player is not online.", (int)Core.Color.BrightRed);
+                    NetworkSend.PlayerMsg(playerIndex, "Target player is not online.", (int)Color.BrightRed);
                 }
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to kick player {playerIndex}");
-                NetworkSend.PlayerMsg(playerIndex, "Kick operation failed.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Kick operation failed.", (int)Color.BrightRed);
             }
         }
 
@@ -725,7 +729,7 @@ namespace Server
             {
                 if (!await IsAdminAsync(playerIndex))
                 {
-                    NetworkSend.PlayerMsg(playerIndex, "You are not authorized to broadcast.", (int)Core.Color.BrightRed);
+                    NetworkSend.PlayerMsg(playerIndex, "You are not authorized to broadcast.", (int)Color.BrightRed);
                     return;
                 }
 
@@ -735,7 +739,7 @@ namespace Server
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Broadcast failed");
-                NetworkSend.PlayerMsg(playerIndex, "Broadcast failed.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Broadcast failed.", (int)Color.BrightRed);
             }
         }
 
@@ -746,12 +750,12 @@ namespace Server
                 string status = $"Players Online: {CountPlayersOnline()}\n" +
                                 $"Uptime: {MyStopwatch.Elapsed}\n" +
                                 $"Errors: {Global.ErrorCount}";
-                NetworkSend.PlayerMsg(playerIndex, status, (int)Core.Color.BrightGreen);
+                NetworkSend.PlayerMsg(playerIndex, status, (int)Color.BrightGreen);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "Failed to send server status");
-                NetworkSend.PlayerMsg(playerIndex, "Unable to retrieve server status.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Unable to retrieve server status.", (int)Color.BrightRed);
             }
         }
 
@@ -780,7 +784,7 @@ namespace Server
                 int targetIndex = await FindPlayerByNameAsync(targetName);
                 if (targetIndex == -1)
                 {
-                    NetworkSend.PlayerMsg(senderIndex, $"Player '{targetName}' not found.", (int)Core.Color.BrightRed);
+                    NetworkSend.PlayerMsg(senderIndex, $"Player '{targetName}' not found.", (int)Color.BrightRed);
                     return;
                 }
 
@@ -790,7 +794,7 @@ namespace Server
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to send whisper from {senderIndex} to {targetName}");
-                NetworkSend.PlayerMsg(senderIndex, "Failed to send whisper.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(senderIndex, "Failed to send whisper.", (int)Color.BrightRed);
             }
         }
 
@@ -798,61 +802,61 @@ namespace Server
         {
             try
             {
-                var player = Core.Data.TempPlayer[playerIndex];
+                var player = Data.TempPlayer[playerIndex];
                 switch (subCommand.ToLower())
                 {
                     case "create":
                         if (player.InParty != -1)
                         {
-                            NetworkSend.PlayerMsg(playerIndex, "You are already in a party.", (int)Core.Color.BrightRed);
+                            NetworkSend.PlayerMsg(playerIndex, "You are already in a party.", (int)Color.BrightRed);
                             return;
                         }
                         player.InParty = (int)GenerateUniqueId();
-                        NetworkSend.PlayerMsg(playerIndex, "Party created.", (int)Core.Color.BrightGreen);
+                        NetworkSend.PlayerMsg(playerIndex, "Party created.", (int)Color.BrightGreen);
                         break;
 
                     case "invite":
                         if (player.InParty == -1)
                         {
-                            NetworkSend.PlayerMsg(playerIndex, "You must create a party first.", (int)Core.Color.BrightRed);
+                            NetworkSend.PlayerMsg(playerIndex, "You must create a party first.", (int)Color.BrightRed);
                             return;
                         }
                         int targetIndex = await FindPlayerByNameAsync(targetName);
                         if (targetIndex == -1)
                         {
-                            NetworkSend.PlayerMsg(playerIndex, $"Player '{targetName}' not found.", (int)Core.Color.BrightRed);
+                            NetworkSend.PlayerMsg(playerIndex, $"Player '{targetName}' not found.", (int)Color.BrightRed);
                             return;
                         }
-                        var targetPlayer = Core.Data.TempPlayer[playerIndex];
+                        var targetPlayer = Data.TempPlayer[playerIndex];
                         if (targetPlayer.InParty != -1)
                         {
-                            NetworkSend.PlayerMsg(playerIndex, $"{targetName} is already in a party.", (int)Core.Color.BrightRed);
+                            NetworkSend.PlayerMsg(playerIndex, $"{targetName} is already in a party.", (int)Color.BrightRed);
                             return;
                         }
                         targetPlayer.InParty = player.InParty;
-                        NetworkSend.PlayerMsg(playerIndex, $"You have joined {Core.Data.Player[playerIndex].Name}'s party.", (int)Core.Color.BrightGreen);
-                        NetworkSend.PlayerMsg(playerIndex, $"{targetName} has joined your party.", (int)Core.Color.BrightGreen);
+                        NetworkSend.PlayerMsg(playerIndex, $"You have joined {Data.Player[playerIndex].Name}'s party.", (int)Color.BrightGreen);
+                        NetworkSend.PlayerMsg(playerIndex, $"{targetName} has joined your party.", (int)Color.BrightGreen);
                         break;
 
                     case "leave":
                         if (player.InParty == -1)
                         {
-                            NetworkSend.PlayerMsg(playerIndex, "You are not in a party.", (int)Core.Color.BrightRed);
+                            NetworkSend.PlayerMsg(playerIndex, "You are not in a party.", (int)Color.BrightRed);
                             return;
                         }
                         player.InParty = -1;
-                        NetworkSend.PlayerMsg(playerIndex, "You have left the party.", (int)Core.Color.BrightGreen);
+                        NetworkSend.PlayerMsg(playerIndex, "You have left the party.", (int)Color.BrightGreen);
                         break;
 
                     default:
-                        NetworkSend.PlayerMsg(playerIndex, "Invalid party command. Use: create, invite, leave.", (int)Core.Color.BrightRed);
+                        NetworkSend.PlayerMsg(playerIndex, "Invalid party command. Use: create, invite, leave.", (int)Color.BrightRed);
                         break;
                 }
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to handle party command for player {playerIndex}");
-                NetworkSend.PlayerMsg(playerIndex, "Party command failed.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Party command failed.", (int)Color.BrightRed);
             }
         }
 
@@ -865,12 +869,12 @@ namespace Server
                                       $"Kills: {stats.Kills}\n" +
                                       $"Deaths: {stats.Deaths}\n" +
                                       $"Playtime: {stats.PlayTime.TotalHours:F2} hours";
-                NetworkSend.PlayerMsg(playerIndex, statsMessage, (int)Core.Color.BrightGreen);
+                NetworkSend.PlayerMsg(playerIndex, statsMessage, (int)Color.BrightGreen);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to send stats for player {playerIndex}");
-                NetworkSend.PlayerMsg(playerIndex, "Failed to retrieve stats.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Failed to retrieve stats.", (int)Color.BrightRed);
             }
         }
 
@@ -879,21 +883,21 @@ namespace Server
             try
             {
                 await Database.SaveAccountAsync(playerIndex); // Assuming this method exists
-                NetworkSend.PlayerMsg(playerIndex, "Your data has been saved.", (int)Core.Color.BrightGreen);
+                NetworkSend.PlayerMsg(playerIndex, "Your data has been saved.", (int)Color.BrightGreen);
                 Logger.LogInformation($"Player {playerIndex} data saved manually.");
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to save data for player {playerIndex}");
-                NetworkSend.PlayerMsg(playerIndex, "Failed to save data.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(playerIndex, "Failed to save data.", (int)Color.BrightRed);
             }
         }
 
         private static async System.Threading.Tasks.Task<int> FindPlayerByNameAsync(string name)
         {
-            for (int i = 0; i < Core.Constant.MaxPlayers; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxPlayers; i++)
             {
-                if (NetworkConfig.IsPlaying(i) && Core.Data.Player[i].Name.Equals(name, StringComparison.OrdinalIgnoreCase))
+                if (NetworkConfig.IsPlaying(i) && Data.Player[i].Name.Equals(name, StringComparison.OrdinalIgnoreCase))
                 {
                     return i;
                 }
@@ -901,33 +905,33 @@ namespace Server
             return -1;
         }
 
-        private static async System.Threading.Tasks.Task SendChatMessageAsync(int senderIndex, string channel, string message, Core.Color color)
+        private static async System.Threading.Tasks.Task SendChatMessageAsync(int senderIndex, string channel, string message, Color color)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(message) || message.Length > 200) // Basic filtering
                 {
-                    NetworkSend.PlayerMsg(senderIndex, "Invalid message.", (int)Core.Color.BrightRed);
+                    NetworkSend.PlayerMsg(senderIndex, "Invalid message.", (int)Color.BrightRed);
                     return;
                 }
 
                 if (channel.StartsWith("private:"))
                 {
                     int targetIndex = int.Parse(channel.Split(':')[1]);
-                    NetworkSend.PlayerMsg(targetIndex, $"[From {Core.Data.Player[senderIndex].Name}] {message}", (int)color);
-                    NetworkSend.PlayerMsg(senderIndex, $"[To {Core.Data.Player[targetIndex].Name}] {message}", (int)color);
+                    NetworkSend.PlayerMsg(targetIndex, $"[From {Data.Player[senderIndex].Name}] {message}", (int)color);
+                    NetworkSend.PlayerMsg(senderIndex, $"[To {Data.Player[targetIndex].Name}] {message}", (int)color);
                 }
-                else if (channel == "party" && Core.Data.TempPlayer[senderIndex].InParty != 0)
+                else if (channel == "party" && Data.TempPlayer[senderIndex].InParty != 0)
                 {
-                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
+                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                     {
-                        if (NetworkConfig.IsPlaying(i) && Core.Data.TempPlayer[i].InParty == Core.Data.TempPlayer[senderIndex].InParty)
-                            NetworkSend.PlayerMsg(i, $"[Party] {Core.Data.Player[senderIndex].Name}: {message}", (int)color);
+                        if (NetworkConfig.IsPlaying(i) && Data.TempPlayer[i].InParty == Data.TempPlayer[senderIndex].InParty)
+                            NetworkSend.PlayerMsg(i, $"[Party] {Data.Player[senderIndex].Name}: {message}", (int)color);
                     });
                 }
                 else if (channel == "global")
                 {
-                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
+                    await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxPlayers), Cts.Token, async (i, ct) =>
                     {
                         if (NetworkConfig.IsPlaying(i))
                             NetworkSend.PlayerMsg(i, message, (int)color);
@@ -937,7 +941,7 @@ namespace Server
             catch (Exception ex)
             {
                 Logger.LogError(ex, $"Failed to send chat message from {senderIndex} to {channel}");
-                NetworkSend.PlayerMsg(senderIndex, "Failed to send message.", (int)Core.Color.BrightRed);
+                NetworkSend.PlayerMsg(senderIndex, "Failed to send message.", (int)Color.BrightRed);
             }
         }
 
@@ -947,7 +951,7 @@ namespace Server
         public static async System.Threading.Tasks.Task OnPlayerLoginAsync(int playerIndex)
         {
             Logger.LogInformation($"Player {playerIndex} logged in.");
-            NetworkSend.PlayerMsg(playerIndex, "Welcome to the server!", (int)Core.Color.BrightGreen);
+            NetworkSend.PlayerMsg(playerIndex, "Welcome to the server!", (int)Color.BrightGreen);
             PlayerStatistics.GetOrAdd(playerIndex, new PlayerStats()).LoginTime = GetServerTime();
         }
 
@@ -974,7 +978,7 @@ namespace Server
         {
             try
             {
-                string backupDir = Core.Path.Database;
+                string backupDir = DataPath.Database;
                 Directory.CreateDirectory(backupDir);
                 string backupPath = System.IO.Path.Combine(backupDir, $"backup_{DateTime.Now:yyyyMMdd_HHmmss}.bak");
                 //await Database.BackupAsync(backupPath); // Assuming this method exists
@@ -1014,8 +1018,8 @@ namespace Server
         public static async System.Threading.Tasks.Task LogErrorAsync(Exception ex, string context = "")
         {
             string errorInfo = $"{ex.Message}\nStackTrace: {ex.StackTrace}";
-            string logPath = System.IO.Path.Combine(Core.Path.Logs, "Errors.log");
-            Directory.CreateDirectory(Core.Path.Logs);
+            string logPath = System.IO.Path.Combine(DataPath.Logs, "Errors.log");
+            Directory.CreateDirectory(DataPath.Logs);
 
             await File.AppendAllTextAsync(logPath,
                 $"{DateTime.Now}\nContext: {context}\n{errorInfo}\n\n", Cts.Token);

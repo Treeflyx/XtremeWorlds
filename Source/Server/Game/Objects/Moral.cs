@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -6,9 +7,9 @@ using Newtonsoft.Json.Linq;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Packets;
-using static Core.Global.Command;
-using Type = Core.Type;
+using static Core.Net.Packets;
+using static Core.Globals.Command;
+using Type = Core.Globals.Type;
 
 namespace Server;
 
@@ -45,7 +46,7 @@ public static class Moral
 
     public static async Task LoadMoralsAsync()
     {
-        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxMorals), LoadMoralAsync);
+        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxMorals), LoadMoralAsync);
     }
 
     private static void SaveMoral(int moralNum)
@@ -64,7 +65,7 @@ public static class Moral
 
     public static void SendMorals(int playerId)
     {
-        for (var moralNum = 0; moralNum < Core.Constant.MaxMorals; moralNum++)
+        for (var moralNum = 0; moralNum < Core.Globals.Constant.MaxMorals; moralNum++)
         {
             if (Data.Moral[moralNum].Name.Length > 0)
             {
@@ -146,7 +147,7 @@ public static class Moral
         }
 
         var moralNum = packetReader.ReadInt32();
-        if (moralNum is < 0 or > Core.Constant.MaxMorals)
+        if (moralNum is < 0 or > Core.Globals.Constant.MaxMorals)
         {
             return;
         }

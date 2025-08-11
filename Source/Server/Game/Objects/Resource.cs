@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic.CompilerServices;
@@ -7,9 +8,9 @@ using Newtonsoft.Json.Linq;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Global.Command;
-using static Core.Packets;
-using Type = Core.Type;
+using static Core.Globals.Command;
+using static Core.Net.Packets;
+using Type = Core.Globals.Type;
 
 namespace Server;
 
@@ -31,7 +32,7 @@ public static class Resource
 
     public static async Task LoadResourcesAsync()
     {
-        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Constant.MaxResources), LoadResourceAsync);
+        await Parallel.ForEachAsync(Enumerable.Range(0, Core.Globals.Constant.MaxResources), LoadResourceAsync);
     }
 
     public static async ValueTask LoadResourceAsync(int resourceNum, CancellationToken cancellationToken)
@@ -86,7 +87,7 @@ public static class Resource
     {
         var levels = 0;
 
-        if (GetPlayerGatherSkillLvl(playerId, skillSlot) == Core.Constant.MaxLevel)
+        if (GetPlayerGatherSkillLvl(playerId, skillSlot) == Core.Globals.Constant.MaxLevel)
         {
             return;
         }
@@ -152,7 +153,7 @@ public static class Resource
         }
 
         var resourcenum = packetReader.ReadInt32();
-        if (resourcenum is < 0 or > Core.Constant.MaxResources)
+        if (resourcenum is < 0 or > Core.Globals.Constant.MaxResources)
         {
             return;
         }
@@ -185,7 +186,7 @@ public static class Resource
         var packetReader = new PacketReader(bytes);
 
         var resourceNum = packetReader.ReadInt32();
-        if (resourceNum < 0 | resourceNum > Core.Constant.MaxResources)
+        if (resourceNum < 0 | resourceNum > Core.Globals.Constant.MaxResources)
         {
             return;
         }
@@ -215,7 +216,7 @@ public static class Resource
 
     public static void SendResources(int playerId)
     {
-        for (var resourceNum = 0; resourceNum < Core.Constant.MaxResources; resourceNum++)
+        for (var resourceNum = 0; resourceNum < Core.Globals.Constant.MaxResources; resourceNum++)
         {
             if (Data.Resource[resourceNum].Name.Length > 0)
             {

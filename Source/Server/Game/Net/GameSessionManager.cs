@@ -15,7 +15,7 @@ public sealed class GameSessionManager : INetworkSessionManager<GameSession>
     {
         _logger = logger;
 
-        var maxConnections = configuration.GetValue("Networking:MaxConnections", Core.Constant.MaxPlayers);
+        var maxConnections = configuration.GetValue("Networking:MaxConnections", Core.Globals.Constant.MaxPlayers);
 
         foreach (var id in Enumerable.Range(1, maxConnections))
         {

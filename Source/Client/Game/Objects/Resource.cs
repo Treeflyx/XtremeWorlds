@@ -2,6 +2,7 @@
 using System.Drawing;
 using Client.Net;
 using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -124,7 +125,7 @@ namespace Client
             if (rec.Width < 0 | rec.Height < 0)
                 return;
 
-            string argpath = System.IO.Path.Combine(Core.Path.Resources, resource.ToString());
+            string argpath = System.IO.Path.Combine(DataPath.Resources, resource.ToString());
             GameClient.RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
@@ -170,13 +171,13 @@ namespace Client
 
             // src rect
             rec.Y = 0;
-            rec.Height = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Resources, resourceSprite.ToString())).Height;
+            rec.Height = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Resources, resourceSprite.ToString())).Height;
             rec.X = 0;
-            rec.Width = GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Resources, resourceSprite.ToString())).Width;
+            rec.Width = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Resources, resourceSprite.ToString())).Width;
 
             // Set base x + y, then the offset due to size
-            x = (int)Math.Round(Data.MyMapResource[resourceNum].X * GameState.SizeX - GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Resources, resourceSprite.ToString())).Width / 2d + 16d);
-            y = Data.MyMapResource[resourceNum].Y * GameState.SizeY - GameClient.GetGfxInfo(System.IO.Path.Combine(Core.Path.Resources, resourceSprite.ToString())).Height + 32;
+            x = (int)Math.Round(Data.MyMapResource[resourceNum].X * GameState.SizeX - GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Resources, resourceSprite.ToString())).Width / 2d + 16d);
+            y = Data.MyMapResource[resourceNum].Y * GameState.SizeY - GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Resources, resourceSprite.ToString())).Height + 32;
 
             DrawResource(resourceSprite, x, y, rec);
         }

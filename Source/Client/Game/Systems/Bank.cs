@@ -1,8 +1,10 @@
 ﻿using Client.Net;
 using Core;
+using Core.Globals;
 using Core.Net;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 using Microsoft.VisualBasic.CompilerServices;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -19,12 +21,12 @@ namespace Client
 
             for (x = 0; x < Constant.MaxPlayers; x++)
             {
-                Core.Data.Bank[x].Item = new Core.Type.PlayerInv[(Constant.MaxBank + 1)];
+                Data.Bank[x].Item = new Type.PlayerInv[(Constant.MaxBank + 1)];
 
                 for (i = 0; i < Constant.MaxBank; i++)
                 {
-                    Core.Data.Bank[x].Item[i].Num = -1;
-                    Core.Data.Bank[x].Item[i].Value = 0;
+                    Data.Bank[x].Item[i].Num = -1;
+                    Data.Bank[x].Item[i].Value = 0;
                 }
             }
         }

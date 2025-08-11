@@ -4,6 +4,7 @@ using Eto.Forms;
 using Eto.Drawing;
 using Microsoft.VisualBasic;
 using Core;
+using Core.Globals;
 
 namespace Client
 {
@@ -54,7 +55,7 @@ namespace Client
                 if (_initializing) return;
                 int tmpindex = lstIndex.SelectedIndex;
                 if (tmpindex < 0) return;
-                Core.Data.Projectile[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
+                Data.Projectile[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
                 RefreshListEntry(GameState.EditorIndex);
                 lstIndex.SelectedIndex = tmpindex;
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
@@ -64,7 +65,7 @@ namespace Client
             nudPic.ValueChanged += (s, e) =>
             {
                 if (_initializing) return;
-                Core.Data.Projectile[GameState.EditorIndex].Sprite = (int)nudPic.Value;
+                Data.Projectile[GameState.EditorIndex].Sprite = (int)nudPic.Value;
                 Drawicon();
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
@@ -73,7 +74,7 @@ namespace Client
             nudRange.ValueChanged += (s, e) =>
             {
                 if (_initializing) return;
-                Core.Data.Projectile[GameState.EditorIndex].Range = (byte)nudRange.Value;
+                Data.Projectile[GameState.EditorIndex].Range = (byte)nudRange.Value;
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
 
@@ -81,7 +82,7 @@ namespace Client
             nudSpeed.ValueChanged += (s, e) =>
             {
                 if (_initializing) return;
-                Core.Data.Projectile[GameState.EditorIndex].Speed = (int)nudSpeed.Value;
+                Data.Projectile[GameState.EditorIndex].Speed = (int)nudSpeed.Value;
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
 
@@ -89,7 +90,7 @@ namespace Client
             nudDamage.ValueChanged += (s, e) =>
             {
                 if (_initializing) return;
-                Core.Data.Projectile[GameState.EditorIndex].Damage = (int)nudDamage.Value;
+                Data.Projectile[GameState.EditorIndex].Damage = (int)nudDamage.Value;
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
 
@@ -176,9 +177,9 @@ namespace Client
         {
             _initializing = true;
             lstIndex.Items.Clear();
-            for (int i = 0; i < Core.Constant.MaxProjectiles; i++)
+            for (int i = 0; i < Constant.MaxProjectiles; i++)
             {
-                lstIndex.Items.Add(new ListItem { Text = (i + 1) + ": " + Core.Data.Projectile[i].Name });
+                lstIndex.Items.Add(new ListItem { Text = (i + 1) + ": " + Data.Projectile[i].Name });
             }
             if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
             nudPic.MaxValue = GameState.NumProjectiles;
@@ -192,7 +193,7 @@ namespace Client
             // Eto ListBox uses ListItem objects; replace the text
             if (lstIndex.Items[index] is ListItem item)
             {
-                item.Text = (index + 1) + ": " + Core.Data.Projectile[index].Name;
+                item.Text = (index + 1) + ": " + Data.Projectile[index].Name;
                 lstIndex.Invalidate();
             }
         }
@@ -207,7 +208,7 @@ namespace Client
 
             if (iconNum < 1 || iconNum > GameState.NumProjectiles) return;
 
-            var path = System.IO.Path.Combine(Core.Path.Projectiles, iconNum + GameState.GfxExt);
+            var path = System.IO.Path.Combine(DataPath.Projectiles, iconNum + GameState.GfxExt);
             if (!File.Exists(path)) return;
 
             try

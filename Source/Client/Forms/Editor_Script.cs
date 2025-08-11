@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Net;
+using Core.Globals;
 
 namespace Client
 {
@@ -63,7 +64,7 @@ namespace Client
 
         private void OpenScript()
         {
-            File.WriteAllLines(Script.TempFile, Core.Data.Script.Code);
+            File.WriteAllLines(Script.TempFile, Data.Script.Code);
             try
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -87,7 +88,7 @@ namespace Client
             }
             try
             {
-                Core.Data.Script.Code = File.ReadAllLines(Script.TempFile);
+                Data.Script.Code = File.ReadAllLines(Script.TempFile);
                 Sender.SendSaveScript();
                 RefreshPreview();
             }
@@ -99,7 +100,7 @@ namespace Client
 
         private void RefreshPreview()
         {
-            txtPreview.Text = string.Join(Environment.NewLine, Core.Data.Script.Code ?? Array.Empty<string>());
+            txtPreview.Text = string.Join(Environment.NewLine, Data.Script.Code ?? Array.Empty<string>());
         }
     }
 }

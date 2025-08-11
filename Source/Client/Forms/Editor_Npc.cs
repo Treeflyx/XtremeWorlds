@@ -4,6 +4,7 @@ using Eto.Forms;
 using Eto.Drawing;
 using Microsoft.VisualBasic;
 using Core;
+using Core.Globals;
 
 namespace Client
 {
@@ -126,15 +127,15 @@ namespace Client
 
             // Stats
             nudStrength = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 70 };
-            nudStrength.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Strength] = (byte)nudStrength.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
+            nudStrength.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Strength] = (byte)nudStrength.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
             nudIntelligence = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 70 };
-            nudIntelligence.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Intelligence] = (byte)nudIntelligence.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
+            nudIntelligence.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Intelligence] = (byte)nudIntelligence.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
             nudSpirit = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 70 };
-            nudSpirit.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Spirit] = (byte)nudSpirit.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
+            nudSpirit.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Spirit] = (byte)nudSpirit.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
             nudLuck = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 70 };
-            nudLuck.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Luck] = (byte)nudLuck.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
+            nudLuck.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Luck] = (byte)nudLuck.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
             nudVitality = new NumericStepper { MinValue = 0, MaxValue = 255, DecimalPlaces = 0, Width = 70 };
-            nudVitality.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Core.Stat.Vitality] = (byte)nudVitality.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
+            nudVitality.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Stat[(int)Stat.Vitality] = (byte)nudVitality.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
 
             // Skills
             cmbSkill1 = new ComboBox(); cmbSkill1.SelectedIndexChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].Skill[0] = (byte)cmbSkill1.SelectedIndex; GameState.NpcChanged[GameState.EditorIndex] = true; } };
@@ -312,7 +313,7 @@ namespace Client
             // populate items
             cmbItem.Items.Clear();
             for (int i = 0; i < Constant.MaxItems; i++)
-                cmbItem.Items.Add((i + 1) + ": " + Core.Data.Item[i].Name);
+                cmbItem.Items.Add((i + 1) + ": " + Data.Item[i].Name);
 
             cmbBehaviour.Items.Clear();
             cmbBehaviour.Items.Add("Stationary");
@@ -361,7 +362,7 @@ namespace Client
             _spriteBitmap = null;
             picSprite.Invalidate();
             if (sprite < 1 || sprite > GameState.NumCharacters) return;
-            var path = System.IO.Path.Combine(Core.Path.Characters, sprite + GameState.GfxExt);
+            var path = System.IO.Path.Combine(DataPath.Characters, sprite + GameState.GfxExt);
             if (!File.Exists(path)) return;
             try
             {

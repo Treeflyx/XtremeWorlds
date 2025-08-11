@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using Core;
 using System;
 using System.IO;
+using Core.Globals;
 
 namespace Client
 {
@@ -115,15 +116,15 @@ namespace Client
         {
             lstIndex.Items.Clear();
             for (int i = 0; i < Constant.MaxResources; i++)
-                lstIndex.Items.Add($"{i + 1}: {Core.Data.Resource[i].Name}");
+                lstIndex.Items.Add($"{i + 1}: {Data.Resource[i].Name}");
 
             cmbRewardItem.Items.Clear();
             for (int i = 0; i < Constant.MaxItems; i++)
-                cmbRewardItem.Items.Add($"{i + 1}: {Core.Data.Item[i].Name}");
+                cmbRewardItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
 
             cmbAnimation.Items.Clear();
             for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbAnimation.Items.Add($"{i + 1}: {Core.Data.Animation[i].Name}");
+                cmbAnimation.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
 
             cmbType.Items.Clear();
             cmbType.Items.Add("Tree");
@@ -157,7 +158,7 @@ namespace Client
             int tmpindex = lstIndex.SelectedIndex;
             MapResource.ClearResource(GameState.EditorIndex);
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Resource[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
             Editors.ResourceEditorInit();
         }
@@ -166,24 +167,24 @@ namespace Client
         {
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
-            Core.Data.Resource[GameState.EditorIndex].Name = txtName.Text;
+            Data.Resource[GameState.EditorIndex].Name = txtName.Text;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Resource[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
         }
 
-        private void TxtMessage_TextChanged() => Core.Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
-        private void TxtMessage2_TextChanged() => Core.Data.Resource[GameState.EditorIndex].EmptyMessage = Strings.Trim(txtMessage2.Text);
-        private void CmbType_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ResourceType = cmbType.SelectedIndex;
-        private void NudNormalPic_ValueChanged() { Core.Data.Resource[GameState.EditorIndex].ResourceImage = (int)Math.Round(nudNormalPic.Value); picNormalpic.Invalidate(); }
-        private void NudExhaustedPic_ValueChanged() { Core.Data.Resource[GameState.EditorIndex].ExhaustedImage = (int)Math.Round(nudExhaustedPic.Value); picExhaustedPic.Invalidate(); }
-        private void CmbRewardItem_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ItemReward = cmbRewardItem.SelectedIndex;
-        private void NudRewardExp_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].ExpReward = (int)Math.Round(nudRewardExp.Value);
-        private void CmbTool_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].ToolRequired = cmbTool.SelectedIndex;
-        private void NudHealth_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].Health = (int)Math.Round(nudHealth.Value);
-        private void NudRespawn_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].RespawnTime = (int)Math.Round(nudRespawn.Value);
-        private void CmbAnimation_SelectedIndexChanged() => Core.Data.Resource[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex;
-        private void NudLvlReq_ValueChanged() => Core.Data.Resource[GameState.EditorIndex].LvlRequired = (int)Math.Round(nudLvlReq.Value);
+        private void TxtMessage_TextChanged() => Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
+        private void TxtMessage2_TextChanged() => Data.Resource[GameState.EditorIndex].EmptyMessage = Strings.Trim(txtMessage2.Text);
+        private void CmbType_SelectedIndexChanged() => Data.Resource[GameState.EditorIndex].ResourceType = cmbType.SelectedIndex;
+        private void NudNormalPic_ValueChanged() { Data.Resource[GameState.EditorIndex].ResourceImage = (int)Math.Round(nudNormalPic.Value); picNormalpic.Invalidate(); }
+        private void NudExhaustedPic_ValueChanged() { Data.Resource[GameState.EditorIndex].ExhaustedImage = (int)Math.Round(nudExhaustedPic.Value); picExhaustedPic.Invalidate(); }
+        private void CmbRewardItem_SelectedIndexChanged() => Data.Resource[GameState.EditorIndex].ItemReward = cmbRewardItem.SelectedIndex;
+        private void NudRewardExp_ValueChanged() => Data.Resource[GameState.EditorIndex].ExpReward = (int)Math.Round(nudRewardExp.Value);
+        private void CmbTool_SelectedIndexChanged() => Data.Resource[GameState.EditorIndex].ToolRequired = cmbTool.SelectedIndex;
+        private void NudHealth_ValueChanged() => Data.Resource[GameState.EditorIndex].Health = (int)Math.Round(nudHealth.Value);
+        private void NudRespawn_ValueChanged() => Data.Resource[GameState.EditorIndex].RespawnTime = (int)Math.Round(nudRespawn.Value);
+        private void CmbAnimation_SelectedIndexChanged() => Data.Resource[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex;
+        private void NudLvlReq_ValueChanged() => Data.Resource[GameState.EditorIndex].LvlRequired = (int)Math.Round(nudLvlReq.Value);
 
         private void DrawSprite(Graphics g, int spriteNum, Drawable target)
         {
@@ -192,7 +193,7 @@ namespace Client
                 g.Clear(Colors.Transparent);
                 return;
             }
-            var path = System.IO.Path.Combine(Core.Path.Resources, spriteNum + GameState.GfxExt);
+            var path = System.IO.Path.Combine(DataPath.Resources, spriteNum + GameState.GfxExt);
             if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
             try
             {

@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using static Core.Type;
-using static Core.Global.Command;
-using static Core.Packets;
+using static Core.Globals.Type;
+using static Core.Globals.Command;
+using static Core.Net.Packets;
 using System.Reflection.Metadata.Ecma335;
+using Core.Globals;
 using Core.Net;
 using Server.Game;
 using Server.Net;
+using Color = Core.Globals.Color;
+using EventCommand = Core.Globals.EventCommand;
 
 namespace Server
 {
@@ -425,7 +428,7 @@ namespace Server
         public static void ProcessEventMovement()
         {
             // Iterate through all maps.
-            for (int i = 0; i < Core.Constant.MaxMaps; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxMaps; i++)
             {
                 // Process global events on this map.
                 for (int x = 0; x < Event.TempEventMap[i].EventCount; x++)
@@ -1564,7 +1567,7 @@ namespace Server
 
                                     switch (command.Index)
                                     {
-                                        case (byte) Core.EventCommand.AddText:
+                                        case (byte) EventCommand.AddText:
                                         {
                                             switch (command.Data2)
                                             {
@@ -1581,7 +1584,7 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ShowText:
+                                        case (byte) EventCommand.ShowText:
                                         {
                                             var buffer = new PacketWriter();
                                             {
@@ -1596,11 +1599,11 @@ namespace Server
                                                 if (withBlock1.CurSlot + 1 < commandList[withBlock1.CurList].CommandCount)
                                                 {
                                                     byte nextIndex = (byte) commandList[withBlock1.CurList].Commands[withBlock1.CurSlot + 1].Index;
-                                                    if (nextIndex == (byte) Core.EventCommand.ShowText || nextIndex == (byte) Core.EventCommand.ShowChoices)
+                                                    if (nextIndex == (byte) EventCommand.ShowText || nextIndex == (byte) EventCommand.ShowChoices)
                                                     {
                                                         nextCommandType = 1;
                                                     }
-                                                    else if (nextIndex == (byte) Core.EventCommand.ConditionalBranch)
+                                                    else if (nextIndex == (byte) EventCommand.ConditionalBranch)
                                                     {
                                                         nextCommandType = 2;
                                                     }
@@ -1615,7 +1618,7 @@ namespace Server
                                             withBlock1.WaitingForResponse = 0; // No response needed.
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ShowChoices:
+                                        case (byte) EventCommand.ShowChoices:
                                         {
                                             var buffer = new PacketWriter();
                                             {
@@ -1663,11 +1666,11 @@ namespace Server
                                                 if (withBlock1.CurSlot + 1 < commandList[withBlock1.CurList].CommandCount)
                                                 {
                                                     byte nextIndex = (byte) commandList[withBlock1.CurList].Commands[withBlock1.CurSlot + 1].Index;
-                                                    if (nextIndex == (byte) Core.EventCommand.ShowText || nextIndex == (byte) Core.EventCommand.ShowChoices)
+                                                    if (nextIndex == (byte) EventCommand.ShowText || nextIndex == (byte) EventCommand.ShowChoices)
                                                     {
                                                         nextCommandType = 1;
                                                     }
-                                                    else if (nextIndex == (byte) Core.EventCommand.ConditionalBranch)
+                                                    else if (nextIndex == (byte) EventCommand.ConditionalBranch)
                                                     {
                                                         nextCommandType = 2;
                                                     }
@@ -1682,7 +1685,7 @@ namespace Server
                                             withBlock1.WaitingForResponse = 0; // No response needed (choices handled separately).
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ModifyVariable:
+                                        case (byte) EventCommand.ModifyVariable:
                                         {
                                             switch (command.Data2)
                                             {
@@ -1704,7 +1707,7 @@ namespace Server
                                             SpawnMapEventsFor(i, mapNum);
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ModifySwitch:
+                                        case (byte) EventCommand.ModifySwitch:
                                         {
                                             Data.Player[i].Switches[command.Data1] = (byte) (command.Data2 == 0 ? 0 : 1);
 
@@ -1713,7 +1716,7 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.ModifySelfSwitch:
+                                        case (byte) EventCommand.ModifySelfSwitch:
                                         {
                                             // Determine whether it's a global or local self switch.
                                             if (Data.Map[mapNum].Event[withBlock1.EventId].Globals == 1)
@@ -1729,7 +1732,7 @@ namespace Server
                                             SpawnMapEventsFor(i, mapNum);
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ConditionalBranch:
+                                        case (byte) EventCommand.ConditionalBranch:
                                         {
                                             bool conditionMet = false;
                                             var branch = command.ConditionalBranch;
@@ -1812,12 +1815,12 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.ExitEventProcess:
+                                        case (byte) EventCommand.ExitEventProcess:
                                             removeEventProcess = true;
                                             endprocess = true;
                                             break;
 
-                                        case (byte) Core.EventCommand.ChangeItems:
+                                        case (byte) EventCommand.ChangeItems:
                                         {
                                             switch (command.Data2)
                                             {
@@ -1847,36 +1850,36 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.RestoreHealth:
+                                        case (byte) EventCommand.RestoreHealth:
                                             SetPlayerVital(i, Vital.Health, GetPlayerMaxVital(i, Vital.Health));
                                             NetworkSend.SendVital(i, Vital.Health);
                                             break;
 
-                                        case (byte) Core.EventCommand.RestoreMana:
+                                        case (byte) EventCommand.RestoreMana:
                                             SetPlayerVital(i, Vital.Mana, GetPlayerMaxVital(i, Vital.Mana));
                                             NetworkSend.SendVital(i, Vital.Mana);
                                             break;
 
-                                        case (byte) Core.EventCommand.RestoreStamina:
+                                        case (byte) EventCommand.RestoreStamina:
                                             SetPlayerVital(i, Vital.Stamina, GetPlayerMaxVital(i, Vital.Stamina));
                                             NetworkSend.SendVital(i, Vital.Stamina);
                                             break;
 
-                                        case (byte) Core.EventCommand.GiveExperience:
+                                        case (byte) EventCommand.GiveExperience:
                                             SetPlayerExp(i, GetPlayerNextLevel(i));
                                             Player.CheckPlayerLevelUp(i);
                                             NetworkSend.SendExp(i);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.ChangeLevel:
+                                        case (byte) EventCommand.ChangeLevel:
                                             SetPlayerLevel(i, command.Data1);
                                             SetPlayerExp(i, 0);
                                             NetworkSend.SendExp(i);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.ChangeSkills:
+                                        case (byte) EventCommand.ChangeSkills:
                                         {
                                             if (command.Data2 == 0) // Learn
                                             {
@@ -1887,7 +1890,7 @@ namespace Server
                                             }
                                             else if (command.Data2 == 1) // Forget
                                             {
-                                                for (int p = 0; p < Core.Constant.MaxPlayerSkills; p++)
+                                                for (int p = 0; p < Core.Globals.Constant.MaxPlayerSkills; p++)
                                                 {
                                                     if (Data.Player[i].Skill[p].Num == command.Data1)
                                                     {
@@ -1900,34 +1903,34 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.ChangeJob:
+                                        case (byte) EventCommand.ChangeJob:
                                             Data.Player[i].Job = (byte) command.Data1;
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.ChangeSprite:
+                                        case (byte) EventCommand.ChangeSprite:
                                             SetPlayerSprite(i, command.Data1);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.ChangeSex:
+                                        case (byte) EventCommand.ChangeSex:
                                             Data.Player[i].Sex = (byte) (command.Data1 == 0 ? Sex.Male : Sex.Female);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.SetPlayerKillable:
+                                        case (byte) EventCommand.SetPlayerKillable:
                                             Data.Player[i].Pk = (command.Data1 == 0 ? false : true);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.WarpPlayer:
+                                        case (byte) EventCommand.WarpPlayer:
                                         {
                                             int dir = command.Data4 == 0 ? Data.Player[i].Dir : (byte) (command.Data4 - 1);
                                             Player.PlayerWarp(i, command.Data1, command.Data2, command.Data3, dir);
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.SetMoveRoute:
+                                        case (byte) EventCommand.SetMoveRoute:
                                         {
                                             // Check if the event exists.
                                             if (command.Data1 < Data.Map[mapNum].Event.Length)
@@ -1971,7 +1974,7 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.PlayAnimation:
+                                        case (byte) EventCommand.PlayAnimation:
                                         {
                                             switch (command.Data2)
                                             {
@@ -2014,7 +2017,7 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.PlayBgm:
+                                        case (byte) EventCommand.PlayBgm:
                                         {
                                             var buffer = new PacketWriter();
                                             {
@@ -2025,7 +2028,7 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.FadeOutBgm:
+                                        case (byte) EventCommand.FadeOutBgm:
                                         {
                                             var buffer = new PacketWriter(4);
                                             buffer.WriteEnum(ServerPackets.SFadeoutBgm);
@@ -2033,7 +2036,7 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.PlaySound:
+                                        case (byte) EventCommand.PlaySound:
                                         {
                                             var buffer = new PacketWriter();
                                             {
@@ -2047,19 +2050,19 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.StopSound:
+                                        case (byte) EventCommand.StopSound:
                                         {
                                             var buffer = new PacketWriter(4);
                                             buffer.WriteEnum(ServerPackets.SStopSound);
                                             PlayerService.Instance.SendDataTo(i, buffer.GetBytes());
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.SetAccessLevel:
+                                        case (byte) EventCommand.SetAccessLevel:
                                             SetPlayerAccess(i, (byte) command.Data1);
                                             NetworkSend.SendPlayerData(i);
                                             break;
 
-                                        case (byte) Core.EventCommand.OpenShop:
+                                        case (byte) EventCommand.OpenShop:
                                         {
                                             // Check if the shop exists and has a valid name.
                                             if (command.Data1 > 0 && command.Data1 < Data.Shop.Length && !string.IsNullOrEmpty(Data.Shop[command.Data1].Name))
@@ -2071,15 +2074,15 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.OpenBank:
+                                        case (byte) EventCommand.OpenBank:
                                             NetworkSend.SendBank(i);
                                             Data.TempPlayer[i].InBank = true;
                                             withBlock1.WaitingForResponse = 3; // Wait for bank to close.
                                             break;
 
-                                        case (byte) Core.EventCommand.ShowChatBubble:
+                                        case (byte) EventCommand.ShowChatBubble:
                                         {
-                                            Core.Color color = Core.Color.Blue; // Or any default color you prefer
+                                            Color color = Color.Blue; // Or any default color you prefer
                                             switch (command.Data1)
                                             {
                                                 case (byte) TargetType.Player:
@@ -2096,16 +2099,16 @@ namespace Server
                                             break;
                                         }
 
-                                        case (byte) Core.EventCommand.Label:
+                                        case (byte) EventCommand.Label:
                                             // No action needed, just a label for GoToLabel.
                                             break;
 
-                                        case (byte) Core.EventCommand.GoToLabel:
+                                        case (byte) EventCommand.GoToLabel:
                                             // Find the label and update the command list position.
                                             FindEventLabel(command.Text1, mapNum, withBlock1.EventId, withBlock1.PageId, ref withBlock1.CurSlot, ref withBlock1.CurList, ref withBlock1.ListLeftOff);
                                             break;
 
-                                        case (byte) Core.EventCommand.SpawnNpc:
+                                        case (byte) EventCommand.SpawnNpc:
                                             if (command.Data1 > 0 && command.Data1 < Data.Map[mapNum].Npc.Length) // Check if Npc exists
                                             {
                                                 Npc.SpawnNpc(command.Data1, mapNum);
@@ -2113,35 +2116,35 @@ namespace Server
 
                                             break;
 
-                                        case (byte) Core.EventCommand.FadeIn:
+                                        case (byte) EventCommand.FadeIn:
                                             Event.SendSpecialEffect(i, Event.EffectTypeFadein);
                                             break;
 
-                                        case (byte) Core.EventCommand.FadeOut:
+                                        case (byte) EventCommand.FadeOut:
                                             Event.SendSpecialEffect(i, Event.EffectTypeFadeout);
                                             break;
 
-                                        case (byte) Core.EventCommand.FlashScreen:
+                                        case (byte) EventCommand.FlashScreen:
                                             Event.SendSpecialEffect(i, Event.EffectTypeFlash);
                                             break;
 
-                                        case (byte) Core.EventCommand.SetFog:
+                                        case (byte) EventCommand.SetFog:
                                             Event.SendSpecialEffect(i, Event.EffectTypeFog, command.Data1, command.Data2, command.Data3);
                                             break;
 
-                                        case (byte) Core.EventCommand.SetWeather:
+                                        case (byte) EventCommand.SetWeather:
                                             Event.SendSpecialEffect(i, Event.EffectTypeWeather, command.Data1, command.Data2);
                                             break;
 
-                                        case (byte) Core.EventCommand.SetScreenTint:
+                                        case (byte) EventCommand.SetScreenTint:
                                             Event.SendSpecialEffect(i, Event.EffectTypeTint, command.Data1, command.Data2, command.Data3, command.Data4);
                                             break;
 
-                                        case (byte) Core.EventCommand.Wait:
+                                        case (byte) EventCommand.Wait:
                                             withBlock1.ActionTimer = General.GetTimeMs() + command.Data1;
                                             break;
 
-                                        case (byte) Core.EventCommand.ShowPicture:
+                                        case (byte) EventCommand.ShowPicture:
                                         {
                                             var buffer = new PacketWriter();
                                             {
@@ -2156,7 +2159,7 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.HidePicture:
+                                        case (byte) EventCommand.HidePicture:
                                         {
                                             var buffer = new PacketWriter(8);
                                             {
@@ -2167,7 +2170,7 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.WaitMovementCompletion:
+                                        case (byte) EventCommand.WaitMovementCompletion:
                                         {
                                             // Ensure the event exists.
                                             if (command.Data1 < Data.Map[mapNum].Event.Length)
@@ -2192,7 +2195,7 @@ namespace Server
 
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.HoldPlayer:
+                                        case (byte) EventCommand.HoldPlayer:
                                         {
                                             var buffer = new PacketWriter(8);
                                             buffer.WriteEnum(ServerPackets.SHoldPlayer);
@@ -2200,7 +2203,7 @@ namespace Server
                                             PlayerService.Instance.SendDataTo(i, buffer.GetBytes());
                                             break;
                                         }
-                                        case (byte) Core.EventCommand.ReleasePlayer:
+                                        case (byte) EventCommand.ReleasePlayer:
                                         {
                                             var buffer = new PacketWriter(8);
                                             {
@@ -2372,7 +2375,7 @@ namespace Server
 
                     switch (command.Index)
                     {
-                        case (byte) Core.EventCommand.ShowChoices:
+                        case (byte) EventCommand.ShowChoices:
                         {
                             int w = 0;
                             if (!string.IsNullOrEmpty(command.Text2))
@@ -2418,7 +2421,7 @@ namespace Server
 
                             break;
                         }
-                        case (byte) Core.EventCommand.ConditionalBranch:
+                        case (byte) EventCommand.ConditionalBranch:
                         {
                             // Handle conditional branches (simplified logic).
                             if (currentListOption[curList] == 0)
@@ -2441,7 +2444,7 @@ namespace Server
 
                             break;
                         }
-                        case (byte) Core.EventCommand.Label:
+                        case (byte) EventCommand.Label:
                         {
                             // Check if this is the target label.
                             if (command.Text1 == label)
@@ -2569,7 +2572,7 @@ namespace Server
             // Use Task.Run to avoid blocking the main thread.
             await System.Threading.Tasks.Task.Run(() =>
             {
-                for (int i = 0; i < Core.Constant.MaxMaps; i++)
+                for (int i = 0; i < Core.Globals.Constant.MaxMaps; i++)
                 {
                     SpawnGlobalEvents(i).ConfigureAwait(false);
                 }

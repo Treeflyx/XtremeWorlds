@@ -2,7 +2,6 @@
 using Core.Globals;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using MonoGame.Extended.ECS;
 using Npgsql.Replication.PgOutput.Messages;
 using System;
 using System.Diagnostics;
@@ -12,8 +11,8 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using Server.Game;
-using static Core.Global.Command;
-using static Core.Type;
+using static Core.Globals.Command;
+using static Core.Globals.Type;
 
 namespace Server
 {
@@ -39,7 +38,7 @@ namespace Server
                 if (General.IsServerDestroyed)
 
                     // Get all our online players.
-                    Debugger.Break(); var onlinePlayers = Core.Data.TempPlayer.Where(player => player.InGame).Select((player, index) => new { Index = Operators.AddObject(index, 1), player }).ToArray();
+                    Debugger.Break(); var onlinePlayers = Data.TempPlayer.Where(player => player.InGame).Select((player, index) => new { Index = Operators.AddObject(index, 1), player }).ToArray();
 
                 await General.CheckShutDownCountDownAsync();
 
@@ -56,9 +55,9 @@ namespace Server
                 {
                     foreach (var player in PlayerService.Instance.Players)
                     {
-                        if (Core.Data.Player[player.Id].Moving > 0)
+                        if (Data.Player[player.Id].Moving > 0)
                         {
-                            Player.PlayerMove(player.Id, Core.Data.Player[player.Id].Dir, Core.Data.Player[player.Id].Moving, false);
+                            Player.PlayerMove(player.Id, Data.Player[player.Id].Dir, Data.Player[player.Id].Moving, false);
                         }
                     }
 
@@ -143,7 +142,7 @@ namespace Server
                 
                 foreach (var player in PlayerService.Instance.Players)
                 {
-                    Database.SaveCharacter(player.Id, Core.Data.TempPlayer[player.Id].Slot);
+                    Database.SaveCharacter(player.Id, Data.TempPlayer[player.Id].Slot);
                     Database.SaveBank(player.Id);
                 }
             }
@@ -157,11 +156,11 @@ namespace Server
             // ///////////////////////////////////////////
             // // This is used for respawning map items //
             // ///////////////////////////////////////////
-            var loopTo = Core.Constant.MaxMaps;
+            var loopTo = Core.Globals.Constant.MaxMaps;
             for (y = 0; y < loopTo; y++)
             {
                 // Clear out unnecessary junk
-                var loopTo1 = Core.Constant.MaxMapItems;
+                var loopTo1 = Core.Globals.Constant.MaxMapItems;
                 for (x = 0; x < loopTo1; x++)
                     Database.ClearMapItem(x, y);
 
@@ -178,13 +177,13 @@ namespace Server
             Core.Globals.Entity.Instances.Clear();
 
             var entities = Core.Globals.Entity.Instances;
-            var mapCount = Core.Constant.MaxMaps;
+            var mapCount = Core.Globals.Constant.MaxMaps;
 
             // Use entities from Entity class
             for (int mapNum = 0; mapNum < mapCount; mapNum++)
             {
                 // Add Npcs
-                for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
+                for (int i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
                 {
                     var npc = Core.Globals.Entity.FromNpc(i, Data.MapNpc[mapNum].Npc[i]);
                     if (npc.Num >= 0)
@@ -197,9 +196,9 @@ namespace Server
                 // Add Players
                 foreach (var i in PlayerService.Instance.Players)
                 {
-                    if (Core.Data.Player[i.Id].Map == mapNum)
+                    if (Data.Player[i.Id].Map == mapNum)
                     {
-                        var player = Core.Globals.Entity.FromPlayer(i.Id, Core.Data.Player[i.Id]);
+                        var player = Core.Globals.Entity.FromPlayer(i.Id, Data.Player[i.Id]);
                         if (IsPlaying(i.Id))
                         {
                             player.Map = mapNum;
@@ -215,7 +214,7 @@ namespace Server
             for (int mapNum = 0; mapNum < mapCount; mapNum++)
             {
                 // Add Npcs
-                for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
+                for (int i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
                 {
                     var npc = Core.Globals.Entity.FromNpc(i, Data.MapNpc[mapNum].Npc[i]);
                     if (npc.Num >= 0)

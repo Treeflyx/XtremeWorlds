@@ -2,9 +2,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using Core;
+using Core.Globals;
 using Core.Net;
-using static Core.Global.Command;
-using Color = Core.Color;
+using static Core.Globals.Command;
+using Color = Core.Globals.Color;
 
 namespace Client.Net;
 

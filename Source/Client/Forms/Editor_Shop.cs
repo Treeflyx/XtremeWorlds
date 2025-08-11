@@ -2,6 +2,7 @@
 using Eto.Drawing;
 using Core;
 using System;
+using Core.Globals;
 
 namespace Client
 {
@@ -87,14 +88,14 @@ namespace Client
         {
             lstIndex.Items.Clear();
             for (int i = 0; i < Constant.MaxShops; i++)
-                lstIndex.Items.Add($"{i + 1}: {Core.Data.Shop[i].Name}");
+                lstIndex.Items.Add($"{i + 1}: {Data.Shop[i].Name}");
 
             cmbItem.Items.Clear();
             cmbCostItem.Items.Clear();
             for (int i = 0; i < Constant.MaxItems; i++)
             {
-                cmbItem.Items.Add($"{i + 1}: {Core.Data.Item[i].Name}");
-                cmbCostItem.Items.Add($"{i + 1}: {Core.Data.Item[i].Name}");
+                cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
             }
 
             if (lstIndex.Items.Count > 0)
@@ -109,18 +110,18 @@ namespace Client
         {
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
-            Core.Data.Shop[GameState.EditorIndex].Name = txtName.Text;
+            Data.Shop[GameState.EditorIndex].Name = txtName.Text;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Shop[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
         }
-        private void NudBuy_ValueChanged() => Core.Data.Shop[GameState.EditorIndex].BuyRate = (int)Math.Round(nudBuy.Value);
+        private void NudBuy_ValueChanged() => Data.Shop[GameState.EditorIndex].BuyRate = (int)Math.Round(nudBuy.Value);
 
         private void BtnUpdate_Click()
         {
             int index = lstTradeItem.SelectedIndex;
             if (index < 0 || index >= Constant.MaxTrades) return;
-            ref var trade = ref Core.Data.Shop[GameState.EditorIndex].TradeItem[index];
+            ref var trade = ref Data.Shop[GameState.EditorIndex].TradeItem[index];
             trade.Item = cmbItem.SelectedIndex;
             trade.ItemValue = (int)Math.Round(nudItemValue.Value);
             trade.CostItem = cmbCostItem.SelectedIndex;
@@ -132,7 +133,7 @@ namespace Client
         {
             int index = lstTradeItem.SelectedIndex;
             if (index < 0 || index >= Constant.MaxTrades) return;
-            ref var trade = ref Core.Data.Shop[GameState.EditorIndex].TradeItem[index];
+            ref var trade = ref Data.Shop[GameState.EditorIndex].TradeItem[index];
             trade.Item = -1;
             trade.ItemValue = 0;
             trade.CostItem = -1;
@@ -147,7 +148,7 @@ namespace Client
             int tmpindex = lstIndex.SelectedIndex;
             Shop.ClearShop(GameState.EditorIndex);
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Shop[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
             Editors.ShopEditorInit();
         }

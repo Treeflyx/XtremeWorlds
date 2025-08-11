@@ -1,11 +1,12 @@
 ﻿using Core;
+using Core.Globals;
 using Core.Net;
 using Microsoft.Extensions.Logging;
 using Server.Game;
 using Server.Game.Net;
 using Server.Net;
-using static Core.Global.Command;
-using static Core.Packets;
+using static Core.Globals.Command;
+using static Core.Net.Packets;
 
 namespace Server;
 
@@ -14,14 +15,14 @@ public static class Npc
     public static async Task SpawnAllMapNpcs()
     {
         await Task.WhenAll(Enumerable
-            .Range(0, Core.Constant.MaxMapNpcs)
+            .Range(0, Core.Globals.Constant.MaxMapNpcs)
             .Select(SpawnMapNpcs));
     }
 
     public static async Task SpawnMapNpcs(int mapNum)
     {
         await Task.WhenAll(Enumerable
-            .Range(0, Core.Constant.MaxMapNpcs)
+            .Range(0, Core.Globals.Constant.MaxMapNpcs)
             .Select(mapNpcNum => Task.Run(() =>
                 SpawnNpc(mapNpcNum, mapNum))));
     }
@@ -36,7 +37,7 @@ public static class Npc
         }
 
         var npcNum = Data.Map[mapNum].Npc[mapNpcNum];
-        if (mapNpcNum == 0 || npcNum < 0 || npcNum > Core.Constant.MaxNpcs)
+        if (mapNpcNum == 0 || npcNum < 0 || npcNum > Core.Globals.Constant.MaxNpcs)
         {
             return;
         }
@@ -160,7 +161,7 @@ public static class Npc
             }
         }
 
-        for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
+        for (var mapNpcNum = 0; mapNpcNum < Core.Globals.Constant.MaxMapNpcs; mapNpcNum++)
         {
             if (Data.MapNpc[mapNum].Npc[mapNpcNum].Num >= 0 &&
                 Data.MapNpc[mapNum].Npc[mapNpcNum].X == x * 32 &&
@@ -186,7 +187,7 @@ public static class Npc
     public static bool CanNpcMove(int mapNum, int mapNpcNum, byte dir)
     {
         int count = System.Enum.GetValues(typeof(Direction)).Length;
-        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count)
+        if (mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Globals.Constant.MaxMapNpcs || dir > count)
         {
             return false;
         }
@@ -245,7 +246,7 @@ public static class Npc
         }
 
         // Check for other NPC collision (using tile grid)
-        for (var i = 0; i < Core.Constant.MaxMapNpcs; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
         {
             if (i == mapNpcNum) continue;
             if (Data.MapNpc[mapNum].Npc[i].Num < 0) continue;
@@ -270,7 +271,7 @@ public static class Npc
     {
         var count = System.Enum.GetValues(typeof(MovementState)).Length;
         int count2 = System.Enum.GetValues(typeof(Direction)).Length;
-        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count2 || movement < 0 || movement > count)
+        if (mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Globals.Constant.MaxMapNpcs || dir > count2 || movement < 0 || movement > count)
         {
             return;
         }
@@ -321,7 +322,7 @@ public static class Npc
     public static void NpcDir(int mapNum, int mapNpcNum, byte dir)
     {
         int count = System.Enum.GetValues(typeof(Direction)).Length;
-        if (mapNum < 0 || mapNum >= Core.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Constant.MaxMapNpcs || dir > count)
+        if (mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps || mapNpcNum < 0 || mapNpcNum >= Core.Globals.Constant.MaxMapNpcs || dir > count)
         {
             return;
         }
@@ -343,7 +344,7 @@ public static class Npc
 
         packet.WriteEnum(ServerPackets.SMapNpcData);
 
-        for (var mapNpcNum = 0; mapNpcNum < Core.Constant.MaxMapNpcs; mapNpcNum++)
+        for (var mapNpcNum = 0; mapNpcNum < Core.Globals.Constant.MaxMapNpcs; mapNpcNum++)
         {
             packet.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].Num);
             packet.WriteInt32(Data.MapNpc[mapNum].Npc[mapNpcNum].X);
@@ -393,7 +394,7 @@ public static class Npc
         }
 
         var npcNum = packetReader.ReadInt32();
-        if (npcNum < 0 | npcNum > Core.Constant.MaxNpcs)
+        if (npcNum < 0 | npcNum > Core.Globals.Constant.MaxNpcs)
         {
             return;
         }
@@ -402,7 +403,7 @@ public static class Npc
         Data.Npc[npcNum].AttackSay = packetReader.ReadString();
         Data.Npc[npcNum].Behaviour = packetReader.ReadByte();
 
-        for (var i = 0; i < Core.Constant.MaxDropItems; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxDropItems; i++)
         {
             Data.Npc[npcNum].DropChance[i] = packetReader.ReadInt32();
             Data.Npc[npcNum].DropItem[i] = packetReader.ReadInt32();
@@ -424,7 +425,7 @@ public static class Npc
             Data.Npc[npcNum].Stat[i] = packetReader.ReadByte();
         }
 
-        for (var i = 0; i < Core.Constant.MaxNpcSkills; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxNpcSkills; i++)
         {
             Data.Npc[npcNum].Skill[i] = packetReader.ReadByte();
         }
@@ -442,7 +443,7 @@ public static class Npc
 
     public static void SendNpcs(int playerId)
     {
-        for (var npcNum = 0; npcNum < Core.Constant.MaxNpcs; npcNum++)
+        for (var npcNum = 0; npcNum < Core.Globals.Constant.MaxNpcs; npcNum++)
         {
             if (Data.Npc[npcNum].Name.Length > 0)
             {
@@ -461,7 +462,7 @@ public static class Npc
         buffer.WriteString(Data.Npc[npcNum].AttackSay);
         buffer.WriteByte(Data.Npc[npcNum].Behaviour);
 
-        for (var i = 0; i < Core.Constant.MaxDropItems; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxDropItems; i++)
         {
             buffer.WriteInt32(Data.Npc[npcNum].DropChance[i]);
             buffer.WriteInt32(Data.Npc[npcNum].DropItem[i]);
@@ -483,7 +484,7 @@ public static class Npc
             buffer.WriteByte(Data.Npc[npcNum].Stat[i]);
         }
 
-        for (var i = 0; i < Core.Constant.MaxNpcSkills; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxNpcSkills; i++)
         {
             buffer.WriteByte(Data.Npc[npcNum].Skill[i]);
         }
@@ -504,7 +505,7 @@ public static class Npc
         packet.WriteString(Data.Npc[npcNum].AttackSay);
         packet.WriteByte(Data.Npc[npcNum].Behaviour);
 
-        for (var i = 0; i < Core.Constant.MaxDropItems; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxDropItems; i++)
         {
             packet.WriteInt32(Data.Npc[npcNum].DropChance[i]);
             packet.WriteInt32(Data.Npc[npcNum].DropItem[i]);
@@ -526,7 +527,7 @@ public static class Npc
             packet.WriteByte(Data.Npc[npcNum].Stat[i]);
         }
 
-        for (var i = 0; i < Core.Constant.MaxNpcSkills; i++)
+        for (var i = 0; i < Core.Globals.Constant.MaxNpcSkills; i++)
         {
             packet.WriteByte(Data.Npc[npcNum].Skill[i]);
         }

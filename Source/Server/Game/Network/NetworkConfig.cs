@@ -1,7 +1,8 @@
 ﻿using Core;
+using Core.Globals;
 using Server.Game;
 using Server.Game.Net;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 
 namespace Server;
 

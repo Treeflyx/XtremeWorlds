@@ -1,5 +1,7 @@
 ﻿using Core;
+using Core.Globals;
 using Microsoft.VisualBasic.CompilerServices;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -12,7 +14,7 @@ namespace Client
             int y;
             int i;
 
-            Core.Data.Autotile = new Core.Type.Autotile[(Data.MyMap.MaxX), (Data.MyMap.MaxY)];
+            Data.Autotile = new Type.Autotile[(Data.MyMap.MaxX), (Data.MyMap.MaxY)];
 
             var loopTo = (int)Data.MyMap.MaxX;
             for (x = 0; x < loopTo; x++)
@@ -21,12 +23,12 @@ namespace Client
                 for (y = 0; y < loopTo1; y++)
                 {
                     int layerCount = System.Enum.GetValues(typeof(MapLayer)).Length;
-                    Core.Data.Autotile[x, y].Layer = new Core.Type.QuarterTile[layerCount];
+                    Data.Autotile[x, y].Layer = new Type.QuarterTile[layerCount];
                     for (i = 0; i < layerCount; i++)
                     {
-                        Core.Data.Autotile[x, y].Layer[i].SrcX = new int[5];
-                        Core.Data.Autotile[x, y].Layer[i].SrcY = new int[5];
-                        Core.Data.Autotile[x, y].Layer[i].Tile = new Core.Type.Point[5];
+                        Data.Autotile[x, y].Layer[i].SrcX = new int[5];
+                        Data.Autotile[x, y].Layer[i].SrcY = new int[5];
+                        Data.Autotile[x, y].Layer[i].Tile = new Type.Point[5];
                     }
                 }
             }
@@ -42,127 +44,127 @@ namespace Client
             {
                 layerNum = layerNum - (layerCount);
                 {
-                    ref var withBlock = ref Core.Data.Autotile[x, y].ExLayer[layerNum].Tile[tileQuarter];
+                    ref var withBlock = ref Data.Autotile[x, y].ExLayer[layerNum].Tile[tileQuarter];
                     switch (autoTileLetter ?? "")
                     {
                         case "a":
                             {
-                                withBlock.X = Core.Type.AutoIn[1].X;
-                                withBlock.Y = Core.Type.AutoIn[1].Y;
+                                withBlock.X = Type.AutoIn[1].X;
+                                withBlock.Y = Type.AutoIn[1].Y;
                                 break;
                             }
                         case "b":
                             {
-                                withBlock.X = Core.Type.AutoIn[2].X;
-                                withBlock.Y = Core.Type.AutoIn[2].Y;
+                                withBlock.X = Type.AutoIn[2].X;
+                                withBlock.Y = Type.AutoIn[2].Y;
                                 break;
                             }
                         case "c":
                             {
-                                withBlock.X = Core.Type.AutoIn[3].X;
-                                withBlock.Y = Core.Type.AutoIn[3].Y;
+                                withBlock.X = Type.AutoIn[3].X;
+                                withBlock.Y = Type.AutoIn[3].Y;
                                 break;
                             }
                         case "d":
                             {
-                                withBlock.X = Core.Type.AutoIn[4].X;
-                                withBlock.Y = Core.Type.AutoIn[4].Y;
+                                withBlock.X = Type.AutoIn[4].X;
+                                withBlock.Y = Type.AutoIn[4].Y;
                                 break;
                             }
                         case "e":
                             {
-                                withBlock.X = Core.Type.AutoNw[1].X;
-                                withBlock.Y = Core.Type.AutoNw[1].Y;
+                                withBlock.X = Type.AutoNw[1].X;
+                                withBlock.Y = Type.AutoNw[1].Y;
                                 break;
                             }
                         case "f":
                             {
-                                withBlock.X = Core.Type.AutoNw[2].X;
-                                withBlock.Y = Core.Type.AutoNw[2].Y;
+                                withBlock.X = Type.AutoNw[2].X;
+                                withBlock.Y = Type.AutoNw[2].Y;
                                 break;
                             }
                         case "g":
                             {
-                                withBlock.X = Core.Type.AutoNw[3].X;
-                                withBlock.Y = Core.Type.AutoNw[3].Y;
+                                withBlock.X = Type.AutoNw[3].X;
+                                withBlock.Y = Type.AutoNw[3].Y;
                                 break;
                             }
                         case "h":
                             {
-                                withBlock.X = Core.Type.AutoNw[4].X;
-                                withBlock.Y = Core.Type.AutoNw[4].Y;
+                                withBlock.X = Type.AutoNw[4].X;
+                                withBlock.Y = Type.AutoNw[4].Y;
                                 break;
                             }
                         case "i":
                             {
-                                withBlock.X = Core.Type.AutoNe[1].X;
-                                withBlock.Y = Core.Type.AutoNe[1].Y;
+                                withBlock.X = Type.AutoNe[1].X;
+                                withBlock.Y = Type.AutoNe[1].Y;
                                 break;
                             }
                         case "j":
                             {
-                                withBlock.X = Core.Type.AutoNe[2].X;
-                                withBlock.Y = Core.Type.AutoNe[2].Y;
+                                withBlock.X = Type.AutoNe[2].X;
+                                withBlock.Y = Type.AutoNe[2].Y;
                                 break;
                             }
                         case "k":
                             {
-                                withBlock.X = Core.Type.AutoNe[3].X;
-                                withBlock.Y = Core.Type.AutoNe[3].Y;
+                                withBlock.X = Type.AutoNe[3].X;
+                                withBlock.Y = Type.AutoNe[3].Y;
                                 break;
                             }
                         case "l":
                             {
-                                withBlock.X = Core.Type.AutoNe[4].X;
-                                withBlock.Y = Core.Type.AutoNe[4].Y;
+                                withBlock.X = Type.AutoNe[4].X;
+                                withBlock.Y = Type.AutoNe[4].Y;
                                 break;
                             }
                         case "m":
                             {
-                                withBlock.X = Core.Type.AutoSw[1].X;
-                                withBlock.Y = Core.Type.AutoSw[1].Y;
+                                withBlock.X = Type.AutoSw[1].X;
+                                withBlock.Y = Type.AutoSw[1].Y;
                                 break;
                             }
                         case "n":
                             {
-                                withBlock.X = Core.Type.AutoSw[2].X;
-                                withBlock.Y = Core.Type.AutoSw[2].Y;
+                                withBlock.X = Type.AutoSw[2].X;
+                                withBlock.Y = Type.AutoSw[2].Y;
                                 break;
                             }
                         case "o":
                             {
-                                withBlock.X = Core.Type.AutoSw[3].X;
-                                withBlock.Y = Core.Type.AutoSw[3].Y;
+                                withBlock.X = Type.AutoSw[3].X;
+                                withBlock.Y = Type.AutoSw[3].Y;
                                 break;
                             }
                         case "p":
                             {
-                                withBlock.X = Core.Type.AutoSw[4].X;
-                                withBlock.Y = Core.Type.AutoSw[4].Y;
+                                withBlock.X = Type.AutoSw[4].X;
+                                withBlock.Y = Type.AutoSw[4].Y;
                                 break;
                             }
                         case "q":
                             {
-                                withBlock.X = Core.Type.AutoSe[1].X;
-                                withBlock.Y = Core.Type.AutoSe[1].Y;
+                                withBlock.X = Type.AutoSe[1].X;
+                                withBlock.Y = Type.AutoSe[1].Y;
                                 break;
                             }
                         case "r":
                             {
-                                withBlock.X = Core.Type.AutoSe[2].X;
-                                withBlock.Y = Core.Type.AutoSe[2].Y;
+                                withBlock.X = Type.AutoSe[2].X;
+                                withBlock.Y = Type.AutoSe[2].Y;
                                 break;
                             }
                         case "s":
                             {
-                                withBlock.X = Core.Type.AutoSe[3].X;
-                                withBlock.Y = Core.Type.AutoSe[3].Y;
+                                withBlock.X = Type.AutoSe[3].X;
+                                withBlock.Y = Type.AutoSe[3].Y;
                                 break;
                             }
                         case "t":
                             {
-                                withBlock.X = Core.Type.AutoSe[4].X;
-                                withBlock.Y = Core.Type.AutoSe[4].Y;
+                                withBlock.X = Type.AutoSe[4].X;
+                                withBlock.Y = Type.AutoSe[4].Y;
                                 break;
                             }
                     }
@@ -171,127 +173,127 @@ namespace Client
             else
             {
                 {
-                    ref var withBlock1 = ref Core.Data.Autotile[x, y].Layer[layerNum].Tile[tileQuarter];
+                    ref var withBlock1 = ref Data.Autotile[x, y].Layer[layerNum].Tile[tileQuarter];
                     switch (autoTileLetter ?? "")
                     {
                         case "a":
                             {
-                                withBlock1.X = Core.Type.AutoIn[1].X;
-                                withBlock1.Y = Core.Type.AutoIn[1].Y;
+                                withBlock1.X = Type.AutoIn[1].X;
+                                withBlock1.Y = Type.AutoIn[1].Y;
                                 break;
                             }
                         case "b":
                             {
-                                withBlock1.X = Core.Type.AutoIn[2].X;
-                                withBlock1.Y = Core.Type.AutoIn[2].Y;
+                                withBlock1.X = Type.AutoIn[2].X;
+                                withBlock1.Y = Type.AutoIn[2].Y;
                                 break;
                             }
                         case "c":
                             {
-                                withBlock1.X = Core.Type.AutoIn[3].X;
-                                withBlock1.Y = Core.Type.AutoIn[3].Y;
+                                withBlock1.X = Type.AutoIn[3].X;
+                                withBlock1.Y = Type.AutoIn[3].Y;
                                 break;
                             }
                         case "d":
                             {
-                                withBlock1.X = Core.Type.AutoIn[4].X;
-                                withBlock1.Y = Core.Type.AutoIn[4].Y;
+                                withBlock1.X = Type.AutoIn[4].X;
+                                withBlock1.Y = Type.AutoIn[4].Y;
                                 break;
                             }
                         case "e":
                             {
-                                withBlock1.X = Core.Type.AutoNw[1].X;
-                                withBlock1.Y = Core.Type.AutoNw[1].Y;
+                                withBlock1.X = Type.AutoNw[1].X;
+                                withBlock1.Y = Type.AutoNw[1].Y;
                                 break;
                             }
                         case "f":
                             {
-                                withBlock1.X = Core.Type.AutoNw[2].X;
-                                withBlock1.Y = Core.Type.AutoNw[2].Y;
+                                withBlock1.X = Type.AutoNw[2].X;
+                                withBlock1.Y = Type.AutoNw[2].Y;
                                 break;
                             }
                         case "g":
                             {
-                                withBlock1.X = Core.Type.AutoNw[3].X;
-                                withBlock1.Y = Core.Type.AutoNw[3].Y;
+                                withBlock1.X = Type.AutoNw[3].X;
+                                withBlock1.Y = Type.AutoNw[3].Y;
                                 break;
                             }
                         case "h":
                             {
-                                withBlock1.X = Core.Type.AutoNw[4].X;
-                                withBlock1.Y = Core.Type.AutoNw[4].Y;
+                                withBlock1.X = Type.AutoNw[4].X;
+                                withBlock1.Y = Type.AutoNw[4].Y;
                                 break;
                             }
                         case "i":
                             {
-                                withBlock1.X = Core.Type.AutoNe[1].X;
-                                withBlock1.Y = Core.Type.AutoNe[1].Y;
+                                withBlock1.X = Type.AutoNe[1].X;
+                                withBlock1.Y = Type.AutoNe[1].Y;
                                 break;
                             }
                         case "j":
                             {
-                                withBlock1.X = Core.Type.AutoNe[2].X;
-                                withBlock1.Y = Core.Type.AutoNe[2].Y;
+                                withBlock1.X = Type.AutoNe[2].X;
+                                withBlock1.Y = Type.AutoNe[2].Y;
                                 break;
                             }
                         case "k":
                             {
-                                withBlock1.X = Core.Type.AutoNe[3].X;
-                                withBlock1.Y = Core.Type.AutoNe[3].Y;
+                                withBlock1.X = Type.AutoNe[3].X;
+                                withBlock1.Y = Type.AutoNe[3].Y;
                                 break;
                             }
                         case "l":
                             {
-                                withBlock1.X = Core.Type.AutoNe[4].X;
-                                withBlock1.Y = Core.Type.AutoNe[4].Y;
+                                withBlock1.X = Type.AutoNe[4].X;
+                                withBlock1.Y = Type.AutoNe[4].Y;
                                 break;
                             }
                         case "m":
                             {
-                                withBlock1.X = Core.Type.AutoSw[1].X;
-                                withBlock1.Y = Core.Type.AutoSw[1].Y;
+                                withBlock1.X = Type.AutoSw[1].X;
+                                withBlock1.Y = Type.AutoSw[1].Y;
                                 break;
                             }
                         case "n":
                             {
-                                withBlock1.X = Core.Type.AutoSw[2].X;
-                                withBlock1.Y = Core.Type.AutoSw[2].Y;
+                                withBlock1.X = Type.AutoSw[2].X;
+                                withBlock1.Y = Type.AutoSw[2].Y;
                                 break;
                             }
                         case "o":
                             {
-                                withBlock1.X = Core.Type.AutoSw[3].X;
-                                withBlock1.Y = Core.Type.AutoSw[3].Y;
+                                withBlock1.X = Type.AutoSw[3].X;
+                                withBlock1.Y = Type.AutoSw[3].Y;
                                 break;
                             }
                         case "p":
                             {
-                                withBlock1.X = Core.Type.AutoSw[4].X;
-                                withBlock1.Y = Core.Type.AutoSw[4].Y;
+                                withBlock1.X = Type.AutoSw[4].X;
+                                withBlock1.Y = Type.AutoSw[4].Y;
                                 break;
                             }
                         case "q":
                             {
-                                withBlock1.X = Core.Type.AutoSe[1].X;
-                                withBlock1.Y = Core.Type.AutoSe[1].Y;
+                                withBlock1.X = Type.AutoSe[1].X;
+                                withBlock1.Y = Type.AutoSe[1].Y;
                                 break;
                             }
                         case "r":
                             {
-                                withBlock1.X = Core.Type.AutoSe[2].X;
-                                withBlock1.Y = Core.Type.AutoSe[2].Y;
+                                withBlock1.X = Type.AutoSe[2].X;
+                                withBlock1.Y = Type.AutoSe[2].Y;
                                 break;
                             }
                         case "s":
                             {
-                                withBlock1.X = Core.Type.AutoSe[3].X;
-                                withBlock1.Y = Core.Type.AutoSe[3].Y;
+                                withBlock1.X = Type.AutoSe[3].X;
+                                withBlock1.Y = Type.AutoSe[3].Y;
                                 break;
                             }
                         case "t":
                             {
-                                withBlock1.X = Core.Type.AutoSe[4].X;
-                                withBlock1.Y = Core.Type.AutoSe[4].Y;
+                                withBlock1.X = Type.AutoSe[4].X;
+                                withBlock1.Y = Type.AutoSe[4].Y;
                                 break;
                             }
                     }
@@ -313,7 +315,7 @@ namespace Client
             // We also give letters to each subtile for easy rendering tweaks. ;]
             // First, we need to re-size the array
 
-            Core.Data.Autotile = new Core.Type.Autotile[(Data.MyMap.MaxX), (Data.MyMap.MaxY)];
+            Data.Autotile = new Type.Autotile[(Data.MyMap.MaxX), (Data.MyMap.MaxY)];
             var loopTo = (int)Data.MyMap.MaxX;
             for (x = 0; x < loopTo; x++)
             {
@@ -321,81 +323,81 @@ namespace Client
                 for (y = 0; y < loopTo1; y++)
                 {
                     int layerCount = System.Enum.GetValues(typeof(MapLayer)).Length;
-                    Core.Data.Autotile[x, y].Layer = new Core.Type.QuarterTile[layerCount];
+                    Data.Autotile[x, y].Layer = new Type.QuarterTile[layerCount];
                     for (int i = 0; i < layerCount; i++)
                     {
-                        Core.Data.Autotile[x, y].Layer[i].SrcX = new int[5];
-                        Core.Data.Autotile[x, y].Layer[i].SrcY = new int[5];
-                        Core.Data.Autotile[x, y].Layer[i].Tile = new Core.Type.Point[5];
+                        Data.Autotile[x, y].Layer[i].SrcX = new int[5];
+                        Data.Autotile[x, y].Layer[i].SrcY = new int[5];
+                        Data.Autotile[x, y].Layer[i].Tile = new Type.Point[5];
                     }
                 }
             }
 
             // Inner tiles (Top right subtile region)
             // NW - a
-            Core.Type.AutoIn[1].X = 32;
-            Core.Type.AutoIn[1].Y = 0;
+            Type.AutoIn[1].X = 32;
+            Type.AutoIn[1].Y = 0;
             // NE - b
-            Core.Type.AutoIn[2].X = 48;
-            Core.Type.AutoIn[2].Y = 0;
+            Type.AutoIn[2].X = 48;
+            Type.AutoIn[2].Y = 0;
             // SW - c
-            Core.Type.AutoIn[3].X = 32;
-            Core.Type.AutoIn[3].Y = 16;
+            Type.AutoIn[3].X = 32;
+            Type.AutoIn[3].Y = 16;
             // SE - d
-            Core.Type.AutoIn[4].X = 48;
-            Core.Type.AutoIn[4].Y = 16;
+            Type.AutoIn[4].X = 48;
+            Type.AutoIn[4].Y = 16;
             // Outer Tiles - NW (bottom subtile region)
             // NW - e
-            Core.Type.AutoNw[1].X = 0;
-            Core.Type.AutoNw[1].Y = 32;
+            Type.AutoNw[1].X = 0;
+            Type.AutoNw[1].Y = 32;
             // NE - f
-            Core.Type.AutoNw[2].X = 16;
-            Core.Type.AutoNw[2].Y = 32;
+            Type.AutoNw[2].X = 16;
+            Type.AutoNw[2].Y = 32;
             // SW - g
-            Core.Type.AutoNw[3].X = 0;
-            Core.Type.AutoNw[3].Y = 48;
+            Type.AutoNw[3].X = 0;
+            Type.AutoNw[3].Y = 48;
             // SE - h
-            Core.Type.AutoNw[4].X = 16;
-            Core.Type.AutoNw[4].Y = 48;
+            Type.AutoNw[4].X = 16;
+            Type.AutoNw[4].Y = 48;
             // Outer Tiles - NE (bottom subtile region)
             // NW - i
-            Core.Type.AutoNe[1].X = 32;
-            Core.Type.AutoNe[1].Y = 32;
+            Type.AutoNe[1].X = 32;
+            Type.AutoNe[1].Y = 32;
             // NE - g
-            Core.Type.AutoNe[2].X = 48;
-            Core.Type.AutoNe[2].Y = 32;
+            Type.AutoNe[2].X = 48;
+            Type.AutoNe[2].Y = 32;
             // SW - k
-            Core.Type.AutoNe[3].X = 32;
-            Core.Type.AutoNe[3].Y = 48;
+            Type.AutoNe[3].X = 32;
+            Type.AutoNe[3].Y = 48;
             // SE - l
-            Core.Type.AutoNe[4].X = 48;
-            Core.Type.AutoNe[4].Y = 48;
+            Type.AutoNe[4].X = 48;
+            Type.AutoNe[4].Y = 48;
             // Outer Tiles - SW (bottom subtile region)
             // NW - m
-            Core.Type.AutoSw[1].X = 0;
-            Core.Type.AutoSw[1].Y = 64;
+            Type.AutoSw[1].X = 0;
+            Type.AutoSw[1].Y = 64;
             // NE - n
-            Core.Type.AutoSw[2].X = 16;
-            Core.Type.AutoSw[2].Y = 64;
+            Type.AutoSw[2].X = 16;
+            Type.AutoSw[2].Y = 64;
             // SW - o
-            Core.Type.AutoSw[3].X = 0;
-            Core.Type.AutoSw[3].Y = 80;
+            Type.AutoSw[3].X = 0;
+            Type.AutoSw[3].Y = 80;
             // SE - p
-            Core.Type.AutoSw[4].X = 16;
-            Core.Type.AutoSw[4].Y = 80;
+            Type.AutoSw[4].X = 16;
+            Type.AutoSw[4].Y = 80;
             // Outer Tiles - SE (bottom subtile region)
             // NW - q
-            Core.Type.AutoSe[1].X = 32;
-            Core.Type.AutoSe[1].Y = 64;
+            Type.AutoSe[1].X = 32;
+            Type.AutoSe[1].Y = 64;
             // NE - r
-            Core.Type.AutoSe[2].X = 48;
-            Core.Type.AutoSe[2].Y = 64;
+            Type.AutoSe[2].X = 48;
+            Type.AutoSe[2].Y = 64;
             // SW - s
-            Core.Type.AutoSe[3].X = 32;
-            Core.Type.AutoSe[3].Y = 80;
+            Type.AutoSe[3].X = 32;
+            Type.AutoSe[3].Y = 80;
             // SE - t
-            Core.Type.AutoSe[4].X = 48;
-            Core.Type.AutoSe[4].Y = 80;
+            Type.AutoSe[4].X = 48;
+            Type.AutoSe[4].Y = 80;
 
             var loopTo2 = (int)Data.MyMap.MaxX;
             for (x = 0; x < loopTo2; x++)
@@ -431,7 +433,7 @@ namespace Client
             // check if the tile can be rendered
             if (withBlock.Layer[layerNum].Tileset <= 0 | withBlock.Layer[layerNum].Tileset > GameState.NumTileSets)
             {
-                Core.Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateNone;
+                Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateNone;
                 return;
             }
 
@@ -439,16 +441,16 @@ namespace Client
             if (withBlock.Layer[layerNum].AutoTile == GameState.AutotileNone | withBlock.Layer[layerNum].AutoTile == GameState.AutotileFake)
             {
                 // default to... default
-                Core.Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateNormal;
+                Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateNormal;
             }
             else
             {
-                Core.Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateAutotile;
+                Data.Autotile[x, y].Layer[layerNum].RenderState = GameState.RenderStateAutotile;
                 // cache tileset positioning
                 for (quarterNum = 0; quarterNum <= 4; quarterNum++)
                 {
-                    Core.Data.Autotile[x, y].Layer[layerNum].SrcX[quarterNum] = Data.MyMap.Tile[x, y].Layer[layerNum].X * 32 + Data.Autotile[x, y].Layer[layerNum].Tile[quarterNum].X;
-                    Core.Data.Autotile[x, y].Layer[layerNum].SrcY[quarterNum] = Data.MyMap.Tile[x, y].Layer[layerNum].Y * 32 + Data.Autotile[x, y].Layer[layerNum].Tile[quarterNum].Y;
+                    Data.Autotile[x, y].Layer[layerNum].SrcX[quarterNum] = Data.MyMap.Tile[x, y].Layer[layerNum].X * 32 + Data.Autotile[x, y].Layer[layerNum].Tile[quarterNum].X;
+                    Data.Autotile[x, y].Layer[layerNum].SrcY[quarterNum] = Data.MyMap.Tile[x, y].Layer[layerNum].Y * 32 + Data.Autotile[x, y].Layer[layerNum].Tile[quarterNum].Y;
                 }
             }
         }

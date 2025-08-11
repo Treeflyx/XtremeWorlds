@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using Core;
-using static Core.Global.Command;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Command;
 using ManagedBass;
 using ManagedBass.Midi;
 using Microsoft.VisualBasic.CompilerServices;
@@ -30,7 +32,7 @@ namespace Client
 
         public static void PlayMusic(string fileName)
         {
-            string path = System.IO.Path.Combine(Core.Path.Music, fileName);
+            string path = System.IO.Path.Combine(DataPath.Music, fileName);
 
             if (fileName == "None")
             {
@@ -166,14 +168,14 @@ namespace Client
 
         public static void PlaySound(string fileName, int x, int y, bool looped = false)
         {
-            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(Core.Path.Sounds + fileName))
+            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             try
             {
                 StopSound(); // Stop previous sound if any
 
-                SoundStream = Bass.CreateStream(Core.Path.Sounds + fileName, 0L, 0L, looped ? BassFlags.Loop : BassFlags.Default);
+                SoundStream = Bass.CreateStream(DataPath.Sounds + fileName, 0L, 0L, looped ? BassFlags.Loop : BassFlags.Default);
                 if (SoundStream != 0)
                 {
                     double calculatedVolume = CalculateSoundVolume(ref x, ref y);
@@ -199,14 +201,14 @@ namespace Client
 
         public static void PlayExtraSound(string fileName, bool looped = false)
         {
-            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(Core.Path.Sounds + fileName))
+            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             try
             {
                 StopExtraSound();
 
-                ExtraSoundStream = Bass.CreateStream(Core.Path.Sounds + fileName, 0L, 0L, looped ? BassFlags.Loop : BassFlags.Default);
+                ExtraSoundStream = Bass.CreateStream(DataPath.Sounds + fileName, 0L, 0L, looped ? BassFlags.Loop : BassFlags.Default);
                 if (ExtraSoundStream != 0)
                 {
                     Bass.ChannelSetAttribute(ExtraSoundStream, ChannelAttribute.Volume, SettingsManager.Instance.SoundVolume / 100.0f);
@@ -290,8 +292,8 @@ namespace Client
                     x = 0;
                 if (y == -1)
                     y = 0;
-                x1 = Core.Data.Player[GameState.MyIndex].X;
-                y1 = Core.Data.Player[GameState.MyIndex].Y;
+                x1 = Data.Player[GameState.MyIndex].X;
+                y1 = Data.Player[GameState.MyIndex].Y;
                 x2 = x * 32;
                 y2 = y * 32;
 
@@ -345,7 +347,7 @@ namespace Client
         public static void PlayWeatherSound(string fileName, bool looped = false)
         {
             // Check if sound is enabled and the file exists
-            if (!(Conversions.ToInteger(SettingsManager.Instance.Sound) == 1) | !File.Exists(Core.Path.Sounds + fileName))
+            if (!(Conversions.ToInteger(SettingsManager.Instance.Sound) == 1) | !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             // Avoid reloading the same sound if it's already playing
@@ -356,7 +358,7 @@ namespace Client
             StopWeatherSound();
 
             // Load the new sound file
-            string soundPath = Core.Path.Sounds + fileName;
+            string soundPath = DataPath.Sounds + fileName;
             WeatherStream = Bass.CreateStream(soundPath, 0L, 0L, looped ? BassFlags.Loop : BassFlags.Default);
 
             // Check if the stream was created successfully

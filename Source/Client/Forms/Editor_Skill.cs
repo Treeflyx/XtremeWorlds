@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using Eto.Forms;
 using System;
 using System.IO;
+using Core.Globals;
 using Eto.Drawing;
 
 namespace Client
@@ -152,23 +153,23 @@ namespace Client
         {
             lstIndex.Items.Clear();
             for (int i = 0; i < Constant.MaxSkills; i++)
-                lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Core.Data.Skill[i].Name)}");
+                lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Data.Skill[i].Name)}");
 
             cmbAnimCast.Items.Clear();
             cmbAnim.Items.Clear();
             for (int i = 0; i < Constant.MaxAnimations; i++)
             {
-                cmbAnimCast.Items.Add($"{i + 1}: {Core.Data.Animation[i].Name}");
-                cmbAnim.Items.Add($"{i + 1}: {Core.Data.Animation[i].Name}");
+                cmbAnimCast.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                cmbAnim.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
             }
 
             cmbProjectile.Items.Clear();
             for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbProjectile.Items.Add($"{i + 1}: {Core.Data.Projectile[i].Name}");
+                cmbProjectile.Items.Add($"{i + 1}: {Data.Projectile[i].Name}");
 
             cmbJob.Items.Clear();
             for (int i = 0; i < Constant.MaxJobs; i++)
-                cmbJob.Items.Add($"{i + 1}: {Core.Data.Job[i].Name.Trim()}");
+                cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
 
             if (lstIndex.Items.Count > 0)
             {
@@ -185,7 +186,7 @@ namespace Client
             int tmpindex = lstIndex.SelectedIndex;
             Database.ClearSkill(GameState.EditorIndex);
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Skill[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
             Editors.SkillEditorInit();
         }
@@ -195,36 +196,36 @@ namespace Client
         {
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
-            Core.Data.Skill[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
+            Data.Skill[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Core.Data.Skill[GameState.EditorIndex].Name}" });
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
         }
-        private void CmbType_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].Type = (byte)cmbType.SelectedIndex;
-        private void NudMp_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].MpCost = (int)Math.Round(nudMp.Value);
-        private void NudLevel_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].LevelReq = (int)Math.Round(nudLevel.Value);
-        private void CmbAccessReq_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex;
-        private void CmbJob_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].JobReq = cmbJob.SelectedIndex;
-        private void NudCast_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].CastTime = (int)Math.Round(nudCast.Value);
-        private void NudCool_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].CdTime = (int)Math.Round(nudCool.Value);
-        private void NudIcon_ValueChanged() { Core.Data.Skill[GameState.EditorIndex].Icon = (int)Math.Round(nudIcon.Value); picSprite.Invalidate(); }
-        private void NudMap_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Map = (int)Math.Round(nudMap.Value);
-        private void CmbDir_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].Dir = (byte)cmbDir.SelectedIndex;
-        private void NudX_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].X = (int)Math.Round(nudX.Value);
-        private void NudY_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Y = (int)Math.Round(nudY.Value);
-        private void NudVital_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Vital = (int)Math.Round(nudVital.Value);
-        private void NudDuration_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Duration = (int)Math.Round(nudDuration.Value);
-        private void NudInterval_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Interval = (int)Math.Round(nudInterval.Value);
-        private void NudRange_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].Range = (int)Math.Round(nudRange.Value);
-        private void ChkAoE_CheckedChanged() => Core.Data.Skill[GameState.EditorIndex].IsAoE = chkAoE.Checked == true;
-        private void NudAoE_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].AoE = (int)Math.Round(nudAoE.Value);
-        private void CmbAnimCast_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].CastAnim = cmbAnimCast.SelectedIndex;
-        private void CmbAnim_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].SkillAnim = cmbAnim.SelectedIndex;
-        private void NudStun_ValueChanged() => Core.Data.Skill[GameState.EditorIndex].StunDuration = (int)Math.Round(nudStun.Value);
-        private void ChkProjectile_CheckedChanged() => Core.Data.Skill[GameState.EditorIndex].IsProjectile = chkProjectile.Checked == true ? 1 : 0;
-        private void CmbProjectile_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex;
-    private void ChkKnockBack_CheckedChanged() => Core.Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
-        private void CmbKnockBackTiles_SelectedIndexChanged() => Core.Data.Skill[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
+        private void CmbType_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Type = (byte)cmbType.SelectedIndex;
+        private void NudMp_ValueChanged() => Data.Skill[GameState.EditorIndex].MpCost = (int)Math.Round(nudMp.Value);
+        private void NudLevel_ValueChanged() => Data.Skill[GameState.EditorIndex].LevelReq = (int)Math.Round(nudLevel.Value);
+        private void CmbAccessReq_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex;
+        private void CmbJob_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].JobReq = cmbJob.SelectedIndex;
+        private void NudCast_ValueChanged() => Data.Skill[GameState.EditorIndex].CastTime = (int)Math.Round(nudCast.Value);
+        private void NudCool_ValueChanged() => Data.Skill[GameState.EditorIndex].CdTime = (int)Math.Round(nudCool.Value);
+        private void NudIcon_ValueChanged() { Data.Skill[GameState.EditorIndex].Icon = (int)Math.Round(nudIcon.Value); picSprite.Invalidate(); }
+        private void NudMap_ValueChanged() => Data.Skill[GameState.EditorIndex].Map = (int)Math.Round(nudMap.Value);
+        private void CmbDir_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Dir = (byte)cmbDir.SelectedIndex;
+        private void NudX_ValueChanged() => Data.Skill[GameState.EditorIndex].X = (int)Math.Round(nudX.Value);
+        private void NudY_ValueChanged() => Data.Skill[GameState.EditorIndex].Y = (int)Math.Round(nudY.Value);
+        private void NudVital_ValueChanged() => Data.Skill[GameState.EditorIndex].Vital = (int)Math.Round(nudVital.Value);
+        private void NudDuration_ValueChanged() => Data.Skill[GameState.EditorIndex].Duration = (int)Math.Round(nudDuration.Value);
+        private void NudInterval_ValueChanged() => Data.Skill[GameState.EditorIndex].Interval = (int)Math.Round(nudInterval.Value);
+        private void NudRange_ValueChanged() => Data.Skill[GameState.EditorIndex].Range = (int)Math.Round(nudRange.Value);
+        private void ChkAoE_CheckedChanged() => Data.Skill[GameState.EditorIndex].IsAoE = chkAoE.Checked == true;
+        private void NudAoE_ValueChanged() => Data.Skill[GameState.EditorIndex].AoE = (int)Math.Round(nudAoE.Value);
+        private void CmbAnimCast_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].CastAnim = cmbAnimCast.SelectedIndex;
+        private void CmbAnim_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].SkillAnim = cmbAnim.SelectedIndex;
+        private void NudStun_ValueChanged() => Data.Skill[GameState.EditorIndex].StunDuration = (int)Math.Round(nudStun.Value);
+        private void ChkProjectile_CheckedChanged() => Data.Skill[GameState.EditorIndex].IsProjectile = chkProjectile.Checked == true ? 1 : 0;
+        private void CmbProjectile_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex;
+    private void ChkKnockBack_CheckedChanged() => Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
+        private void CmbKnockBackTiles_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
 
         private void DrawIcon(Graphics g, int iconNum)
         {
@@ -233,7 +234,7 @@ namespace Client
                 g.Clear(Colors.Transparent);
                 return;
             }
-            var path = System.IO.Path.Combine(Core.Path.Skills, iconNum + GameState.GfxExt);
+            var path = System.IO.Path.Combine(DataPath.Skills, iconNum + GameState.GfxExt);
             if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
             try
             {

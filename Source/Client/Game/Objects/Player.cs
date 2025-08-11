@@ -3,8 +3,10 @@ using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using System.Net.Security;
 using Client.Net;
+using Core.Globals;
 using Core.Net;
-using static Core.Global.Command;
+using static Core.Globals.Command;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -14,9 +16,9 @@ namespace Client
         #region Database
         public static void ClearPlayers()
         {
-            Core.Data.Account = new Core.Type.Account[Constant.MaxPlayers];
-            Core.Data.Player = new Core.Type.Player[Constant.MaxPlayers];
-            Core.Data.TempPlayer = new Core.Type.TempPlayer[Core.Constant.MaxPlayers];
+            Data.Account = new Type.Account[Constant.MaxPlayers];
+            Data.Player = new Type.Player[Constant.MaxPlayers];
+            Data.TempPlayer = new Type.TempPlayer[Constant.MaxPlayers];
 
             for (int i = 0; i < Constant.MaxPlayers; i++)
             {
@@ -26,66 +28,66 @@ namespace Client
 
         public static void ClearAccount(int index)
         {
-            Core.Data.Account[index].Login = "";
-            Core.Data.Account[index].Password = "";
+            Data.Account[index].Login = "";
+            Data.Account[index].Password = "";
         }
 
         public static void ClearPlayer(int index)
         {
             ClearAccount(index);
 
-            Core.Data.Player[index].Name = "";
-            Core.Data.Player[index].Attacking = 0;
-            Core.Data.Player[index].AttackTimer = 0;
-            Core.Data.Player[index].Job = 0;
-            Core.Data.Player[index].Dir = 0;
-            Core.Data.Player[index].Access = (byte)AccessLevel.Player;
+            Data.Player[index].Name = "";
+            Data.Player[index].Attacking = 0;
+            Data.Player[index].AttackTimer = 0;
+            Data.Player[index].Job = 0;
+            Data.Player[index].Dir = 0;
+            Data.Player[index].Access = (byte)AccessLevel.Player;
 
-            Core.Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
-            for (int y = 0; y < Core.Data.Player[index].Equipment.Length; y++)
-                Core.Data.Player[index].Equipment[y] = -1;
+            Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
+            for (int y = 0; y < Data.Player[index].Equipment.Length; y++)
+                Data.Player[index].Equipment[y] = -1;
 
-            Core.Data.Player[index].Exp = 0;
-            Core.Data.Player[index].Level = 0;
-            Core.Data.Player[index].Map = 0;
-            Core.Data.Player[index].MapGetTimer = 0;
-            Core.Data.Player[index].Moving = 0;
-            Core.Data.Player[index].Pk = false;
-            Core.Data.Player[index].Points = 0;
-            Core.Data.Player[index].Sprite = 0;
+            Data.Player[index].Exp = 0;
+            Data.Player[index].Level = 0;
+            Data.Player[index].Map = 0;
+            Data.Player[index].MapGetTimer = 0;
+            Data.Player[index].Moving = 0;
+            Data.Player[index].Pk = false;
+            Data.Player[index].Points = 0;
+            Data.Player[index].Sprite = 0;
 
-            Core.Data.Player[index].Inv = new Core.Type.PlayerInv[Constant.MaxInv];
+            Data.Player[index].Inv = new Type.PlayerInv[Constant.MaxInv];
             for (int x = 0; x < Constant.MaxInv; x++)
             {
-                Core.Data.Player[index].Inv[x].Num = -1;
-                Core.Data.Player[index].Inv[x].Value = 0;
+                Data.Player[index].Inv[x].Num = -1;
+                Data.Player[index].Inv[x].Value = 0;
                 Data.TradeTheirOffer[x].Num = -1;
                 Data.TradeYourOffer[x].Num = -1;
             }
 
-            Core.Data.Player[index].Skill = new Core.Type.PlayerSkill[Constant.MaxPlayerSkills];
+            Data.Player[index].Skill = new Type.PlayerSkill[Constant.MaxPlayerSkills];
             for (int x = 0; x < Constant.MaxPlayerSkills; x++)
             {
-                Core.Data.Player[index].Skill[x].Num = -1;
-                Core.Data.Player[index].Skill[x].Cd = 0;
+                Data.Player[index].Skill[x].Num = -1;
+                Data.Player[index].Skill[x].Cd = 0;
             }
 
-            Core.Data.Player[index].Stat = new byte[Enum.GetValues(typeof(Core.Stat)).Length];
-            foreach (Core.Stat stat in Enum.GetValues(typeof(Core.Stat)))
-                Core.Data.Player[index].Stat[(int)stat] = 0;
+            Data.Player[index].Stat = new byte[Enum.GetValues(typeof(Stat)).Length];
+            foreach (Stat stat in Enum.GetValues(typeof(Stat)))
+                Data.Player[index].Stat[(int)stat] = 0;
 
-            Core.Data.Player[index].Steps = 0;
+            Data.Player[index].Steps = 0;
 
-            int vitalCount = Enum.GetValues(typeof(Core.Vital)).Length;
-            Core.Data.Player[index].Vital = new int[vitalCount];
-            foreach (Core.Vital vital in Enum.GetValues(typeof(Core.Vital)))
-                Core.Data.Player[index].Vital[(int)vital] = 0;
+            int vitalCount = Enum.GetValues(typeof(Vital)).Length;
+            Data.Player[index].Vital = new int[vitalCount];
+            foreach (Vital vital in Enum.GetValues(typeof(Vital)))
+                Data.Player[index].Vital[(int)vital] = 0;
 
-            Core.Data.Player[index].X = 0;
-            Core.Data.Player[index].Y = 0;
+            Data.Player[index].X = 0;
+            Data.Player[index].Y = 0;
 
-            Core.Data.Player[index].Hotbar = new Core.Type.Hotbar[Constant.MaxHotbar];
-            Core.Data.Player[index].GatherSkills = new Core.Type.ResourceType[Enum.GetValues(typeof(Core.ResourceSkill)).Length];
+            Data.Player[index].Hotbar = new Type.Hotbar[Constant.MaxHotbar];
+            Data.Player[index].GatherSkills = new Type.ResourceType[Enum.GetValues(typeof(ResourceSkill)).Length];
 
             Trade.InTrade = -1;
         }
@@ -99,11 +101,11 @@ namespace Client
                 // Check if player has the shift key down for running
                 if (GameState.VbKeyShift)
                 {
-                    Core.Data.Player[GameState.MyIndex].Moving = (byte)MovementState.Walking;
+                    Data.Player[GameState.MyIndex].Moving = (byte)MovementState.Walking;
                 }
                 else
                 {
-                    Core.Data.Player[GameState.MyIndex].Moving = (byte)MovementState.Running;
+                    Data.Player[GameState.MyIndex].Moving = (byte)MovementState.Running;
                 }
 
                 switch (Data.Player[GameState.MyIndex].Dir)
@@ -730,7 +732,7 @@ namespace Client
                     {
                         if (IsPlaying(i))
                         {
-                            if (Core.Data.Player[i].X == x & Core.Data.Player[i].Y == y)
+                            if (Data.Player[i].X == x & Data.Player[i].Y == y)
                             {
                                 checkPlayerDir = true;
                                 return checkPlayerDir;
@@ -782,47 +784,47 @@ namespace Client
                 {
                     case (int)Direction.Up:
                         {
-                            Core.Data.Player[index].Y -= 1;
+                            Data.Player[index].Y -= 1;
 
                             break;
                         }
                     case (int)Direction.Down:
                         {
-                            Core.Data.Player[index].Y += 1;
+                            Data.Player[index].Y += 1;
                             break;
                         }
                     case (int)Direction.Left:
                         {
-                            Core.Data.Player[index].X -= 1;
+                            Data.Player[index].X -= 1;
                             break;
                         }
                     case (int)Direction.Right:
                         {
-                            Core.Data.Player[index].X -= 1;
+                            Data.Player[index].X -= 1;
                             break;
                         }
                     case (int)Direction.UpRight:
                         {
-                            Core.Data.Player[index].X -= 1;
-                            Core.Data.Player[index].Y -= 1;
+                            Data.Player[index].X -= 1;
+                            Data.Player[index].Y -= 1;
                             break;
                         }
                     case (int)Direction.UpLeft:
                         {
-                            Core.Data.Player[index].X -= 1;
-                            Core.Data.Player[index].Y -= 1;
+                            Data.Player[index].X -= 1;
+                            Data.Player[index].Y -= 1;
                             break;
                         }
                     case (int)Direction.DownRight:
                         {
-                            Core.Data.Player[index].X -= 1;
-                            Core.Data.Player[index].Y -= 1;
+                            Data.Player[index].X -= 1;
+                            Data.Player[index].Y -= 1;
                             break;
                         }
                     case (int)Direction.DownLeft:
                         {
-                            Core.Data.Player[index].X -= 1;
-                            Core.Data.Player[index].Y -= 1;
+                            Data.Player[index].X -= 1;
+                            Data.Player[index].Y -= 1;
                             break;
                         }
                 }
@@ -853,19 +855,19 @@ namespace Client
                 // speed from weapon
                 if (GetPlayerEquipment(GameState.MyIndex, Equipment.Weapon) >= 0)
                 {
-                    attackSpeed = Core.Data.Item[GetPlayerEquipment(GameState.MyIndex, Equipment.Weapon)].Speed * 1000;
+                    attackSpeed = Data.Item[GetPlayerEquipment(GameState.MyIndex, Equipment.Weapon)].Speed * 1000;
                 }
                 else
                 {
                     attackSpeed = 1000;
                 }
 
-                if (Core.Data.Player[GameState.MyIndex].AttackTimer + attackSpeed < General.GetTickCount())
+                if (Data.Player[GameState.MyIndex].AttackTimer + attackSpeed < General.GetTickCount())
                 {
-                    if (Core.Data.Player[GameState.MyIndex].Attacking == 0)
+                    if (Data.Player[GameState.MyIndex].Attacking == 0)
                     {
                         {
-                            ref var withBlock = ref Core.Data.Player[GameState.MyIndex];
+                            ref var withBlock = ref Data.Player[GameState.MyIndex];
                             withBlock.Attacking = 1;
                             withBlock.AttackTimer = General.GetTickCount();
                         }
@@ -874,7 +876,7 @@ namespace Client
                     }
                 }
 
-                switch (Core.Data.Player[GameState.MyIndex].Dir)
+                switch (Data.Player[GameState.MyIndex].Dir)
                 {
                     case (byte)Direction.Up:
                         {
@@ -932,7 +934,7 @@ namespace Client
                         }
                 }
 
-                if (General.GetTickCount() > Core.Data.Player[GameState.MyIndex].EventTimer)
+                if (General.GetTickCount() > Data.Player[GameState.MyIndex].EventTimer)
                 {
                     for (int i = 0, loopTo = GameState.CurrentEvents; i < loopTo; i++)
                     {
@@ -959,7 +961,7 @@ namespace Client
                                 
                                 Network.Send(packetWriter);
                                 
-                                Core.Data.Player[GameState.MyIndex].EventTimer = General.GetTickCount() + 200;
+                                Data.Player[GameState.MyIndex].EventTimer = General.GetTickCount() + 200;
                             }
                         }
                     }
@@ -974,27 +976,27 @@ namespace Client
             if (skillSlot < 0 | skillSlot > Constant.MaxPlayerSkills)
                 return;
 
-            if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
+            if (Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
             {
-                Text.AddText("Skill has not cooled down yet!", (int)Core.Color.BrightRed);
+                Text.AddText("Skill has not cooled down yet!", (int)Color.BrightRed);
                 return;
             }
 
-            if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Num < 0)
+            if (Data.Player[GameState.MyIndex].Skill[skillSlot].Num < 0)
                 return;
 
             // Check if player has enough MP
-            if (GetPlayerVital(GameState.MyIndex, Core.Vital.Stamina) < Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Num].MpCost)
+            if (GetPlayerVital(GameState.MyIndex, Vital.Stamina) < Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[skillSlot].Num].MpCost)
             {
-                Text.AddText("Not enough MP to cast " + Data.Skill[(int)Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int)Core.Color.BrightRed);
+                Text.AddText("Not enough MP to cast " + Data.Skill[(int)Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int)Color.BrightRed);
                 return;
             }
 
-            if (Core.Data.Player[GameState.MyIndex].Skill[skillSlot].Num >= 0)
+            if (Data.Player[GameState.MyIndex].Skill[skillSlot].Num >= 0)
             {
-                if (General.GetTickCount() > Core.Data.Player[GameState.MyIndex].AttackTimer + 1000)
+                if (General.GetTickCount() > Data.Player[GameState.MyIndex].AttackTimer + 1000)
                 {
-                    if (Core.Data.Player[GameState.MyIndex].Moving == 0)
+                    if (Data.Player[GameState.MyIndex].Moving == 0)
                     {
                         if (Data.MyMap.Moral > 0)
                         {
@@ -1004,19 +1006,19 @@ namespace Client
                             }
                             else
                             {
-                                Text.AddText("Cannot cast here!", (int)Core.Color.BrightRed);
+                                Text.AddText("Cannot cast here!", (int)Color.BrightRed);
                             }
                         }
                     }
                     else
                     {
-                        Text.AddText("Cannot cast while walking!", (int)Core.Color.BrightRed);
+                        Text.AddText("Cannot cast while walking!", (int)Color.BrightRed);
                     }
                 }
             }
             else
             {
-                Text.AddText("No skill here.", (int)Core.Color.BrightRed);
+                Text.AddText("No skill here.", (int)Color.BrightRed);
             }
 
         }
@@ -1059,12 +1061,12 @@ namespace Client
         {
             var buffer = new PacketReader(data);
 
-            SetPlayerVital(GameState.MyIndex, Core.Vital.Health, buffer.ReadInt32());
+            SetPlayerVital(GameState.MyIndex, Vital.Health, buffer.ReadInt32());
 
             // set max width
-            if (GetPlayerVital(GameState.MyIndex, Core.Vital.Health) > 0)
+            if (GetPlayerVital(GameState.MyIndex, Vital.Health) > 0)
             {
-                GameState.BarWidthGuiHpMax = (long)Math.Round(GetPlayerVital(GameState.MyIndex, Core.Vital.Health) / 209d / (GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Health) / 209d) * 209d);
+                GameState.BarWidthGuiHpMax = (long)Math.Round(GetPlayerVital(GameState.MyIndex, Vital.Health) / 209d / (GetPlayerMaxVital(GameState.MyIndex, Vital.Health) / 209d) * 209d);
             }
             else
             {
@@ -1078,10 +1080,10 @@ namespace Client
         {
             var buffer = new PacketReader(data);
 
-            SetPlayerVital(GameState.MyIndex, Core.Vital.Mana, buffer.ReadInt32());
+            SetPlayerVital(GameState.MyIndex, Vital.Mana, buffer.ReadInt32());
 
             // set max width
-            if (GetPlayerVital(GameState.MyIndex, Core.Vital.Health) > 0)
+            if (GetPlayerVital(GameState.MyIndex, Vital.Health) > 0)
             {
                 //GameState.BarWidth_GuiHP_Max = (long)Math.Round(GetPlayerVital(GameState.MyIndex, Core.Vital.Health) / 209d / (GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Health) / 209d) * 209d);
             }
@@ -1097,12 +1099,12 @@ namespace Client
         {
             var buffer = new PacketReader(data);
 
-            SetPlayerVital(GameState.MyIndex, Core.Vital.Stamina, buffer.ReadInt32());
+            SetPlayerVital(GameState.MyIndex, Vital.Stamina, buffer.ReadInt32());
 
             // set max width
-            if (GetPlayerVital(GameState.MyIndex, Core.Vital.Stamina) > 0)
+            if (GetPlayerVital(GameState.MyIndex, Vital.Stamina) > 0)
             {
-                GameState.BarWidthGuiSpMax = (long)Math.Round(GetPlayerVital(GameState.MyIndex, Core.Vital.Stamina) / 209d / (GetPlayerMaxVital(GameState.MyIndex, Core.Vital.Stamina) / 209d) * 209d);
+                GameState.BarWidthGuiSpMax = (long)Math.Round(GetPlayerVital(GameState.MyIndex, Vital.Stamina) / 209d / (GetPlayerMaxVital(GameState.MyIndex, Vital.Stamina) / 209d) * 209d);
             }
             else
             {
@@ -1120,9 +1122,9 @@ namespace Client
 
             index = buffer.ReadInt32();
 
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             for (i = 0; i < statCount; i++)
-                SetPlayerStat(index, (Core.Stat)i, buffer.ReadInt32());
+                SetPlayerStat(index, (Stat)i, buffer.ReadInt32());
         }
 
         public static void Packet_PlayerData(ReadOnlyMemory<byte> data)
@@ -1140,18 +1142,18 @@ namespace Client
             SetPlayerMap(i, buffer.ReadInt32());
             SetPlayerAccess(i, buffer.ReadByte());
             SetPlayerPk(i, buffer.ReadBoolean());
-            Core.Data.Player[i].Moving = 0;
+            Data.Player[i].Moving = 0;
 
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             for (x = 0; x < statCount; x++)
-                SetPlayerStat(i, (Core.Stat)x, buffer.ReadInt32());
+                SetPlayerStat(i, (Stat)x, buffer.ReadInt32());
 
-            int resourceSkillCount = Enum.GetValues(typeof(Core.ResourceSkill)).Length;
+            int resourceSkillCount = Enum.GetValues(typeof(ResourceSkill)).Length;
             for (x = 0; x < resourceSkillCount; x++)
             {
-                Core.Data.Player[i].GatherSkills[x].SkillLevel = buffer.ReadInt32();
-                Core.Data.Player[i].GatherSkills[x].SkillCurExp = buffer.ReadInt32();
-                Core.Data.Player[i].GatherSkills[x].SkillNextLvlExp = buffer.ReadInt32();
+                Data.Player[i].GatherSkills[x].SkillLevel = buffer.ReadInt32();
+                Data.Player[i].GatherSkills[x].SkillCurExp = buffer.ReadInt32();
+                Data.Player[i].GatherSkills[x].SkillNextLvlExp = buffer.ReadInt32();
             }
 
             // Check if the player is the client player
@@ -1178,7 +1180,7 @@ namespace Client
 
                     // stats
                     for (x = 0; x < statCount; x++)
-                        withBlock.Controls[(int)Gui.GetControlIndex("winCharacter", "lblStat_" + (x + 1))].Text = GetPlayerStat(GameState.MyIndex, (Core.Stat)x).ToString();
+                        withBlock.Controls[(int)Gui.GetControlIndex("winCharacter", "lblStat_" + (x + 1))].Text = GetPlayerStat(GameState.MyIndex, (Stat)x).ToString();
 
                     // points
                     withBlock.Controls[(int)Gui.GetControlIndex("winCharacter", "lblPoints")].Text = GetPlayerPoints(GameState.MyIndex).ToString();
@@ -1211,7 +1213,7 @@ namespace Client
                 return;
 
             // Stop the player from moving
-            Core.Data.Player[i].Moving = 0;
+            Data.Player[i].Moving = 0;
         }
 
         public static void Packet_PlayerDir(ReadOnlyMemory<byte> data)
@@ -1225,7 +1227,7 @@ namespace Client
 
             SetPlayerDir(i, dir);
 
-            ref var withBlock = ref Core.Data.Player[i];
+            ref var withBlock = ref Data.Player[i];
             withBlock.Moving = 0;
         }
 
@@ -1280,8 +1282,8 @@ namespace Client
             SetPlayerX(index, x);
             SetPlayerY(index, y);
             SetPlayerDir(index, dir);
-            Core.Data.Player[index].Moving = moving;
-            Core.Data.Player[index].IsMoving = buffer.ReadBoolean();
+            Data.Player[index].Moving = moving;
+            Data.Player[index].IsMoving = buffer.ReadBoolean();
         }
         #endregion
 

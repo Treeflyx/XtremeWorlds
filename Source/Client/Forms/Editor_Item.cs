@@ -3,6 +3,7 @@ using System.IO;
 using Client.Net;
 using Eto.Forms;
 using Core;
+using Core.Globals;
 using Microsoft.VisualBasic;
 using Eto.Drawing;
 
@@ -48,46 +49,46 @@ namespace Client
             lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
 
             txtName = new TextBox(); txtName.TextChanged += (s,e)=> UpdateName();
-            txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
+            txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
 
-            numIcon = Num(0, GameState.NumItems); numIcon.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Icon = (int)numIcon.Value; LoadItemIcon(); MarkChanged(); };
-            numPaperdoll = Num(0, GameState.NumPaperdolls); numPaperdoll.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Paperdoll = (int)numPaperdoll.Value; LoadPaperdoll(); MarkChanged(); };
-            numItemLvl = Num(1, 255); numItemLvl.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].ItemLevel = (byte)numItemLvl.Value; MarkChanged(); };
-            numPrice = Num(0, int.MaxValue); numPrice.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Price = (int)numPrice.Value; MarkChanged(); };
-            numRarity = Num(0, 255); numRarity.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Rarity = (byte)numRarity.Value; MarkChanged(); };
-            numSpeed = Num(100, 10000); numSpeed.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Speed = (int)numSpeed.Value; MarkChanged(); };
-            numDamage = Num(0, 100000); numDamage.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data2 = (int)numDamage.Value; MarkChanged(); };
-            numVitalMod = Num(0, 100000); numVitalMod.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = (int)numVitalMod.Value; MarkChanged(); };
-            numEventId = Num(0, 100000); numEventId.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = (int)numEventId.Value; MarkChanged(); };
-            numEventValue = Num(0, 100000); numEventValue.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data2 = (int)numEventValue.Value; MarkChanged(); };
+            numIcon = Num(0, GameState.NumItems); numIcon.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Icon = (int)numIcon.Value; LoadItemIcon(); MarkChanged(); };
+            numPaperdoll = Num(0, GameState.NumPaperdolls); numPaperdoll.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Paperdoll = (int)numPaperdoll.Value; LoadPaperdoll(); MarkChanged(); };
+            numItemLvl = Num(1, 255); numItemLvl.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].ItemLevel = (byte)numItemLvl.Value; MarkChanged(); };
+            numPrice = Num(0, int.MaxValue); numPrice.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Price = (int)numPrice.Value; MarkChanged(); };
+            numRarity = Num(0, 255); numRarity.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Rarity = (byte)numRarity.Value; MarkChanged(); };
+            numSpeed = Num(100, 10000); numSpeed.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Speed = (int)numSpeed.Value; MarkChanged(); };
+            numDamage = Num(0, 100000); numDamage.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data2 = (int)numDamage.Value; MarkChanged(); };
+            numVitalMod = Num(0, 100000); numVitalMod.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data1 = (int)numVitalMod.Value; MarkChanged(); };
+            numEventId = Num(0, 100000); numEventId.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data1 = (int)numEventId.Value; MarkChanged(); };
+            numEventValue = Num(0, 100000); numEventValue.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data2 = (int)numEventValue.Value; MarkChanged(); };
 
-            chkStackable = new CheckBox { Text = "Stackable" }; chkStackable.CheckedChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Stackable = chkStackable.Checked==true? (byte)1:(byte)0; MarkChanged(); };
-            chkKnockBack = new CheckBox { Text = "KnockBack" }; chkKnockBack.CheckedChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
+            chkStackable = new CheckBox { Text = "Stackable" }; chkStackable.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Stackable = chkStackable.Checked==true? (byte)1:(byte)0; MarkChanged(); };
+            chkKnockBack = new CheckBox { Text = "KnockBack" }; chkKnockBack.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
 
             cmbType = new ComboBox(); cmbType.SelectedIndexChanged += (s,e)=> ChangeType();
-            cmbSubType = new ComboBox(); cmbSubType.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex; TogglePanels(); MarkChanged(); };
-            cmbAnimation = new ComboBox(); cmbAnimation.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex; MarkChanged(); };
-            cmbBind = new ComboBox(); cmbBind.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].BindType = (byte)cmbBind.SelectedIndex; MarkChanged(); };
-            cmbJobReq = new ComboBox(); cmbJobReq.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].JobReq = cmbJobReq.SelectedIndex; MarkChanged(); };
-            cmbAccessReq = new ComboBox(); cmbAccessReq.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex; MarkChanged(); };
-            cmbTool = new ComboBox(); cmbTool.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data3 = cmbTool.SelectedIndex; MarkChanged(); };
-            cmbSkills = new ComboBox(); cmbSkills.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Data1 = cmbSkills.SelectedIndex; MarkChanged(); };
-            cmbProjectile = new ComboBox(); cmbProjectile.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex; MarkChanged(); };
-            cmbAmmo = new ComboBox(); cmbAmmo.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].Ammo = cmbAmmo.SelectedIndex; MarkChanged(); };
-            cmbKnockBackTiles = new ComboBox(); cmbKnockBackTiles.SelectedIndexChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex; MarkChanged(); };
+            cmbSubType = new ComboBox(); cmbSubType.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex; TogglePanels(); MarkChanged(); };
+            cmbAnimation = new ComboBox(); cmbAnimation.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Animation = cmbAnimation.SelectedIndex; MarkChanged(); };
+            cmbBind = new ComboBox(); cmbBind.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].BindType = (byte)cmbBind.SelectedIndex; MarkChanged(); };
+            cmbJobReq = new ComboBox(); cmbJobReq.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].JobReq = cmbJobReq.SelectedIndex; MarkChanged(); };
+            cmbAccessReq = new ComboBox(); cmbAccessReq.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].AccessReq = cmbAccessReq.SelectedIndex; MarkChanged(); };
+            cmbTool = new ComboBox(); cmbTool.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data3 = cmbTool.SelectedIndex; MarkChanged(); };
+            cmbSkills = new ComboBox(); cmbSkills.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data1 = cmbSkills.SelectedIndex; MarkChanged(); };
+            cmbProjectile = new ComboBox(); cmbProjectile.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex; MarkChanged(); };
+            cmbAmmo = new ComboBox(); cmbAmmo.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Ammo = cmbAmmo.SelectedIndex; MarkChanged(); };
+            cmbKnockBackTiles = new ComboBox(); cmbKnockBackTiles.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex; MarkChanged(); };
 
-            numLevelReq = Num(0, 500); numLevelReq.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].LevelReq = (int)numLevelReq.Value; MarkChanged(); };
-            numStrReq = StatReq(Core.Stat.Strength);
-            numVitReq = StatReq(Core.Stat.Vitality);
-            numLuckReq = StatReq(Core.Stat.Luck);
-            numIntReq = StatReq(Core.Stat.Intelligence);
-            numSprReq = StatReq(Core.Stat.Spirit);
+            numLevelReq = Num(0, 500); numLevelReq.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].LevelReq = (int)numLevelReq.Value; MarkChanged(); };
+            numStrReq = StatReq(Stat.Strength);
+            numVitReq = StatReq(Stat.Vitality);
+            numLuckReq = StatReq(Stat.Luck);
+            numIntReq = StatReq(Stat.Intelligence);
+            numSprReq = StatReq(Stat.Spirit);
 
-            numStrAdd = StatAdd(Core.Stat.Strength);
-            numVitAdd = StatAdd(Core.Stat.Vitality);
-            numLuckAdd = StatAdd(Core.Stat.Luck);
-            numIntAdd = StatAdd(Core.Stat.Intelligence);
-            numSprAdd = StatAdd(Core.Stat.Spirit);
+            numStrAdd = StatAdd(Stat.Strength);
+            numVitAdd = StatAdd(Stat.Vitality);
+            numLuckAdd = StatAdd(Stat.Luck);
+            numIntAdd = StatAdd(Stat.Intelligence);
+            numSprAdd = StatAdd(Stat.Spirit);
 
             iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Black }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
             paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black }; paperdollPreview.Paint += (s,e)=> { if(paperdollBmp!=null) e.Graphics.DrawImage(paperdollBmp,0,0,64,64); };
@@ -194,16 +195,16 @@ namespace Client
 
         NumericStepper Num(int min, int max) => new NumericStepper { MinValue = min, MaxValue = max, Increment = 1 };
 
-        NumericStepper StatReq(Core.Stat stat)
+        NumericStepper StatReq(Stat stat)
         {
             var n = Num(0, 999);
-            n.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].StatReq[(int)stat] = (byte)n.Value; MarkChanged(); };
+            n.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].StatReq[(int)stat] = (byte)n.Value; MarkChanged(); };
             return n;
         }
-        NumericStepper StatAdd(Core.Stat stat)
+        NumericStepper StatAdd(Stat stat)
         {
             var n = Num(0, 999);
-            n.ValueChanged += (s,e)=> { Core.Data.Item[GameState.EditorIndex].AddStat[(int)stat] = (byte)n.Value; MarkChanged(); };
+            n.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].AddStat[(int)stat] = (byte)n.Value; MarkChanged(); };
             return n;
         }
 
@@ -212,14 +213,14 @@ namespace Client
     void InitData()
         {
             lstIndex!.Items.Clear();
-            for (int i = 0; i < Core.Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Core.Data.Item[i].Name);
+            for (int i = 0; i < Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Data.Item[i].Name);
             lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
 
-            cmbAnimation!.Items.Clear(); for (int i=0;i<Core.Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
-            cmbProjectile!.Items.Clear(); for (int i=0;i<Core.Constant.NaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
-            cmbAmmo!.Items.Clear(); for (int i=0;i<Core.Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Core.Data.Item[i].Name);
-            cmbSkills!.Items.Clear(); for (int i=0;i<Core.Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
-            cmbJobReq!.Items.Clear(); for (int i=0;i<Core.Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
+            cmbAnimation!.Items.Clear(); for (int i=0;i<Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
+            cmbProjectile!.Items.Clear(); for (int i=0;i<Constant.MaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
+            cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
+            cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
+            cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
             cmbAccessReq!.Items.Clear(); for (int i=0;i<10;i++) cmbAccessReq.Items.Add(i.ToString());
             cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
             cmbTool!.Items.Clear(); for(int i=0;i<20;i++) cmbTool.Items.Add("Tool "+i);
@@ -235,12 +236,12 @@ namespace Client
 
         void UpdateName()
         {
-            Core.Data.Item[GameState.EditorIndex].Name = Strings.Trim(txtName!.Text);
+            Data.Item[GameState.EditorIndex].Name = Strings.Trim(txtName!.Text);
             if (lstIndex!.SelectedIndex >= 0)
             {
                 int i = lstIndex.SelectedIndex;
                 lstIndex.Items.RemoveAt(i);
-                lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Core.Data.Item[i].Name });
+                lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Data.Item[i].Name });
                 lstIndex.SelectedIndex = i;
             }
             MarkChanged();
@@ -248,7 +249,7 @@ namespace Client
 
         void ChangeType()
         {
-            Core.Data.Item[GameState.EditorIndex].Type = (byte)cmbType!.SelectedIndex;
+            Data.Item[GameState.EditorIndex].Type = (byte)cmbType!.SelectedIndex;
             BuildSubtypeList();
             TogglePanels();
             MarkChanged();
@@ -284,7 +285,7 @@ namespace Client
             }
             if (cmbSubType.Items.Count > 0)
             {
-                var sub = Core.Data.Item[GameState.EditorIndex].SubType;
+                var sub = Data.Item[GameState.EditorIndex].SubType;
                 if (sub < 0 || sub >= cmbSubType.Items.Count) sub = 0; 
                 cmbSubType.SelectedIndex = sub;
             }
@@ -296,7 +297,7 @@ namespace Client
             fraEquipment!.Visible = type == ItemCategory.Equipment || type == ItemCategory.Projectile;
             fraVitals!.Visible = type == ItemCategory.Consumable;
             fraSkill!.Visible = type == ItemCategory.Skill;
-            fraProjectile!.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Core.Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
+            fraProjectile!.Visible = type == ItemCategory.Projectile || (type == ItemCategory.Equipment && Data.Item[GameState.EditorIndex].SubType == (byte)Equipment.Weapon);
             fraEvents!.Visible = type == ItemCategory.Event;
         }
 
@@ -307,7 +308,7 @@ namespace Client
             int num = (int)numIcon!.Value;
             if (num >=1 && num <= GameState.NumItems)
             {
-                var path = System.IO.Path.Combine(Core.Path.Items, num + GameState.GfxExt);
+                var path = System.IO.Path.Combine(DataPath.Items, num + GameState.GfxExt);
                 if (File.Exists(path)) itemBmp = new Bitmap(path);
             }
             iconPreview!.Invalidate();
@@ -319,7 +320,7 @@ namespace Client
             int num = (int)numPaperdoll!.Value;
             if (num >=1 && num <= GameState.NumPaperdolls)
             {
-                var path = System.IO.Path.Combine(Core.Path.Paperdolls, num + GameState.GfxExt);
+                var path = System.IO.Path.Combine(DataPath.Paperdolls, num + GameState.GfxExt);
                 if (File.Exists(path)) paperdollBmp = new Bitmap(path);
             }
             paperdollPreview!.Invalidate();

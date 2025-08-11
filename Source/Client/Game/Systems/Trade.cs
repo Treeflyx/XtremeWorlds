@@ -1,6 +1,7 @@
 ﻿using Client.Net;
 using Core;
-using Core.Localization;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
 
 namespace Client
@@ -31,7 +32,7 @@ namespace Client
             var buffer = new PacketReader(data);
 
             requester = buffer.ReadInt32();
-            GameLogic.Dialogue("Trade Invite", string.Format(LocalesManager.Get("Request"), Core.Data.Player[requester].Name), "", (byte)DialogueType.Trade, (byte)DialogueStyle.YesNo);
+            GameLogic.Dialogue("Trade Invite", string.Format(LocalesManager.Get("Request"), Data.Player[requester].Name), "", (byte)DialogueType.Trade, (byte)DialogueStyle.YesNo);
         }
 
         public static void Packet_Trade(ReadOnlyMemory<byte> data)

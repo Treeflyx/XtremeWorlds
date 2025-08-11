@@ -3,8 +3,6 @@ using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -20,14 +18,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Core.Common;
+using Core.Configurations;
+using Core.Globals;
 using Core.Net;
 using Server.Net;
-using static Core.Global.Command;
-using static Core.Type;
+using static Core.Globals.Command;
+using static Core.Globals.Type;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 using File=System.IO.File;
 using Path = System.IO.Path;
+using SdMapLayer = Core.Globals.SdMapLayer;
+using Type = Core.Globals.Type;
+
 namespace Server
 {
     public class Database
@@ -180,7 +184,7 @@ namespace Server
                 string dataTable = "id SERIAL PRIMARY KEY, data jsonb";
                 string playerTable = "id BIGINT PRIMARY KEY, data jsonb, bank jsonb";
 
-                for (int i = 1, loopTo = Core.Constant.MaxChars; i <= loopTo; i++)
+                for (int i = 1, loopTo = Core.Globals.Constant.MaxChars; i <= loopTo; i++)
                     playerTable += $", character{i} jsonb";
 
                 string[] tableNames = new[] { "job", "item", "map", "npc", "shop", "skill", "resource", "animation", "pet", "projectile", "moral" };
@@ -760,10 +764,10 @@ namespace Server
 
         public static void ClearJob(int jobNum)
         {
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             Data.Job[jobNum].Stat = new int[statCount];
-            Data.Job[jobNum].StartItem = new int[Core.Constant.MaxStartItems];
-            Data.Job[jobNum].StartValue = new int[Core.Constant.MaxStartItems];
+            Data.Job[jobNum].StartItem = new int[Core.Globals.Constant.MaxStartItems];
+            Data.Job[jobNum].StartValue = new int[Core.Globals.Constant.MaxStartItems];
 
             Data.Job[jobNum].Name = "";
             Data.Job[jobNum].Desc = "";
@@ -790,7 +794,7 @@ namespace Server
 
         public static async System.Threading.Tasks.Task LoadJobsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxJobs).Select(i => System.Threading.Tasks.Task.Run(() => LoadJobAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Globals.Constant.MaxJobs).Select(i => System.Threading.Tasks.Task.Run(() => LoadJobAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
@@ -815,9 +819,9 @@ namespace Server
 
             Data.Map[mapNum].Tileset = 1;
             Data.Map[mapNum].Name = "";
-            Data.Map[mapNum].MaxX = Core.Constant.MaxMapx;
-            Data.Map[mapNum].MaxY = Core.Constant.MaxMapy;
-            Data.Map[mapNum].Npc = new int[Core.Constant.MaxMapNpcs];
+            Data.Map[mapNum].MaxX = Core.Globals.Constant.MaxMapx;
+            Data.Map[mapNum].MaxY = Core.Globals.Constant.MaxMapy;
+            Data.Map[mapNum].Npc = new int[Core.Globals.Constant.MaxMapNpcs];
             Data.Map[mapNum].Tile = new Tile[(Data.Map[mapNum].MaxX), (Data.Map[mapNum].MaxY)];
 
             var loopTo = Data.Map[mapNum].MaxX;
@@ -825,17 +829,17 @@ namespace Server
             {
                 var loopTo1 = Data.Map[mapNum].MaxY;
                 for (y = 0; y < loopTo1; y++)
-                    Data.Map[mapNum].Tile[x, y].Layer = new Core.Type.Layer[Enum.GetValues(typeof(MapLayer)).Length];
+                    Data.Map[mapNum].Tile[x, y].Layer = new Type.Layer[Enum.GetValues(typeof(MapLayer)).Length];
             }
 
-            var loopTo2 = Core.Constant.MaxMapNpcs;
+            var loopTo2 = Core.Globals.Constant.MaxMapNpcs;
             for (x = 0; x < loopTo2; x++)
             {
                 Data.Map[mapNum].Npc[x] = -1;
             }
 
             Data.Map[mapNum].EventCount = 0;
-            Data.Map[mapNum].Event = new Core.Type.Event[1];
+            Data.Map[mapNum].Event = new Type.Event[1];
 
             // Reset the values for if a player is on the map or not
             Data.Map[mapNum].Name = "";
@@ -858,25 +862,25 @@ namespace Server
 
         public static async System.Threading.Tasks.Task LoadMapsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxMaps).Select(i => System.Threading.Tasks.Task.Run(() => LoadMapAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Globals.Constant.MaxMaps).Select(i => System.Threading.Tasks.Task.Run(() => LoadMapAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
         public static async System.Threading.Tasks.Task LoadNpcsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxNpcs).Select(i => System.Threading.Tasks.Task.Run(() => LoadNpcAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Globals.Constant.MaxNpcs).Select(i => System.Threading.Tasks.Task.Run(() => LoadNpcAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
         public static async System.Threading.Tasks.Task LoadShopsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxShops).Select(i => System.Threading.Tasks.Task.Run(() => LoadShopAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Globals.Constant.MaxShops).Select(i => System.Threading.Tasks.Task.Run(() => LoadShopAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
         public static async System.Threading.Tasks.Task LoadSkillsAsync()
         {
-            var tasks = Enumerable.Range(0, Core.Constant.MaxSkills).Select(i => System.Threading.Tasks.Task.Run(() => LoadSkillAsync(i)));
+            var tasks = Enumerable.Range(0, Core.Globals.Constant.MaxSkills).Select(i => System.Threading.Tasks.Task.Run(() => LoadSkillAsync(i)));
             await System.Threading.Tasks.Task.WhenAll(tasks);
         }
 
@@ -1051,7 +1055,7 @@ namespace Server
             var xwMap = new XwMap
             {
                 Tile = new XwTile[16, 12],
-                Npc = new long[Core.Constant.MaxMapNpcs]
+                Npc = new long[Core.Globals.Constant.MaxMapNpcs]
             };
 
             using (var fs = new FileStream(fileName, FileMode.Open))
@@ -1230,7 +1234,7 @@ namespace Server
             var map = new Map();
 
             map.Tile = new Tile[16, 12];
-            map.Npc = new int[Core.Constant.MaxMapNpcs];
+            map.Npc = new int[Core.Globals.Constant.MaxMapNpcs];
             map.Name = xwMap.Name;
             map.Music = "Music" + xwMap.Music.ToString() + ".mid";
             map.Revision = (int)xwMap.Revision;
@@ -1260,7 +1264,7 @@ namespace Server
             //    map.Npc = Array.ConvertAll(xwMap.Npc, i => (int)i);
             //}
 
-            for (int i = 0; i < Core.Constant.MaxMapNpcs; i ++)
+            for (int i = 0; i < Core.Globals.Constant.MaxMapNpcs; i ++)
             {
                 map.Npc[i] = -1;
             }
@@ -1390,7 +1394,7 @@ namespace Server
                 throw new InvalidDataException("Invalid layer data: 'Layers' node missing.");
             }
 
-            var mapLayers = new List<Core.Type.SdMapLayer>();
+            var mapLayers = new List<Type.SdMapLayer>();
 
             // There may be multiple <MapLayer> nodes
             foreach (var mapLayersNode in layersNode.Elements("MapLayer"))
@@ -1419,7 +1423,7 @@ namespace Server
                 }
 
                 // Add this layer to the list
-                mapLayers.Add(new Core.Type.SdMapLayer
+                mapLayers.Add(new Type.SdMapLayer
                 {
                     Name = layerName,
                     Tiles = new SdTile
@@ -1464,7 +1468,7 @@ namespace Server
                 FogOpacity = (byte)csMap.MapData.FogOpacity,
                 FogSpeed = (byte)csMap.MapData.FogSpeed,
                 Tile = new Tile[csMap.MapData.MaxX, csMap.MapData.MaxY],
-                Npc = new int[Core.Constant.MaxMapNpcs]
+                Npc = new int[Core.Globals.Constant.MaxMapNpcs]
             };
 
             var layerCount = Enum.GetValues(typeof(MapLayer)).Length;
@@ -1473,7 +1477,7 @@ namespace Server
             {
                 for (int x = 0; x < mwMap.MaxY; x++)
                 {
-                    mwMap.Tile[x, y].Layer = new Core.Type.Layer[layerCount];
+                    mwMap.Tile[x, y].Layer = new Type.Layer[layerCount];
                     mwMap.Tile[x, y].Data1 = csMap.Tile[x, y].Data1;
                     mwMap.Tile[x, y].Data2 = csMap.Tile[x, y].Data2;
                     mwMap.Tile[x, y].Data3 = csMap.Tile[x, y].Data3;
@@ -1545,14 +1549,14 @@ namespace Server
                             // Move the layer up for animation layers
                             switch (i)
                             {
-                                case (int)Core.SdMapLayer.Mask2:
-                                    targetLayer = (int)Core.MapLayer.Cover;
+                                case (int)SdMapLayer.Mask2:
+                                    targetLayer = (int)MapLayer.Cover;
                                     break;
-                                case (int)Core.SdMapLayer.Fringe:
-                                    targetLayer = (int)Core.MapLayer.Fringe;
+                                case (int)SdMapLayer.Fringe:
+                                    targetLayer = (int)MapLayer.Fringe;
                                     break;
-                                case (int)Core.SdMapLayer.Fringe2:
-                                    targetLayer = (int)Core.MapLayer.Roof;
+                                case (int)SdMapLayer.Fringe2:
+                                    targetLayer = (int)MapLayer.Roof;
                                     break;
                             }
                             mwMap.Tile[x, y].Layer[targetLayer].X = tileIndex % 12;
@@ -1564,9 +1568,9 @@ namespace Server
                 }
             }
 
-            mwMap.Npc = new int[Core.Constant.MaxMapNpcs];
+            mwMap.Npc = new int[Core.Globals.Constant.MaxMapNpcs];
 
-            for (int i = 0; i < Core.Constant.MaxMapNpcs; i++)
+            for (int i = 0; i < Core.Globals.Constant.MaxMapNpcs; i++)
             {
                 mwMap.Npc[i] = -1;
             }
@@ -1603,7 +1607,7 @@ namespace Server
                 return;
             }
 
-            var npcData = JObject.FromObject(data).ToObject<Core.Type.Npc>();
+            var npcData = JObject.FromObject(data).ToObject<Type.Npc>();
             Data.Npc[(int)npcNum] = npcData;
         }
 
@@ -1611,7 +1615,7 @@ namespace Server
         {
             var count = Enum.GetValues(typeof(Vital)).Length;
             Data.MapNpc[mapNum].Npc[index].Vital = new int[count];
-            Data.MapNpc[mapNum].Npc[index].SkillCd = new int[Core.Constant.MaxNpcSkills];
+            Data.MapNpc[mapNum].Npc[index].SkillCd = new int[Core.Globals.Constant.MaxNpcSkills];
             Data.MapNpc[mapNum].Npc[index].Num = -1;
             Data.MapNpc[mapNum].Npc[index].SkillBuffer = -1;
         }
@@ -1620,15 +1624,15 @@ namespace Server
         {
             Data.Npc[index].Name = "";
             Data.Npc[index].AttackSay = "";
-            int statCount = Enum.GetValues(typeof(Core.Stat)).Length;
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
             Data.Npc[index].Stat = new byte[statCount];
 
-            for (int i = 0, loopTo = Core.Constant.MaxDropItems; i < loopTo; i++)
+            for (int i = 0, loopTo = Core.Globals.Constant.MaxDropItems; i < loopTo; i++)
             {
-                Data.Npc[index].DropChance = new int[Core.Constant.MaxDropItems];
-                Data.Npc[index].DropItem = new int[Core.Constant.MaxDropItems];
-                Data.Npc[index].DropItemValue = new int[Core.Constant.MaxDropItems];
-                Data.Npc[index].Skill = new byte[Core.Constant.MaxNpcSkills];
+                Data.Npc[index].DropChance = new int[Core.Globals.Constant.MaxDropItems];
+                Data.Npc[index].DropItem = new int[Core.Globals.Constant.MaxDropItems];
+                Data.Npc[index].DropItemValue = new int[Core.Globals.Constant.MaxDropItems];
+                Data.Npc[index].Skill = new byte[Core.Globals.Constant.MaxNpcSkills];
             }
         }
 
@@ -1654,7 +1658,7 @@ namespace Server
         {
             int i;
 
-            var loopTo = Core.Constant.MaxShops;
+            var loopTo = Core.Globals.Constant.MaxShops;
             for (i = 0; i < loopTo; i++)
                 LoadShopAsync(i);
 
@@ -1681,8 +1685,8 @@ namespace Server
             Data.Shop[index] = default;
             Data.Shop[index].Name = "";
 
-            Data.Shop[index].TradeItem = new Core.Type.TradeItem[Core.Constant.MaxTrades];
-            for (int i = 0, loopTo = Core.Constant.MaxTrades; i < loopTo; i++)
+            Data.Shop[index].TradeItem = new Type.TradeItem[Core.Globals.Constant.MaxTrades];
+            for (int i = 0, loopTo = Core.Globals.Constant.MaxTrades; i < loopTo; i++)
             {
                 Data.Shop[index].TradeItem[i].Item = -1;
                 Data.Shop[index].TradeItem[i].CostItem = -1;
@@ -1740,7 +1744,7 @@ namespace Server
                 if (!NetworkConfig.IsPlaying(i))
                     continue;
 
-                await SaveCharacterAsync(i, Core.Data.TempPlayer[i].Slot);
+                await SaveCharacterAsync(i, Data.TempPlayer[i].Slot);
                 await SaveBankAsync(i);
             }
         }
@@ -1757,7 +1761,7 @@ namespace Server
 
         public static async System.Threading.Tasks.Task SaveAccountAsync(int index)
         {
-            string json = JsonConvert.SerializeObject(Core.Data.Account[index]).ToString();
+            string json = JsonConvert.SerializeObject(Data.Account[index]).ToString();
             string username = GetAccountLogin(index);
             long id = GetStringHash(username);
 
@@ -1776,7 +1780,7 @@ namespace Server
             SetPlayerLogin(index, username);
             SetPlayerPassword(index, password);
 
-            string json = JsonConvert.SerializeObject(Core.Data.Account[index]).ToString();
+            string json = JsonConvert.SerializeObject(Data.Account[index]).ToString();
 
             long id = GetStringHash(username);
 
@@ -1794,7 +1798,7 @@ namespace Server
             }
 
             var accountData = JObject.FromObject(data).ToObject<Account>();
-            Core.Data.Account[index] = accountData;
+            Data.Account[index] = accountData;
             return true;
         }
 
@@ -1809,18 +1813,18 @@ namespace Server
             ClearAccount(index);
             ClearBank(index);
 
-            Core.Data.TempPlayer[index].SkillCd = new int[Core.Constant.MaxPlayerSkills];
-            Core.Data.TempPlayer[index].TradeOffer = new PlayerInv[Core.Constant.MaxInv];
+            Data.TempPlayer[index].SkillCd = new int[Core.Globals.Constant.MaxPlayerSkills];
+            Data.TempPlayer[index].TradeOffer = new PlayerInv[Core.Globals.Constant.MaxInv];
 
-            Core.Data.TempPlayer[index].SkillCd = new int[Core.Constant.MaxPlayerSkills];
-            Core.Data.TempPlayer[index].Editor = EditorType.None;
-            Core.Data.TempPlayer[index].SkillBuffer = -1;
-            Core.Data.TempPlayer[index].InShop = -1;
-            Core.Data.TempPlayer[index].InTrade = -1;
-            Core.Data.TempPlayer[index].InParty = -1;
+            Data.TempPlayer[index].SkillCd = new int[Core.Globals.Constant.MaxPlayerSkills];
+            Data.TempPlayer[index].Editor = EditorType.None;
+            Data.TempPlayer[index].SkillBuffer = -1;
+            Data.TempPlayer[index].InShop = -1;
+            Data.TempPlayer[index].InTrade = -1;
+            Data.TempPlayer[index].InParty = -1;
 
-            for (int i = 0, loopTo = Core.Data.TempPlayer[index].EventProcessingCount; i < loopTo; i++)
-                Core.Data.TempPlayer[index].EventProcessing[i].EventId = -1;
+            for (int i = 0, loopTo = Data.TempPlayer[index].EventProcessingCount; i < loopTo; i++)
+                Data.TempPlayer[index].EventProcessing[i].EventId = -1;
 
             ClearCharacter(index);
         }
@@ -1860,8 +1864,8 @@ namespace Server
 
         public static void ClearBank(int index)
         {
-            Data.Bank[index].Item = new PlayerInv[Core.Constant.MaxBank + 1];
-            for (int i = 0; i < Core.Constant.MaxBank; i++)
+            Data.Bank[index].Item = new PlayerInv[Core.Globals.Constant.MaxBank + 1];
+            for (int i = 0; i < Core.Globals.Constant.MaxBank; i++)
             {
                 Data.Bank[index].Item[i].Num = -1;
                 Data.Bank[index].Item[i].Value = 0;
@@ -1870,77 +1874,77 @@ namespace Server
 
         public static void ClearCharacter(int index)
         {
-            Core.Data.Player[index].Name = "";
-            Core.Data.Player[index].Job = 0;
-            Core.Data.Player[index].Dir = 0;
-            Core.Data.Player[index].Access = (byte)AccessLevel.Player;
+            Data.Player[index].Name = "";
+            Data.Player[index].Job = 0;
+            Data.Player[index].Dir = 0;
+            Data.Player[index].Access = (byte)AccessLevel.Player;
 
-            Core.Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
+            Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
             for (int i = 0, loopTo = Enum.GetValues(typeof(Equipment)).Length; i < loopTo; i++)
-                Core.Data.Player[index].Equipment[i] = -1;
+                Data.Player[index].Equipment[i] = -1;
 
-            Core.Data.Player[index].Inv = new PlayerInv[Core.Constant.MaxInv];
-            for (int i = 0, loopTo1 = Core.Constant.MaxInv; i < loopTo1; i++)
+            Data.Player[index].Inv = new PlayerInv[Core.Globals.Constant.MaxInv];
+            for (int i = 0, loopTo1 = Core.Globals.Constant.MaxInv; i < loopTo1; i++)
             {
-                Core.Data.Player[index].Inv[i].Num = -1;
-                Core.Data.Player[index].Inv[i].Value = 0;
+                Data.Player[index].Inv[i].Num = -1;
+                Data.Player[index].Inv[i].Value = 0;
             }
 
-            Core.Data.Player[index].Exp = 0;
-            Core.Data.Player[index].Level = 0;
-            Core.Data.Player[index].Map = 0;
-            Core.Data.Player[index].Name = "";
-            Core.Data.Player[index].Pk = false;
-            Core.Data.Player[index].Points = 0;
-            Core.Data.Player[index].Sex = 0;
+            Data.Player[index].Exp = 0;
+            Data.Player[index].Level = 0;
+            Data.Player[index].Map = 0;
+            Data.Player[index].Name = "";
+            Data.Player[index].Pk = false;
+            Data.Player[index].Points = 0;
+            Data.Player[index].Sex = 0;
 
-            Core.Data.Player[index].Skill = new Core.Type.PlayerSkill[Core.Constant.MaxPlayerSkills];
-            for (int i = 0, loopTo2 = Core.Constant.MaxPlayerSkills; i < loopTo2; i++)
+            Data.Player[index].Skill = new Type.PlayerSkill[Core.Globals.Constant.MaxPlayerSkills];
+            for (int i = 0, loopTo2 = Core.Globals.Constant.MaxPlayerSkills; i < loopTo2; i++)
             {
-                Core.Data.Player[index].Skill[i].Num = -1;
-                Core.Data.Player[index].Skill[i].Cd = 0;
+                Data.Player[index].Skill[i].Num = -1;
+                Data.Player[index].Skill[i].Cd = 0;
             }
 
-            Core.Data.Player[index].Sprite = 0;
+            Data.Player[index].Sprite = 0;
 
-            Core.Data.Player[index].Stat = new byte[Enum.GetValues(typeof(Stat)).Length];
+            Data.Player[index].Stat = new byte[Enum.GetValues(typeof(Stat)).Length];
             for (int i = 0, loopTo3 = Enum.GetValues(typeof(Stat)).Length; i < loopTo3; i++)
-                Core.Data.Player[index].Stat[i] = 0;
+                Data.Player[index].Stat[i] = 0;
 
             var count = Enum.GetValues(typeof(Vital)).Length;
-            Core.Data.Player[index].Vital = new int[count];
+            Data.Player[index].Vital = new int[count];
             for (int i = 0, loopTo4 = count; i < loopTo4; i++)
-                Core.Data.Player[index].Vital[i] = 0;
+                Data.Player[index].Vital[i] = 0;
 
-            Core.Data.Player[index].X = 0;
-            Core.Data.Player[index].Y = 0;
+            Data.Player[index].X = 0;
+            Data.Player[index].Y = 0;
 
-            Core.Data.Player[index].Hotbar = new Core.Type.Hotbar[Core.Constant.MaxHotbar];
-            for (int i = 0, loopTo5 = Core.Constant.MaxHotbar; i < loopTo5; i++)
+            Data.Player[index].Hotbar = new Type.Hotbar[Core.Globals.Constant.MaxHotbar];
+            for (int i = 0, loopTo5 = Core.Globals.Constant.MaxHotbar; i < loopTo5; i++)
             {
-                Core.Data.Player[index].Hotbar[i].Slot = -1;
-                Core.Data.Player[index].Hotbar[i].SlotType = 0;
+                Data.Player[index].Hotbar[i].Slot = -1;
+                Data.Player[index].Hotbar[i].SlotType = 0;
             }
 
-            Core.Data.Player[index].Switches = new byte[Core.Constant.MaxSwitches];
-            for (int i = 0, loopTo6 = Core.Constant.MaxSwitches; i < loopTo6; i++)
-                Core.Data.Player[index].Switches[i] = 0;
+            Data.Player[index].Switches = new byte[Core.Globals.Constant.MaxSwitches];
+            for (int i = 0, loopTo6 = Core.Globals.Constant.MaxSwitches; i < loopTo6; i++)
+                Data.Player[index].Switches[i] = 0;
 
-            Core.Data.Player[index].Variables = new int[Core.Constant.NaxVariables];
-            for (int i = 0, loopTo7 = Core.Constant.NaxVariables; i < loopTo7; i++)
-                Core.Data.Player[index].Variables[i] = 0;
+            Data.Player[index].Variables = new int[Core.Globals.Constant.MaxVariables];
+            for (int i = 0, loopTo7 = Core.Globals.Constant.MaxVariables; i < loopTo7; i++)
+                Data.Player[index].Variables[i] = 0;
 
-            var resoruceCount = Enum.GetValues(typeof(Core.ResourceSkill)).Length;
-            Core.Data.Player[index].GatherSkills = new Core.Type.ResourceType[resoruceCount];
+            var resoruceCount = Enum.GetValues(typeof(ResourceSkill)).Length;
+            Data.Player[index].GatherSkills = new Type.ResourceType[resoruceCount];
             for (int i = 0, loopTo8 = resoruceCount; i < loopTo8; i++)
             {
-                Core.Data.Player[index].GatherSkills[i].SkillLevel = 0;
-                Core.Data.Player[index].GatherSkills[i].SkillCurExp = 0;
+                Data.Player[index].GatherSkills[i].SkillLevel = 0;
+                Data.Player[index].GatherSkills[i].SkillCurExp = 0;
                 SetPlayerGatherSkillMaxExp(index, i, GetSkillNextLevel(index, i));
             }
 
             for (int i = 0, loopTo9 = Enum.GetValues(typeof(Equipment)).Length; i < loopTo9; i++)
-                Core.Data.Player[index].Equipment[i] = -1;
+                Data.Player[index].Equipment[i] = -1;
         }
 
         public static bool LoadCharacter(int index, int charNum)
@@ -1953,24 +1957,24 @@ namespace Server
                 return false;
             }
 
-            var characterData = data.ToObject<Core.Type.Player>();
+            var characterData = data.ToObject<Type.Player>();
 
             if (characterData.Name == "")
             {
                 return false;
             }
 
-            Core.Data.Player[index] = characterData;
-            Core.Data.TempPlayer[index].Slot = (byte)charNum;
+            Data.Player[index] = characterData;
+            Data.TempPlayer[index].Slot = (byte)charNum;
             return true;
         }
 
         public static void SaveCharacter(int index, int slot)
         {
-            string json = JsonConvert.SerializeObject(Core.Data.Player[index]).ToString();
+            string json = JsonConvert.SerializeObject(Data.Player[index]).ToString();
             long id = GetStringHash(GetAccountLogin(index));
 
-            if (slot < 1 | slot > Core.Constant.MaxChars)
+            if (slot < 1 | slot > Core.Globals.Constant.MaxChars)
                 return;
 
             if (RowExistsByColumn("id", id, "account"))
@@ -1988,39 +1992,39 @@ namespace Server
             int n;
             int i;
 
-            if (Strings.Len(Core.Data.Player[index].Name) == 0)
+            if (Strings.Len(Data.Player[index].Name) == 0)
             {
-                Core.Data.Player[index].Name = name;
-                Core.Data.Player[index].Sex = sex;
-                Core.Data.Player[index].Job = jobNum;
-                Core.Data.Player[index].Sprite = sprite;
-                Core.Data.Player[index].Level = 1;
+                Data.Player[index].Name = name;
+                Data.Player[index].Sex = sex;
+                Data.Player[index].Job = jobNum;
+                Data.Player[index].Sprite = sprite;
+                Data.Player[index].Level = 1;
 
                 var statCount = Enum.GetValues(typeof(Stat)).Length;
                 for (n = 0; n < statCount; n++)
-                    Core.Data.Player[index].Stat[n] = (byte)Data.Job[jobNum].Stat[n];
+                    Data.Player[index].Stat[n] = (byte)Data.Job[jobNum].Stat[n];
 
-                Core.Data.Player[index].Dir = (byte)Direction.Down;
-                Core.Data.Player[index].Map = Data.Job[jobNum].StartMap;
+                Data.Player[index].Dir = (byte)Direction.Down;
+                Data.Player[index].Map = Data.Job[jobNum].StartMap;
 
-                if (Core.Data.Player[index].Map == 0)
-                    Core.Data.Player[index].Map = 1;
+                if (Data.Player[index].Map == 0)
+                    Data.Player[index].Map = 1;
 
-                Core.Data.Player[index].X = Data.Job[jobNum].StartX;
-                Core.Data.Player[index].Y = Data.Job[jobNum].StartY;
-                Core.Data.Player[index].Dir = (byte)Direction.Down;
+                Data.Player[index].X = Data.Job[jobNum].StartX;
+                Data.Player[index].Y = Data.Job[jobNum].StartY;
+                Data.Player[index].Dir = (byte)Direction.Down;
 
-                var vitalCount = Enum.GetValues(typeof(Core.Vital)).Length;
+                var vitalCount = Enum.GetValues(typeof(Vital)).Length;
                 for (i = 0; i < vitalCount; i++)
                     SetPlayerVital(index, (Vital)i, GetPlayerMaxVital(index, (Vital)i));
 
                 // set starter equipment
-                for (n = 0; n < Core.Constant.MaxStartItems; n++)
+                for (n = 0; n < Core.Globals.Constant.MaxStartItems; n++)
                 {
                     if (Data.Job[jobNum].StartItem[n] > 0)
                     {
-                        Core.Data.Player[index].Inv[n].Num = Data.Job[jobNum].StartItem[n];
-                        Core.Data.Player[index].Inv[n].Value = Data.Job[jobNum].StartValue[n];
+                        Data.Player[index].Inv[n].Num = Data.Job[jobNum].StartItem[n];
+                        Data.Player[index].Inv[n].Value = Data.Job[jobNum].StartValue[n];
                     }
                 }
 
@@ -2028,8 +2032,8 @@ namespace Server
                 var resourceCount = Enum.GetValues(typeof(ResourceSkill)).Length;
                 for (i = 0; i < resourceCount; i++)
                 {
-                    Core.Data.Player[index].GatherSkills[i].SkillLevel = 0;
-                    Core.Data.Player[index].GatherSkills[i].SkillCurExp = 0;
+                    Data.Player[index].GatherSkills[i].SkillLevel = 0;
+                    Data.Player[index].GatherSkills[i].SkillCurExp = 0;
                     SetPlayerGatherSkillMaxExp(index, i, GetSkillNextLevel(index, i));
                 }
 
@@ -2056,7 +2060,7 @@ namespace Server
 
             }
 
-            filename = Path.Combine(Core.Path.Database, "banlist.txt");
+            filename = Path.Combine(DataPath.Database, "banlist.txt");
 
             // Check if file exists
             if (!System.IO.File.Exists(filename))
@@ -2078,7 +2082,7 @@ namespace Server
 
             sr.Close();
 
-            if (Core.Data.Account[index].Banned)
+            if (Data.Account[index].Banned)
             {
                 isBanned = true;
             }
@@ -2089,7 +2093,7 @@ namespace Server
 
         public static void BanPlayer(int banPlayerIndex, int bannedByIndex)
         {
-            string filename = Path.Combine(Core.Path.Database, "banlist.txt");
+            string filename = Path.Combine(DataPath.Database, "banlist.txt");
             string ip;
             int i;
 
@@ -2110,12 +2114,12 @@ namespace Server
 
             }
 
-            Core.Data.Account[banPlayerIndex].Banned = true;
+            Data.Account[banPlayerIndex].Banned = true;
 
             ip = Strings.Mid(ip, 1, i);
-            Core.Log.Add(ip, "banlist.txt");
+            Log.Add(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
-            Core.Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
+            Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);
             var task = Server.Player.LeftGame(banPlayerIndex);
             task.Wait();
         }
@@ -2132,7 +2136,7 @@ namespace Server
                 packetWriter.WriteInt32(Data.Job[jobNum].Stat[i]);
             }
 
-            for (var q = 0; q < Core.Constant.MaxStartItems; q++)
+            for (var q = 0; q < Core.Globals.Constant.MaxStartItems; q++)
             {
                 packetWriter.WriteInt32(Data.Job[jobNum].StartItem[q]);
                 packetWriter.WriteInt32(Data.Job[jobNum].StartValue[q]);

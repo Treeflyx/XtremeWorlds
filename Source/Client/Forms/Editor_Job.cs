@@ -4,6 +4,7 @@ using System.IO;
 using Eto.Forms;
 using Eto.Drawing;
 using Core;
+using Core.Globals;
 using Microsoft.VisualBasic;
 
 namespace Client
@@ -57,22 +58,22 @@ namespace Client
         lstJobs = new ListBox { Width = 220 };
         lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
         txtName = new TextBox(); txtName.TextChanged += (s, e) => UpdateName();
-        txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Core.Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
+        txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
-        numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Stat.Strength, numStr);
-        numLck = Stat(); numLck.ValueChanged += (s, e) => SetStat(Core.Stat.Luck, numLck);
-        numEnd = Stat(); numEnd.ValueChanged += (s, e) => SetStat(Core.Stat.Luck, numEnd); // original mapping
-        numInt = Stat(); numInt.ValueChanged += (s, e) => SetStat(Core.Stat.Intelligence, numInt);
-        numVit = Stat(); numVit.ValueChanged += (s, e) => SetStat(Core.Stat.Vitality, numVit);
-        numSpr = Stat(); numSpr.ValueChanged += (s, e) => SetStat(Core.Stat.Spirit, numSpr);
-        numBaseExp = new NumericStepper { MinValue = 0, MaxValue = 5_000_000, Increment = 10 }; numBaseExp.ValueChanged += (s, e) => Core.Data.Job[GameState.EditorIndex].BaseExp = (int)numBaseExp.Value;
+        numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);
+        numLck = Stat(); numLck.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Luck, numLck);
+        numEnd = Stat(); numEnd.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Luck, numEnd); // original mapping
+        numInt = Stat(); numInt.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Intelligence, numInt);
+        numVit = Stat(); numVit.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Vitality, numVit);
+        numSpr = Stat(); numSpr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Spirit, numSpr);
+        numBaseExp = new NumericStepper { MinValue = 0, MaxValue = 5_000_000, Increment = 10 }; numBaseExp.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].BaseExp = (int)numBaseExp.Value;
 
-        numStartMap = new NumericStepper { MinValue = 0, MaxValue = int.MaxValue }; numStartMap.ValueChanged += (s, e) => Core.Data.Job[GameState.EditorIndex].StartMap = (int)numStartMap.Value;
-        numStartX = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartX.ValueChanged += (s, e) => Core.Data.Job[GameState.EditorIndex].StartX = (byte)numStartX.Value;
-        numStartY = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartY.ValueChanged += (s, e) => Core.Data.Job[GameState.EditorIndex].StartY = (byte)numStartY.Value;
+        numStartMap = new NumericStepper { MinValue = 0, MaxValue = int.MaxValue }; numStartMap.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartMap = (int)numStartMap.Value;
+        numStartX = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartX.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartX = (byte)numStartX.Value;
+        numStartY = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartY.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartY = (byte)numStartY.Value;
 
-        numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Core.Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
-        numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Core.Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
+        numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
+        numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
 
         lstStartItems = new ListBox { Height = 140 };
         cmbItems = new ComboBox { Width = 180 };
@@ -150,10 +151,10 @@ namespace Client
     void InitData()
     {
         lstJobs!.Items.Clear();
-        for (int i = 0; i < Core.Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Core.Data.Job[i].Name);
+        for (int i = 0; i < Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Data.Job[i].Name);
         lstJobs.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
         cmbItems!.Items.Clear();
-        for (int i = 0; i < Core.Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Core.Data.Item[i].Name);
+        for (int i = 0; i < Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Data.Item[i].Name);
         cmbItems.SelectedIndex = 0;
         ReloadPanel();
     }
@@ -162,22 +163,22 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
 
     void ReloadPanel()
     {
-        var job = Core.Data.Job[GameState.EditorIndex];
+        var job = Data.Job[GameState.EditorIndex];
         txtName!.Text = job.Name; txtDesc!.Text = job.Desc;
-        numStr!.Value = job.Stat[(int)Core.Stat.Strength];
-        numLck!.Value = job.Stat[(int)Core.Stat.Luck];
-        numEnd!.Value = job.Stat[(int)Core.Stat.Luck];
-        numInt!.Value = job.Stat[(int)Core.Stat.Intelligence];
-        numVit!.Value = job.Stat[(int)Core.Stat.Vitality];
-        numSpr!.Value = job.Stat[(int)Core.Stat.Spirit];
+        numStr!.Value = job.Stat[(int)Core.Globals.Stat.Strength];
+        numLck!.Value = job.Stat[(int)Core.Globals.Stat.Luck];
+        numEnd!.Value = job.Stat[(int)Core.Globals.Stat.Luck];
+        numInt!.Value = job.Stat[(int)Core.Globals.Stat.Intelligence];
+        numVit!.Value = job.Stat[(int)Core.Globals.Stat.Vitality];
+        numSpr!.Value = job.Stat[(int)Core.Globals.Stat.Spirit];
         numBaseExp!.Value = job.BaseExp;
         numStartMap!.Value = job.StartMap; numStartX!.Value = job.StartX; numStartY!.Value = job.StartY;
         numMaleSprite!.Value = job.MaleSprite; numFemaleSprite!.Value = job.FemaleSprite;
         lstStartItems!.Items.Clear();
-        for (int i = 0; i < Core.Constant.MaxDropItems; i++)
+        for (int i = 0; i < Constant.MaxDropItems; i++)
         {
             int id = job.StartItem[i]; int amt = job.StartValue[i];
-            string name = id >= 0 && id < Core.Constant.MaxItems ? Core.Data.Item[id].Name : "(None)";
+            string name = id >= 0 && id < Constant.MaxItems ? Data.Item[id].Name : "(None)";
             lstStartItems.Items.Add(name + " x " + amt);
         }
         lstStartItems.SelectedIndex = 0;
@@ -186,7 +187,7 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
 
     void UpdateName()
     {
-        var job = Core.Data.Job[GameState.EditorIndex];
+        var job = Data.Job[GameState.EditorIndex];
         job.Name = Strings.Trim(txtName!.Text);
         if (lstJobs!.SelectedIndex >= 0)
         {
@@ -198,11 +199,11 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
         }
     }
 
-    void SetStat(Core.Stat stat, NumericStepper ctl) => Core.Data.Job[GameState.EditorIndex].Stat[(int)stat] = (int)ctl.Value;
+    void SetStat(Stat stat, NumericStepper ctl) => Data.Job[GameState.EditorIndex].Stat[(int)stat] = (int)ctl.Value;
         void SetStartItem()
         {
             if (lstStartItems!.SelectedIndex < 0) return;
-            var job = Core.Data.Job[GameState.EditorIndex];
+            var job = Data.Job[GameState.EditorIndex];
             job.StartItem[lstStartItems.SelectedIndex] = cmbItems!.SelectedIndex;
             job.StartValue[lstStartItems.SelectedIndex] = (int)numItemAmount!.Value;
             ReloadPanel();
@@ -211,8 +212,8 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
         void LoadSprites()
         {
             maleBmp?.Dispose(); femaleBmp?.Dispose();
-            string malePath = System.IO.Path.Combine(Core.Path.Characters, Core.Data.Job[GameState.EditorIndex].MaleSprite + GameState.GfxExt);
-            string femalePath = System.IO.Path.Combine(Core.Path.Characters, Core.Data.Job[GameState.EditorIndex].FemaleSprite + GameState.GfxExt);
+            string malePath = System.IO.Path.Combine(DataPath.Characters, Data.Job[GameState.EditorIndex].MaleSprite + GameState.GfxExt);
+            string femalePath = System.IO.Path.Combine(DataPath.Characters, Data.Job[GameState.EditorIndex].FemaleSprite + GameState.GfxExt);
             maleBmp = File.Exists(malePath) ? new Bitmap(malePath) : null;
             femaleBmp = File.Exists(femalePath) ? new Bitmap(femalePath) : null;
             malePreview!.Invalidate(); femalePreview!.Invalidate();

@@ -1,12 +1,12 @@
 ﻿using Client.Game.Objects;
 using Core;
-using Core.Localization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Client.Net;
-using static Core.Global.Command;
+using Core.Common;
+using Core.Configurations;
+using Core.Globals;
+using static Core.Globals.Command;
+using Type = Core.Globals.Type;
 
 namespace Client
 {
@@ -61,82 +61,82 @@ namespace Client
 
         public static void CheckAnimations()
         {
-            GameState.NumAnimations = GetFileCount(Core.Path.Animations);
+            GameState.NumAnimations = GetFileCount(DataPath.Animations);
         }
 
         public static void CheckCharacters()
         {
-            GameState.NumCharacters = GetFileCount(Core.Path.Characters);
+            GameState.NumCharacters = GetFileCount(DataPath.Characters);
         }
 
         public static void CheckEmotes()
         {
-            GameState.NumEmotes = GetFileCount(Core.Path.Emotes);
+            GameState.NumEmotes = GetFileCount(DataPath.Emotes);
         }
 
         public static void CheckTilesets()
         {
-            GameState.NumTileSets = GetFileCount(Core.Path.Tilesets);
+            GameState.NumTileSets = GetFileCount(DataPath.Tilesets);
         }
 
         public static void CheckFogs()
         {
-            GameState.NumFogs = GetFileCount(Core.Path.Fogs);
+            GameState.NumFogs = GetFileCount(DataPath.Fogs);
         }
 
         public static void CheckItems()
         {
-            GameState.NumItems = GetFileCount(Core.Path.Items);
+            GameState.NumItems = GetFileCount(DataPath.Items);
         }
 
         public static void CheckPanoramas()
         {
-            GameState.NumPanoramas = GetFileCount(Core.Path.Panoramas);
+            GameState.NumPanoramas = GetFileCount(DataPath.Panoramas);
         }
 
         public static void CheckPaperdolls()
         {
-            GameState.NumPaperdolls = GetFileCount(Core.Path.Paperdolls);
+            GameState.NumPaperdolls = GetFileCount(DataPath.Paperdolls);
         }
 
         public static void CheckParallax()
         {
-            GameState.NumParallax = GetFileCount(Core.Path.Parallax);
+            GameState.NumParallax = GetFileCount(DataPath.Parallax);
         }
 
         public static void CheckPictures()
         {
-            GameState.NumPictures = GetFileCount(Core.Path.Pictures);
+            GameState.NumPictures = GetFileCount(DataPath.Pictures);
         }
 
         public static void CheckProjectile()
         {
-            GameState.NumProjectiles = GetFileCount(Core.Path.Projectiles);
+            GameState.NumProjectiles = GetFileCount(DataPath.Projectiles);
         }
 
         public static void CheckResources()
         {
-            GameState.NumResources = GetFileCount(Core.Path.Resources);
+            GameState.NumResources = GetFileCount(DataPath.Resources);
         }
 
         public static void CheckSkills()
         {
-            GameState.NumSkills = GetFileCount(Core.Path.Skills);
+            GameState.NumSkills = GetFileCount(DataPath.Skills);
         }
 
         public static void CheckInterface()
         {
-            GameState.NumInterface = GetFileCount(Core.Path.Gui);
+            GameState.NumInterface = GetFileCount(DataPath.Gui);
         }
 
         public static void CheckGradients()
         {
-            GameState.NumGradients = GetFileCount(Core.Path.Gradients);
+            GameState.NumGradients = GetFileCount(DataPath.Gradients);
         }
 
         public static void CheckDesigns()
         {
-            GameState.NumDesigns = GetFileCount(Core.Path.Designs);
+            GameState.NumDesigns = GetFileCount(DataPath.Designs);
         }
 
         public static (int Width, int Height) GetResolutionSize(byte resolution)
@@ -191,7 +191,7 @@ namespace Client
 
         public static int GetFileCount(string folderName)
         {
-            string folderPath = System.IO.Path.Combine(Core.Path.Graphics, folderName);
+            string folderPath = System.IO.Path.Combine(DataPath.Graphics, folderName);
             if (Directory.Exists(folderPath))
             {
                 return Directory.GetFiles(folderPath, "*.png").Length; // Adjust for other formats if needed
@@ -205,9 +205,9 @@ namespace Client
 
         public static void CacheMusic()
         {
-            Sound.MusicCache = new string[Directory.GetFiles(Core.Path.Music, "*" + SettingsManager.Instance.MusicExt).Count() + 1];
-            string[] files = Directory.GetFiles(Core.Path.Music, "*" + SettingsManager.Instance.MusicExt);
-            string maxNum = Directory.GetFiles(Core.Path.Music, "*" + SettingsManager.Instance.MusicExt).Count().ToString();
+            Sound.MusicCache = new string[Directory.GetFiles(DataPath.Music, "*" + SettingsManager.Instance.MusicExt).Count() + 1];
+            string[] files = Directory.GetFiles(DataPath.Music, "*" + SettingsManager.Instance.MusicExt);
+            string maxNum = Directory.GetFiles(DataPath.Music, "*" + SettingsManager.Instance.MusicExt).Count().ToString();
             int counter = 0;
 
             foreach (var fileName in files)
@@ -219,9 +219,9 @@ namespace Client
 
         public static void CacheSound()
         {
-            Sound.SoundCache = new string[Directory.GetFiles(Core.Path.Sounds, "*" + SettingsManager.Instance.SoundExt).Count() + 1];
-            string[] files = Directory.GetFiles(Core.Path.Sounds, "*" + SettingsManager.Instance.SoundExt);
-            string maxNum = Directory.GetFiles(Core.Path.Sounds, "*" + SettingsManager.Instance.SoundExt).Count().ToString();
+            Sound.SoundCache = new string[Directory.GetFiles(DataPath.Sounds, "*" + SettingsManager.Instance.SoundExt).Count() + 1];
+            string[] files = Directory.GetFiles(DataPath.Sounds, "*" + SettingsManager.Instance.SoundExt);
+            string maxNum = Directory.GetFiles(DataPath.Sounds, "*" + SettingsManager.Instance.SoundExt).Count().ToString();
             int counter = 0;
 
             foreach (var fileName in files)
@@ -309,7 +309,7 @@ namespace Client
         public static long IsEq(long startX, long startY)
         {
             long isEq = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
             long i;
 
             int equipmentCount = Enum.GetValues(typeof(Equipment)).Length;
@@ -339,7 +339,7 @@ namespace Client
         public static long IsInv(long startX, long startY)
         {
             long isInv = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
             long i;
 
             for (i = 0L; i < Constant.MaxInv; i++)
@@ -368,12 +368,12 @@ namespace Client
         public static long IsSkill(long startX, long startY)
         {
             long isSkill = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
             long i;
 
             for (i = 0L; i < Constant.MaxPlayerSkills; i++)
             {
-                if (Core.Data.Player[GameState.MyIndex].Skill[(int)i].Num >= 0)
+                if (Data.Player[GameState.MyIndex].Skill[(int)i].Num >= 0)
                 {
                     tempRec.Top = startY + GameState.SkillTop + (GameState.SkillOffsetY + GameState.SizeY) * (i / GameState.SkillColumns);
                     tempRec.Bottom = tempRec.Top + GameState.SizeY;
@@ -397,7 +397,7 @@ namespace Client
         public static long IsBank(long startX, long startY)
         {
             byte isBank = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
 
             for (byte i = 0; i < Constant.MaxBank; i++)
             {
@@ -427,7 +427,7 @@ namespace Client
         public static long IsShop(long startX, long startY)
         {
             long isShop = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
             long i;
 
             for (i = 0L; i < Constant.MaxTrades; i++)
@@ -453,7 +453,7 @@ namespace Client
         public static long IsTrade(long startX, long startY)
         {
             long isTrade = default;
-            Core.Type.Rect tempRec;
+            Type.Rect tempRec;
             long i;
 
             for (i = 0L; i < Constant.MaxInv; i++)

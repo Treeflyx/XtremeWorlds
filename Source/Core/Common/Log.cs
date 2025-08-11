@@ -1,17 +1,17 @@
-﻿using System.IO;
+﻿using Core.Globals;
 
-namespace Core;
+namespace Core.Common;
 
 public static class Log
 {
     public static void Add(string message, string logFileName)
     {
-        if (!Directory.Exists(Path.Logs))
+        if (!Directory.Exists(DataPath.Logs))
         {
-            Directory.CreateDirectory(Path.Logs);
+            Directory.CreateDirectory(DataPath.Logs);
         }
 
-        var path = System.IO.Path.Combine(Path.Logs, logFileName);
+        var path = Path.Combine(DataPath.Logs, logFileName);
 
         try
         {

@@ -1,6 +1,6 @@
 ﻿using Core;
 using Microsoft.Extensions.Hosting;
-using static Core.Global.Command;
+using static Core.Globals.Command;
 
 namespace Server.Services;
 
