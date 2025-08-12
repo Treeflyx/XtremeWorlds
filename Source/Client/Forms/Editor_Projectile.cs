@@ -98,11 +98,9 @@ namespace Client
             {
                 if (_iconBitmap != null)
                 {
-                    // Assume 1 row, 4 columns (1x4 spritesheet)
-                    int fw = _iconBitmap.Width / 4;
-                    int fh = _iconBitmap.Height;
-                    picProjectile.Size = new Size(fw, fh);
-                    e.Graphics.DrawImage(_iconBitmap, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                    // Draw the entire 1x4 spritesheet so all directions are visible
+                    e.Graphics.ImageInterpolation = ImageInterpolation.None;
+                    e.Graphics.DrawImage(_iconBitmap, 0, 0);
                 }
             };
 
@@ -225,6 +223,11 @@ namespace Client
             catch
             {
                 _iconBitmap = null;
+            }
+            // Adjust preview size to the native bitmap so the full 1x4 sheet fits
+            if (_iconBitmap != null)
+            {
+                picProjectile.Size = new Size(_iconBitmap.Width, _iconBitmap.Height);
             }
             picProjectile.Invalidate();
         }

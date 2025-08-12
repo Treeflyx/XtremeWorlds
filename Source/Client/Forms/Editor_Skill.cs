@@ -226,7 +226,7 @@ namespace Client
         private void NudStun_ValueChanged() => Data.Skill[GameState.EditorIndex].StunDuration = (int)Math.Round(nudStun.Value);
         private void ChkProjectile_CheckedChanged() => Data.Skill[GameState.EditorIndex].IsProjectile = chkProjectile.Checked == true ? 1 : 0;
         private void CmbProjectile_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex;
-    private void ChkKnockBack_CheckedChanged() => Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
+        private void ChkKnockBack_CheckedChanged() => Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
         private void CmbKnockBackTiles_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
 
         private void DrawIcon(Graphics g, int iconNum)
