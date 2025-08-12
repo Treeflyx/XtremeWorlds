@@ -240,11 +240,12 @@ namespace Client
             Title = "Event Editor";
             ClientSize = new Size(1100, 750);
             InitializeComponent();
-            Shown += Editor_Events_Load; // hook existing load logic
         }
 
         private void InitializeComponent()
         {
+            // Ensure Load is subscribed first
+            Load += Editor_Events_Load; // hook existing load logic
             // Basic left command tree + right content placeholder
             var left = new StackLayout
             {

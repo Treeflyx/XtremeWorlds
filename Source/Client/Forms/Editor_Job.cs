@@ -49,9 +49,10 @@ namespace Client
         Title = "Job Editor";
         ClientSize = new Size(880, 600);
         Padding = 6;
+            // Ensure Load is subscribed first before building UI and wiring events
+            Load += (s, e) => InitData();
         Content = BuildUi();
         Editors.AutoSizeWindow(this, 760, 520);
-        Shown += (s, e) => InitData();
     }
 
     Eto.Forms.Control BuildUi()

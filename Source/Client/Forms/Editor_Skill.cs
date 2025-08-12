@@ -68,6 +68,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Skill_Load();
+
             cmbType.Items.Clear();
             foreach (var name in Enum.GetNames(typeof(SkillEffect)))
                 cmbType.Items.Add(name);
@@ -117,7 +120,6 @@ namespace Client
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
             btnLearn.Click += (s, e) => BtnLearn_Click();
-            Load += (s, e) => Editor_Skill_Load();
 
             picSprite.Paint += (s, e) => DrawIcon(e.Graphics, (int)Math.Round(nudIcon.Value));
 

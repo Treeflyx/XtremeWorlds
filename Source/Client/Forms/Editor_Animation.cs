@@ -46,6 +46,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += Editor_Animation_Load;
+
             nudSprite0 = new NumericStepper { MinValue = 0, MaxValue = GameState.NumAnimations };
             nudSprite1 = new NumericStepper { MinValue = 0, MaxValue = GameState.NumAnimations };
             nudLoopCount0 = new NumericStepper();
@@ -107,7 +110,6 @@ namespace Client
             };
 
             Content = root;
-            Load += Editor_Animation_Load;
         }
 
         private void NudSprite0_ValueChanged(object? sender, EventArgs e)

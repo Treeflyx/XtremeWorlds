@@ -52,6 +52,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Resource_Load();
+
             // Events wiring (converted from WinForms)
             lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
@@ -70,9 +73,8 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
-            Load += (s, e) => Editor_Resource_Load();
 
-            picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
             picExhaustedPic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudExhaustedPic.Value), picExhaustedPic);
 
             // Layout definition

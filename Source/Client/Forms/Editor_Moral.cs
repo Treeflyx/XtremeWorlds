@@ -47,13 +47,16 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Moral_Load();
+
             // Populate color combo (basic placeholder colors; actual content can be expanded)
             cmbColor.Items.Clear();
             cmbColor.Items.Add("White");
             cmbColor.Items.Add("Red");
             cmbColor.Items.Add("Green");
             cmbColor.Items.Add("Blue");
-            cmbColor.SelectedIndex = 0;
+            cmbColor.SelectedIndex = 0;                                                                                                                                                                                                                                                 
 
             // Events
             lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
@@ -69,9 +72,8 @@ namespace Client
             chkPlayerBlock.CheckedChanged += (s, e) => chkPlayerBlock_CheckedChanged();
             chkNpcBlock.CheckedChanged += (s, e) => chkNpcBlock_CheckedChanged();
             btnSave.Click += (s, e) => BtnSave_Click();
-            btnDelete.Click += (s, e) => BtnDelete_Click();
+                                                                                        btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
-            Load += (s, e) => Editor_Moral_Load();
 
             // Layout
             var leftPanel = new DynamicLayout { Spacing = new Size(5, 5) };

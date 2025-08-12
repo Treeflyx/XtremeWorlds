@@ -56,6 +56,8 @@ namespace Client
             _instance = this;
             Title = "NPC Editor";
             ClientSize = new Size(1050, 600);
+            // Ensure Load is subscribed first before building UI and wiring events
+            Load += (s, e) => LoadData();
             InitializeComponent();
             Editors.AutoSizeWindow(this, 900, 560);
         }
@@ -301,8 +303,6 @@ namespace Client
                 },
                 Panel2 = rightPanel
             };
-
-            Shown += (s, e) => LoadData();
             Closed += (s, e) =>
             {
                 if (GameState.MyEditorType == EditorType.Npc)

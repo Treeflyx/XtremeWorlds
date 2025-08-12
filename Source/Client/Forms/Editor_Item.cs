@@ -39,9 +39,10 @@ namespace Client
             Title = "Item Editor";
             ClientSize = new Size(1400, 900); // Increased size for more center controls
             Padding = 6;
+            // Ensure Load is subscribed before wiring other events in BuildUi
+            Load += (s,e) => InitData();
             Content = BuildUi();
             Editors.AutoSizeWindow(this, 1400, 900);
-            Shown += (s,e) => InitData();
         }
 
         Eto.Forms.Control BuildUi()

@@ -38,6 +38,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Ensure Load is subscribed first
+            Load += (s, e) => LoadData();
+
             // Left list
             lstIndex = new ListBox { Width = 220 }; // make width consistent and allow vertical expansion via StackLayoutItem
             lstIndex.SelectedIndexChanged += (s, e) =>
@@ -166,8 +169,6 @@ namespace Client
                 },
                 Panel2 = new Scrollable { Content = grid }
             };
-
-            Shown += (s, e) => LoadData();
             Closed += (s, e) =>
             {
                 if (GameState.MyEditorType == EditorType.Projectile)

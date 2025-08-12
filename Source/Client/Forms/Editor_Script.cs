@@ -45,6 +45,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Ensure Load is subscribed first
+            Load += (s, e) => RefreshPreview();
+
             btnOpenScript.Click += (s, e) => OpenScript();
             btnSaveScript.Click += (s, e) => SaveScript();
             var buttons = new StackLayout
@@ -60,7 +63,6 @@ namespace Client
             layout.Add(txtPreview, yscale: true);
 
             Content = layout;
-            Load += (s, e) => RefreshPreview();
         }
         private void OpenScript()
         {

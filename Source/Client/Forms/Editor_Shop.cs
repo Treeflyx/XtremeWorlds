@@ -45,6 +45,9 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Shop_Load();
+
             // Event wiring
             lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
@@ -59,7 +62,6 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
-            Load += (s, e) => Editor_Shop_Load();
 
             // Adjust list to consistent width and restructure layout similar to other editors
             lstIndex.Width = 220;
