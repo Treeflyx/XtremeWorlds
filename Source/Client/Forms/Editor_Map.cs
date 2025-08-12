@@ -85,8 +85,8 @@ namespace Client
         public Label Label11 = new Label{ Text = "Autotile" };
         public Label Label10 = new Label{ Text = "Layer" };
         public ComboBox cmbLayers = new ComboBox();
-    public Label Label9 = new Label{ Text = "Tileset" };
-    public Slider sldTileSet = new Slider();
+        public Label Label9 = new Label{ Text = "Tileset" };
+        public Slider sldTileSet = new Slider();
         public TabPage tpAttributes = new TabPage{ Text = "Attributes" };
         public RadioButton optNoCrossing = new RadioButton{ Text = "No Crossing" };
         public Button btnFillAttributes = new Button{ Text = "Fill" };
@@ -194,6 +194,8 @@ namespace Client
             if (GameState.NumTileSets > 0)
                 initTs = Math.Min(Math.Max(initTs, 1), GameState.NumTileSets);
             sldTileSet.Value = initTs;
+            sldTileSet.Width = 400;   // make the slider wider
+            sldTileSet.Height = 30;   // make the slider taller
             sldTileSet.ValueChanged += SldTileSet_ValueChanged;
             // Mirror radio buttons into GameState to avoid cross-thread UI access
             optInfo.CheckedChanged += (_, __) => GameState.OptInfo = optInfo.Checked;
