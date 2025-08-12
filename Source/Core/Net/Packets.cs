@@ -234,16 +234,15 @@ public static class Packets
         SEmote = 98,
         SPartyInvite = 99,
         SPartyUpdate = 100,
-        SUpdatePet = 101,
-        SPartyVitals = 102,
-        SMoralEditor = 103,
+        SPartyVitals = 101,
+        SMoralEditor = 102,
 
-        STime = 104,
-        SClock = 105,
+        STime = 103,
+        SClock = 104,
 
-        SScriptEditor = 106,
+        SScriptEditor = 105,
 
         // Make sure COUNT is below everything else
-        Count = 107
+        Count = 106
     }
 }

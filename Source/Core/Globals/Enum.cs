@@ -95,7 +95,6 @@ public enum ItemCategory : byte
     Currency,
     Skill,
     Projectile,
-    Pet
 }
 
 /// <summary>
@@ -289,6 +288,14 @@ public enum ResourceSkill : byte
     Woodcutting,
     Mining,
     Fishing
+}
+
+public enum ToolType : byte
+{
+    None,
+    Axe,
+    Pickaxe,
+    Rod
 }
 
 /// <summary>

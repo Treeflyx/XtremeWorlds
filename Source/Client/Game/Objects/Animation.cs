@@ -15,7 +15,7 @@ namespace Client
     {
 
         #region Drawing
-        public static void DrawAnimation(int index, int layer)
+        public static void Draw(int index, int layer)
         {
             int sprite = Data.Animation[AnimInstance[index].Animation].Sprite[layer];
             if (sprite < 1 | sprite > GameState.NumAnimations)

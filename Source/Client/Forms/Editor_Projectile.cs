@@ -31,16 +31,18 @@ namespace Client
         {
             _instance = this;
             Title = "Projectile Editor";
-            ClientSize = new Size(750, 430);
-            Resizable = true;
+            ClientSize = new Size(750, 430);           
             MinimumSize = new Size(750, 430);
             InitializeComponent();
         }
 
         private void InitializeComponent()
         {
+            // Ensure Load is subscribed first
+            Load += (s, e) => LoadData();
+
             // Left list
-            lstIndex = new ListBox { Size = new Size(200, -1) };
+            lstIndex = new ListBox { Width = 220 }; // make width consistent and allow vertical expansion via StackLayoutItem
             lstIndex.SelectedIndexChanged += (s, e) =>
             {
                 if (_initializing) return;
@@ -49,7 +51,7 @@ namespace Client
             };
 
             // Right side controls
-            txtName = new TextBox();
+            txtName = new TextBox { Width = 200 };
             txtName.TextChanged += (s, e) =>
             {
                 if (_initializing) return;
@@ -94,12 +96,17 @@ namespace Client
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
 
-            picProjectile = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Black };
+            picProjectile = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Transparent };
             picProjectile.Paint += (s, e) =>
             {
                 if (_iconBitmap != null)
                 {
-                    e.Graphics.DrawImage(_iconBitmap, 0, 0, 96, 96);
+                    // Assume 1 row, 4 columns (1x4 spritesheet)
+                    int fw = _iconBitmap.Width / 4;
+                    int fh = _iconBitmap.Height;
+                    picProjectile.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(_iconBitmap, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                    e.Graphics.DrawImage(_iconBitmap, 0, 0);
                 }
             };
 
@@ -142,27 +149,26 @@ namespace Client
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 6,
-                        Items = { btnSave, btnCancel, btnDelete }
+                        Items = { btnSave, btnDelete, btnCancel } // enforce order
                     })
                 }
             };
 
             Content = new Splitter
             {
-                Position = 220,
+                Position = 240,
                 Panel1 = new StackLayout
                 {
                     Padding = 8,
+                    Spacing = 4,
                     Items =
                     {
                         new Label{ Text = "Projectiles", Font = SystemFonts.Bold(12)},
-                        lstIndex
+                        new StackLayoutItem(lstIndex, expand: true)
                     }
                 },
                 Panel2 = new Scrollable { Content = grid }
             };
-
-            Shown += (s, e) => LoadData();
             Closed += (s, e) =>
             {
                 if (GameState.MyEditorType == EditorType.Projectile)
@@ -184,7 +190,6 @@ namespace Client
             if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
             nudPic.MaxValue = GameState.NumProjectiles;
             _initializing = false;
-            if (lstIndex.Items.Count > 0) Editors.ProjectileEditorInit();
         }
 
         private void RefreshListEntry(int index)
@@ -221,6 +226,11 @@ namespace Client
             catch
             {
                 _iconBitmap = null;
+            }
+            // Adjust preview size to the native bitmap so the full 1x4 sheet fits
+            if (_iconBitmap != null)
+            {
+                picProjectile.Size = new Size(_iconBitmap.Width, _iconBitmap.Height);
             }
             picProjectile.Invalidate();
         }

@@ -1,4 +1,4 @@
-﻿using Core;
+using Core;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
@@ -1715,9 +1715,9 @@ namespace Client
                         GetPlayerVital((int) i, Vital.Stamina) < GetPlayerMaxVital((int) i, Vital.Stamina))
                     {
                         // lock to Player
-                        tmpX = (long) Math.Round(GetPlayerX((int) i) * GameState.SizeX +
+                        tmpX = (long)Math.Round(GetPlayerRawX((int)i) +
                             16 - width / 2d);
-                        tmpY = GetPlayerY((int) i) * GameState.SizeY + 35 + height;
+                        tmpY = GetPlayerRawY((int)i) + 35 + height;
 
                         // calculate the width to fill
                         if (width > 0L)
@@ -1750,10 +1750,9 @@ namespace Client
                                 0)
                             {
                                 // lock to player
-                                tmpX = (long) Math.Round(GetPlayerX((int) i) * GameState.SizeX + 16 - width / 2d);
+                                tmpX = (long)Math.Round(GetPlayerRawX((int)i) + 16 - width / 2d);
 
-                                tmpY = GetPlayerY((int) i) * GameState.SizeY + 35 +
-                                       height;
+                                tmpY = GetPlayerRawY((int)i) + 35 + height;
 
                                 // calculate the width to fill
                                 if (width > 0L)
@@ -2543,13 +2542,10 @@ namespace Client
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Animation.AnimInstance == null)
-                        break;
-
                     if (Animation.AnimInstance[i].Used[0])
                     {
-                        Animation.DrawAnimation(i, 0);
-                    }
+                        Animation.Draw(i, 0);
+                    }                
                 }
             }
 
@@ -2680,14 +2676,11 @@ namespace Client
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Animation.AnimInstance == null)
-                        break;
-
                     if (Animation.AnimInstance[i].Used[1])
-                    {
-                        Animation.DrawAnimation(i, 1);
-                    }
-                }
+                        {
+                            Animation.Draw(i, 1);
+                        }
+                    }              
             }
 
             if (GameState.NumProjectiles > 0)

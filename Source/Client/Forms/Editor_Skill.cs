@@ -16,8 +16,9 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Skill? _instance;
         public static Editor_Skill Instance => _instance ??= new Editor_Skill();
-        public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
+        private bool _suppressIndexChanged;
+        public ListBox lstIndex = new ListBox{ Width = 200 };
+        public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbType = new ComboBox();
         public NumericStepper nudMp = new NumericStepper { MinValue = 0 };
         public NumericStepper nudLevel = new NumericStepper { MinValue = 0 };
@@ -56,6 +57,7 @@ namespace Client
             ClientSize = new Size(900, 560);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 820, 520);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -67,14 +69,17 @@ namespace Client
 
         private void InitializeComponent()
         {
-            // Populate static combos (basic placeholders; actual data is set elsewhere)
-            cmbType.Items.Add("Damage");
-            cmbType.Items.Add("Heal");
-            cmbType.Items.Add("Buff");
-            cmbType.Items.Add("Debuff");
+            // Subscribe Load first
+            Load += (s, e) => Editor_Skill_Load();
 
-            cmbAccessReq.Items.Add("None");
-            cmbAccessReq.Items.Add("Admin");
+            cmbType.Items.Clear();
+            foreach (var name in Enum.GetNames(typeof(SkillEffect)))
+                cmbType.Items.Add(name);
+
+            foreach (var name in Enum.GetNames(typeof(AccessLevel)))
+            {
+                cmbAccessReq.Items.Add(name);
+            }
 
             cmbDir.Items.Add("Up");
             cmbDir.Items.Add("Down");
@@ -87,7 +92,7 @@ namespace Client
             cmbKnockBackTiles.Items.Add("3");
 
             // Wiring events
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             cmbType.SelectedIndexChanged += (s, e) => CmbType_SelectedIndexChanged();
             nudMp.ValueChanged += (s, e) => NudMp_ValueChanged();
@@ -118,13 +123,12 @@ namespace Client
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
             btnLearn.Click += (s, e) => BtnLearn_Click();
-            Load += (s, e) => Editor_Skill_Load();
 
             picSprite.Paint += (s, e) => DrawIcon(e.Graphics, (int)Math.Round(nudIcon.Value));
 
             // Layouts
             var listLayout = new DynamicLayout { Spacing = new Size(5,5) };
-            listLayout.AddRow(new Label { Text = "Skills" });
+            listLayout.AddRow(new Label { Text = "Skills", Font = SystemFonts.Bold(12) });
             listLayout.Add(lstIndex, yscale: true);
 
             var general = new DynamicLayout { Spacing = new Size(4,4) };
@@ -136,10 +140,11 @@ namespace Client
             general.AddRow("Cast Anim:", cmbAnimCast, "Skill Anim:", cmbAnim, "Stun:", nudStun);
             general.AddRow(chkProjectile, "Projectile:", cmbProjectile, chkKnockBack, "KB Tiles:", cmbKnockBackTiles);
 
-            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCancel, btnLearn } };
+            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCancel, btnLearn } }; // order enforced
 
             var rightLayout = new DynamicLayout { Spacing = new Size(6,6) };
             rightLayout.Add(general);
+            // buttons moved to right layout bottom (main control view)
             rightLayout.Add(buttons);
 
             Content = new TableLayout
@@ -151,31 +156,33 @@ namespace Client
 
         private void Editor_Skill_Load()
         {
-            lstIndex.Items.Clear();
-            for (int i = 0; i < Constant.MaxSkills; i++)
-                lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Data.Skill[i].Name)}");
-
-            cmbAnimCast.Items.Clear();
-            cmbAnim.Items.Clear();
-            for (int i = 0; i < Constant.MaxAnimations; i++)
+            _suppressIndexChanged = true;
+            try
             {
-                cmbAnimCast.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
-                cmbAnim.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                lstIndex.Items.Clear();
+                for (int i = 0; i < Constant.MaxSkills; i++)
+                    lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Data.Skill[i].Name)}");
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+
+                cmbAnimCast.Items.Clear();
+                cmbAnim.Items.Clear();
+                for (int i = 0; i < Constant.MaxAnimations; i++)
+                {
+                    cmbAnimCast.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                    cmbAnim.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                }
+
+                cmbProjectile.Items.Clear();
+                for (int i = 0; i < Constant.MaxAnimations; i++)
+                    cmbProjectile.Items.Add($"{i + 1}: {Data.Projectile[i].Name}");
+
+                cmbJob.Items.Clear();
+                for (int i = 0; i < Constant.MaxJobs; i++)
+                    cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
             }
+            finally { _suppressIndexChanged = false; }
 
-            cmbProjectile.Items.Clear();
-            for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbProjectile.Items.Add($"{i + 1}: {Data.Projectile[i].Name}");
-
-            cmbJob.Items.Clear();
-            for (int i = 0; i < Constant.MaxJobs; i++)
-                cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
-
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.SkillEditorInit();
-            }
+            Editors.SkillEditorInit();
         }
 
         private void LstIndex_Click() => Editors.SkillEditorInit();
@@ -185,9 +192,14 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             Database.ClearSkill(GameState.EditorIndex);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
             Editors.SkillEditorInit();
         }
         private void BtnLearn_Click() => Sender.SendLearnSkill(GameState.EditorIndex);
@@ -197,9 +209,14 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Skill[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
         private void CmbType_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Type = (byte)cmbType.SelectedIndex;
         private void NudMp_ValueChanged() => Data.Skill[GameState.EditorIndex].MpCost = (int)Math.Round(nudMp.Value);
@@ -224,7 +241,7 @@ namespace Client
         private void NudStun_ValueChanged() => Data.Skill[GameState.EditorIndex].StunDuration = (int)Math.Round(nudStun.Value);
         private void ChkProjectile_CheckedChanged() => Data.Skill[GameState.EditorIndex].IsProjectile = chkProjectile.Checked == true ? 1 : 0;
         private void CmbProjectile_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Projectile = cmbProjectile.SelectedIndex;
-    private void ChkKnockBack_CheckedChanged() => Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
+        private void ChkKnockBack_CheckedChanged() => Data.Skill[GameState.EditorIndex].KnockBack = (byte)(chkKnockBack.Checked == true ? 1 : 0);
         private void CmbKnockBackTiles_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].KnockBackTiles = (byte)cmbKnockBackTiles.SelectedIndex;
 
         private void DrawIcon(Graphics g, int iconNum)
@@ -240,7 +257,13 @@ namespace Client
             {
                 using (var bmp = new Bitmap(path))
                 {
-                    g.DrawImage(bmp, new RectangleF(0,0,picSprite.Width,picSprite.Height));
+                    // Assume 2 icons side by side
+                    int fw = bmp.Width / 2;
+                    int fh = bmp.Height;
+                    picSprite.Size = new Size(fw * 2, fh);
+                    // Draw both icons
+                    g.DrawImage(bmp, new RectangleF(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                    g.DrawImage(bmp, new RectangleF(fw,0,fw,fh), new Rectangle(fw,0,fw,fh));
                 }
             }
             catch { g.Clear(Colors.Transparent); }

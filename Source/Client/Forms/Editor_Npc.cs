@@ -56,13 +56,15 @@ namespace Client
             _instance = this;
             Title = "NPC Editor";
             ClientSize = new Size(1050, 600);
-            MinimumSize = new Size(1050, 600);
+            // Ensure Load is subscribed first before building UI and wiring events
+            Load += (s, e) => LoadData();
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 900, 560);
         }
 
         private void InitializeComponent()
         {
-            lstIndex = new ListBox { Size = new Size(220, -1) };
+            lstIndex = new ListBox { Width = 220 }; // allow height to expand with layout
             lstIndex.SelectedIndexChanged += (s, e) =>
             {
                 if (_initializing) return;
@@ -70,7 +72,7 @@ namespace Client
                 Editors.NpcEditorInit();
             };
 
-            txtName = new TextBox();
+            txtName = new TextBox { Width = 200 };
             txtName.TextChanged += (s, e) =>
             {
                 if (_initializing) return;
@@ -161,15 +163,16 @@ namespace Client
             nudChance = new NumericStepper { MinValue = 0, MaxValue = 100, DecimalPlaces = 0, Width = 80 };
             nudChance.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].DropChance[cmbDropSlot.SelectedIndex] = (int)nudChance.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
 
-            picSprite = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Black };
+            picSprite = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Transparent };
             picSprite.Paint += (s, e) =>
             {
                 if (_spriteBitmap != null)
                 {
-                    // Show first frame (image assumed 4x4 frames as original code divides by 4)
+                    // Show only the first frame at native size (4x4 spritesheet)
                     int frameW = _spriteBitmap.Width / 4;
                     int frameH = _spriteBitmap.Height / 4;
-                    e.Graphics.DrawImage(_spriteBitmap, new Rectangle(0,0, frameW, frameH));
+                    picSprite.Size = new Size(frameW, frameH);
+                    e.Graphics.DrawImage(_spriteBitmap, new Rectangle(0,0, frameW, frameH), new Rectangle(0,0, frameW, frameH));
                 }
             };
 
@@ -249,21 +252,41 @@ namespace Client
                 }
             };
 
-            var rightPanel = new Scrollable
+            // Re-layout right side into two columns to reduce vertical size (remove scrollbar)
+            var colLeft = new StackLayout
             {
-                Content = new StackLayout
+                Spacing = 10,
+                Items =
                 {
-                    Spacing = 10,
-                    Items =
-                    {
-                        new GroupBox{ Text = "General", Content = generalGroup},
-                        new GroupBox{ Text = "Stats", Content = statsGroup},
-                        new GroupBox{ Text = "Skills", Content = skillsGroup},
-                        new GroupBox{ Text = "Drops", Content = dropsGroup},
-                        new StackLayout{ Orientation=Orientation.Horizontal, Spacing=6, Items={ btnSave, btnCancel, btnDelete } }
-                    }
+                    new GroupBox{ Text = "General", Content = generalGroup},
+                    new GroupBox{ Text = "Stats", Content = statsGroup}
                 }
             };
+            var colRight = new StackLayout
+            {
+                Spacing = 10,
+                Items =
+                {
+                    new GroupBox{ Text = "Skills", Content = skillsGroup},
+                    new GroupBox{ Text = "Drops", Content = dropsGroup}
+                }
+            };
+            var buttonsRow = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 6,
+                Items = { btnSave, btnDelete, btnCancel }
+            };
+            var rightContent = new TableLayout
+            {
+                Spacing = new Size(10,10),
+                Rows =
+                {
+                    new TableRow(new TableCell(colLeft, true), new TableCell(colRight, true)),
+                    new TableRow(new TableCell(buttonsRow) { ScaleWidth = true })
+                }
+            };
+            var rightPanel = new Panel { Content = rightContent };
 
             Content = new Splitter
             {
@@ -272,12 +295,14 @@ namespace Client
                 {
                     Padding = 8,
                     Spacing = 4,
-                    Items = { new Label{ Text = "NPCs", Font = SystemFonts.Bold(12)}, lstIndex }
+                    Items =
+                    {
+                        new Label{ Text = "NPCs", Font = SystemFonts.Bold(12)},
+                        new StackLayoutItem(lstIndex, expand: true)
+                    }
                 },
                 Panel2 = rightPanel
             };
-
-            Shown += (s, e) => LoadData();
             Closed += (s, e) =>
             {
                 if (GameState.MyEditorType == EditorType.Npc)
@@ -333,7 +358,6 @@ namespace Client
             if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
             cmbDropSlot.SelectedIndex = 0;
             _initializing = false;
-            if (lstIndex.Items.Count > 0) Editors.NpcEditorInit();
         }
 
         private void SyncDropFields()

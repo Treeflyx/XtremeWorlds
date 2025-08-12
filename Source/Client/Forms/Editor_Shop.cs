@@ -11,13 +11,14 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Shop? _instance;
         public static Editor_Shop Instance => _instance ??= new Editor_Shop();
+        private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public NumericStepper nudBuy = new NumericStepper { MinValue = 0, MaxValue = 10000, Increment = 1 };
         public ComboBox cmbItem = new ComboBox();
         public ComboBox cmbCostItem = new ComboBox();
         public ListBox lstTradeItem = new ListBox();
-        public ComboBox cmbItemCurrency = new ComboBox(); // reserved for future use
+        public ComboBox cmbItemCurrency = new ComboBox();
         public NumericStepper nudItemValue = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
         public NumericStepper nudCostValue = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
         private Button btnUpdate = new Button { Text = "Update Trade" };
@@ -30,9 +31,10 @@ namespace Client
         {
             _instance = this;
             Title = "Shop Editor";
-            ClientSize = new Size(800, 500);
+            ClientSize = new Size(900, 600);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 720, 480);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -44,8 +46,11 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Shop_Load();
+
             // Event wiring
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             nudBuy.ValueChanged += (s, e) => NudBuy_ValueChanged();
             cmbItem.SelectedIndexChanged += (s, e) => { };
@@ -58,51 +63,101 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
-            Load += (s, e) => Editor_Shop_Load();
 
-            // Layouts
-            var listLayout = new DynamicLayout { Spacing = new Size(5,5) };
-            listLayout.AddRow(new Label { Text = "Shops" });
-            listLayout.Add(lstIndex, yscale: true);
+            // Adjust list to consistent width and restructure layout similar to other editors
+            lstIndex.Width = 220;
 
-            var tradeLayout = new DynamicLayout { Spacing = new Size(4,4) };
-            tradeLayout.AddRow(new Label { Text = "Trades" });
-            tradeLayout.Add(lstTradeItem, yscale: true);
-            tradeLayout.AddRow("Item:", cmbItem, "Qty:", nudItemValue);
-            tradeLayout.AddRow("Cost Item:", cmbCostItem, "Cost Qty:", nudCostValue);
-            tradeLayout.AddRow(btnUpdate, btnDeleteTrade);
-
-            var generalLayout = new DynamicLayout { Spacing = new Size(4,4) };
-            generalLayout.AddRow("Name:", txtName, "Buy Rate:", nudBuy);
-            generalLayout.Add(tradeLayout);
-            generalLayout.AddRow(btnSave, btnDelete, btnCancel);
-
-            Content = new TableLayout
+            // Left panel (list)
+            var leftPanel = new StackLayout
             {
-                Spacing = new Size(10,10),
-                Rows = { new TableRow(new TableCell(listLayout, true), new TableCell(generalLayout, true)) }
+                Padding = 4,
+                Spacing = 4,
+                Items =
+                {
+                    new Label { Text = "Shops", Font = SystemFonts.Bold(12) },
+                    new StackLayoutItem(lstIndex, expand: true)
+                }
+            };
+
+            // Trade editor: list on left, fields on right via splitter to avoid overlap
+            var tradeFields = new DynamicLayout { Spacing = new Size(4,4) };
+            tradeFields.AddRow("Item:", cmbItem);
+            tradeFields.AddRow("Qty:", nudItemValue);
+            tradeFields.AddRow("Cost Item:", cmbCostItem);
+            tradeFields.AddRow("Cost Qty:", nudCostValue);
+
+            var tradeListPanel = new StackLayout
+            {
+                Spacing = 4,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                Items =
+                {
+                    new Label { Text = "Items", Font = SystemFonts.Bold(12) },
+                    new StackLayoutItem(new Scrollable { Content = lstTradeItem }, expand: true),
+                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnUpdate, btnDeleteTrade } }
+                }
+            };
+
+            var tradeArea = new Splitter
+            {
+                Position = 560, // wider trade list
+                Panel1 = tradeListPanel,
+                Panel2 = new Scrollable { Content = tradeFields },
+                Panel1MinimumSize = 260,
+                Panel2MinimumSize = 180
+            };
+
+            var rightPanel = new StackLayout
+            {
+                Padding = 4,
+                Spacing = 8,
+                Items =
+                {
+                    new GroupBox { Text = "General", Content = new TableLayout
+                        {
+                            Spacing = new Size(4,4),
+                            Rows = { new TableRow(new Label{Text="Name:"}, txtName, new Label{Text="Buy Rate:"}, nudBuy) }
+                        }
+                    },
+                    // Make trades area expand to fill remaining space
+                    new StackLayoutItem(new GroupBox { Text = "Trade", Content = tradeArea }, expand: true),
+                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } }
+                }
+            };
+
+            Content = new Splitter
+            {
+                Position = 240,
+                Panel1 = leftPanel,
+                Panel2 = rightPanel
             };
         }
 
         private void Editor_Shop_Load()
         {
-            lstIndex.Items.Clear();
-            for (int i = 0; i < Constant.MaxShops; i++)
-                lstIndex.Items.Add($"{i + 1}: {Data.Shop[i].Name}");
-
-            cmbItem.Items.Clear();
-            cmbCostItem.Items.Clear();
-            for (int i = 0; i < Constant.MaxItems; i++)
+            _suppressIndexChanged = true;
+            try
             {
-                cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
-                cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                lstIndex.Items.Clear();
+                for (int i = 0; i < Constant.MaxShops; i++)
+                    lstIndex.Items.Add($"{i + 1}: {Data.Shop[i].Name}");
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+
+                cmbItem.Items.Clear();
+                cmbCostItem.Items.Clear();
+                for (int i = 0; i < Constant.MaxItems; i++)
+                {
+                    cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                    cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                }
+            }
+            finally
+            {
+                _suppressIndexChanged = false;
             }
 
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.ShopEditorInit();
-            }
+            // Single init after population
+            Editors.ShopEditorInit();
         }
 
         private void LstIndex_Click() => Editors.ShopEditorInit();
@@ -111,9 +166,14 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Shop[GameState.EditorIndex].Name = txtName.Text;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
         private void NudBuy_ValueChanged() => Data.Shop[GameState.EditorIndex].BuyRate = (int)Math.Round(nudBuy.Value);
 
@@ -147,9 +207,14 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             Shop.ClearShop(GameState.EditorIndex);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
             Editors.ShopEditorInit();
         }
     }

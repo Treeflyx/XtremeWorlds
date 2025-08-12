@@ -3,7 +3,7 @@ using static Core.Globals.Type;
 namespace Core.Globals;
 
 /// <summary>
-/// Represents a dynamic entity that can be a Player, Npc, or Pet.
+/// Represents a dynamic entity that can be a Player, or Npc.
 /// Allows unified access to common fields for logic processing.
 /// </summary>
 public class Entity

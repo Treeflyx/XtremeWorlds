@@ -13,6 +13,7 @@ namespace Client
     {
         private static Editor_Item? _instance;
         public static Editor_Item Instance => _instance ??= new Editor_Item();
+        private bool _suppressIndexChanged;
 
         // Core lists/controls
         public ListBox? lstIndex; // legacy name used by Editors.cs
@@ -37,18 +38,20 @@ namespace Client
         {
             _instance = this;
             Title = "Item Editor";
-            ClientSize = new Size(1100, 700);
+            ClientSize = new Size(1400, 900); // Increased size for more center controls
             Padding = 6;
+            // Ensure Load is subscribed before wiring other events in BuildUi
+            Load += (s,e) => InitData();
             Content = BuildUi();
-            Shown += (s,e) => InitData();
+            Editors.AutoSizeWindow(this, 1400, 900);
         }
 
         Eto.Forms.Control BuildUi()
         {
             lstIndex = new ListBox { Width = 220, Height = 500 };
-            lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
+            lstIndex.SelectedIndexChanged += (s,e) => { if (_suppressIndexChanged) return; Editors.ItemEditorInit(); };
 
-            txtName = new TextBox(); txtName.TextChanged += (s,e)=> UpdateName();
+            txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s,e)=> UpdateName();
             txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
 
             numIcon = Num(0, GameState.NumItems); numIcon.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Icon = (int)numIcon.Value; LoadItemIcon(); MarkChanged(); };
@@ -63,7 +66,7 @@ namespace Client
             numEventValue = Num(0, 100000); numEventValue.ValueChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Data2 = (int)numEventValue.Value; MarkChanged(); };
 
             chkStackable = new CheckBox { Text = "Stackable" }; chkStackable.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Stackable = chkStackable.Checked==true? (byte)1:(byte)0; MarkChanged(); };
-            chkKnockBack = new CheckBox { Text = "KnockBack" }; chkKnockBack.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
+            chkKnockBack = new CheckBox { Text = "Knockback" }; chkKnockBack.CheckedChanged += (s,e)=> { Data.Item[GameState.EditorIndex].KnockBack = chkKnockBack.Checked==true? (byte)1:(byte)0; MarkChanged(); };
 
             cmbType = new ComboBox(); cmbType.SelectedIndexChanged += (s,e)=> ChangeType();
             cmbSubType = new ComboBox(); cmbSubType.SelectedIndexChanged += (s,e)=> { Data.Item[GameState.EditorIndex].SubType = (byte)cmbSubType.SelectedIndex; TogglePanels(); MarkChanged(); };
@@ -90,8 +93,24 @@ namespace Client
             numIntAdd = StatAdd(Stat.Intelligence);
             numSprAdd = StatAdd(Stat.Spirit);
 
-            iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Black }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
-            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black }; paperdollPreview.Paint += (s,e)=> { if(paperdollBmp!=null) e.Graphics.DrawImage(paperdollBmp,0,0,64,64); };
+            iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Transparent }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
+            iconPreview.Paint += (s,e)=> {
+                if(itemBmp!=null) {
+                    int fw = itemBmp.Width / 4;
+                    int fh = itemBmp.Height / 4;
+                    iconPreview.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(itemBmp, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                }
+            };
+            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Transparent };
+            paperdollPreview.Paint += (s,e)=> {
+                if(paperdollBmp!=null) {
+                    int fw = paperdollBmp.Width / 4;
+                    int fh = paperdollBmp.Height / 4;
+                    paperdollPreview.Size = new Size(fw, fh);
+                    e.Graphics.DrawImage(paperdollBmp, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+                }
+            };
 
             btnSave = new Button { Text = "Save" }; btnSave.Click += (s,e)=> { Editors.ItemEditorOK(); Close(); };
             btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s,e)=> { Editors.ItemEditorCancel(); Close(); };
@@ -104,13 +123,14 @@ namespace Client
                 Spacing = new Size(4,4),
                 Rows =
                 {
-                    new TableRow(new Label{Text="Name"}, txtName),
-                    new TableRow(new Label{Text="Description"}, txtDescription),
-                    new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
-                    new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="SubType"}, cmbSubType),
-                    new TableRow(new Label{Text="Animation"}, cmbAnimation, new Label{Text="Bind"}, cmbBind),
-                    new TableRow(new Label{Text="Item Lvl"}, numItemLvl, new Label{Text="Price"}, numPrice),
-                    new TableRow(new Label{Text="Rarity"}, numRarity, chkStackable, null),
+                    // Move Paperdoll next to Name to use empty space
+                    new TableRow(new Label{Text="Name"}, txtName, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
+                    // Move SubType up next to Description for quicker access
+                    new TableRow(new Label{Text="Description"}, txtDescription, new Label{Text="SubType"}, cmbSubType),
+                    new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, null, null),
+                    new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="Animation"}, cmbAnimation),
+                    new TableRow(new Label{Text="Bind"}, cmbBind, new Label{Text="Item Lvl"}, numItemLvl),
+                    new TableRow(new Label{Text="Price"}, numPrice, new Label{Text="Rarity"}, numRarity, chkStackable),
                     new TableRow(btnSpawn, numSpawnAmount, null, null)
                 }
             });
@@ -170,9 +190,8 @@ namespace Client
             });
 
             var left = new DynamicLayout { Spacing = new Size(4,4) };
-            left.AddRow(new Label{Text="Items"});
-            left.AddRow(lstIndex);
-            left.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=4,Items={btnSave,btnDelete,btnCancel}});
+            left.AddRow(new Label{Text="Items", Font = SystemFonts.Bold(12)});
+            left.Add(lstIndex, yscale:true);
 
             var mid = new DynamicLayout { Spacing = new Size(6,6) };
             mid.AddRow(fraBasics);
@@ -181,6 +200,7 @@ namespace Client
             mid.AddRow(fraSkill);
             mid.AddRow(fraProjectile);
             mid.AddRow(fraEvents);
+            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCancel}});
 
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);
@@ -212,22 +232,31 @@ namespace Client
 
     void InitData()
         {
-            lstIndex!.Items.Clear();
-            for (int i = 0; i < Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Data.Item[i].Name);
-            lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex!.Items.Clear();
+                for (int i = 0; i < Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Data.Item[i].Name);
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
 
-            cmbAnimation!.Items.Clear(); for (int i=0;i<Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
-            cmbProjectile!.Items.Clear(); for (int i=0;i<Constant.MaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
-            cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
-            cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
-            cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
-            cmbAccessReq!.Items.Clear(); for (int i=0;i<10;i++) cmbAccessReq.Items.Add(i.ToString());
-            cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
-            cmbTool!.Items.Clear(); for(int i=0;i<20;i++) cmbTool.Items.Add("Tool "+i);
-            cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
+                cmbAnimation!.Items.Clear(); for (int i=0;i<Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
+                cmbProjectile!.Items.Clear(); for (int i=0;i<Constant.MaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
+                cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
+                cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
+                cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
+                cmbAccessReq!.Items.Clear();
+                foreach (var name in Enum.GetNames(typeof(Core.Globals.AccessLevel)))
+                    cmbAccessReq.Items.Add(name);
+                cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
+                cmbTool!.Items.Clear();
+                foreach (var name in Enum.GetNames(typeof(ToolType)))
+                    cmbTool.Items.Add(name);
+                cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
 
-            cmbType!.Items.Clear();
-            foreach(var name in Enum.GetNames(typeof(ItemCategory))) cmbType.Items.Add(name);
+                cmbType!.Items.Clear();
+                foreach(var name in Enum.GetNames(typeof(ItemCategory))) cmbType.Items.Add(name);
+            }
+            finally { _suppressIndexChanged = false; }
 
             Editors.ItemEditorInit(); // will populate controls & preview
             TogglePanels();
@@ -240,9 +269,14 @@ namespace Client
             if (lstIndex!.SelectedIndex >= 0)
             {
                 int i = lstIndex.SelectedIndex;
-                lstIndex.Items.RemoveAt(i);
-                lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Data.Item[i].Name });
-                lstIndex.SelectedIndex = i;
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(i);
+                    lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Data.Item[i].Name });
+                    lstIndex.SelectedIndex = i;
+                }
+                finally { _suppressIndexChanged = false; }
             }
             MarkChanged();
         }

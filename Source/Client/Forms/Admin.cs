@@ -30,8 +30,7 @@ namespace Client
         {
             _instance = this;
             Title = "Admin Panel";
-            ClientSize = new Size(600, 700);
-            Resizable = false;
+            ClientSize = new Size(640, 600);
             InitializeComponents();
         }
 
@@ -57,6 +56,7 @@ namespace Client
             btnAdminWarpMe2 = new Button { Text = "Warp Me To Player" };
             btnAdminSetAccess = new Button { Text = "Set Access" };
             btnAdminSetSprite = new Button { Text = "Set Player Sprite" };
+            btnLevelUp = new Button { Text = "Level Up" };
 
             btnAdminWarpTo.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.WarpTo((int)nudAdminMap.Value); };
             btnAdminBan.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendBan(txtAdminName.Text.Trim()); };
@@ -76,12 +76,15 @@ namespace Client
                     new TableRow(new Label{Text="Access:"}, cmbAccess, btnAdminSetAccess),
                     new TableRow(new Label{Text="Map Number:"}, nudAdminMap, btnAdminWarpTo),
                     new TableRow(new Label{Text="Sprite:"}, nudAdminSprite, btnAdminSetSprite),
-                    new TableRow(btnAdminBan, btnAdminKick, btnAdminWarp2Me, btnAdminWarpMe2),
+                    // Split action buttons across two rows for clearer sizing
+                    new TableRow(btnAdminBan, btnAdminKick, btnLevelUp),
+                    new TableRow(btnAdminWarp2Me, btnAdminWarpMe2)
                 }
             };
 
             // Map List Tab
-            lstMaps = new ListBox();
+            // Enlarge map list area
+            lstMaps = new ListBox { Size = new Size(-1, 420) }; // taller list
             btnMapReport = new Button { Text = "Refresh List" };
             btnMapReport.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else Sender.SendRequestMapReport(); };
             lstMaps.MouseDoubleClick += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper) ShowDenied(); else if (lstMaps.SelectedIndex >= 0) Sender.WarpTo(lstMaps.SelectedIndex + 1); };
@@ -105,7 +108,6 @@ namespace Client
             };
 
             // Editors Tab
-            btnLevelUp = new Button { Text = "Level Up" };
             btnAnimationEditor = new Button { Text = "Animation Editor" };
             btnJobEditor = new Button { Text = "Job Editor" };
             btnItemEditor = new Button { Text = "Item Editor" };
@@ -131,15 +133,31 @@ namespace Client
             btnMoralEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer) ShowDenied(); else Sender.SendRequestEditMoral(); };
             btnScriptEditor.Click += (s, e) => { if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner) ShowDenied(); else Sender.SendRequestEditScript(0); };
 
+            // Editors buttons stretch to fill width
             var editorsLayout = new TableLayout
             {
                 Padding = 10,
                 Spacing = new Size(5, 5),
                 Rows =
                 {
-                    new TableRow(btnLevelUp, btnAnimationEditor, btnJobEditor, btnItemEditor),
-                    new TableRow(btnMapEditor, btnNpcEditor, btnProjectiles, btnResourceEditor),
-                    new TableRow(btnShopEditor, btnSkillEditor, btnMoralEditor, btnScriptEditor)
+                    new TableRow(
+                        new TableCell(btnAnimationEditor, true),
+                        new TableCell(btnJobEditor, true),
+                        new TableCell(btnItemEditor, true),
+                        new TableCell(btnMapEditor, true)
+                    ),
+                    new TableRow(
+                        new TableCell(btnNpcEditor, true),
+                        new TableCell(btnProjectiles, true),
+                        new TableCell(btnResourceEditor, true),
+                        new TableCell(btnShopEditor, true)
+                    ),
+                    new TableRow(
+                        new TableCell(btnSkillEditor, true),
+                        new TableCell(btnMoralEditor, true),
+                        new TableCell(btnScriptEditor, true),
+                        new TableCell(new Panel(), true) // spacer cell to balance columns
+                    )
                 }
             };
 

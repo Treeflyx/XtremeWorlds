@@ -14,6 +14,7 @@ namespace Client
     // Singleton access to mirror legacy usage pattern in Main.cs
     private static Editor_Job? _instance;
     public static Editor_Job Instance => _instance ??= new Editor_Job();
+    private bool _suppressIndexChanged;
 
     public ListBox? lstJobs, lstStartItems;
     public TextBox? txtName;
@@ -49,15 +50,18 @@ namespace Client
         Title = "Job Editor";
         ClientSize = new Size(880, 600);
         Padding = 6;
+            // Ensure Load is subscribed first before building UI and wiring events
+            Load += (s, e) => InitData();
         Content = BuildUi();
-        Shown += (s, e) => InitData();
+        Editors.AutoSizeWindow(this, 760, 520);
     }
 
     Eto.Forms.Control BuildUi()
     {
-        lstJobs = new ListBox { Width = 220 };
-        lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
-        txtName = new TextBox(); txtName.TextChanged += (s, e) => UpdateName();
+        
+    lstJobs = new ListBox { Width = 220 };
+    lstJobs.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; ChangeJob(); };
+        txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
         numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);
@@ -75,7 +79,7 @@ namespace Client
         numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
         numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
 
-        lstStartItems = new ListBox { Height = 140 };
+    lstStartItems = new ListBox { Height = 140, Width = 420 };
         cmbItems = new ComboBox { Width = 180 };
         numItemAmount = new NumericStepper { MinValue = 1, MaxValue = 999, Value = 1 };
         btnSetItem = new Button { Text = "Set Slot" }; btnSetItem.Click += (s, e) => SetStartItem();
@@ -115,21 +119,14 @@ namespace Client
             Rows = { new TableRow(new Label{Text="Male"}, numMaleSprite, malePreview, new Label{Text="Female"}, numFemaleSprite, femalePreview) }
         });
 
-        var items = Box("Start Items", new TableLayout
-        {
-            Spacing = new Size(4,4),
-            Rows =
-            {
-                new TableRow(lstStartItems),
-                new TableRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amt"}, numItemAmount, btnSetItem)
-            }
-        });
+    var itemsLayout = new DynamicLayout { Spacing = new Size(4,4) };
+    itemsLayout.AddRow(lstStartItems);
+    itemsLayout.AddRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amount"}, numItemAmount, btnSetItem);
+    var items = Box("Start Items", itemsLayout);
 
-        var left = new DynamicLayout { Spacing = new Size(4,4) };
-        left.AddRow(new Label{Text="Jobs"}); left.AddRow(lstJobs);
-        left.AddRow(new Label{Text="Name"}); left.AddRow(txtName);
-        left.AddRow(new Label{Text="Description"}); left.AddRow(txtDesc);
-        left.Add(null);
+    var left = new DynamicLayout { Spacing = new Size(4,4) };
+    left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(12)});
+    left.Add(lstJobs, yscale: true);
 
         var right = new DynamicLayout { Spacing = new Size(6,6) };
         right.AddRow(stats);
@@ -150,12 +147,18 @@ namespace Client
 
     void InitData()
     {
-        lstJobs!.Items.Clear();
-        for (int i = 0; i < Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Data.Job[i].Name);
-        lstJobs.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
-        cmbItems!.Items.Clear();
-        for (int i = 0; i < Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Data.Item[i].Name);
-        cmbItems.SelectedIndex = 0;
+        _suppressIndexChanged = true;
+        try
+        {
+            lstJobs!.Items.Clear();
+            for (int i = 0; i < Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Data.Job[i].Name);
+            lstJobs.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+            cmbItems!.Items.Clear();
+            for (int i = 0; i < Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Data.Item[i].Name);
+            cmbItems.SelectedIndex = 0;
+        }
+        finally { _suppressIndexChanged = false; }
+
         ReloadPanel();
     }
 
@@ -193,9 +196,14 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
         {
             // Replace item by removing and inserting new ListItem
             int i = lstJobs.SelectedIndex;
-            lstJobs.Items.RemoveAt(i);
-            lstJobs.Items.Insert(i, new ListItem { Text = (GameState.EditorIndex + 1) + ": " + job.Name });
-            lstJobs.SelectedIndex = i;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstJobs.Items.RemoveAt(i);
+                lstJobs.Items.Insert(i, new ListItem { Text = (GameState.EditorIndex + 1) + ": " + job.Name });
+                lstJobs.SelectedIndex = i;
+            }
+            finally { _suppressIndexChanged = false; }
         }
     }
 
@@ -216,15 +224,29 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
             string femalePath = System.IO.Path.Combine(DataPath.Characters, Data.Job[GameState.EditorIndex].FemaleSprite + GameState.GfxExt);
             maleBmp = File.Exists(malePath) ? new Bitmap(malePath) : null;
             femaleBmp = File.Exists(femalePath) ? new Bitmap(femalePath) : null;
+            if (maleBmp != null)
+            {
+                int fw = maleBmp.Width / 4;
+                int fh = maleBmp.Height / 4;
+                malePreview!.Size = new Size(fw, fh);
+            }
+            if (femaleBmp != null)
+            {
+                int fw = femaleBmp.Width / 4;
+                int fh = femaleBmp.Height / 4;
+                femalePreview!.Size = new Size(fw, fh);
+            }
             malePreview!.Invalidate(); femalePreview!.Invalidate();
         }
 
         public void DrawPreview(Graphics g, Bitmap? bmp, Size size)
         {
-            g.Clear(Colors.Black);
+            g.Clear(Colors.Transparent);
             if (bmp == null) return;
-            int fw = bmp.Width / 4; int fh = bmp.Height / 4;
-            g.DrawImage(bmp, new RectangleF(0,0,size.Width,size.Height), new Rectangle(0,0,fw,fh));
+            int fw = bmp.Width / 4;
+            int fh = bmp.Height / 4;
+            // Draw only the first frame at 0,0, at its native size
+            g.DrawImage(bmp, new RectangleF(0, 0, fw, fh), new Rectangle(0, 0, fw, fh));
         }
 
         // Parameterless wrapper used by Editors.cs legacy call pattern

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using Client.Net;
 using Core.Globals;
 using Eto.Forms;
@@ -46,6 +47,11 @@ public static class Program
         }
         catch (ObjectDisposedException) { }
         catch (InvalidOperationException) { }
+        catch (Exception ex)
+        {
+            // Prevent UI timer from dying due to unexpected exceptions
+            try { System.Console.WriteLine($"[UiTimer] Exception: {ex}"); } catch { }
+        }
     }
 
     private static void UpdateEditors()
@@ -81,7 +87,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Map;
             GameState.EditorIndex = 0;
             new Editor_Map().Show();
-            Editor_Map.MapEditorInit();
             GameState.InitMapEditor = false;
         }
 
@@ -90,7 +95,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Animation;
             GameState.EditorIndex = 0;
             new Editor_Animation().Show();
-            Editors.AnimationEditorInit();
             GameState.InitAnimationEditor = false;
         }
 
@@ -99,7 +103,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Item;
             GameState.EditorIndex = 0;
             new Editor_Item().Show();
-            Editors.ItemEditorInit();
             GameState.InitItemEditor = false;
         }
 
@@ -108,7 +111,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Job;
             GameState.EditorIndex = 0;
             new Editor_Job().Show();
-            Editors.JobEditorInit();
             GameState.InitJobEditor = false;
         }
 
@@ -117,7 +119,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Moral;
             GameState.EditorIndex = 0;
             new Editor_Moral().Show();
-            Editors.MoralEditorInit();
             GameState.InitMoralEditor = false;
         }
 
@@ -126,7 +127,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Resource;
             GameState.EditorIndex = 0;
             new Editor_Resource().Show();
-            Editors.ResourceEditorInit();
             GameState.InitResourceEditor = false;
         }
 
@@ -135,7 +135,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Npc;
             GameState.EditorIndex = 0;
             new Editor_Npc().Show();
-            Editors.NpcEditorInit();
             GameState.InitNpcEditor = false;
         }
 
@@ -144,7 +143,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Skill;
             GameState.EditorIndex = 0;
             new Editor_Skill().Show();
-            Editors.SkillEditorInit();
             GameState.InitSkillEditor = false;
         }
 
@@ -153,7 +151,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Shop;
             GameState.EditorIndex = 0;
             new Editor_Shop().Show();
-            Editors.ShopEditorInit();
             GameState.InitShopEditor = false;
         }
 
@@ -162,7 +159,6 @@ public static class Program
             GameState.MyEditorType = EditorType.Projectile;
             GameState.EditorIndex = 0;
             new Editor_Projectile().Show();
-            Editors.ProjectileEditorInit();
             GameState.InitProjectileEditor = false;
         }
 
@@ -182,14 +178,14 @@ public static class Program
             Editor_Animation.Instance?.picSprite1?.Invalidate();
         }
         catch { /* some editors may not be instantiated yet */ }
-        if (GameState.InGame)
+        if (!GameState.InGame)
         {
-            // Reset disposal flag when (re)entering game
+            // Reset disposal flag when (re)entering non-game state
             _editorsDisposed = false;
         }
         else if (!_editorsDisposed)
         {
-            // Dispose editors once when leaving game state
+            // Dispose editors once when entering game state
             try { Editor_Item.Instance?.Dispose(); } catch { }
             try { Editor_Job.Instance?.Dispose(); } catch { }
             try { Editor_Map.Instance?.Dispose(); } catch { }

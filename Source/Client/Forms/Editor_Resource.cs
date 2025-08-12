@@ -13,33 +13,35 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Resource? _instance;
         public static Editor_Resource Instance => _instance ??= new Editor_Resource();
-        public ListBox lstIndex = new ListBox();
-        public TextBox txtName = new TextBox();
-        public TextBox txtMessage = new TextBox();
-        public TextBox txtMessage2 = new TextBox();
-        public ComboBox cmbType = new ComboBox();
-        public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0 };
-        public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0 };
-        public ComboBox cmbRewardItem = new ComboBox();
-        public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
-        public ComboBox cmbTool = new ComboBox();
-        public NumericStepper nudHealth = new NumericStepper { MinValue = 0 };
-        public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
-        public ComboBox cmbAnimation = new ComboBox();
-        public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0 };
+        private bool _suppressIndexChanged;
+        public ListBox lstIndex = new ListBox { Width = 200 };
+        public TextBox txtName = new TextBox { Width = 200 };
+    public TextBox txtMessage = new TextBox { Width = 200 };
+    public TextBox txtMessage2 = new TextBox { Width = 200 };
+    public ComboBox cmbType = new ComboBox { Width = 200 };
+    public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0, Width = 80 };
+    public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0, Width = 80 };
+    public ComboBox cmbRewardItem = new ComboBox { Width = 200 };
+    public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+    public ComboBox cmbTool = new ComboBox { Width = 200 };
+    public NumericStepper nudHealth = new NumericStepper { MinValue = 0, Width = 100 };
+    public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+    public ComboBox cmbAnimation = new ComboBox { Width = 200 };
+    public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0, Width = 100 };
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
         public Button btnCancel = new Button { Text = "Cancel" };
-        public Drawable picNormalpic = new Drawable { Size = new Size(96, 96) };
-        public Drawable picExhaustedPic = new Drawable { Size = new Size(96, 96) };
+        public Drawable picNormalpic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
+        public Drawable picExhaustedPic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
 
         public Editor_Resource()
         {
             _instance = this;
             Title = "Resource Editor";
-            ClientSize = new Size(760, 480);
+            ClientSize = new Size(1000, 680);
             Padding = 10;
             InitializeComponent();
+            Editors.AutoSizeWindow(this, 680, 440);
         }
 
         protected override void OnClosed(EventArgs e)
@@ -51,8 +53,11 @@ namespace Client
 
         private void InitializeComponent()
         {
+            // Subscribe Load first
+            Load += (s, e) => Editor_Resource_Load();
+
             // Events wiring (converted from WinForms)
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             txtMessage.TextChanged += (s, e) => TxtMessage_TextChanged();
             txtMessage2.TextChanged += (s, e) => TxtMessage2_TextChanged();
@@ -69,51 +74,119 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
-            Load += (s, e) => Editor_Resource_Load();
+
 
             picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
             picExhaustedPic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudExhaustedPic.Value), picExhaustedPic);
 
             // Layout definition
             var listLayout = new DynamicLayout { Spacing = new Size(5, 5) };
-            listLayout.AddRow(new Label { Text = "Resources" });
+            listLayout.AddRow(new Label { Text = "Resources", Font = SystemFonts.Bold(12) });
             listLayout.Add(lstIndex, yscale: true);
 
-            var imagesLayout = new TableLayout
+        var imagesLayout = new TableLayout
             {
                 Spacing = new Size(10, 10),
                 Rows =
                 {
-                    new TableRow(new Label { Text = "Normal Pic:" }, nudNormalPic, picNormalpic,
-                              new Label { Text = "Exhausted Pic:" }, nudExhaustedPic, picExhaustedPic)
+            new TableRow(new Label { Text = "Normal:" }, nudNormalPic, picNormalpic,
+                  new Label { Text = "Exhausted:" }, nudExhaustedPic, picExhaustedPic)
                 }
             };
 
-            var rightLayout = new DynamicLayout { Spacing = new Size(5,5) };
-            rightLayout.AddRow("Name:", txtName);
-            rightLayout.AddRow("Success Msg:", txtMessage);
-            rightLayout.AddRow("Empty Msg:", txtMessage2);
-            rightLayout.AddRow("Type:", cmbType);
+            var rightLayout = new DynamicLayout { Spacing = new Size(5,5), Padding = new Padding(0) };
+            // Top fields in a dedicated 2-column grid with a scaling spacer column
+            var fieldsLayout = new TableLayout
+            {
+                Spacing = new Size(5, 6),
+                Rows =
+                {
+                    new TableRow(
+                        new TableCell(new Label { Text = "Name:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtName, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Success Msg:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtMessage, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Empty Msg:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtMessage2, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Type:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbType, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    )
+                }
+            };
+            rightLayout.Add(fieldsLayout);
             rightLayout.Add(imagesLayout);
-            rightLayout.AddRow("Reward Item:", cmbRewardItem);
-            rightLayout.AddRow("Reward Exp:", nudRewardExp);
-            rightLayout.AddRow("Tool Req:", cmbTool, "Animation:", cmbAnimation);
-            rightLayout.AddRow("Health:", nudHealth, "Respawn:", nudRespawn);
-            rightLayout.AddRow("Level Req:", nudLvlReq);
-            rightLayout.AddRow(btnSave, btnDelete, btnCancel);
 
-            Content = new TableLayout
+            // Remaining fields in another table to keep pairs tight to labels
+            var detailsLayout = new TableLayout
+            {
+                Spacing = new Size(5, 6),
+                Rows =
+                {
+                    // Reward Item
+                    new TableRow(
+                        new TableCell(new Label { Text = "Reward Item:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbRewardItem, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Reward Exp
+                    new TableRow(
+                        new TableCell(new Label { Text = "Reward Exp:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudRewardExp, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Tool Req / Animation
+                    new TableRow(
+                        new TableCell(new Label { Text = "Tool Req:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbTool, scaleWidth: false),
+                        new TableCell(new Label { Text = "Animation:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbAnimation, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Health / Respawn
+                    new TableRow(
+                        new TableCell(new Label { Text = "Health:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudHealth, scaleWidth: false),
+                        new TableCell(new Label { Text = "Respawn:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudRespawn, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Level Req
+                    new TableRow(
+                        new TableCell(new Label { Text = "Level Req:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudLvlReq, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    )
+                }
+            };
+            rightLayout.Add(detailsLayout);
+
+            // buttons moved to right panel bottom (main control view)
+            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalContentAlignment = HorizontalAlignment.Left, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
+
+        Content = new TableLayout
             {
                 Spacing = new Size(10,10),
                 Rows =
                 {
-                    new TableRow(new TableCell(listLayout, true), new TableCell(rightLayout, true))
+            // Left list pane fixed to preferred width (list is set to 200px)
+            new TableRow(new TableCell(listLayout), new TableCell(rightLayout, true))
                 }
             };
         }
 
         private void Editor_Resource_Load()
         {
+            _suppressIndexChanged = true;
             lstIndex.Items.Clear();
             for (int i = 0; i < Constant.MaxResources; i++)
                 lstIndex.Items.Add($"{i + 1}: {Data.Resource[i].Name}");
@@ -127,26 +200,30 @@ namespace Client
                 cmbAnimation.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
 
             cmbType.Items.Clear();
-            cmbType.Items.Add("Tree");
-            cmbType.Items.Add("Mine");
-            cmbType.Items.Add("Herb");
-            cmbType.Items.Add("Other");
+            foreach (var name in Enum.GetValues(typeof(ResourceSkill)))
+            {
+                cmbType.Items.Add(name.ToString());
+            }
 
             cmbTool.Items.Clear();
-            cmbTool.Items.Add("None");
-            cmbTool.Items.Add("Axe");
-            cmbTool.Items.Add("Pickaxe");
-            cmbTool.Items.Add("Scythe");
+            foreach (var name in Enum.GetNames(typeof(ToolType)))
+                cmbTool.Items.Add(name);
 
             nudExhaustedPic.MaxValue = GameState.NumResources;
             nudNormalPic.MaxValue = GameState.NumResources;
             nudRespawn.MaxValue = 1000000;
 
+            // Select current index without triggering handlers
             if (lstIndex.Items.Count > 0)
             {
-                lstIndex.SelectedIndex = 0;
-                Editors.ResourceEditorInit();
+                var idx = GameState.EditorIndex;
+                if (idx < 0 || idx >= lstIndex.Items.Count) idx = 0;
+                lstIndex.SelectedIndex = idx;
             }
+            _suppressIndexChanged = false;
+            // Initialize once post-population
+            if (lstIndex.SelectedIndex >= 0)
+                Editors.ResourceEditorInit();
         }
 
         private void LstIndex_Click() => Editors.ResourceEditorInit();
@@ -157,9 +234,11 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             MapResource.ClearResource(GameState.EditorIndex);
+            _suppressIndexChanged = true;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
             lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = false;
             Editors.ResourceEditorInit();
         }
 
@@ -168,9 +247,11 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Resource[GameState.EditorIndex].Name = txtName.Text;
+            _suppressIndexChanged = true;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
             lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = false;
         }
 
         private void TxtMessage_TextChanged() => Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
@@ -193,13 +274,20 @@ namespace Client
                 g.Clear(Colors.Transparent);
                 return;
             }
-            var path = System.IO.Path.Combine(DataPath.Resources, spriteNum + GameState.GfxExt);
-            if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
+        var path = System.IO.Path.Combine(DataPath.Resources, spriteNum + GameState.GfxExt);
+        if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
             try
             {
                 using (var bmp = new Bitmap(path))
                 {
-                    g.DrawImage(bmp, new RectangleF(0,0,target.Width,target.Height));
+
+            var bounds = target.Size;
+            int fw = Math.Min(bmp.Width, bounds.Width);
+            int fh = Math.Min(bmp.Height, bounds.Height);
+            int ox = (bounds.Width - fw) / 2;
+            int oy = (bounds.Height - fh) / 2;
+            g.Clear(Colors.Transparent);
+            g.DrawImage(bmp, new RectangleF(ox, oy, fw, fh), new Rectangle(0, 0, fw, fh));
                 }
             }
             catch { g.Clear(Colors.Transparent); }

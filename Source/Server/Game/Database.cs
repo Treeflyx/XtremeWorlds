@@ -187,7 +187,7 @@ namespace Server
                 for (int i = 1, loopTo = Core.Globals.Constant.MaxChars; i <= loopTo; i++)
                     playerTable += $", character{i} jsonb";
 
-                string[] tableNames = new[] { "job", "item", "map", "npc", "shop", "skill", "resource", "animation", "pet", "projectile", "moral" };
+                string[] tableNames = new[] { "job", "item", "map", "npc", "shop", "skill", "resource", "animation", "projectile", "moral" };
 
                 var tasks = tableNames.Select(tableName => CreateTableAsync(tableName, dataTable));
                 await System.Threading.Tasks.Task.WhenAll(tasks);

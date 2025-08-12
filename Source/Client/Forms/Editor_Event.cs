@@ -18,6 +18,26 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Event? _instance;
         public static Editor_Event Instance => _instance ??= new Editor_Event();
+        // Expose a safe closer for external callers to avoid double-dispose
+        public static void CloseIfOpen()
+        {
+            var inst = _instance;
+            if (inst == null) return;
+            try
+            {
+                // Prefer Close to allow Eto to unbind cleanly, then dispose
+                inst.Close();
+                inst.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+                // already disposed; ignore
+            }
+            finally
+            {
+                _instance = null;
+            }
+        }
 
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
@@ -128,7 +148,7 @@ namespace Client
         public Button btnPastePage = new Button { Text = "Paste Page" };
         public NumericStepper nudShowPicture = new NumericStepper();
         public ComboBox cmbPicLoc = new ComboBox();
-        public TextBox txtName = new TextBox();
+        public TextBox txtName = new TextBox { Width = 200 };
         public ImageView picGraphicSel = new ImageView();
         public ImageView picGraphic = new ImageView();
         public Panel fraGraphic = new Panel();
@@ -199,6 +219,12 @@ namespace Client
         public CheckBox optVariableAction2 = new CheckBox { Text = "Sub" };
         public CheckBox optVariableAction3 = new CheckBox { Text = "Random" };
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if (ReferenceEquals(_instance, this)) _instance = null;
+        }
+
         // Condition numeric controls
         public NumericStepper nudCondition_PlayerVarCondition = new NumericStepper();
         public NumericStepper nudCondition_HasItem = new NumericStepper();
@@ -240,11 +266,12 @@ namespace Client
             Title = "Event Editor";
             ClientSize = new Size(1100, 750);
             InitializeComponent();
-            Shown += Editor_Events_Load; // hook existing load logic
         }
 
         private void InitializeComponent()
         {
+            // Ensure Load is subscribed first
+            Load += Editor_Events_Load; // hook existing load logic
             // Basic left command tree + right content placeholder
             var left = new StackLayout
             {
