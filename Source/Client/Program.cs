@@ -1711,9 +1711,9 @@ static void LoadFonts()
                         GetPlayerVital((int)i, Vital.Stamina) < GetPlayerMaxVital((int)i, Vital.Stamina))
                     {
                         // lock to Player
-                        tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX +
+                        tmpX = (long)Math.Round(GetPlayerRawX((int)i) +
                             16 - width / 2d);
-                        tmpY = GetPlayerY((int)i) * GameState.SizeY + 35 + height;
+                        tmpY = GetPlayerRawY((int)i) + 35 + height;
 
                         // calculate the width to fill
                         if (width > 0L)
@@ -1746,10 +1746,9 @@ static void LoadFonts()
                                 0)
                             {
                                 // lock to player
-                                tmpX = (long)Math.Round(GetPlayerX((int)i) * GameState.SizeX + 16 - width / 2d);
+                                tmpX = (long)Math.Round(GetPlayerRawX((int)i) + 16 - width / 2d);
 
-                                tmpY = GetPlayerY((int)i) * GameState.SizeY + 35 +
-                                       height;
+                                tmpY = GetPlayerRawY((int)i) + 35 + height;
 
                                 // calculate the width to fill
                                 if (width > 0L)

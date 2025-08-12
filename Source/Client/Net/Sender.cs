@@ -591,7 +591,7 @@ public static class Sender
         packetWriter.WriteString(Data.Resource[resourceNum].SuccessMessage);
         packetWriter.WriteInt32(Data.Resource[resourceNum].LvlRequired);
         packetWriter.WriteInt32(Data.Resource[resourceNum].ToolRequired);
-        packetWriter.WriteInt32(Data.Resource[resourceNum].Walkthrough ? 1 : 0);
+        packetWriter.WriteBoolean(Data.Resource[resourceNum].Walkthrough);
 
         Network.Send(packetWriter);
     }

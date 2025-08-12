@@ -25,8 +25,8 @@ namespace Client
         public TextBox txtName = new();
         public ListBox lstIndex = new();
         public ComboBox cmbSound = new();
-        public Drawable picSprite0 = new() { Size = new Size(96,96) };
-        public Drawable picSprite1 = new() { Size = new Size(96,96) };
+        public Drawable picSprite0 = new() { Size = new Size(96, 96) };
+        public Drawable picSprite1 = new() { Size = new Size(96, 96) };
 
         public Editor_Animation()
         {
@@ -83,12 +83,12 @@ namespace Client
             picSprite1.Paint += PicSprite1_Paint;
 
             // Left side: index list with header
-            var left = new DynamicLayout { Padding = 0, Spacing = new Size(5,5) };
-            left.AddRow(new Label{ Text = "Animations", Font = SystemFonts.Bold(11)});
+            var left = new DynamicLayout { Padding = 0, Spacing = new Size(5, 5) };
+            left.AddRow(new Label { Text = "Animations", Font = SystemFonts.Bold(11) });
             left.Add(lstIndex, yscale: true);
 
             // Right side: animation properties
-            var right = new DynamicLayout { Padding = 0, Spacing = new Size(5,5) };
+            var right = new DynamicLayout { Padding = 0, Spacing = new Size(5, 5) };
             right.AddRow("Name:", txtName);
             right.AddRow("Sprite 0:", nudSprite0, "Frames:", nudFrameCount0, "Loop Time:", nudLoopTime0, picSprite0);
             right.AddRow("Sprite 1:", nudSprite1, "Frames:", nudFrameCount1, "Loop Time:", nudLoopTime1, picSprite1);
@@ -98,7 +98,7 @@ namespace Client
 
             var root = new TableLayout
             {
-                Spacing = new Size(10,10),
+                Spacing = new Size(10, 10),
                 Padding = new Padding(10),
                 Rows =
                 {
@@ -110,53 +110,53 @@ namespace Client
             Load += Editor_Animation_Load;
         }
 
-    private void NudSprite0_ValueChanged(object? sender, EventArgs e)
+        private void NudSprite0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Sprite[0] = (int)Math.Round(nudSprite0.Value);
         }
 
-    private void NudSprite1_ValueChanged(object? sender, EventArgs e)
+        private void NudSprite1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Sprite[1] = (int)Math.Round(nudSprite1.Value);
         }
 
-    private void NudLoopCount0_ValueChanged(object? sender, EventArgs e)
+        private void NudLoopCount0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].LoopCount[0] = (int)Math.Round(nudLoopCount0.Value);
         }
 
-    private void NudLoopCount1_ValueChanged(object? sender, EventArgs e)
+        private void NudLoopCount1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].LoopCount[1] = (int)Math.Round(nudLoopCount1.Value);
         }
 
-    private void NudFrameCount0_ValueChanged(object? sender, EventArgs e)
+        private void NudFrameCount0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Frames[0] = (int)Math.Round(nudFrameCount0.Value);
         }
 
-    private void NudFrameCount1_ValueChanged(object? sender, EventArgs e)
+        private void NudFrameCount1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Frames[1] = (int)Math.Round(nudFrameCount1.Value);
         }
 
-    private void NudLoopTime0_ValueChanged(object? sender, EventArgs e)
+        private void NudLoopTime0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].LoopTime[0] = (int)Math.Round(nudLoopTime0.Value);
         }
 
-    private void NudLoopTime1_ValueChanged(object? sender, EventArgs e)
+        private void NudLoopTime1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].LoopTime[1] = (int)Math.Round(nudLoopTime1.Value);
         }
 
-    private void BtnSave_Click(object? sender, EventArgs e)
+        private void BtnSave_Click(object? sender, EventArgs e)
         {
             Editors.AnimationEditorOK();
             Close();
         }
 
-    private void TxtName_TextChanged(object? sender, EventArgs e)
+        private void TxtName_TextChanged(object? sender, EventArgs e)
         {
             int tmpindex;
             tmpindex = lstIndex.SelectedIndex;
@@ -166,12 +166,12 @@ namespace Client
             lstIndex.SelectedIndex = tmpindex;
         }
 
-    private void lstIndex_Click(object? sender, EventArgs e)
+        private void lstIndex_Click(object? sender, EventArgs e)
         {
             Editors.AnimationEditorInit();
         }
 
-    private void BtnDelete_Click(object? sender, EventArgs e)
+        private void BtnDelete_Click(object? sender, EventArgs e)
         {
             int tmpindex;
 
@@ -185,13 +185,13 @@ namespace Client
             Editors.AnimationEditorInit();
         }
 
-    private void BtnCancel_Click(object? sender, EventArgs e)
+        private void BtnCancel_Click(object? sender, EventArgs e)
         {
             Editors.AnimationEditorCancel();
             Close();
         }
 
-    private void Editor_Animation_Load(object? sender, EventArgs e)
+        private void Editor_Animation_Load(object? sender, EventArgs e)
         {
             lstIndex.Items.Clear();
 
@@ -211,12 +211,12 @@ namespace Client
             nudSprite1.MaxValue = GameState.NumAnimations;
         }
 
-    private void CmbSound_SelectedIndexChanged(object? sender, EventArgs e)
+        private void CmbSound_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Sound = cmbSound.SelectedIndex.ToString();
         }
 
-    private void Editor_Animation_FormClosing(object? sender, EventArgs e)
+        private void Editor_Animation_FormClosing(object? sender, EventArgs e)
         {
             Editors.AnimationEditorCancel();
         }
@@ -288,12 +288,12 @@ namespace Client
             }
         }
 
-    private void PicSprite0_Paint(object? sender, PaintEventArgs e)
+        private void PicSprite0_Paint(object? sender, PaintEventArgs e)
         {
             ProcessAnimation(e.Graphics, nudSprite0, nudFrameCount0, nudLoopTime0, 0, picSprite0);
         }
 
-    private void PicSprite1_Paint(object? sender, PaintEventArgs e)
+        private void PicSprite1_Paint(object? sender, PaintEventArgs e)
         {
             ProcessAnimation(e.Graphics, nudSprite1, nudFrameCount1, nudLoopTime1, 1, picSprite1);
         }

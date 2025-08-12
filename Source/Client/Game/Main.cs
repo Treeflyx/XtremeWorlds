@@ -46,6 +46,11 @@ public static class Program
         }
         catch (ObjectDisposedException) { }
         catch (InvalidOperationException) { }
+        catch (Exception ex)
+        {
+            // Prevent UI timer from dying due to unexpected exceptions
+            try { System.Console.WriteLine($"[UiTimer] Exception: {ex}"); } catch { }
+        }
     }
 
     private static void UpdateEditors()
@@ -171,14 +176,14 @@ public static class Program
             Editor_Animation.Instance?.picSprite1?.Invalidate();
         }
         catch { /* some editors may not be instantiated yet */ }
-        if (GameState.InGame)
+        if (!GameState.InGame)
         {
-            // Reset disposal flag when (re)entering game
+            // Reset disposal flag when (re)entering non-game state
             _editorsDisposed = false;
         }
         else if (!_editorsDisposed)
         {
-            // Dispose editors once when leaving game state
+            // Dispose editors once when entering game state
             try { Editor_Item.Instance?.Dispose(); } catch { }
             try { Editor_Job.Instance?.Dispose(); } catch { }
             try { Editor_Map.Instance?.Dispose(); } catch { }

@@ -171,7 +171,7 @@ public static class Resource
         Data.Resource[resourcenum].SuccessMessage = packetReader.ReadString();
         Data.Resource[resourcenum].LvlRequired = packetReader.ReadInt32();
         Data.Resource[resourcenum].ToolRequired = packetReader.ReadInt32();
-        Data.Resource[resourcenum].Walkthrough = packetReader.ReadInt32() != 0;
+        Data.Resource[resourcenum].Walkthrough = packetReader.ReadBoolean();
 
         SaveResource(resourcenum);
 
