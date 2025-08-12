@@ -11,7 +11,6 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Animation? _instance;
         public static Editor_Animation Instance => _instance ??= new Editor_Animation();
-
         public NumericStepper nudSprite0 = new();
         public NumericStepper nudSprite1 = new();
         public NumericStepper nudLoopCount0 = new();

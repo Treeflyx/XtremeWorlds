@@ -133,7 +133,7 @@ namespace Client
             {
                 cmbType.Items.Add(name.ToString());
             }
-            
+
             cmbTool.Items.Clear();
             foreach (var name in Enum.GetNames(typeof(ToolType)))
                 cmbTool.Items.Add(name);
@@ -142,11 +142,6 @@ namespace Client
             nudNormalPic.MaxValue = GameState.NumResources;
             nudRespawn.MaxValue = 1000000;
 
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.ResourceEditorInit();
-            }
         }
 
         private void LstIndex_Click() => Editors.ResourceEditorInit();

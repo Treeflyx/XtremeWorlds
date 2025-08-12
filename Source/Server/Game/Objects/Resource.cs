@@ -263,7 +263,7 @@ public static class Resource
         packet.WriteString(Data.Resource[resourceNum].SuccessMessage);
         packet.WriteInt32(Data.Resource[resourceNum].LvlRequired);
         packet.WriteInt32(Data.Resource[resourceNum].ToolRequired);
-        packet.WriteInt32(Conversions.ToInteger(Data.Resource[resourceNum].Walkthrough));
+        packet.WriteBoolean(Data.Resource[resourceNum].Walkthrough);
     }
 
     public static void CheckResource(int playerId, int x, int y)

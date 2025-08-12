@@ -189,7 +189,6 @@ namespace Client
             if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
             nudPic.MaxValue = GameState.NumProjectiles;
             _initializing = false;
-            if (lstIndex.Items.Count > 0) Editors.ProjectileEditorInit();
         }
 
         private void RefreshListEntry(int index)

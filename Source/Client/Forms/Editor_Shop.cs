@@ -143,12 +143,6 @@ namespace Client
                 cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
                 cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
             }
-
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.ShopEditorInit();
-            }
         }
 
         private void LstIndex_Click() => Editors.ShopEditorInit();

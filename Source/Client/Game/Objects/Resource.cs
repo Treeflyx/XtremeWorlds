@@ -86,7 +86,7 @@ namespace Client
             Data.Resource[resourceNum].SuccessMessage = buffer.ReadString();
             Data.Resource[resourceNum].LvlRequired = buffer.ReadInt32();
             Data.Resource[resourceNum].ToolRequired = buffer.ReadInt32();
-            Data.Resource[resourceNum].Walkthrough = Conversions.ToBoolean(buffer.ReadInt32());
+            Data.Resource[resourceNum].Walkthrough = buffer.ReadBoolean();
         }
 
         #endregion

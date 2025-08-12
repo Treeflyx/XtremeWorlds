@@ -170,12 +170,6 @@ namespace Client
             cmbJob.Items.Clear();
             for (int i = 0; i < Constant.MaxJobs; i++)
                 cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
-
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.SkillEditorInit();
-            }
         }
 
         private void LstIndex_Click() => Editors.SkillEditorInit();

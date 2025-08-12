@@ -358,7 +358,6 @@ namespace Client
             if (lstIndex.Items.Count > 0) lstIndex.SelectedIndex = 0;
             cmbDropSlot.SelectedIndex = 0;
             _initializing = false;
-            if (lstIndex.Items.Count > 0) Editors.NpcEditorInit();
         }
 
         private void SyncDropFields()

@@ -108,11 +108,6 @@ namespace Client
             {
                 lstIndex.Items.Add($"{i + 1}: {Data.Moral[i].Name}");
             }
-            if (lstIndex.Items.Count > 0)
-            {
-                lstIndex.SelectedIndex = 0;
-                Editors.MoralEditorInit();
-            }
         }
 
         private void LstIndex_Click() => Editors.MoralEditorInit();
