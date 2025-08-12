@@ -114,14 +114,6 @@ namespace Client
         public static void NpcEditorInit()
         {
             var withBlock = Editor_Npc.Instance;
-            var idx = withBlock.lstIndex.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (withBlock.lstIndex.Items.Count > 0) withBlock.lstIndex.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
-
             withBlock.cmbDropSlot.SelectedIndex = 0;
 
             withBlock.txtName.Text = Data.Npc[GameState.EditorIndex].Name;
@@ -254,13 +246,6 @@ namespace Client
         public static void SkillEditorInit()
         {
             var withBlock = Editor_Skill.Instance;
-            var idx = withBlock.lstIndex.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (withBlock.lstIndex.Items.Count > 0) withBlock.lstIndex.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
 
             withBlock.cmbAnimCast.SelectedIndex = 0;
             withBlock.cmbAnim.SelectedIndex = 0;
@@ -454,14 +439,6 @@ namespace Client
         public static void JobEditorInit()
         {
             var withBlock = Editor_Job.Instance;
-            var idx = withBlock.lstIndex.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (withBlock.lstIndex.Items.Count > 0) withBlock.lstIndex.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
-
             withBlock.txtName!.Text = Data.Job[GameState.EditorIndex].Name;
             withBlock.txtDescription!.Text = Data.Job[GameState.EditorIndex].Desc;
 
@@ -507,14 +484,6 @@ namespace Client
 
         public static void ItemEditorInit()
         {
-            var listItem = Editor_Item.Instance!.lstIndex!;
-            var idx = listItem.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (listItem.Items.Count > 0) listItem.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
             ref var withBlock = ref Data.Item[GameState.EditorIndex];
             Editor_Item.Instance!.txtName!.Text = withBlock.Name;
             Editor_Item.Instance!.txtDescription!.Text = withBlock.Description;
@@ -710,13 +679,6 @@ namespace Client
         public static void MoralEditorInit()
         {
             var moralBlock = Editor_Moral.Instance;
-            var idx = moralBlock.lstIndex.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (moralBlock.lstIndex.Items.Count > 0) moralBlock.lstIndex.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
             moralBlock.txtName!.Text = Data.Moral[GameState.EditorIndex].Name;
             moralBlock.cmbColor!.SelectedIndex = Data.Moral[GameState.EditorIndex].Color;
             moralBlock.chkCanCast!.Checked = Data.Moral[GameState.EditorIndex].CanCast;
