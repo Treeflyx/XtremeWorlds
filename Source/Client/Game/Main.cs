@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http.Headers;
 using Client.Net;
 using Core.Globals;
 using Eto.Forms;
@@ -165,6 +166,7 @@ public static class Program
         {
             GameState.MyEditorType = EditorType.Script;
             GameState.EditorIndex = 0;
+            new Editor_Script().Show();
             GameState.InitScriptEditor = false;
         }
 
