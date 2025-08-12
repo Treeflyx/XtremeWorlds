@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 
 using Eto.Forms;
 using Eto.Drawing;
+using System.IO;
 
 namespace Client
 {
@@ -24,10 +25,10 @@ namespace Client
         public Button btnDelete = new();
         public Button btnCancel = new();
         public TextBox txtName = new();
-        public ListBox lstIndex = new();
+        public ListBox lstIndex = new() { Width = 200 };
         public ComboBox cmbSound = new();
-        public Drawable picSprite0 = new() { Size = new Size(96, 96) };
-        public Drawable picSprite1 = new() { Size = new Size(96, 96) };
+        public Drawable picSprite0 = new() { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
+        public Drawable picSprite1 = new() { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
 
         public Editor_Animation()
         {
@@ -64,8 +65,8 @@ namespace Client
             txtName = new TextBox { Width = 200 };
             lstIndex = new ListBox { Width = 200 };
             cmbSound = new ComboBox();
-            picSprite0 = new Drawable { Size = new Size(96, 96) };
-            picSprite1 = new Drawable { Size = new Size(96, 96) };
+            picSprite0 = new Drawable { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
+            picSprite1 = new Drawable { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
 
             nudSprite0.ValueChanged += NudSprite0_ValueChanged;
             nudSprite1.ValueChanged += NudSprite1_ValueChanged;
@@ -116,11 +117,15 @@ namespace Client
         private void NudSprite0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Sprite[0] = (int)Math.Round(nudSprite0.Value);
+            UpdatePreviewSize(picSprite0, nudSprite0, nudFrameCount0);
+            picSprite0.Invalidate();
         }
 
         private void NudSprite1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Sprite[1] = (int)Math.Round(nudSprite1.Value);
+            UpdatePreviewSize(picSprite1, nudSprite1, nudFrameCount1);
+            picSprite1.Invalidate();
         }
 
         private void NudLoopCount0_ValueChanged(object? sender, EventArgs e)
@@ -136,11 +141,15 @@ namespace Client
         private void NudFrameCount0_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Frames[0] = (int)Math.Round(nudFrameCount0.Value);
+            UpdatePreviewSize(picSprite0, nudSprite0, nudFrameCount0);
+            picSprite0.Invalidate();
         }
 
         private void NudFrameCount1_ValueChanged(object? sender, EventArgs e)
         {
             Data.Animation[GameState.EditorIndex].Frames[1] = (int)Math.Round(nudFrameCount1.Value);
+            UpdatePreviewSize(picSprite1, nudSprite1, nudFrameCount1);
+            picSprite1.Invalidate();
         }
 
         private void NudLoopTime0_ValueChanged(object? sender, EventArgs e)
@@ -230,6 +239,12 @@ namespace Client
             finally { _suppressIndexChanged = false; }
 
             Editors.AnimationEditorInit();
+
+            // After init, ensure previews match the actual frame size
+            UpdatePreviewSize(picSprite0, nudSprite0, nudFrameCount0);
+            UpdatePreviewSize(picSprite1, nudSprite1, nudFrameCount1);
+            picSprite0.Invalidate();
+            picSprite1.Invalidate();
         }
 
         private void CmbSound_SelectedIndexChanged(object? sender, EventArgs e)
@@ -264,48 +279,76 @@ namespace Client
                 using (var img = new Bitmap(imagePath))
                 {
                     int columns = (int)Math.Round(frameCountControl.Value);
+                    graphics.Clear(Colors.Transparent);
+
+                    // Determine source frame rectangle
+                    Rectangle srcRect;
                     if (columns <= 0)
                     {
-                        graphics.DrawImage(img, 0, 0, drawable.Width, drawable.Height);
-                        return;
+                        // No columns specified; treat the whole image as a single frame
+                        srcRect = new Rectangle(0, 0, img.Width, img.Height);
                     }
-
-                    int frameWidth = img.Width / columns;
-                    int frameHeight = img.Height;
-                    int rows = frameHeight > 0 ? img.Height / frameHeight : 1;
-                    int frameCount = rows * columns;
-
-                    int looptime = (int)Math.Round(loopCountControl.Value);
-                    if (GameState.AnimEditorTimer[animationTimerIndex] + looptime <= Environment.TickCount)
+                    else
                     {
-                        if (GameState.AnimEditorFrame[animationTimerIndex] >= frameCount)
-                        {
-                            GameState.AnimEditorFrame[animationTimerIndex] = 1;
-                        }
-                        else
-                        {
-                            GameState.AnimEditorFrame[animationTimerIndex] += 1;
-                        }
-                        GameState.AnimEditorTimer[animationTimerIndex] = Environment.TickCount;
+                        int frameWidth = Math.Max(1, img.Width / columns);
+                        // Dynamic division for height: infer square frames; if not tall enough, fall back
+                        int inferredRows = frameWidth > 0 ? img.Height / frameWidth : 0;
+                        int frameHeight = inferredRows > 0 ? frameWidth : img.Height;
+                        srcRect = new Rectangle(0, 0, frameWidth, frameHeight); // first frame only
                     }
 
-                    if (frameCountControl.Value > 0)
-                    {
-                        int frameIndex = GameState.AnimEditorFrame[animationTimerIndex] - 1;
-                        int column = frameIndex % columns;
-                        int row = frameIndex / columns;
+                    // Compute destination rectangle: native size (no upscaling), centered and clipped
+                    var bounds = drawable.Size;
+                    int drawW = Math.Min(srcRect.Width, bounds.Width);
+                    int drawH = Math.Min(srcRect.Height, bounds.Height);
+                    int offX = (bounds.Width - drawW) / 2;
+                    int offY = (bounds.Height - drawH) / 2;
+                    var destRect = new RectangleF(offX, offY, drawW, drawH);
 
-                        var srcRect = new Eto.Drawing.Rectangle(column * frameWidth, row * frameHeight, frameWidth, frameHeight);
-                        var destRect = new Eto.Drawing.RectangleF(0, 0, drawable.Width, drawable.Height);
-                        graphics.Clear(Colors.Transparent);
-                        graphics.DrawImage(img, destRect, srcRect);
-                    }
+                    graphics.DrawImage(img, destRect, srcRect);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error processing animation: {ex.Message}");
                 graphics.Clear(Colors.Transparent);
+            }
+        }
+
+    private void UpdatePreviewSize(Drawable drawable, NumericStepper animationControl, NumericStepper frameCountControl)
+        {
+            try
+            {
+                int animationNum = (int)Math.Round(animationControl.Value);
+                if (animationNum <= 0 || animationNum > GameState.NumAnimations)
+                {
+                    // fallback size
+                    return;
+                }
+
+                var imagePath = Path.Combine(DataPath.Animations, animationNum + GameState.GfxExt);
+                if (!File.Exists(imagePath))
+                {
+                    return;
+                }
+
+                using (var img = new Bitmap(imagePath))
+                {
+                    int columns = (int)Math.Round(frameCountControl.Value;
+                    int frameWidth = columns > 0 ? Math.Max(1, img.Width / columns) : img.Width;
+                    int inferredRows = frameWidth > 0 ? img.Height / frameWidth : 0;
+                    int frameHeight = columns > 0 ? (inferredRows > 0 ? frameWidth : img.Height) : img.Height;
+                    var newSize = new Size(192, 192);
+                    if (drawable.Size != newSize)
+                    {
+                        drawable.Size = newSize;
+                        drawable.MinimumSize = newSize;
+                    }
+                }
+            }
+            catch
+            {
+                // ignore sizing errors; keep current size
             }
         }
 
