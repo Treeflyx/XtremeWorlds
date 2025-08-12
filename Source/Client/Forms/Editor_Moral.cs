@@ -13,7 +13,7 @@ namespace Client
         private static Editor_Moral? _instance;
         public static Editor_Moral Instance => _instance ??= new Editor_Moral();
         private bool _suppressIndexChanged;
-        public ListBox lstIndex = new ListBox();
+        public ListBox lstIndex = new ListBox{ Width = 200 };
         public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbColor = new ComboBox();
         public CheckBox chkCanCast = new CheckBox { Text = "Can Cast" };

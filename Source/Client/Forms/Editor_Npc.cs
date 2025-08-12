@@ -163,7 +163,7 @@ namespace Client
             nudChance = new NumericStepper { MinValue = 0, MaxValue = 100, DecimalPlaces = 0, Width = 80 };
             nudChance.ValueChanged += (s, e) => { if (!_initializing) { Data.Npc[GameState.EditorIndex].DropChance[cmbDropSlot.SelectedIndex] = (int)nudChance.Value; GameState.NpcChanged[GameState.EditorIndex] = true; } };
 
-            picSprite = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Black };
+            picSprite = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Transparent };
             picSprite.Paint += (s, e) =>
             {
                 if (_spriteBitmap != null)

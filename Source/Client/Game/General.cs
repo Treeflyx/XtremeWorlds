@@ -189,9 +189,9 @@ namespace Client
                 Data.Chat[i].Text = "";
         }
 
-        public static int GetFileCount(string folderName)
+        public static int GetFileCount(string folderPath)
         {
-            string folderPath = System.IO.Path.Combine(DataPath.Graphics, folderName);
+            // folderPath is expected to be an absolute directory path (e.g., DataPath.Resources)
             if (Directory.Exists(folderPath))
             {
                 return Directory.GetFiles(folderPath, "*.png").Length; // Adjust for other formats if needed

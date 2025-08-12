@@ -241,7 +241,7 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
 
         public void DrawPreview(Graphics g, Bitmap? bmp, Size size)
         {
-            g.Clear(Colors.Black);
+            g.Clear(Colors.Transparent);
             if (bmp == null) return;
             int fw = bmp.Width / 4;
             int fh = bmp.Height / 4;

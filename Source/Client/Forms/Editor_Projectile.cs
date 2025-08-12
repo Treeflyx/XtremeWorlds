@@ -96,7 +96,7 @@ namespace Client
                 GameState.ProjectileChanged[GameState.EditorIndex] = true;
             };
 
-            picProjectile = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Black };
+            picProjectile = new Drawable { Size = new Size(96, 96), BackgroundColor = Colors.Transparent };
             picProjectile.Paint += (s, e) =>
             {
                 if (_iconBitmap != null)

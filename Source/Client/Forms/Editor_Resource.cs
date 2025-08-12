@@ -14,7 +14,7 @@ namespace Client
         private static Editor_Resource? _instance;
         public static Editor_Resource Instance => _instance ??= new Editor_Resource();
         private bool _suppressIndexChanged;
-        public ListBox lstIndex = new ListBox();
+        public ListBox lstIndex = new ListBox { Width = 200 };
         public TextBox txtName = new TextBox { Width = 200 };
         public TextBox txtMessage = new TextBox();
         public TextBox txtMessage2 = new TextBox();
@@ -31,14 +31,14 @@ namespace Client
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
         public Button btnCancel = new Button { Text = "Cancel" };
-        public Drawable picNormalpic = new Drawable { Size = new Size(96, 96) };
-        public Drawable picExhaustedPic = new Drawable { Size = new Size(96, 96) };
+        public Drawable picNormalpic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
+        public Drawable picExhaustedPic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
 
         public Editor_Resource()
         {
             _instance = this;
             Title = "Resource Editor";
-            ClientSize = new Size(760, 480);
+            ClientSize = new Size(1000, 680);
             Padding = 10;
             InitializeComponent();
             Editors.AutoSizeWindow(this, 680, 440);
@@ -75,7 +75,8 @@ namespace Client
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
+
+            picNormalpic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudNormalPic.Value), picNormalpic);
             picExhaustedPic.Paint += (s, e) => DrawSprite(e.Graphics, (int)Math.Round(nudExhaustedPic.Value), picExhaustedPic);
 
             // Layout definition
@@ -88,16 +89,29 @@ namespace Client
                 Spacing = new Size(10, 10),
                 Rows =
                 {
-                    new TableRow(new Label { Text = "Normal Pic:" }, nudNormalPic, picNormalpic,
-                              new Label { Text = "Exhausted Pic:" }, nudExhaustedPic, picExhaustedPic)
+                    new TableRow(new Label { Text = "Normal:" }, nudNormalPic, picNormalpic,
+                              new Label { Text = "Exhausted:" }, nudExhaustedPic, picExhaustedPic)
                 }
             };
 
             var rightLayout = new DynamicLayout { Spacing = new Size(5,5) };
             rightLayout.AddRow("Name:", txtName);
-            rightLayout.AddRow("Success Msg:", txtMessage);
-            rightLayout.AddRow("Empty Msg:", txtMessage2);
-            rightLayout.AddRow("Type:", cmbType);
+            // Compact rows for Success Msg, Empty Msg, and Type
+            rightLayout.Add(new TableLayout
+            {
+                Spacing = new Size(4, 4),
+                Rows = { new TableRow(new Label { Text = "Success Msg:" }, txtMessage) }
+            });
+            rightLayout.Add(new TableLayout
+            {
+                Spacing = new Size(4, 4),
+                Rows = { new TableRow(new Label { Text = "Empty Msg:" }, txtMessage2) }
+            });
+            rightLayout.Add(new TableLayout
+            {
+                Spacing = new Size(4, 4),
+                Rows = { new TableRow(new Label { Text = "Type:" }, cmbType) }
+            });
             rightLayout.Add(imagesLayout);
             rightLayout.AddRow("Reward Item:", cmbRewardItem);
             rightLayout.AddRow("Reward Exp:", nudRewardExp);
@@ -107,12 +121,13 @@ namespace Client
             // buttons moved to right panel bottom (main control view)
             rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
 
-            Content = new TableLayout
+        Content = new TableLayout
             {
                 Spacing = new Size(10,10),
                 Rows =
                 {
-                    new TableRow(new TableCell(listLayout, true), new TableCell(rightLayout, true))
+            // Left list pane fixed to preferred width (list is set to 200px)
+            new TableRow(new TableCell(listLayout), new TableCell(rightLayout, true))
                 }
             };
         }
@@ -207,16 +222,20 @@ namespace Client
                 g.Clear(Colors.Transparent);
                 return;
             }
-            var path = System.IO.Path.Combine(DataPath.Resources, spriteNum + GameState.GfxExt);
-            if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
+        var path = System.IO.Path.Combine(DataPath.Resources, spriteNum + GameState.GfxExt);
+        if (!File.Exists(path)) { g.Clear(Colors.Transparent); return; }
             try
             {
                 using (var bmp = new Bitmap(path))
                 {
-                    int fw = bmp.Width / 4;
-                    int fh = bmp.Height / 4;
-                    target.Size = new Size(fw, fh);
-                    g.DrawImage(bmp, new RectangleF(0,0,fw,fh), new Rectangle(0,0,fw,fh));
+
+            var bounds = target.Size;
+            int fw = Math.Min(bmp.Width, bounds.Width);
+            int fh = Math.Min(bmp.Height, bounds.Height);
+            int ox = (bounds.Width - fw) / 2;
+            int oy = (bounds.Height - fh) / 2;
+            g.Clear(Colors.Transparent);
+            g.DrawImage(bmp, new RectangleF(ox, oy, fw, fh), new Rectangle(0, 0, fw, fh));
                 }
             }
             catch { g.Clear(Colors.Transparent); }

@@ -93,7 +93,7 @@ namespace Client
             numIntAdd = StatAdd(Stat.Intelligence);
             numSprAdd = StatAdd(Stat.Spirit);
 
-            iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Black }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
+            iconPreview = new Drawable { Size = new Size(32,32), BackgroundColor = Colors.Transparent }; iconPreview.Paint += (s,e)=> { if(itemBmp!=null) e.Graphics.DrawImage(itemBmp,0,0); };
             iconPreview.Paint += (s,e)=> {
                 if(itemBmp!=null) {
                     int fw = itemBmp.Width / 4;
@@ -102,7 +102,7 @@ namespace Client
                     e.Graphics.DrawImage(itemBmp, new Rectangle(0,0,fw,fh), new Rectangle(0,0,fw,fh));
                 }
             };
-            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Black };
+            paperdollPreview = new Drawable { Size = new Size(64,64), BackgroundColor = Colors.Transparent };
             paperdollPreview.Paint += (s,e)=> {
                 if(paperdollBmp!=null) {
                     int fw = paperdollBmp.Width / 4;
