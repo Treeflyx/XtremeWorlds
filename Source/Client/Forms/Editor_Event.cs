@@ -18,6 +18,26 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Event? _instance;
         public static Editor_Event Instance => _instance ??= new Editor_Event();
+        // Expose a safe closer for external callers to avoid double-dispose
+        public static void CloseIfOpen()
+        {
+            var inst = _instance;
+            if (inst == null) return;
+            try
+            {
+                // Prefer Close to allow Eto to unbind cleanly, then dispose
+                inst.Close();
+                inst.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+                // already disposed; ignore
+            }
+            finally
+            {
+                _instance = null;
+            }
+        }
 
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
@@ -198,6 +218,12 @@ namespace Client
         public CheckBox optVariableAction1 = new CheckBox { Text = "Add" };
         public CheckBox optVariableAction2 = new CheckBox { Text = "Sub" };
         public CheckBox optVariableAction3 = new CheckBox { Text = "Random" };
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            if (ReferenceEquals(_instance, this)) _instance = null;
+        }
 
         // Condition numeric controls
         public NumericStepper nudCondition_PlayerVarCondition = new NumericStepper();

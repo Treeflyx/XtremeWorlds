@@ -1554,7 +1554,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
             Gui.HideChat();
 
-            Editor_Event.Instance?.Dispose();
+            Editor_Event.CloseIfOpen();
 
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
@@ -1573,7 +1573,7 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
             Gui.HideChat();
 
-            Editor_Event.Instance?.Dispose();
+            Editor_Event.CloseIfOpen();
 
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
