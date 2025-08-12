@@ -27,8 +27,7 @@ public static class WinBank
             winBank.Width - 8,
             winBank.Height - 27,
             4, 4);
-
-        var width = 76;
+        
         var height = 76;
 
         var xo = winBank.Left;
@@ -44,10 +43,10 @@ public static class WinBank
 
             var argpath1 = Path.Combine(DataPath.Gui, "35");
 
-            GameClient.RenderTexture(ref argpath1, xo + 4, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 80, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 156, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 232, y, 0, 0, width, height, width, height);
+            GameClient.RenderTexture(ref argpath1, xo + 4, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argpath1, xo + 80, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argpath1, xo + 156, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argpath1, xo + 232, y, 0, 0, 76, height, 76, height);
             GameClient.RenderTexture(ref argpath1, xo + 308, y, 0, 0, 79, height, 79, height);
 
             y += 76;

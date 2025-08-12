@@ -121,13 +121,19 @@ public static class WinChat
 
     public static void Show()
     {
+        var winChat = Gui.GetWindowByName("winChat");
+        if (winChat is null)
+        {
+            return;
+        }
+        
         var windowIndex = Gui.GetWindowIndex("winChat");
         var controlIndex = Gui.GetControlIndex("winChat", "txtChat");
 
         Gui.ShowWindow("winChat", resetPosition: false);
         Gui.HideWindow("winChatSmall");
 
-        Gui.ActiveWindow = windowIndex;
+        Gui.ActiveWindow = winChat;
         Gui.SetActiveControl(windowIndex, controlIndex);
         Gui.Windows[windowIndex].Controls[controlIndex].Visible = true;
 
@@ -137,13 +143,19 @@ public static class WinChat
 
     public static void Hide()
     {
+        var winChat = Gui.GetWindowByName("winChat");
+        if (winChat is null)
+        {
+            return;
+        }
+        
         var windowIndex = Gui.GetWindowIndex("winChat");
         var controlIndex = Gui.GetControlIndex("winChat", "txtChat");
 
         Gui.ShowWindow("winChatSmall", resetPosition: false);
         Gui.HideWindow("winChat");
 
-        Gui.ActiveWindow = windowIndex;
+        Gui.ActiveWindow = winChat;
         Gui.SetActiveControl(windowIndex, controlIndex);
         Gui.Windows[windowIndex].Controls[controlIndex].Visible = false;
 

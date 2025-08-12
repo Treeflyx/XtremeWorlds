@@ -691,8 +691,8 @@ public static class Type
     {
         public DraggablePartType Type;
         public PartOrigin Origin;
-        public long Value;
-        public long Slot;
+        public int Value;
+        public int Slot;
     }
 
     public struct CsMap
@@ -986,11 +986,6 @@ public static class Type
     }
 
     public struct Script
-    {
-        public string[] Code;
-    }
-
-    public struct Ui
     {
         public string[] Code;
     }

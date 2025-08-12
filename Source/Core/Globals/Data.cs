@@ -48,6 +48,4 @@ public static class Data
     public static TileHistory[]? TileHistory;
     public static Autotile[,]? Autotile;
     public static MapEvent[]? MapEvents;
-
-    public static Ui Ui;
 }

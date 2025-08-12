@@ -2031,20 +2031,22 @@ namespace Client
 
         public static void SetOptionsScreen()
         {
+            var windowIndex = Gui.GetWindowIndex("winOptions");
+            
             // Resolutions
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1920x1080");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1680x1050");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1600x900");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1440x900");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1440x1050");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1366x768");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1360x1024");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1360x768");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1280x1024");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1280x800");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1280x768");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1280x720");
-            Gui.Combobox_AddItem(Gui.GetWindowIndex("winOptions").ToString(), Gui.GetControlIndex("winOptions", "cmbRes"), "1120x864");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1920x1080");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1680x1050");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1600x900");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1440x900");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1440x1050");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1366x768");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1360x1024");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1360x768");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1280x1024");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1280x800");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1280x768");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1280x720");
+            Gui.Combobox_AddItem(windowIndex, Gui.GetControlIndex("winOptions", "cmbRes"), "1120x864");
 
             // fill the options screen
             {
@@ -2162,18 +2164,18 @@ namespace Client
             Gui.ShowWindow(Gui.GetWindowIndex("winPlayerMenu"));
         }
 
-        public static void SetBarWidth(ref long maxWidth, ref long width)
+        public static void SetBarWidth(ref int maxWidth, ref int width)
         {
-            long barDifference;
+            int barDifference;
 
             if (maxWidth <  width)
             {
                 // find out the amount to increase per loop
-                barDifference = (long)Math.Round((double)(width - maxWidth) / 100L) * 10L;
+                barDifference = (int)Math.Round((double)(width - maxWidth) / 100) * 10;
 
                 // if it's less than 1 then default to 1
-                if (barDifference < 0L)
-                    barDifference = 0L;
+                if (barDifference < 0)
+                    barDifference = 0;
                 
                 if (width != maxWidth && barDifference == 0L)
                 {
@@ -2186,11 +2188,11 @@ namespace Client
             else if (maxWidth > width)
             {
                 // find out the amount to increase per loop
-                barDifference = (long)Math.Round((double)(maxWidth - width) / 100) * 10L;
+                barDifference = (int)Math.Round((double)(maxWidth - width) / 100) * 10;
 
                 // if it's less than 1 then default to 1
-                if (barDifference < 0L)
-                    barDifference = 0L;
+                if (barDifference < 0)
+                    barDifference = 0;
 
                 if (maxWidth != width && barDifference == 0L)
                 {

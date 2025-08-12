@@ -12,7 +12,6 @@ using Keys = Microsoft.Xna.Framework.Input.Keys;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
-using Client.Game.Objects;
 using Client.Game.UI;
 using Client.Game.UI.Windows;
 using Client.Net;
@@ -575,7 +574,7 @@ namespace Client
 
             if (IsKeyStateActive(Keys.F5))
             {
-                Ui.Load();
+                UIScript.Load();
                 Gui.Init();
             }
 
@@ -747,14 +746,13 @@ namespace Client
             Keys key;
 
             // Check if there is an active window and that it is visible.
-            if (Gui.ActiveWindow > 0L && Gui.Windows[Gui.ActiveWindow].Visible)
+            if (Gui.ActiveWindow is not null && Gui.ActiveWindow.Visible)
             {
                 // Check if an active control exists.
-                if (Gui.Windows[Gui.ActiveWindow].ActiveControl > 0)
+                if (Gui.ActiveWindow.ActiveControl is not null)
                 {
                     // Get the active control.
-                    var activeControl = Gui.Windows[Gui.ActiveWindow]
-                        .Controls[Gui.Windows[Gui.ActiveWindow].ActiveControl];
+                    var activeControl = Gui.ActiveWindow.ActiveControl;
 
                     // Check if the Enter key is active and can be processed.
                     if (IsKeyStateActive(Keys.Enter))
@@ -765,7 +763,7 @@ namespace Client
                             activeControl.CallBack[(int) ControlState.FocusEnter].Invoke();
                         }
                         // If no callback, activate a new control.
-                        else if (Gui.ActivateControl() == 0)
+                        else if (Gui.ActivateControl() is null)
                         {
                             Gui.ActivateControl(0, false);
                         }
@@ -775,7 +773,7 @@ namespace Client
                     if (IsKeyStateActive(Keys.Tab))
                     {
                         // Handle Tab: Switch to the next control.
-                        if (Gui.ActivateControl() == 0)
+                        if (Gui.ActivateControl() is null)
                         {
                             Gui.ActivateControl(0, false);
                         }
@@ -1654,8 +1652,8 @@ namespace Client
                         tmpY = Data.MyMapNpc[(int) i].Y + 35;
 
                         // calculate the width to fill
-                        if (width > 0L)
-                            GameState.BarWidthNpcHpMax[(int) i] = (long) Math.Round(
+                        if (width > 0)
+                            GameState.BarWidthNpcHpMax[(int) i] = (int) Math.Round(
                                 Data.MyMapNpc[(int) i].Vital[(int) Vital.Health] / (double) width /
                                 (Data.Npc[(int) npcNum].Hp / (double) width) * width);
 
@@ -1690,8 +1688,8 @@ namespace Client
                         tmpY = GetPlayerRawY((int) i) + 35;
 
                         // calculate the width to fill
-                        if (width > 0L)
-                            GameState.BarWidthPlayerHpMax[(int) i] = (long) Math.Round(
+                        if (width > 0)
+                            GameState.BarWidthPlayerHpMax[(int) i] = (int) Math.Round(
                                 GetPlayerVital((int) i, Vital.Health) / (double) width /
                                 (GetPlayerMaxVital((int) i, Vital.Health) / (double) width) * width);
 
@@ -1720,8 +1718,8 @@ namespace Client
                         tmpY = GetPlayerRawY((int)i) + 35 + height;
 
                         // calculate the width to fill
-                        if (width > 0L)
-                            GameState.BarWidthPlayerSpMax[(int) i] = (long) Math.Round(
+                        if (width > 0)
+                            GameState.BarWidthPlayerSpMax[(int) i] = (int) Math.Round(
                                 GetPlayerVital((int) i, Vital.Stamina) / (double) width /
                                 (GetPlayerMaxVital((int) i, Vital.Stamina) / (double) width) * width);
 
@@ -2824,7 +2822,7 @@ namespace Client
 
         public static void Render_Menu()
         {
-            Gui.DrawMenuBg();
+            Gui.DrawMenuBackground();
             Gui.Render();
 
             //RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);

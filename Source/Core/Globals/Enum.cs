@@ -502,39 +502,6 @@ public enum Quadrant
 }
 
 /// <summary>
-/// Defines UI control types.
-/// </summary>
-public enum ControlType
-{
-    Label,
-    Window,
-    Button,
-    TextBox,
-    Scrollbar,
-    PictureBox,
-    Checkbox,
-    ComboBox,
-    ComboMenu
-}
-
-/// <summary>
-/// Represents the state of a UI entity or control.
-/// </summary>
-public enum ControlState
-{
-    Normal,
-    Hover,
-    MouseDown,
-    MouseMove,
-    MouseUp,
-    DoubleClick,
-    FocusEnter,
-    MouseScroll,
-    KeyDown,
-    KeyUp
-}
-
-/// <summary>
 /// Defines text alignment.
 /// </summary>
 public enum Alignment

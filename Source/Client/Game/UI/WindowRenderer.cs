@@ -5,14 +5,8 @@ namespace Client.Game.UI;
 
 public static class WindowRenderer
 {
-    public static void Render(int windowIndex)
+    public static void Render(Window window)
     {
-        if (windowIndex < 0 || windowIndex >= Gui.Windows.Count)
-        {
-            return;
-        }
-
-        var window = Gui.Windows[windowIndex];
         if (window.Censor)
         {
             window.Text = Text.CensorText(window.Text);
@@ -37,13 +31,11 @@ public static class WindowRenderer
 
             for (var i = 0; i < window.List.Count - 1; i++)
             {
-                // Render selection
                 if (i == window.Value || i == window.Group)
                 {
                     GameClient.RenderTexture(ref path, x, y - 1, 0, 0, window.Width, 15, 255, 0, 0, 0);
                 }
-
-                // Render the text, centered
+                
                 var left = x + window.Width / 2 - Text.GetTextWidth(window.List[i], window.Font) / 2;
 
                 Text.RenderText(window.List[i], left, y, Color.White, Color.Black);

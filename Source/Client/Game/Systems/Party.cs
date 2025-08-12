@@ -1,4 +1,5 @@
 ﻿using Client.Game.UI;
+using Client.Game.UI.Windows;
 using Client.Net;
 using Core;
 using Core.Globals;
@@ -48,7 +49,7 @@ namespace Client
             if (inParty == -1)
             {
                 ClearParty();
-                Gui.UpdatePartyInterface();
+                WinParty.Update();
                 // exit out early
                 return;
             }
@@ -59,7 +60,7 @@ namespace Client
                 Data.MyParty.Member[i] = buffer.ReadInt32();
             Data.MyParty.MemberCount = buffer.ReadInt32();
 
-            Gui.UpdatePartyInterface();
+            WinParty.Update();
         }
 
         public static void Packet_PartyVitals(ReadOnlyMemory<byte> data)

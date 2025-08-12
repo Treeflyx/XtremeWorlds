@@ -61,18 +61,18 @@ namespace Client
         public static byte CharNum;
 
         // elastic bars
-        public static long[] BarWidthNpcHp = new long[(Constant.MaxMapNpcs)];
-        public static long[] BarWidthPlayerHp = new long[Constant.MaxPlayers];
-        public static long[] BarWidthPlayerSp = new long[Constant.MaxPlayers];
-        public static long[] BarWidthNpcHpMax = new long[(Constant.MaxMapNpcs)];
-        public static long[] BarWidthPlayerHpMax = new long[Constant.MaxPlayers];
-        public static long[] BarWidthPlayerSpMax = new long[Constant.MaxPlayers];
-        public static long BarWidthGuiHp;
-        public static long BarWidthGuiSp;
-        public static long BarWidthGuiExp;
-        public static long BarWidthGuiHpMax;
-        public static long BarWidthGuiSpMax;
-        public static long BarWidthGuiExpMax;
+        public static int[] BarWidthNpcHp = new int[Constant.MaxMapNpcs];
+        public static int[] BarWidthPlayerHp = new int[Constant.MaxPlayers];
+        public static int[] BarWidthPlayerSp = new int[Constant.MaxPlayers];
+        public static int[] BarWidthNpcHpMax = new int[Constant.MaxMapNpcs];
+        public static int[] BarWidthPlayerHpMax = new int[Constant.MaxPlayers];
+        public static int[] BarWidthPlayerSpMax = new int[Constant.MaxPlayers];
+        public static int BarWidthGuiHp;
+        public static int BarWidthGuiSp;
+        public static int BarWidthGuiExp;
+        public static int BarWidthGuiHpMax;
+        public static int BarWidthGuiSpMax;
+        public static int BarWidthGuiExpMax;
 
         public static int CurrentEvents;
 

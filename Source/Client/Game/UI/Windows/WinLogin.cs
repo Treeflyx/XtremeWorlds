@@ -6,7 +6,33 @@ namespace Client.Game.UI.Windows;
 
 public static class WinLogin
 {
-    public static void OnRegisterClick()
+    public static void OnExit()
+    {
+        General.DestroyGame();
+    }
+    
+    public static void OnLogin()
+    {
+        var window = Gui.GetWindowByName("winLogin");
+        if (window is null)
+        {
+            return;
+        }
+
+        var username = window.GetChild("txtUsername").Text;
+        var password = window.GetChild("txtPassword").Text;
+
+        if (Network.IsConnected)
+        {
+            Sender.SendLogin(username, password);
+        }
+        else
+        {
+            GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", DialogueType.Alert);
+        }
+    }
+
+    public static void OnRegister()
     {
         if (!Network.IsConnected)
         {
@@ -33,9 +59,9 @@ public static class WinLogin
         {
             return;
         }
-
-        var control = winLogin.Controls[Gui.GetControlIndex("winLogin", "chkSaveUsername")];
-        if (control.Value == 0)
+        
+        var checkBoxSaveUsername = winLogin.GetChild("chkSaveUsername");
+        if (checkBoxSaveUsername.Value == 0)
         {
             SettingsManager.Instance.SaveUsername = false;
             SettingsManager.Instance.Username = "";

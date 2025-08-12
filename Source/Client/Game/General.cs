@@ -1,5 +1,4 @@
-﻿using Client.Game.Objects;
-using Core;
+﻿using Core;
 using System.Runtime.InteropServices;
 using Client.Game.UI;
 using Client.Net;
@@ -54,7 +53,7 @@ namespace Client
             CheckDesigns();
             Sound.InitializeBass();
             _ = Network.Start();
-            Ui.Load();
+            UIScript.Load();
             Gui.Init();
             GameState.Ping = -1;
         }

@@ -34,15 +34,15 @@ public class Control
     public bool Enabled { get; set; }
     public Action? OnDraw { get; set; }
     public string Tooltip { get; set; } = string.Empty;
-    public long Group { get; set; }
+    public int Group { get; set; }
     public bool Censor { get; set; }
-    public long Icon { get; set; }
+    public int Icon { get; set; }
     public ControlState State { get; set; }
-    public List<string> List { get; set; } = [];
+    public List<string> List { get; } = [];
 
     // Arrays for states
     public List<Design> Design { get; set; } = [];
-    public List<long> Image { get; set; } = [];
+    public List<int> Image { get; set; } = [];
     public List<string> Texture { get; set; } = [];
-    public List<Action> CallBack { get; set; } = [];
+    public List<Action?> CallBack { get; set; } = [];
 }

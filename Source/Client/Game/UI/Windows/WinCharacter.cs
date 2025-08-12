@@ -15,14 +15,14 @@ public static class WinCharacter
             return;
         }
         
-        var w = Gui.GetWindowByName("winCharacter");
-        if (w is null)
+        var winCharacter = Gui.GetWindowByName("winCharacter");
+        if (winCharacter is null)
         {
             return;
         }
 
-        var x = w.Left;
-        var y = w.Top;
+        var x = winCharacter.Left;
+        var y = winCharacter.Top;
 
         // Render bottom
         var argpath = Path.Combine(DataPath.Gui, "37");
@@ -49,8 +49,8 @@ public static class WinCharacter
                 continue;
             }
             
-            x = w.Left + GameState.EqLeft + (GameState.EqOffsetX + 32) * (i % GameState.EqColumns);
-            y = w.Top + GameState.EqTop;
+            x = winCharacter.Left + GameState.EqLeft + (GameState.EqOffsetX + 32) * (i % GameState.EqColumns);
+            y = winCharacter.Top + GameState.EqTop;
             
             var path = Path.Combine(DataPath.Items, itemIcon.ToString());
             

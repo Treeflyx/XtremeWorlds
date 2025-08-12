@@ -17,15 +17,15 @@ public class Window
     public bool Visible { get; set; }
     public bool CanDrag { get; set; }
     public Font Font { get; set; }
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
     public int XOffset { get; set; }
     public int YOffset { get; set; }
     public int Icon { get; set; }
     public bool Enabled { get; set; }
     public long Value { get; set; }
-    public long Group { get; set; }
+    public int Group { get; set; }
     public byte ZChange { get; set; }
-    public long ZOrder { get; set; }
+    public int ZOrder { get; set; }
     public Action? OnDraw { get; set; }
     public bool Censor { get; set; }
     public bool ClickThrough { get; set; }
@@ -37,14 +37,14 @@ public class Window
 
     // Arrays for states
     public List<Design> Design { get; set; } = [];
-    public List<long>? Image { get; set; }
-    public List<Action>? CallBack { get; set; }
+    public List<int>? Image { get; set; }
+    public List<Action?> CallBack { get; set; } = [];
 
     // Controls in this window
-    public List<Control> Controls { get; set; } = [];
-    public int LastControl { get; set; }
-    public int ActiveControl { get; set; }
-    
+    public List<Control> Controls { get; } = [];
+    public Control? LastControl { get; set; }
+    public Control? ActiveControl { get; set; }
+
     public Control GetChild(string controlName)
     {
         foreach (var control in Controls)
@@ -56,5 +56,18 @@ public class Window
         }
 
         throw new InvalidOperationException("Control not found: " + controlName);
+    }
+
+    public bool SetActiveControl(Control control)
+    {
+        switch (Type)
+        {
+            case ControlType.TextBox:
+                LastControl = ActiveControl;
+                ActiveControl = control;
+                return true;
+        }
+
+        return false;
     }
 }

@@ -74,13 +74,13 @@ public static class WinNewChar
             return;
         }
 
-        if (winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkMale")].Value != 0)
+        if (winNewChar.GetChild("chkMale").Value != 0)
         {
             return;
         }
 
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkFemale")].Value = 0;
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkMale")].Value = 1;
+        winNewChar.GetChild("chkFemale").Value = 0;
+        winNewChar.GetChild("chkMale").Value = 1;
     }
 
     public static void OnFemaleChecked()
@@ -94,13 +94,13 @@ public static class WinNewChar
             return;
         }
 
-        if (winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkFemale")].Value != 0)
+        if (winNewChar.GetChild("chkFemale").Value != 0)
         {
             return;
         }
 
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkFemale")].Value = 1;
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkMale")].Value = 0;
+        winNewChar.GetChild("chkFemale").Value = 1;
+        winNewChar.GetChild("chkMale").Value = 0;
     }
 
     public static void OnCancel()
@@ -111,9 +111,9 @@ public static class WinNewChar
             return;
         }
 
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "txtName")].Text = "";
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkMale")].Value = 0;
-        winNewChar.Controls[Gui.GetControlIndex("winNewChar", "chkFemale")].Value = 0;
+        winNewChar.GetChild("txtName").Text = "";
+        winNewChar.GetChild("chkMale").Value = 0;
+        winNewChar.GetChild("chkFemale").Value = 0;
 
         GameState.NewCharSprite = 1;
         GameState.NewCnarGender = Sex.Male;
@@ -130,9 +130,7 @@ public static class WinNewChar
             return;
         }
 
-        var name = Gui.FilterUnsupportedCharacters(
-            winNewChar.Controls[Gui.GetControlIndex("winNewChar", "txtName")].Text,
-            winNewChar.Controls[Gui.GetControlIndex("winNewChar", "txtName")].Font);
+        var name = winNewChar.GetChild("txtName").Text;
 
         Gui.HideWindows();
 

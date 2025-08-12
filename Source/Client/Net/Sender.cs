@@ -109,23 +109,7 @@ public static class Sender
 
         Network.Send(packetWriter);
     }
-
-    public static void btnLogin_Click()
-    {
-        var window = Gui.Windows[Gui.GetWindowIndex("winLogin")];
-        var username = window.Controls[Gui.GetControlIndex("winLogin", "txtUsername")].Text;
-        var password = window.Controls[Gui.GetControlIndex("winLogin", "txtPassword")].Text;
-
-        if (Network.IsConnected)
-        {
-            SendLogin(username, password);
-        }
-        else
-        {
-            GameLogic.Dialogue("Invalid Connection", "Cannot connect to game server.", "Please try again.", DialogueType.Alert);
-        }
-    }
-
+    
     public static void GetPing()
     {
         var packetWriter = new PacketWriter(4);

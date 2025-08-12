@@ -158,7 +158,7 @@ public static class DesignRenderer
     {
         const int borderSize = 4;
 
-        Gui.RenderControl_Square(1, left, top, width, height, borderSize, alpha);
+        RenderSquare(1, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gui, Textures.Wood);
 
@@ -173,7 +173,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(8, left + borderSize, top + borderSize, width, height, borderSize, alpha);
+        RenderSquare(8, left + borderSize, top + borderSize, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gui, Textures.Wood);
 
@@ -188,14 +188,14 @@ public static class DesignRenderer
     {
         const int borderSize = 4;
 
-        Gui.RenderControl_Square(9, left, top, width, height, borderSize, alpha);
+        RenderSquare(9, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderGreen(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(2, left, top, width, height, borderSize, alpha);
+        RenderSquare(2, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Wood);
 
@@ -210,7 +210,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(2, left, top, width, height, borderSize, alpha);
+        RenderSquare(2, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Green);
 
@@ -225,7 +225,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(2, left, top, width, height, borderSize, alpha);
+        RenderSquare(2, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.GreenClick);
 
@@ -240,7 +240,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(3, left, top, width, height, borderSize, alpha);
+        RenderSquare(3, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Red);
 
@@ -255,7 +255,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(3, left, top, width, height, borderSize, alpha);
+        RenderSquare(3, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.RedHover);
 
@@ -270,7 +270,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(3, left, top, width, height, borderSize, alpha);
+        RenderSquare(3, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.RedClick);
 
@@ -285,7 +285,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(14, left, top, width, height, borderSize, alpha);
+        RenderSquare(14, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Blue);
 
@@ -301,7 +301,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(14, left, top, width, height, borderSize, alpha);
+        RenderSquare(14, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.BlueHover);
 
@@ -317,7 +317,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(14, left, top, width, height, borderSize, alpha);
+        RenderSquare(14, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.BlueClick);
 
@@ -333,7 +333,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(15, left, top, width, height, borderSize, alpha);
+        RenderSquare(15, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Orange);
 
@@ -349,7 +349,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(15, left, top, width, height, borderSize, alpha);
+        RenderSquare(15, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.OrangeHover);
 
@@ -360,7 +360,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(15, left, top, width, height, borderSize, alpha);
+        RenderSquare(15, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.OrangeClick);
 
@@ -376,7 +376,7 @@ public static class DesignRenderer
     {
         const int borderSize = 2;
 
-        Gui.RenderControl_Square(17, left, top, width, height, borderSize, alpha);
+        RenderSquare(17, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, Textures.Grey);
 
@@ -392,49 +392,49 @@ public static class DesignRenderer
     {
         const int borderSize = 20;
 
-        Gui.RenderControl_Square(4, left, top, width, height, borderSize, alpha);
+        RenderSquare(4, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderBlackOval(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 4;
 
-        Gui.RenderControl_Square(5, left, top, width, height, borderSize, alpha);
+        RenderSquare(5, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderTextBlack(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 5;
 
-        Gui.RenderControl_Square(6, left, top, width, height, borderSize, alpha);
+        RenderSquare(6, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderTextWhite(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 5;
 
-        Gui.RenderControl_Square(7, left, top, width, height, borderSize, alpha);
+        RenderSquare(7, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderTextBlackSquare(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 4;
 
-        Gui.RenderControl_Square(10, left, top, width, height, borderSize, alpha);
+        RenderSquare(10, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderWindowDescription(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 8;
 
-        Gui.RenderControl_Square(11, left, top, width, height, borderSize, alpha);
+        RenderSquare(11, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderDescriptionPicture(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 3;
 
-        Gui.RenderControl_Square(12, left, top, width, height, borderSize, alpha);
+        RenderSquare(12, left, top, width, height, borderSize, alpha);
 
         var path = Path.Combine(DataPath.Gradients, "7");
 
@@ -450,7 +450,7 @@ public static class DesignRenderer
     {
         const int borderSize = 35;
 
-        Gui.RenderControl_Square(13,
+        RenderSquare(13,
             left - borderSize,
             top - borderSize,
             width + borderSize * 2,
@@ -462,13 +462,45 @@ public static class DesignRenderer
     {
         const int borderSize = 12;
 
-        Gui.RenderControl_Square(16, left, top, width, height, borderSize, alpha);
+        RenderSquare(16, left, top, width, height, borderSize, alpha);
     }
 
     private static void RenderTileSelectionBox(int left, int top, int width, int height, int alpha)
     {
         const int borderSize = 4;
 
-        Gui.RenderControl_Square(18, left, top, width, height, borderSize, alpha);
+        RenderSquare(18, left, top, width, height, borderSize, alpha);
+    }
+    
+    private static void RenderSquare(int sprite, int x, int y, int width, int height, int borderSize, int alpha = 255)
+    {
+        var path = Path.Combine(DataPath.Designs, sprite.ToString());
+        
+        // Draw center
+        GameClient.RenderTexture(ref path, x + borderSize, y + borderSize, borderSize + 1, borderSize + 1, width - borderSize * 2, height - borderSize * 2, alpha: (byte) alpha);
+
+        // Draw top side
+        GameClient.RenderTexture(ref path, x + borderSize, y, borderSize, 0, width - borderSize * 2, borderSize, 1, borderSize, (byte) alpha);
+
+        // Draw left side
+        GameClient.RenderTexture(ref path, x, y + borderSize, 0, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte) alpha);
+
+        // Draw right side
+        GameClient.RenderTexture(ref path, x + width - borderSize, y + borderSize, borderSize + 3, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte) alpha);
+
+        // Draw bottom side
+        GameClient.RenderTexture(ref path, x + borderSize, y + height - borderSize, borderSize, borderSize + 3, width - borderSize * 2, borderSize, 1, borderSize, (byte) alpha);
+
+        // Draw top left corner
+        GameClient.RenderTexture(ref path, x, y, 0, 0, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+
+        // Draw top right corner
+        GameClient.RenderTexture(ref path, x + width - borderSize, y, borderSize + 3, 0, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+
+        // Draw bottom left corner
+        GameClient.RenderTexture(ref path, x, y + height - borderSize, 0, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+
+        // Draw bottom right corner
+        GameClient.RenderTexture(ref path, x + width - borderSize, y + height - borderSize, borderSize + 3, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
     }
 }
