@@ -123,13 +123,14 @@ namespace Client
                 Spacing = new Size(4,4),
                 Rows =
                 {
-                    new TableRow(new Label{Text="Name"}, txtName),
-                    new TableRow(new Label{Text="Description"}, txtDescription),
-                    new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
-                    new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="SubType"}, cmbSubType),
-                    new TableRow(new Label{Text="Animation"}, cmbAnimation, new Label{Text="Bind"}, cmbBind),
-                    new TableRow(new Label{Text="Item Lvl"}, numItemLvl, new Label{Text="Price"}, numPrice),
-                    new TableRow(new Label{Text="Rarity"}, numRarity, chkStackable, null),
+                    // Move Paperdoll next to Name to use empty space
+                    new TableRow(new Label{Text="Name"}, txtName, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
+                    // Move SubType up next to Description for quicker access
+                    new TableRow(new Label{Text="Description"}, txtDescription, new Label{Text="SubType"}, cmbSubType),
+                    new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, null, null),
+                    new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="Animation"}, cmbAnimation),
+                    new TableRow(new Label{Text="Bind"}, cmbBind, new Label{Text="Item Lvl"}, numItemLvl),
+                    new TableRow(new Label{Text="Price"}, numPrice, new Label{Text="Rarity"}, numRarity, chkStackable),
                     new TableRow(btnSpawn, numSpawnAmount, null, null)
                 }
             });
