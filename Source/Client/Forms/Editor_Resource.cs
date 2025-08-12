@@ -129,16 +129,19 @@ namespace Client
                 cmbAnimation.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
 
             cmbType.Items.Clear();
-            cmbType.Items.Add("Tree");
-            cmbType.Items.Add("Mine");
-            cmbType.Items.Add("Herb");
-            cmbType.Items.Add("Other");
+            foreach (var name in Enum.GetValues(typeof(ResourceSkill)))
+            {
+                if (name is ToolType toolType && toolType != ToolType.None)
+                {
+                    cmbTool.Items.Add(name.ToString());
+                }
+            }
+            
 
+            // Populate from ToolType enum to stay in sync with core values
             cmbTool.Items.Clear();
-            cmbTool.Items.Add("None");
-            cmbTool.Items.Add("Axe");
-            cmbTool.Items.Add("Pickaxe");
-            cmbTool.Items.Add("Scythe");
+            foreach (var name in Enum.GetNames(typeof(ToolType)))
+                cmbTool.Items.Add(name);
 
             nudExhaustedPic.MaxValue = GameState.NumResources;
             nudNormalPic.MaxValue = GameState.NumResources;

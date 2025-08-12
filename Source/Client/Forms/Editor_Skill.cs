@@ -69,10 +69,10 @@ namespace Client
         private void InitializeComponent()
         {
             // Populate static combos (basic placeholders; actual data is set elsewhere)
-            cmbType.Items.Add("Damage");
-            cmbType.Items.Add("Heal");
-            cmbType.Items.Add("Buff");
-            cmbType.Items.Add("Debuff");
+            // Populate from SkillEffect enum to match Data.Skill.Type
+            cmbType.Items.Clear();
+            foreach (var name in Enum.GetNames(typeof(SkillEffect)))
+                cmbType.Items.Add(name);
 
             cmbAccessReq.Items.Add("None");
             cmbAccessReq.Items.Add("Admin");
