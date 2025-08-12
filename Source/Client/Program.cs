@@ -2542,12 +2542,9 @@ static void LoadFonts()
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Animation.AnimInstance == null)
-                        break;
-
                     if (Animation.AnimInstance[i].Used[0])
                     {
-                        Animation.DrawAnimation(i, 0);
+                        Animation.Draw(i, 0);
                     }                
                 }
             }
@@ -2681,12 +2678,9 @@ static void LoadFonts()
             {
                 for (i = 0; i < byte.MaxValue; i++)
                 {
-                    if (Animation.AnimInstance == null)
-                        break;
-
                     if (Animation.AnimInstance[i].Used[1])
                         {
-                            Animation.DrawAnimation(i, 1);
+                            Animation.Draw(i, 1);
                         }
                     }              
             }
