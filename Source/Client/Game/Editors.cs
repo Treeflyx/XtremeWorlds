@@ -34,16 +34,7 @@ namespace Client
         #region Animation Editor
 
         public static void AnimationEditorInit()
-        {
-            var list = Editor_Animation.Instance!.lstIndex!;
-            var idx = list.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (list.Items.Count > 0) list.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
-            
+        {  
             ref var withBlock = ref Data.Animation[GameState.EditorIndex];
             if (string.IsNullOrEmpty(withBlock.Sound))
             {
@@ -211,15 +202,6 @@ namespace Client
 
         public static void ResourceEditorInit()
         {
-            // Removed unused local 'i' and added safe index guard
-            var list = Editor_Resource.Instance.lstIndex;
-            var idx = list.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (list.Items.Count > 0) list.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
             var withBlock = Editor_Resource.Instance;
             withBlock.txtName.Text = Data.Resource[GameState.EditorIndex].Name;
             withBlock.txtMessage.Text = Data.Resource[GameState.EditorIndex].SuccessMessage;
@@ -369,16 +351,7 @@ namespace Client
 
         #region Shop editor
         public static void ShopEditorInit()
-        {
-            var list = Editor_Shop.Instance.lstIndex;
-            var idx = list.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (list.Items.Count > 0) list.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
-            
+        {            
             var withBlock = Editor_Shop.Instance;
             withBlock.txtName.Text = Data.Shop[GameState.EditorIndex].Name;
 
@@ -767,16 +740,7 @@ namespace Client
 
         #region Projectile Editor
         public static void ProjectileEditorInit()
-        {
-            var list = Editor_Projectile.Instance.lstIndex;
-            var idx = list.SelectedIndex;
-            if (idx < 0)
-            {
-                idx = 0;
-                if (list.Items.Count > 0) list.SelectedIndex = 0;
-            }
-            GameState.EditorIndex = idx;
-            
+        {            
             ref var withBlock = ref Data.Projectile[GameState.EditorIndex];
             Editor_Projectile.Instance.txtName.Text = Strings.Trim(withBlock.Name);
             Editor_Projectile.Instance.nudPic.Value = withBlock.Sprite;
