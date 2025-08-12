@@ -391,6 +391,21 @@ namespace Client
         public static int CurAutotileType;
         public static int CurTileset;
 
+        // Thread-safe mirrors of editor tool radio button states (avoids cross-thread UI access)
+        public static bool OptInfo;         // Info mode
+        public static bool OptBlocked;      // Blocked tile
+        public static bool OptWarp;         // Warp attribute
+        public static bool OptItem;         // Item attribute
+        public static bool OptNpcAvoid;     // NPC avoid attribute
+        public static bool OptResource;     // Resource attribute
+        public static bool OptNpcSpawn;     // NPC spawn attribute
+        public static bool OptShop;         // Shop attribute
+        public static bool OptBank;         // Bank attribute
+        public static bool OptHeal;         // Heal attribute
+        public static bool OptTrap;         // Trap attribute
+        public static bool OptAnimation;    // Animation attribute
+        public static bool OptNoCrossing;   // No Crossing attribute
+
         // Editors
         public static bool InitEditor;
         public static bool InitMapEditor;
