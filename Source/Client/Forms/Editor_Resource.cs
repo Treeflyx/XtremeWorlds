@@ -16,18 +16,18 @@ namespace Client
         private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox { Width = 200 };
         public TextBox txtName = new TextBox { Width = 200 };
-        public TextBox txtMessage = new TextBox();
-        public TextBox txtMessage2 = new TextBox();
-        public ComboBox cmbType = new ComboBox();
-        public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0 };
-        public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0 };
-        public ComboBox cmbRewardItem = new ComboBox();
-        public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
-        public ComboBox cmbTool = new ComboBox();
-        public NumericStepper nudHealth = new NumericStepper { MinValue = 0 };
-        public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000 };
-        public ComboBox cmbAnimation = new ComboBox();
-        public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0 };
+    public TextBox txtMessage = new TextBox { Width = 200 };
+    public TextBox txtMessage2 = new TextBox { Width = 200 };
+    public ComboBox cmbType = new ComboBox { Width = 200 };
+    public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0, Width = 80 };
+    public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0, Width = 80 };
+    public ComboBox cmbRewardItem = new ComboBox { Width = 200 };
+    public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+    public ComboBox cmbTool = new ComboBox { Width = 200 };
+    public NumericStepper nudHealth = new NumericStepper { MinValue = 0, Width = 100 };
+    public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+    public ComboBox cmbAnimation = new ComboBox { Width = 200 };
+    public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0, Width = 100 };
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
         public Button btnCancel = new Button { Text = "Cancel" };
@@ -84,42 +84,94 @@ namespace Client
             listLayout.AddRow(new Label { Text = "Resources", Font = SystemFonts.Bold(12) });
             listLayout.Add(lstIndex, yscale: true);
 
-            var imagesLayout = new TableLayout
+        var imagesLayout = new TableLayout
             {
                 Spacing = new Size(10, 10),
                 Rows =
                 {
-                    new TableRow(new Label { Text = "Normal:" }, nudNormalPic, picNormalpic,
-                              new Label { Text = "Exhausted:" }, nudExhaustedPic, picExhaustedPic)
+            new TableRow(new Label { Text = "Normal:" }, nudNormalPic, picNormalpic,
+                  new Label { Text = "Exhausted:" }, nudExhaustedPic, picExhaustedPic)
                 }
             };
 
-            var rightLayout = new DynamicLayout { Spacing = new Size(5,5) };
-            rightLayout.AddRow("Name:", txtName);
-            // Compact rows for Success Msg, Empty Msg, and Type
-            rightLayout.Add(new TableLayout
+            var rightLayout = new DynamicLayout { Spacing = new Size(5,5), Padding = new Padding(0) };
+            // Top fields in a dedicated 2-column grid with a scaling spacer column
+            var fieldsLayout = new TableLayout
             {
-                Spacing = new Size(4, 4),
-                Rows = { new TableRow(new Label { Text = "Success Msg:" }, txtMessage) }
-            });
-            rightLayout.Add(new TableLayout
-            {
-                Spacing = new Size(4, 4),
-                Rows = { new TableRow(new Label { Text = "Empty Msg:" }, txtMessage2) }
-            });
-            rightLayout.Add(new TableLayout
-            {
-                Spacing = new Size(4, 4),
-                Rows = { new TableRow(new Label { Text = "Type:" }, cmbType) }
-            });
+                Spacing = new Size(5, 6),
+                Rows =
+                {
+                    new TableRow(
+                        new TableCell(new Label { Text = "Name:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtName, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Success Msg:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtMessage, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Empty Msg:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(txtMessage2, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    new TableRow(
+                        new TableCell(new Label { Text = "Type:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbType, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    )
+                }
+            };
+            rightLayout.Add(fieldsLayout);
             rightLayout.Add(imagesLayout);
-            rightLayout.AddRow("Reward Item:", cmbRewardItem);
-            rightLayout.AddRow("Reward Exp:", nudRewardExp);
-            rightLayout.AddRow("Tool Req:", cmbTool, "Animation:", cmbAnimation);
-            rightLayout.AddRow("Health:", nudHealth, "Respawn:", nudRespawn);
-            rightLayout.AddRow("Level Req:", nudLvlReq);
+
+            // Remaining fields in another table to keep pairs tight to labels
+            var detailsLayout = new TableLayout
+            {
+                Spacing = new Size(5, 6),
+                Rows =
+                {
+                    // Reward Item
+                    new TableRow(
+                        new TableCell(new Label { Text = "Reward Item:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbRewardItem, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Reward Exp
+                    new TableRow(
+                        new TableCell(new Label { Text = "Reward Exp:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudRewardExp, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Tool Req / Animation
+                    new TableRow(
+                        new TableCell(new Label { Text = "Tool Req:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbTool, scaleWidth: false),
+                        new TableCell(new Label { Text = "Animation:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(cmbAnimation, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Health / Respawn
+                    new TableRow(
+                        new TableCell(new Label { Text = "Health:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudHealth, scaleWidth: false),
+                        new TableCell(new Label { Text = "Respawn:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudRespawn, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    ),
+                    // Level Req
+                    new TableRow(
+                        new TableCell(new Label { Text = "Level Req:", TextAlignment = TextAlignment.Left }, scaleWidth: false),
+                        new TableCell(nudLvlReq, scaleWidth: false),
+                        new TableCell(null, scaleWidth: true)
+                    )
+                }
+            };
+            rightLayout.Add(detailsLayout);
+
             // buttons moved to right panel bottom (main control view)
-            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
+            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalContentAlignment = HorizontalAlignment.Left, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
 
         Content = new TableLayout
             {
