@@ -12,6 +12,7 @@ namespace Client
         // Singleton instance for legacy static access
         private static Editor_Moral? _instance;
         public static Editor_Moral Instance => _instance ??= new Editor_Moral();
+        private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbColor = new ComboBox();
@@ -59,7 +60,7 @@ namespace Client
             cmbColor.SelectedIndex = 0;                                                                                                                                                                                                                                                 
 
             // Events
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             cmbColor.SelectedIndexChanged += (s, e) => CmbColor_SelectedIndexChanged();
             chkCanCast.CheckedChanged += (s, e) => chkCanCast_CheckedChanged();
@@ -105,11 +106,19 @@ namespace Client
 
         private void Editor_Moral_Load()
         {
-            lstIndex.Items.Clear();
-            for (int i = 0; i < Constant.MaxMorals; i++)
+            _suppressIndexChanged = true;
+            try
             {
-                lstIndex.Items.Add($"{i + 1}: {Data.Moral[i].Name}");
+                lstIndex.Items.Clear();
+                for (int i = 0; i < Constant.MaxMorals; i++)
+                {
+                    lstIndex.Items.Add($"{i + 1}: {Data.Moral[i].Name}");
+                }
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
             }
+            finally { _suppressIndexChanged = false; }
+
+            Editors.MoralEditorInit();
         }
 
         private void LstIndex_Click() => Editors.MoralEditorInit();
@@ -130,9 +139,14 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             Moral.ClearMoral(GameState.EditorIndex);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Moral[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Moral[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
             Editors.MoralEditorInit();
         }
 
@@ -141,9 +155,14 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Moral[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Moral[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Moral[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
 
         private void chkCanCast_CheckedChanged() => Data.Moral[GameState.EditorIndex].CanCast = chkCanCast.Checked == true;

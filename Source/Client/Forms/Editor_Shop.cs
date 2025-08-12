@@ -11,6 +11,7 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Shop? _instance;
         public static Editor_Shop Instance => _instance ??= new Editor_Shop();
+        private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox { Width = 200 };
         public NumericStepper nudBuy = new NumericStepper { MinValue = 0, MaxValue = 10000, Increment = 1 };
@@ -49,7 +50,7 @@ namespace Client
             Load += (s, e) => Editor_Shop_Load();
 
             // Event wiring
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             nudBuy.ValueChanged += (s, e) => NudBuy_ValueChanged();
             cmbItem.SelectedIndexChanged += (s, e) => { };
@@ -134,17 +135,29 @@ namespace Client
 
         private void Editor_Shop_Load()
         {
-            lstIndex.Items.Clear();
-            for (int i = 0; i < Constant.MaxShops; i++)
-                lstIndex.Items.Add($"{i + 1}: {Data.Shop[i].Name}");
-
-            cmbItem.Items.Clear();
-            cmbCostItem.Items.Clear();
-            for (int i = 0; i < Constant.MaxItems; i++)
+            _suppressIndexChanged = true;
+            try
             {
-                cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
-                cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                lstIndex.Items.Clear();
+                for (int i = 0; i < Constant.MaxShops; i++)
+                    lstIndex.Items.Add($"{i + 1}: {Data.Shop[i].Name}");
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+
+                cmbItem.Items.Clear();
+                cmbCostItem.Items.Clear();
+                for (int i = 0; i < Constant.MaxItems; i++)
+                {
+                    cmbItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                    cmbCostItem.Items.Add($"{i + 1}: {Data.Item[i].Name}");
+                }
             }
+            finally
+            {
+                _suppressIndexChanged = false;
+            }
+
+            // Single init after population
+            Editors.ShopEditorInit();
         }
 
         private void LstIndex_Click() => Editors.ShopEditorInit();
@@ -153,9 +166,14 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Shop[GameState.EditorIndex].Name = txtName.Text;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
         private void NudBuy_ValueChanged() => Data.Shop[GameState.EditorIndex].BuyRate = (int)Math.Round(nudBuy.Value);
 
@@ -189,9 +207,14 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             Shop.ClearShop(GameState.EditorIndex);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Shop[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
             Editors.ShopEditorInit();
         }
     }

@@ -14,6 +14,7 @@ namespace Client
     // Singleton access to mirror legacy usage pattern in Main.cs
     private static Editor_Job? _instance;
     public static Editor_Job Instance => _instance ??= new Editor_Job();
+    private bool _suppressIndexChanged;
 
     public ListBox? lstJobs, lstStartItems;
     public TextBox? txtName;
@@ -58,8 +59,8 @@ namespace Client
     Eto.Forms.Control BuildUi()
     {
         
-        lstJobs = new ListBox { Width = 220 };
-        lstJobs.SelectedIndexChanged += (s, e) => ChangeJob();
+    lstJobs = new ListBox { Width = 220 };
+    lstJobs.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; ChangeJob(); };
         txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
@@ -146,12 +147,18 @@ namespace Client
 
     void InitData()
     {
-        lstJobs!.Items.Clear();
-        for (int i = 0; i < Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Data.Job[i].Name);
-        lstJobs.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
-        cmbItems!.Items.Clear();
-        for (int i = 0; i < Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Data.Item[i].Name);
-        cmbItems.SelectedIndex = 0;
+        _suppressIndexChanged = true;
+        try
+        {
+            lstJobs!.Items.Clear();
+            for (int i = 0; i < Constant.MaxJobs; i++) lstJobs.Items.Add((i + 1) + ": " + Data.Job[i].Name);
+            lstJobs.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+            cmbItems!.Items.Clear();
+            for (int i = 0; i < Constant.MaxItems; i++) cmbItems.Items.Add((i + 1) + ": " + Data.Item[i].Name);
+            cmbItems.SelectedIndex = 0;
+        }
+        finally { _suppressIndexChanged = false; }
+
         ReloadPanel();
     }
 
@@ -189,9 +196,14 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
         {
             // Replace item by removing and inserting new ListItem
             int i = lstJobs.SelectedIndex;
-            lstJobs.Items.RemoveAt(i);
-            lstJobs.Items.Insert(i, new ListItem { Text = (GameState.EditorIndex + 1) + ": " + job.Name });
-            lstJobs.SelectedIndex = i;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstJobs.Items.RemoveAt(i);
+                lstJobs.Items.Insert(i, new ListItem { Text = (GameState.EditorIndex + 1) + ": " + job.Name });
+                lstJobs.SelectedIndex = i;
+            }
+            finally { _suppressIndexChanged = false; }
         }
     }
 

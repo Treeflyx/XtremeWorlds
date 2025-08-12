@@ -13,6 +13,7 @@ namespace Client
     {
         private static Editor_Item? _instance;
         public static Editor_Item Instance => _instance ??= new Editor_Item();
+        private bool _suppressIndexChanged;
 
         // Core lists/controls
         public ListBox? lstIndex; // legacy name used by Editors.cs
@@ -48,7 +49,7 @@ namespace Client
         Eto.Forms.Control BuildUi()
         {
             lstIndex = new ListBox { Width = 220, Height = 500 };
-            lstIndex.SelectedIndexChanged += (s,e) => Editors.ItemEditorInit();
+            lstIndex.SelectedIndexChanged += (s,e) => { if (_suppressIndexChanged) return; Editors.ItemEditorInit(); };
 
             txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s,e)=> UpdateName();
             txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };
@@ -230,26 +231,31 @@ namespace Client
 
     void InitData()
         {
-            lstIndex!.Items.Clear();
-            for (int i = 0; i < Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Data.Item[i].Name);
-            lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex!.Items.Clear();
+                for (int i = 0; i < Constant.MaxItems; i++) lstIndex.Items.Add((i+1)+": "+Data.Item[i].Name);
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
 
-            cmbAnimation!.Items.Clear(); for (int i=0;i<Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
-            cmbProjectile!.Items.Clear(); for (int i=0;i<Constant.MaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
-            cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
-            cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
-            cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
-            cmbAccessReq!.Items.Clear();
-            foreach (var name in Enum.GetNames(typeof(Core.Globals.AccessLevel)))
-                cmbAccessReq.Items.Add(name);
-            cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
-            cmbTool!.Items.Clear();
-            foreach (var name in Enum.GetNames(typeof(ToolType)))
-                cmbTool.Items.Add(name);
-            cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
+                cmbAnimation!.Items.Clear(); for (int i=0;i<Constant.MaxAnimations;i++) cmbAnimation.Items.Add((i+1)+": "+Data.Animation[i].Name);
+                cmbProjectile!.Items.Clear(); for (int i=0;i<Constant.MaxVariables;i++) cmbProjectile.Items.Add((i+1)+": "+Data.Projectile[i].Name);
+                cmbAmmo!.Items.Clear(); for (int i=0;i<Constant.MaxItems;i++) cmbAmmo.Items.Add((i+1)+": "+Data.Item[i].Name);
+                cmbSkills!.Items.Clear(); for (int i=0;i<Constant.MaxSkills;i++) cmbSkills.Items.Add((i+1)+": "+Data.Skill[i].Name);
+                cmbJobReq!.Items.Clear(); for (int i=0;i<Constant.MaxJobs;i++) cmbJobReq.Items.Add(Data.Job[i].Name);
+                cmbAccessReq!.Items.Clear();
+                foreach (var name in Enum.GetNames(typeof(Core.Globals.AccessLevel)))
+                    cmbAccessReq.Items.Add(name);
+                cmbBind!.Items.Clear(); cmbBind.Items.Add("None"); cmbBind.Items.Add("Pickup"); cmbBind.Items.Add("Equip");
+                cmbTool!.Items.Clear();
+                foreach (var name in Enum.GetNames(typeof(ToolType)))
+                    cmbTool.Items.Add(name);
+                cmbKnockBackTiles!.Items.Clear(); for(int i=0;i<6;i++) cmbKnockBackTiles.Items.Add(i+" tile");
 
-            cmbType!.Items.Clear();
-            foreach(var name in Enum.GetNames(typeof(ItemCategory))) cmbType.Items.Add(name);
+                cmbType!.Items.Clear();
+                foreach(var name in Enum.GetNames(typeof(ItemCategory))) cmbType.Items.Add(name);
+            }
+            finally { _suppressIndexChanged = false; }
 
             Editors.ItemEditorInit(); // will populate controls & preview
             TogglePanels();
@@ -262,9 +268,14 @@ namespace Client
             if (lstIndex!.SelectedIndex >= 0)
             {
                 int i = lstIndex.SelectedIndex;
-                lstIndex.Items.RemoveAt(i);
-                lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Data.Item[i].Name });
-                lstIndex.SelectedIndex = i;
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(i);
+                    lstIndex.Items.Insert(i, new ListItem{ Text = (i+1)+": "+ Data.Item[i].Name });
+                    lstIndex.SelectedIndex = i;
+                }
+                finally { _suppressIndexChanged = false; }
             }
             MarkChanged();
         }

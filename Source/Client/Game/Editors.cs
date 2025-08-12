@@ -208,9 +208,7 @@ namespace Client
             withBlock.nudRespawn.Value = Data.Resource[GameState.EditorIndex].RespawnTime;
             withBlock.cmbAnimation.SelectedIndex = Data.Resource[GameState.EditorIndex].Animation;
             withBlock.nudLvlReq.Value = Data.Resource[GameState.EditorIndex].LvlRequired;
-            
-            Editor_Resource.Instance.Visible = true;
-
+ 
             GameState.ResourceChanged[GameState.EditorIndex] = true;
         }
 

@@ -11,6 +11,7 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Animation? _instance;
         public static Editor_Animation Instance => _instance ??= new Editor_Animation();
+        private bool _suppressIndexChanged;
         public NumericStepper nudSprite0 = new();
         public NumericStepper nudSprite1 = new();
         public NumericStepper nudLoopCount0 = new();
@@ -78,7 +79,7 @@ namespace Client
             btnDelete.Click += BtnDelete_Click;
             btnCancel.Click += BtnCancel_Click;
             txtName.TextChanged += TxtName_TextChanged;
-            lstIndex.SelectedIndexChanged += lstIndex_Click;
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; lstIndex_Click(s, e); };
             cmbSound.SelectedIndexChanged += CmbSound_SelectedIndexChanged;
             this.Closed += Editor_Animation_FormClosing;
 
@@ -163,9 +164,14 @@ namespace Client
             int tmpindex;
             tmpindex = lstIndex.SelectedIndex;
             Data.Animation[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Animation[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Animation[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
 
         private void lstIndex_Click(object? sender, EventArgs e)
@@ -180,9 +186,14 @@ namespace Client
             Animation.ClearAnimation(GameState.EditorIndex);
 
             tmpindex = lstIndex.SelectedIndex;
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Animation[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Animation[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
 
             Editors.AnimationEditorInit();
         }
@@ -195,22 +206,30 @@ namespace Client
 
         private void Editor_Animation_Load(object? sender, EventArgs e)
         {
-            lstIndex.Items.Clear();
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.Clear();
 
-            // Add the names
-            for (int i = 0; i < Constant.MaxAnimations; i++)
-                lstIndex.Items.Add(i + 1 + ": " + Data.Animation[i].Name);
+                // Add the names
+                for (int i = 0; i < Constant.MaxAnimations; i++)
+                    lstIndex.Items.Add(i + 1 + ": " + Data.Animation[i].Name);
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
 
-            // find the music we have set
-            cmbSound.Items.Clear();
+                // find the music we have set
+                cmbSound.Items.Clear();
 
-            General.CacheSound();
+                General.CacheSound();
 
-            for (int i = 0, loopTo = Information.UBound(Sound.SoundCache); i < loopTo; i++)
-                cmbSound.Items.Add(Sound.SoundCache[i]);
+                for (int i = 0, loopTo = Information.UBound(Sound.SoundCache); i < loopTo; i++)
+                    cmbSound.Items.Add(Sound.SoundCache[i]);
 
-            nudSprite0.MaxValue = GameState.NumAnimations;
-            nudSprite1.MaxValue = GameState.NumAnimations;
+                nudSprite0.MaxValue = GameState.NumAnimations;
+                nudSprite1.MaxValue = GameState.NumAnimations;
+            }
+            finally { _suppressIndexChanged = false; }
+
+            Editors.AnimationEditorInit();
         }
 
         private void CmbSound_SelectedIndexChanged(object? sender, EventArgs e)

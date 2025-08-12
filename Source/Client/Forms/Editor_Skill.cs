@@ -16,6 +16,7 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Skill? _instance;
         public static Editor_Skill Instance => _instance ??= new Editor_Skill();
+        private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbType = new ComboBox();
@@ -89,7 +90,7 @@ namespace Client
             cmbKnockBackTiles.Items.Add("3");
 
             // Wiring events
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             cmbType.SelectedIndexChanged += (s, e) => CmbType_SelectedIndexChanged();
             nudMp.ValueChanged += (s, e) => NudMp_ValueChanged();
@@ -153,25 +154,33 @@ namespace Client
 
         private void Editor_Skill_Load()
         {
-            lstIndex.Items.Clear();
-            for (int i = 0; i < Constant.MaxSkills; i++)
-                lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Data.Skill[i].Name)}");
-
-            cmbAnimCast.Items.Clear();
-            cmbAnim.Items.Clear();
-            for (int i = 0; i < Constant.MaxAnimations; i++)
+            _suppressIndexChanged = true;
+            try
             {
-                cmbAnimCast.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
-                cmbAnim.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                lstIndex.Items.Clear();
+                for (int i = 0; i < Constant.MaxSkills; i++)
+                    lstIndex.Items.Add($"{i + 1}: {Strings.Trim(Data.Skill[i].Name)}");
+                lstIndex.SelectedIndex = GameState.EditorIndex >= 0 ? GameState.EditorIndex : 0;
+
+                cmbAnimCast.Items.Clear();
+                cmbAnim.Items.Clear();
+                for (int i = 0; i < Constant.MaxAnimations; i++)
+                {
+                    cmbAnimCast.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                    cmbAnim.Items.Add($"{i + 1}: {Data.Animation[i].Name}");
+                }
+
+                cmbProjectile.Items.Clear();
+                for (int i = 0; i < Constant.MaxAnimations; i++)
+                    cmbProjectile.Items.Add($"{i + 1}: {Data.Projectile[i].Name}");
+
+                cmbJob.Items.Clear();
+                for (int i = 0; i < Constant.MaxJobs; i++)
+                    cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
             }
+            finally { _suppressIndexChanged = false; }
 
-            cmbProjectile.Items.Clear();
-            for (int i = 0; i < Constant.MaxAnimations; i++)
-                cmbProjectile.Items.Add($"{i + 1}: {Data.Projectile[i].Name}");
-
-            cmbJob.Items.Clear();
-            for (int i = 0; i < Constant.MaxJobs; i++)
-                cmbJob.Items.Add($"{i + 1}: {Data.Job[i].Name.Trim()}");
+            Editors.SkillEditorInit();
         }
 
         private void LstIndex_Click() => Editors.SkillEditorInit();
@@ -181,9 +190,14 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             Database.ClearSkill(GameState.EditorIndex);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
             Editors.SkillEditorInit();
         }
         private void BtnLearn_Click() => Sender.SendLearnSkill(GameState.EditorIndex);
@@ -193,9 +207,14 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Skill[GameState.EditorIndex].Name = Strings.Trim(txtName.Text);
-            lstIndex.Items.RemoveAt(GameState.EditorIndex);
-            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
-            lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(GameState.EditorIndex);
+                lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Skill[GameState.EditorIndex].Name}" });
+                lstIndex.SelectedIndex = tmpindex;
+            }
+            finally { _suppressIndexChanged = false; }
         }
         private void CmbType_SelectedIndexChanged() => Data.Skill[GameState.EditorIndex].Type = (byte)cmbType.SelectedIndex;
         private void NudMp_ValueChanged() => Data.Skill[GameState.EditorIndex].MpCost = (int)Math.Round(nudMp.Value);

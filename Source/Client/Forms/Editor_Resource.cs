@@ -13,6 +13,7 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Resource? _instance;
         public static Editor_Resource Instance => _instance ??= new Editor_Resource();
+        private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox();
         public TextBox txtName = new TextBox { Width = 200 };
         public TextBox txtMessage = new TextBox();
@@ -56,7 +57,7 @@ namespace Client
             Load += (s, e) => Editor_Resource_Load();
 
             // Events wiring (converted from WinForms)
-            lstIndex.SelectedIndexChanged += (s, e) => LstIndex_Click();
+            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             txtMessage.TextChanged += (s, e) => TxtMessage_TextChanged();
             txtMessage2.TextChanged += (s, e) => TxtMessage2_TextChanged();
@@ -118,6 +119,7 @@ namespace Client
 
         private void Editor_Resource_Load()
         {
+            _suppressIndexChanged = true;
             lstIndex.Items.Clear();
             for (int i = 0; i < Constant.MaxResources; i++)
                 lstIndex.Items.Add($"{i + 1}: {Data.Resource[i].Name}");
@@ -144,6 +146,17 @@ namespace Client
             nudNormalPic.MaxValue = GameState.NumResources;
             nudRespawn.MaxValue = 1000000;
 
+            // Select current index without triggering handlers
+            if (lstIndex.Items.Count > 0)
+            {
+                var idx = GameState.EditorIndex;
+                if (idx < 0 || idx >= lstIndex.Items.Count) idx = 0;
+                lstIndex.SelectedIndex = idx;
+            }
+            _suppressIndexChanged = false;
+            // Initialize once post-population
+            if (lstIndex.SelectedIndex >= 0)
+                Editors.ResourceEditorInit();
         }
 
         private void LstIndex_Click() => Editors.ResourceEditorInit();
@@ -154,9 +167,11 @@ namespace Client
         {
             int tmpindex = lstIndex.SelectedIndex;
             MapResource.ClearResource(GameState.EditorIndex);
+            _suppressIndexChanged = true;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
             lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = false;
             Editors.ResourceEditorInit();
         }
 
@@ -165,9 +180,11 @@ namespace Client
             if (lstIndex.SelectedIndex < 0) return;
             int tmpindex = lstIndex.SelectedIndex;
             Data.Resource[GameState.EditorIndex].Name = txtName.Text;
+            _suppressIndexChanged = true;
             lstIndex.Items.RemoveAt(GameState.EditorIndex);
             lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Resource[GameState.EditorIndex].Name}" });
             lstIndex.SelectedIndex = tmpindex;
+            _suppressIndexChanged = false;
         }
 
         private void TxtMessage_TextChanged() => Data.Resource[GameState.EditorIndex].SuccessMessage = Strings.Trim(txtMessage.Text);
