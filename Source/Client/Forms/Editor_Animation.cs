@@ -334,7 +334,7 @@ namespace Client
 
                 using (var img = new Bitmap(imagePath))
                 {
-                    int columns = (int)Math.Round(frameCountControl.Value;
+                    int columns = (int)Math.Round(frameCountControl.Value);
                     int frameWidth = columns > 0 ? Math.Max(1, img.Width / columns) : img.Width;
                     int inferredRows = frameWidth > 0 ? img.Height / frameWidth : 0;
                     int frameHeight = columns > 0 ? (inferredRows > 0 ? frameWidth : img.Height) : img.Height;
