@@ -76,8 +76,10 @@ namespace Client
             foreach (var name in Enum.GetNames(typeof(SkillEffect)))
                 cmbType.Items.Add(name);
 
-            cmbAccessReq.Items.Add("None");
-            cmbAccessReq.Items.Add("Admin");
+            foreach (var name in Enum.GetNames(typeof(AccessLevel)))
+            {
+                cmbAccessReq.Items.Add(name);
+            }
 
             cmbDir.Items.Add("Up");
             cmbDir.Items.Add("Down");
