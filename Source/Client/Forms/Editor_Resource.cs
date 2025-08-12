@@ -131,14 +131,9 @@ namespace Client
             cmbType.Items.Clear();
             foreach (var name in Enum.GetValues(typeof(ResourceSkill)))
             {
-                if (name is ToolType toolType && toolType != ToolType.None)
-                {
-                    cmbTool.Items.Add(name.ToString());
-                }
+                cmbType.Items.Add(name.ToString());
             }
             
-
-            // Populate from ToolType enum to stay in sync with core values
             cmbTool.Items.Clear();
             foreach (var name in Enum.GetNames(typeof(ToolType)))
                 cmbTool.Items.Add(name);

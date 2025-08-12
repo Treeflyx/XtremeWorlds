@@ -68,8 +68,6 @@ namespace Client
 
         private void InitializeComponent()
         {
-            // Populate static combos (basic placeholders; actual data is set elsewhere)
-            // Populate from SkillEffect enum to match Data.Skill.Type
             cmbType.Items.Clear();
             foreach (var name in Enum.GetNames(typeof(SkillEffect)))
                 cmbType.Items.Add(name);
