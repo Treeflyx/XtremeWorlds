@@ -118,6 +118,10 @@ namespace Client
         // Get DPI scale factor using SDL2
         private float GetDpiScale()
         {
+            // Use preprocessor directive to exclude SDL code from macOS builds
+#if OSX || MACOS
+            return 1.0f;
+#else
             float dpi = 96.0f; // Default DPI (standard for Windows)
             int display = SDL.SDL_GetWindowDisplayIndex(Window.Handle);
             if (SDL.SDL_GetDisplayDPI(display, out float ddpi, out float hdpi, out float vdpi) == 0)
@@ -125,9 +129,9 @@ namespace Client
                 // Use diagonal DPI for scaling
                 dpi = ddpi;
             }
-
             // Calculate scale factor (96 is standard DPI)
             return dpi / 96.0f;
+#endif
         }
 
         public GameClient()

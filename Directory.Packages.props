@@ -18,11 +18,12 @@
     <PackageVersion Include="MonoGame.Extended" Version="4.1.0" />
     <PackageVersion Include="MonoGame.Framework.Content.Pipeline" Version="3.8.4" />
     <PackageVersion Include="MonoGame.Framework.DesktopGL" Version="3.8.4" />
-    <PackageVersion Include="MonoGame.Library.SDL" Version="2.32.2.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- Exclude SDL-related packages on macOS using RuntimeIdentifier -->
+    <PackageVersion Include="MonoGame.Library.SDL" Version="2.32.2.1" Condition=" '$(RuntimeIdentifier)' != 'osx-x64' and '$(RuntimeIdentifier)' != 'osx-arm64' " />
+    <PackageVersion Include="Ryujinx.SDL2-CS" Version="2.0.14" Condition=" '$(RuntimeIdentifier)' != 'osx-x64' and '$(RuntimeIdentifier)' != 'osx-arm64' " />
+    <PackageVersion Include="SDL2-CS" Version="2.0.0" Condition=" '$(RuntimeIdentifier)' != 'osx-x64' and '$(RuntimeIdentifier)' != 'osx-arm64' " />
     <PackageVersion Include="Npgsql" Version="9.0.3" />
-    <PackageVersion Include="Ryujinx.SDL2-CS" Version="2.0.14" />
-    <PackageVersion Include="SDL2-CS" Version="2.0.0" />
     <PackageVersion Include="Serilog" Version="4.3.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="4.0.0" />
