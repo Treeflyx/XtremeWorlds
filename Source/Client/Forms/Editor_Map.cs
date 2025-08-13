@@ -1,4 +1,4 @@
-﻿using Eto.Forms;
+using Eto.Forms;
 using Eto.Drawing;
 using Assimp.Configs;
 using Client.Game.UI;
@@ -40,7 +40,7 @@ namespace Client
         public RadioButton optWarp = new RadioButton{ Text = "Warp" };
         public RadioButton optBlocked = new RadioButton{ Text = "Blocked" };
         public Panel pnlBack = new Panel();
-        public ImageView picBackSelect = new ImageView();
+        public Drawable picBackSelect = new Drawable();
         public Panel pnlAttributes = new Panel();
         public GroupBox fraAnimation = new GroupBox{ Text = "Animation" };
         public ComboBox cmbAnimation = new ComboBox();
@@ -88,7 +88,7 @@ namespace Client
         public Label Label10 = new Label{ Text = "Layer" };
         public ComboBox cmbLayers = new ComboBox();
         public Label Label9 = new Label{ Text = "Tileset" };
-        public ComboBox cmbTileSets = new ComboBox();
+        public Slider sldTileSet = new Slider();
         public TabPage tpAttributes = new TabPage{ Text = "Attributes" };
         public RadioButton optNoCrossing = new RadioButton{ Text = "No Crossing" };
         public Button btnFillAttributes = new Button{ Text = "Fill" };
@@ -181,6 +181,89 @@ namespace Client
             ClientSize = new Size(1200, 800);
             InitializeToolbar();
             lblMapBrightness.Text = "Brightness:";
+
+            // Wire tileset preview drawing & input
+            picBackSelect.Size = new Size(512, 512); // default; can adjust based on tileset
+            picBackSelect.MinimumSize = new Size(256, 256);
+            picBackSelect.Paint += PicBackSelect_Paint;
+            picBackSelect.MouseDown += PicBackSelect_MouseDown;
+            picBackSelect.MouseMove += PicBackSelect_MouseMove;
+
+            // Wire tileset slider selector
+            sldTileSet.MinValue = 1;
+            sldTileSet.MaxValue = Math.Max(1, GameState.NumTileSets);
+            var initTs = GameState.CurTileset > 0 ? GameState.CurTileset : 1;
+            if (GameState.NumTileSets > 0)
+                initTs = Math.Min(Math.Max(initTs, 1), GameState.NumTileSets);
+            sldTileSet.Value = initTs;
+            sldTileSet.Width = 400;   // make the slider wider
+            sldTileSet.Height = 30;   // make the slider taller
+            sldTileSet.ValueChanged += SldTileSet_ValueChanged;
+            // Mirror radio buttons into GameState to avoid cross-thread UI access
+            optInfo.CheckedChanged += (_, __) => GameState.OptInfo = optInfo.Checked;
+            optBlocked.CheckedChanged += (_, __) => GameState.OptBlocked = optBlocked.Checked;
+            optWarp.CheckedChanged += (_, __) => GameState.OptWarp = optWarp.Checked;
+            optItem.CheckedChanged += (_, __) => GameState.OptItem = optItem.Checked;
+            optNpcAvoid.CheckedChanged += (_, __) => GameState.OptNpcAvoid = optNpcAvoid.Checked;
+            optResource.CheckedChanged += (_, __) => GameState.OptResource = optResource.Checked;
+            optNpcSpawn.CheckedChanged += (_, __) => GameState.OptNpcSpawn = optNpcSpawn.Checked;
+            optShop.CheckedChanged += (_, __) => GameState.OptShop = optShop.Checked;
+            optBank.CheckedChanged += (_, __) => GameState.OptBank = optBank.Checked;
+            optHeal.CheckedChanged += (_, __) => GameState.OptHeal = optHeal.Checked;
+            optTrap.CheckedChanged += (_, __) => GameState.OptTrap = optTrap.Checked;
+            optAnimation.CheckedChanged += (_, __) => GameState.OptAnimation = optAnimation.Checked;
+            optNoCrossing.CheckedChanged += (_, __) => GameState.OptNoCrossing = optNoCrossing.Checked;
+
+            // Set initial defaults
+            GameState.OptBlocked = true;
+            GameState.OptInfo = optInfo.Checked;
+
+            // Build a minimal layout so picBackSelect is visible in the main window
+            InitializeLayout();
+        }
+
+        /// <summary>
+        /// Minimal UI layout to host the Tiles tab and show the tileset selector and picBackSelect preview.
+        /// </summary>
+        private void InitializeLayout()
+        {
+            // Tiles tab content: label + combo + scrollable tileset preview
+            var tilesetScroll = new Scrollable
+            {
+                Content = picBackSelect,
+                Border = BorderType.None,
+                ExpandContentWidth = true,
+                ExpandContentHeight = true
+            };
+
+        var tilesTabContent = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Padding = 6,
+                Spacing = 6,
+                Items =
+                {
+                    Label9,
+                    sldTileSet,
+                    new StackLayoutItem(tilesetScroll, true)
+                }
+            };
+
+            tpTiles.Content = tilesTabContent;
+
+            // Ensure all known tabs exist (empty content is fine for now)
+            tabPages.Pages.Clear();
+            tabPages.Pages.Add(tpTiles);
+            tabPages.Pages.Add(tpAttributes);
+            tabPages.Pages.Add(tpNpcs);
+            tabPages.Pages.Add(tpSettings);
+            tabPages.Pages.Add(tpDirBlock);
+            tabPages.Pages.Add(tpEvents);
+            tabPages.Pages.Add(tpEffects);
+            tabPages.SelectedIndexChanged += tabPages_SelectedIndexChanged;
+
+            // Place the tabs as the main content so Tiles tab (with picBackSelect) is visible
+            Content = tabPages;
         }
 
         private void InitializeToolbar()
@@ -274,7 +357,8 @@ namespace Client
                 withBlock.Name = Instance.txtName.Text;
                 if (Instance.lstMusic.SelectedIndex >= 0)
                 {
-                    withBlock.Music = Instance.lstMusic.Items[Instance.lstMusic.SelectedIndex].ToString();
+                    var musicItem = Instance.lstMusic.Items[Instance.lstMusic.SelectedIndex]?.ToString() ?? string.Empty;
+                    withBlock.Music = musicItem;
                 }
                 else
                 {
@@ -312,7 +396,12 @@ namespace Client
                 withBlock.Tile = new Type.Tile[(withBlock.MaxX), (withBlock.MaxY)];
 
                 for (int i = 0; i < GameState.MaxTileHistory; i++)
-                    Data.TileHistory[i].Tile = new Tile[(withBlock.MaxX), (withBlock.MaxY)];
+                {
+                    if (Data.TileHistory![i].Tile == null)
+                        Data.TileHistory![i].Tile = new Tile[(withBlock.MaxX), (withBlock.MaxY)];
+                    else if (Data.TileHistory![i].Tile.GetLength(0) != withBlock.MaxX || Data.TileHistory![i].Tile.GetLength(1) != withBlock.MaxY)
+                        Data.TileHistory![i].Tile = new Tile[(withBlock.MaxX), (withBlock.MaxY)];
+                }
 
                 Data.Autotile = new Type.Autotile[(withBlock.MaxX), (withBlock.MaxY)];
 
@@ -334,7 +423,10 @@ namespace Client
                         Data.Autotile[x, y].Layer = new Type.QuarterTile[layerCount];
 
                         for (int i = 0; i < GameState.MaxTileHistory; i++)
-                            Data.TileHistory[i].Tile[x, y].Layer = new Type.Layer[layerCount];
+                        {
+                            if (Data.TileHistory![i].Tile?[x, y].Layer == null || Data.TileHistory![i].Tile[x, y].Layer.Length != layerCount)
+                                Data.TileHistory![i].Tile![x, y].Layer = new Type.Layer[layerCount];
+                        }
 
                         if (x < x2)
                         {
@@ -390,18 +482,23 @@ namespace Client
     private void PicBackSelect_MouseDown(object? sender, MouseEventArgs e)
         {
             MapEditorChooseTile((int)e.Buttons, e.Location.X, e.Location.Y);
+            picBackSelect.Invalidate();
         }
 
     private void PicBackSelect_MouseMove(object? sender, MouseEventArgs e)
         {
             MapEditorDrag((int)e.Buttons, e.Location.X, e.Location.Y);
+            if (e.Buttons == MouseButtons.Primary)
+            {
+                picBackSelect.Invalidate();
+            }
         }
 
-        private void CmbTileSets_Click(object sender, EventArgs e)
+    private void CmbTileSets_Click(object sender, EventArgs e)
         {
             if (GameState.CurTileset > GameState.NumTileSets)
             {
-                cmbTileSets.SelectedIndex = 0;
+                sldTileSet.Value = 1;
             }
 
             Data.MyMap.Tileset = GameState.CurTileset;
@@ -994,11 +1091,10 @@ namespace Client
 
             Instance.optBlocked.Checked = true;
 
-            Instance.cmbTileSets.Items.Clear();
-            for (int i = 0, loopTo = GameState.NumTileSets; i < loopTo; i++)
-                Instance.cmbTileSets.Items.Add((i + 1).ToString());
-            
-            Instance.cmbTileSets.SelectedIndex = 0;
+            // Configure tileset slider selector instead of ComboBox
+            Instance.sldTileSet.MinValue = 1;
+            Instance.sldTileSet.MaxValue = Math.Max(1, GameState.NumTileSets);
+            Instance.sldTileSet.Value = Math.Clamp(GameState.CurTileset > 0 ? GameState.CurTileset : 1, 1, Math.Max(1, GameState.NumTileSets));
             Instance.cmbAutoTile.SelectedIndex = 0;
             Instance.tabPages.SelectedIndex = 0;
             Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
@@ -1124,7 +1220,7 @@ namespace Client
 
             if (GameClient.IsMouseButtonDown(MouseButton.Left))
             {
-                if (Instance.optInfo.Checked)
+                if (GameState.OptInfo)
                 {
                     if (GameState.Info == false)
                     {
@@ -1158,7 +1254,7 @@ namespace Client
                 {
                     ref var withBlock1 = ref Data.MyMap.Tile[GameState.CurX, GameState.CurY];
                     // blocked tile
-                    if (Instance.optBlocked.Checked == true)
+                    if (GameState.OptBlocked)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1171,7 +1267,7 @@ namespace Client
                     }
 
                     // warp tile
-                    if (Instance.optWarp.Checked == true)
+                    if (GameState.OptWarp)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1190,7 +1286,7 @@ namespace Client
                     }
 
                     // item spawn
-                    if (Instance.optItem.Checked == true)
+                    if (GameState.OptItem)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1209,7 +1305,7 @@ namespace Client
                     }
 
                     // Npc avoid
-                    if (Instance.optNpcAvoid.Checked == true)
+                    if (GameState.OptNpcAvoid)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1228,7 +1324,7 @@ namespace Client
                     }
 
                     // resource
-                    if (Instance.optResource.Checked == true)
+                    if (GameState.OptResource)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1247,7 +1343,7 @@ namespace Client
                     }
 
                     // Npc spawn
-                    if (Instance.optNpcSpawn.Checked == true)
+                    if (GameState.OptNpcSpawn)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1266,7 +1362,7 @@ namespace Client
                     }
 
                     // shop
-                    if (Instance.optShop.Checked == true)
+                    if (GameState.OptShop)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1285,7 +1381,7 @@ namespace Client
                     }
 
                     // bank
-                    if (Instance.optBank.Checked == true)
+                    if (GameState.OptBank)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1304,7 +1400,7 @@ namespace Client
                     }
 
                     // heal
-                    if (Instance.optHeal.Checked == true)
+                    if (GameState.OptHeal)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1323,7 +1419,7 @@ namespace Client
                     }
 
                     // trap
-                    if (Instance.optTrap.Checked == true)
+                    if (GameState.OptTrap)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1342,7 +1438,7 @@ namespace Client
                     }
 
                     // Animation
-                    if (Instance.optAnimation.Checked == true)
+                    if (GameState.OptAnimation)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1361,7 +1457,7 @@ namespace Client
                     }
 
                     // No Xing
-                    if (Instance.optNoCrossing.Checked == true)
+                    if (GameState.OptNoCrossing)
                     {
                         if (GameState.EditorAttribute == 1)
                         {
@@ -1469,7 +1565,7 @@ namespace Client
                     for (int i2 = 0, loopTo2 = Data.MyMap.Tile[x2, y2].Layer != null ? Data.MyMap.Tile[x2, y2].Layer.Length : 0; i2 < loopTo2; i2++)
                     {
                         ref var currentTile = ref Data.MyMap.Tile[x2, y2];
-                        ref var historyTile = ref Data.TileHistory[GameState.TileHistoryIndex].Tile[x2, y2];
+                        ref var historyTile = ref Data.TileHistory![GameState.TileHistoryIndex].Tile[x2, y2];
 
                         // Check Layer array length for both tiles
                         if (currentTile.Layer == null || currentTile.Layer.Length <= i2 || historyTile.Layer == null || historyTile.Layer.Length <= i2)
@@ -1681,7 +1777,7 @@ namespace Client
             {
                 for (int i = 0; i < GameState.TileHistoryIndex; i++)
                 {
-                    Data.TileHistory[(int)i] = Data.TileHistory[(int)(i + 1)];
+                    Data.TileHistory![(int)i] = Data.TileHistory![(int)(i + 1)];
                 }
             }
             else
@@ -1703,7 +1799,7 @@ namespace Client
 
         public static void MapEditorFillLayer(MapLayer layer, byte theAutotile = 0, byte tileX = 0, byte tileY = 0)
         {
-            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", DialogueType.FillLayer, DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, (Instance?.cmbTileSets.SelectedIndex ?? -1) + 1);
+            GameLogic.Dialogue("Map Editor", "Fill Layer: " + layer.ToString(), "Are you sure you wish to fill this layer?", (byte)DialogueType.FillLayer, (byte)DialogueStyle.YesNo, GameState.CurLayer, GameState.CurAutotileType, tileX, tileY, (int)(Instance?.sldTileSet.Value ?? 1));
         }
 
         public static void MapEditorEyeDropper()
@@ -1738,7 +1834,7 @@ namespace Client
                     for (int i = 0; i < layerCount; i++)
                     {
                         ref var currentTile = ref Data.MyMap.Tile[x, y];
-                        ref var historyTile = ref Data.TileHistory[GameState.TileHistoryIndex].Tile[x, y];
+                        ref var historyTile = ref Data.TileHistory![GameState.TileHistoryIndex].Tile[x, y];
 
                         if (currentTile.Layer == null || currentTile.Layer.Length <= i || historyTile.Layer == null || historyTile.Layer.Length <= i)
                         {
@@ -1814,7 +1910,7 @@ namespace Client
                     for (int i = 0; i < layerCount; i++)
                     {
                         ref var currentTile = ref Data.MyMap.Tile[x, y];
-                        ref var historyTile = ref Data.TileHistory[GameState.TileHistoryIndex].Tile[x, y];
+                        ref var historyTile = ref Data.TileHistory![GameState.TileHistoryIndex].Tile[x, y];
 
                         if (currentTile.Layer == null || currentTile.Layer.Length <= i || historyTile.Layer == null || historyTile.Layer.Length <= i)
                         {
@@ -1959,24 +2055,24 @@ namespace Client
                     {
                         ref var withBlock1 = ref Data.MyMap.Tile[x, y];
                         Array.Resize(ref Data.MyMap.Tile[x, y].Layer, layerCount);
-                        Array.Resize(ref Data.Autotile[x, y].Layer, layerCount);
+                        Array.Resize(ref Data.Autotile![x, y].Layer, layerCount);
 
-                        withBlock1.Data1 = Data.TempTile[x, y].Data1;
-                        withBlock1.Data2 = Data.TempTile[x, y].Data2;
-                        withBlock1.Data3 = Data.TempTile[x, y].Data3;
-                        withBlock1.Type = Data.TempTile[x, y].Type;
-                        withBlock1.Data1_2 = Data.TempTile[x, y].Data1_2;
-                        withBlock1.Data2_2 = Data.TempTile[x, y].Data2_2;
-                        withBlock1.Data3_2 = Data.TempTile[x, y].Data3_2;
-                        withBlock1.Type2 = Data.TempTile[x, y].Type2;
-                        withBlock1.DirBlock = Data.TempTile[x, y].DirBlock;
+                        withBlock1.Data1 = Data.TempTile![x, y].Data1;
+                        withBlock1.Data2 = Data.TempTile![x, y].Data2;
+                        withBlock1.Data3 = Data.TempTile![x, y].Data3;
+                        withBlock1.Type = Data.TempTile![x, y].Type;
+                        withBlock1.Data1_2 = Data.TempTile![x, y].Data1_2;
+                        withBlock1.Data2_2 = Data.TempTile![x, y].Data2_2;
+                        withBlock1.Data3_2 = Data.TempTile![x, y].Data3_2;
+                        withBlock1.Type2 = Data.TempTile![x, y].Type2;
+                        withBlock1.DirBlock = Data.TempTile![x, y].DirBlock;
 
                         for (i = 0; i < layerCount; i++)
                         {
-                            withBlock1.Layer[i].X = Data.TempTile[x, y].Layer[i].X;
-                            withBlock1.Layer[i].Y = Data.TempTile[x, y].Layer[i].Y;
-                            withBlock1.Layer[i].Tileset = Data.TempTile[x, y].Layer[i].Tileset;
-                            withBlock1.Layer[i].AutoTile = Data.TempTile[x, y].Layer[i].AutoTile;
+                            withBlock1.Layer[i].X = Data.TempTile![x, y].Layer[i].X;
+                            withBlock1.Layer[i].Y = Data.TempTile![x, y].Layer[i].Y;
+                            withBlock1.Layer[i].Tileset = Data.TempTile![x, y].Layer[i].Tileset;
+                            withBlock1.Layer[i].AutoTile = Data.TempTile![x, y].Layer[i].AutoTile;
                             Autotile.CacheRenderState(x, y, i);
                         }
                     }
@@ -2099,7 +2195,7 @@ namespace Client
             Focus();
         }
 
-        private void tabPages_SelectedIndexChanged(object sender, EventArgs e)
+    private void tabPages_SelectedIndexChanged(object? sender, EventArgs e)
         {
             GameState.MapEditorTab = Instance.tabPages.SelectedIndex;
 
@@ -2109,14 +2205,68 @@ namespace Client
             }
         }
 
-        private void cmbTileSets_SelectedIndexChanged(object sender, EventArgs e)
+    private void SldTileSet_ValueChanged(object? sender, EventArgs e)
         {
-            GameState.CurTileset = cmbTileSets.SelectedIndex + 1;
+            GameState.CurTileset = sldTileSet.Value;
+            picBackSelect.Invalidate();
         }
 
         private void cmbLayers_SelectedIndexChanged(object sender, EventArgs e)
         {
             GameState.CurLayer = cmbLayers.SelectedIndex;
+        }
+
+        private void PicBackSelect_Paint(object? sender, PaintEventArgs e)
+        {
+            DrawTileset(e.Graphics);
+        }
+
+        // Eto paint-based tileset renderer
+        public static void DrawTileset(Graphics g)
+        {
+            try
+            {
+                if (Instance == null) return;
+                int tilesetIndex = GameState.CurTileset;
+                if (tilesetIndex == 0)
+                    return;
+
+                string tilesetPath = System.IO.Path.Combine(DataPath.Tilesets, tilesetIndex.ToString()) + GameState.GfxExt;
+
+                g.Clear(Colors.Black);
+
+                if (!System.IO.File.Exists(tilesetPath))
+                {
+                    return;
+                }
+
+                using (var srcImage = new Bitmap(tilesetPath))
+                {
+                    int srcWidth = srcImage.Width;
+                    int srcHeight = srcImage.Height;
+
+                    // Use nearest-neighbor to preserve pixel art
+                    g.ImageInterpolation = ImageInterpolation.None;
+
+                    // Draw the image at (-offsetX, -offsetY) to simulate scrolling
+                    g.DrawImage(srcImage, -tilesetOffsetX, -tilesetOffsetY);
+
+                    // Draw selection rectangle (adjusted for offset)
+                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX - tilesetOffsetX;
+                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY - tilesetOffsetY;
+                    int scaledWidth = GameState.EditorTileWidth * GameState.SizeX;
+                    int scaledHeight = GameState.EditorTileHeight * GameState.SizeY;
+
+                    using (var pen = new Pen(Colors.Red, 1))
+                    {
+                        g.DrawRectangle(pen, scaledX, scaledY, scaledWidth, scaledHeight);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                try { System.Console.WriteLine($"[DrawTileset] {ex}"); } catch { }
+            }
         }
 
         /// <summary>
