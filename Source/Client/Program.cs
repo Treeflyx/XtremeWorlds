@@ -17,7 +17,9 @@ using Client.Game.UI.Windows;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;
+#if !OSX && !MACOS
 using SDL2;
+#endif
 using Type = Core.Globals.Type;
 
 namespace Client
