@@ -1992,7 +1992,7 @@ namespace Server
             int n;
             int i;
 
-            if (Strings.Len(Data.Player[index].Name) == 0)
+            if (Data.Player[index].Name == "")
             {
                 Data.Player[index].Name = name;
                 Data.Player[index].Sex = sex;

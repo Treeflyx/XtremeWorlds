@@ -357,7 +357,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             }
 
             // Check if name is already in use
-            if (Data.Char.Contains(name))
+            if (Data.Char?.Contains(name) == true)
             {
                 NetworkSend.AlertMsg(session, SystemMessage.NameTaken, Menu.NewCharacter);
                 return;
