@@ -298,7 +298,8 @@ namespace Server
             {
                 try
                 {
-                    await Database.CreateDatabaseAsync("mirage");
+                    var name = GetDatabaseName(configuration);
+                    await Database.CreateDatabaseAsync(name);
                     await Database.CreateTablesAsync();
                     await LoadCharacterListAsync();
                     Logger.LogInformation("Database initialized successfully.");
@@ -1046,6 +1047,18 @@ namespace Server
                 }
                 _shutDownLastTimer = time;
             }
+        }
+
+          /// <summary>
+        /// Gets the database name from configuration (Database:ConnectionString).
+        /// </summary>
+        public static string? GetDatabaseName(IConfiguration configuration)
+        {
+            var connStr = configuration["Database:ConnectionString"];
+            if (string.IsNullOrEmpty(connStr))
+                return null;
+            var builder = new System.Data.Common.DbConnectionStringBuilder { ConnectionString = connStr };
+            return builder.TryGetValue("Database", out var dbNameObj) ? dbNameObj?.ToString() : null;
         }
 
         #endregion
