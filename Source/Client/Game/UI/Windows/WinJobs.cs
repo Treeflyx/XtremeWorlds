@@ -55,17 +55,21 @@ public static class WinJobs
 
         var y = winJobs.Top + 60;
 
+        if (lines == null)
+            return;
+
+        if (!Text.Fonts.TryGetValue(winJobs.Font, out var font) || font == null || font.Characters == null)
+            return;
+
         foreach (var line in lines)
         {
+            if (string.IsNullOrEmpty(line)) continue;
+
             var x = winJobs.Left + 118 + 200 / 2 - Text.GetTextWidth(line, winJobs.Font) / 2;
-
-            var textClean = new string(line.Where(c => Text.Fonts[winJobs.Font].Characters.Contains(c)).ToArray());
-            var textSize = Text.Fonts[winJobs.Font].MeasureString(textClean);
-
-            var padding = (int) (textSize.X / 6);
-
+            var textClean = new string(line.Where(c => font.Characters.Contains(c)).ToArray());
+            var textSize = font.MeasureString(textClean);
+            var padding = (int)(textSize.X / 6);
             Text.RenderText(line, x + padding, y, Color.White, Color.Black);
-
             y += lineHeight;
         }
     }
