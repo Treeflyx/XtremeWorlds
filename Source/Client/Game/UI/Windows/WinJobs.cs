@@ -34,17 +34,17 @@ public static class WinJobs
         }
 
 
-        var facePath = Path.Combine(DataPath.Characters, spriteIndex.ToString());
-        var faceTexture = GameClient.GetGfxInfo(facePath);
-        if (faceTexture is null)
+        var spritePath = Path.Combine(DataPath.Characters, spriteIndex.ToString());
+        var spriteTexture = GameClient.GetGfxInfo(spritePath);
+        if (spriteTexture is null)
         {
             return;
         }
 
-        var w = faceTexture.Width / 4;
-        var h = faceTexture.Height / 4;
+        var w = spriteTexture.Width / 4;
+        var h = spriteTexture.Height / 4;
 
-        GameClient.RenderTexture(ref facePath,
+        GameClient.RenderTexture(ref spritePath,
             winJobs.Left + 50,
             winJobs.Top + 90,
             0, 0, w, h, w, h);
