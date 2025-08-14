@@ -778,11 +778,7 @@ namespace Client
                     // Check if the Tab key is active and can be processed
                     if (IsKeyStateActive(Keys.Tab))
                     {
-                        // Handle Tab: Switch to the next control.
-                        if (Gui.ActivateControl() is null)
-                        {
-                            Gui.ActivateControl(0, false);
-                        }
+                        Gui.FocusNextControl();
                     }
                 }
             }

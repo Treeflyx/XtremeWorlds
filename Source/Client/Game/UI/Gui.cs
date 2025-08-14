@@ -74,8 +74,8 @@ public class Gui
             Top = top,
             OrigLeft = left,
             OrigTop = top,
-            Width = (int) (width * SettingsManager.Instance.Scale),
-            Height = (int) (height * SettingsManager.Instance.Scale),
+            Width = (int)(width * SettingsManager.Instance.Scale),
+            Height = (int)(height * SettingsManager.Instance.Scale),
             Visible = visible,
             CanDrag = canDrag,
             Max = max,
@@ -138,7 +138,7 @@ public class Gui
         {
             if (Windows[i].ZOrder > oldZOrder)
             {
-                Windows[i].ZOrder --;
+                Windows[i].ZOrder--;
             }
         }
 
@@ -174,24 +174,24 @@ public class Gui
         bool clickThrough = false)
     {
         var stateCount = Enum.GetValues<ControlState>().Length;
-        var design = new List<Design>(Enumerable.Repeat((Design) 0, stateCount));
+        var design = new List<Design>(Enumerable.Repeat((Design)0, stateCount));
         var image = new List<int>(Enumerable.Repeat(0, stateCount));
-        var callback = new List<Action?>(Enumerable.Repeat((Action) null, stateCount));
+        var callback = new List<Action?>(Enumerable.Repeat((Action)null, stateCount));
 
         // Assign specific values for each state
-        design[(int) ControlState.Normal] = designNorm;
-        design[(int) ControlState.Hover] = designHover;
-        design[(int) ControlState.MouseDown] = designMousedown;
+        design[(int)ControlState.Normal] = designNorm;
+        design[(int)ControlState.Hover] = designHover;
+        design[(int)ControlState.MouseDown] = designMousedown;
 
-        image[(int) ControlState.Normal] = imageNorm;
-        image[(int) ControlState.Hover] = imageHover;
-        image[(int) ControlState.MouseDown] = imageMousedown;
+        image[(int)ControlState.Normal] = imageNorm;
+        image[(int)ControlState.Hover] = imageHover;
+        image[(int)ControlState.MouseDown] = imageMousedown;
 
-        callback[(int) ControlState.Normal] = callbackNorm;
-        callback[(int) ControlState.Hover] = callbackHover;
-        callback[(int) ControlState.MouseDown] = callbackMousedown;
-        callback[(int) ControlState.MouseMove] = callbackMousemove;
-        callback[(int) ControlState.DoubleClick] = callbackDblclick;
+        callback[(int)ControlState.Normal] = callbackNorm;
+        callback[(int)ControlState.Hover] = callbackHover;
+        callback[(int)ControlState.MouseDown] = callbackMousedown;
+        callback[(int)ControlState.MouseMove] = callbackMousemove;
+        callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
         // Create a new instance of Window and populate it
         var window = new Window
@@ -202,8 +202,8 @@ public class Gui
             Top = top,
             OrigLeft = left,
             OrigTop = top,
-            Width = (int) (width * SettingsManager.Instance.Scale),
-            Height = (int) (height * SettingsManager.Instance.Scale),
+            Width = (int)(width * SettingsManager.Instance.Scale),
+            Height = (int)(height * SettingsManager.Instance.Scale),
             Visible = visible,
             CanDrag = canDrag,
             Font = font,
@@ -263,22 +263,22 @@ public class Gui
         var designs = new List<Design>(Enumerable.Repeat(Design.None, stateCount).ToList());
         var images = new List<int>(Enumerable.Repeat(0, stateCount).ToList());
         var textures = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
-        var callbacks = new List<Action?>(Enumerable.Repeat((Action) null, stateCount).ToList());
+        var callbacks = new List<Action?>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
-        designs[(int) ControlState.Normal] = designNorm;
-        designs[(int) ControlState.Hover] = designHover;
-        designs[(int) ControlState.MouseDown] = designMousedown;
+        designs[(int)ControlState.Normal] = designNorm;
+        designs[(int)ControlState.Hover] = designHover;
+        designs[(int)ControlState.MouseDown] = designMousedown;
 
-        images[(int) ControlState.Normal] = imageNorm;
-        images[(int) ControlState.Hover] = imageHover;
-        images[(int) ControlState.MouseDown] = imageMousedown;
+        images[(int)ControlState.Normal] = imageNorm;
+        images[(int)ControlState.Hover] = imageHover;
+        images[(int)ControlState.MouseDown] = imageMousedown;
 
-        callbacks[(int) ControlState.Normal] = callbackNorm;
-        callbacks[(int) ControlState.Hover] = callbackHover;
-        callbacks[(int) ControlState.MouseDown] = callbackMousedown;
-        callbacks[(int) ControlState.MouseMove] = callbackMousemove;
-        callbacks[(int) ControlState.DoubleClick] = callbackDblclick;
-        callbacks[(int) ControlState.FocusEnter] = callbackEnter;
+        callbacks[(int)ControlState.Normal] = callbackNorm;
+        callbacks[(int)ControlState.Hover] = callbackHover;
+        callbacks[(int)ControlState.MouseDown] = callbackMousedown;
+        callbacks[(int)ControlState.MouseMove] = callbackMousemove;
+        callbacks[(int)ControlState.DoubleClick] = callbackDblclick;
+        callbacks[(int)ControlState.FocusEnter] = callbackEnter;
 
         if (!Windows.TryGetValue(windowIndex, out var window))
         {
@@ -293,8 +293,8 @@ public class Gui
             Top = top,
             OrigLeft = left,
             OrigTop = top,
-            Width = (int) (width * SettingsManager.Instance.Scale),
-            Height = (int) (height * SettingsManager.Instance.Scale),
+            Width = (int)(width * SettingsManager.Instance.Scale),
+            Height = (int)(height * SettingsManager.Instance.Scale),
             Visible = visible,
             CanDrag = false,
             Text = text,
@@ -355,7 +355,7 @@ public class Gui
         var design = new List<Design>(Enumerable.Repeat(Design.None, stateCount));
         var image = new List<int>(Enumerable.Repeat(0, stateCount));
         var texture = new List<string>(Enumerable.Repeat(string.Empty, stateCount));
-        var callback = new List<Action?>(Enumerable.Repeat((Action) null, stateCount));
+        var callback = new List<Action?>(Enumerable.Repeat((Action)null, stateCount));
 
         if (string.IsNullOrEmpty(texturePath))
         {
@@ -363,21 +363,21 @@ public class Gui
         }
 
         // fill temp arrays
-        design[(int) ControlState.Normal] = designNorm;
-        design[(int) ControlState.Hover] = designHover;
-        design[(int) ControlState.MouseDown] = designMousedown;
-        image[(int) ControlState.Normal] = imageNorm;
-        image[(int) ControlState.Hover] = imageHover;
-        image[(int) ControlState.MouseDown] = imageMousedown;
-        texture[(int) ControlState.Normal] = texturePath;
-        texture[(int) ControlState.Hover] = texturePath;
-        texture[(int) ControlState.MouseDown] = texturePath;
+        design[(int)ControlState.Normal] = designNorm;
+        design[(int)ControlState.Hover] = designHover;
+        design[(int)ControlState.MouseDown] = designMousedown;
+        image[(int)ControlState.Normal] = imageNorm;
+        image[(int)ControlState.Hover] = imageHover;
+        image[(int)ControlState.MouseDown] = imageMousedown;
+        texture[(int)ControlState.Normal] = texturePath;
+        texture[(int)ControlState.Hover] = texturePath;
+        texture[(int)ControlState.MouseDown] = texturePath;
 
-        callback[(int) ControlState.Normal] = callbackNorm;
-        callback[(int) ControlState.Hover] = callbackHover;
-        callback[(int) ControlState.MouseDown] = callbackMousedown;
-        callback[(int) ControlState.MouseMove] = callbackMousemove;
-        callback[(int) ControlState.DoubleClick] = callbackDblclick;
+        callback[(int)ControlState.Normal] = callbackNorm;
+        callback[(int)ControlState.Hover] = callbackHover;
+        callback[(int)ControlState.MouseDown] = callbackMousedown;
+        callback[(int)ControlState.MouseMove] = callbackMousemove;
+        callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
         // Control the box
         CreateControl(windowIndex, ZOrderCon, name, Color.White, ControlType.PictureBox, design, image, texture, callback, left, top, width, height, visible, canDrag, alpha: alpha, clickThrough: clickThrough, xOffset: 0, yOffset: 0, onDraw: onDraw);
@@ -411,23 +411,23 @@ public class Gui
         var design = new List<Design>(Enumerable.Repeat(Design.None, stateCount).ToList());
         var image = new List<int>(Enumerable.Repeat(0, stateCount).ToList());
         var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
-        var callback = new List<Action?>(Enumerable.Repeat((Action) null, stateCount).ToList());
+        var callback = new List<Action?>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
         // fill temp arrays
-        design[(int) ControlState.Normal] = designNorm;
-        design[(int) ControlState.Hover] = designHover;
-        design[(int) ControlState.MouseDown] = designMousedown;
-        image[(int) ControlState.Normal] = imageNorm;
-        image[(int) ControlState.Hover] = imageHover;
-        image[(int) ControlState.MouseDown] = imageMousedown;
-        texture[(int) ControlState.Normal] = DataPath.Gui;
-        texture[(int) ControlState.Hover] = DataPath.Gui;
-        texture[(int) ControlState.MouseDown] = DataPath.Gui;
-        callback[(int) ControlState.Normal] = callbackNorm;
-        callback[(int) ControlState.Hover] = callbackHover;
-        callback[(int) ControlState.MouseDown] = callbackMousedown;
-        callback[(int) ControlState.MouseMove] = callbackMousemove;
-        callback[(int) ControlState.DoubleClick] = callbackDblclick;
+        design[(int)ControlState.Normal] = designNorm;
+        design[(int)ControlState.Hover] = designHover;
+        design[(int)ControlState.MouseDown] = designMousedown;
+        image[(int)ControlState.Normal] = imageNorm;
+        image[(int)ControlState.Hover] = imageHover;
+        image[(int)ControlState.MouseDown] = imageMousedown;
+        texture[(int)ControlState.Normal] = DataPath.Gui;
+        texture[(int)ControlState.Hover] = DataPath.Gui;
+        texture[(int)ControlState.MouseDown] = DataPath.Gui;
+        callback[(int)ControlState.Normal] = callbackNorm;
+        callback[(int)ControlState.Hover] = callbackHover;
+        callback[(int)ControlState.MouseDown] = callbackMousedown;
+        callback[(int)ControlState.MouseMove] = callbackMousemove;
+        callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
         // Control the button 
         CreateControl(windowIndex, ZOrderCon, name, Color.White, ControlType.Button, design, image, texture, callback, left, top, width, height, visible, text: text, font: font, clickThrough: Conversions.ToBoolean(alpha), xOffset: xOffset, yOffset: yOffset, censor: censor, icon: icon, tooltip: tooltip);
@@ -453,14 +453,14 @@ public class Gui
         var designLabel = new List<Design>(Enumerable.Repeat(Design.None, controlStateCount).ToList());
         var imageLabel = new List<int>(Enumerable.Repeat(0, controlStateCount).ToList());
         var textureLabel = new List<string>(Enumerable.Repeat(DataPath.Designs, controlStateCount).ToList());
-        var callbackLabel = new List<Action?>(Enumerable.Repeat((Action) null, controlStateCount).ToList());
+        var callbackLabel = new List<Action?>(Enumerable.Repeat((Action)null, controlStateCount).ToList());
 
         // fill temp arrays
-        callbackLabel[(int) ControlState.Normal] = callbackNorm;
-        callbackLabel[(int) ControlState.Hover] = callbackHover;
-        callbackLabel[(int) ControlState.MouseDown] = callbackMousedown;
-        callbackLabel[(int) ControlState.MouseMove] = callbackMousemove;
-        callbackLabel[(int) ControlState.DoubleClick] = callbackDblclick;
+        callbackLabel[(int)ControlState.Normal] = callbackNorm;
+        callbackLabel[(int)ControlState.Hover] = callbackHover;
+        callbackLabel[(int)ControlState.MouseDown] = callbackMousedown;
+        callbackLabel[(int)ControlState.MouseMove] = callbackMousemove;
+        callbackLabel[(int)ControlState.DoubleClick] = callbackDblclick;
 
         // Control the label
         CreateControl(windowIndex, ZOrderCon, name, Color.White, ControlType.Label, designLabel, imageLabel, textureLabel, callbackLabel,
@@ -490,17 +490,17 @@ public class Gui
         var design = new List<Design>(Enumerable.Repeat(Design.None, stateCount).ToList());
         var image = new List<int>(Enumerable.Repeat(0, stateCount).ToList());
         var texture = new List<string>(Enumerable.Repeat(DataPath.Designs, stateCount).ToList());
-        var callback = new List<Action?>(Enumerable.Repeat((Action) null, stateCount).ToList());
+        var callback = new List<Action?>(Enumerable.Repeat((Action)null, stateCount).ToList());
 
         design[0] = theDesign;
         texture[0] = DataPath.Gui;
 
         // fill temp arrays
-        callback[(int) ControlState.Normal] = callbackNorm;
-        callback[(int) ControlState.Hover] = callbackHover;
-        callback[(int) ControlState.MouseDown] = callbackMousedown;
-        callback[(int) ControlState.MouseMove] = callbackMousemove;
-        callback[(int) ControlState.DoubleClick] = callbackDblclick;
+        callback[(int)ControlState.Normal] = callbackNorm;
+        callback[(int)ControlState.Hover] = callbackHover;
+        callback[(int)ControlState.MouseDown] = callbackMousedown;
+        callback[(int)ControlState.MouseMove] = callbackMousemove;
+        callback[(int)ControlState.DoubleClick] = callbackDblclick;
 
         // Control the box
         CreateControl(windowIndex, ZOrderCon, name, Color.White, ControlType.Checkbox, design, image,
@@ -517,7 +517,7 @@ public class Gui
         var theDesign = new List<Design>(Enumerable.Repeat(Design.None, controlStateCount).ToList());
         var image = new List<int>(Enumerable.Repeat(0, controlStateCount).ToList());
         var texture = new List<string>(Enumerable.Repeat(DataPath.Gui, controlStateCount).ToList());
-        var callback = new List<Action?>(Enumerable.Repeat((Action) null, controlStateCount).ToList());
+        var callback = new List<Action?>(Enumerable.Repeat((Action)null, controlStateCount).ToList());
 
         // Set the design for the normal state
         theDesign[0] = design;
@@ -585,7 +585,7 @@ public class Gui
         {
             return null;
         }
-        
+
         var activeControl = ActiveWindow.ActiveControl;
         if (activeControl is not null)
         {
@@ -620,8 +620,8 @@ public class Gui
     {
         var window = Windows[windowIndex];
 
-        window.Left = (int) Math.Round(GameState.ResolutionWidth / 2d - window.Width / 2d);
-        window.Top = (int) Math.Round(GameState.ResolutionHeight / 2d - window.Height / 2d);
+        window.Left = (int)Math.Round(GameState.ResolutionWidth / 2d - window.Width / 2d);
+        window.Top = (int)Math.Round(GameState.ResolutionHeight / 2d - window.Height / 2d);
         window.OrigLeft = window.Left;
         window.OrigTop = window.Top;
     }
@@ -755,7 +755,7 @@ public class Gui
             for (var i = 1; i < Windows.Count; i++)
             {
                 var window = Windows[i];
-                if (window is not {Enabled: true, Visible: true})
+                if (window is not { Enabled: true, Visible: true })
                 {
                     continue;
                 }
@@ -811,7 +811,7 @@ public class Gui
                 if (ActiveWindow is not null && _isDragging)
                 {
                     window = ActiveWindow;
-                    if (_canDrag && window is {CanDrag: true, Enabled: true, Visible: true})
+                    if (_canDrag && window is { CanDrag: true, Enabled: true, Visible: true })
                     {
                         window.Left = GameLogic.Clamp(window.Left + (GameState.CurMouseX - window.Left - window.MovedX), 0, GameState.ResolutionWidth - window.Width);
                         window.Top = GameLogic.Clamp(window.Top + (GameState.CurMouseY - window.Top - window.MovedY), 0, GameState.ResolutionHeight - window.Height);
@@ -823,7 +823,7 @@ public class Gui
             if (curWindow > 0L)
             {
                 // Handle the active window's callback
-                var callBack = Windows[curWindow].CallBack[(int) entState];
+                var callBack = Windows[curWindow].CallBack[(int)entState];
 
                 // Execute the callback if it exists
                 callBack?.Invoke();
@@ -833,7 +833,7 @@ public class Gui
                 {
                     var control = Windows[curWindow].Controls[i];
 
-                    if (control is {Enabled: true, Visible: true})
+                    if (control is { Enabled: true, Visible: true })
                     {
                         if (GameState.CurMouseX >= control.Left + Windows[curWindow].Left && GameState.CurMouseX <= control.Left + control.Width + Windows[curWindow].Left && GameState.CurMouseY >= control.Top + Windows[curWindow].Top && GameState.CurMouseY <= control.Top + control.Height + Windows[curWindow].Top)
                         {
@@ -885,29 +885,29 @@ public class Gui
                     switch (withBlock2.Type)
                     {
                         case ControlType.Checkbox:
-                        {
-                            if (withBlock2.Group > 0L && withBlock2.Value == 0L)
                             {
-                                foreach (var control in Windows[curWindow].Controls)
+                                if (withBlock2.Group > 0L && withBlock2.Value == 0L)
                                 {
-                                    if (control.Type == ControlType.Checkbox &&
-                                        control.Group == withBlock2.Group)
+                                    foreach (var control in Windows[curWindow].Controls)
                                     {
-                                        control.Value = 0;
+                                        if (control.Type == ControlType.Checkbox &&
+                                            control.Group == withBlock2.Group)
+                                        {
+                                            control.Value = 0;
+                                        }
                                     }
+
+                                    withBlock2.Value = 0;
                                 }
 
-                                withBlock2.Value = 0;
+                                break;
                             }
 
-                            break;
-                        }
-
                         case ControlType.ComboMenu:
-                        {
-                            ShowComboMenu(curWindow, curControl);
-                            break;
-                        }
+                            {
+                                ShowComboMenu(curWindow, curControl);
+                                break;
+                            }
                     }
 
                     if (GameClient.IsMouseButtonDown(MouseButton.Left))
@@ -915,7 +915,7 @@ public class Gui
                         SetActiveControl(curWindow, curControl);
                     }
 
-                    callBack = withBlock2.CallBack[(int) entState];
+                    callBack = withBlock2.CallBack[(int)entState];
 
                     // Execute the callback if it exists
                     callBack?.Invoke();
@@ -969,7 +969,7 @@ public class Gui
                 if (window.State == ControlState.MouseDown)
                 {
                     window.State = ControlState.Normal;
-                    window.CallBack[(int) ControlState.Normal]?.Invoke();
+                    window.CallBack[(int)ControlState.Normal]?.Invoke();
                 }
 
                 if (window.Controls.Count == 0)
@@ -985,7 +985,7 @@ public class Gui
                     }
 
                     control.State = ControlState.Normal;
-                    control.CallBack[(int) control.State]?.Invoke();
+                    control.CallBack[(int)control.State]?.Invoke();
                 }
             }
         }
@@ -997,7 +997,7 @@ public class Gui
         {
             return;
         }
-        
+
         foreach (var window in Windows.Values.OrderBy(x => x.ZOrder).Where(x => x.Visible))
         {
             WindowRenderer.Render(window);
@@ -1073,7 +1073,7 @@ public class Gui
         // Find the option we're hovering over
         if (withBlock.List.Count > 0)
         {
-            var loopTo = (long) withBlock.List.Count;
+            var loopTo = (long)withBlock.List.Count;
             for (var i = 0; i < loopTo; i++)
             {
                 if (y >= 16L * i & y <= 16L * i)
@@ -1085,7 +1085,7 @@ public class Gui
             }
         }
     }
-    
+
     public static void UpdateStats_UI()
     {
         // set the bar labels
@@ -1125,15 +1125,15 @@ public class Gui
         Windows[GetWindowIndex("winComboMenuBG")].Width = GameState.ResolutionWidth;
         Windows[GetWindowIndex("winComboMenuBG")].Height = GameState.ResolutionHeight;
     }
-    
+
     public static void DrawMenuBackground()
     {
         var path = Path.Combine(DataPath.Pictures, "1");
-        
+
         GameClient.RenderTexture(
-            path: ref path, 
-            dX: 0, dY: 0, sX: 0, sY: 0, 
-            dW: 1920, dH: 1080, 
+            path: ref path,
+            dX: 0, dY: 0, sX: 0, sY: 0,
+            dW: 1920, dH: 1080,
             sW: 1920, sH: 1080);
     }
 
@@ -1147,13 +1147,13 @@ public class Gui
         // your items
         for (var i = 0L; i < Constant.MaxInv; i++)
         {
-            if (Data.TradeYourOffer[(int) i].Num >= 0)
+            if (Data.TradeYourOffer[(int)i].Num >= 0)
             {
-                long itemNum = GetPlayerInv(GameState.MyIndex, Data.TradeYourOffer[(int) i].Num);
+                long itemNum = GetPlayerInv(GameState.MyIndex, Data.TradeYourOffer[(int)i].Num);
                 if (itemNum >= 0L & itemNum < Constant.MaxItems)
                 {
-                    Item.StreamItem((int) itemNum);
-                    long itemPic = Data.Item[(int) itemNum].Icon;
+                    Item.StreamItem((int)itemNum);
+                    long itemPic = Data.Item[(int)itemNum].Icon;
 
                     if (itemPic > 0L & itemPic <= GameState.NumItems)
                     {
@@ -1162,30 +1162,30 @@ public class Gui
 
                         // draw icon
                         var argpath = Path.Combine(DataPath.Items, itemPic.ToString());
-                        GameClient.RenderTexture(ref argpath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
+                        GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                         // If item is a stack - draw the amount you have
-                        if (Data.TradeYourOffer[(int) i].Value > 1)
+                        if (Data.TradeYourOffer[(int)i].Value > 1)
                         {
                             var y = top + 20L;
                             var x = left + 1L;
-                            var amount = Data.TradeYourOffer[(int) i].Value.ToString();
+                            var amount = Data.TradeYourOffer[(int)i].Value.ToString();
 
                             // Draw currency but with k, m, b etc. using a convertion function
                             if (Conversions.ToLong(amount) < 1000000L)
                             {
-                                color = (long) ColorName.White;
+                                color = (long)ColorName.White;
                             }
                             else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                             {
-                                color = (long) ColorName.Yellow;
+                                color = (long)ColorName.Yellow;
                             }
                             else if (Conversions.ToLong(amount) > 10000000L)
                             {
-                                color = (long) ColorName.BrightGreen;
+                                color = (long)ColorName.BrightGreen;
                             }
 
-                            Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int) x, (int) y, GameClient.QbColorToXnaColor((int) color), GameClient.QbColorToXnaColor((int) color));
+                            Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                         }
                     }
                 }
@@ -1203,11 +1203,11 @@ public class Gui
         // their items
         for (var i = 0L; i < Constant.MaxInv; i++)
         {
-            long itemNum = Data.TradeTheirOffer[(int) i].Num;
+            long itemNum = Data.TradeTheirOffer[(int)i].Num;
             if (itemNum >= 0L & itemNum < Constant.MaxItems)
             {
-                Item.StreamItem((int) itemNum);
-                long itemPic = Data.Item[(int) itemNum].Icon;
+                Item.StreamItem((int)itemNum);
+                long itemPic = Data.Item[(int)itemNum].Icon;
 
                 if (itemPic > 0L & itemPic <= GameState.NumItems)
                 {
@@ -1216,30 +1216,30 @@ public class Gui
 
                     // draw icon
                     var argpath = Path.Combine(DataPath.Items, itemPic.ToString());
-                    GameClient.RenderTexture(ref argpath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
+                    GameClient.RenderTexture(ref argpath, (int)left, (int)top, 0, 0, 32, 32, 32, 32);
 
                     // If item is a stack - draw the amount you have
-                    if (Data.TradeTheirOffer[(int) i].Value > 1)
+                    if (Data.TradeTheirOffer[(int)i].Value > 1)
                     {
                         var y = top + 20L;
                         var x = left + 1L;
-                        var amount = Data.TradeTheirOffer[(int) i].Value.ToString();
+                        var amount = Data.TradeTheirOffer[(int)i].Value.ToString();
 
                         // Draw currency but with k, m, b etc. using a convertion function
                         if (Conversions.ToLong(amount) < 1000000L)
                         {
-                            color = (long) ColorName.White;
+                            color = (long)ColorName.White;
                         }
                         else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
                         {
-                            color = (long) ColorName.Yellow;
+                            color = (long)ColorName.Yellow;
                         }
                         else if (Conversions.ToLong(amount) > 10000000L)
                         {
-                            color = (long) ColorName.BrightGreen;
+                            color = (long)ColorName.BrightGreen;
                         }
 
-                        Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int) x, (int) y, GameClient.QbColorToXnaColor((int) color), GameClient.QbColorToXnaColor((int) color));
+                        Text.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int)x, (int)y, GameClient.QbColorToXnaColor((int)color), GameClient.QbColorToXnaColor((int)color));
                     }
                 }
             }
@@ -1260,5 +1260,32 @@ public class Gui
     public static Control? GetActiveControl()
     {
         return ActiveWindow?.ActiveControl;
+    }
+
+      /// <summary>
+    /// Moves focus to the next enabled, visible, and focusable control in the active window.
+    /// </summary>
+    public static void FocusNextControl()
+    {
+        if (ActiveWindow == null || ActiveWindow.Controls.Count == 0)
+            return;
+
+        var controls = ActiveWindow.Controls;
+        int currentIndex = controls.IndexOf(ActiveWindow.ActiveControl);
+        int count = controls.Count;
+        int nextIndex = (currentIndex + 1) % count;
+
+        // Try to find the next enabled and visible control
+        for (int i = 0; i < count; i++)
+        {
+            var ctrl = controls[nextIndex];
+            if (ctrl.Enabled && ctrl.Visible)
+            {
+                ActiveWindow.ActiveControl = ctrl;
+                // Optionally, trigger focus event/callback here
+                return;
+            }
+            nextIndex = (nextIndex + 1) % count;
+        }
     }
 }
