@@ -61,8 +61,34 @@ public static class WinJobs
         }
 
         var lines = default(string[]);
+        var text = "";
 
-        var text = Data.Job[GameState.NewCharJob].Desc;
+        // Get job description or use default
+        if (Data.Job[(int)GameState.NewCharJob].Desc == "")
+        {
+            switch (GameState.NewCharJob)
+            {
+                case 0: // Warrior
+                    {
+                        text = "The way of a warrior has never been an easy one. ...";
+                        break;
+                    }
+                case 1: // Wizard
+                    {
+                        text = "Wizards are often mistrusted characters who ... enjoy setting things on fire.";
+                        break;
+                    }
+                case 2: // Whisperer
+                    {
+                        text = "The art of healing comes with pressure and guilt, ...";
+                        break;
+                    }
+            }
+        }
+        else
+        {
+            text = Data.Job[GameState.NewCharJob].Desc;
+        }
 
         Text.WordWrap(text, winJobs.Font, 330, ref lines);
 
