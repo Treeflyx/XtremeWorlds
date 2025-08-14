@@ -1279,7 +1279,7 @@ public class Gui
         for (int i = 0; i < count; i++)
         {
             var ctrl = controls[nextIndex];
-            if (ctrl.Enabled && ctrl.Visible)
+            if (ctrl.Enabled && ctrl.Visible && ctrl.Type == ControlType.TextBox)
             {
                 ActiveWindow.ActiveControl = ctrl;
                 // Optionally, trigger focus event/callback here
