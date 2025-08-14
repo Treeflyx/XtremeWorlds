@@ -654,7 +654,7 @@ public class Crystalshire
             designHover: Design.Parchment,
             designMousedown: Design.Parchment,
             callbackMousedown: WinJobs.OnClose,
-            onDraw: WinJobs.OnDrawFace);
+            onDraw: WinJobs.OnDrawSprite);
 
         Gui.UpdatePictureBox(
             windowIndex: windowIndex,
