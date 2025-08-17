@@ -58,7 +58,7 @@ namespace Server
             foreach (var i in PlayerService.Instance.PlayerIds)
             {
                 // Trim and convert both names to uppercase for case-insensitive comparison
-                if (Strings.UCase(GetPlayerName(i)) == Strings.UCase(name))
+                if (GetPlayerName(i).ToUpperInvariant() == name.ToUpperInvariant())
                 {
                     findPlayer = i;
                     return findPlayer;
@@ -72,27 +72,23 @@ namespace Server
         public static string CheckGrammar(string word, byte caps = 0)
         {
             string checkGrammar = default;
-            string firstLetter;
-
-            firstLetter = Strings.LCase(Strings.Left(word, 1));
+            string firstLetter = word.Substring(0, 1).ToLowerInvariant();
 
             if (firstLetter == "$")
             {
-                checkGrammar = Strings.Mid(word, 2, Strings.Len(word) - 1);
+                checkGrammar = word.Substring(1);
                 return checkGrammar;
             }
 
-            if (LikeOperator.LikeString(firstLetter, "*[aeiou]*", CompareMethod.Binary))
-            {
-                if (Conversions.ToBoolean(caps))
-                    checkGrammar = "An " + word;
-                else
-                    checkGrammar = "an " + word;
-            }
-            else if (Conversions.ToBoolean(caps))
-                checkGrammar = "A " + word;
+            // Simple vowel check for English grammar
+            string vowels = "aeiou";
+            bool startsWithVowel = vowels.Contains(firstLetter);
+            bool isCaps = caps != 0;
+
+            if (startsWithVowel)
+                checkGrammar = (isCaps ? "An " : "an ") + word;
             else
-                checkGrammar = "a " + word;
+                checkGrammar = (isCaps ? "A " : "a ") + word;
             return checkGrammar;
         }
 

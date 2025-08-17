@@ -603,7 +603,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             {
                 if (Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo > 0)
                 {
-                    if (Conversions.ToBoolean(global::Server.Player.HasItem(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
+                    if (Convert.ToBoolean(global::Server.Player.HasItem(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
                     {
                         global::Server.Player.TakeInv(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo, 1);
                         Projectile.PlayerFireProjectile(session.Id);
@@ -1280,7 +1280,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var filename = System.IO.Path.Combine(DataPath.Database, "banlist.txt");
 
         if (File.Exists(filename))
-            FileSystem.Kill(filename);
+            File.Delete(filename);
 
         NetworkSend.PlayerMsg(session.Id, "Ban list destroyed.", (int) ColorName.BrightGreen);
     }
@@ -1457,7 +1457,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Data.Skill[skillNum].Duration = buffer.ReadInt32();
         Data.Skill[skillNum].Icon = buffer.ReadInt32();
         Data.Skill[skillNum].Interval = buffer.ReadInt32();
-        Data.Skill[skillNum].IsAoE = Conversions.ToBoolean(buffer.ReadInt32());
+    Data.Skill[skillNum].IsAoE = Convert.ToBoolean(buffer.ReadInt32());
         Data.Skill[skillNum].LevelReq = buffer.ReadInt32();
         Data.Skill[skillNum].Map = buffer.ReadInt32();
         Data.Skill[skillNum].MpCost = buffer.ReadInt32();

@@ -36,7 +36,7 @@ namespace Server
                 if (General.IsServerDestroyed)
 
                     // Get all our online players.
-                    Debugger.Break(); var onlinePlayers = Data.TempPlayer.Where(player => player.InGame).Select((player, index) => new { Index = Operators.AddObject(index, 1), player }).ToArray();
+                    Debugger.Break(); var onlinePlayers = Data.TempPlayer.Where(player => player.InGame).Select((player, index) => new { Index = index + 1, player }).ToArray();
 
                 await General.CheckShutDownCountDownAsync();
 
