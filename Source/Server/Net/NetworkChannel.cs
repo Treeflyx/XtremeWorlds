@@ -9,7 +9,7 @@ namespace Server.Net;
 
 internal sealed class NetworkChannel<TSession>(ILogger<NetworkChannel<TSession>> logger, TcpClient tcpClient) : INetworkChannel where TSession : IDisposable
 {
-    private const int BufferSize = 8192;
+    private const int BufferSize = 1024;
 
     private readonly NetworkStream _networkStream = tcpClient.GetStream();
     private readonly Channel<byte[]> _sendChannel = Channel.CreateUnbounded<byte[]>();
