@@ -1,7 +1,5 @@
 ﻿using Core;
 using Core.Globals;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Npgsql.Replication.PgOutput.Messages;
 using System;
 using System.Diagnostics;

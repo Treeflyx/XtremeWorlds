@@ -14,7 +14,6 @@
     <PackageVersion Include="ManagedBass" Version="3.1.1" />
     <PackageVersion Include="ManagedBass.Midi" Version="3.1.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
-    <PackageVersion Include="Microsoft.VisualBasic" Version="10.3.0" />
     <PackageVersion Include="MonoGame.Content.Builder.Task" Version="3.8.4" />
     <PackageVersion Include="MonoGame.Extended" Version="4.1.0" />
     <PackageVersion Include="MonoGame.Framework.Content.Pipeline" Version="3.8.4" />

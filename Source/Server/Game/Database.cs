@@ -1,8 +1,6 @@
 ﻿using Core;
 using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Npgsql;
@@ -470,7 +468,7 @@ namespace Server
                 {
                     command.Parameters.AddWithValue("@value", value);
 
-                    bool exists = Conversions.ToBoolean(command.ExecuteScalar());
+                    bool exists = Convert.ToBoolean(command.ExecuteScalar());
                     return exists;
                 }
             }
@@ -975,30 +973,30 @@ namespace Server
                 var withBlock = csMap.MapData;
                 withBlock.Name = GetVar(fileName, "General", "Name");
                 withBlock.Music = GetVar(fileName, "General", "Music");
-                withBlock.Moral = (byte)Conversion.Val(GetVar(fileName, "General", "Moral"));
-                withBlock.Up = (int)Conversion.Val(GetVar(fileName, "General", "Up"));
-                withBlock.Down = (int)Conversion.Val(GetVar(fileName, "General", "Down"));
-                withBlock.Left = (int)Conversion.Val(GetVar(fileName, "General", "Left"));
-                withBlock.Right = (int)Conversion.Val(GetVar(fileName, "General", "Right"));
-                withBlock.BootMap = (int)Conversion.Val(GetVar(fileName, "General", "BootMap"));
-                withBlock.BootX = (byte)Conversion.Val(GetVar(fileName, "General", "BootX"));
-                withBlock.BootY = (byte)Conversion.Val(GetVar(fileName, "General", "BootY"));
-                withBlock.MaxX = (byte)Conversion.Val(GetVar(fileName, "General", "MaxX"));
-                withBlock.MaxY = (byte)Conversion.Val(GetVar(fileName, "General", "MaxY"));
+                withBlock.Moral = Convert.ToByte(GetVar(fileName, "General", "Moral"));
+                withBlock.Up = Convert.ToInt32(GetVar(fileName, "General", "Up"));
+                withBlock.Down = Convert.ToInt32(GetVar(fileName, "General", "Down"));
+                withBlock.Left = Convert.ToInt32(GetVar(fileName, "General", "Left"));
+                withBlock.Right = Convert.ToInt32(GetVar(fileName, "General", "Right"));
+                withBlock.BootMap = Convert.ToInt32(GetVar(fileName, "General", "BootMap"));
+                withBlock.BootX = Convert.ToByte(GetVar(fileName, "General", "BootX"));
+                withBlock.BootY = Convert.ToByte(GetVar(fileName, "General", "BootY"));
+                withBlock.MaxX = Convert.ToByte(GetVar(fileName, "General", "MaxX"));
+                withBlock.MaxY = Convert.ToByte(GetVar(fileName, "General", "MaxY"));
 
-                withBlock.Weather = (int)Conversion.Val(GetVar(fileName, "General", "Weather"));
-                withBlock.WeatherIntensity = (int)Conversion.Val(GetVar(fileName, "General", "WeatherIntensity"));
+                withBlock.Weather = Convert.ToInt32(GetVar(fileName, "General", "Weather"));
+                withBlock.WeatherIntensity = Convert.ToInt32(GetVar(fileName, "General", "WeatherIntensity"));
 
-                withBlock.Fog = (int)Conversion.Val(GetVar(fileName, "General", "Fog"));
-                withBlock.FogSpeed = (int)Conversion.Val(GetVar(fileName, "General", "FogSpeed"));
-                withBlock.FogOpacity = (int)Conversion.Val(GetVar(fileName, "General", "FogOpacity"));
+                withBlock.Fog = Convert.ToInt32(GetVar(fileName, "General", "Fog"));
+                withBlock.FogSpeed = Convert.ToInt32(GetVar(fileName, "General", "FogSpeed"));
+                withBlock.FogOpacity = Convert.ToInt32(GetVar(fileName, "General", "FogOpacity"));
 
-                withBlock.Red = (int)Conversion.Val(GetVar(fileName, "General", "Red"));
-                withBlock.Green = (int)Conversion.Val(GetVar(fileName, "General", "Green"));
-                withBlock.Blue = (int)Conversion.Val(GetVar(fileName, "General", "Blue"));
-                withBlock.Alpha = (int)Conversion.Val(GetVar(fileName, "General", "Alpha"));
+                withBlock.Red = Convert.ToInt32(GetVar(fileName, "General", "Red"));
+                withBlock.Green = Convert.ToInt32(GetVar(fileName, "General", "Green"));
+                withBlock.Blue = Convert.ToInt32(GetVar(fileName, "General", "Blue"));
+                withBlock.Alpha = Convert.ToInt32(GetVar(fileName, "General", "Alpha"));
 
-                withBlock.BossNpc = (int)Conversion.Val(GetVar(fileName, "General", "BossNpc"));
+                withBlock.BossNpc = Convert.ToInt32(GetVar(fileName, "General", "BossNpc"));
             }
 
             // Redim the map
@@ -2049,15 +2047,13 @@ namespace Server
             string line;
             int i;
             
-            for (i = Strings.Len(ip); i >= 0; i -= 1)
+            for (i = ip.Length; i >= 0; i -= 1)
             {
-
-                if (Strings.Mid(ip, i, 1) == ".")
+                if (ip.Substring(i - 1, 1) == ".")
                 {
-                    ip = Strings.Mid(ip, i, 1);
+                    ip = ip.Substring(i - 1, 1);
                     break;
                 }
-
             }
 
             filename = Path.Combine(DataPath.Database, "banlist.txt");
@@ -2074,7 +2070,7 @@ namespace Server
             {
                 // Is banned?
                 line = sr.ReadLine();
-                if ((Strings.LCase(line) ?? "") == (Strings.LCase(Strings.Mid(ip, 1, Strings.Len(line))) ?? ""))
+                if ((line?.ToLower() ?? "") == (ip.Substring(0, Math.Min(line?.Length ?? 0, ip.Length)).ToLower() ?? ""))
                 {
                     isBanned = true;
                 }
@@ -2104,19 +2100,17 @@ namespace Server
             // Cut off last portion of ip
             ip = PlayerService.Instance.ClientIp(banPlayerIndex);
 
-            for (i = Strings.Len(ip); i >= 0; i -= 1)
+            for (i = ip.Length; i >= 0; i -= 1)
             {
-
-                if (Strings.Mid(ip, i, 1) == ".")
+                if (ip.Substring(i - 1, 1) == ".")
                 {
                     break;
                 }
-
             }
 
             Data.Account[banPlayerIndex].Banned = true;
 
-            ip = Strings.Mid(ip, 1, i);
+            ip = ip.Substring(0, i);
             Log.Add(ip, "banlist.txt");
             NetworkSend.GlobalMsg(GetPlayerName(banPlayerIndex) + " has been banned from " + SettingsManager.Instance.GameName + " by " + GetPlayerName(bannedByIndex) + "!");
             Log.Add(GetPlayerName(bannedByIndex) + " has banned " + GetPlayerName(banPlayerIndex) + ".", Constant.AdminLog);

@@ -60,7 +60,6 @@
         <PackageReference Include="Eto.Platform.Gtk"/>
         <PackageReference Include="ManagedBass"/>
         <PackageReference Include="ManagedBass.Midi"/>
-        <PackageReference Include="Microsoft.VisualBasic"/>
         <PackageReference Include="MonoGame.Content.Builder.Task"/>
         <PackageReference Include="MonoGame.Framework.Content.Pipeline"/>
         <PackageReference Include="MonoGame.Framework.DesktopGL"/>

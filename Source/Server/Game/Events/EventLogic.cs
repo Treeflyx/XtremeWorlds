@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using static Core.Globals.Type;
 using static Core.Globals.Command;
 using static Core.Net.Packets;
