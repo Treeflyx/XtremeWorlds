@@ -21,6 +21,10 @@ public abstract class PacketParser<TPacketId> where TPacketId : Enum
         while (bytes.Length >= 4)
         {
             var packetSize = BitConverter.ToInt32(bytes.Span);
+            if (packetSize > bytes.Length - 4)
+            {
+                break;
+            }
 
             bytes = bytes[4..];
             if (packetSize == 0)

@@ -8,7 +8,7 @@ public static class Network
 {
     private sealed class NetworkEventHandler : INetworkEventHandler
     {
-        private const int BufferSize = 0x2000;
+        private const int BufferSize = 0xFFFF;
         private readonly GamePacketParser _parser = new();
         private readonly byte[] _buffer = new byte[BufferSize];
         private int _bufferOffset;
