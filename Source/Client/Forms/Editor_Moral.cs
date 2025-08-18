@@ -60,7 +60,13 @@ namespace Client
             cmbColor.SelectedIndex = 0;                                                                                                                                                                                                                                                 
 
             // Events
-            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                LstIndex_Click();
+            };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             cmbColor.SelectedIndexChanged += (s, e) => CmbColor_SelectedIndexChanged();
             chkCanCast.CheckedChanged += (s, e) => chkCanCast_CheckedChanged();

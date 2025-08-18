@@ -50,7 +50,13 @@ namespace Client
             Load += (s, e) => Editor_Shop_Load();
 
             // Event wiring
-            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                LstIndex_Click();
+            };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             nudBuy.ValueChanged += (s, e) => NudBuy_ValueChanged();
             cmbItem.SelectedIndexChanged += (s, e) => { };

@@ -49,7 +49,13 @@ namespace Client
         Eto.Forms.Control BuildUi()
         {
             lstIndex = new ListBox { Width = 220, Height = 500 };
-            lstIndex.SelectedIndexChanged += (s,e) => { if (_suppressIndexChanged) return; Editors.ItemEditorInit(); };
+            lstIndex.SelectedIndexChanged += (s,e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                Editors.ItemEditorInit();
+            };
 
             txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s,e)=> UpdateName();
             txtDescription = new TextArea { Size = new Size(200,120) }; txtDescription.TextChanged += (s,e)=> { Data.Item[GameState.EditorIndex].Description = Strings.Trim(txtDescription.Text); MarkChanged(); };

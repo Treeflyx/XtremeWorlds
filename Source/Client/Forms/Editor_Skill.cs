@@ -92,7 +92,13 @@ namespace Client
             cmbKnockBackTiles.Items.Add("3");
 
             // Wiring events
-            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                LstIndex_Click();
+            };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             cmbType.SelectedIndexChanged += (s, e) => CmbType_SelectedIndexChanged();
             nudMp.ValueChanged += (s, e) => NudMp_ValueChanged();

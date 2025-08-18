@@ -69,6 +69,7 @@ namespace Client
             {
                 if (_initializing) return;
                 if (lstIndex.SelectedIndex < 0) return;
+                GameState.EditorIndex = lstIndex.SelectedIndex;
                 Editors.NpcEditorInit();
             };
 

@@ -60,7 +60,13 @@ namespace Client
     {
         
     lstJobs = new ListBox { Width = 220 };
-    lstJobs.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; ChangeJob(); };
+    lstJobs.SelectedIndexChanged += (s, e) =>
+    {
+        if (_suppressIndexChanged) return;
+        if (lstJobs.SelectedIndex >= 0)
+            GameState.EditorIndex = lstJobs.SelectedIndex;
+        ChangeJob();
+    };
         txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 

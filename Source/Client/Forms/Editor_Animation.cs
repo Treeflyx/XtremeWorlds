@@ -80,7 +80,13 @@ namespace Client
             btnDelete.Click += BtnDelete_Click;
             btnCancel.Click += BtnCancel_Click;
             txtName.TextChanged += TxtName_TextChanged;
-            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; lstIndex_Click(s, e); };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                lstIndex_Click(s, e);
+            };
             cmbSound.SelectedIndexChanged += CmbSound_SelectedIndexChanged;
             this.Closed += Editor_Animation_FormClosing;
 
@@ -95,9 +101,9 @@ namespace Client
             // Right side: animation properties
             var right = new DynamicLayout { Padding = 0, Spacing = new Size(5, 5) };
             right.AddRow("Name:", txtName);
-            right.AddRow("Sprite 0:", nudSprite0, "Frames:", nudFrameCount0, "Loop Time:", nudLoopTime0, picSprite0);
-            right.AddRow("Sprite 1:", nudSprite1, "Frames:", nudFrameCount1, "Loop Time:", nudLoopTime1, picSprite1);
-            right.AddRow("Loop Count 0:", nudLoopCount0, "Loop Count 1:", nudLoopCount1);
+            right.AddRow("Sprite 1:", nudSprite0, "Frames:", nudFrameCount0, "Loop Time:", nudLoopTime0, picSprite0);
+            right.AddRow("Sprite 2:", nudSprite1, "Frames:", nudFrameCount1, "Loop Time:", nudLoopTime1, picSprite1);
+            right.AddRow("Loop Count 1:", nudLoopCount0, "Loop Count 2:", nudLoopCount1);
             right.AddRow("Sound:", cmbSound);
             right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
 

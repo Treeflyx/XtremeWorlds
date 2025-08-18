@@ -16,18 +16,18 @@ namespace Client
         private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox { Width = 200 };
         public TextBox txtName = new TextBox { Width = 200 };
-    public TextBox txtMessage = new TextBox { Width = 200 };
-    public TextBox txtMessage2 = new TextBox { Width = 200 };
-    public ComboBox cmbType = new ComboBox { Width = 200 };
-    public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0, Width = 80 };
-    public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0, Width = 80 };
-    public ComboBox cmbRewardItem = new ComboBox { Width = 200 };
-    public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
-    public ComboBox cmbTool = new ComboBox { Width = 200 };
-    public NumericStepper nudHealth = new NumericStepper { MinValue = 0, Width = 100 };
-    public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
-    public ComboBox cmbAnimation = new ComboBox { Width = 200 };
-    public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0, Width = 100 };
+        public TextBox txtMessage = new TextBox { Width = 200 };
+        public TextBox txtMessage2 = new TextBox { Width = 200 };
+        public ComboBox cmbType = new ComboBox { Width = 200 };
+        public NumericStepper nudNormalPic = new NumericStepper { MinValue = 0, Width = 80 };
+        public NumericStepper nudExhaustedPic = new NumericStepper { MinValue = 0, Width = 80 };
+        public ComboBox cmbRewardItem = new ComboBox { Width = 200 };
+        public NumericStepper nudRewardExp = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+        public ComboBox cmbTool = new ComboBox { Width = 200 };
+        public NumericStepper nudHealth = new NumericStepper { MinValue = 0, Width = 100 };
+        public NumericStepper nudRespawn = new NumericStepper { MinValue = 0, MaxValue = 1000000, Width = 120 };
+        public ComboBox cmbAnimation = new ComboBox { Width = 200 };
+        public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0, Width = 100 };
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
         public Button btnCancel = new Button { Text = "Cancel" };
@@ -57,7 +57,13 @@ namespace Client
             Load += (s, e) => Editor_Resource_Load();
 
             // Events wiring (converted from WinForms)
-            lstIndex.SelectedIndexChanged += (s, e) => { if (_suppressIndexChanged) return; LstIndex_Click(); };
+            lstIndex.SelectedIndexChanged += (s, e) =>
+            {
+                if (_suppressIndexChanged) return;
+                if (lstIndex.SelectedIndex >= 0)
+                    GameState.EditorIndex = lstIndex.SelectedIndex;
+                LstIndex_Click();
+            };
             txtName.TextChanged += (s, e) => TxtName_TextChanged();
             txtMessage.TextChanged += (s, e) => TxtMessage_TextChanged();
             txtMessage2.TextChanged += (s, e) => TxtMessage2_TextChanged();
