@@ -137,8 +137,7 @@ namespace Client
                     new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, null, null),
                     new TableRow(new Label{Text="Type"}, cmbType, new Label{Text="Animation"}, cmbAnimation),
                     new TableRow(new Label{Text="Bind"}, cmbBind, new Label{Text="Item Lvl"}, numItemLvl),
-                    new TableRow(new Label{Text="Price"}, numPrice, new Label{Text="Rarity"}, numRarity, chkStackable),
-                    new TableRow(btnSpawn, numSpawnAmount, null, null)
+                    new TableRow(new Label{Text="Price"}, numPrice, new Label{Text="Rarity"}, numRarity, chkStackable)
                 }
             });
 
@@ -207,7 +206,8 @@ namespace Client
             mid.AddRow(fraSkill);
             mid.AddRow(fraProjectile);
             mid.AddRow(fraEvents);
-            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCancel}});
+            // Action bar at bottom with Save/Delete/Cancel and Spawn controls
+            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCancel,btnSpawn,numSpawnAmount}});
 
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);
