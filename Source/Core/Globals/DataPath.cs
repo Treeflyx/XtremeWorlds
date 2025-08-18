@@ -17,7 +17,8 @@ public static class DataPath
         }
     }
     
-    public static string Asset => Path.Combine(Environment.CurrentDirectory, "Content");
+    // Use the application base directory so running from bin/Build works and finds Content next to the executable
+    public static string Asset => Path.Combine(AppContext.BaseDirectory ?? Environment.CurrentDirectory, "Content");
     public static string Config => Path.Combine(Local, "Config");
     public static string Skins => Path.Combine(Asset, "Skins");
     public static string Graphics => Path.Combine(Asset, "Graphics");

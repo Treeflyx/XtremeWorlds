@@ -15,6 +15,9 @@ namespace Client
     private static Editor_Job? _instance;
     public static Editor_Job Instance => _instance ??= new Editor_Job();
     private bool _suppressIndexChanged;
+    // Copy/Paste clipboard for jobs
+    private Core.Globals.Type.Job _clipboardJob;
+    private bool _hasClipboardJob;
 
     public ListBox? lstJobs, lstStartItems;
     public TextBox? txtName;
@@ -24,7 +27,7 @@ namespace Client
     public NumericStepper? numStr, numLck, numEnd, numInt, numVit, numSpr, numBaseExp;
     public NumericStepper? numStartMap, numStartX, numStartY;
     public NumericStepper? numMaleSprite, numFemaleSprite, numItemAmount;
-    public Button? btnSetItem, btnSave, btnDelete, btnCancel;
+    public Button? btnSetItem, btnSave, btnDelete, btnCopy, btnCancel;
     public Drawable? malePreview, femalePreview;
     Bitmap? maleBmp, femaleBmp;
 
@@ -96,8 +99,9 @@ namespace Client
         btnSetItem = new Button { Text = "Set Slot" }; btnSetItem.Click += (s, e) => SetStartItem();
 
         // Actions
-        btnSave = new Button { Text = "Save" }; btnSave.Click += (s, e) => { Editors.JobEditorOK(); Close(); };
-        btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s, e) => { Database.ClearJob(GameState.EditorIndex); ReloadPanel(); };
+    btnSave = new Button { Text = "Save" }; btnSave.Click += (s, e) => { Editors.JobEditorOK(); Close(); };
+    btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s, e) => { Database.ClearJob(GameState.EditorIndex); ReloadPanel(); };
+    btnCopy = new Button { Text = "Copy" }; btnCopy.Click += (s, e) => CopyOrPasteJob();
         btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s, e) => { Editors.JobEditorCancel(); Close(); };
 
         // Previews
@@ -155,7 +159,7 @@ namespace Client
     rightContent.Add(items);
     rightContent.AddRow(start);
     rightContent.AddRow(sprites);
-    rightContent.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+    rightContent.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCopy, btnCancel } });
     var right = new Scrollable { Content = rightContent, ExpandContentWidth = true };
 
         return new TableLayout
@@ -228,6 +232,45 @@ void ChangeJob() { if (lstJobs!.SelectedIndex >= 0) { GameState.EditorIndex = ls
             }
             finally { _suppressIndexChanged = false; }
         }
+    }
+
+    void CopyOrPasteJob()
+    {
+        int src = GameState.EditorIndex;
+        if (!_hasClipboardJob)
+        {
+            if (src < 0 || src >= Constant.MaxJobs) return;
+            var s = Data.Job[src];
+            _clipboardJob = s;
+            if (s.Stat != null) _clipboardJob.Stat = (int[])s.Stat.Clone();
+            if (s.StartItem != null) _clipboardJob.StartItem = (int[])s.StartItem.Clone();
+            if (s.StartValue != null) _clipboardJob.StartValue = (int[])s.StartValue.Clone();
+            _hasClipboardJob = true;
+            btnCopy!.Text = "Paste";
+            return;
+        }
+
+    int def = GameState.EditorIndex + 1;
+    var oneBased = Editors.PromptIndex(this, "Paste Job", $"Paste job into index (1..{Constant.MaxJobs}):", 1, Constant.MaxJobs, def);
+    if (oneBased == null) return;
+    int dst = oneBased.Value - 1;
+        var n = _clipboardJob;
+        if (n.Stat != null) n.Stat = (int[])n.Stat.Clone();
+        if (n.StartItem != null) n.StartItem = (int[])n.StartItem.Clone();
+        if (n.StartValue != null) n.StartValue = (int[])n.StartValue.Clone();
+        Data.Job[dst] = n;
+        GameState.JobChanged[dst] = true;
+
+        _suppressIndexChanged = true;
+        try
+        {
+            lstJobs!.Items.RemoveAt(dst);
+            lstJobs.Items.Insert(dst, new ListItem { Text = (dst + 1) + ": " + Data.Job[dst].Name });
+            lstJobs.SelectedIndex = dst;
+        }
+        finally { _suppressIndexChanged = false; }
+        GameState.EditorIndex = dst;
+        ReloadPanel();
     }
 
     void SetStat(Stat stat, NumericStepper ctl) => Data.Job[GameState.EditorIndex].Stat[(int)stat] = (int)ctl.Value;

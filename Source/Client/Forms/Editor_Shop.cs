@@ -25,7 +25,10 @@ namespace Client
         private Button btnDeleteTrade = new Button { Text = "Delete Trade" };
         private Button btnSave = new Button { Text = "Save" };
         private Button btnDelete = new Button { Text = "Delete" };
+        private Button btnCopy = new Button { Text = "Copy" };
         private Button btnCancel = new Button { Text = "Cancel" };
+        private Core.Globals.Type.Shop _clipboardShop;
+        private bool _hasClipboardShop;
 
         public Editor_Shop()
         {
@@ -69,6 +72,7 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
+            btnCopy.Click += (s, e) => CopyOrPasteShop();
 
             // Adjust list to consistent width and restructure layout similar to other editors
             lstIndex.Width = 220;
@@ -127,7 +131,7 @@ namespace Client
                     },
                     // Make trades area expand to fill remaining space
                     new StackLayoutItem(new GroupBox { Text = "Trade", Content = tradeArea }, expand: true),
-                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } }
+                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCopy, btnCancel } }
                 }
             };
 
@@ -221,6 +225,53 @@ namespace Client
                 lstIndex.SelectedIndex = tmpindex;
             }
             finally { _suppressIndexChanged = false; }
+            Editors.ShopEditorInit();
+        }
+
+        private void CopyOrPasteShop()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardShop)
+            {
+                if (src < 0 || src >= Constant.MaxShops) return;
+                var s = Data.Shop[src];
+                _clipboardShop = s; // struct copy
+                if (s.TradeItem != null)
+                {
+                    _clipboardShop.TradeItem = new Core.Globals.Type.TradeItem[s.TradeItem.Length];
+                    Array.Copy(s.TradeItem, _clipboardShop.TradeItem, s.TradeItem.Length);
+                }
+                _hasClipboardShop = true;
+                btnCopy.Text = "Paste";
+                return;
+            }
+
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste Shop", $"Paste shop into index (1..{Constant.MaxShops}):", 1, Constant.MaxShops, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var n = _clipboardShop;
+            if (n.TradeItem != null)
+            {
+                var arr = new Core.Globals.Type.TradeItem[n.TradeItem.Length];
+                Array.Copy(n.TradeItem, arr, n.TradeItem.Length);
+                n.TradeItem = arr;
+            }
+            Data.Shop[dst] = n;
+            GameState.ShopChanged[dst] = true;
+
+            if (lstIndex != null && dst >= 0 && dst < lstIndex.Items.Count)
+            {
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = $"{dst + 1}: {Data.Shop[dst].Name}" });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+            }
+            GameState.EditorIndex = dst;
             Editors.ShopEditorInit();
         }
     }

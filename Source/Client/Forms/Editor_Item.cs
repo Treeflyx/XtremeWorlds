@@ -14,6 +14,9 @@ namespace Client
         private static Editor_Item? _instance;
         public static Editor_Item Instance => _instance ??= new Editor_Item();
         private bool _suppressIndexChanged;
+        // Copy/Paste clipboard for items
+        private Core.Globals.Type.Item _clipboardItem;
+        private bool _hasClipboardItem;
 
         // Core lists/controls
         public ListBox? lstIndex; // legacy name used by Editors.cs
@@ -25,7 +28,7 @@ namespace Client
         public NumericStepper? numStrReq, numVitReq, numLuckReq, numIntReq, numSprReq, numLevelReq;
         public NumericStepper? numStrAdd, numVitAdd, numLuckAdd, numIntAdd, numSprAdd;
         public Drawable? iconPreview, paperdollPreview;
-        public Button? btnSave, btnCancel, btnDelete;
+        public Button? btnSave, btnCancel, btnDelete, btnCopy;
         public Button? btnSpawn;
         public NumericStepper? numSpawnAmount;
 
@@ -121,6 +124,8 @@ namespace Client
             btnSave = new Button { Text = "Save" }; btnSave.Click += (s,e)=> { Editors.ItemEditorOK(); Close(); };
             btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s,e)=> { Editors.ItemEditorCancel(); Close(); };
             btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s,e)=> { Item.ClearItem(GameState.EditorIndex); Editors.ItemEditorInit(); MarkChanged(); };
+            btnCopy = new Button { Text = "Copy" };
+            btnCopy.Click += (s,e)=> CopyOrPasteItem();
             btnSpawn = new Button { Text = "Spawn" }; btnSpawn.Click += (s,e)=> { Sender.SendSpawnItem(GameState.EditorIndex, (int)numSpawnAmount!.Value); };
             numSpawnAmount = Num(1, int.MaxValue); numSpawnAmount.Value = 1;
 
@@ -206,8 +211,8 @@ namespace Client
             mid.AddRow(fraSkill);
             mid.AddRow(fraProjectile);
             mid.AddRow(fraEvents);
-            // Action bar at bottom with Save/Delete/Cancel and Spawn controls
-            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCancel,btnSpawn,numSpawnAmount}});
+            // Action bar at bottom with Save/Delete/Copy/Cancel and Spawn controls
+            mid.AddRow(new StackLayout{Orientation=Orientation.Horizontal,Spacing=6,Items={btnSave,btnDelete,btnCopy,btnCancel,btnSpawn,numSpawnAmount}});
 
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);
@@ -417,6 +422,48 @@ namespace Client
             itemBmp?.Dispose(); paperdollBmp?.Dispose();
             Editors.ItemEditorCancel();
             base.OnClosed(e);
+        }
+
+        void CopyOrPasteItem()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardItem)
+            {
+                if (src < 0 || src >= Constant.MaxItems) return;
+                // Copy
+                var s = Data.Item[src];
+                _clipboardItem = s;
+                if (s.AddStat != null) _clipboardItem.AddStat = (byte[])s.AddStat.Clone();
+                if (s.StatReq != null) _clipboardItem.StatReq = (byte[])s.StatReq.Clone();
+                _hasClipboardItem = true;
+                btnCopy!.Text = "Paste";
+                return;
+            }
+
+            // Paste
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste Item", $"Paste item into index (1..{Constant.MaxItems}):", 1, Constant.MaxItems, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var n = _clipboardItem;
+            if (n.AddStat != null) n.AddStat = (byte[])n.AddStat.Clone();
+            if (n.StatReq != null) n.StatReq = (byte[])n.StatReq.Clone();
+            Data.Item[dst] = n;
+            GameState.ItemChanged[dst] = true;
+
+            if (lstIndex != null && dst >= 0 && dst < lstIndex.Items.Count)
+            {
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = (dst + 1) + ": " + Data.Item[dst].Name });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+            }
+            GameState.EditorIndex = dst;
+            Editors.ItemEditorInit();
         }
     }
 }

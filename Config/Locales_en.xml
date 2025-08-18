@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Locales xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Load Key="Loading" Value="Loading..." />
+  <Load Key="Graphics" Value="Initializing Graphics.." />
+  <Load Key="Network" Value="Initializing Network..." />
+  <Load Key="Starting" Value="Starting Game..." />
+  <MainMenu Key="ServerStatus" Value="Server Status:" />
+  <MainMenu Key="ServerOnline" Value="Online" />
+  <MainMenu Key="ServerReconnect" Value="Reconnecting..." />
+  <MainMenu Key="ServerOffline" Value="Offline" />
+  <MainMenu Key="ButtonPlay" Value="Play" />
+  <MainMenu Key="ButtonRegister" Value="Register" />
+  <MainMenu Key="ButtonCredits" Value="Credits" />
+  <MainMenu Key="ButtonExit" Value="Exit" />
+  <MainMenu Key="NewsHeader" Value="Latest News" />
+  <MainMenu Key="News" Value="Welcome To the XtremeWorlds.&#xA;This is a free open-source C# game engine!&#xA;For help or support please visit our site at&#xA;https://xtremeworlds.com/." />
+  <MainMenu Key="Login" Value="Login" />
+  <MainMenu Key="LoginName" Value="Name: " />
+  <MainMenu Key="LoginPass" Value="Password: " />
+  <MainMenu Key="LoginCheckBox" Value="Save Password?" />
+  <MainMenu Key="LoginButton" Value="Submit" />
+  <MainMenu Key="NewCharacter" Value="Create Character" />
+  <MainMenu Key="NewCharacterName" Value="Name: " />
+  <MainMenu Key="NewCharacterClass" Value="Class: " />
+  <MainMenu Key="NewCharacterGender" Value="Gender: " />
+  <MainMenu Key="NewCharacterMale" Value="Male" />
+  <MainMenu Key="NewCharacterFemale" Value="Female" />
+  <MainMenu Key="NewCharacterSprite" Value="Sprite" />
+  <MainMenu Key="NewCharacterButton" Value="Submit" />
+  <MainMenu Key="UseCharacter" Value="Character Selection" />
+  <MainMenu Key="UseCharacterNew" Value="New Character" />
+  <MainMenu Key="UseCharacterUse" Value="Use Character" />
+  <MainMenu Key="UseCharacterDel" Value="Delete Character" />
+  <MainMenu Key="Register" Value="Registration" />
+  <MainMenu Key="RegisterName" Value="Username: " />
+  <MainMenu Key="RegisterPass1" Value="Password: " />
+  <MainMenu Key="RegisterPass2" Value="Retype Password: " />
+  <MainMenu Key="Credits" Value="Credits" />
+  <MainMenu Key="StringLegal" Value="You cannot use high ASCII characters In your name, please re-enter." />
+  <MainMenu Key="SendLogin" Value="Connected, sending login information..." />
+  <MainMenu Key="SendNewCharacter" Value="Connected, sending character data..." />
+  <MainMenu Key="SendRegister" Value="Connected, sending registration information..." />
+  <MainMenu Key="ConnectToServer" Value="Connecting to Server...( {0} )" />
+  <Game Key="Time" Value="Time: " />
+  <Game Key="Fps" Value="Fps: " />
+  <Game Key="Lps" Value="Lps: " />
+  <Game Key="Ping" Value="Ping: " />
+  <Game Key="PingSync" Value="Sync" />
+  <Game Key="PingLocal" Value="Local" />
+  <Game Key="MapReceive" Value="Receiving map..." />
+  <Game Key="DataReceive" Value="Receiving game data..." />
+  <Game Key="MapCurMap" Value="Map # {0}" />
+  <Game Key="MapCurLoc" Value="Loc() x: {0} y: {1}" />
+  <Game Key="MapLoc" Value="Cur Loc x: {0} y: {1}" />
+  <Game Key="Fullscreen" Value="Please restart the client for the changes to take effect." />
+  <Game Key="InvalidMap" Value="Invalid map index." />
+  <Game Key="AccessDenied" Value="Access Denied!" />
+  <Chat Key="Emote" Value="Usage : /emote [1-11]" />
+  <Chat Key="Info" Value="Usage : /info [player]" />
+  <Chat Key="Party" Value="Usage : /party [player]" />
+  <Chat Key="Trade" Value="Usage : /trade [player]" />
+  <Chat Key="PlayerMsg" Value="Usage : ![player] [message]" />
+  <Chat Key="InvalidCmd" Value="Not a valid command!" />
+  <Chat Key="Help1" Value="Social Commands : " />
+  <Chat Key="Help2" Value="'[message] = Global Message" />
+  <Chat Key="Help3" Value="-[message] = Party Message" />
+  <Chat Key="Help4" Value="![player] [message] = Player Message" />
+  <Chat Key="Help5" Value="@[message] = Admin Message" />
+  <Chat Key="Help6" Value="Available Commands: /help, /info, &#xA;/fps, /lps, /stats, /trade, &#xA;/party, /join, /leave" />
+  <Chat Key="AdminGblMsg" Value="''msghere = Global Admin Message" />
+  <Chat Key="AdminPvtMsg" Value="= msghere = Private Admin Message" />
+  <Chat Key="Admin1" Value="Social Commands:" />
+  <Chat Key="Admin2" Value="Available Commands: /admin, /who, /access, /loc, &#xA;/warpmeto, /warptome, /warpto, &#xA;/sprite, /mapreport, /kick, &#xA;/ban, /respawn, /welcome,&#xA;/editmap, /edititem, /editresource,&#xA;/editskill, /editshop /editprojectile,&#xA;/editnpc, /editjob, /editscript, /acp" />
+  <Chat Key="Welcome" Value="Usage : /welcome [message]" />
+  <Chat Key="Access" Value="Usage : /access [player] [access]" />
+  <Chat Key="Sprite" Value="Usage : /sprite [index]" />
+  <Chat Key="Kick" Value="Usage : /kick [player]" />
+  <Chat Key="Ban" Value="Usage : /ban [player]" />
+  <Chat Key="WarpMeTo" Value="Usage : /warpmeto [player]" />
+  <Chat Key="WarpToMe" Value="Usage : /warptome [player]" />
+  <Chat Key="WarpTo" Value="Usage : /warpto [map index]" />
+  <ItemDescription Key="NotAvailable" Value="Not Available" />
+  <ItemDescription Key="None" Value="None" />
+  <ItemDescription Key="Seconds" Value="Seconds" />
+  <ItemDescription Key="Currency" Value="Currency" />
+  <ItemDescription Key="CommonEvent" Value="Event" />
+  <ItemDescription Key="Potion" Value="Potion" />
+  <ItemDescription Key="Skill" Value="Skill" />
+  <ItemDescription Key="Weapon" Value="Weapon" />
+  <ItemDescription Key="Armor" Value="Armor" />
+  <ItemDescription Key="Helmet" Value="Helmet" />
+  <ItemDescription Key="Shield" Value="Shield" />
+  <ItemDescription Key="Shoes" Value="Shoes" />
+  <ItemDescription Key="Gloves" Value="Gloves" />
+  <ItemDescription Key="Amount" Value="Amount : " />
+  <ItemDescription Key="Restore" Value="Restore Amount : " />
+  <ItemDescription Key="Damage" Value="Damage : " />
+  <ItemDescription Key="Defense" Value="Defense : " />
+  <SkillDescription Key="No" Value="No" />
+  <SkillDescription Key="None" Value="None" />
+  <SkillDescription Key="Warp" Value="Warp" />
+  <SkillDescription Key="Tiles" Value="Tiles" />
+  <SkillDescription Key="SelfCast" Value="Self-Cast" />
+  <SkillDescription Key="Gain" Value="Regen : " />
+  <SkillDescription Key="GainHp" Value="Regen HP" />
+  <SkillDescription Key="GainMp" Value="Regen MP" />
+  <SkillDescription Key="Lose" Value="Syphon : " />
+  <SkillDescription Key="LoseHp" Value="Syphon HP" />
+  <SkillDescription Key="LoseMp" Value="Syphon MP" />
+  <Crafting Key="NotEnough" Value="Not enough materials!" />
+  <Crafting Key="NotSelected" Value="Nothing selected" />
+  <Trade Key="Request" Value="{0} is requesting to trade." />
+  <Trade Key="Timeout" Value="You took too long to decide. Please try again." />
+  <Trade Key="Value" Value="Total Value : {0}g" />
+  <Trade Key="StatusOther" Value="Other player confirmed offer." />
+  <Trade Key="StatusSelf" Value="You confirmed the offer." />
+  <Events Key="OptContinue" Value="- Continue -" />
+  <Quest Key="Cancel" Value="Cancel Started" />
+  <Quest Key="Started" Value="Quest Started" />
+  <Quest Key="Completed" Value="Quest Completed" />
+  <Quest Key="Slay" Value="Defeat {0}/{1} {2}." />
+  <Quest Key="Collect" Value="Collect {0}/{1} {2}." />
+  <Quest Key="Talk" Value="Go talk To {0}." />
+  <Quest Key="Reach" Value="Go To {0}." />
+  <Quest Key="TurnIn" Value="Give {0} the {1} {2}/{3} they requested." />
+  <Quest Key="Kill" Value="Defeat {0}/{1} Players In Battle." />
+  <Quest Key="Gather" Value="Gather {0}/{1} {2}." />
+  <Quest Key="Fetch" Value="Fetch {0} X {1} from {2}." />
+  <Character Key="PName" Value="Name: " />
+  <Character Key="JobType" Value="Job: " />
+  <Character Key="Level" Value="Lv: " />
+  <Character Key="Exp" Value="Exp: " />
+  <Character Key="StatsLabel" Value="Stats:" />
+  <Character Key="Strength" Value="Strength: " />
+  <Character Key="Endurance" Value="Endurance: " />
+  <Character Key="Vitality" Value="Vitality: " />
+  <Character Key="Intelligence" Value="Intelligence: " />
+  <Character Key="Luck" Value="Luck: " />
+  <Character Key="Spirit" Value="Spirit: " />
+  <Character Key="Points" Value="Points Available: " />
+  <Character Key="SkillLabel" Value="Skills:" />
+</Locales>

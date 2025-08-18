@@ -14,6 +14,8 @@ namespace Client
         public static Editor_Moral Instance => _instance ??= new Editor_Moral();
         private bool _suppressIndexChanged;
         public ListBox lstIndex = new ListBox{ Width = 200 };
+        private Core.Globals.Type.Moral _clipboardMoral;
+        private bool _hasClipboardMoral;
         public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbColor = new ComboBox();
         public CheckBox chkCanCast = new CheckBox { Text = "Can Cast" };
@@ -27,6 +29,7 @@ namespace Client
         public CheckBox chkNpcBlock = new CheckBox { Text = "Npc Block" };
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
+        public Button btnCopy = new Button { Text = "Copy" };
         public Button btnCancel = new Button { Text = "Cancel" };
 
         public Editor_Moral()
@@ -81,6 +84,7 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
                                                                                         btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
+            btnCopy.Click += (s, e) => CopyOrPasteMoral();
 
             // Layout
             var leftPanel = new DynamicLayout { Spacing = new Size(5, 5) };
@@ -97,7 +101,7 @@ namespace Client
             right.AddRow(chkPlayerBlock, chkNpcBlock);
 
             // Buttons now placed at bottom of right panel
-            right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+            right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCopy, btnCancel } });
 
             Content = new TableLayout
             {
@@ -181,5 +185,40 @@ namespace Client
         private void chkPlayerBlock_CheckedChanged() => Data.Moral[GameState.EditorIndex].PlayerBlock = chkPlayerBlock.Checked == true;
         private void chkNpcBlock_CheckedChanged() => Data.Moral[GameState.EditorIndex].NpcBlock = chkNpcBlock.Checked == true;
         private void CmbColor_SelectedIndexChanged() => Data.Moral[GameState.EditorIndex].Color = (byte)(cmbColor.SelectedIndex >= 0 ? cmbColor.SelectedIndex : 0);
+
+        private void CopyOrPasteMoral()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardMoral)
+            {
+                if (src < 0 || src >= Constant.MaxMorals) return;
+                _clipboardMoral = Data.Moral[src];
+                _hasClipboardMoral = true;
+                btnCopy.Text = "Paste";
+                return;
+            }
+
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste Moral", $"Paste moral into index (1..{Constant.MaxMorals}):", 1, Constant.MaxMorals, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var n = _clipboardMoral;
+            Data.Moral[dst] = n;
+            GameState.MoralChanged[dst] = true;
+
+            if (lstIndex != null && dst >= 0 && dst < lstIndex.Items.Count)
+            {
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = $"{dst + 1}: {Data.Moral[dst].Name}" });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+            }
+            GameState.EditorIndex = dst;
+            Editors.MoralEditorInit();
+        }
     }
 }

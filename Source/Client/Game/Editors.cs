@@ -31,11 +31,31 @@ namespace Client
             };
         }
 
+        // Simple modal numeric prompt to replace VB Interaction.InputBox on cross-platform
+        public static int? PromptIndex(Form owner, string title, string message, int min, int max, int defaultValue)
+        {
+            var dlg = new Dialog { Title = title, ClientSize = new Size(360, 140), Padding = 10 };
+            var num = new NumericStepper { MinValue = min, MaxValue = max, Value = defaultValue, DecimalPlaces = 0 };
+            var ok = new Button { Text = "OK" };
+            var cancel = new Button { Text = "Cancel" };
+            int? result = null;
+            ok.Click += (s, e) => { result = (int)Math.Round(num.Value); dlg.Close(); };
+            cancel.Click += (s, e) => { result = null; dlg.Close(); };
+            var layout = new DynamicLayout { Spacing = new Size(6, 6) };
+            layout.AddRow(new Label { Text = message });
+            layout.AddRow(num);
+            layout.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { ok, cancel } });
+            dlg.Content = layout;
+            dlg.ShowModal(owner);
+            return result;
+        }
+
         #region Animation Editor
 
         public static void AnimationEditorInit()
         {  
             ref var withBlock = ref Data.Animation[GameState.EditorIndex];
+            EnsureAnimationArrays(ref withBlock);
             if (string.IsNullOrEmpty(withBlock.Sound))
             {
                 Editor_Animation.Instance!.cmbSound!.SelectedIndex = 0;
@@ -74,6 +94,28 @@ namespace Client
             Editor_Animation.Instance!.nudLoopTime1!.Value = withBlock.LoopTime[1];
 
             GameState.AnimationChanged[GameState.EditorIndex] = true;
+        }
+
+        private static void EnsureAnimationArrays(ref Core.Globals.Type.Animation a)
+        {
+            // Ensure arrays exist and have at least length 2
+            if (a.Sprite == null) a.Sprite = new int[2];
+            else if (a.Sprite.Length < 2) Array.Resize(ref a.Sprite, 2);
+
+            if (a.Frames == null) a.Frames = new int[2];
+            else if (a.Frames.Length < 2) Array.Resize(ref a.Frames, 2);
+
+            if (a.LoopCount == null) a.LoopCount = new int[2];
+            else if (a.LoopCount.Length < 2) Array.Resize(ref a.LoopCount, 2);
+
+            if (a.LoopTime == null) a.LoopTime = new int[2];
+            else if (a.LoopTime.Length < 2) Array.Resize(ref a.LoopTime, 2);
+
+            // Sensible minimums to prevent zero/invalid state
+            if (a.LoopCount[0] == 0) a.LoopCount[0] = 1;
+            if (a.LoopCount[1] == 0) a.LoopCount[1] = 1;
+            if (a.LoopTime[0] == 0) a.LoopTime[0] = 1;
+            if (a.LoopTime[1] == 0) a.LoopTime[1] = 1;
         }
 
         public static void AnimationEditorOK()
@@ -116,6 +158,9 @@ namespace Client
             var withBlock = Editor_Npc.Instance;
             withBlock.cmbDropSlot.SelectedIndex = 0;
 
+            // Normalize arrays to avoid null/index errors
+            EnsureNpcArrays(ref Data.Npc[GameState.EditorIndex]);
+
             withBlock.txtName.Text = Data.Npc[GameState.EditorIndex].Name;
             withBlock.txtAttackSay.Text = Data.Npc[GameState.EditorIndex].AttackSay;
             withBlock.nudSprite.Value = Data.Npc[GameState.EditorIndex].Sprite;
@@ -153,6 +198,25 @@ namespace Client
             Editor_Npc.Instance.DrawSprite();
 
             GameState.NpcChanged[GameState.EditorIndex] = true;
+        }
+
+        private static void EnsureNpcArrays(ref Core.Globals.Type.Npc n)
+        {
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
+            if (n.Stat == null) n.Stat = new byte[statCount];
+            else if (n.Stat.Length < statCount) Array.Resize(ref n.Stat, statCount);
+
+            if (n.DropChance == null) n.DropChance = new int[6];
+            else if (n.DropChance.Length < 6) Array.Resize(ref n.DropChance, 6);
+
+            if (n.DropItem == null) n.DropItem = new int[6];
+            else if (n.DropItem.Length < 6) Array.Resize(ref n.DropItem, 6);
+
+            if (n.DropItemValue == null) n.DropItemValue = new int[6];
+            else if (n.DropItemValue.Length < 6) Array.Resize(ref n.DropItemValue, 6);
+
+            if (n.Skill == null) n.Skill = new byte[7];
+            else if (n.Skill.Length < 7) Array.Resize(ref n.Skill, 7);
         }
 
         public static void NpcEditorOK()

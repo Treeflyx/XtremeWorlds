@@ -24,6 +24,9 @@ namespace Client
         public Button btnSave = null!;
         public Button btnCancel = null!;
         public Button btnDelete = null!;
+        public Button btnCopy = null!;
+        private Core.Globals.Type.Projectile _clipboardProjectile;
+        private bool _hasClipboardProjectile;
 
         private bool _initializing;
 
@@ -134,6 +137,36 @@ namespace Client
                 Editors.ProjectileEditorInit();
             };
 
+            btnCopy = new Button { Text = "Copy" };
+            btnCopy.Click += (s, e) =>
+            {
+                int src = GameState.EditorIndex;
+                if (!_hasClipboardProjectile)
+                {
+                    if (src < 0 || src >= Constant.MaxProjectiles) return;
+                    _clipboardProjectile = Data.Projectile[src];
+                    _hasClipboardProjectile = true;
+                    btnCopy.Text = "Paste";
+                    return;
+                }
+                int def = GameState.EditorIndex + 1;
+                var oneBased = Editors.PromptIndex(this, "Paste Projectile", $"Paste projectile into index (1..{Constant.MaxProjectiles}):", 1, Constant.MaxProjectiles, def);
+                if (oneBased == null) return;
+                int dst = oneBased.Value - 1;
+                var n = _clipboardProjectile;
+                Data.Projectile[dst] = n;
+                GameState.ProjectileChanged[dst] = true;
+                _initializing = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = (dst + 1) + ": " + Data.Projectile[dst].Name });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _initializing = false; }
+                Editors.ProjectileEditorInit();
+            };
+
             var grid = new TableLayout
             {
                 Spacing = new Size(6, 6),
@@ -150,7 +183,7 @@ namespace Client
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 6,
-                        Items = { btnSave, btnDelete, btnCancel } // enforce order
+                        Items = { btnSave, btnDelete, btnCopy, btnCancel } // enforce order
                     })
                 }
             };

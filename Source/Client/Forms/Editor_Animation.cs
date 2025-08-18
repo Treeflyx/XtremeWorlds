@@ -23,12 +23,15 @@ namespace Client
         public NumericStepper nudLoopTime1 = new();
         public Button btnSave = new();
         public Button btnDelete = new();
+        public Button btnCopy = new();
         public Button btnCancel = new();
         public TextBox txtName = new();
         public ListBox lstIndex = new() { Width = 200 };
         public ComboBox cmbSound = new();
         public Drawable picSprite0 = new() { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
         public Drawable picSprite1 = new() { Size = new Size(192, 192), MinimumSize = new Size(192, 192) };
+        private Core.Globals.Type.Animation _clipboardAnim;
+        private bool _hasClipboardAnim;
 
         public Editor_Animation()
         {
@@ -62,6 +65,7 @@ namespace Client
             btnSave = new Button { Text = "Save" };
             btnDelete = new Button { Text = "Delete" };
             btnCancel = new Button { Text = "Cancel" };
+            btnCopy = new Button { Text = "Copy" };
             txtName = new TextBox { Width = 200 };
             lstIndex = new ListBox { Width = 200 };
             cmbSound = new ComboBox();
@@ -79,6 +83,7 @@ namespace Client
             btnSave.Click += BtnSave_Click;
             btnDelete.Click += BtnDelete_Click;
             btnCancel.Click += BtnCancel_Click;
+            btnCopy.Click += (s, e) => CopyOrPasteAnimation();
             txtName.TextChanged += TxtName_TextChanged;
             lstIndex.SelectedIndexChanged += (s, e) =>
             {
@@ -105,7 +110,7 @@ namespace Client
             right.AddRow("Sprite 2:", nudSprite1, "Frames:", nudFrameCount1, "Loop Time:", nudLoopTime1, picSprite1);
             right.AddRow("Loop Count 1:", nudLoopCount0, "Loop Count 2:", nudLoopCount1);
             right.AddRow("Sound:", cmbSound);
-            right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+            right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCopy, btnCancel } });
 
             var root = new TableLayout
             {
@@ -122,6 +127,7 @@ namespace Client
 
         private void NudSprite0_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].Sprite[0] = (int)Math.Round(nudSprite0.Value);
             UpdatePreviewSize(picSprite0, nudSprite0, nudFrameCount0);
             picSprite0.Invalidate();
@@ -129,6 +135,7 @@ namespace Client
 
         private void NudSprite1_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].Sprite[1] = (int)Math.Round(nudSprite1.Value);
             UpdatePreviewSize(picSprite1, nudSprite1, nudFrameCount1);
             picSprite1.Invalidate();
@@ -136,16 +143,19 @@ namespace Client
 
         private void NudLoopCount0_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].LoopCount[0] = (int)Math.Round(nudLoopCount0.Value);
         }
 
         private void NudLoopCount1_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].LoopCount[1] = (int)Math.Round(nudLoopCount1.Value);
         }
 
         private void NudFrameCount0_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].Frames[0] = (int)Math.Round(nudFrameCount0.Value);
             UpdatePreviewSize(picSprite0, nudSprite0, nudFrameCount0);
             picSprite0.Invalidate();
@@ -153,6 +163,7 @@ namespace Client
 
         private void NudFrameCount1_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].Frames[1] = (int)Math.Round(nudFrameCount1.Value);
             UpdatePreviewSize(picSprite1, nudSprite1, nudFrameCount1);
             picSprite1.Invalidate();
@@ -160,11 +171,13 @@ namespace Client
 
         private void NudLoopTime0_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].LoopTime[0] = (int)Math.Round(nudLoopTime0.Value);
         }
 
         private void NudLoopTime1_ValueChanged(object? sender, EventArgs e)
         {
+            EnsureAnimationArrays(ref Data.Animation[GameState.EditorIndex]);
             Data.Animation[GameState.EditorIndex].LoopTime[1] = (int)Math.Round(nudLoopTime1.Value);
         }
 
@@ -253,9 +266,57 @@ namespace Client
             picSprite1.Invalidate();
         }
 
+        private void CopyOrPasteAnimation()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardAnim)
+            {
+                if (src < 0 || src >= Constant.MaxAnimations) return;
+                var a = Data.Animation[src];
+                _clipboardAnim = a; // struct copy
+                if (a.Sprite != null) _clipboardAnim.Sprite = (int[])a.Sprite.Clone();
+                if (a.Frames != null) _clipboardAnim.Frames = (int[])a.Frames.Clone();
+                if (a.LoopCount != null) _clipboardAnim.LoopCount = (int[])a.LoopCount.Clone();
+                if (a.LoopTime != null) _clipboardAnim.LoopTime = (int[])a.LoopTime.Clone();
+                _hasClipboardAnim = true;
+                btnCopy.Text = "Paste";
+                return;
+            }
+
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste Animation", $"Paste animation into index (1..{Constant.MaxAnimations}):", 1, Constant.MaxAnimations, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var n = _clipboardAnim;
+            if (n.Sprite != null) n.Sprite = (int[])n.Sprite.Clone();
+            if (n.Frames != null) n.Frames = (int[])n.Frames.Clone();
+            if (n.LoopCount != null) n.LoopCount = (int[])n.LoopCount.Clone();
+            if (n.LoopTime != null) n.LoopTime = (int[])n.LoopTime.Clone();
+            EnsureAnimationArrays(ref n);
+            Data.Animation[dst] = n;
+            GameState.AnimationChanged[dst] = true;
+
+            if (lstIndex != null && dst >= 0 && dst < lstIndex.Items.Count)
+            {
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = $"{dst + 1}: {Data.Animation[dst].Name}" });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+            }
+            GameState.EditorIndex = dst;
+            Editors.AnimationEditorInit();
+        }
+
         private void CmbSound_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            Data.Animation[GameState.EditorIndex].Sound = cmbSound.SelectedIndex.ToString();
+            // Store the actual selected sound text, not the index
+            var sel = cmbSound.SelectedValue as ListItem;
+            var text = sel?.Text ?? cmbSound.SelectedValue?.ToString() ?? string.Empty;
+            Data.Animation[GameState.EditorIndex].Sound = text;
         }
 
         private void Editor_Animation_FormClosing(object? sender, EventArgs e)
@@ -319,6 +380,25 @@ namespace Client
                 Console.WriteLine($"Error processing animation: {ex.Message}");
                 graphics.Clear(Colors.Transparent);
             }
+        }
+
+        private static void EnsureAnimationArrays(ref Core.Globals.Type.Animation a)
+        {
+            if (a.Sprite == null || a.Sprite.Length < 2) a.Sprite = a.Sprite != null ? Resize(a.Sprite, 2) : new int[2];
+            if (a.Frames == null || a.Frames.Length < 2) a.Frames = a.Frames != null ? Resize(a.Frames, 2) : new int[2];
+            if (a.LoopCount == null || a.LoopCount.Length < 2) a.LoopCount = a.LoopCount != null ? Resize(a.LoopCount, 2) : new int[2];
+            if (a.LoopTime == null || a.LoopTime.Length < 2) a.LoopTime = a.LoopTime != null ? Resize(a.LoopTime, 2) : new int[2];
+            if (a.LoopCount[0] == 0) a.LoopCount[0] = 1;
+            if (a.LoopCount[1] == 0) a.LoopCount[1] = 1;
+            if (a.LoopTime[0] == 0) a.LoopTime[0] = 1;
+            if (a.LoopTime[1] == 0) a.LoopTime[1] = 1;
+        }
+
+        private static int[] Resize(int[] arr, int len)
+        {
+            var n = new int[len];
+            Array.Copy(arr, n, Math.Min(arr.Length, len));
+            return n;
         }
 
     private void UpdatePreviewSize(Drawable drawable, NumericStepper animationControl, NumericStepper frameCountControl)

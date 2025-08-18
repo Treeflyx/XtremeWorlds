@@ -17,6 +17,9 @@ namespace Client
         private static Editor_Skill? _instance;
         public static Editor_Skill Instance => _instance ??= new Editor_Skill();
         private bool _suppressIndexChanged;
+        // Copy/Paste clipboard
+        private Core.Globals.Type.Skill _clipboardSkill;
+        private bool _hasClipboardSkill;
         public ListBox lstIndex = new ListBox{ Width = 200 };
         public TextBox txtName = new TextBox { Width = 200 };
         public ComboBox cmbType = new ComboBox();
@@ -44,10 +47,11 @@ namespace Client
         public ComboBox cmbProjectile = new ComboBox();
         public CheckBox chkKnockBack = new CheckBox { Text = "KnockBack" };
         public ComboBox cmbKnockBackTiles = new ComboBox();
-        private Button btnSave = new Button { Text = "Save" };
-        private Button btnDelete = new Button { Text = "Delete" };
-        private Button btnCancel = new Button { Text = "Cancel" };
-        private Button btnLearn = new Button { Text = "Learn" };
+        public Button btnSave = new Button { Text = "Save" };
+        public Button btnDelete = new Button { Text = "Delete" };
+        public Button btnCopy = new Button { Text = "Copy" };
+        public Button btnCancel = new Button { Text = "Cancel" };
+        public Button btnLearn = new Button { Text = "Learn" };
         public Drawable picSprite = new Drawable { Size = new Size(64, 64) };
 
         public Editor_Skill()
@@ -128,6 +132,7 @@ namespace Client
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
+            btnCopy.Click += (s, e) => CopyOrPasteSkill();
             btnLearn.Click += (s, e) => BtnLearn_Click();
 
             picSprite.Paint += (s, e) => DrawIcon(e.Graphics, (int)Math.Round(nudIcon.Value));
@@ -146,7 +151,7 @@ namespace Client
             general.AddRow("Cast Anim:", cmbAnimCast, "Skill Anim:", cmbAnim, "Stun:", nudStun);
             general.AddRow(chkProjectile, "Projectile:", cmbProjectile, chkKnockBack, "KB Tiles:", cmbKnockBackTiles);
 
-            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCancel, btnLearn } }; // order enforced
+            var buttons = new StackLayout { Orientation = Orientation.Horizontal, Spacing = 5, Items = { btnSave, btnDelete, btnCopy, btnCancel, btnLearn } }; // order enforced
 
             var rightLayout = new DynamicLayout { Spacing = new Size(6,6) };
             rightLayout.Add(general);
@@ -276,5 +281,40 @@ namespace Client
         }
 
         public void DrawIcon() => picSprite.Invalidate();
+
+        private void CopyOrPasteSkill()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardSkill)
+            {
+                if (src < 0 || src >= Constant.MaxSkills) return;
+                _clipboardSkill = Data.Skill[src]; // struct copy (no arrays)
+                _hasClipboardSkill = true;
+                btnCopy.Text = "Paste";
+                return;
+            }
+
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste Skill", $"Paste skill into index (1..{Constant.MaxSkills}):", 1, Constant.MaxSkills, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var n = _clipboardSkill; // struct copy
+            Data.Skill[dst] = n;
+            GameState.SkillChanged[dst] = true;
+
+            if (lstIndex != null && dst >= 0 && dst < lstIndex.Items.Count)
+            {
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = $"{dst + 1}: {Data.Skill[dst].Name}" });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+            }
+            GameState.EditorIndex = dst;
+            Editors.SkillEditorInit();
+        }
     }
 }

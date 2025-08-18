@@ -47,6 +47,9 @@ namespace Client
         private Button btnSave = null!;
         private Button btnCancel = null!;
         private Button btnDelete = null!;
+        private Button btnCopy = null!;
+        private Core.Globals.Type.Npc _clipboardNpc;
+        private bool _hasClipboardNpc;
 
         private Bitmap? _spriteBitmap;
         private bool _initializing;
@@ -192,6 +195,9 @@ namespace Client
                 Editors.NpcEditorInit();
             };
 
+            btnCopy = new Button { Text = "Copy" };
+            btnCopy.Click += (s, e) => CopyOrPasteNpc();
+
             // Layout sections
             var generalGroup = new TableLayout
             {
@@ -276,7 +282,7 @@ namespace Client
             {
                 Orientation = Orientation.Horizontal,
                 Spacing = 6,
-                Items = { btnSave, btnDelete, btnCancel }
+                Items = { btnSave, btnDelete, btnCopy, btnCancel }
             };
             var rightContent = new TableLayout
             {
@@ -312,6 +318,69 @@ namespace Client
                 }
                 if (_instance == this) _instance = null;
             };
+        }
+
+        private void CopyOrPasteNpc()
+        {
+            int src = GameState.EditorIndex;
+            if (!_hasClipboardNpc)
+            {
+                if (src < 0 || src >= Constant.MaxNpcs) return;
+                var sNpc = Data.Npc[src];
+                _clipboardNpc = sNpc; // struct copy
+                // deep copy arrays
+                if (sNpc.Stat != null) _clipboardNpc.Stat = (byte[])sNpc.Stat.Clone();
+                if (sNpc.DropChance != null) _clipboardNpc.DropChance = (int[])sNpc.DropChance.Clone();
+                if (sNpc.DropItem != null) _clipboardNpc.DropItem = (int[])sNpc.DropItem.Clone();
+                if (sNpc.DropItemValue != null) _clipboardNpc.DropItemValue = (int[])sNpc.DropItemValue.Clone();
+                if (sNpc.Skill != null) _clipboardNpc.Skill = (byte[])sNpc.Skill.Clone();
+                _hasClipboardNpc = true;
+                btnCopy.Text = "Paste";
+                return;
+            }
+
+            int def = GameState.EditorIndex + 1;
+            var oneBased = Editors.PromptIndex(this, "Paste NPC", $"Paste NPC into index (1..{Constant.MaxNpcs}):", 1, Constant.MaxNpcs, def);
+            if (oneBased == null) return;
+            int dst = oneBased.Value - 1;
+            var nNpc = _clipboardNpc; // copy
+            if (nNpc.Stat != null) nNpc.Stat = (byte[])nNpc.Stat.Clone();
+            if (nNpc.DropChance != null) nNpc.DropChance = (int[])nNpc.DropChance.Clone();
+            if (nNpc.DropItem != null) nNpc.DropItem = (int[])nNpc.DropItem.Clone();
+            if (nNpc.DropItemValue != null) nNpc.DropItemValue = (int[])nNpc.DropItemValue.Clone();
+            if (nNpc.Skill != null) nNpc.Skill = (byte[])nNpc.Skill.Clone();
+            EnsureNpcArrays(ref nNpc);
+            Data.Npc[dst] = nNpc;
+            GameState.NpcChanged[dst] = true;
+            _initializing = true;
+            try
+            {
+                lstIndex.Items.RemoveAt(dst);
+                lstIndex.Items.Insert(dst, new ListItem { Text = (dst + 1) + ": " + Data.Npc[dst].Name });
+                lstIndex.SelectedIndex = dst;
+            }
+            finally { _initializing = false; }
+            GameState.EditorIndex = dst;
+            Editors.NpcEditorInit();
+        }
+
+        private static void EnsureNpcArrays(ref Core.Globals.Type.Npc n)
+        {
+            int statCount = Enum.GetValues(typeof(Stat)).Length;
+            if (n.Stat == null) n.Stat = new byte[statCount];
+            else if (n.Stat.Length < statCount) Array.Resize(ref n.Stat, statCount);
+
+            if (n.DropChance == null) n.DropChance = new int[6];
+            else if (n.DropChance.Length < 6) Array.Resize(ref n.DropChance, 6);
+
+            if (n.DropItem == null) n.DropItem = new int[6];
+            else if (n.DropItem.Length < 6) Array.Resize(ref n.DropItem, 6);
+
+            if (n.DropItemValue == null) n.DropItemValue = new int[6];
+            else if (n.DropItemValue.Length < 6) Array.Resize(ref n.DropItemValue, 6);
+
+            if (n.Skill == null) n.Skill = new byte[7];
+            else if (n.Skill.Length < 7) Array.Resize(ref n.Skill, 7);
         }
 
         private void LoadData()

@@ -30,7 +30,10 @@ namespace Client
         public NumericStepper nudLvlReq = new NumericStepper { MinValue = 0, Width = 100 };
         public Button btnSave = new Button { Text = "Save" };
         public Button btnDelete = new Button { Text = "Delete" };
+        public Button btnCopy = new Button { Text = "Copy" };
         public Button btnCancel = new Button { Text = "Cancel" };
+        private Core.Globals.Type.Resource _clipboardResource;
+        private bool _hasClipboardResource;
         public Drawable picNormalpic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
         public Drawable picExhaustedPic = new Drawable { Size = new Size(150, 130), MinimumSize = new Size(150, 130) };
 
@@ -79,6 +82,34 @@ namespace Client
             nudLvlReq.ValueChanged += (s, e) => NudLvlReq_ValueChanged();
             btnSave.Click += (s, e) => BtnSave_Click();
             btnDelete.Click += (s, e) => BtnDelete_Click();
+            btnCopy.Click += (s, e) =>
+            {
+                int src = GameState.EditorIndex;
+                if (!_hasClipboardResource)
+                {
+                    if (src < 0 || src >= Constant.MaxResources) return;
+                    _clipboardResource = Data.Resource[src];
+                    _hasClipboardResource = true;
+                    btnCopy.Text = "Paste";
+                    return;
+                }
+                int def = GameState.EditorIndex + 1;
+                var oneBased = Editors.PromptIndex(this, "Paste Resource", $"Paste resource into index (1..{Constant.MaxResources}):", 1, Constant.MaxResources, def);
+                if (oneBased == null) return;
+                int dst = oneBased.Value - 1;
+                var nRes = _clipboardResource;
+                Data.Resource[dst] = nRes;
+                GameState.ResourceChanged[dst] = true;
+                _suppressIndexChanged = true;
+                try
+                {
+                    lstIndex.Items.RemoveAt(dst);
+                    lstIndex.Items.Insert(dst, new ListItem { Text = $"{dst + 1}: {Data.Resource[dst].Name}" });
+                    lstIndex.SelectedIndex = dst;
+                }
+                finally { _suppressIndexChanged = false; }
+                Editors.ResourceEditorInit();
+            };
             btnCancel.Click += (s, e) => BtnCancel_Click();
 
 
@@ -177,7 +208,7 @@ namespace Client
             rightLayout.Add(detailsLayout);
 
             // buttons moved to right panel bottom (main control view)
-            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalContentAlignment = HorizontalAlignment.Left, Items = { btnSave, btnDelete, btnCancel } }); // order enforced
+            rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalContentAlignment = HorizontalAlignment.Left, Items = { btnSave, btnDelete, btnCopy, btnCancel } }); // order enforced
 
         Content = new TableLayout
             {
