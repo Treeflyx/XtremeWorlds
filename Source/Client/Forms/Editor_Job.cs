@@ -48,28 +48,30 @@ namespace Client
     {
         _instance = this;
         Title = "Job Editor";
-        ClientSize = new Size(880, 600);
+        ClientSize = new Size(720, 500);
         Padding = 6;
             // Ensure Load is subscribed first before building UI and wiring events
             Load += (s, e) => InitData();
         Content = BuildUi();
-        Editors.AutoSizeWindow(this, 760, 520);
+        Editors.AutoSizeWindow(this, 600, 420);
     }
 
     Eto.Forms.Control BuildUi()
     {
-        
-    lstJobs = new ListBox { Width = 220 };
-    lstJobs.SelectedIndexChanged += (s, e) =>
-    {
-        if (_suppressIndexChanged) return;
-        if (lstJobs.SelectedIndex >= 0)
-            GameState.EditorIndex = lstJobs.SelectedIndex;
-        ChangeJob();
-    };
+        // Primary lists and fields
+        lstJobs = new ListBox { Width = 200 };
+        lstJobs.SelectedIndexChanged += (s, e) =>
+        {
+            if (_suppressIndexChanged) return;
+            if (lstJobs.SelectedIndex >= 0)
+                GameState.EditorIndex = lstJobs.SelectedIndex;
+            ChangeJob();
+        };
+
         txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
         txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
+        // Stats
         numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);
         numLck = Stat(); numLck.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Luck, numLck);
         numEnd = Stat(); numEnd.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Luck, numEnd); // original mapping
@@ -78,27 +80,33 @@ namespace Client
         numSpr = Stat(); numSpr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Spirit, numSpr);
         numBaseExp = new NumericStepper { MinValue = 0, MaxValue = 5_000_000, Increment = 10 }; numBaseExp.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].BaseExp = (int)numBaseExp.Value;
 
+        // Start position
         numStartMap = new NumericStepper { MinValue = 0, MaxValue = int.MaxValue }; numStartMap.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartMap = (int)numStartMap.Value;
         numStartX = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartX.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartX = (byte)numStartX.Value;
         numStartY = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartY.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartY = (byte)numStartY.Value;
 
+        // Sprites
         numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
         numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
 
-    lstStartItems = new ListBox { Height = 140, Width = 420 };
+        // Items
+        lstStartItems = new ListBox { Height = 140, Width = 200 };
         cmbItems = new ComboBox { Width = 180 };
         numItemAmount = new NumericStepper { MinValue = 1, MaxValue = 999, Value = 1 };
         btnSetItem = new Button { Text = "Set Slot" }; btnSetItem.Click += (s, e) => SetStartItem();
 
+        // Actions
         btnSave = new Button { Text = "Save" }; btnSave.Click += (s, e) => { Editors.JobEditorOK(); Close(); };
         btnDelete = new Button { Text = "Delete" }; btnDelete.Click += (s, e) => { Database.ClearJob(GameState.EditorIndex); ReloadPanel(); };
         btnCancel = new Button { Text = "Cancel" }; btnCancel.Click += (s, e) => { Editors.JobEditorCancel(); Close(); };
 
+        // Previews
         malePreview = new Drawable { Size = new Size(72,72), BackgroundColor = Colors.Black };
         femalePreview = new Drawable { Size = new Size(72,72), BackgroundColor = Colors.Black };
         malePreview.Paint += (s, e) => DrawPreview(e.Graphics, maleBmp, malePreview.Size);
         femalePreview.Paint += (s, e) => DrawPreview(e.Graphics, femaleBmp, femalePreview.Size);
 
+        // Helper to box groups
         GroupBox Box(string text, Eto.Forms.Control content) => new GroupBox { Text = text, Content = content };
 
         var stats = Box("Stats", new TableLayout
@@ -125,21 +133,30 @@ namespace Client
             Rows = { new TableRow(new Label{Text="Male"}, numMaleSprite, malePreview, new Label{Text="Female"}, numFemaleSprite, femalePreview) }
         });
 
-    var itemsLayout = new DynamicLayout { Spacing = new Size(4,4) };
-    itemsLayout.AddRow(lstStartItems);
-    itemsLayout.AddRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amount"}, numItemAmount, btnSetItem);
-    var items = Box("Start Items", itemsLayout);
+        var itemsLayout = new DynamicLayout { Spacing = new Size(4,4) };
+        itemsLayout.AddRow(lstStartItems);
+        itemsLayout.AddRow(new Label{Text="Item"}, cmbItems, new Label{Text="Amount"}, numItemAmount, btnSetItem);
+        var items = Box("Start Items", itemsLayout);
 
+    // Left side: just the jobs list (scales vertically)
     var left = new DynamicLayout { Spacing = new Size(4,4) };
-    left.AddRow(new Label{Text="Jobs", Font = SystemFonts.Bold(12)});
     left.Add(lstJobs, yscale: true);
 
-        var right = new DynamicLayout { Spacing = new Size(6,6) };
-        right.AddRow(stats);
-        right.AddRow(start);
-        right.AddRow(sprites);
-        right.AddRow(items);
-        right.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+    // Right content wrapped in a scrollable to keep window compact
+    var rightContent = new DynamicLayout { Spacing = new Size(6,6) };
+    // Name row at the top (non-scaling textbox like other editors)
+    var nameRow = new TableLayout
+    {
+        Spacing = new Size(4,4),
+        Rows = { new TableRow(new Label{Text="Name:"}, new TableCell(txtName, scaleWidth: false), null, null) }
+    };
+    rightContent.Add(nameRow);
+    rightContent.Add(stats);
+    rightContent.Add(items);
+    rightContent.AddRow(start);
+    rightContent.AddRow(sprites);
+    rightContent.AddRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnSave, btnDelete, btnCancel } });
+    var right = new Scrollable { Content = rightContent, ExpandContentWidth = true };
 
         return new TableLayout
         {

@@ -38,17 +38,17 @@ namespace Client
         {
             _instance = this;
             Title = "Item Editor";
-            ClientSize = new Size(1400, 900); // Increased size for more center controls
+            ClientSize = new Size(1100, 800);
             Padding = 6;
             // Ensure Load is subscribed before wiring other events in BuildUi
             Load += (s,e) => InitData();
             Content = BuildUi();
-            Editors.AutoSizeWindow(this, 1400, 900);
+            Editors.AutoSizeWindow(this, 1000, 720);
         }
 
         Eto.Forms.Control BuildUi()
         {
-            lstIndex = new ListBox { Width = 220, Height = 500 };
+            lstIndex = new ListBox { Width = 200 };
             lstIndex.SelectedIndexChanged += (s,e) =>
             {
                 if (_suppressIndexChanged) return;
@@ -129,8 +129,9 @@ namespace Client
                 Spacing = new Size(4,4),
                 Rows =
                 {
-                    // Move Paperdoll next to Name to use empty space
-                    new TableRow(new Label{Text="Name"}, txtName, new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview),
+                    // Name fixed width like other editor; wrap in non-scaling TableCell
+                    new TableRow(new TableCell(new Label{Text="Name"}), new TableCell(txtName, scaleWidth: false), null, null),
+                    new TableRow(new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview, null),
                     // Move SubType up next to Description for quicker access
                     new TableRow(new Label{Text="Description"}, txtDescription, new Label{Text="SubType"}, cmbSubType),
                     new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, null, null),
@@ -211,11 +212,23 @@ namespace Client
             var right = new DynamicLayout { Spacing = new Size(6,6) };
             right.AddRow(fraRequirements);
 
+            // Wrap mid+right in a scrollable so the editor gets a vertical scrollbar when content overflows
+            var midRight = new TableLayout
+            {
+                Spacing = new Size(8,8),
+                Rows = { new TableRow(mid, right) }
+            };
+            var scroll = new Scrollable
+            {
+                Content = midRight,
+                ExpandContentWidth = true // avoid horizontal scrollbar; content stretches to available width
+            };
+
             return new Eto.Forms.TableLayout
             {
                 Padding = 4,
                 Spacing = new Size(8,8),
-                Rows = { new TableRow(left, mid, right) }
+                Rows = { new TableRow(left, scroll) }
             };
         }
 
