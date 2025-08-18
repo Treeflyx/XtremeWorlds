@@ -2,28 +2,24 @@
 
 public sealed class TextBox : Control
 {
-    public void Render(int xO, int yO, Window window)
+    public bool Censor { get; set; }
+    
+    public override void Render(int x, int y)
     {
-        string textInput = null;
-
-        if (Design[(int) State] > 0L)
+        var design = GetActiveDesign();
+        if (design != Design.None)
         {
-            DesignRenderer.Render(
-                Design[(int) State],
-                Left + xO,
-                Top + yO,
-                Width,
-                Height,
-                Alpha);
+            DesignRenderer.Render(design, X + x, Y + y, Width, Height, Alpha);
         }
 
-        if (Image[(int) State] > 0)
+        var image = GetActiveImage();
+        if (image is not null)
         {
-            var path = Path.Combine(Texture[(int) State], Image[(int) State].ToString());
+            var path = Path.Combine(Texture[(int) State], image.Value.ToString());
 
             GameClient.RenderTexture(ref path,
-                Left + xO,
-                Top + yO, 0, 0,
+                X + x,
+                Y + y, 0, 0,
                 Width,
                 Height,
                 Width,
@@ -31,17 +27,22 @@ public sealed class TextBox : Control
                 (byte) Alpha);
         }
 
-        if (Gui.ActiveWindow == window && window.ActiveControl == this)
+        string input = null;
+
+        if (Gui.ActiveWindow?.ActiveControl == this)
         {
-            textInput = GameState.ChatShowLine;
+            input = GameState.ChatShowLine;
         }
 
-        var text = ((Censor ? Client.Game.UI.Text.CensorText(Text) : Text) + textInput).Replace("\0", string.Empty);
-        var textSize = Client.Game.UI.Text.Fonts[Font].MeasureString(text);
+        var text = ((Censor ? TextRenderer.CensorText(Text) : Text) + input).Replace("\0", string.Empty);
+        var textSize = TextRenderer.Fonts[Font].MeasureString(text);
 
-        var left = Left + xO + XOffset;
-        var top = Top + yO + YOffset + (Height - textSize.Y) / 2.0d;
-
-        Client.Game.UI.Text.RenderText(text, left, (int) Math.Round(top), Color, Microsoft.Xna.Framework.Color.Black, Font);
+        TextRenderer.RenderText(
+            text,
+            X + x + XOffset,
+            Y + y + YOffset + (int) (Height - textSize.Y) / 2,
+            Color,
+            Microsoft.Xna.Framework.Color.Black,
+            Font);
     }
 }

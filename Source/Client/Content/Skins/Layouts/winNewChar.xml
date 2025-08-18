@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winNewChar" Caption="Create Character"
+        Size="290, 172"
+        Icon="17" IconOffset="2, 6"
+        Design="WindowNormal"
+        StartPosition="CenterScreen"
+        Visible="False">
+    
+    <PictureBox Position="6, 26" Size="278, 140" Design="Parchment"/>
+
+    <!-- Name -->
+    <PictureBox Position="29, 42" Size="124, 9" Design="BlackOval"/>
+    <Label Text="Name" Position="29, 39" Size="142, 10" Align="Center"/>
+
+    <!-- Textbox -->
+    <TextBox Name="txtName" Position="29, 55" Size="124, 19"/>
+
+    <!-- Sex -->
+    <PictureBox Position="29, 85" Size="124, 9" Design="BlackOval"/>
+    <Label Text="Gender" Position="29, 82" Size="142, 10" Align="Center"/>
+    <CheckBox Name="chkMale" Text="Male" Position="29, 103" Size="55, 15" Design="CheckboxNormal"/>
+    <CheckBox Name="chkFemale" Text="Female" Position="90, 103" Size="62, 15" Design="CheckboxNormal"/>
+
+    <!-- Buttons -->
+    <Button Name="btnAccept" Text="Accept"
+            Position="29, 127" Size="60, 24"
+            Design="Green"
+            DesignHover="GreenHover"
+            DesignMouseDown="GreenClick"/>
+
+    <Button Name="btnCancel" Text="Cancel"
+            Position="93, 127" Size="60, 24"
+            Design="Red"
+            DesignHover="RedHover"
+            DesignMouseDown="RedClick"/>
+
+    <!-- Sprite -->
+    <PictureBox Position="175, 42" Size="76, 9" Design="BlackOval"/>
+    <Label Text="Sprite" Position="175, 39" Size="76, 10" Align="Center"/>
+
+    <!-- Scene -->
+    <PictureBox Name="picScene" Position="165, 55" Size="96, 96" Image="11"/>
+
+    <!-- Buttons -->
+    <Button Name="btnLeft" Position="163, 40" Size="10, 13" Image="12" ImageHover="14" ImageMouseDown="16"/>
+    <Button Name="btnRight" Position="252, 40" Size="10, 13" Image="13" ImageHover="15" ImageMouseDown="17"/>
+
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+
+</Window>

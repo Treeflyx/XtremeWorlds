@@ -13,8 +13,8 @@ public static class WinTrade
             return;
         }
         
-        var xo = winTrade.Left;
-        var yo = winTrade.Top;
+        var xo = winTrade.X;
+        var yo = winTrade.Y;
         var width = winTrade.Width;
         var height = winTrade.Height;
         
@@ -84,8 +84,8 @@ public static class WinTrade
         }
 
         var picYour = winTrade.GetChild("picYour");
-        var x = winTrade.Left + picYour.Left;
-        var y = winTrade.Top + picYour.Top;
+        var x = winTrade.X + picYour.X;
+        var y = winTrade.Y + picYour.Y;
 
         var slot = General.IsTrade(x, y);
         if (slot >= 0)
@@ -121,8 +121,8 @@ public static class WinTrade
         }
 
         var picYour = winTrade.GetChild("picYour");
-        var slotX = winTrade.Left + picYour.Left;
-        var slotY = winTrade.Top + picYour.Top;
+        var slotX = winTrade.X + picYour.X;
+        var slotY = winTrade.Y + picYour.Y;
 
         var slot = General.IsTrade(slotX, slotY);
         if (YourOfferIsEmpty(slot))
@@ -131,13 +131,13 @@ public static class WinTrade
             return;
         }
 
-        var x = winTrade.Left - winDescription.Width;
+        var x = winTrade.X - winDescription.Width;
         if (x < 0)
         {
-            x = winTrade.Left + winTrade.Width;
+            x = winTrade.X + winTrade.Width;
         }
 
-        var y = winTrade.Top - 6;
+        var y = winTrade.Y - 6;
 
         GameLogic.ShowItemDesc(x, y, GetPlayerInv(GameState.MyIndex, Data.TradeYourOffer[slot].Num));
     }
@@ -157,8 +157,8 @@ public static class WinTrade
         }
 
         var picTheir = winTrade.GetChild("picTheir");
-        var slotX = winTrade.Left + picTheir.Left;
-        var slotY = winTrade.Top + picTheir.Top;
+        var slotX = winTrade.X + picTheir.X;
+        var slotY = winTrade.Y + picTheir.Y;
 
         var slot = General.IsTrade(slotX, slotY);
         if (TheirOfferIsEmpty(slot))
@@ -167,13 +167,13 @@ public static class WinTrade
             return;
         }
 
-        var x = winTrade.Left - winDescription.Width;
+        var x = winTrade.X - winDescription.Width;
         if (x < 0)
         {
-            x = winTrade.Left + winTrade.Width;
+            x = winTrade.X + winTrade.Width;
         }
 
-        var y = winTrade.Top - 6;
+        var y = winTrade.Y - 6;
 
         GameLogic.ShowItemDesc(x, y, Data.TradeTheirOffer[slot].Num);
     }

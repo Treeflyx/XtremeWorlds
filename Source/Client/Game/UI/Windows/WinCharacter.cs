@@ -7,22 +7,53 @@ namespace Client.Game.UI.Windows;
 public static class WinCharacter
 {
     private static readonly Equipment[] EquipmentTypes = Enum.GetValues<Equipment>();
-    
-    public static void OnDrawCharacter()
+
+    public static void Update()
     {
-        if (GameState.MyIndex < 0 || GameState.MyIndex > Constant.MaxPlayers)
-        {
-            return;
-        }
-        
+        UpdateBars();
+
         var winCharacter = Gui.GetWindowByName("winCharacter");
         if (winCharacter is null)
         {
             return;
         }
 
-        var x = winCharacter.Left;
-        var y = winCharacter.Top;
+        winCharacter.GetChild("lblHealth").Text = "Health";
+        winCharacter.GetChild("lblSpirit").Text = "Spirit";
+        winCharacter.GetChild("lblExperience").Text = "Exp";
+        winCharacter.GetChild("lblHealth2").Text = GetPlayerVital(GameState.MyIndex, Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Health);
+        winCharacter.GetChild("lblSpirit2").Text = GetPlayerVital(GameState.MyIndex, Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Stamina);
+        winCharacter.GetChild("lblExperience2").Text = Data.Player[GameState.MyIndex].Exp + "/" + GameState.NextlevelExp;
+    }
+
+    private static void UpdateBars()
+    {
+        var winBars = Gui.GetWindowByName("winBars");
+        if (winBars is null)
+        {
+            return;
+        }
+
+        winBars.GetChild("lblHP").Text = GetPlayerVital(GameState.MyIndex, Vital.Health) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Health);
+        winBars.GetChild("lblMP").Text = GetPlayerVital(GameState.MyIndex, Vital.Stamina) + "/" + GetPlayerMaxVital(GameState.MyIndex, Vital.Stamina);
+        winBars.GetChild("lblEXP").Text = GetPlayerExp(GameState.MyIndex) + "/" + GameState.NextlevelExp;
+    }
+
+    public static void OnDrawCharacter()
+    {
+        if (GameState.MyIndex < 0 || GameState.MyIndex > Constant.MaxPlayers)
+        {
+            return;
+        }
+
+        var winCharacter = Gui.GetWindowByName("winCharacter");
+        if (winCharacter is null)
+        {
+            return;
+        }
+
+        var x = winCharacter.X;
+        var y = winCharacter.Y;
 
         // Render bottom
         var argpath = Path.Combine(DataPath.Gui, "37");
@@ -34,7 +65,7 @@ public static class WinCharacter
         // render top wood
         var argpath4 = Path.Combine(DataPath.Gui, "1");
         GameClient.RenderTexture(ref argpath4, x + 4, y + 23, 100, 100, 166, 291, 166, 291);
-        
+
         for (var i = 0; i < EquipmentTypes.Length; i++)
         {
             var itemNum = GetPlayerEquipment(GameState.MyIndex, EquipmentTypes[i]);
@@ -42,18 +73,18 @@ public static class WinCharacter
             {
                 continue;
             }
-            
+
             var itemIcon = Data.Item[itemNum].Icon;
             if (itemIcon <= 0 || itemIcon >= GameState.NumItems)
             {
                 continue;
             }
-            
-            x = winCharacter.Left + GameState.EqLeft + (GameState.EqOffsetX + 32) * (i % GameState.EqColumns);
-            y = winCharacter.Top + GameState.EqTop;
-            
+
+            x = winCharacter.X + GameState.EqLeft + (GameState.EqOffsetX + 32) * (i % GameState.EqColumns);
+            y = winCharacter.Y + GameState.EqTop;
+
             var path = Path.Combine(DataPath.Items, itemIcon.ToString());
-            
+
             GameClient.RenderTexture(ref path, x, y, 0, 0, 32, 32, 32, 32);
         }
     }
@@ -65,8 +96,8 @@ public static class WinCharacter
         {
             return;
         }
-        
-        var slot = General.IsEq(winCharacter.Left, winCharacter.Top);
+
+        var slot = General.IsEq(winCharacter.X, winCharacter.Y);
         if (slot >= 0)
         {
             Sender.SendUnequip(slot);
@@ -93,21 +124,21 @@ public static class WinCharacter
         {
             return;
         }
-        
-        var slot = General.IsEq(winCharacter.Left, winCharacter.Top);
+
+        var slot = General.IsEq(winCharacter.X, winCharacter.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
             return;
         }
 
-        var x = winCharacter.Left - winDescription.Width;
+        var x = winCharacter.X - winDescription.Width;
         if (x < 0)
         {
-            x = winCharacter.Left + winCharacter.Width;
+            x = winCharacter.X + winCharacter.Width;
         }
 
-        var y = winCharacter.Top - 6;
+        var y = winCharacter.Y - 6;
 
         GameLogic.ShowEqDesc(x, y, slot);
     }

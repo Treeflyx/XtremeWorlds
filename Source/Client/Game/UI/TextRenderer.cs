@@ -8,7 +8,7 @@ using static Core.Globals.Command;
 
 namespace Client.Game.UI;
 
-public class Text
+public static class TextRenderer
 {
     public static readonly Dictionary<Font, SpriteFont> Fonts = new();
 
@@ -21,7 +21,7 @@ public class Text
             _ => Color.LightGreen
         };
     }
-    
+
     public static string CensorText(string input)
     {
         return new string('*', input.Length);
@@ -35,7 +35,7 @@ public class Text
         }
 
         var sanitizedText = new StringBuilder();
-        
+
         foreach (var ch in text)
         {
             if (font.Characters.Contains(ch))
@@ -54,7 +54,7 @@ public class Text
         {
             throw new ArgumentException("Font not found.");
         }
-        
+
         var sanitizedText = SanitizeText(text, spriteFont);
         var textDimensions = spriteFont.MeasureString(sanitizedText);
         return (int) Math.Round(textDimensions.X * textSize);
@@ -470,7 +470,7 @@ public class Text
 
         // set the position
         var xO = 19L;
-        xO += Gui.Windows[Gui.GetWindowIndex("winChat")].Left;
+        xO += Gui.Windows[Gui.GetWindowIndex("winChat")].X;
         long yO = GameState.ResolutionHeight - 45;
         var width = (int) Gui.Windows[Gui.GetWindowIndex("winChat")].Width;
 
@@ -573,22 +573,22 @@ public class Text
                     color = Color.White;
                     backColor = Color.Black;
                     break;
-                
+
                 case (int) AccessLevel.Moderator:
                     color = Color.Cyan;
                     backColor = Color.White;
                     break;
-                
+
                 case (int) AccessLevel.Mapper:
                     color = Color.Green;
                     backColor = Color.Black;
                     break;
-                
+
                 case (int) AccessLevel.Developer:
                     color = Color.Blue;
                     backColor = Color.Black;
                     break;
-                
+
                 case (int) AccessLevel.Owner:
                     color = Color.Yellow;
                     backColor = Color.Black;
