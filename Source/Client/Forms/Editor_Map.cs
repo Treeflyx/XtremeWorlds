@@ -89,6 +89,8 @@ namespace Client
         public ComboBox cmbLayers = new ComboBox();
         public Label Label9 = new Label{ Text = "Tileset" };
         public Slider sldTileSet = new Slider();
+        // Use the Scrollable's native vertical scrollbar beside the tiles
+        private Scrollable tilesetScrollArea = new Scrollable();
         public TabPage tpAttributes = new TabPage{ Text = "Attributes" };
         public RadioButton optNoCrossing = new RadioButton{ Text = "No Crossing" };
         public Button btnFillAttributes = new Button{ Text = "Fill" };
@@ -192,13 +194,25 @@ namespace Client
             // Wire tileset slider selector
             sldTileSet.MinValue = 1;
             sldTileSet.MaxValue = Math.Max(1, GameState.NumTileSets);
-            var initTs = GameState.CurTileset > 0 ? GameState.CurTileset : 1;
-            if (GameState.NumTileSets > 0)
-                initTs = Math.Min(Math.Max(initTs, 1), GameState.NumTileSets);
-            sldTileSet.Value = initTs;
+            var preferredTs = (Data.MyMap.Tileset > 0 && Data.MyMap.Tileset <= GameState.NumTileSets)
+                ? Data.MyMap.Tileset
+                : (GameState.CurTileset > 0 ? GameState.CurTileset : 1);
+            sldTileSet.Value = Math.Clamp(preferredTs, 1, Math.Max(1, GameState.NumTileSets));
+            GameState.CurTileset = sldTileSet.Value;
+            if (Data.MyMap.Tileset <= 0 || Data.MyMap.Tileset != GameState.CurTileset)
+                Data.MyMap.Tileset = GameState.CurTileset;
             sldTileSet.Width = 400;   // make the slider wider
             sldTileSet.Height = 30;   // make the slider taller
             sldTileSet.ValueChanged += SldTileSet_ValueChanged;
+
+            // Configure tileset scroll area: show vertical scrollbar automatically
+            tilesetScrollArea = new Scrollable
+            {
+                Content = picBackSelect,
+                Border = BorderType.None,
+                ExpandContentWidth = true,
+                ExpandContentHeight = false // allow vertical scrollbar when content taller than viewport
+            };
             // Mirror radio buttons into GameState to avoid cross-thread UI access
             optInfo.CheckedChanged += (_, __) => GameState.OptInfo = optInfo.Checked;
             optBlocked.CheckedChanged += (_, __) => GameState.OptBlocked = optBlocked.Checked;
@@ -220,6 +234,11 @@ namespace Client
 
             // Build a minimal layout so picBackSelect is visible in the main window
             InitializeLayout();
+
+            // Ensure a valid tileset is selected on first open and force an initial draw
+            GameState.CurTileset = sldTileSet.Value;
+            if (Data.MyMap.Tileset <= 0) Data.MyMap.Tileset = GameState.CurTileset;
+            picBackSelect.Invalidate();
         }
 
         /// <summary>
@@ -227,16 +246,8 @@ namespace Client
         /// </summary>
         private void InitializeLayout()
         {
-            // Tiles tab content: label + combo + scrollable tileset preview
-            var tilesetScroll = new Scrollable
-            {
-                Content = picBackSelect,
-                Border = BorderType.None,
-                ExpandContentWidth = true,
-                ExpandContentHeight = true
-            };
-
-        var tilesTabContent = new StackLayout
+        // Tiles tab content: label + combo + scrollable tileset preview (uses native vertical scrollbar)
+            var tilesTabContent = new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Padding = 6,
@@ -245,7 +256,7 @@ namespace Client
                 {
                     Label9,
                     sldTileSet,
-                    new StackLayoutItem(tilesetScroll, true)
+            new StackLayoutItem(tilesetScrollArea, true)
                 }
             };
 
@@ -264,6 +275,9 @@ namespace Client
 
             // Place the tabs as the main content so Tiles tab (with picBackSelect) is visible
             Content = tabPages;
+
+            // Reset scroll position when opening
+            tilesetScrollArea.ScrollPosition = new Eto.Drawing.Point(0, 0);
         }
 
         private void InitializeToolbar()
@@ -2209,6 +2223,7 @@ namespace Client
         {
             GameState.CurTileset = sldTileSet.Value;
             picBackSelect.Invalidate();
+            tilesetScrollArea.ScrollPosition = new Eto.Drawing.Point(0, 0);
         }
 
         private void cmbLayers_SelectedIndexChanged(object sender, EventArgs e)
@@ -2245,15 +2260,21 @@ namespace Client
                     int srcWidth = srcImage.Width;
                     int srcHeight = srcImage.Height;
 
+                    // Ensure the drawable matches the tileset size so the Scrollable shows a vertical bar
+                    if (Instance.picBackSelect.Height != srcHeight || Instance.picBackSelect.Width != srcWidth)
+                    {
+                        Instance.picBackSelect.Size = new Size(srcWidth, srcHeight);
+                    }
+
                     // Use nearest-neighbor to preserve pixel art
                     g.ImageInterpolation = ImageInterpolation.None;
 
-                    // Draw the image at (-offsetX, -offsetY) to simulate scrolling
-                    g.DrawImage(srcImage, -tilesetOffsetX, -tilesetOffsetY);
+                    // Draw the tileset at origin; Scrollable clips/scrolls content automatically
+                    g.DrawImage(srcImage, 0, 0);
 
-                    // Draw selection rectangle (adjusted for offset)
-                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX - tilesetOffsetX;
-                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY - tilesetOffsetY;
+                    // Draw selection rectangle in content coordinates
+                    int scaledX = GameState.EditorTileSelStart.X * GameState.SizeX;
+                    int scaledY = GameState.EditorTileSelStart.Y * GameState.SizeY;
                     int scaledWidth = GameState.EditorTileWidth * GameState.SizeX;
                     int scaledHeight = GameState.EditorTileHeight * GameState.SizeY;
 
