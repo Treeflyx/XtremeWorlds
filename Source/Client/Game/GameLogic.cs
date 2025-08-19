@@ -1633,38 +1633,23 @@ namespace Client
             {
                 case (byte)ItemCategory.Equipment:
                     {
-                        switch (Data.Item[(int)itemNum].SubType)
+                        switch ((Equipment)Data.Item[(int)itemNum].SubType)
                         {
-                            case (byte)ItemSubCategory.Weapon:
-                                {
-                                    AddDescInfo("Weapon", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
-                            case (byte)ItemSubCategory.Armor:
-                                {
-                                    AddDescInfo("Armor", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
-                            case (byte)ItemSubCategory.Helmet:
-                                {
-                                    AddDescInfo("Helmet", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
-                            case (byte)ItemSubCategory.Shield:
-                                {
-                                    AddDescInfo("Shield", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
-                            case (byte)ItemSubCategory.Shoes:
-                                {
-                                    AddDescInfo("Shoes", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
-                            case (byte)ItemSubCategory.Gloves:
-                                {
-                                    AddDescInfo("Gloves", Microsoft.Xna.Framework.Color.White);
-                                    break;
-                                }
+                            case Equipment.Weapon:
+                                AddDescInfo("Weapon", Microsoft.Xna.Framework.Color.White);
+                                break;
+                            case Equipment.Armor:
+                                AddDescInfo("Armor", Microsoft.Xna.Framework.Color.White);
+                                break;
+                            case Equipment.Helmet:
+                                AddDescInfo("Helmet", Microsoft.Xna.Framework.Color.White);
+                                break;
+                            case Equipment.Shield:
+                                AddDescInfo("Shield", Microsoft.Xna.Framework.Color.White);
+                                break;
+                            default:
+                                AddDescInfo("Equipment", Microsoft.Xna.Framework.Color.White);
+                                break;
                         }
 
                         break;
@@ -1787,34 +1772,6 @@ namespace Client
                         if (Data.Item[(int)itemNum].AddStat[(int)Stat.Intelligence] > 0)
                         {
                             AddDescInfo("+" + Data.Item[(int)itemNum].AddStat[(int)Stat.Intelligence] + " Int", Microsoft.Xna.Framework.Color.White);
-                        }
-
-                        if (Data.Item[(int)itemNum].Data1 > 0)
-                        {
-                            switch (Data.Item[(int)itemNum].SubType)
-                            {
-                                case (byte)ItemSubCategory.RestoresHealth:
-                                    {
-                                        AddDescInfo("+" + Data.Item[(int)itemNum].Data1 + " HP", Microsoft.Xna.Framework.Color.White);
-                                        break;
-                                    }
-                                case (byte)ItemSubCategory.RestoresMana:
-                                    {
-                                        AddDescInfo("+" + Data.Item[(int)itemNum].Data1 + " MP", Microsoft.Xna.Framework.Color.White);
-                                        break;
-                                    }
-                                case (byte)ItemSubCategory.RestoresStamina:
-                                    {
-                                        AddDescInfo("+" + Data.Item[(int)itemNum].Data1 + " SP", Microsoft.Xna.Framework.Color.White);
-                                        break;
-                                    }
-                                case (byte)ItemSubCategory.GrantsExperience:
-                                    {
-                                        AddDescInfo("+" + Data.Item[(int)itemNum].Data1 + " EXP", Microsoft.Xna.Framework.Color.White);
-                                        break;
-                                    }
-                            }
-
                         }
 
                         AddDescInfo("Value: " + Data.Item[(int)itemNum].Price + " G", Microsoft.Xna.Framework.Color.Yellow);

@@ -108,35 +108,6 @@ public enum ConsumableEffect : byte
     GrantsExperience
 }
 
-/// <summary>
-/// Defines the sub-category of an item.
-/// NOTE: This enum mixes multiple concepts and could be a candidate for a more advanced class-based design.
-/// </summary>
-public enum ItemSubCategory : byte
-{
-    // Equipment Sub-types
-    Weapon,
-    Armor,
-    Helmet,
-    Shield,
-    Shoes,
-    Gloves,
-
-    // Consumable Effect Sub-types
-    RestoresHealth,
-    RestoresMana,
-    RestoresStamina,
-    DealsHealthDamage,
-    DealsManaDamage,
-    DealsStaminaDamage,
-    GrantsExperience,
-
-    // Other Sub-types
-    CommonEvent,
-    Currency,
-    SkillBook
-}
-
 /// <Summary> Equipment used by Players </Summary>
 public enum Equipment : byte
 {
