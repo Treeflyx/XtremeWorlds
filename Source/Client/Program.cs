@@ -2143,15 +2143,35 @@ namespace Client
             // DrawShadow(x, y + 16)
             DrawCharacterSprite(spriteNum, x, y, rect);
 
-            // check for paperdolling
-            for (int i = 0; i < Enum.GetValues(typeof(Equipment)).Length; i++)
+            // check for paperdolling with directional draw order rules
+            // Rule: draw weapon first when facing up (behind), draw weapon last when facing down (in front)
+            var dirVal = (Direction) GetPlayerDir(index);
+            Equipment[] eqOrder = new[] { Equipment.Weapon, Equipment.Armor, Equipment.Helmet, Equipment.Shield };
+
+            // Treat diagonals as their vertical tendency
+            bool isUp = dirVal == Direction.Up || dirVal == Direction.UpLeft || dirVal == Direction.UpRight;
+            bool isDown = dirVal == Direction.Down || dirVal == Direction.DownLeft || dirVal == Direction.DownRight;
+
+            if (isDown)
             {
-                if (GetPlayerEquipment(index, (Equipment) i) >= 0)
+                // Move weapon to the end so it draws on top
+                eqOrder = new[] { Equipment.Armor, Equipment.Helmet, Equipment.Shield, Equipment.Weapon };
+            }
+            else if (isUp)
+            {
+                // Ensure weapon is first so it draws behind
+                eqOrder = new[] { Equipment.Weapon, Equipment.Armor, Equipment.Helmet, Equipment.Shield };
+            }
+
+            foreach (var eq in eqOrder)
+            {
+                if (GetPlayerEquipment(index, eq) >= 0)
                 {
-                    if (Data.Item[GetPlayerEquipment(index, (Equipment) i)].Paperdoll > 0)
+                    var itemIndex = GetPlayerEquipment(index, eq);
+                    var paperId = Data.Item[itemIndex].Paperdoll;
+                    if (paperId > 0)
                     {
-                        DrawPaperdoll(x, y, Data.Item[GetPlayerEquipment(index, (Equipment) i)].Paperdoll, anim,
-                            spriteleft);
+                        DrawPaperdoll(x, y, paperId, anim, spriteleft);
                     }
                 }
             }
