@@ -714,7 +714,7 @@ public class Crystalshire
 
         Gui.CreateCheckBox(
             windowIndex: windowIndex,
-            name: "chkClient.Guild",
+            name: "chkGuild",
             left: 210, top: 2, width: 49, height: 23,
             text: "Guild",
             font: Font.Arial,
@@ -899,7 +899,7 @@ public class Crystalshire
 
         Gui.CreateButton(
             windowIndex: windowIndex,
-            name: "btnClient.Guild",
+            name: "btnGuild",
             left: 155, top: 0, width: 29, height: 29,
             icon: 107,
             designNorm: Design.Grey,
@@ -1082,9 +1082,9 @@ public class Crystalshire
 
         Gui.CreateLabel(
             windowIndex: windowIndex,
-            name: "lblClient.Guild",
+            name: "lblGuild",
             left: 18, top: 96, width: 147, height: 10,
-            text: "Client.Guild",
+            text: "Guild",
             font: Font.Arial);
 
         Gui.CreateLabel(
@@ -1134,9 +1134,9 @@ public class Crystalshire
 
         Gui.CreateLabel(
             windowIndex: windowIndex,
-            name: "lblClient.Guild2",
+            name: "lblGuild2",
             left: 13, top: 96, width: 147, height: 10,
-            text: "Client.Guild",
+            text: "Guild",
             font: Font.Arial,
             align: Alignment.Right);
 
@@ -1446,7 +1446,7 @@ public class Crystalshire
             imageHover: 44,
             imageMousedown: 44);
 
-        Gui.CreateLabel(
+            Gui.CreateLabel(
             windowIndex: windowIndex,
             name: "lblJob",
             left: 5, top: 102, width: 92, height: 10,
@@ -1533,9 +1533,9 @@ public class Crystalshire
 
         Gui.CreateButton(
             windowIndex: windowIndex,
-            name: "btnClient.Guild",
+            name: "btnGuild",
             left: 8, top: 62, width: 94, height: 18,
-            text: "Invite to Client.Guild",
+            text: "Invite to Guild",
             designNorm: Design.MenuOption,
             callbackMousedown: WinPlayerMenu.OnGuildInvite);
 
