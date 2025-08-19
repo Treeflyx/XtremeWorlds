@@ -173,9 +173,14 @@ public static class Program
         // Invalidate redraw surfaces where needed (guard against null/partial migration)
         try
         {
-            Editor_Map.Instance?.picBackSelect.Invalidate();
-            Editor_Animation.Instance?.picSprite0?.Invalidate();
-            Editor_Animation.Instance?.picSprite1?.Invalidate();
+            if (GameState.MyEditorType == EditorType.Map)
+                Editor_Map.Instance?.picBackSelect.Invalidate();
+
+            if (GameState.MyEditorType == EditorType.Animation)
+            {
+                Editor_Animation.Instance?.picSprite0?.Invalidate();
+                Editor_Animation.Instance?.picSprite1?.Invalidate();
+            }
         }
         catch { /* some editors may not be instantiated yet */ }
         if (!GameState.InGame)

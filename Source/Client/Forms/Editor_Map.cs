@@ -29,16 +29,18 @@ namespace Client
         public static Editor_Map Instance => _instance ??= new Editor_Map();
         private static readonly int tilesetOffsetX = 0;
         private static int tilesetOffsetY = 0;
-        public RadioButton optTrap = new RadioButton{ Text = "Trap" };
-        public RadioButton optHeal = new RadioButton{ Text = "Heal" };
-        public RadioButton optBank = new RadioButton{ Text = "Bank" };
-        public RadioButton optShop = new RadioButton{ Text = "Shop" };
-        public RadioButton optNpcSpawn = new RadioButton{ Text = "Npc Spawn" };
-        public RadioButton optResource = new RadioButton{ Text = "Resource" };
-        public RadioButton optNpcAvoid = new RadioButton{ Text = "Npc Avoid" };
-        public RadioButton optItem = new RadioButton{ Text = "Item" };
-        public RadioButton optWarp = new RadioButton{ Text = "Warp" };
-        public RadioButton optBlocked = new RadioButton{ Text = "Blocked" };
+        // Controller for grouping all attribute radio buttons so only one is selectable
+        private readonly RadioButton attrRadioController = new RadioButton();
+        public RadioButton optTrap;
+        public RadioButton optHeal;
+        public RadioButton optBank;
+        public RadioButton optShop;
+        public RadioButton optNpcSpawn;
+        public RadioButton optResource;
+        public RadioButton optNpcAvoid;
+        public RadioButton optItem;
+        public RadioButton optWarp;
+        public RadioButton optBlocked;
         public Panel pnlBack = new Panel();
         public Drawable picBackSelect = new Drawable();
         public Panel pnlAttributes = new Panel();
@@ -92,12 +94,12 @@ namespace Client
         // Use the Scrollable's native vertical scrollbar beside the tiles
         private Scrollable tilesetScrollArea = new Scrollable();
         public TabPage tpAttributes = new TabPage{ Text = "Attributes" };
-        public RadioButton optNoCrossing = new RadioButton{ Text = "No Crossing" };
+        public RadioButton optNoCrossing;
         public Button btnFillAttributes = new Button{ Text = "Fill" };
-        public RadioButton optInfo = new RadioButton{ Text = "Info" };
+        public RadioButton optInfo;
         public Label Label23 = new Label();
         public ComboBox cmbAttribute = new ComboBox();
-        public RadioButton optAnimation = new RadioButton{ Text = "Animation" };
+        public RadioButton optAnimation;
         public TabPage tpNpcs = new TabPage{ Text = "NPCs" };
         public GroupBox fraNpcs = new GroupBox{ Text = "NPCs" };
         public ListBox lstMapNpc = new ListBox();
@@ -149,7 +151,6 @@ namespace Client
         public TabPage tpEffects = new TabPage{ Text = "Effects" };
         public GroupBox GroupBox6 = new GroupBox{ Text = "Brightness" };
         public Slider scrlMapBrightness = new Slider();
-        public Label lblMapBrightness = new Label();
         public GroupBox GroupBox5 = new GroupBox{ Text = "Parallax" };
         public ComboBox cmbParallax = new ComboBox();
         public GroupBox GroupBox4 = new GroupBox{ Text = "Panorama" };
@@ -170,9 +171,7 @@ namespace Client
         public Slider scrlFogSpeed = new Slider();
         public Label lblFogSpeed = new Label();
         public Slider scrlIntensity = new Slider();
-        public Label lblIntensity = new Label();
         public Slider scrlFog = new Slider();
-        public Label lblFogIndex = new Label();
         public Label Label14 = new Label();
         public ComboBox cmbWeather = new ComboBox();
 
@@ -182,7 +181,6 @@ namespace Client
             Title = "Map Editor";
             ClientSize = new Size(1200, 800);
             InitializeToolbar();
-            lblMapBrightness.Text = "Brightness:";
 
             // Wire tileset preview drawing & input
             picBackSelect.Size = new Size(512, 512); // default; can adjust based on tileset
@@ -213,6 +211,21 @@ namespace Client
                 ExpandContentWidth = true,
                 ExpandContentHeight = false // allow vertical scrollbar when content taller than viewport
             };
+
+            // Instantiate attribute radio buttons with a shared controller for mutual exclusivity
+            optBlocked = new RadioButton(attrRadioController) { Text = "Blocked" };
+            optWarp = new RadioButton(attrRadioController) { Text = "Warp" };
+            optItem = new RadioButton(attrRadioController) { Text = "Item" };
+            optNpcAvoid = new RadioButton(attrRadioController) { Text = "Npc Avoid" };
+            optResource = new RadioButton(attrRadioController) { Text = "Resource" };
+            optNpcSpawn = new RadioButton(attrRadioController) { Text = "Npc Spawn" };
+            optShop = new RadioButton(attrRadioController) { Text = "Shop" };
+            optBank = new RadioButton(attrRadioController) { Text = "Bank" };
+            optHeal = new RadioButton(attrRadioController) { Text = "Heal" };
+            optTrap = new RadioButton(attrRadioController) { Text = "Trap" };
+            optAnimation = new RadioButton(attrRadioController) { Text = "Animation" };
+            optNoCrossing = new RadioButton(attrRadioController) { Text = "No Crossing" };
+            optInfo = new RadioButton(attrRadioController) { Text = "Info" };
             // Mirror radio buttons into GameState to avoid cross-thread UI access
             optInfo.CheckedChanged += (_, __) => GameState.OptInfo = optInfo.Checked;
             optBlocked.CheckedChanged += (_, __) => GameState.OptBlocked = optBlocked.Checked;
@@ -230,6 +243,9 @@ namespace Client
 
             // Set initial defaults
             GameState.OptBlocked = true;
+
+            // Ensure UI reflects default single selection
+            optBlocked.Checked = true;
             GameState.OptInfo = optInfo.Checked;
 
             // Build a minimal layout so picBackSelect is visible in the main window
@@ -246,7 +262,30 @@ namespace Client
         /// </summary>
         private void InitializeLayout()
         {
-        // Tiles tab content: label + combo + scrollable tileset preview (uses native vertical scrollbar)
+            // Initialize layer and autotile selectors
+            if (cmbLayers.Items.Count == 0)
+            {
+                foreach (var name in System.Enum.GetNames(typeof(MapLayer)))
+                    cmbLayers.Items.Add(name);
+                cmbLayers.SelectedIndex = 0;
+                cmbLayers.SelectedIndexChanged += cmbLayers_SelectedIndexChanged;
+            }
+
+            if (cmbAutoTile.Items.Count == 0)
+            {
+                // 0 = none; 1..5 map to engine's autotile types
+                cmbAutoTile.Items.Add("None");
+                cmbAutoTile.Items.Add("Autotile");
+                cmbAutoTile.Items.Add("Fake Autotile");
+                cmbAutoTile.Items.Add("Animated");
+                cmbAutoTile.Items.Add("Cliff");
+                cmbAutoTile.Items.Add("Waterfall");
+                cmbAutoTile.SelectedIndex = 0;
+                cmbAutoTile.SelectedIndexChanged += CmbAutoTile_SelectedIndexChanged;
+            }
+
+            // Tiles tab content: label + slider + scrollable tileset preview (uses native vertical scrollbar)
+            Label9.Text = "Tileset";
             var tilesTabContent = new StackLayout
             {
                 Orientation = Orientation.Vertical,
@@ -254,15 +293,27 @@ namespace Client
                 Spacing = 6,
                 Items =
                 {
-                    Label9,
-                    sldTileSet,
-            new StackLayoutItem(tilesetScrollArea, true)
+                    new StackLayout
+                    {
+                        Orientation = Orientation.Horizontal,
+                        Spacing = 12,
+                        Items = { Label9, sldTileSet, Label10, cmbLayers, Label11, cmbAutoTile }
+                    },
+                    new StackLayoutItem(tilesetScrollArea, true)
                 }
             };
 
+            // Build remaining tabs
+            BuildAttributesTab();
+            BuildNpcsTab();
+            BuildSettingsTab();
+            BuildDirBlockTab();
+            BuildEventsTab();
+            BuildEffectsTab();
+
             tpTiles.Content = tilesTabContent;
 
-            // Ensure all known tabs exist (empty content is fine for now)
+            // Ensure all known tabs exist
             tabPages.Pages.Clear();
             tabPages.Pages.Add(tpTiles);
             tabPages.Pages.Add(tpAttributes);
@@ -273,11 +324,465 @@ namespace Client
             tabPages.Pages.Add(tpEffects);
             tabPages.SelectedIndexChanged += tabPages_SelectedIndexChanged;
 
-            // Place the tabs as the main content so Tiles tab (with picBackSelect) is visible
-            Content = tabPages;
+            // Place the tabs inside a scrollable so the editor can scroll if content overflows
+            Content = new Scrollable
+            {
+                Content = tabPages,
+                ExpandContentWidth = true,
+                ExpandContentHeight = false
+            };
 
             // Reset scroll position when opening
             tilesetScrollArea.ScrollPosition = new Eto.Drawing.Point(0, 0);
+        }
+
+        private void BuildAttributesTab()
+        {
+            // Left column: attribute selection
+            Label23.Text = "Attribute Layer";
+            if (cmbAttribute.Items.Count == 0)
+            {
+                cmbAttribute.Items.Add("1");
+                cmbAttribute.Items.Add("2");
+                cmbAttribute.SelectedIndex = 1; // default to layer 1
+                cmbAttribute.SelectedIndexChanged += cmbAttribute_SelectedIndexChanged;
+            }
+            // Ensure the combo doesn't force an oversized width within the narrow left column
+            cmbAttribute.Width = 160;
+
+            // Wire attribute radio buttons to show their group boxes
+            optWarp.CheckedChanged += OptWarp_CheckedChanged;
+            optItem.CheckedChanged += OptItem_CheckedChanged;
+            optResource.CheckedChanged += OptResource_CheckedChanged;
+            optNpcSpawn.CheckedChanged += OptNpcSpawn_CheckedChanged;
+            optShop.CheckedChanged += OptShop_CheckedChanged;
+            optHeal.CheckedChanged += OptHeal_CheckedChanged;
+            optTrap.CheckedChanged += OptTrap_CheckedChanged;
+            optAnimation.CheckedChanged += optAnimation_CheckedChanged;
+            optBlocked.CheckedChanged += OptBlocked_CheckedChanged;
+
+            // Right side content: stacked panels; visibility controlled by radio selection
+            // Configure default ranges/text
+            scrlMapWarpMap.MinValue = 1;
+            scrlMapWarpMap.MaxValue = Constant.MaxMaps;
+            scrlMapWarpMap.ValueChanged += ScrlMapWarpMap_Scroll;
+            scrlMapWarpX.MinValue = 0; scrlMapWarpX.MaxValue = byte.MaxValue; scrlMapWarpX.ValueChanged += ScrlMapWarpX_Scroll;
+            scrlMapWarpY.MinValue = 0; scrlMapWarpY.MaxValue = byte.MaxValue; scrlMapWarpY.ValueChanged += ScrlMapWarpY_Scroll;
+            btnMapWarp.Click += BtnMapWarp_Click;
+
+            scrlMapItem.MinValue = 0; scrlMapItem.MaxValue = Constant.MaxItems - 1; scrlMapItem.ValueChanged += ScrlMapItem_ValueChanged;
+            scrlMapItemValue.MinValue = 1; scrlMapItemValue.MaxValue = 255; scrlMapItemValue.ValueChanged += ScrlMapItemValue_ValueChanged;
+            btnMapItem.Click += BtnMapItem_Click;
+
+            scrlResource.MinValue = 0; scrlResource.MaxValue = Constant.MaxResources - 1; scrlResource.ValueChanged += ScrlResource_ValueChanged;
+            btnResourceOk.Click += BtnResourceOk_Click;
+
+            lstNpc.SelectedIndex = 0;
+            scrlNpcDir.MinValue = 0; scrlNpcDir.MaxValue = 3; scrlNpcDir.ValueChanged += ScrlNpcDir_Scroll;
+            btnNpcSpawn.Click += BtnNpcSpawn_Click;
+
+            cmbShop.SelectedIndex = 0; btnShop.Click += BtnShop_Click;
+
+            cmbHeal.Items.Clear();
+            cmbHeal.Items.Add("Hp");
+            cmbHeal.Items.Add("Mp");
+            cmbHeal.SelectedIndex = 0;
+            scrlHeal.MinValue = 1; scrlHeal.MaxValue = 255; scrlHeal.ValueChanged += ScrlHeal_Scroll; btnHeal.Click += BtnHeal_Click;
+
+            scrlTrap.MinValue = 1; scrlTrap.MaxValue = 255; scrlTrap.ValueChanged += ScrlTrap_ValueChanged; btnTrap.Click += BtnTrap_Click;
+
+            cmbAnimation.SelectedIndex = 0; brnAnimation.Click += brnAnimation_Click;
+
+            btnFillAttributes.Click += btnFillAttributes_Click;
+
+            // Make all attribute sliders/scrollbars bigger for better usability
+            // Warp
+            scrlMapWarpMap.Width = 400;
+            scrlMapWarpMap.Height = 30;
+            scrlMapWarpX.Width = 400;
+            scrlMapWarpX.Height = 30;
+            scrlMapWarpY.Width = 400;
+            scrlMapWarpY.Height = 30;
+            // Item
+            scrlMapItem.Width = 400;
+            scrlMapItem.Height = 30;
+            scrlMapItemValue.Width = 400;
+            scrlMapItemValue.Height = 30;
+            // Resource
+            scrlResource.Width = 400;
+            scrlResource.Height = 30;
+            // NPC spawn direction
+            scrlNpcDir.Width = 400;
+            scrlNpcDir.Height = 30;
+            // Heal amount
+            scrlHeal.Width = 400;
+            scrlHeal.Height = 30;
+            // Trap amount
+            scrlTrap.Width = 400;
+            scrlTrap.Height = 30;
+
+            // Compose group boxes content minimally with labels + sliders/combos
+            fraMapWarp.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Map" }, scrlMapWarpMap, lblMapWarpMap } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "X" }, scrlMapWarpX, lblMapWarpX } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Y" }, scrlMapWarpY, lblMapWarpY } },
+                    new StackLayoutItem(btnMapWarp)
+                }
+            };
+
+            fraMapItem.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Item" }, scrlMapItem, lblMapItem } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Value" }, scrlMapItemValue } },
+                    picMapItem,
+                    btnMapItem
+                }
+            };
+
+            fraResource.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items = { new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Resource" }, scrlResource, lblResource } }, btnResourceOk }
+            };
+
+            fraNpcSpawn.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items = { lstNpc, new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Direction" }, scrlNpcDir, lblNpcDir } }, btnNpcSpawn }
+            };
+
+            fraShop.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { cmbShop, btnShop } };
+            fraHeal.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { cmbHeal, new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Amount" }, scrlHeal, lblHeal } }, btnHeal } };
+            fraTrap.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Amount" }, scrlTrap, lblTrap } }, btnTrap } };
+            fraAnimation.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { cmbAnimation, brnAnimation } };
+
+            // Place all attribute group boxes into a stack; only one visible at a time
+            pnlAttributes.Content = new StackLayout
+            {
+                Padding = 6,
+                Spacing = 6,
+                Items = { fraMapWarp, fraMapItem, fraResource, fraNpcSpawn, fraShop, fraHeal, fraTrap, fraAnimation }
+            };
+            ClearAttributeDialogue(); // hide all by default
+
+            // Build left column with all attribute radios and helpers
+            var leftCol = new StackLayout
+            {
+                Width = 220,
+                Padding = 6,
+                Spacing = 4,
+                Items =
+                {
+                    new Label{ Text = "Attributes" },
+                    optBlocked,
+                    optWarp,
+                    optItem,
+                    optNpcAvoid,
+                    optResource,
+                    optNpcSpawn,
+                    optShop,
+                    optBank,
+                    optHeal,
+                    optTrap,
+                    optAnimation,
+                    optNoCrossing,
+                    optInfo,
+                    new StackLayout{ Spacing = 2, Items = { Label23, cmbAttribute } },
+                    btnFillAttributes
+                }
+            };
+
+            // Right side container holds dynamic attribute panes
+            var rightCol = new StackLayout
+            {
+                Padding = 6,
+                Spacing = 6,
+                Items = { pnlAttributes }
+            };
+
+            tpAttributes.Content = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 8,
+                Items = { leftCol, new StackLayoutItem(rightCol, true) }
+            };
+        }
+
+        private void BuildNpcsTab()
+        {
+            // Left column: map npc slots
+            lstMapNpc.Size = new Size(280, 500); // make it larger and scrollable
+            lstMapNpc.SelectedIndexChanged += LstMapNpc_SelectedIndexChanged;
+            fraNpcs.Width = 300;
+            fraNpcs.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items = { new StackLayoutItem(lstMapNpc, true) }
+            };
+
+            // Right: npc picker for selected slot
+            Label17.Text = "NPC";
+            cmbNpcList.Width = 280; // make selection box wider
+            cmbNpcList.SelectedIndexChanged += CmbNpcList_SelectedIndexChanged;
+
+            var right = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label17, cmbNpcList } },
+                    Label18
+                }
+            };
+
+            // Populate if not already filled (fallback in case MapPropertiesInit hasn't run yet)
+            if (lstMapNpc.Items.Count == 0 || cmbNpcList.Items.Count == 0)
+            {
+                try { MapPropertiesInit(); } catch { /* ignore during early init */ }
+            }
+
+            tpNpcs.Content = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 8,
+                Items = { new StackLayoutItem(fraNpcs, false), new StackLayoutItem(right, true) }
+            };
+        }
+
+        private void LstMapNpc_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            var idx = lstMapNpc.SelectedIndex;
+            if (idx < 0) return;
+
+            // Prefer slot index parsed from the list item text (e.g., "5: Goblin")
+            var slot = idx;
+            try
+            {
+                var itemText = lstMapNpc.Items[idx]?.ToString() ?? string.Empty;
+                if (TryParseLeadingNumber(itemText, out var parsed) && parsed >= 0)
+                    slot = parsed;
+            }
+            catch { /* ignore */ }
+
+            // Slot 0 is reserved as "None" and not assignable
+            if (slot == 0)
+            {
+                cmbNpcList.SelectedIndex = 0;
+                return;
+            }
+
+            // Sync the combo to the currently assigned NPC for this slot
+            int npcIndex = 0;
+            try
+            {
+                if (Data.MyMap.Npc != null && slot < Data.MyMap.Npc.Length)
+                {
+                    npcIndex = Data.MyMap.Npc[slot];
+                    if (npcIndex < 0 || npcIndex >= Constant.MaxNpcs) npcIndex = 0;
+                }
+            }
+            catch { npcIndex = 0; }
+
+            if (cmbNpcList.Items.Count > 0)
+                cmbNpcList.SelectedIndex = Math.Clamp(npcIndex, 0, cmbNpcList.Items.Count - 1);
+        }
+
+        // Helper: parse a leading integer from a string like "12: Foo"
+        private static bool TryParseLeadingNumber(string? text, out int value)
+        {
+            value = 0;
+            if (string.IsNullOrEmpty(text)) return false;
+            int i = 0;
+            while (i < text.Length && char.IsWhiteSpace(text[i])) i++;
+            int start = i;
+            while (i < text.Length && char.IsDigit(text[i])) i++;
+            if (i == start) return false;
+            var numPart = text.Substring(start, i - start);
+            return int.TryParse(numPart, out value);
+        }
+
+        private void BuildSettingsTab()
+        {
+            // Left column: high-level settings
+            Label6.Text = "Name";
+            txtName.TextChanged += txtName_TextChanged;
+            Label22.Text = "Shop";
+            Label8.Text = "Moral";
+
+            fraMapSettings.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label6, txtName } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label8, lstMoral } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label22, lstShop } },
+                }
+            };
+
+            fraMapLinks.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new Label{ Text = "Links (map numbers)" },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Up" }, txtUp } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Down" }, txtDown } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Left" }, txtLeft } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Right" }, txtRight } }
+                }
+            };
+
+            Label5.Text = "Map"; Label4.Text = "X"; Label3.Text = "Y";
+            chkNoMapRespawn.CheckedChanged += chkRespawn_CheckedChanged;
+            chkIndoors.CheckedChanged += chkIndoors_CheckedChanged;
+            fraBootSettings.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label5, txtBootMap, Label4, txtBootX, Label3, txtBootY } },
+                    chkNoMapRespawn,
+                    chkIndoors
+                }
+            };
+
+            Label7.Text = "Max X"; Label2.Text = "Max Y";
+            fraMaxSizes.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items = { new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label7, txtMaxX, Label2, txtMaxY } } }
+            };
+
+            GroupBox2.Text = "Music";
+            btnPreview.Click += BtnPreview_Click;
+            lstMusic.Width = 500;
+            lstMusic.Height = 500;
+            GroupBox2.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items = { lstMusic, btnPreview }
+            };
+
+            // Assemble Settings tab
+            var left = new StackLayout{ Padding = 6, Spacing = 8, Items = { fraMapSettings, GroupBox2 } };
+            var right = new StackLayout{ Padding = 6, Spacing = 8, Items = { fraMapLinks, fraBootSettings, fraMaxSizes } };
+            tpSettings.Content = new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { left, new StackLayoutItem(right, true) } };
+        }
+
+        private void BuildDirBlockTab()
+        {
+            // Directions blocking instructions
+            Label12.Text = "Click arrows on the map to toggle blocked directions.";
+            tpDirBlock.Content = new StackLayout{ Padding = 12, Items = { Label12 } };
+        }
+
+        private void BuildEventsTab()
+        {
+            Label15.Text = "Copy Mode:";
+            Label16.Text = "Paste Mode:";
+            lblCopyMode.Text = "CopyMode Off";
+            lblPasteMode.Text = "PasteMode Off";
+            btnCopyEvent.Click += BtnCopyEvent_Click;
+            btnPasteEvent.Click += BtnPasteEvent_Click;
+
+            var left = new StackLayout
+            {
+                Padding = 6, Spacing = 8,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label15, lblCopyMode } },
+                    btnCopyEvent,
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label16, lblPasteMode } },
+                    btnPasteEvent,
+                    Label13
+                }
+            };
+
+            tpEvents.Content = new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { left, new StackLayoutItem(new Panel(), true) } };
+        }
+
+        private void BuildEffectsTab()
+        {
+            // Weather
+            Label14.Text = "Weather";
+            cmbWeather.Items.Clear();
+            cmbWeather.Items.Add("None");                           
+            cmbWeather.Items.Add("Rain");
+            cmbWeather.Items.Add                                                                                                                                                                                ("Snow");
+            cmbWeather.Items.Add("Storm");
+            cmbWeather.SelectedIndexChanged += CmbWeather_SelectedIndexChanged;
+
+            scrlIntensity.MinValue = 0; scrlIntensity.MaxValue = 100; scrlIntensity.ValueChanged += ScrlIntensity_Scroll;
+            scrlFog.MinValue = 0; scrlFog.MaxValue = 100; scrlFog.ValueChanged += ScrlFog_Scroll;
+            // Make intensity and fog sliders wider
+            scrlIntensity.Width = 400;
+            scrlFog.Width = 400;
+
+            GroupBox1.Text = "Fog";
+            GroupBox1.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label14, cmbWeather } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Intensity" }, scrlIntensity } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Fog Index" }, scrlFog } },
+                }
+            };
+
+            // Tint
+            GroupBox3.Text = "Tint";
+            chkTint.CheckedChanged += ChkUseTint_CheckedChanged;
+            scrlMapRed.MinValue = 0; scrlMapRed.MaxValue = 255; scrlMapRed.ValueChanged += ScrlMapRed_Scroll;
+            scrlMapGreen.MinValue = 0; scrlMapGreen.MaxValue = 255; scrlMapGreen.ValueChanged += ScrlMapGreen_Scroll;
+            scrlMapBlue.MinValue = 0; scrlMapBlue.MaxValue = 255; scrlMapBlue.ValueChanged += ScrlMapBlue_Scroll;
+            scrlMapAlpha.MinValue = 0; scrlMapAlpha.MaxValue = 255; scrlMapAlpha.ValueChanged += ScrlMapAlpha_Scroll;
+            // Make tint sliders wider
+            scrlMapRed.Width = 400;
+            scrlMapGreen.Width = 400;
+            scrlMapBlue.Width = 400;
+            scrlMapAlpha.Width = 400;
+            GroupBox3.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
+                    chkTint,
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Red" }, scrlMapRed, lblMapRed } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Green" }, scrlMapGreen, lblMapGreen } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Blue" }, scrlMapBlue, lblMapBlue } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Alpha" }, scrlMapAlpha, lblMapAlpha } },
+                }
+            };
+
+            // Panorama
+            GroupBox4.Text = "Panorama";
+            cmbPanorama.SelectedIndexChanged += CmbPanorama_SelectedIndexChanged;
+            GroupBox4.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { cmbPanorama } };
+
+            // Parallax
+            GroupBox5.Text = "Parallax";
+            cmbParallax.SelectedIndexChanged += CmbParallax_SelectedIndexChanged;
+            GroupBox5.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { cmbParallax } };
+
+            // Brightness
+            GroupBox6.Text = "Brightness";
+            scrlMapBrightness.MinValue = 0; scrlMapBrightness.MaxValue = 100; scrlMapBrightness.ValueChanged += scrMapBrightness_Scroll;
+            scrlMapBrightness.Width = 400;
+            GroupBox6.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Brightness" }, scrlMapBrightness } } } };
+
+            // Assemble Effects tab (column of items)
+            var left = new StackLayout{ Padding = 6, Spacing = 8, Items = { GroupBox1, GroupBox3 } };
+            var right = new StackLayout{ Padding = 6, Spacing = 8, Items = { GroupBox4, GroupBox5, GroupBox6 } };
+            tpEffects.Content = new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { left, new StackLayoutItem(right, true) } };
         }
 
         private void InitializeToolbar()
@@ -493,13 +998,13 @@ namespace Client
         #endregion
 
     #region Tiles
-    private void PicBackSelect_MouseDown(object? sender, MouseEventArgs e)
+        private void PicBackSelect_MouseDown(object? sender, MouseEventArgs e)
         {
             MapEditorChooseTile((int)e.Buttons, e.Location.X, e.Location.Y);
             picBackSelect.Invalidate();
         }
 
-    private void PicBackSelect_MouseMove(object? sender, MouseEventArgs e)
+        private void PicBackSelect_MouseMove(object? sender, MouseEventArgs e)
         {
             MapEditorDrag((int)e.Buttons, e.Location.X, e.Location.Y);
             if (e.Buttons == MouseButtons.Primary)
@@ -508,7 +1013,7 @@ namespace Client
             }
         }
 
-    private void CmbTileSets_Click(object sender, EventArgs e)
+        private void CmbTileSets_Click(object sender, EventArgs e)
         {
             if (GameState.CurTileset > GameState.NumTileSets)
             {
@@ -521,7 +1026,7 @@ namespace Client
             GameState.EditorTileSelEnd = new Point(1, 1);
         }
 
-        private void CmbAutoTile_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbAutoTile_SelectedIndexChanged(object? sender, EventArgs e)
         {
             GameState.CurAutotileType = cmbAutoTile.SelectedIndex;
             if (cmbAutoTile.SelectedIndex == 0)
@@ -537,22 +1042,22 @@ namespace Client
 
         #region Attributes
 
-        private void ScrlMapWarpMap_Scroll(object sender, EventArgs e)
+        private void ScrlMapWarpMap_Scroll(object? sender, EventArgs e)
         {
             lblMapWarpMap.Text = "Map: " + scrlMapWarpMap.Value;
         }
 
-        private void ScrlMapWarpX_Scroll(object sender, EventArgs e)
+        private void ScrlMapWarpX_Scroll(object? sender, EventArgs e)
         {
             lblMapWarpX.Text = "X: " + scrlMapWarpX.Value;
         }
 
-        private void ScrlMapWarpY_Scroll(object sender, EventArgs e)
+        private void ScrlMapWarpY_Scroll(object? sender, EventArgs e)
         {
             lblMapWarpY.Text = "Y: " + scrlMapWarpY.Value;
         }
 
-        private void BtnMapWarp_Click(object sender, EventArgs e)
+        private void BtnMapWarp_Click(object? sender, EventArgs e)
         {
             GameState.EditorWarpMap = scrlMapWarpMap.Value;
 
@@ -562,7 +1067,7 @@ namespace Client
             fraMapWarp.Visible = false;
         }
 
-        private void OptWarp_CheckedChanged(object sender, EventArgs e)
+        private void OptWarp_CheckedChanged(object? sender, EventArgs e)
         {
             if (optWarp.Checked == false)
                 return;
@@ -579,7 +1084,7 @@ namespace Client
             scrlMapWarpY.Value = 0;
         }
 
-        private void ScrlMapItem_ValueChanged(object sender, EventArgs e)
+        private void ScrlMapItem_ValueChanged(object? sender, EventArgs e)
         {
             if (Data.Item[scrlMapItem.Value].Type == (byte)ItemCategory.Currency | Data.Item[scrlMapItem.Value].Stackable == 1)
             {
@@ -595,12 +1100,12 @@ namespace Client
             lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
         }
 
-        private void ScrlMapItemValue_ValueChanged(object sender, EventArgs e)
+        private void ScrlMapItemValue_ValueChanged(object? sender, EventArgs e)
         {
             lblMapItem.Text = (scrlMapItem.Value + 1) + ". " + Data.Item[scrlMapItem.Value].Name + " x" + scrlMapItemValue.Value;
         }
 
-        private void BtnMapItem_Click(object sender, EventArgs e)
+        private void BtnMapItem_Click(object? sender, EventArgs e)
         {
             GameState.ItemEditorNum = scrlMapItem.Value;
             GameState.ItemEditorValue = scrlMapItemValue.Value;
@@ -608,7 +1113,7 @@ namespace Client
             fraMapItem.Visible = false;
         }
 
-        private void OptItem_CheckedChanged(object sender, EventArgs e)
+        private void OptItem_CheckedChanged(object? sender, EventArgs e)
         {
             if (optItem.Checked == false)
                 return;
@@ -622,19 +1127,19 @@ namespace Client
             // DrawItem removed in refactor (image updated elsewhere)
     }
 
-        private void BtnResourceOk_Click(object sender, EventArgs e)
+        private void BtnResourceOk_Click(object? sender, EventArgs e)
         {
             GameState.ResourceEditorNum = scrlResource.Value;
             pnlAttributes.Visible = false;
             fraResource.Visible = false;
         }
 
-        private void ScrlResource_ValueChanged(object sender, EventArgs e)
+        private void ScrlResource_ValueChanged(object? sender, EventArgs e)
         {
             lblResource.Text = "Resource: " + Data.Resource[scrlResource.Value].Name;
         }
 
-        private void OptResource_CheckedChanged(object sender, EventArgs e)
+        private void OptResource_CheckedChanged(object? sender, EventArgs e)
         {
             if (optResource.Checked == false)
                 return;
@@ -645,7 +1150,7 @@ namespace Client
             ScrlResource_ValueChanged(sender, e);
         }
 
-        private void BtnNpcSpawn_Click(object sender, EventArgs e)
+        private void BtnNpcSpawn_Click(object? sender, EventArgs e)
         {
             GameState.SpawnNpcNum = lstNpc.SelectedIndex;
             GameState.SpawnNpcDir = scrlNpcDir.Value;
@@ -653,7 +1158,7 @@ namespace Client
             fraNpcSpawn.Visible = false;
         }
 
-        private void OptNpcSpawn_CheckedChanged(object sender, EventArgs e)
+        private void OptNpcSpawn_CheckedChanged(object? sender, EventArgs e)
         {
             int n;
 
@@ -682,14 +1187,14 @@ namespace Client
             fraNpcSpawn.Visible = true;
         }
 
-        private void BtnShop_Click(object sender, EventArgs e)
+        private void BtnShop_Click(object? sender, EventArgs e)
         {
             GameState.EditorShop = cmbShop.SelectedIndex;
             pnlAttributes.Visible = false;
             fraShop.Visible = false;
         }
 
-        private void OptShop_CheckedChanged(object sender, EventArgs e)
+        private void OptShop_CheckedChanged(object? sender, EventArgs e)
         {
             if (optShop.Checked == false)
                 return;
@@ -699,7 +1204,7 @@ namespace Client
             fraShop.Visible = true;
         }
 
-        private void BtnHeal_Click(object sender, EventArgs e)
+        private void BtnHeal_Click(object? sender, EventArgs e)
         {
             GameState.MapEditorHealType = cmbHeal.SelectedIndex;
             GameState.MapEditorHealAmount = scrlHeal.Value;
@@ -707,12 +1212,12 @@ namespace Client
             fraHeal.Visible = false;
         }
 
-        private void ScrlHeal_Scroll(object sender, EventArgs e)
+        private void ScrlHeal_Scroll(object? sender, EventArgs e)
         {
             lblHeal.Text = "Amount: " + scrlHeal.Value;
         }
 
-        private void OptHeal_CheckedChanged(object sender, EventArgs e)
+        private void OptHeal_CheckedChanged(object? sender, EventArgs e)
         {
             if (optHeal.Checked == false)
                 return;
@@ -723,19 +1228,19 @@ namespace Client
             cmbHeal.SelectedIndex = 0;
         }
 
-        private void ScrlTrap_ValueChanged(object sender, EventArgs e)
+        private void ScrlTrap_ValueChanged(object? sender, EventArgs e)
         {
             lblTrap.Text = "Amount: " + scrlTrap.Value;
         }
 
-        private void BtnTrap_Click(object sender, EventArgs e)
+        private void BtnTrap_Click(object? sender, EventArgs e)
         {
             GameState.MapEditorHealAmount = scrlTrap.Value;
             pnlAttributes.Visible = false;
             fraTrap.Visible = false;
         }
 
-        private void OptTrap_CheckedChanged(object sender, EventArgs e)
+        private void OptTrap_CheckedChanged(object? sender, EventArgs e)
         {
             if (optTrap.Checked == false)
                 return;
@@ -750,7 +1255,7 @@ namespace Client
             GameLogic.Dialogue("Map Editor", "Clear Attributes: ", "Are you sure you wish to clear attributes?", DialogueType.ClearAttributes, DialogueStyle.YesNo);
         }
 
-        private void ScrlNpcDir_Scroll(object sender, EventArgs e)
+        private void ScrlNpcDir_Scroll(object? sender, EventArgs e)
         {
             switch (scrlNpcDir.Value)
             {
@@ -777,7 +1282,7 @@ namespace Client
             }
         }
 
-        private void OptBlocked_CheckedChanged(object sender, EventArgs e)
+        private void OptBlocked_CheckedChanged(object? sender, EventArgs e)
         {
             if (optBlocked.Checked)
                 pnlAttributes.Visible = false;
@@ -786,16 +1291,33 @@ namespace Client
 
         #region Npc's
 
-        private void CmbNpcList_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbNpcList_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (lstMapNpc.SelectedIndex > 0)
+            var idx = lstMapNpc.SelectedIndex;
+            if (idx < 0) return;
+
+            // Determine slot from item text to avoid relying on visual index
+            int slot = idx;
+            try
             {
-                lstMapNpc.Items[lstMapNpc.SelectedIndex] = new ListItem { Text = lstMapNpc.SelectedIndex + ": " + Data.Npc[cmbNpcList.SelectedIndex].Name };
-                Data.MyMap.Npc[lstMapNpc.SelectedIndex] = cmbNpcList.SelectedIndex;
+                var itemText = lstMapNpc.Items[idx]?.ToString() ?? string.Empty;
+                if (TryParseLeadingNumber(itemText, out var parsed) && parsed >= 0)
+                    slot = parsed;
             }
+            catch { /* ignore */ }
+
+            if (slot == 0) return; // slot 0 is None
+            if (slot >= Data.MyMap.Npc.Length) return;
+
+            // Update map data and refresh the item's display text
+            var npcIndex = cmbNpcList.SelectedIndex;        // 0-based internal id
+            Data.MyMap.Npc[slot] = npcIndex;
+            var displayId = npcIndex + 1;                   // 1-based display id
+            var newName = Strings.Trim(Data.Npc[npcIndex].Name);
+            lstMapNpc.Items[idx] = new ListItem { Text = $"{slot}: {displayId}. {newName}" };
         }
 
-        private void BtnPreview_Click(object sender, EventArgs e)
+        private void BtnPreview_Click(object? sender, EventArgs e)
         {
             if (lstMusic.SelectedIndex > 0)
             {
@@ -819,7 +1341,7 @@ namespace Client
 
         #region Events
 
-        private void BtnCopyEvent_Click(object sender, EventArgs e)
+        private void BtnCopyEvent_Click(object? sender, EventArgs e)
         {
             if (Event.EventCopy == false)
             {
@@ -835,7 +1357,7 @@ namespace Client
             }
         }
 
-        private void BtnPasteEvent_Click(object sender, EventArgs e)
+        private void BtnPasteEvent_Click(object? sender, EventArgs e)
         {
             if (Event.EventPaste == false)
             {
@@ -855,36 +1377,34 @@ namespace Client
 
         #region Map Effects
 
-        private void CmbWeather_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbWeather_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Data.MyMap.Weather = (byte)cmbWeather.SelectedIndex;
         }
 
-        private void ScrlFog_Scroll(object sender, EventArgs e)
+        private void ScrlFog_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.Fog = scrlFog.Value;
-            lblFogIndex.Text = "Fog: " + scrlFog.Value;
         }
 
-        private void ScrlIntensity_Scroll(object sender, EventArgs e)
+        private void ScrlIntensity_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.WeatherIntensity = scrlIntensity.Value;
-            lblIntensity.Text = "Intensity: " + scrlIntensity.Value;
         }
 
-        private void ScrlFogSpeed_Scroll(object sender, EventArgs e)
+    private void ScrlFogSpeed_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.FogSpeed = (byte)scrlFogSpeed.Value;
             lblFogSpeed.Text = "Fog Speed: " + scrlFogSpeed.Value;
         }
 
-        private void ScrlFogOpacity_Scroll(object sender, EventArgs e)
+        private void ScrlFogOpacity_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.FogOpacity = (byte)scrlFogOpacity.Value;
             lblFogOpacity.Text = "Fog Alpha: " + scrlFogOpacity.Value;
         }
 
-        private void ChkUseTint_CheckedChanged(object sender, EventArgs e)
+        private void ChkUseTint_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkTint.Checked == true)
             {
@@ -896,36 +1416,36 @@ namespace Client
             }
         }
 
-        private void ScrlMapRed_Scroll(object sender, EventArgs e)
+        private void ScrlMapRed_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.MapTintR = (byte)scrlMapRed.Value;
             lblMapRed.Text = "Red: " + scrlMapRed.Value;
         }
 
-        private void ScrlMapGreen_Scroll(object sender, EventArgs e)
+        private void ScrlMapGreen_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.MapTintG = (byte)scrlMapGreen.Value;
             lblMapGreen.Text = "Green: " + scrlMapGreen.Value;
         }
 
-        private void ScrlMapBlue_Scroll(object sender, EventArgs e)
+        private void ScrlMapBlue_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.MapTintB = (byte)scrlMapBlue.Value;
             lblMapBlue.Text = "Blue: " + scrlMapBlue.Value;
         }
 
-        private void ScrlMapAlpha_Scroll(object sender, EventArgs e)
+        private void ScrlMapAlpha_Scroll(object? sender, EventArgs e)
         {
             Data.MyMap.MapTintA = (byte)scrlMapAlpha.Value;
             lblMapAlpha.Text = "Alpha: " + scrlMapAlpha.Value;
         }
 
-        private void CmbPanorama_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbPanorama_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Data.MyMap.Panorama = (byte)cmbPanorama.SelectedIndex;
         }
 
-        private void CmbParallax_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbParallax_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Data.MyMap.Parallax = (byte)cmbParallax.SelectedIndex;
         }
@@ -1019,20 +1539,23 @@ namespace Client
                     continue;
                 }
 
-                if (Data.MyMap.Npc[x] >= 0 && Data.MyMap.Npc[x] <= Constant.MaxNpcs)
+                var npcIndex = (x < Data.MyMap.Npc.Length) ? Data.MyMap.Npc[x] : -1;
+                if (npcIndex >= 0 && npcIndex < Constant.MaxNpcs)
                 {
-                    Instance.lstMapNpc.Items.Add(x + ": " + Strings.Trim(Data.Npc[Data.MyMap.Npc[x]].Name));
+                    var displayId = npcIndex + 1; // show 1-based ID to user
+                    var name = Strings.Trim(Data.Npc[npcIndex].Name);
+                    Instance.lstMapNpc.Items.Add($"{x}: {displayId}. {name}");
                 }
                 else
                 {
-                    Instance.lstMapNpc.Items.Add(x + ": None");
+                    Instance.lstMapNpc.Items.Add($"{x}: None");
                 }
             }
 
             Instance.lstMapNpc.SelectedIndex = 0;
 
             for (y = 0; y < Constant.MaxNpcs; y++)
-                Instance.cmbNpcList.Items.Add(y + 1 + ": " + Strings.Trim(Data.Npc[y].Name));
+                Instance.cmbNpcList.Items.Add((y + 1) + ": " + Strings.Trim(Data.Npc[y].Name));
 
             Instance.cmbNpcList.SelectedIndex = 0;
 
@@ -1049,9 +1572,7 @@ namespace Client
 
             Instance.cmbWeather.SelectedIndex = Data.MyMap.Weather;
             Instance.scrlFog.Value = Data.MyMap.Fog;
-            Instance.lblFogIndex.Text = "Fog: " + Instance.scrlFog.Value;
             Instance.scrlIntensity.Value = Data.MyMap.WeatherIntensity;
-            Instance.lblIntensity.Text = "Intensity: " + Instance.scrlIntensity.Value;
             Instance.scrlFogOpacity.Value = Data.MyMap.FogOpacity;
             Instance.scrlFogSpeed.Value = Data.MyMap.FogSpeed;
 
@@ -1073,7 +1594,6 @@ namespace Client
 
             Instance.tabPages.SelectedIndex = 0;
             Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
-            Instance.lblMapBrightness.Text = "Brightness: " + Instance.scrlMapBrightness.Value;
             Instance.chkTint.Checked = Data.MyMap.MapTint;
             Instance.scrlMapRed.Value = Data.MyMap.MapTintR;
             Instance.scrlMapGreen.Value = Data.MyMap.MapTintG;
@@ -1112,7 +1632,6 @@ namespace Client
             Instance.cmbAutoTile.SelectedIndex = 0;
             Instance.tabPages.SelectedIndex = 0;
             Instance.scrlMapBrightness.Value = Data.MyMap.Brightness;
-            Instance.lblMapBrightness.Text = "Brightness: " + Instance.scrlMapBrightness.Value;
             Instance.chkTint.Checked = Data.MyMap.MapTint;
             Instance.scrlMapRed.Value = Data.MyMap.MapTintR;
             Instance.scrlMapGreen.Value = Data.MyMap.MapTintG;
@@ -1990,23 +2509,20 @@ namespace Client
             fraShop.Visible = false;
             fraHeal.Visible = false;
             fraTrap.Visible = false;
+            fraAnimation.Visible = false;
         }
 
-        private void txtName_TextChanged(object sender, EventArgs e)
+        private void txtName_TextChanged(object? sender, EventArgs e)
         {
             Data.MyMap.Name = txtName.Text;
         }
 
-    // WinForms FormClosing replaced by manual call site when disposing
-    private void Editor_Map_FormClosing(object? sender, EventArgs e) => MapEditorCancel();
+        // WinForms FormClosing replaced by manual call site when disposing
+        private void Editor_Map_FormClosing(object? sender, EventArgs e) => MapEditorCancel();
 
-        private void scrMapBrightness_Scroll(object sender, EventArgs e)
+        private void scrMapBrightness_Scroll(object? sender, EventArgs e)
         {
-            if (lblMapBrightness == null)
-                return;
-
             Data.MyMap.Brightness = (byte)scrlMapBrightness.Value;
-            lblMapBrightness.Text = "Brightness: " + scrlMapBrightness.Value;
         }
 
         public static void MapEditorCopyMap()
@@ -2101,32 +2617,32 @@ namespace Client
             }
         }
 
-        private void tsbCopyMap_Click(object sender, EventArgs e)
+    private void tsbCopyMap_Click(object? sender, EventArgs e)
         {
             MapEditorCopyMap();
         }
 
-        private void tsbUndo_Click(object sender, EventArgs e)
+    private void tsbUndo_Click(object? sender, EventArgs e)
         {
             MapEditorUndo();
         }
 
-        private void tsbRedo_Click(object sender, EventArgs e)
+    private void tsbRedo_Click(object? sender, EventArgs e)
         {
             MapEditorRedo();
         }
 
-        private void tsbOpacity_Click(object sender, EventArgs e)
+    private void tsbOpacity_Click(object? sender, EventArgs e)
         {
             GameState.HideLayers = !GameState.HideLayers;
         }
 
-        private void tsbScreenshot_Click(object sender, EventArgs e)
+    private void tsbScreenshot_Click(object? sender, EventArgs e)
         {
             GameClient.TakeScreenshot();
         }
 
-        private void tsbTileset_Click(object sender, EventArgs e)
+    private void tsbTileset_Click(object? sender, EventArgs e)
         {
             for (int y = 0; y < Data.MyMap.MaxY; y++)
             {
@@ -2147,7 +2663,7 @@ namespace Client
             }
         }
 
-        private void optAnimation_CheckedChanged(object sender, EventArgs e)
+        private void optAnimation_CheckedChanged(object? sender, EventArgs e)
         {
             if (optAnimation.Checked == false)
                 return;
@@ -2157,14 +2673,14 @@ namespace Client
             fraAnimation.Visible = true;
         }
 
-        private void brnAnimation_Click(object sender, EventArgs e)
+    private void brnAnimation_Click(object? sender, EventArgs e)
         {
             GameState.EditorAnimation = cmbAnimation.SelectedIndex;
             pnlAttributes.Visible = false;
             fraAnimation.Visible = false;
         }
 
-        private void chkRespawn_CheckedChanged(object sender, EventArgs e)
+        private void chkRespawn_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkNoMapRespawn.Checked == true)
             {
@@ -2176,7 +2692,7 @@ namespace Client
             }
         }
 
-        private void chkIndoors_CheckedChanged(object sender, EventArgs e)
+        private void chkIndoors_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkIndoors.Checked == true)
             {
@@ -2188,28 +2704,26 @@ namespace Client
             }
         }
 
-        private void cmbAttribute_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbAttribute_SelectedIndexChanged(object? sender, EventArgs e)
         {
             GameState.EditorAttribute = (byte)(cmbAttribute.SelectedIndex);
         }
 
-        private void tsbDeleteMap_Click(object sender, EventArgs e)
+        private void tsbDeleteMap_Click(object? sender, EventArgs e)
         {
             GameLogic.Dialogue("Map Editor", "Clear Map: ", "Are you sure you want to clear this map?", DialogueType.ClearMap, DialogueStyle.YesNo);
         }
-    // Removed obsolete WinForms Paint handler (ImageView has no Paint event in Eto)
-
-        private void btnFillAttributes_Click(object sender, EventArgs e)
+        private void btnFillAttributes_Click(object? sender, EventArgs e)
         {
             GameLogic.Dialogue("Map Editor", "Fill Attributes: ", "Are you sure you wish to fill attributes?", DialogueType.FillAttributes, DialogueStyle.YesNo);
         }
 
-        private void ToolStrip_MouseHover(object sender, EventArgs e)
+        private void ToolStrip_MouseHover(object? sender, EventArgs e)
         {
             Focus();
         }
 
-    private void tabPages_SelectedIndexChanged(object? sender, EventArgs e)
+        private void tabPages_SelectedIndexChanged(object? sender, EventArgs e)
         {
             GameState.MapEditorTab = Instance.tabPages.SelectedIndex;
 
@@ -2219,14 +2733,14 @@ namespace Client
             }
         }
 
-    private void SldTileSet_ValueChanged(object? sender, EventArgs e)
+        private void SldTileSet_ValueChanged(object? sender, EventArgs e)
         {
             GameState.CurTileset = sldTileSet.Value;
             picBackSelect.Invalidate();
             tilesetScrollArea.ScrollPosition = new Eto.Drawing.Point(0, 0);
         }
 
-        private void cmbLayers_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbLayers_SelectedIndexChanged(object? sender, EventArgs e)
         {
             GameState.CurLayer = cmbLayers.SelectedIndex;
         }

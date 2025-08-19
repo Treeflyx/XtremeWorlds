@@ -293,7 +293,8 @@ namespace Client
                     new TableRow(new TableCell(buttonsRow) { ScaleWidth = true })
                 }
             };
-            var rightPanel = new Panel { Content = rightContent };
+            // Wrap right content in a Scrollable to allow scrolling if it overflows vertically
+            var rightPanel = new Scrollable { Content = rightContent, ExpandContentWidth = true, ExpandContentHeight = false };
 
             Content = new Splitter
             {
