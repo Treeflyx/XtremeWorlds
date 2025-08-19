@@ -395,7 +395,6 @@ namespace Client
 
             btnFillAttributes.Click += btnFillAttributes_Click;
 
-            // Make all attribute sliders/scrollbars bigger for better usability
             // Warp
             scrlMapWarpMap.Width = 400;
             scrlMapWarpMap.Height = 30;
@@ -403,20 +402,25 @@ namespace Client
             scrlMapWarpX.Height = 30;
             scrlMapWarpY.Width = 400;
             scrlMapWarpY.Height = 30;
+
             // Item
             scrlMapItem.Width = 400;
             scrlMapItem.Height = 30;
             scrlMapItemValue.Width = 400;
             scrlMapItemValue.Height = 30;
+
             // Resource
             scrlResource.Width = 400;
             scrlResource.Height = 30;
+
             // NPC spawn direction
             scrlNpcDir.Width = 400;
             scrlNpcDir.Height = 30;
+
             // Heal amount
             scrlHeal.Width = 400;
             scrlHeal.Height = 30;
+
             // Trap amount
             scrlTrap.Width = 400;
             scrlTrap.Height = 30;
