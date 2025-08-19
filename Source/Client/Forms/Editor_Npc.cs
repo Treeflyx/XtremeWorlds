@@ -317,7 +317,7 @@ namespace Client
                 {
                     Editors.NpcEditorCancel();
                 }
-                if (_instance == this) _instance = null;
+                if (ReferenceEquals(_instance, this)) _instance = null;
             };
         }
 

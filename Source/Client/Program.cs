@@ -136,8 +136,13 @@ namespace Client
 #endif
             Content.RootDirectory = "Content";
 
-            // Hook into the Exiting event to handle window close
-            Exiting += OnWindowClose;
+            // Handle Exiting without forcing a hard shutdown
+            Exiting += (s, e) => {
+                // Let General perform graceful shutdown tasks
+                General.DestroyGame();
+                // Also end the Eto UI loop cleanly
+                try { Client.Program.QuitEto(); } catch { }
+            };
         }
 
         protected override void Initialize()
@@ -1059,10 +1064,7 @@ namespace Client
             Sender.PlayerSearch(GameState.CurX, GameState.CurY, 1);
         }
 
-        private static void OnWindowClose(object sender, EventArgs e)
-        {
-            General.DestroyGame();
-        }
+    // Removed explicit window-close hard exit; rely on graceful shutdown above
 
         public static void TakeScreenshot()
         {

@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using Client.Net;
 using Core.Globals;
 using Eto.Forms;
+using Eto.Drawing;
 
 namespace Client;
 
@@ -10,23 +11,33 @@ public static class Program
 {
     private static UITimer? _uiTimer;
     private static bool _editorsDisposed;
+    private static Form? _rootForm; // hidden form to keep Eto alive
 
     [STAThread]
     public static void Main()
     {
         // Start game loop on background thread so Eto UI thread stays responsive
-        var gameThread = new System.Threading.Thread(RunGame) { IsBackground = true };
+    var gameThread = new System.Threading.Thread(RunGame) { IsBackground = false };
         gameThread.Start();
 
         // Start Eto application & periodic UI updater
         // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
         // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
-        var app = new Application(Eto.Platform.Detect);
+    var app = new Application(Eto.Platform.Detect);
         _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
         _uiTimer.Elapsed += UiTimerOnElapsed;
         _uiTimer.Start();
 
-        app.Run();
+        // Keep Eto running even if all editor windows are closed by using a hidden root form
+        _rootForm = new Form
+        {
+            Title = string.Empty,
+            ShowInTaskbar = false,
+            ClientSize = new Size(1, 1),
+        };
+    _rootForm.Shown += (s, e) => ((Form)s!).Visible = false;
+
+        app.Run(_rootForm);
     }
 
     private static void RunGame()
@@ -206,5 +217,16 @@ public static class Program
             // TODO: track Admin form instance and close if open
             _editorsDisposed = true;
         }
+    }
+
+    // Called when the game is exiting to stop the Eto loop cleanly
+    public static void QuitEto()
+    {
+        try
+        {
+            // Close the hidden root form, which ends Application.Run
+            Application.Instance?.AsyncInvoke(() => _rootForm?.Close());
+        }
+        catch { }
     }
 }
