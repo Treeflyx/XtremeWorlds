@@ -12,7 +12,6 @@ using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
 using static Core.Globals.Type;
-using Text = Client.Game.UI.Text;
 using Type = Core.Globals.Type;
 
 namespace Client
@@ -226,7 +225,7 @@ namespace Client
                 }
                 else
                 {
-                    Text.AddText(LocalesManager.Get("PlayerMsg"), (int)ColorName.Yellow);
+                    TextRenderer.AddText(LocalesManager.Get("PlayerMsg"), (int)ColorName.Yellow);
                 }
 
                 goto Continue1;
@@ -243,7 +242,7 @@ namespace Client
                             // Checks to make sure we have more than one string in the array
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Emote"), (int)ColorName.Yellow);
+                                TextRenderer.AddText(LocalesManager.Get("Emote"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -253,12 +252,12 @@ namespace Client
 
                     case "/help":
                         {
-                            Text.AddText(LocalesManager.Get("Help1"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Help2"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Help3"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Help4"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Help5"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Help6"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help1"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help2"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help3"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help4"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help5"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Help6"), (int)ColorName.Yellow);
                             break;
                         }
 
@@ -276,7 +275,7 @@ namespace Client
                             // Checks to make sure we have more than one string in the array
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Info"), (int)ColorName.Yellow);
+                                TextRenderer.AddText(LocalesManager.Get("Info"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -332,7 +331,7 @@ namespace Client
                             // Make sure they are actually sending something
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Party"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("Party"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -369,7 +368,7 @@ namespace Client
                             // Make sure they are actually sending something
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Trade"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("Trade"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -383,14 +382,14 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
-                            Text.AddText(LocalesManager.Get("Admin1"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("Admin2"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("AdminGblMsg"), (int)ColorName.Yellow);
-                            Text.AddText(LocalesManager.Get("AdminPvtMsg"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Admin1"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("Admin2"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("AdminGblMsg"), (int)ColorName.Yellow);
+                            TextRenderer.AddText(LocalesManager.Get("AdminPvtMsg"), (int)ColorName.Yellow);
                             break;
                         }
 
@@ -406,13 +405,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessAlert"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessAlert"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Kick"), (int)ColorName.Yellow);
+                                TextRenderer.AddText(LocalesManager.Get("Kick"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -427,7 +426,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -441,13 +440,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpMeTo"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("WarpMeTo"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -461,13 +460,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpToMe"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("WarpToMe"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -481,13 +480,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("WarpTo"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("WarpTo"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -500,7 +499,7 @@ namespace Client
                             }
                             else
                             {
-                                Text.AddText(LocalesManager.Get("InvalidMap"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("InvalidMap"), (int)ColorName.BrightRed);
                             }
 
                             break;
@@ -512,13 +511,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
                             {
-                                Text.AddText(LocalesManager.Get("Sprite"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("Sprite"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -532,7 +531,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -546,7 +545,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -559,7 +558,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Mapper)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -571,7 +570,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                             }
 
                             Sender.SendRequestEditScript(0);
@@ -585,13 +584,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1)
                             {
-                                Text.AddText(LocalesManager.Get("Welcome"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("Welcome"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -605,7 +604,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -619,13 +618,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Moderator)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if (Information.UBound(command) < 1)
                             {
-                                Text.AddText(LocalesManager.Get("Ban"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("Ban"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -640,7 +639,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -653,13 +652,13 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Owner)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
                             if ((Information.UBound(command) < 2 || Information.IsNumeric(command[1])) | !Information.IsNumeric(command[2]))
                             {
-                                Text.AddText(LocalesManager.Get("Access"), (int)ColorName.Yellow);
+                                TextRenderer.AddText(LocalesManager.Get("Access"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
@@ -673,7 +672,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -686,7 +685,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -699,7 +698,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -712,7 +711,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -725,7 +724,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -738,7 +737,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -751,7 +750,7 @@ namespace Client
 
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -763,7 +762,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -775,7 +774,7 @@ namespace Client
                         {
                             if (GetPlayerAccess(GameState.MyIndex) < (int)AccessLevel.Developer)
                             {
-                                Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+                                TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
@@ -790,7 +789,7 @@ namespace Client
 
                     default:
                         {
-                            Text.AddText(LocalesManager.Get("InvalidCmd"), (int)ColorName.BrightRed);
+                            TextRenderer.AddText(LocalesManager.Get("InvalidCmd"), (int)ColorName.BrightRed);
                             break;
                         }
                 }
@@ -1516,8 +1515,8 @@ namespace Client
             GameState.DescItem = itemNum;
 
             // set position
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Left = x;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Top = y;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].X = x;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Y = y;
 
             // show the window
             Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
@@ -1846,8 +1845,8 @@ namespace Client
             GameState.DescItem = skillNum;
 
             // set position
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Left = x;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Top = y;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].X = x;
+            Gui.Windows[Gui.GetWindowIndex("winDescription")].Y = y;
 
             // show the window
             Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
@@ -2157,8 +2156,8 @@ namespace Client
             GameState.PlayerMenuIndex = index;
             if (GameState.PlayerMenuIndex == 0L | GameState.PlayerMenuIndex == GameState.MyIndex)
                 return;
-            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Left = x - 5;
-            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Top = y - 5;
+            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].X = x - 5;
+            Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Y = y - 5;
             Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Controls[Gui.GetControlIndex("winPlayerMenu", "btnName")].Text = GetPlayerName((int)GameState.PlayerMenuIndex);
             Gui.ShowWindow(Gui.GetWindowIndex("winRightClickBG"));
             Gui.ShowWindow(Gui.GetWindowIndex("winPlayerMenu"));

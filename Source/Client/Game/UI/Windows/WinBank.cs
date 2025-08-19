@@ -21,8 +21,8 @@ public static class WinBank
         var argpath = Path.Combine(DataPath.Gui, "34");
 
         GameClient.RenderTexture(ref argpath,
-            winBank.Left + 4,
-            winBank.Top + 23,
+            winBank.X + 4,
+            winBank.Y + 23,
             0, 0,
             winBank.Width - 8,
             winBank.Height - 27,
@@ -30,10 +30,10 @@ public static class WinBank
         
         var height = 76;
 
-        var xo = winBank.Left;
-        var yo = winBank.Top;
+        var xo = winBank.X;
+        var yo = winBank.Y;
 
-        var y = winBank.Top + 23;
+        var y = winBank.Y + 23;
         for (var i = 0; i < 5; i++)
         {
             if (i == 4)
@@ -88,9 +88,9 @@ public static class WinBank
             }
 
             var amount = GetBankValue(GameState.MyIndex, slot);
-            var amountColor = Text.GetColorForAmount(amount);
+            var amountColor = TextRenderer.GetColorForAmount(amount);
 
-            Text.RenderText(GameLogic.ConvertCurrency(amount), left + 1, top + 20, amountColor, amountColor);
+            TextRenderer.RenderText(GameLogic.ConvertCurrency(amount), left + 1, top + 20, amountColor, amountColor);
         }
     }
 
@@ -113,7 +113,7 @@ public static class WinBank
             return;
         }
 
-        var slot = General.IsBank(winBank.Left, winBank.Top);
+        var slot = General.IsBank(winBank.X, winBank.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
@@ -126,13 +126,13 @@ public static class WinBank
             return;
         }
 
-        var x = winBank.Left - winDescription.Width;
+        var x = winBank.X - winDescription.Width;
         if (x < 0)
         {
-            x = winBank.Left + winBank.Width;
+            x = winBank.X + winBank.Width;
         }
 
-        var y = winBank.Top - 6;
+        var y = winBank.Y - 6;
 
         GameLogic.ShowItemDesc(x, y, GetBank(GameState.MyIndex, slot));
     }
@@ -145,7 +145,7 @@ public static class WinBank
             return;
         }
 
-        var slot = General.IsBank(winBank.Left, winBank.Top);
+        var slot = General.IsBank(winBank.X, winBank.Y);
         if (slot >= 0)
         {
             ref var dragBox = ref Gui.DragBox;
@@ -158,10 +158,10 @@ public static class WinBank
             var windowIndex = Gui.GetWindowIndex("winDragBox");
             var window = Gui.Windows[windowIndex];
 
-            window.Left = GameState.CurMouseX;
-            window.Top = GameState.CurMouseY;
-            window.MovedX = GameState.CurMouseX - window.Left;
-            window.MovedY = GameState.CurMouseY - window.Top;
+            window.X = GameState.CurMouseX;
+            window.Y = GameState.CurMouseY;
+            window.MovedX = GameState.CurMouseX - window.X;
+            window.MovedY = GameState.CurMouseY - window.Y;
 
             Gui.ShowWindow(windowIndex, resetPosition: false);
 
@@ -179,7 +179,7 @@ public static class WinBank
             return;
         }
 
-        var slot = General.IsBank(winBank.Left, winBank.Top);
+        var slot = General.IsBank(winBank.X, winBank.Y);
         if (slot >= 0)
         {
             Bank.WithdrawItem(slot, GetBankValue(GameState.MyIndex, slot));

@@ -13,7 +13,7 @@ public static class WinJobs
             return;
         }
 
-        var spriteIndex = 0;
+        int spriteIndex;
 
         if (Data.Job[GameState.NewCharJob].Name == "")
         {
@@ -27,10 +27,9 @@ public static class WinJobs
         }
         else
         {
-            if (winJobs.GetChild("chkMale").Value == 1)
-                spriteIndex = Data.Job[GameState.NewCharJob].MaleSprite;
-            else
-                spriteIndex = Data.Job[GameState.NewCharJob].FemaleSprite;
+            spriteIndex = winJobs.GetChild("chkMale").Value == 1 
+                ? Data.Job[GameState.NewCharJob].MaleSprite 
+                : Data.Job[GameState.NewCharJob].FemaleSprite;
         }
 
 
@@ -45,12 +44,12 @@ public static class WinJobs
         var h = spriteTexture.Height / 4;
 
         GameClient.RenderTexture(ref spritePath,
-            winJobs.Left + 50,
-            winJobs.Top + 90,
+            winJobs.X + 50,
+            winJobs.Y + 90,
             0, 0, w, h, w, h);
     }
 
-    public static void Jobs_DrawText()
+    public static void OnDrawDescription()
     {
         const int lineHeight = 14;
 
@@ -64,7 +63,7 @@ public static class WinJobs
         var text = "";
 
         // Get job description or use default
-        if (Data.Job[(int)GameState.NewCharJob].Desc == "")
+        if (Data.Job[GameState.NewCharJob].Desc == "")
         {
             switch (GameState.NewCharJob)
             {
@@ -90,22 +89,22 @@ public static class WinJobs
             text = Data.Job[GameState.NewCharJob].Desc;
         }
 
-        Text.WordWrap(text, winJobs.Font, 330, ref lines);
+        TextRenderer.WordWrap(text, winJobs.Font, 330, ref lines);
 
-        var y = winJobs.Top + 60;
+        var y = winJobs.Y + 60;
 
         foreach (var line in lines)
         {
             if (line == "") continue;
             
-            var x = winJobs.Left + 118 + 200 / 2 - Text.GetTextWidth(line, winJobs.Font) / 2;
+            var x = winJobs.X + 118 + 200 / 2 - TextRenderer.GetTextWidth(line, winJobs.Font) / 2;
 
-            var textClean = new string(line.Where(c => Text.Fonts[winJobs.Font].Characters.Contains(c)).ToArray());
-            var textSize = Text.Fonts[winJobs.Font].MeasureString(textClean);
+            var textClean = new string(line.Where(c => TextRenderer.Fonts[winJobs.Font].Characters.Contains(c)).ToArray());
+            var textSize = TextRenderer.Fonts[winJobs.Font].MeasureString(textClean);
 
             var padding = (int) (textSize.X / 6);
 
-            Text.RenderText(line, x + padding, y, Color.White, Color.Black);
+            TextRenderer.RenderText(line, x + padding, y, Color.White, Color.Black);
 
             y += lineHeight;
         }

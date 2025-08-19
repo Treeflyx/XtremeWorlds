@@ -52,10 +52,10 @@ public static class WinParty
             winParty.GetChild("picShadow" + frame).Visible = true;
             winParty.GetChild("picChar" + frame).Visible = true;
             winParty.GetChild("picChar" + frame).Value = playerIndex;
-
+            winParty.GetChild("picChar" + frame).Image = GetPlayerSprite(playerIndex);
+            
             for (var x = 0; x <= 4; x++)
             {
-                winParty.GetChild("picChar" + frame).Image[x] = GetPlayerSprite(playerIndex);
                 winParty.GetChild("picChar" + frame).Texture[x] = DataPath.Characters;
             }
 

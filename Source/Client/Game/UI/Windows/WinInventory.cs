@@ -19,8 +19,8 @@ public static class WinInventory
             return;
         }
 
-        var xO = winInventory.Left;
-        var yO = winInventory.Top;
+        var xO = winInventory.X;
+        var yO = winInventory.Y;
         var width = winInventory.Width;
         var height = winInventory.Height;
 
@@ -121,9 +121,9 @@ public static class WinInventory
 
                         var x = left + 1;
                         var amount = GetPlayerInvValue(GameState.MyIndex, slot) - amountModifier;
-                        var amountColor = Text.GetColorForAmount(amount);
+                        var amountColor = TextRenderer.GetColorForAmount(amount);
 
-                        Text.RenderText(GameLogic.ConvertCurrency(amount), x, y, amountColor, amountColor);
+                        TextRenderer.RenderText(GameLogic.ConvertCurrency(amount), x, y, amountColor, amountColor);
                     }
                 }
             }
@@ -145,7 +145,7 @@ public static class WinInventory
             return;
         }
 
-        var slot = General.IsInv(winInventory.Left, winInventory.Top);
+        var slot = General.IsInv(winInventory.X, winInventory.Y);
         if (slot >= 0)
         {
             ref var dragBox = ref Gui.DragBox;
@@ -158,10 +158,10 @@ public static class WinInventory
             var windowIndex = Gui.GetWindowIndex("winDragBox");
             var window = Gui.Windows[windowIndex];
 
-            window.Left = GameState.CurMouseX;
-            window.Top = GameState.CurMouseY;
-            window.MovedX = GameState.CurMouseX - window.Left;
-            window.MovedY = GameState.CurMouseY - window.Top;
+            window.X = GameState.CurMouseX;
+            window.Y = GameState.CurMouseY;
+            window.MovedX = GameState.CurMouseX - window.X;
+            window.MovedY = GameState.CurMouseY - window.Y;
 
             Gui.ShowWindow(windowIndex, resetPosition: false);
 
@@ -179,7 +179,7 @@ public static class WinInventory
             return;
         }
 
-        var slot = General.IsInv(winInventory.Left, winInventory.Top);
+        var slot = General.IsInv(winInventory.X, winInventory.Y);
         if (slot >= 0)
         {
             if (GameState.InBank)
@@ -256,7 +256,7 @@ public static class WinInventory
             return;
         }
 
-        var slot = General.IsInv(winInventory.Left, winInventory.Top);
+        var slot = General.IsInv(winInventory.X, winInventory.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
@@ -290,13 +290,13 @@ public static class WinInventory
             return;
         }
 
-        var x = winInventory.Left - winDescription.Width;
+        var x = winInventory.X - winDescription.Width;
         if (x < 0)
         {
-            x = winInventory.Left + winInventory.Width;
+            x = winInventory.X + winInventory.Width;
         }
 
-        var y = winInventory.Top - 6;
+        var y = winInventory.Y - 6;
 
         GameLogic.ShowInvDesc(x, y, slot);
     }

@@ -29,8 +29,8 @@ public static class WinNewChar
         var h = sprite.Height / 4;
 
         GameClient.RenderTexture(ref spritePath,
-            winNewChar.Left + 190,
-            winNewChar.Top + 100, 0, 0,
+            winNewChar.X + 190,
+            winNewChar.Y + 100, 0, 0,
             w, h, w, h);
     }
 

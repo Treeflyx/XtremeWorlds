@@ -489,20 +489,20 @@ public static class Sender
         // Dont let them forget a skill which is in CD
         if (Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
         {
-            Text.AddText("Cannot forget a skill which is cooling down!", (int) ColorName.Red);
+            TextRenderer.AddText("Cannot forget a skill which is cooling down!", (int) ColorName.Red);
             return;
         }
 
         // Dont let them forget a skill which is buffered
         if (GameState.SkillBuffer == skillSlot)
         {
-            Text.AddText("Cannot forget a skill which you are casting!", (int) ColorName.Red);
+            TextRenderer.AddText("Cannot forget a skill which you are casting!", (int) ColorName.Red);
             return;
         }
 
         if (Data.Player[GameState.MyIndex].Skill[skillSlot].Num < 0)
         {
-            Text.AddText("No skill found.", (int) ColorName.Red);
+            TextRenderer.AddText("No skill found.", (int) ColorName.Red);
             return;
         }
 

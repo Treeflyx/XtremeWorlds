@@ -22,8 +22,8 @@ public static class WinSkills
         var greenPath = Path.Combine(DataPath.Gui, "34");
         
         GameClient.RenderTexture(ref greenPath, 
-            winSkills.Left + 4, 
-            winSkills.Top + 23, 
+            winSkills.X + 4, 
+            winSkills.Y + 23, 
             0, 0,
             winSkills.Width - 8, 
             winSkills.Height - 27, 
@@ -31,8 +31,8 @@ public static class WinSkills
         
         var height = 76;
         
-        var x = winSkills.Left;
-        var y = winSkills.Top + 23;
+        var x = winSkills.X;
+        var y = winSkills.Y + 23;
 
         for (var i = 0; i < 4; i++)
         {
@@ -72,8 +72,8 @@ public static class WinSkills
                 continue;
             }
                     
-            var top = winSkills.Top + GameState.SkillTop + (GameState.SkillOffsetY + 32) * (slot / GameState.SkillColumns);
-            var left = winSkills.Left + GameState.SkillLeft + (GameState.SkillOffsetX + 32) * (slot % GameState.SkillColumns);
+            var top = winSkills.Y + GameState.SkillTop + (GameState.SkillOffsetY + 32) * (slot / GameState.SkillColumns);
+            var left = winSkills.X + GameState.SkillLeft + (GameState.SkillOffsetX + 32) * (slot % GameState.SkillColumns);
 
             var iconPath = Path.Combine(DataPath.Skills, icon.ToString());
                         
@@ -100,7 +100,7 @@ public static class WinSkills
             return;
         }
 
-        var slot = General.IsSkill(winSkills.Left, winSkills.Top);
+        var slot = General.IsSkill(winSkills.X, winSkills.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
@@ -113,13 +113,13 @@ public static class WinSkills
             return;
         }
 
-        var x = winSkills.Left - winDescription.Width;
+        var x = winSkills.X - winDescription.Width;
         if (x < 0)
         {
-            x = winSkills.Left + winSkills.Width;
+            x = winSkills.X + winSkills.Width;
         }
 
-        var y = winSkills.Top - 6;
+        var y = winSkills.Y - 6;
 
         GameLogic.ShowSkillDesc(x, y, GetPlayerSkill(GameState.MyIndex, slot), slot);
     }
@@ -132,7 +132,7 @@ public static class WinSkills
             return;
         }
 
-        var slot = General.IsSkill(winSkills.Left, winSkills.Top);
+        var slot = General.IsSkill(winSkills.X, winSkills.Y);
         if (slot >= 0)
         {
             ref var dragBox = ref Gui.DragBox;
@@ -145,10 +145,10 @@ public static class WinSkills
             var windowIndex = Gui.GetWindowIndex("winDragBox");
             var window = Gui.Windows[windowIndex];
 
-            window.Left = GameState.CurMouseX;
-            window.Top = GameState.CurMouseY;
-            window.MovedX = GameState.CurMouseX - window.Left;
-            window.MovedY = GameState.CurMouseY - window.Top;
+            window.X = GameState.CurMouseX;
+            window.Y = GameState.CurMouseY;
+            window.MovedX = GameState.CurMouseX - window.X;
+            window.MovedY = GameState.CurMouseY - window.Y;
 
             Gui.ShowWindow(windowIndex, resetPosition: false);
 
@@ -166,7 +166,7 @@ public static class WinSkills
             return;
         }
 
-        var slot = General.IsSkill(winSkills.Left, winSkills.Top);
+        var slot = General.IsSkill(winSkills.X, winSkills.Y);
         if (slot >= 0)
         {
             Player.PlayerCastSkill(slot);
