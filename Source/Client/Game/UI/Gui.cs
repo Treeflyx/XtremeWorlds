@@ -4,7 +4,6 @@ using Client.Game.UI.Controls;
 using Client.Game.UI.Windows;
 using Core.Configurations;
 using Core.Globals;
-using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using static Core.Globals.Command;
@@ -966,23 +965,28 @@ public class Gui
                         {
                             var y = top + 20L;
                             var x = left + 1L;
-                            var amount = Data.TradeYourOffer[i].Value.ToString();
+                            var amountValue = Data.TradeYourOffer[i].Value;
 
-                            // Draw currency but with k, m, b etc. using a convertion function
-                            if (Conversions.ToLong(amount) < 1000000L)
+                            // Color thresholds: <1M white, 1M-10M yellow, >10M bright green
+                            if (amountValue < 1_000_000L)
                             {
                                 color = (int) ColorName.White;
                             }
-                            else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
+                            else if (amountValue > 1_000_000L && amountValue < 10_000_000L)
                             {
                                 color = (int) ColorName.Yellow;
                             }
-                            else if (Conversions.ToLong(amount) > 10000000L)
+                            else if (amountValue > 10_000_000L)
                             {
                                 color = (int) ColorName.BrightGreen;
                             }
 
-                            TextRenderer.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int) x, (int) y, GameClient.QbColorToXnaColor(color), GameClient.QbColorToXnaColor(color));
+                            TextRenderer.RenderText(
+                                GameLogic.ConvertCurrency((int) amountValue),
+                                (int) x,
+                                (int) y,
+                                GameClient.QbColorToXnaColor(color),
+                                GameClient.QbColorToXnaColor(color));
                         }
                     }
                 }
@@ -1020,23 +1024,28 @@ public class Gui
                     {
                         var y = top + 20L;
                         var x = left + 1L;
-                        var amount = Data.TradeTheirOffer[i].Value.ToString();
+                        var amountValue = Data.TradeTheirOffer[i].Value;
 
-                        // Draw currency but with k, m, b etc. using a convertion function
-                        if (Conversions.ToLong(amount) < 1000000L)
+                        // Color thresholds: <1M white, 1M-10M yellow, >10M bright green
+                        if (amountValue < 1_000_000L)
                         {
                             color = (int) ColorName.White;
                         }
-                        else if (Conversions.ToLong(amount) > 1000000L & Conversions.ToLong(amount) < 10000000L)
+                        else if (amountValue > 1_000_000L && amountValue < 10_000_000L)
                         {
                             color = (int) ColorName.Yellow;
                         }
-                        else if (Conversions.ToLong(amount) > 10000000L)
+                        else if (amountValue > 10_000_000L)
                         {
                             color = (int) ColorName.BrightGreen;
                         }
 
-                        TextRenderer.RenderText(GameLogic.ConvertCurrency(Conversions.ToInteger(amount)), (int) x, (int) y, GameClient.QbColorToXnaColor(color), GameClient.QbColorToXnaColor(color));
+                        TextRenderer.RenderText(
+                            GameLogic.ConvertCurrency((int) amountValue),
+                            (int) x,
+                            (int) y,
+                            GameClient.QbColorToXnaColor(color),
+                            GameClient.QbColorToXnaColor(color));
                     }
                 }
             }
