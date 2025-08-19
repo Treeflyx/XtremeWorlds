@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Client.Game.UI;
@@ -10,6 +11,8 @@ using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using static Core.Globals.Command;
 using Type = Core.Globals.Type;
 
@@ -76,7 +79,6 @@ namespace Client
         private static DateTime _lastMouseClickTime = DateTime.MinValue;
         private const int MouseClickCooldown = 250;
         private static DateTime _lastSearchTime = DateTime.MinValue;
-
         // Ensure this class exists to store graphic info
         public class GfxInfo
         {
@@ -148,6 +150,7 @@ namespace Client
         protected override void Initialize()
         {
             Window.Title = SettingsManager.Instance.GameName;
+            // Keep window visible; we'll load heavy content asynchronously.
 
             // Create the RenderTarget2D with the same size as the screen
             RenderTarget = new RenderTarget2D(Graphics.GraphicsDevice,
@@ -169,6 +172,13 @@ namespace Client
             base.Initialize();
         }
 
+        protected override void BeginRun()
+        {
+            base.BeginRun();
+            // Start TCP client after the window has loaded
+            try { _ = Network.Start(); }
+            catch (Exception ex) { Debug.WriteLine($"Network start error: {ex.Message}"); }
+        }
 
         static void LoadFonts()
         {
@@ -188,7 +198,19 @@ namespace Client
             PixelTexture.SetData([Color.White]);
 
             LoadFonts();
-            General.Startup();
+            // Kick off heavy startup work on a background thread to avoid freezing the main thread
+            GameState.IsLoading = true;
+            _ = Task.Run(() =>
+            {
+                try
+                {
+                    General.Startup();
+                }
+                finally
+                {
+                    GameState.IsLoading = false;
+                }
+            });
 
             var cursorPath = Path.Combine(DataPath.Misc, "Cursor.png");
             var cursorTexture = Texture2D.FromFile(Graphics.GraphicsDevice, cursorPath);
@@ -346,6 +368,23 @@ namespace Client
 
             SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
 
+            // Lightweight loading screen while heavy startup is running
+            if (GameState.IsLoading)
+            {
+                var loadingText = "Loading...";
+                if (TextRenderer.Fonts.TryGetValue(Font.Georgia, out var font))
+                {
+                    var size = font.MeasureString(loadingText);
+                    var x = (Graphics.PreferredBackBufferWidth - size.X) / 2f;
+                    var y = (Graphics.PreferredBackBufferHeight - size.Y) / 2f;
+                    SpriteBatch.DrawString(font, loadingText, new Vector2(x, y), Color.White);
+                }
+
+                SpriteBatch.End();
+                base.Draw(gameTime);
+                return;
+            }
+
             if (GameState.InGame == true)
             {
                 Render_Game();
@@ -362,6 +401,13 @@ namespace Client
 
         protected override void Update(GameTime gameTime)
         {
+            // During background loading, keep updates minimal and skip input/UI logic
+            if (GameState.IsLoading)
+            {
+                ResetInputStates();
+                base.Update(gameTime);
+                return;
+            }
             // Ignore input if the window is minimized or inactive
             if ((!IsActive || Window.ClientBounds.Width == 0) | Window.ClientBounds.Height == 0)
             {
@@ -1064,7 +1110,6 @@ namespace Client
             Sender.PlayerSearch(GameState.CurX, GameState.CurY, 1);
         }
 
-    // Removed explicit window-close hard exit; rely on graceful shutdown above
 
         public static void TakeScreenshot()
         {

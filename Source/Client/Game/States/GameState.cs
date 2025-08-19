@@ -137,6 +137,8 @@ namespace Client
         // Controls main gameloop
         public static bool InGame;
         public static bool InMenu;
+        // Async startup/loading state
+        public static bool IsLoading;
 
         public static bool MapData;
         public static bool PlayerData;

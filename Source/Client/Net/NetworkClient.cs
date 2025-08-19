@@ -7,14 +7,15 @@ namespace Client.Net;
 public sealed class NetworkClient
 {
     private Channel<byte[]>? _sendChannel;
-    private bool _connected;
+    private volatile bool _isConnected; // true only when TCP is connected
+    private int _started; // 0/1 guard to avoid starting twice
 
-    public bool Connected => _connected;
+    public bool Connected => _isConnected;
 
     public async Task StartAsync(string hostname, int port, INetworkEventHandler eventHandler, CancellationToken cancellationToken)
     {
-        var connected = Interlocked.Exchange(ref _connected, true);
-        if (connected)
+        // Ensure only a single runner loop
+        if (Interlocked.Exchange(ref _started, 1) == 1)
         {
             return;
         }
@@ -25,29 +26,59 @@ public sealed class NetworkClient
             SingleWriter = false
         });
 
-        try
+    try
         {
             Console.WriteLine("Connecting to server...");
             
             while (!cancellationToken.IsCancellationRequested)
             {
-                var tcpClient = new TcpClient();
-
-                var connect = tcpClient.ConnectAsync(hostname, port, cancellationToken).AsTask();
-                var timeout = Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
-
-                // Bit of a awkard timeout mechanism here because TcpClient.ConnectAsync does not respect CancellationTokens
-                await Task.WhenAny(connect, timeout);
-                if (!tcpClient.Connected)
+        _isConnected = false; // assume disconnected until we actually connect
+        TcpClient tcpClient = null;
+                try
                 {
-                    continue;
+                    tcpClient = new TcpClient();
+
+                    var connect = tcpClient.ConnectAsync(hostname, port, cancellationToken).AsTask();
+                    var timeout = Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
+
+                    // TcpClient.ConnectAsync ignores CancellationTokens; race a timeout instead
+                    await Task.WhenAny(connect, timeout);
+
+                    if (!tcpClient.Connected)
+                    {
+                        // Avoid tight loop when server is down
+                        await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
+                        continue;
+                    }
+
+                    Console.WriteLine("Connected to server successfully");
+                    _isConnected = true;
+
+                    await RunAsync(tcpClient, _sendChannel, eventHandler, cancellationToken);
+
+                    Console.WriteLine("Reconnecting...");
                 }
-
-                Console.WriteLine("Connected to server successfully");
-
-                await RunAsync(tcpClient, _sendChannel, eventHandler, cancellationToken);
-
-                Console.WriteLine("Reconnecting...");
+                catch (SocketException ex)
+                {
+                    Console.WriteLine($"Socket error while connecting: {ex.Message}");
+                    // Backoff a bit before retry
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Disposed due to shutdown; exit loop
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Network connect loop error: {ex.Message}");
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
+                }
+                finally
+                {
+            try { tcpClient?.Close(); } catch { }
+            _isConnected = false; // mark disconnected on any exit
+                }
             }
         }
         catch (OperationCanceledException)
@@ -55,7 +86,8 @@ public sealed class NetworkClient
         }
         finally
         {
-            Interlocked.Exchange(ref _connected, false);
+        _isConnected = false;
+        Interlocked.Exchange(ref _started, 0);
         }
     }
 
@@ -109,6 +141,10 @@ public sealed class NetworkClient
         }
         catch (ObjectDisposedException) // Happens when RunReceive closes the TcpClient and disposes the stream
         {
+        }
+        catch (SocketException ex)
+        {
+            Console.WriteLine($"Socket error while sending: {ex.Message}");
         }
         finally
         {
