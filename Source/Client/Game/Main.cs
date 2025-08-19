@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http.Headers;
 using Client.Net;
 using Core.Globals;
@@ -224,8 +225,34 @@ public static class Program
     {
         try
         {
-            // Close the hidden root form, which ends Application.Run
-            Application.Instance?.AsyncInvoke(() => _rootForm?.Close());
+            // Stop the UI timer to avoid further callbacks during shutdown
+            try { _uiTimer?.Stop(); } catch { }
+
+            // Close all open Eto windows on the UI thread, then close the hidden root form
+            Application.Instance?.AsyncInvoke(() =>
+            {
+                try
+                {
+                    // Close all windows except the hidden root, if present
+                    foreach (var win in Application.Instance.Windows.ToList())
+                    {
+                        try
+                        {
+                            if (!ReferenceEquals(win, _rootForm) && win.Visible)
+                                win.Close();
+                        }
+                        catch { }
+                    }
+
+                    // Finally close the root form to end Application.Run
+                    _rootForm?.Close();
+                }
+                catch
+                {
+                    // As a fallback, request application quit
+                    try { Application.Instance.Quit(); } catch { }
+                }
+            });
         }
         catch { }
     }
