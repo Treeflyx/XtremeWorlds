@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0-windows</TargetFramework>
+        <TargetFrameworks>net9.0;net9.0-windows</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <RootNamespace>Client</RootNamespace>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -67,6 +67,9 @@
         <PackageReference Include="Ryujinx.SDL2-CS"/>
         <PackageReference Include="SDL2-CS"/>
         <PackageReference Include="CS-Script"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net9.0-windows'">
         <PackageReference Include="Eto.Platform.Windows"/>
     </ItemGroup>
 
