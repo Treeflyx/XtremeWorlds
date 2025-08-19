@@ -178,7 +178,7 @@ namespace Client
 
         private void ShowDenied()
         {
-            Text.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
+            TextRenderer.AddText(LocalesManager.Get("AccessDenied"), (int)ColorName.BrightRed);
         }
 
         private bool IsNumeric(string s)

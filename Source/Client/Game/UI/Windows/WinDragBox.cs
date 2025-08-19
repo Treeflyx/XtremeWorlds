@@ -17,8 +17,8 @@ public static class WinDragBox
             return;
         }
 
-        var x = winDragBox.Left;
-        var y = winDragBox.Top;
+        var x = winDragBox.X;
+        var y = winDragBox.Y;
 
         if (Gui.DragBox.Type == DraggablePartType.None)
         {
@@ -74,10 +74,10 @@ public static class WinDragBox
                 continue;
             }
 
-            if (GameState.CurMouseX < window.Left ||
-                GameState.CurMouseX > window.Left + window.Width ||
-                GameState.CurMouseY < window.Top ||
-                GameState.CurMouseY > window.Top + window.Height)
+            if (GameState.CurMouseX < window.X ||
+                GameState.CurMouseX > window.X + window.Width ||
+                GameState.CurMouseY < window.Y ||
+                GameState.CurMouseY > window.Y + window.Height)
             {
                 continue;
             }
@@ -137,9 +137,9 @@ public static class WinDragBox
                     {
                         Type.Rect rect;
 
-                        rect.Top = window.Top + GameState.BankTop + (GameState.BankOffsetY + 32) * (slot / GameState.BankColumns);
+                        rect.Top = window.Y + GameState.BankTop + (GameState.BankOffsetY + 32) * (slot / GameState.BankColumns);
                         rect.Bottom = rect.Top + 32;
-                        rect.Left = window.Left + GameState.BankLeft + (GameState.BankOffsetX + 32) * (slot % GameState.BankColumns);
+                        rect.Left = window.X + GameState.BankLeft + (GameState.BankOffsetX + 32) * (slot % GameState.BankColumns);
                         rect.Right = rect.Left + 32;
 
                         if (GameState.CurMouseX < rect.Left ||
@@ -190,9 +190,9 @@ public static class WinDragBox
                     {
                         Type.Rect rect;
 
-                        rect.Top = window.Top + GameState.InvTop + (GameState.InvOffsetY + 32) * (slot / GameState.InvColumns);
+                        rect.Top = window.Y + GameState.InvTop + (GameState.InvOffsetY + 32) * (slot / GameState.InvColumns);
                         rect.Bottom = rect.Top + 32;
-                        rect.Left = window.Left + GameState.InvLeft + (GameState.InvOffsetX + 32) * (slot % GameState.InvColumns);
+                        rect.Left = window.X + GameState.InvLeft + (GameState.InvOffsetX + 32) * (slot % GameState.InvColumns);
                         rect.Right = rect.Left + 32;
 
                         if (GameState.CurMouseX < rect.Left ||
@@ -243,9 +243,9 @@ public static class WinDragBox
         {
             Type.Rect rect;
 
-            rect.Top = window.Top + GameState.SkillTop + (GameState.SkillOffsetY + 32) * (slot / GameState.SkillColumns);
+            rect.Top = window.Y + GameState.SkillTop + (GameState.SkillOffsetY + 32) * (slot / GameState.SkillColumns);
             rect.Bottom = rect.Top + 32;
-            rect.Left = window.Left + GameState.SkillLeft + (GameState.SkillOffsetX + 32) * (slot % GameState.SkillColumns);
+            rect.Left = window.X + GameState.SkillLeft + (GameState.SkillOffsetX + 32) * (slot % GameState.SkillColumns);
             rect.Right = rect.Left + 32;
 
             if (GameState.CurMouseX < rect.Left ||
@@ -277,9 +277,9 @@ public static class WinDragBox
         {
             Type.Rect rect;
 
-            rect.Top = window.Top + GameState.HotbarTop;
+            rect.Top = window.Y + GameState.HotbarTop;
             rect.Bottom = rect.Top + 32;
-            rect.Left = window.Left + GameState.HotbarLeft + slot * GameState.HotbarOffsetX;
+            rect.Left = window.X + GameState.HotbarLeft + slot * GameState.HotbarOffsetX;
             rect.Right = rect.Left + 32;
 
             if (GameState.CurMouseX < rect.Left ||

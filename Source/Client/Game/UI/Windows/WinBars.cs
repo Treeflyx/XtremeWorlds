@@ -12,8 +12,8 @@ public static class WinBars
             return;
         }
 
-        var x = winBars.Left;
-        var y = winBars.Top;
+        var x = winBars.X;
+        var y = winBars.Y;
 
         var hpBarTexturePath = Path.Combine(DataPath.Gui, "27");
         var spBarTexturePath = Path.Combine(DataPath.Gui, "28");

@@ -18,8 +18,8 @@ public static class WinChat
             return;
         }
 
-        var x = winIndex.Left;
-        var y = winIndex.Top + 16;
+        var x = winIndex.X;
+        var y = winIndex.Y + 16;
 
         DesignRenderer.Render(Design.WindowDescription, x, y, 352, 152);
 
@@ -28,7 +28,7 @@ public static class WinChat
         GameClient.RenderTexture(ref path, x + 7, y + 123, 0, 0, 171, 22, 171, 22);
         GameClient.RenderTexture(ref path, x + 174, y + 123, 0, 22, 171, 22, 171, 22);
 
-        Text.DrawChat();
+        TextRenderer.DrawChat();
     }
 
     public static void OnDrawSmall()
@@ -49,7 +49,7 @@ public static class WinChat
             GameState.ActChatHeight = 10;
         }
 
-        var x = winChatSmall.Left + 10;
+        var x = winChatSmall.X + 10;
         var y = GameState.ResolutionHeight - 10;
 
         DesignRenderer.Render(Design.WindowWithShadow, x, y, 160, 10);

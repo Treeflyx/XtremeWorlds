@@ -3,6 +3,7 @@ using Core;
 using Microsoft.VisualBasic.CompilerServices;
 using System.Net.Security;
 using Client.Game.UI;
+using Client.Game.UI.Windows;
 using Client.Net;
 using Core.Globals;
 using Core.Net;
@@ -992,7 +993,7 @@ namespace Client
 
             if (Data.Player[GameState.MyIndex].Skill[skillSlot].Cd > 0)
             {
-                Text.AddText("Skill has not cooled down yet!", (int) ColorName.BrightRed);
+                TextRenderer.AddText("Skill has not cooled down yet!", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -1000,9 +1001,9 @@ namespace Client
                 return;
 
             // Check if player has enough MP
-            if (GetPlayerVital(GameState.MyIndex, Vital.Stamina) < Data.Skill[(int) Data.Player[GameState.MyIndex].Skill[skillSlot].Num].MpCost)
+            if (GetPlayerVital(GameState.MyIndex, Vital.Stamina) < Data.Skill[Data.Player[GameState.MyIndex].Skill[skillSlot].Num].MpCost)
             {
-                Text.AddText("Not enough MP to cast " + Data.Skill[(int) Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int) ColorName.BrightRed);
+                TextRenderer.AddText("Not enough MP to cast " + Data.Skill[Data.Player[GameState.MyIndex].Skill[skillSlot].Num].Name + ".", (int) ColorName.BrightRed);
                 return;
             }
 
@@ -1020,19 +1021,19 @@ namespace Client
                             }
                             else
                             {
-                                Text.AddText("Cannot cast here!", (int) ColorName.BrightRed);
+                                TextRenderer.AddText("Cannot cast here!", (int) ColorName.BrightRed);
                             }
                         }
                     }
                     else
                     {
-                        Text.AddText("Cannot cast while walking!", (int) ColorName.BrightRed);
+                        TextRenderer.AddText("Cannot cast while walking!", (int) ColorName.BrightRed);
                     }
                 }
             }
             else
             {
-                Text.AddText("No skill here.", (int) ColorName.BrightRed);
+                TextRenderer.AddText("No skill here.", (int) ColorName.BrightRed);
             }
         }
 
@@ -1086,7 +1087,7 @@ namespace Client
                 GameState.BarWidthGuiHpMax = 0;
             }
 
-            Gui.UpdateStats_UI();
+            WinCharacter.Update();
         }
 
         public static void Packet_PlayerMP(ReadOnlyMemory<byte> data)
@@ -1105,7 +1106,7 @@ namespace Client
                 //GameState.BarWidth_GuiHP_Max = 0L;
             }
 
-            Gui.UpdateStats_UI();
+            WinCharacter.Update();
         }
 
         public static void Packet_PlayerSP(ReadOnlyMemory<byte> data)
@@ -1124,7 +1125,7 @@ namespace Client
                 GameState.BarWidthGuiSpMax = 0;
             }
 
-            Gui.UpdateStats_UI();
+            WinCharacter.Update();
         }
 
         public static void Packet_PlayerStats(ReadOnlyMemory<byte> data)
@@ -1181,33 +1182,33 @@ namespace Client
                 // set form
                 {
                     var withBlock = Gui.Windows[Gui.GetWindowIndex("winCharacter")];
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblName")].Text = "Name";
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblJob")].Text = "Job";
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblLevel")].Text = "Level";
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblGuild")].Text = "Guild";
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblName2")].Text = GetPlayerName(GameState.MyIndex);
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblJob2")].Text = Data.Job[GetPlayerJob(GameState.MyIndex)].Name;
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblLevel2")].Text = GetPlayerLevel(GameState.MyIndex).ToString();
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblGuild2")].Text = "None";
-                    Gui.UpdateStats_UI();
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblName")].Text = "Name";
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblJob")].Text = "Job";
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblLevel")].Text = "Level";
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblGuild")].Text = "Guild";
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblName2")].Text = GetPlayerName(GameState.MyIndex);
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblJob2")].Text = Data.Job[GetPlayerJob(GameState.MyIndex)].Name;
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblLevel2")].Text = GetPlayerLevel(GameState.MyIndex).ToString();
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblGuild2")].Text = "None";
+                    WinCharacter.Update();
 
                     // stats
                     for (x = 0; x < statCount; x++)
-                        withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblStat_" + (x + 1))].Text = GetPlayerStat(GameState.MyIndex, (Stat) x).ToString();
+                        withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblStat_" + (x + 1))].Text = GetPlayerStat(GameState.MyIndex, (Stat) x).ToString();
 
                     // points
-                    withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "lblPoints")].Text = GetPlayerPoints(GameState.MyIndex).ToString();
+                    withBlock.Controls[Gui.GetControlIndex("winCharacter", "lblPoints")].Text = GetPlayerPoints(GameState.MyIndex).ToString();
 
                     // grey out buttons
                     if (GetPlayerPoints(GameState.MyIndex) == 0)
                     {
                         for (x = 0; x < statCount; x++)
-                            withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "btnGreyStat_" + (x + 1))].Visible = true;
+                            withBlock.Controls[Gui.GetControlIndex("winCharacter", "btnGreyStat_" + (x + 1))].Visible = true;
                     }
                     else
                     {
                         for (x = 0; x < statCount; x++)
-                            withBlock.Controls[(int) Gui.GetControlIndex("winCharacter", "btnGreyStat_" + (x + 1))].Visible = false;
+                            withBlock.Controls[Gui.GetControlIndex("winCharacter", "btnGreyStat_" + (x + 1))].Visible = false;
                     }
                 }
                 GameState.PlayerData = true;
@@ -1274,7 +1275,7 @@ namespace Client
             }
 
             // Update GUI
-            Gui.UpdateStats_UI();
+            WinCharacter.Update();
         }
 
         public static void Packet_PlayerXY(ReadOnlyMemory<byte> data)

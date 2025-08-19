@@ -29,13 +29,13 @@ public static class WinOptions
 
             if (!enabled)
             {
-                Text.AddText("Music turned off.", (int) ColorName.BrightGreen);
+                TextRenderer.AddText("Music turned off.", (int) ColorName.BrightGreen);
 
                 Sound.StopMusic();
             }
             else
             {
-                Text.AddText("Music tured on.", (int) ColorName.BrightGreen);
+                TextRenderer.AddText("Music tured on.", (int) ColorName.BrightGreen);
 
                 var music = GameState.InGame ? Data.MyMap.Music : SettingsManager.Instance.Music.ToString();
                 if (music != "None.")
@@ -55,7 +55,7 @@ public static class WinOptions
         {
             SettingsManager.Instance.Sound = enabled;
 
-            Text.AddText(!enabled ? "Sound turned off." : "Sound tured on.", (int) ColorName.BrightGreen);
+            TextRenderer.AddText(!enabled ? "Sound turned off." : "Sound tured on.", (int) ColorName.BrightGreen);
         }
 
 
@@ -68,13 +68,13 @@ public static class WinOptions
             {
                 if (GameState.InGame)
                 {
-                    Text.AddText("Autotiles turned off.", (int) ColorName.BrightGreen);
+                    TextRenderer.AddText("Autotiles turned off.", (int) ColorName.BrightGreen);
                     Autotile.InitAutotiles();
                 }
             }
             else if (GameState.InGame)
             {
-                Text.AddText("Autotiles turned on.", (int) ColorName.BrightGreen);
+                TextRenderer.AddText("Autotiles turned on.", (int) ColorName.BrightGreen);
                 Autotile.InitAutotiles();
             }
         }
@@ -101,7 +101,7 @@ public static class WinOptions
 
         if (GameState.InGame && restartRequired)
         {
-            Text.AddText("Some changes will take effect next time you load the game.", (int) ColorName.BrightGreen);
+            TextRenderer.AddText("Some changes will take effect next time you load the game.", (int) ColorName.BrightGreen);
         }
 
         OnClose();

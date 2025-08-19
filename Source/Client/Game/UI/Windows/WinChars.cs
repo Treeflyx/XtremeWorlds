@@ -73,7 +73,7 @@ public static class WinChars
         Gui.ShowWindow("winLogin");
     }
     
-    public static void Chars_OnDraw()
+    public static void OnDraw()
     {
         var winChars = Gui.GetWindowByName("winChars");
         if (winChars is null)
@@ -81,8 +81,8 @@ public static class WinChars
             return;
         }
         
-        var x = winChars.Left + 24;
-        var y = winChars.Top;
+        var x = winChars.X + 24;
+        var y = winChars.Y;
         
         for (var i = 0; i <= Constant.MaxChars - 1; i++)
         {

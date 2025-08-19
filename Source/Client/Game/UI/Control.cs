@@ -3,46 +3,53 @@ using Microsoft.Xna.Framework;
 
 namespace Client.Game.UI;
 
-public class Control
+public abstract class Control : Component
 {
-    public string Name { get; set; } = string.Empty;
-    public ControlType Type { get; set; }
-    public int Left { get; set; }
-    public int Top { get; set; }
-    public int OrigLeft { get; set; }
-    public int OrigTop { get; set; }
-    public int MovedX { get; set; }
-    public int MovedY { get; set; }
-    public int Width { get; set; }
-    public int Height { get; set; }
-    public bool Visible { get; set; }
-    public bool CanDrag { get; set; }
-    public int Max { get; set; }
-    public int Min { get; set; }
     public int Value { get; set; }
     public string Text { get; set; } = string.Empty;
-    public byte Length { get; set; }
-    public Alignment Align { get; set; }
-    public Font Font { get; set; }
-    public Color Color { get; set; }
-    public int Alpha { get; set; }
-    public bool ClickThrough { get; set; }
+    public Alignment Align { get; set; } = Alignment.Left;
+    public Font Font { get; set; } = Font.Georgia;
+    public Color Color { get; set; } = Color.White;
+    public int Alpha { get; set; } = 255;
     public int XOffset { get; set; }
     public int YOffset { get; set; }
-    public byte ZChange { get; set; }
     public int ZOrder { get; set; }
-    public bool Enabled { get; set; }
-    public Action? OnDraw { get; set; }
+    public bool Enabled { get; set; } = true;
     public string Tooltip { get; set; } = string.Empty;
-    public int Group { get; set; }
-    public bool Censor { get; set; }
     public int Icon { get; set; }
     public ControlState State { get; set; }
-    public List<string> List { get; } = [];
-
+    public Design Design { get; set; } = Design.None;
+    public Design? DesignHover { get; set; }
+    public Design? DesignMouseDown { get; set; }
+    public int? Image { get; set; }
+    public int? ImageHover { get; set; }
+    public int? ImageMouseDown { get; set; }
+    public Action? OnDraw { get; set; }
+    
     // Arrays for states
-    public List<Design> Design { get; set; } = [];
-    public List<int> Image { get; set; } = [];
     public List<string> Texture { get; set; } = [];
     public List<Action?> CallBack { get; set; } = [];
+
+    public abstract void Render(int x, int y);
+    
+    protected Design GetActiveDesign()
+    {
+        return State switch
+        {
+            ControlState.Normal => Design,
+            ControlState.Hover => DesignHover ?? Design,
+            ControlState.MouseDown => DesignMouseDown ?? Design,
+            _ => Design
+        };
+    }
+
+    protected int? GetActiveImage()
+    {
+        return State switch {
+            ControlState.Normal => Image,
+            ControlState.Hover => ImageHover ?? Image,
+            ControlState.MouseDown => ImageMouseDown ?? Image,
+            _ => Image
+        };
+    }
 }

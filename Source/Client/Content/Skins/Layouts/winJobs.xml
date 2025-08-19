@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winJobs" Caption="Select Job"
+        Size="364, 229"
+        Icon="17" IconOffset="2, 6"
+        Design="WindowNormal"
+        StartPosition="CenterScreen"
+        Visible="False">
+
+    <PictureBox Name="picParchment" Position="6, 26" Size="352, 197" Design="Parchment"/>
+
+    <PictureBox Position="183, 42" Size="98, 9" Design="BlackOval"/>
+    <Label Name="lblJobName" Text="Warrior" Position="183, 39" Size="98, 10" Align="Center"/>
+    <Button Name="btnLeft" Position="170, 40" Size="10, 13" Image="12" ImageHover="14" ImageMouseDown="16"/>
+    <Button Name="btnRight" Position="282, 40" Size="10, 13" Image="13" ImageHover="15" ImageMouseDown="17"/>
+
+    <Button Name="btnAccept" Text="Accept"
+            Position="183, 185" Size="98, 22"
+            Design="Green"
+            DesignHover="GreenHover"
+            DesignMouseDown="GreenClick"/>
+
+    <PictureBox Name="picBackground" Position="127, 55" Size="210, 124" Design="TextBlack"/>
+    <PictureBox Name="picOverlay" Position="6, 26" Size="0, 0"/>
+    
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+
+</Window>

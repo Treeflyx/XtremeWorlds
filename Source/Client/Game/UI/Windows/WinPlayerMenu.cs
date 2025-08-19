@@ -29,13 +29,13 @@ public static class WinPlayerMenu
     {
         OnClose();
         
-        Text.AddText("System not yet in place.", (int) ColorName.BrightRed);
+        TextRenderer.AddText("System not yet in place.", (int) ColorName.BrightRed);
     }
 
     public static void OnPrivateMessage()
     {
         OnClose();
         
-        Text.AddText("System not yet in place.", (int) ColorName.BrightRed);
+        TextRenderer.AddText("System not yet in place.", (int) ColorName.BrightRed);
     }
 }

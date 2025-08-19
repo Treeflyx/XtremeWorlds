@@ -2,35 +2,26 @@
 
 namespace Client.Game.UI;
 
-public class Window
+public sealed class Window : Component
 {
-    public string Name { get; set; } = string.Empty;
-    public ControlType Type { get; set; }
-    public int Left { get; set; }
-    public int Top { get; set; }
-    public int OrigLeft { get; set; }
-    public int OrigTop { get; set; }
+    public int InitialX { get; set; }
+    public int InitialY { get; set; }
     public int MovedX { get; set; }
     public int MovedY { get; set; }
-    public int Width { get; set; }
-    public int Height { get; set; }
-    public bool Visible { get; set; }
-    public bool CanDrag { get; set; }
+    public bool CanDrag { get; set; } = true;
     public Font Font { get; set; }
     public string Text { get; set; } = string.Empty;
     public int XOffset { get; set; }
     public int YOffset { get; set; }
     public int Icon { get; set; }
-    public bool Enabled { get; set; }
     public long Value { get; set; }
     public int Group { get; set; }
     public byte ZChange { get; set; }
     public int ZOrder { get; set; }
     public Action? OnDraw { get; set; }
-    public bool Censor { get; set; }
     public bool ClickThrough { get; set; }
-    public int LinkedToWin { get; set; }
-    public int LinkedToCon { get; set; }
+    
+    public Control? ParentControl { get; set; }
 
     public ControlState State { get; set; }
     public List<string> List { get; set; } = []; // Drop down items?
@@ -57,17 +48,9 @@ public class Window
 
         throw new InvalidOperationException("Control not found: " + controlName);
     }
-
-    public bool SetActiveControl(Control control)
+    
+    public bool Contains(int x, int y)
     {
-        switch (Type)
-        {
-            case ControlType.TextBox:
-                LastControl = ActiveControl;
-                ActiveControl = control;
-                return true;
-        }
-
-        return false;
+        return x >= X && x <= X + Width && y >= Y && y <= Y + Height;
     }
 }

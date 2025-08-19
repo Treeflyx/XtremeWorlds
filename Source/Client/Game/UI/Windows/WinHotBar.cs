@@ -22,13 +22,13 @@ public static class WinHotBar
 
         var argpath = Path.Combine(DataPath.Gui, "31");
 
-        GameClient.RenderTexture(ref argpath, winHotbar.Left - 1, winHotbar.Top + 3, 0, 0, 11, 26, 11, 26);
-        GameClient.RenderTexture(ref argpath, winHotbar.Left + 407, winHotbar.Top + 3, 0, 0, 11, 26, 11, 26);
+        GameClient.RenderTexture(ref argpath, winHotbar.X - 1, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
+        GameClient.RenderTexture(ref argpath, winHotbar.X + 407, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
 
         for (var slot = 0; slot < Constant.MaxHotbar; slot++)
         {
-            var x = winHotbar.Left + GameState.HotbarLeft + slot * GameState.HotbarOffsetX;
-            var y = winHotbar.Top + GameState.HotbarTop;
+            var x = winHotbar.X + GameState.HotbarLeft + slot * GameState.HotbarOffsetX;
+            var y = winHotbar.Y + GameState.HotbarTop;
 
             if (slot != Constant.MaxHotbar - 1)
             {
@@ -63,7 +63,7 @@ public static class WinHotBar
 
             var slotNumberStr = slotNumber.ToString();
 
-            Text.RenderText(slotNumberStr, x + 4, y + 19, Color.White, Color.White);
+            TextRenderer.RenderText(slotNumberStr, x + 4, y + 19, Color.White, Color.White);
         }
     }
 
@@ -75,7 +75,7 @@ public static class WinHotBar
             return;
         }
 
-        var slot = GameLogic.IsHotbar(winHotbar.Left, winHotbar.Top);
+        var slot = GameLogic.IsHotbar(winHotbar.X, winHotbar.Y);
         if (slot >= 0)
         {
             ref var dragBox = ref Gui.DragBox;
@@ -94,10 +94,10 @@ public static class WinHotBar
             var windowIndex = Gui.GetWindowIndex("winDragBox");
             var winDragBox = Gui.Windows[windowIndex];
 
-            winDragBox.Left = GameState.CurMouseX;
-            winDragBox.Top = GameState.CurMouseY;
-            winDragBox.MovedX = GameState.CurMouseX - winDragBox.Left;
-            winDragBox.MovedY = GameState.CurMouseY - winDragBox.Top;
+            winDragBox.X = GameState.CurMouseX;
+            winDragBox.Y = GameState.CurMouseY;
+            winDragBox.MovedX = GameState.CurMouseX - winDragBox.X;
+            winDragBox.MovedY = GameState.CurMouseY - winDragBox.Y;
 
             Gui.ShowWindow(windowIndex, resetPosition: false);
 
@@ -115,7 +115,7 @@ public static class WinHotBar
             return;
         }
 
-        var slot = GameLogic.IsHotbar(winHotbar.Left, winHotbar.Top);
+        var slot = GameLogic.IsHotbar(winHotbar.X, winHotbar.Y);
         if (slot >= 0)
         {
             Sender.SendUseHotbarSlot(slot);
@@ -143,7 +143,7 @@ public static class WinHotBar
             return;
         }
 
-        var slot = GameLogic.IsHotbar(winHotbar.Left, winHotbar.Top);
+        var slot = GameLogic.IsHotbar(winHotbar.X, winHotbar.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
@@ -156,13 +156,13 @@ public static class WinHotBar
             return;
         }
 
-        var x = winHotbar.Left - winDescription.Width;
+        var x = winHotbar.X - winDescription.Width;
         if (x < 0)
         {
-            x = winHotbar.Left + winHotbar.Width;
+            x = winHotbar.X + winHotbar.Width;
         }
 
-        var y = winHotbar.Top - 6;
+        var y = winHotbar.Y - 6;
 
         switch (Data.Player[GameState.MyIndex].Hotbar[slot].SlotType)
         {

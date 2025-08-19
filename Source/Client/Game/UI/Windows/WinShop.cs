@@ -37,15 +37,15 @@ public static class WinShop
         {
             return;
         }
-        
-        var xo = winShop.Left;
-        var yo = winShop.Top;
+
+        var xo = winShop.X;
+        var yo = winShop.Y;
         var width = winShop.Width;
         var height = winShop.Height;
 
         // render green
         var argpath = Path.Combine(DataPath.Gui, "34");
-        
+
         GameClient.RenderTexture(ref argpath, xo + 4, yo + 23, 0, 0, width - 8, height - 27, 4, 4);
 
         width = 76;
@@ -58,19 +58,19 @@ public static class WinShop
             {
                 height = 42;
             }
-            
+
             var argpath1 = Path.Combine(DataPath.Gui, "35");
-            
+
             GameClient.RenderTexture(ref argpath1, xo + 4, y, 0, 0, width, height, width, height);
             GameClient.RenderTexture(ref argpath1, xo + 80, y, 0, 0, width, height, width, height);
             GameClient.RenderTexture(ref argpath1, xo + 156, y, 0, 0, width, height, width, height);
             GameClient.RenderTexture(ref argpath1, xo + 232, y, 0, 0, 42, height, 42, height);
-            
+
             y += 76;
         }
-        
+
         var argpath5 = Path.Combine(DataPath.Gui, "1");
-        
+
         GameClient.RenderTexture(ref argpath5, xo + 4, y - 34, 0, 0, 270, 72, 270, 72);
     }
 
@@ -165,7 +165,7 @@ public static class WinShop
             return;
         }
 
-        var slot = General.IsShop(winShop.Left, winShop.Top);
+        var slot = General.IsShop(winShop.X, winShop.Y);
         if (slot >= 0)
         {
             if (GameState.ShopIsSelling)
@@ -210,20 +210,20 @@ public static class WinShop
             return;
         }
 
-        var slot = General.IsShop(winShop.Left, winShop.Top);
+        var slot = General.IsShop(winShop.X, winShop.Y);
         if (slot < 0)
         {
             winDescription.Visible = false;
             return;
         }
 
-        var x = winShop.Left - winDescription.Width;
+        var x = winShop.X - winDescription.Width;
         if (x < 0)
         {
-            x = winShop.Left + winShop.Width;
+            x = winShop.X + winShop.Width;
         }
 
-        var y = winShop.Top - 6;
+        var y = winShop.Y - 6;
 
         var itemNum = !GameState.ShopIsSelling
             ? Data.Shop[GameState.InShop].TradeItem[slot].Item
@@ -274,9 +274,10 @@ public static class WinShop
                     labelCost.Text = Data.Shop[GameState.InShop].TradeItem[GameState.ShopSelectedSlot].CostValue + " " + Data.Item[Data.Shop[GameState.InShop].TradeItem[GameState.ShopSelectedSlot].CostItem].Name;
                 }
 
+                picItem.Image = Data.Item[GameState.ShopSelectedItem].Icon;
+
                 for (var i = 0; i < 5; i++)
                 {
-                    picItem.Image[i] = Data.Item[GameState.ShopSelectedItem].Icon;
                     picItem.Texture[i] = DataPath.Items;
                 }
             }
@@ -285,9 +286,10 @@ public static class WinShop
                 labelName.Text = "Empty Slot";
                 labelCost.Text = "";
 
+                picItem.Image = null;
+
                 for (var i = 0; i < 5; i++)
                 {
-                    picItem.Image[i] = 0;
                     picItem.Texture[i] = string.Empty;
                 }
             }
@@ -303,9 +305,9 @@ public static class WinShop
                 labelName.Text = Data.Item[GameState.ShopSelectedItem].Name;
                 labelCost.Text = cost + "g";
 
+                picItem.Image = Data.Item[GameState.ShopSelectedItem].Icon;
                 for (var i = 0; i < 5; i++)
                 {
-                    picItem.Image[i] = Data.Item[GameState.ShopSelectedItem].Icon;
                     picItem.Texture[i] = DataPath.Items;
                 }
             }
@@ -314,9 +316,9 @@ public static class WinShop
                 labelName.Text = "Empty Slot";
                 labelCost.Text = "";
 
+                picItem.Image = null;
                 for (var i = 0; i < 5; i++)
                 {
-                    picItem.Image[i] = 0;
                     picItem.Texture[i] = string.Empty;
                 }
             }
@@ -327,8 +329,8 @@ public static class WinShop
     {
         for (var i = 0; i < Constant.MaxTrades; i++)
         {
-            var x = winShop.Top + GameState.ShopLeft + (GameState.ShopOffsetX + 32) * (i % GameState.ShopColumns);
-            var y = winShop.Left + GameState.ShopTop + (GameState.ShopOffsetY + 32) * (i / GameState.ShopColumns);
+            var x = winShop.Y + GameState.ShopLeft + (GameState.ShopOffsetX + 32) * (i % GameState.ShopColumns);
+            var y = winShop.X + GameState.ShopTop + (GameState.ShopOffsetY + 32) * (i / GameState.ShopColumns);
 
             if (GameState.ShopSelectedSlot == i)
             {
@@ -361,8 +363,8 @@ public static class WinShop
     {
         for (var i = 0; i < Constant.MaxTrades; i++)
         {
-            var top = winShop.Top + GameState.ShopTop + (GameState.ShopOffsetY + 32) * (i / GameState.ShopColumns);
-            var left = winShop.Left + GameState.ShopLeft + (GameState.ShopOffsetX + 32) * (i % GameState.ShopColumns);
+            var top = winShop.Y + GameState.ShopTop + (GameState.ShopOffsetY + 32) * (i / GameState.ShopColumns);
+            var left = winShop.X + GameState.ShopLeft + (GameState.ShopOffsetX + 32) * (i % GameState.ShopColumns);
 
             if (GameState.ShopSelectedSlot == i)
             {
@@ -398,9 +400,9 @@ public static class WinShop
             var x = left + 1;
 
             var amount = GetPlayerInvValue(GameState.MyIndex, i);
-            var amountColor = Text.GetColorForAmount(amount);
+            var amountColor = TextRenderer.GetColorForAmount(amount);
 
-            Text.RenderText(GameLogic.ConvertCurrency(amount), x, y, amountColor, amountColor);
+            TextRenderer.RenderText(GameLogic.ConvertCurrency(amount), x, y, amountColor, amountColor);
         }
     }
 }

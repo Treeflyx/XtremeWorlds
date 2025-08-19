@@ -18,8 +18,8 @@ public static class WinDescription
             return;
         }
 
-        var x = winDescription.Left;
-        var y = winDescription.Top;
+        var x = winDescription.X;
+        var y = winDescription.Y;
 
         switch (GameState.DescType)
         {
@@ -40,8 +40,8 @@ public static class WinDescription
                     var argpath1 = Path.Combine(DataPath.Gui, "45");
 
                     GameClient.RenderTexture(ref argpath1,
-                        x + picBar.Left,
-                        y + picBar.Top, 0, 12,
+                        x + picBar.X,
+                        y + picBar.Y, 0, 12,
                         picBar.Value, 12,
                         picBar.Value, 12);
                 }
@@ -62,8 +62,8 @@ public static class WinDescription
         var offset = 18;
         for (var i = 0; i < GameState.Description.Length; i++)
         {
-            Text.RenderText(GameState.Description[i].Caption,
-                x + 140 - Text.GetTextWidth(GameState.Description[i].Caption) / 2,
+            TextRenderer.RenderText(GameState.Description[i].Caption,
+                x + 140 - TextRenderer.GetTextWidth(GameState.Description[i].Caption) / 2,
                 y + offset,
                 GameClient.ToXnaColor(GameState.Description[i].Color),
                 Color.Black);

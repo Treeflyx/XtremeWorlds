@@ -436,7 +436,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) ColorName.Yellow, channel: (byte) ChatChannel.Broadcast);
+        TextRenderer.AddText(message, (int) ColorName.Yellow, channel: (byte) ChatChannel.Broadcast);
     }
 
     private static void Packet_MapMsg(ReadOnlyMemory<byte> data)
@@ -445,7 +445,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) ColorName.White, channel: (byte) ChatChannel.Map);
+        TextRenderer.AddText(message, (int) ColorName.White, channel: (byte) ChatChannel.Map);
     }
 
     private static void Packet_AdminMsg(ReadOnlyMemory<byte> data)
@@ -454,7 +454,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var message = packetReader.ReadString();
 
-        Text.AddText(message, (int) ColorName.BrightCyan, channel: (byte) ChatChannel.Broadcast);
+        TextRenderer.AddText(message, (int) ColorName.BrightCyan, channel: (byte) ChatChannel.Broadcast);
     }
 
     private static void Packet_PlayerMsg(ReadOnlyMemory<byte> data)
@@ -464,7 +464,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         var message = packetReader.ReadString();
         var color = packetReader.ReadInt32();
 
-        Text.AddText(message, color, channel: (byte) ChatChannel.Private);
+        TextRenderer.AddText(message, color, channel: (byte) ChatChannel.Private);
     }
 
     private static void Packet_SpawnItem(ReadOnlyMemory<byte> data)
@@ -705,7 +705,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         };
 
         // add to the chat box
-        Text.AddText(header + " " + name + ": " + message, color, channel: channelType);
+        TextRenderer.AddText(header + " " + name + ": " + message, color, channel: channelType);
     }
 
     private static void Packet_Stunned(ReadOnlyMemory<byte> data)
@@ -852,19 +852,19 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         switch (Clock.Instance.TimeOfDay)
         {
             case TimeOfDay.Dawn:
-                Text.AddText("A chilling, refreshing, breeze has come with the morning.", (int) ColorName.DarkGray);
+                TextRenderer.AddText("A chilling, refreshing, breeze has come with the morning.", (int) ColorName.DarkGray);
                 break;
 
             case TimeOfDay.Day:
-                Text.AddText("Day has dawned in this region.", (int) ColorName.DarkGray);
+                TextRenderer.AddText("Day has dawned in this region.", (int) ColorName.DarkGray);
                 break;
 
             case TimeOfDay.Dusk:
-                Text.AddText("Dusk has begun darkening the skies...", (int) ColorName.DarkGray);
+                TextRenderer.AddText("Dusk has begun darkening the skies...", (int) ColorName.DarkGray);
                 break;
 
             default:
-                Text.AddText("Night has fallen upon the weary travelers.", (int) ColorName.DarkGray);
+                TextRenderer.AddText("Night has fallen upon the weary travelers.", (int) ColorName.DarkGray);
                 break;
         }
     }

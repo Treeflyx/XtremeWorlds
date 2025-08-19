@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winLogin" Caption="Login"
+        Size="276, 212"
+        Icon="45" IconOffset="3, 5"
+        Design="WindowNormal"
+        StartPosition="CenterScreen">
+
+    <PictureBox Position="6, 26" Size="264, 180" Design="Parchment"/>
+
+    <PictureBox Position="67, 43" Size="142, 9" Design="BlackOval"/>
+    <PictureBox Position="67, 79" Size="142, 9" Design="BlackOval"/>
+
+    <Label Text="Username" Position="72, 39" Size="142, 10" Align="Center"/>
+    <TextBox Name="txtUsername" Position="67, 55" Size="142, 19"/>
+
+    <Label Text="Password" Position="72, 75" Size="142, 10" Align="Center"/>
+    <TextBox Name="txtPassword" Position="67, 86" Size="142, 19" Censor="True"/>
+
+    <CheckBox Name="chkSaveUsername" Text="Save Username?"
+              Position="67, 114" Size="142, 10"
+              Design="CheckboxNormal"/>
+
+    <Button Name="btnAccept" Text="Accept"
+            Position="67, 134" Size="67, 22"
+            Design="Green"
+            DesignHover="GreenHover"
+            DesignMouseDown="GreenClick"/>
+
+    <Button Name="btnExit" Text="Exit"
+            Position="142, 134" Size="67, 22"
+            Design="Red"
+            DesignHover="RedHover"
+            DesignMouseDown="RedClick"/>
+
+    <Button Name="btnRegister" Text="Register Account"
+            Position="12, -35" Size="252, 22"
+            Design="Green"
+            DesignHover="GreenHover"
+            DesignMouseDown="GreenClick"/>
+
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+
+</Window>
