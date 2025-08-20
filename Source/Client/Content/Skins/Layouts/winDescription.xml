@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winDescription" Size="193, 142" Position="0, 0" Font="Georgia" Design="WindowDescription" StartPosition="CenterScreen">
+    <Label Name="lblName" Text="Flame Sword" Position="8, 12" Size="177, 10" Font="Arial" Align="Center"/>
+
+    <PictureBox Name="picSprite" Position="18, 32" Size="68, 68" Design="DescriptionPicture"/>
+    <PictureBox Name="picSep" Position="96, 28" Size="0, 92" Image="44"/>
+
+    <Label Name="lblJob" Text="Job: None" Position="101, 102" Size="86, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblLevel" Text="Level 1" Position="101, 114" Size="86, 10" Font="Georgia" Align="Center"/>
+
+    <PictureBox Name="picBar" Position="19, 114" Size="66, 12" Image="45"/>
+</Window>

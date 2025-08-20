@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winMenu" Size="229, 30" Position="571, 569" Font="Georgia">
+    <PictureBox Name="picWood" Position="0, 5" Size="228, 20" Design="Wood"/>
+
+    <Button Name="btnChar" Position="8, 0" Size="29, 29" Image="108" Design="Green"/>
+    <Button Name="btnInv" Position="44, 0" Size="29, 29" Image="1" Design="Green"/>
+    <Button Name="btnSkills" Position="82, 0" Size="29, 29" Image="109" Design="Green"/>
+    <Button Name="btnMap" Position="119, 0" Size="29, 29" Image="106" Design="Grey"/>
+    <Button Name="btnGuild" Position="155, 0" Size="29, 29" Image="107" Design="Grey"/>
+    <Button Name="btnQuest" Position="190, 0" Size="29, 29" Image="23" Design="Grey"/>
+</Window>

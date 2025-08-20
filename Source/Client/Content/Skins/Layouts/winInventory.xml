@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winInventory" Caption="Inventory" Size="202, 319" Position="0,0" Font="Georgia" Icon="1" Design="WindowEmpty" StartPosition="CenterScreen">
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+    <PictureBox Name="picBlank" Position="8, 293" Size="186, 18" Image="67"/>
+    <Label Name="lblGold" Text="0g" Position="57, 288" Size="100, 15" Font="Arial" Align="Right"/>
+</Window>

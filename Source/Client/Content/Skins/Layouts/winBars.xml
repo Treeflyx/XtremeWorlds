@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winBars" Size="239, 77" Position="10, 10" Font="Georgia" Design="WindowNoBar">
+    <PictureBox Name="picParchment" Position="6, 6" Size="227, 65" Design="Parchment"/>
+
+    <PictureBox Name="picHP_Blank" Position="15, 15" Size="209, 13" Image="24"/>
+    <PictureBox Name="picSP_Blank" Position="15, 32" Size="209, 13" Image="25"/>
+    <PictureBox Name="picEXP_Blank" Position="15, 49" Size="209, 13" Image="26"/>
+
+    <PictureBox Name="picHealth" Position="16, 10" Size="44, 14" Image="21"/>
+    <PictureBox Name="picSpirit" Position="16, 28" Size="44, 14" Image="22"/>
+    <PictureBox Name="picExperience" Position="16, 45" Size="74, 14" Image="23"/>
+
+    <Label Name="lblHP" Text="999/999" Position="15, 14" Size="209, 10" Font="Arial" Align="Center"/>
+    <Label Name="lblMP" Text="999/999" Position="15, 30" Size="209, 10" Font="Arial" Align="Center"/>
+    <Label Name="lblEXP" Text="999/999" Position="15, 48" Size="209, 10" Font="Arial" Align="Center"/>
+</Window>

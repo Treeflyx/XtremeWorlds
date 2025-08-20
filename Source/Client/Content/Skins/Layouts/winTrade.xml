@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winTrade" Caption="Trading with [Name]" Size="412, 386" Position="0, 0"
+        Font="Georgia" Icon="112" Design="WindowEmpty" StartPosition="CenterScreen">
+
+    <Button Name="btnClose" Position="-19, 5" Size="36, 36" Image="8" ImageHover="9" ImageMouseDown="10"/>
+
+    <PictureBox Name="picParchment" Position="10, 312" Size="392, 66" Design="Parchment"/>
+
+    <PictureBox Name="shadowYour" Position="36, 30" Size="142, 9" Design="Parchment"/>
+    <Label Name="lblYourTrade" Text="Your Offer" Position="36, 27" Size="142, 9" Font="Georgia" Align="Center"/>
+
+    <PictureBox Name="shadowTheir" Position="236, 30" Size="142, 9" Design="Parchment"/>
+    <Label Name="lblTheirTrade" Text="Their Offer" Position="236, 27" Size="142, 9" Font="Georgia" Align="Center"/>
+
+    <Button Name="btnAccept" Text="Accept" Position="134, 340" Size="68, 24" Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick"/>
+    <Button Name="btnDecline" Text="Decline" Position="210, 340" Size="68, 24" Design="Red" DesignHover="RedHover" DesignMouseDown="RedClick"/>
+
+    <Label Name="lblStatus" Text="" Position="114, 322" Size="184, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblBlankLeft" Text="Total Value" Position="25, 330" Size="100, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblBlankRight" Text="Total Value" Position="285, 330" Size="100, 10" Font="Georgia" Align="Center"/>
+
+    <Label Name="lblYourValue" Text="0g" Position="25, 344" Size="100, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblTheirValue" Text="0g" Position="285, 344" Size="100, 10" Font="Georgia" Align="Center"/>
+
+    <PictureBox Name="picYour" Position="14, 46" Size="184, 260"/>
+    <PictureBox Name="picTheir" Position="214, 46" Size="184, 260"/>
+</Window>

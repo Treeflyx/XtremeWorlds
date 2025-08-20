@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winDialogue" Caption="Warning"
+        Size="348, 145" Position="0, 0"
+        Icon="38" IconOffset="3, 5"
+        Font="Georgia"
+        Design="WindowNormal"
+        StartPosition="CenterScreen">
+
+    <PictureBox Name="picParchment" Position="6, 26" Size="335, 113" Design="Parchment"/>
+    <PictureBox Name="picShadow" Position="103, 44" Size="144, 9" Design="BlackOval"/>
+
+    <Label Name="lblHeader" Text="Header" Position="103, 40" Size="144, 10" Font="Arial" Align="Center"/>
+
+    <TextBox Name="txtInput" Position="93, 75" Size="162, 18" Font="Arial"/>
+
+    <Label Name="lblBody_1" Text="Invalid username or password." Position="15, 60" Size="314, 10" Font="Arial" Align="Center"/>
+    <Label Name="lblBody_2" Text="Please try again!" Position="15, 75" Size="314, 10" Font="Arial" Align="Center"/>
+
+    <Button Name="btnYes" Text="Yes" Position="104, 98" Size="68, 24" Font="Arial"
+            Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick"/>
+    <Button Name="btnNo" Text="No" Position="180, 98" Size="68, 24" Font="Arial"
+            Design="Red" DesignHover="RedHover" DesignMouseDown="RedClick"/>
+    <Button Name="btnOkay" Text="Okay" Position="140, 98" Size="68, 24" Font="Arial"
+            Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick"/>
+
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+</Window>

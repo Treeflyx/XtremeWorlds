@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window Name="winParty" Caption="" Size="252, 158" Position="4, 78"
+        Font="Georgia" Design="WindowParty">
+    <Label Name="lblName1" Text="Name - Level 1" Position="60, 20" Size="173, 10" Font="Arial"/>
+    <Label Name="lblName2" Text="Name - Level 1" Position="60, 60" Size="173, 10" Font="Arial"/>
+    <Label Name="lblName3" Text="Name - Level 1" Position="60, 100" Size="173, 10" Font="Arial"/>
+
+    <PictureBox Name="picEmptyBar_HP1" Position="58, 34" Size="173, 9" Image="62"/>
+    <PictureBox Name="picEmptyBar_HP2" Position="58, 74" Size="173, 9" Image="62"/>
+    <PictureBox Name="picEmptyBar_HP3" Position="58, 114" Size="173, 9" Image="62"/>
+
+    <PictureBox Name="picEmptyBar_SP1" Position="58, 44" Size="173, 9" Image="63"/>
+    <PictureBox Name="picEmptyBar_SP2" Position="58, 84" Size="173, 9" Image="63"/>
+    <PictureBox Name="picEmptyBar_SP3" Position="58, 124" Size="173, 9" Image="63"/>
+
+    <PictureBox Name="picBar_HP1" Position="58, 34" Size="173, 9" Image="64"/>
+    <PictureBox Name="picBar_HP2" Position="58, 74" Size="173, 9" Image="64"/>
+    <PictureBox Name="picBar_HP3" Position="58, 114" Size="173, 9" Image="64"/>
+
+    <PictureBox Name="picBar_SP1" Position="58, 44" Size="173, 9" Image="65"/>
+    <PictureBox Name="picBar_SP2" Position="58, 84" Size="173, 9" Image="65"/>
+    <PictureBox Name="picBar_SP3" Position="58, 124" Size="173, 9" Image="65"/>
+
+    <PictureBox Name="picChar1" Position="20, 20" Size="32, 32"/>
+    <PictureBox Name="picChar2" Position="20, 60" Size="32, 32"/>
+    <PictureBox Name="picChar3" Position="20, 100" Size="32, 32"/>
+</Window>
