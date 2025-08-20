@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window Name="winChat" Size="352, 152" Position="8, 422" Font="Georgia">
-    <PictureBox Name="picNull" Position="0, 0" Size="0, 0"/>
+<Window Name="winChat" Size="352, 152" Position="8, 422" Font="Georgia">   
     <CheckBox Name="chkGame" Text="Game" Position="10, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkMap" Text="Map" Position="60, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkGlobal" Text="Global" Position="110, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkParty" Text="Party" Position="160, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkGuild" Text="Guild" Position="210, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
-    <CheckBox Name="chkPlayer" Text="Player" Position="260, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
-
-    <Button Name="btnChat" Text="Say" Position="296, 140" Size="48, 20" Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick" Font="Arial"/>
-    <TextBox Name="txtChat" Position="12, 143" Size="352, 25"/>
-
+    <CheckBox Name="chkPlayer" Text="Player" Position="260, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>    
+    <PictureBox Name="picNull" Position="0, 0" Size="0, 0"/>
+    <Button Name="btnChat" Text="Say" Position="296, 146" Size="48, 20" Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick" Font="Arial"/>
+    <TextBox Name="txtChat" Position="12, 143" Size="278, 25"/>
     <Button Name="btnUp" Position="328, 28" Size="10, 13" Image="4" ImageHover="52" ImageMouseDown="4"/>
     <Button Name="btnDown" Position="327, 122" Size="10, 13" Image="5" ImageHover="53" ImageMouseDown="5"/>
 </Window>
