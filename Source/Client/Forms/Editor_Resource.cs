@@ -209,13 +209,19 @@ namespace Client
             // buttons moved to right panel bottom (main control view)
             rightLayout.Add(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, HorizontalContentAlignment = HorizontalAlignment.Left, Items = { btnSave, btnDelete, btnCopy, btnCancel } }); // order enforced
 
+        var scroll = new Scrollable
+        {
+            Content = rightLayout,
+            ExpandContentWidth = true,
+            ExpandContentHeight = false
+        };
         Content = new TableLayout
             {
                 Spacing = new Size(10,10),
                 Rows =
                 {
             // Left list pane fixed to preferred width (list is set to 200px)
-            new TableRow(new TableCell(listLayout), new TableCell(rightLayout, true))
+            new TableRow(new TableCell(listLayout), new TableCell(scroll, true))
                 }
             };
         }

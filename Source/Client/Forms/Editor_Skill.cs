@@ -157,10 +157,16 @@ namespace Client
             // buttons moved to right layout bottom (main control view)
             rightLayout.Add(buttons);
 
+            var scroll = new Scrollable
+            {
+                Content = rightLayout,
+                ExpandContentWidth = true,
+                ExpandContentHeight = false
+            };
             Content = new TableLayout
             {
                 Spacing = new Size(10,10),
-                Rows = { new TableRow(new TableCell(listLayout, true), new TableCell(rightLayout, true)) }
+                Rows = { new TableRow(new TableCell(listLayout, true), new TableCell(scroll, true)) }
             };
         }
 
