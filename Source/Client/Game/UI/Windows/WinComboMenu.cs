@@ -4,6 +4,20 @@ namespace Client.Game.UI.Windows;
 
 public static class WinComboMenu
 {
+    /// <summary>
+    /// Returns true if the combo menu is currently open for the given window/control.
+    /// </summary>
+    public static bool IsOpen(Window window, int controlIndex)
+    {
+        var winComboMenu = Gui.GetWindowByName("winComboMenu");
+        if (winComboMenu is null || !winComboMenu.Visible)
+            return false;
+        // Check if the menu is for the current ComboBox
+        if (window.Controls[controlIndex] is ComboBox comboBox && winComboMenu.ParentControl == comboBox)
+            return true;
+        return false;
+    }
+    
     public static void Close()
     {
         Gui.HideWindow("winComboMenuBG");

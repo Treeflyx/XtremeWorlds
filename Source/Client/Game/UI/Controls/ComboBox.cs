@@ -7,7 +7,10 @@ public sealed class ComboBox : Control
     private const int ArrowSprite = 66;
 
     public List<string> Items { get; } = [];
-    
+
+    // Add a public property for Value (selection index)
+    public new int Value { get; set; }
+
     public override void Render(int x, int y)
     {
         switch (Design)
@@ -15,12 +18,10 @@ public sealed class ComboBox : Control
             case Design.ComboBoxNormal:
                 DesignRenderer.Render(Design.TextBlack, X + x, Y + y, Width, Height);
 
-                if (Value > 0)
+                // Always display the selected item if Value is in range
+                if (Items.Count > 0 && Value >= 0 && Value < Items.Count)
                 {
-                    if (Value <= Items.Count - 1)
-                    {
-                        TextRenderer.RenderText(Items[Value], X + x, Y + y, Color, Color.Black);
-                    }
+                    TextRenderer.RenderText(Items[Value], X + x, Y + y, Color, Color.Black);
                 }
 
                 var path = Path.Combine(Texture[0], ArrowSprite.ToString());

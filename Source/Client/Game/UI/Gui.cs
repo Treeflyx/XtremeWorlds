@@ -774,10 +774,31 @@ public class Gui
 
                     if (control is {Enabled: true, Visible: true})
                     {
-                        if (GameState.CurMouseX >= control.X + curWindow.X &&
-                            GameState.CurMouseX <= control.X + control.Width + curWindow.X &&
-                            GameState.CurMouseY >= control.Y + curWindow.Y &&
-                            GameState.CurMouseY <= control.Y + control.Height + curWindow.Y)
+                        bool isComboMenuHit = false;
+                        if (control is ComboBox comboBox)
+                        {
+                            // Improved combo menu styling: smaller height, padding, border
+                            int itemHeight = 12; // More compact item height
+                            int menuPadding = 4;
+                            int menuX = curWindow.X + comboBox.X - menuPadding;
+                            int menuY = curWindow.Y + comboBox.Y + comboBox.Height;
+                            int menuWidth = comboBox.Width + menuPadding * 2;
+                            int menuHeight = comboBox.Items.Count * itemHeight + menuPadding * 2;
+                            if (GameState.CurMouseX >= menuX &&
+                                GameState.CurMouseX <= menuX + menuWidth &&
+                                GameState.CurMouseY >= menuY &&
+                                GameState.CurMouseY <= menuY + menuHeight)
+                            {
+                                isComboMenuHit = true;
+                            }
+                            // Optionally, you can add a border or background drawing here if you have a custom render method
+                        }
+
+                        if ((GameState.CurMouseX >= control.X + curWindow.X &&
+                             GameState.CurMouseX <= control.X + control.Width + curWindow.X &&
+                             GameState.CurMouseY >= control.Y + curWindow.Y &&
+                             GameState.CurMouseY <= control.Y + control.Height + curWindow.Y)
+                            || isComboMenuHit)
                         {
                             if (curControl == 0L || control.ZOrder > curWindow.Controls[curControl].ZOrder)
                             {
@@ -827,10 +848,42 @@ public class Gui
 
                             break;
                         }
-
-                        case ComboBox:
-                            WinComboMenu.Show(curWindow, curControl);
+                        case ComboBox comboBox:
+                        {
+                            int itemHeight = 12;
+                            int menuPadding = 4;
+                            bool menuIsOpen = WinComboMenu.IsOpen(curWindow, curControl); // You may need to implement this check if not present
+                            if (entState == ControlState.MouseDown && GameClient.IsMouseButtonDown(MouseButton.Left))
+                            {
+                                if (menuIsOpen)
+                                {
+                                    int menuX = curWindow.X + comboBox.X - menuPadding;
+                                    int menuY = curWindow.Y + comboBox.Y + comboBox.Height;
+                                    int menuWidth = comboBox.Width + menuPadding * 2;
+                                    int menuHeight = comboBox.Items.Count * itemHeight + menuPadding * 2;
+                                    bool inMenu = GameState.CurMouseX >= menuX && GameState.CurMouseX <= menuX + menuWidth &&
+                                                  GameState.CurMouseY >= menuY && GameState.CurMouseY <= menuY + menuHeight;
+                                    int relY = GameState.CurMouseY - (curWindow.Y + comboBox.Y + comboBox.Height + menuPadding);
+                                    int idx = relY / itemHeight;
+                                    if (inMenu && idx >= 0 && idx < comboBox.Items.Count)
+                                    {
+                                        comboBox.Value = idx;
+                                        WinComboMenu.Close(); // Hide menu after selection
+                                    }
+                                    else if (!inMenu)
+                                    {
+                                        // Clicked outside menu, close it
+                                        WinComboMenu.Close();
+                                    }
+                                }
+                                else
+                                {
+                                    // Menu not open yet, open it
+                                    WinComboMenu.Show(curWindow, curControl);
+                                }
+                            }
                             break;
+                        }
                     }
 
                     if (GameClient.IsMouseButtonDown(MouseButton.Left))
@@ -954,21 +1007,24 @@ public class Gui
         }
 
         var y = GameState.CurMouseY - window.Y;
+        bool didSelect = false;
         for (var i = 0; i < window.List.Count; i++)
         {
-            if (y < 16 * i || y > 16 * i)
+            if (y >= 16 * i && y < 16 * (i + 1))
             {
-                continue;
+                if (window.ParentControl is not null)
+                {
+                    // Set the ComboBox.Value property if possible
+                    if (window.ParentControl is Client.Game.UI.Controls.ComboBox comboBox)
+                        comboBox.Value = i;
+                    else
+                        window.ParentControl.Value = i;
+                }
+                didSelect = true;
+                break;
             }
-
-            if (window.ParentControl is not null)
-            {
-                window.ParentControl.Value = i;
-            }
-
-            WinComboMenu.Close();
-            break;
         }
+        WinComboMenu.Close();
     }
 
     public static void ResizeGui()
