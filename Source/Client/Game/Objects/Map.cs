@@ -74,22 +74,33 @@ namespace Client
         {
             int fogNum = GameState.CurrentFog;
 
-            if (fogNum <= 0 | fogNum > GameState.NumFogs)
+            if (fogNum <= 0 || fogNum > GameState.NumFogs)
                 return;
 
-            int sX = 0;
-            int sY = 0;
-            int sW = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Width; // Using the full width of the fog texture
-            int sH = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Height; // Using the full height of the fog texture
-
-            // These should match the scale calculations for full coverage plus extra area
-            int dX = (int) Math.Round(GameState.FogOffsetX * 2.5d - 50d);
-            int dY = (int) Math.Round(GameState.FogOffsetY * 3.5d - 50d);
-            int dW = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Width + 200;
-            int dH = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Height + 200;
-
             string argPath = System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString());
-            GameClient.RenderTexture(ref argPath, dX, dY, sX, sY, dW, dH, sW, sH, (byte) GameState.CurrentFogOpacity);
+            var gfxInfo = GameClient.GetGfxInfo(argPath);
+            int sW = gfxInfo.Width;
+            int sH = gfxInfo.Height;
+
+            // Calculate how many tiles are needed to cover the screen
+            int screenW = GameState.ResolutionWidth;
+            int screenH = GameState.ResolutionHeight;
+
+            // Wrap fog offset so it scrolls smoothly and never leaves a gap
+            int offsetX = (int)(GameState.FogOffsetX % sW);
+            int offsetY = (int)(GameState.FogOffsetY % sH);
+            if (offsetX > 0) offsetX -= sW;
+            if (offsetY > 0) offsetY -= sH;
+
+            // Draw the fog texture repeatedly to fill the screen
+            float fogAlpha = GameState.CurrentFogOpacity / 255f;
+            for (int x = offsetX; x < screenW; x += sW)
+            {
+                for (int y = offsetY; y < screenH; y += sH)
+                {
+                    GameClient.RenderTexture(ref argPath, x, y, 0, 0, sW, sH, sW, sH, fogAlpha);
+                }
+            }
         }
 
         public static void DrawMapGroundTile(int x, int y)

@@ -163,7 +163,8 @@ namespace Client
         public Slider scrlMapBlue = new Slider();
         public Slider scrlMapGreen = new Slider();
         public Slider scrlMapRed = new Slider();
-        public GroupBox GroupBox1 = new GroupBox{ Text = "Fog" };
+        public GroupBox GroupBoxFog = new GroupBox{ Text = "Fog" };
+        public GroupBox GroupBoxWeather = new GroupBox{ Text = "Weather" };
         public Slider scrlFogOpacity = new Slider();
         public Label lblFogOpacity = new Label();
         public Slider scrlFogSpeed = new Slider();
@@ -713,30 +714,65 @@ namespace Client
 
         private void BuildEffectsTab()
         {
-            // Weather
+            // Weather group
             Label14.Text = "Weather";
             cmbWeather.Items.Clear();
-            cmbWeather.Items.Add("None");                           
+            cmbWeather.Items.Add("None");
             cmbWeather.Items.Add("Rain");
-            cmbWeather.Items.Add                                                                                                                                                                                ("Snow");
+            cmbWeather.Items.Add("Snow");
             cmbWeather.Items.Add("Storm");
             cmbWeather.SelectedIndexChanged += CmbWeather_SelectedIndexChanged;
 
             scrlIntensity.MinValue = 0; scrlIntensity.MaxValue = 100; scrlIntensity.ValueChanged += ScrlIntensity_Scroll;
-            scrlFog.MinValue = 0; scrlFog.MaxValue = 100; scrlFog.ValueChanged += ScrlFog_Scroll;
-            // Make intensity and fog sliders wider
             scrlIntensity.Width = 400;
-            scrlFog.Width = 400;
 
-            GroupBox1.Text = "Fog";
-            GroupBox1.Content = new StackLayout
+            GroupBoxWeather.Content = new StackLayout
             {
                 Padding = 6, Spacing = 6,
                 Items =
                 {
                     new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { Label14, cmbWeather } },
                     new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Intensity" }, scrlIntensity } },
+                }
+            };
+
+            // Fog group
+            scrlFog.MinValue = 0; scrlFog.MaxValue = 100; scrlFog.ValueChanged += ScrlFog_Scroll;
+            scrlFog.Width = 400;
+
+            // Fog group: add FogOpacity slider and label
+            scrlFogOpacity.MinValue = 0;
+            scrlFogOpacity.MaxValue = 255;
+            scrlFogOpacity.Value = Data.MyMap.FogOpacity;
+            scrlFogOpacity.Width = 400;
+            scrlFogOpacity.Height = 30;
+            scrlFogOpacity.ValueChanged += (s, e) => {
+                Data.MyMap.FogOpacity = (byte)scrlFogOpacity.Value;
+                lblFogOpacity.Text = $"Opacity: {scrlFogOpacity.Value}";
+            };
+            lblFogOpacity.Text = $"Opacity: {scrlFogOpacity.Value}";
+
+            GroupBox1.Text = "Fog";
+            // Fog speed slider and label
+            scrlFogSpeed.MinValue = 0;
+            scrlFogSpeed.MaxValue = 255;
+            scrlFogSpeed.Value = Data.MyMap.FogSpeed;
+            scrlFogSpeed.Width = 400;
+            scrlFogSpeed.Height = 30;
+            scrlFogSpeed.ValueChanged += (s, e) => {
+                Data.MyMap.FogSpeed = (byte)scrlFogSpeed.Value;
+                lblFogSpeed.Text = $"Speed: {scrlFogSpeed.Value}";
+            };
+            lblFogSpeed.Text = $"Speed: {scrlFogSpeed.Value}";
+
+            GroupBox1.Content = new StackLayout
+            {
+                Padding = 6, Spacing = 6,
+                Items =
+                {
                     new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Fog Index" }, scrlFog } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { lblFogOpacity, scrlFogOpacity } },
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { lblFogSpeed, scrlFogSpeed } },
                 }
             };
 
@@ -747,6 +783,7 @@ namespace Client
             scrlMapGreen.MinValue = 0; scrlMapGreen.MaxValue = 255; scrlMapGreen.ValueChanged += ScrlMapGreen_Scroll;
             scrlMapBlue.MinValue = 0; scrlMapBlue.MaxValue = 255; scrlMapBlue.ValueChanged += ScrlMapBlue_Scroll;
             scrlMapAlpha.MinValue = 0; scrlMapAlpha.MaxValue = 255; scrlMapAlpha.ValueChanged += ScrlMapAlpha_Scroll;
+
             // Make tint sliders wider
             scrlMapRed.Width = 400;
             scrlMapGreen.Width = 400;
@@ -781,10 +818,50 @@ namespace Client
             scrlMapBrightness.Width = 400;
             GroupBox6.Content = new StackLayout{ Padding = 6, Spacing = 6, Items = { new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Brightness" }, scrlMapBrightness } } } };
 
-            // Assemble Effects tab (column of items)
-            var left = new StackLayout{ Padding = 6, Spacing = 8, Items = { GroupBox1, GroupBox3 } };
-            var right = new StackLayout{ Padding = 6, Spacing = 8, Items = { GroupBox4, GroupBox5, GroupBox6 } };
-            tpEffects.Content = new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { left, new StackLayoutItem(right, true) } };
+            // Left column: effect selection radio buttons
+            var effectRadioController = new RadioButton();
+            var radioWeather = new RadioButton(effectRadioController) { Text = "Weather" };
+            var radioFog = new RadioButton(effectRadioController) { Text = "Fog" };
+            var radioTint = new RadioButton(effectRadioController) { Text = "Tint" };
+            var radioPanorama = new RadioButton(effectRadioController) { Text = "Panorama" };
+            var radioParallax = new RadioButton(effectRadioController) { Text = "Parallax" };
+            var radioBrightness = new RadioButton(effectRadioController) { Text = "Brightness" };
+
+            var effectPanels = new Panel { Content = GroupBoxWeather };
+
+            radioWeather.CheckedChanged += (s, e) => { if (radioWeather.Checked) effectPanels.Content = GroupBoxWeather; };
+            radioFog.CheckedChanged += (s, e) => { if (radioFog.Checked) effectPanels.Content = GroupBox1; };
+            radioTint.CheckedChanged += (s, e) => { if (radioTint.Checked) effectPanels.Content = GroupBox3; };
+            radioPanorama.CheckedChanged += (s, e) => { if (radioPanorama.Checked) effectPanels.Content = GroupBox4; };
+            radioParallax.CheckedChanged += (s, e) => { if (radioParallax.Checked) effectPanels.Content = GroupBox5; };
+            radioBrightness.CheckedChanged += (s, e) => { if (radioBrightness.Checked) effectPanels.Content = GroupBox6; };
+
+            // Default selection
+            radioWeather.Checked = true;
+
+            var leftCol = new StackLayout
+            {
+                Width = 180,
+                Padding = 6,
+                Spacing = 6,
+                Items =
+                {
+                    new Label{ Text = "Effects" },
+                    radioWeather,
+                    radioFog,
+                    radioTint,
+                    radioPanorama,
+                    radioParallax,
+                    radioBrightness
+                }
+            };
+
+            tpEffects.Content = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 10,
+                Items = { leftCol, new StackLayoutItem(effectPanels, true) }
+            };
         }
 
         private void InitializeToolbar()
