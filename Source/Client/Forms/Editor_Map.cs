@@ -265,7 +265,11 @@ namespace Client
             if (cmbLayers.Items.Count == 0)
             {
                 foreach (var name in System.Enum.GetNames(typeof(MapLayer)))
-                    cmbLayers.Items.Add(name);
+                {
+                    // Insert spaces before capital letters (except the first letter)
+                    string displayName = System.Text.RegularExpressions.Regex.Replace(name, "(?<!^)([A-Z])", " $1");
+                    cmbLayers.Items.Add(displayName);
+                }
                 cmbLayers.SelectedIndex = 0;
                 cmbLayers.SelectedIndexChanged += cmbLayers_SelectedIndexChanged;
             }
@@ -1657,18 +1661,19 @@ namespace Client
 
             Instance.cmbPanorama.Items.Clear();
 
+            // Add 'None' option (0) for panorama
+            Instance.cmbPanorama.Items.Add("None");
             var loopTo4 = GameState.NumPanoramas;
             for (i = 0; i < loopTo4; i++)
                 Instance.cmbPanorama.Items.Add((i + 1).ToString());
-            
             Instance.cmbPanorama.SelectedIndex = Data.MyMap.Panorama;
-            
+
             Instance.cmbParallax.Items.Clear();
-            
+            // Add 'None' option (0) for parallax
+            Instance.cmbParallax.Items.Add("None");
             var loopTo5 = GameState.NumParallax;
             for (i = 0; i < loopTo5; i++)
                 Instance.cmbParallax.Items.Add((i + 1).ToString());
-            
             Instance.cmbParallax.SelectedIndex = Data.MyMap.Parallax;
 
             Instance.tabPages.SelectedIndex = 0;
