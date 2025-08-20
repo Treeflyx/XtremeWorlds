@@ -225,7 +225,11 @@ namespace Client
             int d;
 
             canMove = true;
-
+            if (GetPlayerX(GameState.MyIndex) < 0 || GetPlayerX(GameState.MyIndex) >= Data.MyMap.MaxX || GetPlayerY(GameState.MyIndex) < 0 || GetPlayerY(GameState.MyIndex) >= Data.MyMap.MaxY)
+            {
+                canMove = false;
+                return canMove;
+            }
 
             if (Event.HoldPlayer)
             {
