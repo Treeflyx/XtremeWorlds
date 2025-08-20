@@ -70,14 +70,14 @@ namespace Client
             {
                 if (GameState.WeatherParticle[i].InUse == 1)
                 {
-                    if (GameState.WeatherParticle[i].X > GameState.TileView.Right * 32d | GameState.WeatherParticle[i].Y > GameState.TileView.Bottom * 32d)
+                    // Only fall vertically, not diagonally
+                    if (GameState.WeatherParticle[i].Y > GameState.TileView.Bottom * 32d)
                     {
                         GameState.WeatherParticle[i].InUse = 0;
                     }
                     else
                     {
-                        GameState.WeatherParticle[i].X = GameState.WeatherParticle[i].X + GameState.WeatherParticle[i].Velocity;
-                        GameState.WeatherParticle[i].Y = GameState.WeatherParticle[i].Y + GameState.WeatherParticle[i].Velocity;
+                        GameState.WeatherParticle[i].Y += GameState.WeatherParticle[i].Velocity;
                     }
                 }
             }
