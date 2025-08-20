@@ -752,7 +752,7 @@ namespace Client
             };
             lblFogOpacity.Text = $"Opacity: {scrlFogOpacity.Value}";
 
-            GroupBox1.Text = "Fog";
+            GroupBoxFog.Text = "Fog";
             // Fog speed slider and label
             scrlFogSpeed.MinValue = 0;
             scrlFogSpeed.MaxValue = 255;
@@ -765,7 +765,7 @@ namespace Client
             };
             lblFogSpeed.Text = $"Speed: {scrlFogSpeed.Value}";
 
-            GroupBox1.Content = new StackLayout
+            GroupBoxFog.Content = new StackLayout
             {
                 Padding = 6, Spacing = 6,
                 Items =
@@ -830,7 +830,7 @@ namespace Client
             var effectPanels = new Panel { Content = GroupBoxWeather };
 
             radioWeather.CheckedChanged += (s, e) => { if (radioWeather.Checked) effectPanels.Content = GroupBoxWeather; };
-            radioFog.CheckedChanged += (s, e) => { if (radioFog.Checked) effectPanels.Content = GroupBox1; };
+            radioFog.CheckedChanged += (s, e) => { if (radioFog.Checked) effectPanels.Content = GroupBoxFog; };
             radioTint.CheckedChanged += (s, e) => { if (radioTint.Checked) effectPanels.Content = GroupBox3; };
             radioPanorama.CheckedChanged += (s, e) => { if (radioPanorama.Checked) effectPanels.Content = GroupBox4; };
             radioParallax.CheckedChanged += (s, e) => { if (radioParallax.Checked) effectPanels.Content = GroupBox5; };
