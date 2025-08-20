@@ -41,10 +41,12 @@ namespace Client
             txtAdminName = new TextBox(); 
             txtAdminName.Text = GetPlayerName(GameState.MyIndex); 
             cmbAccess = new DropDown();
+
             foreach (var name in Enum.GetNames(typeof(AccessLevel)))
             {
                 cmbAccess.Items.Add(name);
             }
+            cmbAccess.SelectedIndex = 0; // Set default access to 0
 
             nudAdminSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters };
             nudAdminMap = new NumericStepper { MinValue = 0, MaxValue = Constant.MaxMaps };
