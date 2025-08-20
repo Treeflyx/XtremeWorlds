@@ -131,31 +131,32 @@ public class Crystalshire
     public void UpdateWindow_Chat()
     {
         var window = WindowLoader.FromLayout("winChat");
-        // Picture box draw
-        window.GetChild("picNull").OnDraw = WinChat.OnDraw;
+
         // Buttons
-        window.GetChild("btnChat").CallBack[(int) ControlState.Normal] = WinChat.OnSayClick;
-        window.GetChild("btnUp").CallBack[(int) ControlState.MouseDown] = WinChat.OnUpButtonMouseDown;
-        window.GetChild("btnDown").CallBack[(int) ControlState.MouseDown] = WinChat.OnDownButtonMouseDown;
-        window.GetChild("btnUp").CallBack[(int) ControlState.MouseUp] = WinChat.OnUpButtonMouseUp;
-        window.GetChild("btnDown").CallBack[(int) ControlState.MouseUp] = WinChat.OnDownButtonMouseUp;
+        window.GetChild("btnChat").CallBack[(int)ControlState.Normal] = WinChat.OnSayClick;
+        window.GetChild("btnUp").CallBack[(int)ControlState.MouseDown] = WinChat.OnUpButtonMouseDown;
+        window.GetChild("btnDown").CallBack[(int)ControlState.MouseDown] = WinChat.OnDownButtonMouseDown;
+        window.GetChild("btnUp").CallBack[(int)ControlState.MouseUp] = WinChat.OnUpButtonMouseUp;
+        window.GetChild("btnDown").CallBack[(int)ControlState.MouseUp] = WinChat.OnDownButtonMouseUp;
+
         // Checkboxes
-        window.GetChild("chkGame").CallBack[(int) ControlState.MouseDown] = WinChat.OnGameChannelClicked;
-        window.GetChild("chkMap").CallBack[(int) ControlState.MouseDown] = WinChat.OnMapChannelClicked;
-        window.GetChild("chkGlobal").CallBack[(int) ControlState.MouseDown] = WinChat.OnBroadcastChannelClicked;
-        window.GetChild("chkParty").CallBack[(int) ControlState.MouseDown] = WinChat.OnPartyChannelClicked;
-        window.GetChild("chkGuild").CallBack[(int) ControlState.MouseDown] = WinChat.OnGuildChannelClicked;
-        window.GetChild("chkPlayer").CallBack[(int) ControlState.MouseDown] = WinChat.OnPrivateChannelClicked;
+        window.GetChild("chkGame").CallBack[(int)ControlState.MouseDown] = WinChat.OnGameChannelClicked;
+        window.GetChild("chkMap").CallBack[(int)ControlState.MouseDown] = WinChat.OnMapChannelClicked;
+        window.GetChild("chkGlobal").CallBack[(int)ControlState.MouseDown] = WinChat.OnBroadcastChannelClicked;
+        window.GetChild("chkParty").CallBack[(int)ControlState.MouseDown] = WinChat.OnPartyChannelClicked;
+        window.GetChild("chkGuild").CallBack[(int)ControlState.MouseDown] = WinChat.OnGuildChannelClicked;
+        window.GetChild("chkPlayer").CallBack[(int)ControlState.MouseDown] = WinChat.OnPrivateChannelClicked;
 
         Gui.SetActiveControl(window, "txtChat");
 
         // Initialize checkbox states
-        window.GetChild("chkGame").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Game];
-        window.GetChild("chkMap").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Map];
-        window.GetChild("chkGlobal").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Broadcast];
-        window.GetChild("chkParty").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Party];
-        window.GetChild("chkGuild").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Guild];
-        window.GetChild("chkPlayer").Value = SettingsManager.Instance.ChannelState[(int) ChatChannel.Private];
+        window.GetChild("chkGame").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Game];
+        window.GetChild("chkMap").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Map];
+        window.GetChild("chkGlobal").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Broadcast];
+        window.GetChild("chkParty").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Party];
+        window.GetChild("chkGuild").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Guild];
+        window.GetChild("chkPlayer").Value = SettingsManager.Instance.ChannelState[(int)ChatChannel.Private];
+        window.GetChild("picNull").OnDraw = WinChat.OnDraw;
     }
 
     public void UpdateWindow_ChatSmall()
@@ -168,7 +169,6 @@ public class Crystalshire
     {
         var window = WindowLoader.FromLayout("winHotbar");
         window.OnDraw = WinHotBar.OnDraw;
-        // Wire window-level interactions
         window.CallBack[(int) ControlState.MouseMove] = WinHotBar.OnMouseMove;
         window.CallBack[(int) ControlState.MouseDown] = WinHotBar.OnMouseDown;
         window.CallBack[(int) ControlState.DoubleClick] = WinHotBar.OnDoubleClick;
