@@ -401,8 +401,8 @@ namespace Client
         {
             Graphics.GraphicsDevice.Clear(Color.Black);
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend);
-
+            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+            
             // Lightweight loading screen while heavy startup is running
             if (GameState.IsLoading)
             {
