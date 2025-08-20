@@ -18,10 +18,12 @@ public static class WinEscMenu
 
     public static void OnMainMenuClick()
     {
-        Gui.HideWindows();
-        Gui.ShowWindow("winLogin");
+        // We're going back to a menu screen; ensure flags are consistent
         GameState.InGame = false;
+        GameState.InMenu = true;
+        Gui.HideWindows();
 
+        Gui.ShowWindow("winLogin");
         Sender.SendLogout();
     }
 
