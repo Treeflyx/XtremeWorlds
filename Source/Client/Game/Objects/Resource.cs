@@ -125,8 +125,8 @@ namespace Client
             if (rec.Width < 0 | rec.Height < 0)
                 return;
 
-            string argpath = System.IO.Path.Combine(DataPath.Resources, resource.ToString());
-            GameClient.RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
+            string argPath = System.IO.Path.Combine(DataPath.Resources, resource.ToString());
+            GameClient.RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
         public static void DrawMapResource(int resourceNum)

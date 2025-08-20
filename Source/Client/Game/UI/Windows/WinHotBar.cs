@@ -20,10 +20,10 @@ public static class WinHotBar
             return;
         }
 
-        var argpath = Path.Combine(DataPath.Gui, "31");
+        var argPath = Path.Combine(DataPath.Gui, "31");
 
-        GameClient.RenderTexture(ref argpath, winHotbar.X - 1, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
-        GameClient.RenderTexture(ref argpath, winHotbar.X + 407, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
+        GameClient.RenderTexture(ref argPath, winHotbar.X - 1, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
+        GameClient.RenderTexture(ref argPath, winHotbar.X + 407, winHotbar.Y + 3, 0, 0, 11, 26, 11, 26);
 
         for (var slot = 0; slot < Constant.MaxHotbar; slot++)
         {
@@ -32,14 +32,14 @@ public static class WinHotBar
 
             if (slot != Constant.MaxHotbar - 1)
             {
-                var argpath2 = Path.Combine(DataPath.Gui, "32");
+                var argPath2 = Path.Combine(DataPath.Gui, "32");
 
-                GameClient.RenderTexture(ref argpath2, x + 30, y + 3, 0, 0, 13, 26, 13, 26);
+                GameClient.RenderTexture(ref argPath2, x + 30, y + 3, 0, 0, 13, 26, 13, 26);
             }
 
-            var argpath3 = Path.Combine(DataPath.Gui, "30");
+            var argPath3 = Path.Combine(DataPath.Gui, "30");
 
-            GameClient.RenderTexture(ref argpath3, x - 2, y - 2, 0, 0, 36, 36, 36, 36);
+            GameClient.RenderTexture(ref argPath3, x - 2, y - 2, 0, 0, 36, 36, 36, 36);
 
             if (Gui.DragBox.Origin != PartOrigin.Hotbar || Gui.DragBox.Slot != slot)
             {

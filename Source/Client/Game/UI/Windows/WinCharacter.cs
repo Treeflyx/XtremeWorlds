@@ -56,15 +56,15 @@ public static class WinCharacter
         var y = winCharacter.Y;
 
         // Render bottom
-        var argpath = Path.Combine(DataPath.Gui, "37");
-        GameClient.RenderTexture(ref argpath, x + 4, y + 314, 0, 0, 40, 38, 40, 38);
-        GameClient.RenderTexture(ref argpath, x + 44, y + 314, 0, 0, 40, 38, 40, 38);
-        GameClient.RenderTexture(ref argpath, x + 84, y + 314, 0, 0, 40, 38, 40, 38);
-        GameClient.RenderTexture(ref argpath, x + 124, y + 314, 0, 0, 46, 38, 46, 38);
+        var argPath = Path.Combine(DataPath.Gui, "37");
+        GameClient.RenderTexture(ref argPath, x + 4, y + 314, 0, 0, 40, 38, 40, 38);
+        GameClient.RenderTexture(ref argPath, x + 44, y + 314, 0, 0, 40, 38, 40, 38);
+        GameClient.RenderTexture(ref argPath, x + 84, y + 314, 0, 0, 40, 38, 40, 38);
+        GameClient.RenderTexture(ref argPath, x + 124, y + 314, 0, 0, 46, 38, 46, 38);
 
         // render top wood
-        var argpath4 = Path.Combine(DataPath.Gui, "1");
-        GameClient.RenderTexture(ref argpath4, x + 4, y + 23, 100, 100, 166, 291, 166, 291);
+        var argPath4 = Path.Combine(DataPath.Gui, "1");
+        GameClient.RenderTexture(ref argPath4, x + 4, y + 23, 100, 100, 166, 291, 166, 291);
 
         for (var i = 0; i < EquipmentTypes.Length; i++)
         {

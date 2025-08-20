@@ -307,8 +307,8 @@ namespace Client
             y = GameLogic.ConvertMapY(y * 32);
 
             // Render texture
-            string argpath = System.IO.Path.Combine(DataPath.Projectiles, sprite.ToString());
-            GameClient.RenderTexture(ref argpath, x, y, (int) Math.Round(rec.Left), (int) Math.Round(rec.Top), 32, 32);
+            string argPath = System.IO.Path.Combine(DataPath.Projectiles, sprite.ToString());
+            GameClient.RenderTexture(ref argPath, x, y, (int) Math.Round(rec.Left), (int) Math.Round(rec.Top), 32, 32);
         }
 
         #endregion

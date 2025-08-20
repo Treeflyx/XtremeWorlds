@@ -18,9 +18,9 @@ public static class WinBank
             return;
         }
 
-        var argpath = Path.Combine(DataPath.Gui, "34");
+        var argPath = Path.Combine(DataPath.Gui, "34");
 
-        GameClient.RenderTexture(ref argpath,
+        GameClient.RenderTexture(ref argPath,
             winBank.X + 4,
             winBank.Y + 23,
             0, 0,
@@ -41,13 +41,13 @@ public static class WinBank
                 height = 42;
             }
 
-            var argpath1 = Path.Combine(DataPath.Gui, "35");
+            var argPath1 = Path.Combine(DataPath.Gui, "35");
 
-            GameClient.RenderTexture(ref argpath1, xo + 4, y, 0, 0, 76, height, 76, height);
-            GameClient.RenderTexture(ref argpath1, xo + 80, y, 0, 0, 76, height, 76, height);
-            GameClient.RenderTexture(ref argpath1, xo + 156, y, 0, 0, 76, height, 76, height);
-            GameClient.RenderTexture(ref argpath1, xo + 232, y, 0, 0, 76, height, 76, height);
-            GameClient.RenderTexture(ref argpath1, xo + 308, y, 0, 0, 79, height, 79, height);
+            GameClient.RenderTexture(ref argPath1, xo + 4, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argPath1, xo + 80, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argPath1, xo + 156, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argPath1, xo + 232, y, 0, 0, 76, height, 76, height);
+            GameClient.RenderTexture(ref argPath1, xo + 308, y, 0, 0, 79, height, 79, height);
 
             y += 76;
         }
@@ -78,9 +78,9 @@ public static class WinBank
             var left = xo + GameState.BankLeft + (GameState.BankOffsetX + 32) * (slot % GameState.BankColumns);
 
             // draw icon
-            var argpath6 = Path.Combine(DataPath.Items, itemIcon.ToString());
+            var argPath6 = Path.Combine(DataPath.Items, itemIcon.ToString());
 
-            GameClient.RenderTexture(ref argpath6, left, top, 0, 0, 32, 32, 32, 32);
+            GameClient.RenderTexture(ref argPath6, left, top, 0, 0, 32, 32, 32, 32);
 
             if (GetBankValue(GameState.MyIndex, slot) <= 1)
             {

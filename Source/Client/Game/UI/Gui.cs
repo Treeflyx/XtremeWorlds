@@ -1119,8 +1119,8 @@ public class Gui
                         var left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                         // draw icon
-                        var argpath = Path.Combine(DataPath.Items, itemPic.ToString());
-                        GameClient.RenderTexture(ref argpath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
+                        var argPath = Path.Combine(DataPath.Items, itemPic.ToString());
+                        GameClient.RenderTexture(ref argPath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
 
                         // If item is a stack - draw the amount you have
                         if (Data.TradeYourOffer[i].Value > 1)
@@ -1183,8 +1183,8 @@ public class Gui
                     var left = xo + GameState.TradeLeft + (GameState.TradeOffsetX + 32L) * (i % GameState.TradeColumns);
 
                     // draw icon
-                    var argpath = Path.Combine(DataPath.Items, itemPic.ToString());
-                    GameClient.RenderTexture(ref argpath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
+                    var argPath = Path.Combine(DataPath.Items, itemPic.ToString());
+                    GameClient.RenderTexture(ref argPath, (int) left, (int) top, 0, 0, 32, 32, 32, 32);
 
                     // If item is a stack - draw the amount you have
                     if (Data.TradeTheirOffer[i].Value > 1)

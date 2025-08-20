@@ -37,9 +37,9 @@ public static class WinDescription
                 var picBar = winDescription.GetChild("picBar");
                 if (picBar.Visible)
                 {
-                    var argpath1 = Path.Combine(DataPath.Gui, "45");
+                    var argPath1 = Path.Combine(DataPath.Gui, "45");
 
-                    GameClient.RenderTexture(ref argpath1,
+                    GameClient.RenderTexture(ref argPath1,
                         x + picBar.X,
                         y + picBar.Y, 0, 12,
                         picBar.Value, 12,

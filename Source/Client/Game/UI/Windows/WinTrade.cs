@@ -18,15 +18,15 @@ public static class WinTrade
         var width = winTrade.Width;
         var height = winTrade.Height;
         
-        var argpath = Path.Combine(DataPath.Gui, 34.ToString());
+        var argPath = Path.Combine(DataPath.Gui, 34.ToString());
         
         // render green
-        GameClient.RenderTexture(ref argpath, xo + 4, yo + 23, 0, 0, width - 8, height - 27, 4, 4); // ?
-        GameClient.RenderTexture(ref argpath, xo + 4, yo + 23, 100, 100, width - 8, 18, width - 8, 18); // Top
-        GameClient.RenderTexture(ref argpath, xo + 4, yo + 40, 350, 0, 5, height - 45, 5, height - 45); // Left
-        GameClient.RenderTexture(ref argpath, xo + width - 9, yo + 40, 350, 0, 5, height - 45, 5, height - 45); // Right
-        GameClient.RenderTexture(ref argpath, xo + 203, yo + 40, 350, 0, 6, height - 45, 6, height - 45); // Center
-        GameClient.RenderTexture(ref argpath, xo + 4, yo + 307, 100, 100, width - 8, 75, width - 8, 75); // Bottom
+        GameClient.RenderTexture(ref argPath, xo + 4, yo + 23, 0, 0, width - 8, height - 27, 4, 4); // ?
+        GameClient.RenderTexture(ref argPath, xo + 4, yo + 23, 100, 100, width - 8, 18, width - 8, 18); // Top
+        GameClient.RenderTexture(ref argPath, xo + 4, yo + 40, 350, 0, 5, height - 45, 5, height - 45); // Left
+        GameClient.RenderTexture(ref argPath, xo + width - 9, yo + 40, 350, 0, 5, height - 45, 5, height - 45); // Right
+        GameClient.RenderTexture(ref argPath, xo + 203, yo + 40, 350, 0, 6, height - 45, 6, height - 45); // Center
+        GameClient.RenderTexture(ref argPath, xo + 4, yo + 307, 100, 100, width - 8, 75, width - 8, 75); // Bottom
         
         var y = yo + 40;
         for (var i = 0; i < 5; i++)
@@ -36,11 +36,11 @@ public static class WinTrade
                 height = 38;
             }
             
-            var argpath6 = Path.Combine(DataPath.Gui, 35.ToString());
+            var argPath6 = Path.Combine(DataPath.Gui, 35.ToString());
             
-            GameClient.RenderTexture(ref argpath6, xo + 4 + 5, y, 0, 0, 76, 76, 76, 76);
-            GameClient.RenderTexture(ref argpath6, xo + 80 + 5, y, 0, 0, 76, 76, 76, 76);
-            GameClient.RenderTexture(ref argpath6, xo + 156 + 5, y, 0, 0, 42, 76, 42, 76);
+            GameClient.RenderTexture(ref argPath6, xo + 4 + 5, y, 0, 0, 76, 76, 76, 76);
+            GameClient.RenderTexture(ref argPath6, xo + 80 + 5, y, 0, 0, 76, 76, 76, 76);
+            GameClient.RenderTexture(ref argPath6, xo + 156 + 5, y, 0, 0, 42, 76, 42, 76);
             
             y += 76;
         }
@@ -53,11 +53,11 @@ public static class WinTrade
                 height = 38;
             }
             
-            var argpath9 = Path.Combine(DataPath.Gui, 35.ToString());
+            var argPath9 = Path.Combine(DataPath.Gui, 35.ToString());
             
-            GameClient.RenderTexture(ref argpath9, xo + 4 + 205, y, 0, 0, 76, 76, 76, 76);
-            GameClient.RenderTexture(ref argpath9, xo + 80 + 205, y, 0, 0, 76, 76, 76, 76);
-            GameClient.RenderTexture(ref argpath9, xo + 156 + 205, y, 0, 0, 42, 76, 42, 76);
+            GameClient.RenderTexture(ref argPath9, xo + 4 + 205, y, 0, 0, 76, 76, 76, 76);
+            GameClient.RenderTexture(ref argPath9, xo + 80 + 205, y, 0, 0, 76, 76, 76, 76);
+            GameClient.RenderTexture(ref argPath9, xo + 156 + 205, y, 0, 0, 42, 76, 42, 76);
 
             y += 76;
         }

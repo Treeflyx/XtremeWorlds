@@ -64,8 +64,8 @@ namespace Client
                         spriteLeft = GameState.WeatherParticle[i].Type - 1;
                     }
 
-                    string argpath = System.IO.Path.Combine(DataPath.Misc, "Weather");
-                    GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(GameState.WeatherParticle[i].X), GameLogic.ConvertMapY(GameState.WeatherParticle[i].Y), spriteLeft * 32, 0, 32, 32, 32, 32);
+                    string argPath = System.IO.Path.Combine(DataPath.Misc, "Weather");
+                    GameClient.RenderTexture(ref argPath, GameLogic.ConvertMapX(GameState.WeatherParticle[i].X), GameLogic.ConvertMapY(GameState.WeatherParticle[i].Y), spriteLeft * 32, 0, 32, 32, 32, 32);
                 }
             }
         }
@@ -88,8 +88,8 @@ namespace Client
             int dW = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Width + 200;
             int dH = GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString())).Height + 200;
 
-            string argpath = System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString());
-            GameClient.RenderTexture(ref argpath, dX, dY, sX, sY, dW, dH, sW, sH, (byte) GameState.CurrentFogOpacity);
+            string argPath = System.IO.Path.Combine(DataPath.Fogs, fogNum.ToString());
+            GameClient.RenderTexture(ref argPath, dX, dY, sX, sY, dW, dH, sW, sH, (byte) GameState.CurrentFogOpacity);
         }
 
         public static void DrawMapGroundTile(int x, int y)
@@ -175,8 +175,8 @@ namespace Client
                             }
 
                             // Render the tile
-                            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
-                            GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
+                            string argPath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
+                            GameClient.RenderTexture(ref argPath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
                         }
 
                         // Autotile rendering state
@@ -281,8 +281,8 @@ namespace Client
                             }
 
                             // Render the tile with the calculated rectangle and transparency
-                            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
-                            GameClient.RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
+                            string argPath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerIndex].Tileset.ToString());
+                            GameClient.RenderTexture(ref argPath, GameLogic.ConvertMapX(x * GameState.SizeX), GameLogic.ConvertMapY(y * GameState.SizeY), rect.X, rect.Y, rect.Width, rect.Height, rect.Width, rect.Height, alpha);
                         }
                         // Handle autotile rendering
                         else if (Data.Autotile[x, y].Layer[layerIndex].RenderState == GameState.RenderStateAutotile)
@@ -374,8 +374,8 @@ namespace Client
 
             if (Data.MyMap.Tile[x, y].Layer is null)
                 return;
-            string argpath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerNum].Tileset.ToString());
-            GameClient.RenderTexture(ref argpath, dX, dY, Data.Autotile[x, y].Layer[layerNum].SrcX[quarterNum] + xOffset, Data.Autotile[x, y].Layer[layerNum].SrcY[quarterNum] + yOffset, 16, 16, 16, 16);
+            string argPath = System.IO.Path.Combine(DataPath.Tilesets, Data.MyMap.Tile[x, y].Layer[layerNum].Tileset.ToString());
+            GameClient.RenderTexture(ref argPath, dX, dY, Data.Autotile[x, y].Layer[layerNum].SrcX[quarterNum] + xOffset, Data.Autotile[x, y].Layer[layerNum].SrcY[quarterNum] + yOffset, 16, 16, 16, 16);
         }
 
         public static void DrawMapTint()
@@ -445,8 +445,8 @@ namespace Client
             if (index < 1 | index > GameState.NumPanoramas)
                 return;
 
-            string argpath = System.IO.Path.Combine(DataPath.Panoramas, index.ToString());
-            GameClient.RenderTexture(ref argpath, 0, 0, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height);
+            string argPath = System.IO.Path.Combine(DataPath.Panoramas, index.ToString());
+            GameClient.RenderTexture(ref argPath, 0, 0, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Panoramas, index.ToString())).Height);
         }
 
         public static void DrawParallax(int index)
@@ -465,8 +465,8 @@ namespace Client
             horz = GameLogic.ConvertMapX(GetPlayerX(GameState.MyIndex)) * 2.5f - 50f;
             vert = GameLogic.ConvertMapY(GetPlayerY(GameState.MyIndex)) * 2.5f - 50f;
 
-            string argpath = System.IO.Path.Combine(DataPath.Parallax, index.ToString());
-            GameClient.RenderTexture(ref argpath, (int) Math.Round(horz), (int) Math.Round(vert), 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height);
+            string argPath = System.IO.Path.Combine(DataPath.Parallax, index.ToString());
+            GameClient.RenderTexture(ref argPath, (int) Math.Round(horz), (int) Math.Round(vert), 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Parallax, index.ToString())).Height);
         }
 
         public static void DrawPicture(int index = 0, int type = 0)
@@ -526,8 +526,8 @@ namespace Client
                     break;
             }
 
-            string argpath = System.IO.Path.Combine(DataPath.Pictures, index.ToString());
-            GameClient.RenderTexture(ref argpath, posX, posY, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height);
+            string argPath = System.IO.Path.Combine(DataPath.Pictures, index.ToString());
+            GameClient.RenderTexture(ref argPath, posX, posY, 0, 0, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Width, GameClient.GetGfxInfo(System.IO.Path.Combine(DataPath.Pictures, index.ToString())).Height);
         }
 
         public static void ClearMap()

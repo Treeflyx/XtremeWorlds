@@ -1332,8 +1332,8 @@ namespace Client
             x = GameLogic.ConvertMapX(x2);
             y = GameLogic.ConvertMapY(y2) - (GameState.SizeY + 16);
 
-            string argpath = Path.Combine(DataPath.Emotes, sprite.ToString());
-            RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
+            string argPath = Path.Combine(DataPath.Emotes, sprite.ToString());
+            RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
         public static void DrawDirections(int x, int y)
@@ -1347,8 +1347,8 @@ namespace Client
             rec.Width = 32;
             rec.Height = 32;
 
-            string argpath = Path.Combine(DataPath.Misc, "Direction");
-            RenderTexture(ref argpath, GameLogic.ConvertMapX(x * GameState.SizeX),
+            string argPath = Path.Combine(DataPath.Misc, "Direction");
+            RenderTexture(ref argPath, GameLogic.ConvertMapX(x * GameState.SizeX),
                 GameLogic.ConvertMapY(y * GameState.SizeY),
                 rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
 
@@ -1377,8 +1377,8 @@ namespace Client
 
                 rec.Height = 8;
 
-                string argpath1 = Path.Combine(DataPath.Misc, "Direction");
-                RenderTexture(ref argpath1, GameLogic.ConvertMapX(x * GameState.SizeX) + GameState.DirArrowX[i],
+                string argPath1 = Path.Combine(DataPath.Misc, "Direction");
+                RenderTexture(ref argPath1, GameLogic.ConvertMapX(x * GameState.SizeX) + GameState.DirArrowX[i],
                     GameLogic.ConvertMapY(y * GameState.SizeY) + GameState.DirArrowY[i], rec.X, rec.Y, rec.Width,
                     rec.Height,
                     rec.Width, rec.Height);
@@ -1412,8 +1412,8 @@ namespace Client
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = Path.Combine(DataPath.Paperdolls, sprite.ToString());
-            RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
+            string argPath = Path.Combine(DataPath.Paperdolls, sprite.ToString());
+            RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
         public static void DrawNpc(int mapNpcNum)
@@ -1572,8 +1572,8 @@ namespace Client
             x = GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X * GameState.SizeX);
             y = GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y * GameState.SizeY);
 
-            string argpath = Path.Combine(DataPath.Items, picNum.ToString());
-            RenderTexture(ref argpath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height, srcrec.Width,
+            string argPath = Path.Combine(DataPath.Items, picNum.ToString());
+            RenderTexture(ref argPath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height, srcrec.Width,
                 srcrec.Height);
         }
 
@@ -1588,8 +1588,8 @@ namespace Client
             x = GameLogic.ConvertMapX(x2);
             y = GameLogic.ConvertMapY(y2);
 
-            string argpath = Path.Combine(DataPath.Characters, sprite.ToString());
-            RenderTexture(ref argpath, x, y, sRect.X, sRect.Y, sRect.Width, sRect.Height, sRect.Width, sRect.Height);
+            string argPath = Path.Combine(DataPath.Characters, sprite.ToString());
+            RenderTexture(ref argPath, x, y, sRect.X, sRect.Y, sRect.Width, sRect.Height, sRect.Width, sRect.Height);
         }
 
         public static void DrawBlood(int index)
@@ -1617,8 +1617,8 @@ namespace Client
                 destrec = new Rectangle(GameLogic.ConvertMapX(withBlock.X),
                     GameLogic.ConvertMapY(withBlock.Y), GameState.SizeX, GameState.SizeY);
 
-                string argpath = Path.Combine(DataPath.Misc, "Blood");
-                RenderTexture(ref argpath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height);
+                string argPath = Path.Combine(DataPath.Misc, "Blood");
+                RenderTexture(ref argPath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height);
             }
         }
 
@@ -1662,15 +1662,15 @@ namespace Client
                         // draw bar background
                         top = height * 3L; // HP bar background
                         left = 0L;
-                        string argpath = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) width, (int) height, (int) width, (int) height);
 
                         // draw the bar proper
                         top = 0L; // HP bar
                         left = 0L;
-                        string argpath1 = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath1, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath1 = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath1, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) GameState.BarWidthNpcHp[(int) i], (int) height,
                             (int) GameState.BarWidthNpcHp[(int) i], (int) height);
                     }
@@ -1698,15 +1698,15 @@ namespace Client
                         // draw bar background
                         top = height * 3L; // HP bar background
                         left = 0L;
-                        string argpath2 = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath2, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath2 = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath2, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) width, (int) height, (int) width, (int) height);
 
                         // draw the bar proper
                         top = 0L; // HP bar
                         left = 0L;
-                        string argpath3 = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath3, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath3 = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath3, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) GameState.BarWidthPlayerHp[(int) i], (int) height,
                             (int) GameState.BarWidthPlayerHp[(int) i], (int) height);
                     }
@@ -1728,15 +1728,15 @@ namespace Client
                         // draw bar background
                         top = height * 3L; // SP bar background
                         left = 0L;
-                        string argpath4 = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath4, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath4 = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath4, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) width, (int) height, (int) width, (int) height);
 
                         // draw the bar proper
                         top = height * 0L; // SP bar
                         left = 0L;
-                        string argpath5 = Path.Combine(DataPath.Misc, "Bars");
-                        RenderTexture(ref argpath5, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
+                        string argPath5 = Path.Combine(DataPath.Misc, "Bars");
+                        RenderTexture(ref argPath5, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
                             (int) left, (int) top, (int) GameState.BarWidthPlayerSp[(int) i], (int) height,
                             (int) GameState.BarWidthPlayerSp[(int) i], (int) height);
                     }
@@ -1764,16 +1764,16 @@ namespace Client
                                 // draw bar background
                                 top = height * 3L; // cooldown bar background
                                 left = 0L;
-                                string argpath6 = Path.Combine(DataPath.Misc, "Bars");
-                                RenderTexture(ref argpath6, GameLogic.ConvertMapX((int) tmpX),
+                                string argPath6 = Path.Combine(DataPath.Misc, "Bars");
+                                RenderTexture(ref argPath6, GameLogic.ConvertMapX((int) tmpX),
                                     GameLogic.ConvertMapY((int) tmpY), (int) left, (int) top, (int) width, (int) height,
                                     (int) width, (int) height);
 
                                 // draw the bar proper
                                 top = height * 2L; // cooldown bar
                                 left = 0L;
-                                string argpath7 = Path.Combine(DataPath.Misc, "Bars");
-                                RenderTexture(ref argpath7, GameLogic.ConvertMapX((int) tmpX),
+                                string argPath7 = Path.Combine(DataPath.Misc, "Bars");
+                                RenderTexture(ref argPath7, GameLogic.ConvertMapX((int) tmpX),
                                     GameLogic.ConvertMapY((int) tmpY), (int) left, (int) top, (int) barWidth, (int) height,
                                     (int) barWidth, (int) height);
                             }
@@ -1860,8 +1860,8 @@ namespace Client
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = Path.Combine(DataPath.Misc, "Target");
-            RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
+            string argPath = Path.Combine(DataPath.Misc, "Target");
+            RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
         public static Color ToMonoGameColor(System.Drawing.Color drawingColor)
@@ -1888,8 +1888,8 @@ namespace Client
             width = rec.Right - rec.Left;
             height = rec.Bottom - rec.Top;
 
-            string argpath = Path.Combine(DataPath.Misc, "Target");
-            RenderTexture(ref argpath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
+            string argPath = Path.Combine(DataPath.Misc, "Target");
+            RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height, rec.Width, rec.Height);
         }
 
         public static void DrawChatBubble(long index)
@@ -1969,53 +1969,53 @@ namespace Client
                 y2 = y - (Information.UBound(theArray) + 1) * 12;
 
                 // render bubble - top left
-                string argpath = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath, (int) (x2 - 9L), (int) (y2 - 5L), 0, 0, 9, 5, 9, 5);
+                string argPath = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath, (int) (x2 - 9L), (int) (y2 - 5L), 0, 0, 9, 5, 9, 5);
 
                 // top right
-                string argpath1 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath1, (int) (x2 + maxWidth), (int) (y2 - 5L), 119, 0, 9, 5, 9, 5);
+                string argPath1 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath1, (int) (x2 + maxWidth), (int) (y2 - 5L), 119, 0, 9, 5, 9, 5);
 
                 // top
-                string argpath2 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath2, (int) x2, (int) (y2 - 5L), 9, 0, (int) maxWidth, 5, 5, 5);
+                string argPath2 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath2, (int) x2, (int) (y2 - 5L), 9, 0, (int) maxWidth, 5, 5, 5);
 
                 // bottom left
-                string argpath3 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath3, (int) (x2 - 9L), (int) y, 0, 19, 9, 6, 9, 6);
+                string argPath3 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath3, (int) (x2 - 9L), (int) y, 0, 19, 9, 6, 9, 6);
 
                 // bottom right
-                string argpath4 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath4, (int) (x2 + maxWidth), (int) y, 119, 19, 9, 6, 9, 6);
+                string argPath4 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath4, (int) (x2 + maxWidth), (int) y, 119, 19, 9, 6, 9, 6);
 
                 // bottom - left half
-                string argpath5 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath5, (int) x2, (int) y, 9, 19, (int) (maxWidth / 2L - 5L), 6, 6, 6);
+                string argPath5 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath5, (int) x2, (int) y, 9, 19, (int) (maxWidth / 2L - 5L), 6, 6, 6);
 
                 // bottom - right half
-                string argpath6 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath6, (int) (x2 + maxWidth / 2L + 6L), (int) y, 9, 19, (int) (maxWidth / 2L - 5L), 6,
+                string argPath6 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath6, (int) (x2 + maxWidth / 2L + 6L), (int) y, 9, 19, (int) (maxWidth / 2L - 5L), 6,
                     9,
                     6);
 
                 // left
-                string argpath7 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath7, (int) (x2 - 9L), (int) y2, 0, 6, 9, (Information.UBound(theArray) + 1) * 12, 9, 6);
+                string argPath7 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath7, (int) (x2 - 9L), (int) y2, 0, 6, 9, (Information.UBound(theArray) + 1) * 12, 9, 6);
 
                 // right
-                string argpath8 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath8, (int) (x2 + maxWidth), (int) y2, 119, 6, 9, (Information.UBound(theArray) + 1) * 12,
+                string argPath8 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath8, (int) (x2 + maxWidth), (int) y2, 119, 6, 9, (Information.UBound(theArray) + 1) * 12,
                     9,
                     6);
 
                 // center
-                string argpath9 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath9, (int) x2, (int) y2, 9, 5, (int) maxWidth, (Information.UBound(theArray) + 1) * 12, 9,
+                string argPath9 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath9, (int) x2, (int) y2, 9, 5, (int) maxWidth, (Information.UBound(theArray) + 1) * 12, 9,
                     5);
 
                 // little pointy bit
-                string argpath10 = Path.Combine(DataPath.Gui, 33.ToString());
-                RenderTexture(ref argpath10, (int) (x - 5L), (int) y, 58, 19, 11, 11, 11, 11);
+                string argPath10 = Path.Combine(DataPath.Gui, 33.ToString());
+                RenderTexture(ref argPath10, (int) (x - 5L), (int) y, 58, 19, 11, 11, 11, 11);
 
                 // render each line centralized
                 tmpNum = Information.UBound(theArray);
@@ -2309,8 +2309,8 @@ namespace Client
             // Define the position on the map where the graphic will be drawn
             var position = new Vector2(x, y);
 
-            string argpath = Path.Combine(DataPath.Characters, gfxIndex.ToString());
-            RenderTexture(ref argpath, (int) Math.Round(position.X), (int) Math.Round(position.Y), sourceRect.X,
+            string argPath = Path.Combine(DataPath.Characters, gfxIndex.ToString());
+            RenderTexture(ref argPath, (int) Math.Round(position.X), (int) Math.Round(position.Y), sourceRect.X,
                 sourceRect.Y,
                 frameWidth, frameHeight, sourceRect.Width, sourceRect.Height);
         }
@@ -2332,8 +2332,8 @@ namespace Client
                 // Define destination rectangle
                 var destRect = new Rectangle(x, y, srcRect.Width, srcRect.Height);
 
-                string argpath = Path.Combine(DataPath.Tilesets, gfxIndex.ToString());
-                RenderTexture(ref argpath, destRect.X, destRect.Y, srcRect.X, srcRect.Y, destRect.Width,
+                string argPath = Path.Combine(DataPath.Tilesets, gfxIndex.ToString());
+                RenderTexture(ref argPath, destRect.X, destRect.Y, srcRect.X, srcRect.Y, destRect.Width,
                     destRect.Height,
                     srcRect.Width, srcRect.Height);
             }
@@ -2462,18 +2462,18 @@ namespace Client
 
                         if (Data.MapEvents[id].GraphicY2 > 1)
                         {
-                            string argpath = Path.Combine(DataPath.Tilesets,
+                            string argPath = Path.Combine(DataPath.Tilesets,
                                 Data.MapEvents[id].Graphic.ToString());
-                            RenderTexture(ref argpath,
+                            RenderTexture(ref argPath,
                                 GameLogic.ConvertMapX(Data.MapEvents[id].X),
                                 GameLogic.ConvertMapY(Data.MapEvents[id].Y) - GameState.SizeY,
                                 sRect.Left, sRect.Top, sRect.Width, sRect.Height);
                         }
                         else
                         {
-                            string argpath1 = Path.Combine(DataPath.Tilesets,
+                            string argPath1 = Path.Combine(DataPath.Tilesets,
                                 Data.MapEvents[id].Graphic.ToString());
-                            RenderTexture(ref argpath1,
+                            RenderTexture(ref argPath1,
                                 GameLogic.ConvertMapX(Data.MapEvents[id].X),
                                 GameLogic.ConvertMapY(Data.MapEvents[id].Y), sRect.Left,
                                 sRect.Top,
@@ -2838,8 +2838,8 @@ namespace Client
             DrawBars();
             Map.DrawMapFade();
             Gui.Render();
-            string argpath = Path.Combine(DataPath.Misc, "Cursor");
-            RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
+            string argPath = Path.Combine(DataPath.Misc, "Cursor");
+            RenderTexture(ref argPath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
         }
 
         public static void Render_Menu()
@@ -2847,7 +2847,7 @@ namespace Client
             Gui.DrawMenuBackground();
             Gui.Render();
 
-            //RenderTexture(ref argpath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
+            //RenderTexture(ref argPath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
         }
 
         public static void UpdateMapAttributes()

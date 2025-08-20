@@ -85,8 +85,8 @@ namespace Client
             y = GameLogic.ConvertMapY(y);
 
             // Render the frame using the calculated source rectangle and position
-            string argpath = System.IO.Path.Combine(DataPath.Animations, sprite.ToString());
-            GameClient.RenderTexture(ref argpath, x, y, sRect.X, sRect.Y, frameWidth, frameHeight, frameWidth, frameHeight);
+            string argPath = System.IO.Path.Combine(DataPath.Animations, sprite.ToString());
+            GameClient.RenderTexture(ref argPath, x, y, sRect.X, sRect.Y, frameWidth, frameHeight, frameWidth, frameHeight);
         }
 
         private static Point GetLockedPosition(int index, int lockindex, int width, int height)

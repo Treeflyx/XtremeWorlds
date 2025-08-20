@@ -44,9 +44,9 @@ public static class WinShop
         var height = winShop.Height;
 
         // render green
-        var argpath = Path.Combine(DataPath.Gui, "34");
+        var argPath = Path.Combine(DataPath.Gui, "34");
 
-        GameClient.RenderTexture(ref argpath, xo + 4, yo + 23, 0, 0, width - 8, height - 27, 4, 4);
+        GameClient.RenderTexture(ref argPath, xo + 4, yo + 23, 0, 0, width - 8, height - 27, 4, 4);
 
         width = 76;
         height = 76;
@@ -59,19 +59,19 @@ public static class WinShop
                 height = 42;
             }
 
-            var argpath1 = Path.Combine(DataPath.Gui, "35");
+            var argPath1 = Path.Combine(DataPath.Gui, "35");
 
-            GameClient.RenderTexture(ref argpath1, xo + 4, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 80, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 156, y, 0, 0, width, height, width, height);
-            GameClient.RenderTexture(ref argpath1, xo + 232, y, 0, 0, 42, height, 42, height);
+            GameClient.RenderTexture(ref argPath1, xo + 4, y, 0, 0, width, height, width, height);
+            GameClient.RenderTexture(ref argPath1, xo + 80, y, 0, 0, width, height, width, height);
+            GameClient.RenderTexture(ref argPath1, xo + 156, y, 0, 0, width, height, width, height);
+            GameClient.RenderTexture(ref argPath1, xo + 232, y, 0, 0, 42, height, 42, height);
 
             y += 76;
         }
 
-        var argpath5 = Path.Combine(DataPath.Gui, "1");
+        var argPath5 = Path.Combine(DataPath.Gui, "1");
 
-        GameClient.RenderTexture(ref argpath5, xo + 4, y - 34, 0, 0, 270, 72, 270, 72);
+        GameClient.RenderTexture(ref argPath5, xo + 4, y - 34, 0, 0, 270, 72, 270, 72);
     }
 
     public static void OnClose()
