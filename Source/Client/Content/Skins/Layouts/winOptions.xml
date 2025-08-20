@@ -2,7 +2,7 @@
 <Window Name="winOptions" Size="210, 212" Position="0, 0" Font="Georgia" Design="WindowNoBar" StartPosition="CenterScreen">
     <PictureBox Name="picParchment" Position="6, 6" Size="198, 200" Design="Parchment"/>
 
-    <PictureBox Name="picBlankTop" Position="35, 25" Size="140, 10" Design="Parchment"/>
+    <PictureBox Name="picBlank" Position="35, 25" Size="140, 10" Design="Parchment"/>
     <Label Name="lblGeneral" Text="General Options" Position="35, 22" Size="140, 10" Font="Georgia" Align="Center"/>
 
     <CheckBox Name="chkMusic" Text="Music" Position="35, 40" Size="80, 10" Design="CheckboxNormal"/>

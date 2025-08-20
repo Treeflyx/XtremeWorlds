@@ -9,40 +9,43 @@ public static class Network
     private sealed class NetworkEventHandler : INetworkEventHandler
     {
         private const int BufferSize = 0xFFFF;
-        private readonly GamePacketParser _parser = new();
-        private readonly byte[] _buffer = new byte[BufferSize];
+    private readonly GamePacketParser _parser = new();
+    private byte[] _buffer = new byte[BufferSize];
         private int _bufferOffset;
         
         public Task OnBytesReceivedAsync(ReadOnlyMemory<byte> bytes, CancellationToken cancellationToken)
         {
-            var space = BufferSize - _bufferOffset;
-            if (bytes.Length > space)
+            // Ensure capacity for incoming bytes (allow dynamic growth beyond initial BufferSize)
+            var required = _bufferOffset + bytes.Length;
+            if (required > _buffer.Length)
             {
-                throw new InvalidOperationException("Buffer is full");
+                var newCapacity = Math.Max(required, _buffer.Length * 2);
+                Array.Resize(ref _buffer, newCapacity);
             }
 
+            // Append new bytes
             bytes.Span.CopyTo(_buffer.AsSpan(_bufferOffset));
-
             _bufferOffset += bytes.Length;
             if (_bufferOffset == 0)
             {
                 return Task.CompletedTask;
             }
 
+            // Parse as many packets as possible
             var count = _parser.Parse(_buffer.AsMemory(0, _bufferOffset));
             if (count == 0)
             {
                 return Task.CompletedTask;
             }
 
+            // Move any leftover bytes to the beginning of the buffer for the next read
             var bytesLeft = _bufferOffset - count;
             if (bytesLeft > 0)
             {
-                _buffer.AsSpan(_bufferOffset, bytesLeft).CopyTo(_buffer.AsSpan(0));
+                _buffer.AsSpan(count, bytesLeft).CopyTo(_buffer.AsSpan(0));
             }
 
             _bufferOffset = bytesLeft;
-            
             return Task.CompletedTask;
         }
     }

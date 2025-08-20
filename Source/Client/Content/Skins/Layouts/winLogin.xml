@@ -3,7 +3,8 @@
         Size="276, 212"
         Icon="45" IconOffset="3, 5"
         Design="WindowNormal"
-        StartPosition="CenterScreen">
+        StartPosition="CenterScreen"
+        Visible="true">
 
     <PictureBox Position="6, 26" Size="264, 180" Design="Parchment"/>
 
@@ -38,6 +39,6 @@
             DesignHover="GreenHover"
             DesignMouseDown="GreenClick"/>
 
-    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ButtonHover="9" IconMouseDown="10" ImageHover="9" ImageMouseDown="10"/>
 
 </Window>

@@ -8,8 +8,6 @@ using Core;
 using Core.Configurations;
 using Core.Globals;
 using Core.Net;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static Core.Globals.Type;
@@ -2184,9 +2182,9 @@ namespace Client
             Sender.SendCloseEditor();
 
             // show gui
-            Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
+            Gui.ShowWindow("winHotbar", resetPosition: false);
+            Gui.ShowWindow("winMenu", resetPosition: false);
+            Gui.ShowWindow("winBars", resetPosition: false);
             WinChat.Hide();
 
             Editor_Event.CloseIfOpen();
@@ -2203,9 +2201,9 @@ namespace Client
             Sender.SendCloseEditor();
 
             // show gui
-            Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
-            Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
+            Gui.ShowWindow("winHotbar", resetPosition: false);
+            Gui.ShowWindow("winMenu", resetPosition: false);
+            Gui.ShowWindow("winBars", resetPosition: false);
             WinChat.Hide();
 
             Editor_Event.CloseIfOpen();

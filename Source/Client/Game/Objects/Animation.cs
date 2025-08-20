@@ -2,8 +2,6 @@
 using Core;
 using Core.Globals;
 using Core.Net;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using static Core.Globals.Command;
 using Point = Microsoft.Xna.Framework.Point;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;

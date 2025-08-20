@@ -1,6 +1,5 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
-using Microsoft.VisualBasic;
 using Core;
 using System;
 using System.IO;

@@ -68,6 +68,33 @@ public class Gui
         }
     }
 
+    // Safe helpers to avoid null/KeyNotFound when UI isn't fully initialized
+    public static bool TryGetWindow(string windowName, out Window? window)
+    {
+        window = GetWindowByName(windowName);
+        return window is not null;
+    }
+
+    public static bool TryGetControl(string windowName, string controlName, out Control? control)
+    {
+        control = null;
+        var window = GetWindowByName(windowName);
+        if (window is null)
+        {
+            return false;
+        }
+
+        try
+        {
+            control = window.GetChild(controlName);
+            return control is not null;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public static int CreateWindow(string name, string caption, Font font, int zOrder, int left, int top, int width, int height, int icon, bool visible = true, int xOffset = 0, int yOffset = 0, Design designNorm = Design.None, Design designHover = Design.None, Design designMousedown = Design.None, int imageNorm = 0, int imageHover = 0, int imageMousedown = 0, Action? callbackNorm = null, Action? callbackHover = null, Action? callbackMousemove = null, Action? callbackMousedown = null, Action? callbackDblclick = null, Action? onDraw = null, bool canDrag = true, byte zChange = 1, bool clickThrough = false)
     {
         var stateCount = Enum.GetValues<ControlState>().Length;
@@ -404,11 +431,11 @@ public class Gui
 
     public static int GetWindowIndex(string windowName)
     {
-        for (var i = 0; i <= Windows.Count - 1; i++)
+        foreach (var kvp in Windows)
         {
-            if (string.Equals(Windows[i + 1].Name, windowName, StringComparison.CurrentCultureIgnoreCase))
+            if (string.Equals(kvp.Value.Name, windowName, StringComparison.CurrentCultureIgnoreCase))
             {
-                return i + 1;
+                return (int)kvp.Key;
             }
         }
 
@@ -496,7 +523,22 @@ public class Gui
 
     public static void ShowWindow(string windowName, bool forced = false, bool resetPosition = true)
     {
-        ShowWindow(GetWindowIndex(windowName), forced, resetPosition);
+        var index = GetWindowIndex(windowName);
+        if (index == 0)
+        {
+            try
+            {
+                // Try to lazily load the layout if it's not already loaded via the skin script
+                WindowLoader.FromLayout(windowName);
+                index = GetWindowIndex(windowName);
+            }
+            catch
+            {
+                // ignore; will no-op below
+            }
+        }
+
+        ShowWindow(index, forced, resetPosition);
     }
 
     public static void ShowWindow(int windowIndex, bool forced = false, bool resetPosition = true)
@@ -523,8 +565,24 @@ public class Gui
             return;
         }
 
-        ActiveWindow.X = ActiveWindow.InitialX;
-        ActiveWindow.Y = ActiveWindow.InitialY;
+        // If the window was initialized before resolution was known, its initial position
+        // may be off-screen (e.g., negative). Recenter it using current resolution.
+        var needsRecentering =
+            ActiveWindow.InitialX < 0 || ActiveWindow.InitialY < 0 ||
+            ActiveWindow.InitialX + ActiveWindow.Width > GameState.ResolutionWidth ||
+            ActiveWindow.InitialY + ActiveWindow.Height > GameState.ResolutionHeight;
+
+        if (needsRecentering)
+        {
+            CentralizeWindow(windowIndex);
+            ActiveWindow.InitialX = ActiveWindow.X;
+            ActiveWindow.InitialY = ActiveWindow.Y;
+        }
+        else
+        {
+            ActiveWindow.X = ActiveWindow.InitialX;
+            ActiveWindow.Y = ActiveWindow.InitialY;
+        }
     }
 
     public static void HideWindow(string windowName)
@@ -558,34 +616,47 @@ public class Gui
         ZOrderWin = 0;
         ZOrderCon = 0;
 
-        // Menu (dynamic UI initialization via Script.Instance)
+        // Dynamic UI initialization via Script.Instance (robust: keep going on errors)
         var ui = UIScript.Instance;
-        ui?.UpdateWindow_Menu();
-        ui?.UpdateWindow_Register();
-        ui?.UpdateWindow_Login();
-        ui?.UpdateWindow_NewChar();
-        ui?.UpdateWindow_Jobs();
-        ui?.UpdateWindow_Chars();
-        ui?.UpdateWindow_ChatSmall();
-        ui?.UpdateWindow_Chat();
-        ui?.UpdateWindow_Menu();
-        ui?.UpdateWindow_Description();
-        ui?.UpdateWindow_Inventory();
-        ui?.UpdateWindow_Skills();
-        ui?.UpdateWindow_Character();
-        ui?.UpdateWindow_Hotbar();
-        ui?.UpdateWindow_Bank();
-        ui?.UpdateWindow_Shop();
-        ui?.UpdateWindow_EscMenu();
-        ui?.UpdateWindow_Bars();
-        ui?.UpdateWindow_Dialogue();
-        ui?.UpdateWindow_DragBox();
-        ui?.UpdateWindow_Options();
-        ui?.UpdateWindow_Trade();
-        ui?.UpdateWindow_Party();
-        ui?.UpdateWindow_PlayerMenu();
-        ui?.UpdateWindow_RightClick();
-        ui?.UpdateWindow_Combobox();
+        if (ui is not null)
+        {
+            void Safe(string name, Action call)
+            {
+                try { call(); }
+                catch (Exception ex) { Console.WriteLine($"UI script error in {name}: {ex.Message}"); }
+            }
+
+            Safe("UpdateWindow_Menu", () => ui.UpdateWindow_Menu());
+            Safe("UpdateWindow_Register", () => ui.UpdateWindow_Register());
+            Safe("UpdateWindow_Login", () => ui.UpdateWindow_Login());
+            Safe("UpdateWindow_NewChar", () => ui.UpdateWindow_NewChar());
+            Safe("UpdateWindow_Jobs", () => ui.UpdateWindow_Jobs());
+            Safe("UpdateWindow_Chars", () => ui.UpdateWindow_Chars());
+            Safe("UpdateWindow_ChatSmall", () => ui.UpdateWindow_ChatSmall());
+            Safe("UpdateWindow_Chat", () => ui.UpdateWindow_Chat());
+            Safe("UpdateWindow_Menu", () => ui.UpdateWindow_Menu());
+            Safe("UpdateWindow_Description", () => ui.UpdateWindow_Description());
+            Safe("UpdateWindow_Inventory", () => ui.UpdateWindow_Inventory());
+            Safe("UpdateWindow_Skills", () => ui.UpdateWindow_Skills());
+            Safe("UpdateWindow_Character", () => ui.UpdateWindow_Character());
+            Safe("UpdateWindow_Hotbar", () => ui.UpdateWindow_Hotbar());
+            Safe("UpdateWindow_Bank", () => ui.UpdateWindow_Bank());
+            Safe("UpdateWindow_Shop", () => ui.UpdateWindow_Shop());
+            Safe("UpdateWindow_EscMenu", () => ui.UpdateWindow_EscMenu());
+            Safe("UpdateWindow_Bars", () => ui.UpdateWindow_Bars());
+            Safe("UpdateWindow_Dialogue", () => ui.UpdateWindow_Dialogue());
+            Safe("UpdateWindow_DragBox", () => ui.UpdateWindow_DragBox());
+            Safe("UpdateWindow_Options", () => ui.UpdateWindow_Options());
+            Safe("UpdateWindow_Trade", () => ui.UpdateWindow_Trade());
+            Safe("UpdateWindow_Party", () => ui.UpdateWindow_Party());
+            Safe("UpdateWindow_PlayerMenu", () => ui.UpdateWindow_PlayerMenu());
+            Safe("UpdateWindow_RightClick", () => ui.UpdateWindow_RightClick());
+            Safe("UpdateWindow_Combobox", () => ui.UpdateWindow_Combobox());
+        }
+        else
+        {
+            Console.WriteLine("UI script not loaded; windows will be created on demand from layouts.");
+        }
     }
 
     public static bool HandleInterfaceEvents(ControlState entState)
@@ -902,24 +973,54 @@ public class Gui
 
     public static void ResizeGui()
     {
+        // If UI hasn't been initialized yet, bail out safely
+        if (Windows.IsEmpty)
+        {
+            return;
+        }
+
+        // Helper to safely apply changes when a window exists
+        static void TryApply(string name, Action<Window> apply)
+        {
+            var idx = GetWindowIndex(name);
+            if (idx == 0)
+            {
+                return;
+            }
+
+            if (Windows.TryGetValue(idx, out var w))
+            {
+                apply(w);
+            }
+        }
+
         // move Hotbar
-        Windows[GetWindowIndex("winHotbar")].X = GameState.ResolutionWidth - 432;
+        TryApply("winHotbar", w => w.X = GameState.ResolutionWidth - 432);
 
         // move chat
-        Windows[GetWindowIndex("winChat")].Y = GameState.ResolutionHeight - 178;
-        Windows[GetWindowIndex("winChatSmall")].Y = GameState.ResolutionHeight - 162;
+        TryApply("winChat", w => w.Y = GameState.ResolutionHeight - 178);
+        TryApply("winChatSmall", w => w.Y = GameState.ResolutionHeight - 162);
 
         // move menu
-        Windows[GetWindowIndex("winMenu")].X = GameState.ResolutionWidth - 238;
-        Windows[GetWindowIndex("winMenu")].Y = GameState.ResolutionHeight - 42;
+        TryApply("winMenu", w =>
+        {
+            w.X = GameState.ResolutionWidth - 238;
+            w.Y = GameState.ResolutionHeight - 42;
+        });
 
         // re-size right-click background
-        Windows[GetWindowIndex("winRightClickBG")].Width = GameState.ResolutionWidth;
-        Windows[GetWindowIndex("winRightClickBG")].Height = GameState.ResolutionHeight;
+        TryApply("winRightClickBG", w =>
+        {
+            w.Width = GameState.ResolutionWidth;
+            w.Height = GameState.ResolutionHeight;
+        });
 
         // re-size combo background
-        Windows[GetWindowIndex("winComboMenuBG")].Width = GameState.ResolutionWidth;
-        Windows[GetWindowIndex("winComboMenuBG")].Height = GameState.ResolutionHeight;
+        TryApply("winComboMenuBG", w =>
+        {
+            w.Width = GameState.ResolutionWidth;
+            w.Height = GameState.ResolutionHeight;
+        });
     }
 
     public static void DrawMenuBackground()
@@ -936,9 +1037,14 @@ public class Gui
     public static void DrawYourTrade()
     {
         var color = 0;
+        if (!TryGetWindow("winTrade", out var winTrade) ||
+            !TryGetControl("winTrade", "picYour", out var picYour))
+        {
+            return;
+        }
 
-        var xo = Windows[GetWindowIndex("winTrade")].X + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].X;
-        var yo = Windows[GetWindowIndex("winTrade")].Y + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picYour")].Y;
+        var xo = winTrade!.X + picYour!.X;
+        var yo = winTrade!.Y + picYour!.Y;
 
         // your items
         for (var i = 0; i < Constant.MaxInv; i++)
@@ -997,9 +1103,14 @@ public class Gui
     public static void DrawTheirTrade()
     {
         var color = 0;
+        if (!TryGetWindow("winTrade", out var winTrade) ||
+            !TryGetControl("winTrade", "picTheir", out var picTheir))
+        {
+            return;
+        }
 
-        var xo = Windows[GetWindowIndex("winTrade")].X + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].X;
-        var yo = Windows[GetWindowIndex("winTrade")].Y + Windows[GetWindowIndex("winTrade")].Controls[GetControlIndex("winTrade", "picTheir")].Y;
+        var xo = winTrade!.X + picTheir!.X;
+        var yo = winTrade!.Y + picTheir!.Y;
 
         // their items
         for (var i = 0; i < Constant.MaxInv; i++)

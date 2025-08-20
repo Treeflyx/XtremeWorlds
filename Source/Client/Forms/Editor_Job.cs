@@ -5,7 +5,6 @@ using Eto.Forms;
 using Eto.Drawing;
 using Core;
 using Core.Globals;
-using Microsoft.VisualBasic;
 
 namespace Client
 {

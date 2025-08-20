@@ -1,7 +1,6 @@
 ﻿using Core;
 using Microsoft.Toolkit.HighPerformance;
 using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using System;
 using System.Data.Common;
 using Client.Game.UI;
@@ -96,7 +95,7 @@ namespace Client
 
         public static bool IsDirBlocked(ref byte blockvar, ref byte dir)
         {
-            return Conversions.ToBoolean(blockvar & (long)Math.Round(Math.Pow(2d, dir)));
+            return (blockvar & (byte)Math.Round(Math.Pow(2d, dir))) != 0;
         }
 
         public static string ConvertCurrency(int amount)
@@ -129,12 +128,15 @@ namespace Client
             string chatText = string.Empty;
             string name;
             int i;
-            int n;
+            int n = 0;
             string[] command;
 
             if (GameState.InGame)
             {
-                chatText = Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text;
+                if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl))
+                {
+                    chatText = chatCtrl!.Text;
+                }
             }
 
             if (chatText != null)
@@ -143,9 +145,12 @@ namespace Client
             // hide/show chat window
             if (string.IsNullOrEmpty(chatText))
             {
-                if (Gui.Windows[Gui.GetWindowIndex("winChat")].Visible == true)
+                if (Gui.TryGetWindow("winChat", out var winChat) && winChat!.Visible)
                 {
-                    Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                    if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl2))
+                    {
+                        chatCtrl2!.Text = "";
+                    }
                     WinChat.Hide();
                     return;
                 }
@@ -161,7 +166,7 @@ namespace Client
                     Sender.AdminMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl3)) chatCtrl3!.Text = "";
                 return;
             }
 
@@ -175,7 +180,7 @@ namespace Client
                     Sender.BroadcastMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl4)) chatCtrl4!.Text = "";
                 return;
             }
 
@@ -189,7 +194,7 @@ namespace Client
                     Party.SendPartyChatMsg(chatText);
                 }
 
-                Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+                if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl5)) chatCtrl5!.Text = "";
                 return;
             }
 
@@ -218,7 +223,7 @@ namespace Client
                 chatText = Strings.Mid(chatText, i, Strings.Len(chatText) - 1);
 
                 // Make sure they are actually sending something
-                if (Strings.Len(chatText) > 0)
+                if (!string.IsNullOrEmpty(chatText) && Strings.Len(chatText) > 0)
                 {
                     // Send the message to the player
                     Sender.PlayerMsg(chatText, name);
@@ -240,13 +245,13 @@ namespace Client
                     case "/emote":
                         {
                             // Checks to make sure we have more than one string in the array
-                            if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
+                            if (command.Length < 2 || !int.TryParse(command[1], out var emote))
                             {
                                 TextRenderer.AddText(LocalesManager.Get("Emote"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
-                            Sender.SendUseEmote(Conversions.ToInteger(command[1]));
+                            Sender.SendUseEmote(emote);
                             break;
                         }
 
@@ -464,7 +469,7 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            if (Information.UBound(command) < 1 || Information.IsNumeric(command[1]))
+                            if (command.Length < 2 || int.TryParse(command[1], out _))
                             {
                                 TextRenderer.AddText(LocalesManager.Get("WarpToMe"), (int)ColorName.BrightRed);
                                 goto Continue1;
@@ -484,13 +489,11 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
+                            if (command.Length < 2 || !int.TryParse(command[1], out n))
                             {
                                 TextRenderer.AddText(LocalesManager.Get("WarpTo"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
-
-                            n = Conversions.ToInteger(command[1]);
 
                             // Check to make sure its a valid map #
                             if (n >= 0 & n < Constant.MaxMaps)
@@ -515,13 +518,13 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            if (Information.UBound(command) < 1 || !Information.IsNumeric(command[1]))
+                            if (command.Length < 2 || !int.TryParse(command[1], out var sprite))
                             {
                                 TextRenderer.AddText(LocalesManager.Get("Sprite"), (int)ColorName.BrightRed);
                                 goto Continue1;
                             }
 
-                            Sender.SendSetSprite(Conversions.ToInteger(command[1]));
+                            Sender.SendSetSprite(sprite);
                             break;
                         }
 
@@ -656,13 +659,13 @@ namespace Client
                                 goto Continue1;
                             }
 
-                            if ((Information.UBound(command) < 2 || Information.IsNumeric(command[1])) | !Information.IsNumeric(command[2]))
+                            if ((command.Length < 3 || int.TryParse(command[1], out _)) || !int.TryParse(command[2], out var access))
                             {
                                 TextRenderer.AddText(LocalesManager.Get("Access"), (int)ColorName.Yellow);
                                 goto Continue1;
                             }
 
-                            Sender.SendSetAccess(command[1], (byte)Conversions.ToLong(command[2]));
+                            Sender.SendSetAccess(command[1], (byte)access);
                             break;
                         }
 
@@ -797,13 +800,16 @@ namespace Client
 
             else if (Strings.Len(chatText) > 0) // Say message
             {
-                Sender.SayMsg(chatText);
+                if (!string.IsNullOrEmpty(chatText))
+                {
+                    Sender.SayMsg(chatText);
+                }
             }
 
         Continue1:
             ;
 
-            Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[Gui.GetControlIndex("winChat", "txtChat")].Text = "";
+            if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl6)) chatCtrl6!.Text = "";
         }
 
         public static void CheckMapGetItem()
@@ -904,7 +910,7 @@ namespace Client
         public static void DialogueAlert(byte index)
         {
             var header = default(string);
-            var body = default(string);
+            var body = default(string); 
             var body2 = default(string);
 
             // find the body/header
@@ -1049,61 +1055,68 @@ namespace Client
                         body2 = "Check logs folder for details.";
 
                         Gui.HideWindows();
-                        Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+                        Gui.ShowWindow("winLogin");
                         break;
                     }
             }
-
+         
             // set the dialogue up!
-            Dialogue(header, body, body2, DialogueType.Alert);
+            Dialogue(header ?? string.Empty, body ?? string.Empty, body2 ?? string.Empty, DialogueType.Alert);
+
+            // Ensure the dialogue window is visible
+            Gui.ShowWindow("winDialogue", true);
         }
 
         public static void CloseDialogue()
         {
-            Gui.HideWindow(Gui.GetWindowIndex("winDialogue"));
+            Gui.HideWindow("winDialogue");
         }
 
         public static void Dialogue(string header, string body, string body2, DialogueType index, DialogueStyle style = 0, long data1 = 0L, long data2 = 0L, long data3 = 0L, long data4 = 0L, long data5 = 0L)
         {
-            if (Gui.Windows[Gui.GetWindowIndex("winDialogue")].Visible == true)
-                return;
-
-            // set buttons
+            // Ensure the window exists before proceeding
+            if (!Gui.TryGetWindow("winDialogue", out var dlg) || dlg is null)
             {
-                var withBlock = Gui.Windows[Gui.GetWindowIndex("winDialogue")];
-                if (style == DialogueStyle.YesNo)
-                {
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = true;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = true;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
-                }
-                else if (style == DialogueStyle.Okay)
-                {
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = true;
-                }
-                else if (style == DialogueStyle.Input)
-                {
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnYes")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnNo")].Visible = false;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "btnOkay")].Visible = true;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Visible = true;
-                    withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Visible = false;
-                }
-
-                // set labels
-                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblHeader")].Text = header;
-                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_1")].Text = body;
-                withBlock.Controls[Gui.GetControlIndex("winDialogue", "lblBody_2")].Text = body2;
-                withBlock.Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Text = "";
+                // UI not ready yet; bail out safely
+                return;
             }
 
-            // set it all up
+            if (dlg.Visible)
+                return;
+
+            // Set button/field visibility per style using safe control lookups
+            switch (style)
+            {
+                case DialogueStyle.YesNo:
+                    if (Gui.TryGetControl("winDialogue", "btnYes", out var c1)) c1!.Visible = true;
+                    if (Gui.TryGetControl("winDialogue", "btnNo", out var c2)) c2!.Visible = true;
+                    if (Gui.TryGetControl("winDialogue", "btnOkay", out var c3)) c3!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "txtInput", out var c4)) c4!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "lblBody_2", out var c5)) c5!.Visible = true;
+                    break;
+                case DialogueStyle.Okay:
+                    if (Gui.TryGetControl("winDialogue", "btnYes", out var c6)) c6!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "btnNo", out var c7)) c7!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "btnOkay", out var c8)) c8!.Visible = true;
+                    if (Gui.TryGetControl("winDialogue", "txtInput", out var c9)) c9!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "lblBody_2", out var c10)) c10!.Visible = true;
+                    break;
+                case DialogueStyle.Input:
+                    if (Gui.TryGetControl("winDialogue", "btnYes", out var c11)) c11!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "btnNo", out var c12)) c12!.Visible = false;
+                    if (Gui.TryGetControl("winDialogue", "btnOkay", out var c13)) c13!.Visible = true;
+                    if (Gui.TryGetControl("winDialogue", "txtInput", out var c14)) c14!.Visible = true;
+                    if (Gui.TryGetControl("winDialogue", "lblBody_2", out var c15)) c15!.Visible = false;
+                    break;
+            }
+
+            // Set labels safely
+            if (Gui.TryGetControl("winDialogue", "lblHeader", out var h)) h!.Text = header;
+            if (Gui.TryGetControl("winDialogue", "lblBody_1", out var b1)) b1!.Text = body;
+            if (Gui.TryGetControl("winDialogue", "lblBody_2", out var b2)) b2!.Text = body2;
+            if (Gui.TryGetControl("winDialogue", "txtInput", out var inp)) inp!.Text = string.Empty;
+
+            // Set state
             GameState.DiaIndex = index;
             GameState.DiaData1 = data1;
             GameState.DiaData2 = data2;
@@ -1112,18 +1125,18 @@ namespace Client
             GameState.DiaData5 = data5;
             GameState.DiaStyle = style;
 
-            // make the Gui.Windows visible
-            Gui.ShowWindow(Gui.GetWindowIndex("winDialogue"), true);
+            // Show window
+            Gui.ShowWindow("winDialogue", true);
         }
 
         public static void DialogueHandler(long index)
         {
             long value;
-            string diaInput;
+            string diaInput = string.Empty;
             int x;
             int y;
 
-            diaInput = Gui.Windows[Gui.GetWindowIndex("winDialogue")].Controls[Gui.GetControlIndex("winDialogue", "txtInput")].Text;
+            if (Gui.TryGetControl("winDialogue", "txtInput", out var diaInputCtrl)) diaInput = diaInputCtrl!.Text;
 
             // Find out which button
             if (index == 1L) // Okay button
@@ -1416,8 +1429,8 @@ namespace Client
             GameState.NewCharJob = 0;
             GameState.NewCharSprite = 1;
             GameState.NewCnarGender = (long)Sex.Male;
-            Gui.Windows[Gui.GetWindowIndex("winJobs")].Controls[Gui.GetControlIndex("winJobs", "lblJobName")].Text = Data.Job[(int)GameState.NewCharJob].Name;
-            Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
+            if (Gui.TryGetControl("winJobs", "lblJobName", out var jobNameLbl)) jobNameLbl!.Text = Data.Job[(int)GameState.NewCharJob].Name;
+            Gui.ShowWindow("winJobs");
         }
 
         public static void AddChar(string name, int sex, int job, int sprite)
@@ -1488,7 +1501,7 @@ namespace Client
 
         public static void ShowInvDesc(int x, int y, int invNum)
         {
-            bool soulBound;
+            // reserved for future use
 
             if (invNum < 0L | invNum > Constant.MaxInv)
                 return;
@@ -1496,8 +1509,7 @@ namespace Client
             // show
             if (GetPlayerInv(GameState.MyIndex, invNum) >= 0)
             {
-                if (Data.Item[GetPlayerInv(GameState.MyIndex, invNum)].BindType > 0 & Data.Player[GameState.MyIndex].Inv[invNum].Bound > 0)
-                    soulBound = true;
+                // if (Data.Item[GetPlayerInv(GameState.MyIndex, invNum)].BindType > 0 & Data.Player[GameState.MyIndex].Inv[invNum].Bound > 0) { }
                 ShowItemDesc(x, y, GetPlayerInv(GameState.MyIndex, invNum));
             }
         }
@@ -1508,18 +1520,20 @@ namespace Client
             string theName;
             string jobName;
             string levelTxt;
-            long i;
 
             // set globals
             GameState.DescType = (byte)DraggablePartType.Item; // inventory
             GameState.DescItem = itemNum;
 
-            // set position
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].X = x;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Y = y;
+            // set position (guard if UI not ready)
+            if (Gui.TryGetWindow("winDescription", out var winDescription))
+            {
+                winDescription!.X = x;
+                winDescription!.Y = y;
+            }
 
             // show the window
-            Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
+            Gui.ShowWindow("winDescription", resetPosition: false);
 
             // exit out early if last is same
             if (GameState.DescLastType == GameState.DescType & GameState.DescLastItem == GameState.DescItem)
@@ -1530,20 +1544,21 @@ namespace Client
             GameState.DescLastItem = GameState.DescItem;
 
             // show req. labels
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblJob")].Visible = true;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Visible = true;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = false;
+            if (Gui.TryGetControl("winDescription", "lblJob", out var lblJob)) lblJob!.Visible = true;
+            if (Gui.TryGetControl("winDescription", "lblLevel", out var lblLevel)) lblLevel!.Visible = true;
+            if (Gui.TryGetControl("winDescription", "picBar", out var picBar)) picBar!.Visible = false;
 
             // set variables
             {
-                var withBlock = Gui.Windows[Gui.GetWindowIndex("winDescription")];
+                var withBlock = Gui.GetWindowByName("winDescription");
+                if (withBlock is null) return;
                 // name
                 // If Not soulBound Then
                 theName = Data.Item[(int)itemNum].Name;
                 // Else
                 // theName = "(SB) " & Item(itemNum).Name)
                 // End If
-                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Text = theName;
+                if (Gui.TryGetControl("winDescription", "lblName", out var lblName)) lblName!.Text = theName;
                 switch (Data.Item[(int)itemNum].Rarity)
                 {
                     case 0: // white
@@ -1787,12 +1802,8 @@ namespace Client
 
         public static void ShowSkillDesc(int x, int y, int skillNum, long skillSlot)
         {
-            long color;
-            string theName;
-            string sUse;
-            long i;
-            int barWidth;
-            int tmpWidth;
+            string sUse = string.Empty;
+            int tmpWidth = 0;
 
             if (skillNum < 0 || skillNum > Constant.MaxSkills)
                 return;
@@ -1801,12 +1812,15 @@ namespace Client
             GameState.DescType = 2; // Skill
             GameState.DescItem = skillNum;
 
-            // set position
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].X = x;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Y = y;
+            // set position (guard if UI not ready)
+            if (Gui.TryGetWindow("winDescription", out var winDescription))
+            {
+                winDescription!.X = x;
+                winDescription!.Y = y;
+            }
 
             // show the window
-            Gui.ShowWindow(Gui.GetWindowIndex("winDescription"), resetPosition: false);
+            Gui.ShowWindow("winDescription", resetPosition: false);
 
             // exit out early if last is same
             if (GameState.DescLastType == GameState.DescType & GameState.DescLastItem == GameState.DescItem)
@@ -1816,21 +1830,24 @@ namespace Client
             GameState.Description = new Type.Text[2];
 
             // hide req. labels
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "lblLevel")].Visible = false;
-            Gui.Windows[Gui.GetWindowIndex("winDescription")].Controls[Gui.GetControlIndex("winDescription", "picBar")].Visible = true;
+            if (Gui.TryGetControl("winDescription", "lblLevel", out var lblLevel2)) lblLevel2!.Visible = false;
+            if (Gui.TryGetControl("winDescription", "picBar", out var picBar2)) picBar2!.Visible = true;
 
             // set variables
             {
-                var withBlock = Gui.Windows[Gui.GetWindowIndex("winDescription")];
+                var withBlock = Gui.GetWindowByName("winDescription");
+                if (withBlock is null) return;
                 // set name
-                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Text = Data.Skill[(int)skillNum].Name;
-                withBlock.Controls[Gui.GetControlIndex("winDescription", "lblName")].Color = Microsoft.Xna.Framework.Color.White;
+                if (Gui.TryGetControl("winDescription", "lblName", out var lblName2))
+                {
+                    lblName2!.Text = Data.Skill[(int)skillNum].Name;
+                    lblName2!.Color = Microsoft.Xna.Framework.Color.White;
+                }
 
                 // find ranks
                 if (skillSlot >= 0L)
                 {
-                    // draw the rank bar
-                    barWidth = 66;
+                    // draw the rank bar (fixed width for now)
                     // If Type.Skill(skillNum).rank > 0 Then
                     // tmpWidth = ((PlayerSkills(SkillSlot).Uses / barWidth) / (Type.Skill(skillNum).NextUses / barWidth)) * barWidth
                     // Else
@@ -1839,7 +1856,6 @@ namespace Client
                     withBlock.Controls[Gui.GetControlIndex("winDescription", "picBar")].Value = tmpWidth;
                     // does it rank up?
                     // If Type.Skill(skillNum).NextRank > 0 Then
-                    color = (long)ColorName.White;
                     // sUse = "Uses: " & PlayerSkills(SkillSlot).Uses & "/" & Type.Skill(skillNum).NextUses
                     // If PlayerSkills(SkillSlot).Uses = Type.Skill(skillNum).NextUses Then
                     // If Not GetPlayerLevel(GameState.MyIndex) >= Skill(Type.Skill(skillNum).NextRank).LevelReq Then
@@ -1848,7 +1864,6 @@ namespace Client
                     // End If
                     // End If
                     // Else
-                    color = (long)ColorName.Gray;
                     sUse = "Max Rank";
                     // End If
                     // show controls
@@ -1946,9 +1961,8 @@ namespace Client
             ShowItemDesc(x, y, itemNum);
         }
 
-        public static void ShowEqDesc(int x, int y, long eqNum)
-        {
-            bool soulBound;
+    public static void ShowEqDesc(int x, int y, long eqNum)
+    {
 
             var equipmentCount = System.Enum.GetValues(typeof(Equipment)).Length;
 
@@ -1959,10 +1973,8 @@ namespace Client
                 return;
 
             // show
-            if (Conversions.ToBoolean(Data.Player[GameState.MyIndex].Equipment[(int)eqNum]))
+            if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum] != 0)
             {
-                if (Data.Item[Data.Player[GameState.MyIndex].Equipment[(int)eqNum]].BindType > 0)
-                    soulBound = true;
                 ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum]);
             }
         }
@@ -1970,10 +1982,18 @@ namespace Client
         public static void AddDescInfo(string text, Microsoft.Xna.Framework.Color color)
         {
             long count;
-            count = Information.UBound(GameState.Description);
-            Array.Resize(ref GameState.Description, (int)(count));
-            GameState.Description[(int)(count)].Caption = text;
-            GameState.Description[(int)(count)].Color = GameClient.ToDrawingColor(color);
+            if (GameState.Description == null || GameState.Description.Length == 0)
+            {
+                GameState.Description = new Type.Text[1];
+                count = 0;
+            }
+            else
+            {
+                count = GameState.Description.Length;
+                Array.Resize(ref GameState.Description, (int)(count + 1));
+            }
+            GameState.Description[(int)count].Caption = text;
+            GameState.Description[(int)count].Color = GameClient.ToDrawingColor(color);
         }
 
         public static void LogoutGame()
@@ -1981,7 +2001,7 @@ namespace Client
             GameState.InMenu = true;
             GameState.InGame = false;
             Gui.HideWindows();
-            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+            Gui.ShowWindow("winLogin");
             General.ClearGameData();
         }
 
@@ -2007,10 +2027,10 @@ namespace Client
             // fill the options screen
             {
                 var withBlock = Gui.Windows[Gui.GetWindowIndex("winOptions")];
-                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkMusic")].Value = Conversions.ToInteger(SettingsManager.Instance.Music);
-                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkSound")].Value = Conversions.ToInteger(SettingsManager.Instance.Sound);
-                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkAutotile")].Value = Conversions.ToInteger(SettingsManager.Instance.Autotile);
-                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkFullscreen")].Value = Conversions.ToInteger(SettingsManager.Instance.Fullscreen);
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkMusic")].Value = SettingsManager.Instance.Music ? 1 : 0;
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkSound")].Value = SettingsManager.Instance.Sound ? 1 : 0;
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkAutotile")].Value = SettingsManager.Instance.Autotile ? 1 : 0;
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkFullscreen")].Value = SettingsManager.Instance.Fullscreen ? 1 : 0;
                 withBlock.Controls[Gui.GetControlIndex("winOptions", "cmbRes")].Value = SettingsManager.Instance.Resolution;
             }
         }
@@ -2031,7 +2051,7 @@ namespace Client
             WinShop.UpdateShop();
 
             // show the window
-            Gui.ShowWindow(Gui.GetWindowIndex("winShop"));
+            Gui.ShowWindow("winShop");
         }
 
         public static void UpdatePartyBars()
@@ -2094,7 +2114,7 @@ namespace Client
         public static void ShowTrade()
         {
             // show the window
-            Gui.ShowWindow(Gui.GetWindowIndex("winTrade"));
+            Gui.ShowWindow("winTrade");
 
             // set the controls up
             {
@@ -2116,8 +2136,8 @@ namespace Client
             Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].X = x - 5;
             Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Y = y - 5;
             Gui.Windows[Gui.GetWindowIndex("winPlayerMenu")].Controls[Gui.GetControlIndex("winPlayerMenu", "btnName")].Text = GetPlayerName((int)GameState.PlayerMenuIndex);
-            Gui.ShowWindow(Gui.GetWindowIndex("winRightClickBG"));
-            Gui.ShowWindow(Gui.GetWindowIndex("winPlayerMenu"));
+            Gui.ShowWindow("winRightClickBG");
+            Gui.ShowWindow("winPlayerMenu");
         }
 
         public static void SetBarWidth(ref int maxWidth, ref int width)

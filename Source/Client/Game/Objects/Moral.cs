@@ -1,7 +1,6 @@
 ﻿using Client.Net;
 using Core;
 using Core.Globals;
-using Microsoft.VisualBasic.CompilerServices;
 using Type = Core.Globals.Type;
 
 namespace Client

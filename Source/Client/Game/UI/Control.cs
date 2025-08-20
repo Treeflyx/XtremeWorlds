@@ -25,13 +25,13 @@ public abstract class Control : Component
     public int? ImageHover { get; set; }
     public int? ImageMouseDown { get; set; }
     public Action? OnDraw { get; set; }
-    
+
     // Arrays for states
     public List<string> Texture { get; set; } = [];
     public List<Action?> CallBack { get; set; } = [];
 
     public abstract void Render(int x, int y);
-    
+
     protected Design GetActiveDesign()
     {
         return State switch
@@ -45,7 +45,8 @@ public abstract class Control : Component
 
     protected int? GetActiveImage()
     {
-        return State switch {
+        return State switch
+        {
             ControlState.Normal => Image,
             ControlState.Hover => ImageHover ?? Image,
             ControlState.MouseDown => ImageMouseDown ?? Image,

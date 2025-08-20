@@ -1,6 +1,4 @@
 ﻿using Core.Globals;
-using Microsoft.VisualBasic;
-
 using Eto.Forms;
 using Eto.Drawing;
 using System.IO;

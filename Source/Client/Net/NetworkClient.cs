@@ -32,8 +32,8 @@ public sealed class NetworkClient
             
             while (!cancellationToken.IsCancellationRequested)
             {
-        _isConnected = false; // assume disconnected until we actually connect
-        TcpClient tcpClient = null;
+                _isConnected = false; // assume disconnected until we actually connect
+                TcpClient tcpClient = null;
                 try
                 {
                     tcpClient = new TcpClient();
@@ -110,20 +110,40 @@ public sealed class NetworkClient
 
             while (true)
             {
-                var bytesReceived = await networkStream.ReadAsync(buffer, cancellationToken);
+                int bytesReceived;
+                try
+                {
+                    bytesReceived = await networkStream.ReadAsync(buffer, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    // Graceful shutdown
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Receive error: {ex.Message}");
+                    break;
+                }
                 if (bytesReceived == 0)
                 {
                     Console.WriteLine("Connection with the server has been lost");
                     break;
                 }
 
-                await eventHandler.OnBytesReceivedAsync(buffer.AsMemory(0, bytesReceived), cancellationToken);
+                try
+                {
+                    await eventHandler.OnBytesReceivedAsync(buffer.AsMemory(0, bytesReceived), cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    // Swallow handler errors to avoid tearing down the connection
+                    Console.WriteLine($"OnBytesReceived handler error: {ex.Message}");
+                }
             }
         }
         finally
         {
-            tcpClient.Close();
-
             ArrayPool<byte>.Shared.Return(buffer);
         }
     }

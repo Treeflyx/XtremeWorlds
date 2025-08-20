@@ -6,8 +6,6 @@ using Client.Game.UI.Windows;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -79,6 +77,7 @@ namespace Client
         private static DateTime _lastMouseClickTime = DateTime.MinValue;
         private const int MouseClickCooldown = 250;
         private static DateTime _lastSearchTime = DateTime.MinValue;
+
         // Ensure this class exists to store graphic info
         public class GfxInfo
         {
@@ -86,7 +85,7 @@ namespace Client
             public int Height;
         }
 
-        public static GfxInfo? GetGfxInfo(string key)
+        public static GfxInfo GetGfxInfo(string key)
         {
             // Check if the key does not end with ".gfxext" and append if needed
             if (!key.EndsWith(GameState.GfxExt, StringComparison.OrdinalIgnoreCase))
@@ -94,15 +93,14 @@ namespace Client
                 key += GameState.GfxExt;
             }
 
-            // Retrieve the texture
-            var texture = GetTexture(key);
+            // Ensure the texture is loaded so GfxInfoCache gets populated
+            var texture = GetTexture(key) ?? LoadTexture(key);
 
-            GfxInfo result = null;
-            if (!GfxInfoCache.TryGetValue(key, out result))
+            if (!GfxInfoCache.TryGetValue(key, out var result) || result is null)
             {
-                // Log or handle the case where the key is not found in the cache
-                Debug.WriteLine($"Warning: GfxInfo for key '{key}' not found in cache.");
-                return null;
+                // If still not available, return a harmless placeholder size (1x1)
+                Debug.WriteLine($"Warning: GfxInfo for key '{key}' not found; using placeholder 1x1.");
+                return new GfxInfo { Width = 1, Height = 1 };
             }
 
             return result;
@@ -185,7 +183,22 @@ namespace Client
             // Get all defined font enum values except None (assumed to be 0)
             var fontValues = Enum.GetValues(typeof(Font));
             for (int i = 1; i < fontValues.Length; i++)
-                TextRenderer.Fonts[(Font) fontValues.GetValue(i)] = LoadFont(DataPath.Fonts, (Font) fontValues.GetValue(i));
+            {
+                var val = fontValues.GetValue(i);
+                if (val is not Font f)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    TextRenderer.Fonts[f] = LoadFont(DataPath.Fonts, f);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Failed to load font {f}: {ex.Message}");
+                }
+            }
         }
 
         protected override void LoadContent()
@@ -212,10 +225,32 @@ namespace Client
                 }
             });
 
-            var cursorPath = Path.Combine(DataPath.Misc, "Cursor.png");
-            var cursorTexture = Texture2D.FromFile(Graphics.GraphicsDevice, cursorPath);
+            try
+            {
+                var cursorPath = Path.Combine(DataPath.Misc, "Cursor.png");
+                if (!File.Exists(cursorPath))
+                {
+                    // Fallback to Content relative path if the asset base is different
+                    var fallback = Path.Combine(Content.RootDirectory, "Graphics", "Misc", "Cursor.png");
+                    cursorPath = File.Exists(fallback) ? fallback : cursorPath;
+                }
 
-            Mouse.SetCursor(MouseCursor.FromTexture2D(cursorTexture, 0, 0));
+                if (File.Exists(cursorPath))
+                {
+                    using var fs = new FileStream(cursorPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    using var tempTex = Texture2D.FromStream(Graphics.GraphicsDevice, fs);
+                    Mouse.SetCursor(MouseCursor.FromTexture2D(tempTex, 0, 0));
+                }
+                else
+                {
+                    Mouse.SetCursor(MouseCursor.Arrow);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Cursor load failed: {ex.Message}");
+                Mouse.SetCursor(MouseCursor.Arrow);
+            }
         }
 
         public static SpriteFont LoadFont(string path, Font font)
@@ -610,68 +645,70 @@ namespace Client
                     return;
 
                 // Hide options screen
-                if (Gui.Windows[Gui.GetWindowIndex("winOptions")].Visible == true)
+                if (IsWindowVisible("winOptions"))
                 {
-                    Gui.HideWindow(Gui.GetWindowIndex("winOptions"));
+                    Gui.HideWindow("winOptions");
                     WinComboMenu.Close();
                     return;
                 }
 
                 // hide/show chat window
-                if (Gui.Windows[Gui.GetWindowIndex("winChat")].Visible == true)
+                if (IsWindowVisible("winChat"))
                 {
-                    Gui.Windows[Gui.GetWindowIndex("winChat")].Controls[(int) Gui.GetControlIndex("winChat", "txtChat")]
-                        .Text = "";
+                    if (Gui.TryGetControl("winChat", "txtChat", out var chatCtrl))
+                    {
+                        chatCtrl!.Text = "";
+                    }
                     WinChat.Hide();
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winEscMenu")].Visible == true)
+                if (IsWindowVisible("winEscMenu"))
                 {
-                    Gui.HideWindow(Gui.GetWindowIndex("winEscMenu"));
+                    Gui.HideWindow("winEscMenu");
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winShop")].Visible == true)
+                if (IsWindowVisible("winShop"))
                 {
                     Shop.CloseShop();
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winBank")].Visible == true)
+                if (IsWindowVisible("winBank"))
                 {
                     Bank.CloseBank();
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winTrade")].Visible == true)
+                if (IsWindowVisible("winTrade"))
                 {
                     Trade.SendDeclineTrade();
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winInventory")].Visible == true)
+                if (IsWindowVisible("winInventory"))
                 {
-                    Gui.HideWindow(Gui.GetWindowIndex("winInventory"));
+                    Gui.HideWindow("winInventory");
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winCharacter")].Visible == true)
+                if (IsWindowVisible("winCharacter"))
                 {
-                    Gui.HideWindow(Gui.GetWindowIndex("winCharacter"));
+                    Gui.HideWindow("winCharacter");
                     return;
                 }
 
-                if (Gui.Windows[Gui.GetWindowIndex("winSkills")].Visible == true)
+                if (IsWindowVisible("winSkills"))
                 {
-                    Gui.HideWindow(Gui.GetWindowIndex("winSkills"));
+                    Gui.HideWindow("winSkills");
                     return;
                 }
 
                 // show them
-                if (Gui.Windows[Gui.GetWindowIndex("winChat")].Visible == false)
+                if (!IsWindowVisible("winChat"))
                 {
-                    Gui.ShowWindow(Gui.GetWindowIndex("winEscMenu"), true);
+                    Gui.ShowWindow("winEscMenu", true);
                     return;
                 }
             }
@@ -739,7 +776,7 @@ namespace Client
 
         private static bool IsWindowVisible(string windowName)
         {
-            return Gui.Windows[Gui.GetWindowIndex(windowName)].Visible;
+            return Gui.TryGetWindow(windowName, out var window) && window!.Visible;
         }
 
         private static bool IsInputCooldownElapsed()
@@ -768,8 +805,6 @@ namespace Client
 
         private static void HandleActiveWindowInput()
         {
-            Keys key;
-
             // Check if there is an active window and that it is visible.
             if (Gui.ActiveWindow is not null && Gui.ActiveWindow.Visible)
             {
@@ -783,10 +818,7 @@ namespace Client
                     if (IsKeyStateActive(Keys.Enter))
                     {
                         // Handle Enter: Call the control's callback or activate a new control.
-                        if (activeControl.CallBack[(int) ControlState.FocusEnter] is not null)
-                        {
-                            activeControl.CallBack[(int) ControlState.FocusEnter].Invoke();
-                        }
+                        activeControl.CallBack[(int) ControlState.FocusEnter]?.Invoke();
                     }
 
                     // Check if the Tab key is active and can be processed
@@ -855,11 +887,11 @@ namespace Client
 
                         if (activeControl is not null && activeControl.Visible && activeControl.Enabled)
                         {
-                            string text = activeControl.Text + Conversions.ToString(character.Value);
+                            string text = activeControl.Text + character.Value;
                             if (TextRenderer.GetTextWidth(text) < activeControl.Width)
                             {
                                 // Append character to the control's text  
-                                activeControl.Text += Conversions.ToString(character.Value);
+                                activeControl.Text += character.Value;
                                 Gui.UpdateActiveControl(activeControl);
                                 continue; // Move to the next key  
                             }
@@ -898,19 +930,19 @@ namespace Client
         }
 
         // Convert a key to a character (if possible)
-        private static char ConvertKeyToChar(Keys key, bool shiftPressed)
+    private static char ConvertKeyToChar(Keys key, bool shiftPressed)
         {
             // Handle alphabetic keys
             if (key >= Keys.A && key <= Keys.Z)
             {
-                char baseChar = Strings.ChrW(Strings.AscW('A') + ((int) key - (int) Keys.A));
+        char baseChar = (char)('A' + ((int)key - (int)Keys.A));
                 return shiftPressed ? baseChar : char.ToLower(baseChar);
             }
 
             // Handle numeric keys (0-9)
             if (key >= Keys.D0 && key <= Keys.D9)
             {
-                char digit = Strings.ChrW(Strings.AscW('0') + ((int) key - (int) Keys.D0));
+                char digit = (char)('0' + ((int)key - (int)Keys.D0));
                 return shiftPressed ? General.GetShiftedDigit(digit) : digit;
             }
 
@@ -1066,8 +1098,11 @@ namespace Client
                 // Right-click interactions
                 if (IsMouseButtonDown(MouseButton.Right))
                 {
-                    int slotNum = (int) GameLogic.IsHotbar(Gui.Windows[Gui.GetWindowIndex("winHotbar")].X,
-                        Gui.Windows[Gui.GetWindowIndex("winHotbar")].Y);
+                    int slotNum = -1;
+                    if (Gui.TryGetWindow("winHotbar", out var winHotbar))
+                    {
+                        slotNum = (int) GameLogic.IsHotbar(winHotbar!.X, winHotbar!.Y);
+                    }
 
                     if (slotNum >= 0L)
                     {

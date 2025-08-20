@@ -69,14 +69,21 @@ public abstract class PacketParser<TPacketId> where TPacketId : Enum
             return;
         }
 
-        if (compressed)
+        try
         {
-            HandleCompressed(packetData, handler);
+            if (compressed)
+            {
+                HandleCompressed(packetData, handler);
+                return;
+            }
 
-            return;
+            handler(packetData);
         }
-
-        handler(packetData);
+        catch (Exception ex)
+        {
+            // Never let handler exceptions bubble out to the network layer
+            Console.WriteLine($"Packet handler error (id={packetId}): {ex.Message}");
+        }
     }
 
     private static void HandleCompressed(ReadOnlyMemory<byte> bytes, Action<ReadOnlyMemory<byte>> handler)

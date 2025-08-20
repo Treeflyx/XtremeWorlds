@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using Core.Configurations;
 using Core.Globals;
-using Microsoft.VisualBasic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using static Core.Globals.Command;
@@ -523,7 +522,7 @@ public static class TextRenderer
                     rLines += wrappedLines.Length;
 
                     // set the top width
-                    var loopTo = Information.UBound(wrappedLines);
+                    var loopTo = wrappedLines.Length;
                     for (var x = 0; x < loopTo; x++)
                     {
                         if (GetTextWidth(wrappedLines[x]) > topWidth)

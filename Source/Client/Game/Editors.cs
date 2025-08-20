@@ -2,8 +2,6 @@
 using Client.Net;
 using Core;
 using Core.Globals;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using Eto.Forms;
 using Eto.Drawing;
 

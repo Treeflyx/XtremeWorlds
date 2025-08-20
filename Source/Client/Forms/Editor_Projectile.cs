@@ -2,7 +2,6 @@
 using System.IO;
 using Eto.Forms;
 using Eto.Drawing;
-using Microsoft.VisualBasic;
 using Core;
 using Core.Globals;
 

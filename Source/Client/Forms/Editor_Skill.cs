@@ -2,7 +2,6 @@
 using System.IO;
 using Client.Net;
 using Core;
-using Microsoft.VisualBasic;
 using Eto.Forms;
 using System;
 using System.IO;

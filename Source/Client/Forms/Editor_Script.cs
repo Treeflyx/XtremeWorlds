@@ -1,7 +1,6 @@
 ﻿using Eto.Forms;
 using Eto.Drawing;
 using Core;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

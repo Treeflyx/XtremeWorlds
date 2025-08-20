@@ -3,7 +3,6 @@ using Client.Net;
 using Core;
 using Core.Globals;
 using Core.Net;
-using Microsoft.VisualBasic.CompilerServices;
 using Type = Core.Globals.Type;
 
 namespace Client

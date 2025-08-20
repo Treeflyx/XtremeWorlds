@@ -5,6 +5,7 @@ using Core.Configurations;
 using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
+using System;
 
 namespace Client.Net;
 
@@ -146,40 +147,46 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         if (menuReset > 0)
         {
+            // We're going back to a menu screen; ensure flags are consistent
+            GameState.InGame = false;
+            GameState.InMenu = true;
             Gui.HideWindows();
 
             switch ((Menu) menuReset)
             {
                 case Menu.Login:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+                    Gui.ShowWindow("winLogin");
                     break;
 
                 case Menu.CharacterSelect:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
+                    Gui.ShowWindow("winChars");
                     break;
 
                 case Menu.JobSelection:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
+                    Gui.ShowWindow("winJobs");
                     break;
 
                 case Menu.NewCharacter:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winNewChar"));
+                    Gui.ShowWindow("winNewChar");
                     break;
 
                 case Menu.MainMenu:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+                    Gui.ShowWindow("winLogin");
                     break;
 
                 case Menu.Register:
-                    Gui.ShowWindow(Gui.GetWindowIndex("winRegister"));
+                    Gui.ShowWindow("winRegister");
                     break;
             }
         }
         else if (kick > 0 || GameState.InGame)
         {
-            Gui.ShowWindow(Gui.GetWindowIndex("winLogin"));
+            // Ensure we return to login with proper state
+            GameState.InGame = false;
+            GameState.InMenu = true;
+            Gui.HideWindows();
+            Gui.ShowWindow("winLogin");
         }
-
         GameLogic.DialogueAlert(dialogueIndex);
     }
 
@@ -196,7 +203,10 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
         var isSlotEmpty = new bool[Constant.MaxChars];
 
-        SettingsManager.Instance.Username = Gui.Windows[Gui.GetWindowIndex("winLogin")].Controls[Gui.GetControlIndex("winLogin", "txtUsername")].Text;
+        if (Gui.TryGetControl("winLogin", "txtUsername", out var usernameCtrl))
+        {
+            SettingsManager.Instance.Username = usernameCtrl!.Text;
+        }
         SettingsManager.Save();
 
         for (var i = 0; i < Constant.MaxChars; i++)
@@ -215,7 +225,7 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
 
 
         Gui.HideWindows();
-        Gui.ShowWindow(Gui.GetWindowIndex("winChars"));
+        Gui.ShowWindow("winChars");
 
         long winNum = Gui.GetWindowIndex("winChars");
         for (var i = 0L; i < Constant.MaxChars; i++)
@@ -331,10 +341,11 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         GameState.SkillBuffer = -1;
         GameState.InShop = -1;
 
-        Gui.ShowWindow(Gui.GetWindowIndex("winHotbar"), resetPosition: false);
-        Gui.ShowWindow(Gui.GetWindowIndex("winMenu"), resetPosition: false);
-        Gui.ShowWindow(Gui.GetWindowIndex("winBars"), resetPosition: false);
-        WinChat.Hide();
+        Gui.ShowWindow("winHotbar", resetPosition: false);
+        Gui.ShowWindow("winMenu", resetPosition: false);
+        Gui.ShowWindow("winBars", resetPosition: false);
+
+        try { WinChat.Hide(); } catch (Exception ex) { Console.WriteLine($"WinChat.Hide error: {ex.Message}"); }
 
         General.GameInit();
     }

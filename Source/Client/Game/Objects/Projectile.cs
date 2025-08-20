@@ -4,7 +4,6 @@ using Core;
 using Core.Globals;
 using Core.Net;
 using static Core.Globals.Command;
-using Microsoft.VisualBasic.CompilerServices;
 using Type = Core.Globals.Type;
 
 namespace Client

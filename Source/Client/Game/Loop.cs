@@ -1,13 +1,10 @@
 ﻿using Core;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
 using System;
 using Client.Game.UI;
 using Client.Net;
 using Core.Configurations;
 using Core.Globals;
 using static Core.Globals.Command;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Type = Core.Globals.Type;
 
 namespace Client

@@ -6,7 +6,6 @@ using Core.Globals;
 using static Core.Globals.Command;
 using ManagedBass;
 using ManagedBass.Midi;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Client
 {
@@ -20,32 +19,32 @@ namespace Client
         public static int WeatherStream;
         public static int ExtraSoundStream;
 
-        public static string[] MusicCache;
-        public static string[] SoundCache;
+    public static string[] MusicCache = Array.Empty<string>();
+    public static string[] SoundCache = Array.Empty<string>();
 
         public static bool FadeInSwitch;
         public static bool FadeOutSwitch;
-        public static string CurrentMusic;
-        public static string CurrentWeatherMusic;
+    public static string CurrentMusic = string.Empty;
+    public static string CurrentWeatherMusic = string.Empty;
 
         public static int SoundFontHandle;
 
         public static void PlayMusic(string fileName)
         {
-            string path = System.IO.Path.Combine(DataPath.Music, fileName);
-
-            if (fileName == "None")
+            if (string.IsNullOrWhiteSpace(fileName) || fileName == "None")
             {
                 return;
             }
 
-            if (Conversions.ToInteger(SettingsManager.Instance.Music) == 0 | !File.Exists(path))
+            string path = System.IO.Path.Combine(DataPath.Music, fileName);
+
+            if (!SettingsManager.Instance.Music || !File.Exists(path))
             {
                 StopMusic();
                 return;
             }
 
-            if ((fileName ?? "") == (CurrentMusic ?? ""))
+            if (fileName == CurrentMusic)
             {
                 return;
             }
@@ -136,7 +135,7 @@ namespace Client
             }
 
             // Ensure the file exists before attempting to load it
-            if (!File.Exists(filePath))
+            if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
             {
                 Console.WriteLine($"MIDi file not found: {filePath}");
                 return;
@@ -168,7 +167,7 @@ namespace Client
 
         public static void PlaySound(string fileName, int x, int y, bool looped = false)
         {
-            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(DataPath.Sounds + fileName))
+            if (!SettingsManager.Instance.Sound || !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             try
@@ -201,7 +200,7 @@ namespace Client
 
         public static void PlayExtraSound(string fileName, bool looped = false)
         {
-            if (Conversions.ToInteger(SettingsManager.Instance.Sound) == 0 | !File.Exists(DataPath.Sounds + fileName))
+            if (!SettingsManager.Instance.Sound || !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             try
@@ -347,7 +346,7 @@ namespace Client
         public static void PlayWeatherSound(string fileName, bool looped = false)
         {
             // Check if sound is enabled and the file exists
-            if (!(Conversions.ToInteger(SettingsManager.Instance.Sound) == 1) | !File.Exists(DataPath.Sounds + fileName))
+            if (!SettingsManager.Instance.Sound || !File.Exists(DataPath.Sounds + fileName))
                 return;
 
             // Avoid reloading the same sound if it's already playing

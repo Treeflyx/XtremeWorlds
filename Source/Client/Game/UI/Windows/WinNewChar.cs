@@ -118,8 +118,8 @@ public static class WinNewChar
         GameState.NewCharSprite = 1;
         GameState.NewCnarGender = Sex.Male;
 
-        Gui.HideWindows();
-        Gui.ShowWindow(Gui.GetWindowIndex("winJobs"));
+            Gui.HideWindows();
+            Gui.ShowWindow("winJobs");
     }
 
     public static void OnAccept()

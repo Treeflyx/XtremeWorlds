@@ -58,8 +58,7 @@ public static class WindowLoader
         var designMousedownName = xmlReader.GetAttribute("DesignMouseDown");
         var designMousedown = GetDesignByName(designMousedownName, design);
         var startPosition = xmlReader.GetAttribute("StartPosition");
-        var visible = GetBoolean(xmlReader.GetAttribute("Visible"), true);
-
+        var visible = GetBoolean(xmlReader.GetAttribute("Visible"), false);
         var windowIndex = Gui.CreateWindow(
             name: name ?? string.Empty,
             caption: caption ?? string.Empty,
@@ -202,6 +201,7 @@ public static class WindowLoader
         var fontName = xmlReader.GetAttribute("Font");
         var font = GetFontByName(fontName, DefaultControlFont);
         var image = GetInt32(xmlReader.GetAttribute("Image"));
+        var iconNormal = GetInt32(xmlReader.GetAttribute("Icon"), image);
         var imageHover = GetInt32(xmlReader.GetAttribute("ImageHover"), image);
         var imageMousedown = GetInt32(xmlReader.GetAttribute("ImageMouseDown"), image);
         var designName = xmlReader.GetAttribute("Design");
@@ -236,7 +236,9 @@ public static class WindowLoader
             imageMousedown: imageMousedown,
             designNorm: design,
             designHover: designHover,
-            designMousedown: designMousedown);
+            designMousedown: designMousedown,
+            icon: iconNormal
+        );
     }
 
     private static void ReadTextBox(XmlReader xmlReader, int windowIndex)

@@ -3,7 +3,6 @@ using Client.Net;
 using Core;
 using Core.Globals;
 using Core.Net;
-using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using static Core.Globals.Type;
 using EventCommand = Core.Globals.EventCommand;

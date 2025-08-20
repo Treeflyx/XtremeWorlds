@@ -408,7 +408,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     return;
                 }
 
-                NetworkConfig.LoadAccount(session, Data.Account[session.Id].Login, slot);
+                // Ensure account loading completes before proceeding
+                NetworkConfig.LoadAccount(session, Data.Account[session.Id].Login, slot).Wait();
             }
         }
         else
@@ -1457,7 +1458,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         Data.Skill[skillNum].Duration = buffer.ReadInt32();
         Data.Skill[skillNum].Icon = buffer.ReadInt32();
         Data.Skill[skillNum].Interval = buffer.ReadInt32();
-    Data.Skill[skillNum].IsAoE = Convert.ToBoolean(buffer.ReadInt32());
+        Data.Skill[skillNum].IsAoE = Convert.ToBoolean(buffer.ReadInt32());
         Data.Skill[skillNum].LevelReq = buffer.ReadInt32();
         Data.Skill[skillNum].Map = buffer.ReadInt32();
         Data.Skill[skillNum].MpCost = buffer.ReadInt32();
