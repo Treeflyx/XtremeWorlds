@@ -244,8 +244,24 @@ public class Crystalshire
     public void UpdateWindow_Options()
     {
         var window = WindowLoader.FromLayout("winOptions");
+        // Wire Confirm button
         window.GetChild("btnConfirm").CallBack[(int) ControlState.MouseDown] = WinOptions.OnConfirm;
-        Client.GameLogic.SetOptionsScreen();
+
+        // Wire checkboxes to toggle their value on click (do not call OnConfirm)
+        void ToggleCheckbox(string name)
+        {
+            var cb = window.GetChild(name);
+            cb.CallBack[(int)ControlState.MouseDown] = () => { cb.Value = cb.Value == 0 ? 1 : 0; };
+        }
+        ToggleCheckbox("chkMusic");
+        ToggleCheckbox("chkSound");
+        ToggleCheckbox("chkAutotile");
+        ToggleCheckbox("chkFullscreen");
+
+    // Ensure cmbRes is visible
+    window.GetChild("cmbRes").Visible = true;
+
+    Client.GameLogic.SetOptionsScreen();
     }
 
     public void UpdateWindow_Combobox()

@@ -125,12 +125,37 @@ public static class WindowLoader
             case "TextBox":
                 ReadTextBox(xmlReader, windowIndex);
                 break;
+
+            case "ComboBox":
+                ReadComboBox(xmlReader, windowIndex);
+                break;
         }
 
         if (!xmlReader.IsEmptyElement)
         {
             xmlReader.Skip();
         }
+
+    }
+
+    private static void ReadComboBox(XmlReader xmlReader, int windowIndex)
+    {
+        var name = xmlReader.GetAttribute("Name");
+        var position = xmlReader.GetAttribute("Position");
+        var positionVec = GetVector(position);
+        var size = xmlReader.GetAttribute("Size");
+        var sizeVec = GetVector(size);
+        var designName = xmlReader.GetAttribute("Design");
+        var design = GetDesignByName(designName, Design.ComboBoxNormal);
+
+        Gui.CreateComboBox(
+            windowIndex: windowIndex,
+            name: name ?? string.Empty,
+            left: positionVec.X,
+            top: positionVec.Y,
+            width: sizeVec.X,
+            height: sizeVec.Y,
+            design: design);
     }
 
     private static void ReadLabel(XmlReader xmlReader, int windowIndex)

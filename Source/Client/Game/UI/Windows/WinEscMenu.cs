@@ -13,12 +13,14 @@ public static class WinEscMenu
     {
         Gui.HideWindow("winEscMenu");
         Gui.ShowWindow("winOptions", true);
+        GameLogic.SetOptionsScreen();
     }
 
     public static void OnMainMenuClick()
     {
         Gui.HideWindows();
         Gui.ShowWindow("winLogin");
+        GameState.InGame = false;
 
         Sender.SendLogout();
     }

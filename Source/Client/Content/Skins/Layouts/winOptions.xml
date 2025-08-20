@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window Name="winOptions" Size="210, 212" Position="0, 0" Font="Georgia" Design="WindowNoBar" StartPosition="CenterScreen">
-    <PictureBox Name="picParchment" Position="6, 6" Size="198, 200" Design="Parchment"/>
+    <Window Name="winOptions" Size="260, 240" Position="0, 0" Font="Georgia" Design="WindowNoBar" StartPosition="CenterScreen">
+    <PictureBox Name="picParchment" Position="10, 10" Size="240, 220" Design="Parchment"/>
 
-    <PictureBox Name="picBlank" Position="35, 25" Size="140, 10" Design="Parchment"/>
-    <Label Name="lblGeneral" Text="General Options" Position="35, 22" Size="140, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblGeneral" Text="General Options" Position="20, 18" Size="220, 18" Font="Georgia" Align="Center"/>
+    <PictureBox Name="picSep1" Position="20, 38" Size="220, 2" Design="Parchment"/>
 
-    <CheckBox Name="chkMusic" Text="Music" Position="35, 40" Size="80, 10" Design="CheckboxNormal"/>
-    <CheckBox Name="chkSound" Text="Sound" Position="115, 40" Size="80, 10" Design="CheckboxNormal"/>
-    <CheckBox Name="chkAutotile" Text="Autotile" Position="35, 60" Size="80, 10" Design="CheckboxNormal"/>
-    <CheckBox Name="chkFullscreen" Text="Fullscreen" Position="115, 60" Size="80, 10" Design="CheckboxNormal"/>
+    <CheckBox Name="chkMusic" Text="Music" Position="30, 50" Size="100, 20" Design="CheckboxNormal"/>
+    <CheckBox Name="chkSound" Text="Sound" Position="130, 50" Size="100, 20" Design="CheckboxNormal"/>
+    <CheckBox Name="chkAutotile" Text="Autotile" Position="30, 80" Size="100, 20" Design="CheckboxNormal"/>
+    <CheckBox Name="chkFullscreen" Text="Fullscreen" Position="130, 80" Size="100, 20" Design="CheckboxNormal"/>
 
-    <PictureBox Name="picBlankBottom" Position="35, 85" Size="140, 10" Design="Parchment"/>
-    <Label Name="lblRes" Text="Select Resolution" Position="35, 92" Size="140, 10" Font="Georgia" Align="Center"/>
+    <Label Name="lblRes" Text="Resolution" Position="20, 115" Size="220, 18" Font="Georgia" Align="Center"/>
+    <PictureBox Name="picSep2" Position="20, 135" Size="220, 2" Design="Parchment"/>
+    <ComboBox Name="cmbRes" Position="55, 145" Size="150, 24" Design="ComboBoxNormal"/>
 
-    <ComboBox Name="cmbRes" Position="30, 100" Size="150, 18" Design="ComboBoxNormal"/>
-
-    <Button Name="btnConfirm" Text="Confirm" Position="65, 168" Size="80, 22" Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick"/>
+    <Button Name="btnConfirm" Text="Confirm" Position="90, 190" Size="80, 28" Design="Green" DesignHover="GreenHover" DesignMouseDown="GreenClick"/>
 </Window>
