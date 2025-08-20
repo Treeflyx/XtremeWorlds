@@ -432,7 +432,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             }
 
             Database.LoadCharacter(session.Id, slot);
-            Data.Char.Remove(GetPlayerName(session.Id));
+            Data.Char?.Remove(GetPlayerName(session.Id));
             Database.ClearCharacter(session.Id);
             Database.SaveCharacter(session.Id, slot);
 

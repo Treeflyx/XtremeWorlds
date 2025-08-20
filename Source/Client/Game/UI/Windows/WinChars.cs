@@ -38,12 +38,12 @@ public static class WinChars
 
     public static void OnDeleteCharacter2Click()
     {
-        TryDeleteCharacter(1);
+        TryDeleteCharacter(2);
     }
 
     public static void OnDeleteCharacter3Click()
     {
-        TryDeleteCharacter(1);
+        TryDeleteCharacter(3);
     }
 
     private static void TryCreateCharacter(int slot)
