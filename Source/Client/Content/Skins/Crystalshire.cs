@@ -125,7 +125,7 @@ public class Crystalshire
     public void UpdateWindow_Bars()
     {
         var window = WindowLoader.FromLayout("winBars");
-        window.GetChild("picBlank").OnDraw = WinBars.OnDraw;
+        window.GetChild("picOverlay").OnDraw = WinBars.OnDraw;
     }
 
     public void UpdateWindow_Chat()

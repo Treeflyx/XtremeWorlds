@@ -201,7 +201,7 @@ public static class WindowLoader
         var fontName = xmlReader.GetAttribute("Font");
         var font = GetFontByName(fontName, DefaultControlFont);
         var image = GetInt32(xmlReader.GetAttribute("Image"));
-        var iconNormal = GetInt32(xmlReader.GetAttribute("Icon"), image);
+        var iconNormal = GetInt32(xmlReader.GetAttribute("Icon"));
         var imageHover = GetInt32(xmlReader.GetAttribute("ImageHover"), image);
         var imageMousedown = GetInt32(xmlReader.GetAttribute("ImageMouseDown"), image);
         var designName = xmlReader.GetAttribute("Design");

@@ -12,4 +12,7 @@
     <Label Name="lblHP" Text="999/999" Position="15, 14" Size="209, 10" Font="Arial" Align="Center"/>
     <Label Name="lblMP" Text="999/999" Position="15, 30" Size="209, 10" Font="Arial" Align="Center"/>
     <Label Name="lblEXP" Text="999/999" Position="15, 48" Size="209, 10" Font="Arial" Align="Center"/>
+
+    <!-- Overlay for WinBars.OnDraw (must be last for correct draw order) -->
+    <PictureBox Name="picOverlay" Position="0, 0" Size="0, 0"/>
 </Window>

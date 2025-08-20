@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window Name="winChat" Size="352, 152" Position="8, 422" Font="Georgia">
+    <PictureBox Name="picNull" Position="0, 0" Size="0, 0"/>
     <CheckBox Name="chkGame" Text="Game" Position="10, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkMap" Text="Map" Position="60, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
     <CheckBox Name="chkGlobal" Text="Global" Position="110, 2" Size="49, 23" Design="CheckboxChat" Font="Arial"/>
