@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window Name="winBars" Size="239, 77" Position="10, 10" Font="Georgia" Design="WindowNoBar">
     <PictureBox Name="picParchment" Position="6, 6" Size="227, 65" Design="Parchment"/>
-    <PictureBox Name="picBlank" Position="15, 15" Size="209, 50" Design="Parchment"/>
     <PictureBox Name="picHP_Blank" Position="15, 15" Size="209, 13" Image="24"/>
     <PictureBox Name="picSP_Blank" Position="15, 32" Size="209, 13" Image="25"/>
     <PictureBox Name="picEXP_Blank" Position="15, 49" Size="209, 13" Image="26"/>
