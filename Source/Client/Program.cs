@@ -1569,8 +1569,8 @@ namespace Client
             destrec = new Rectangle(GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X * GameState.SizeX),
                 GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y * GameState.SizeY), GameState.SizeX, GameState.SizeY);
 
-            x = GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X * GameState.SizeX);
-            y = GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y * GameState.SizeY);
+            x = GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X);
+            y = GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y);
 
             string argPath = Path.Combine(DataPath.Items, picNum.ToString());
             RenderTexture(ref argPath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height, srcrec.Width,

@@ -95,10 +95,13 @@ public static class Item
             return;
         }
 
+        x *= 32;
+        y *= 32;
+
         Data.MapItem[mapNum, mapItemSlot].Num = itemNum;
         Data.MapItem[mapNum, mapItemSlot].Value = itemVal;
-        Data.MapItem[mapNum, mapItemSlot].X = x * 32;
-        Data.MapItem[mapNum, mapItemSlot].Y = y * 32;
+        Data.MapItem[mapNum, mapItemSlot].X = x;
+        Data.MapItem[mapNum, mapItemSlot].Y = y;
 
         var packet = new PacketWriter();
 
