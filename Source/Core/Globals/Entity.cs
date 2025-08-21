@@ -68,7 +68,6 @@ public class Entity
     public byte Moving { get; set; }
     public byte Attacking { get; set; }
     public int AttackTimer { get; set; }
-    public int MapGetTimer { get; set; }
     public byte Steps { get; set; }
     public int Emote { get; set; }
     public int EmoteTimer { get; set; }
@@ -135,7 +134,6 @@ public class Entity
             Moving = player.Moving,
             Attacking = player.Attacking,
             AttackTimer = player.AttackTimer,
-            MapGetTimer = player.MapGetTimer,
             Steps = player.Steps,
             Emote = player.Emote,
             EmoteTimer = player.EmoteTimer,
@@ -224,7 +222,6 @@ public class Entity
             Moving = entity.Moving,
             Attacking = entity.Attacking,
             AttackTimer = entity.AttackTimer,
-            MapGetTimer = entity.MapGetTimer,
             Steps = entity.Steps,
             Emote = entity.Emote,
             EmoteTimer = entity.EmoteTimer,

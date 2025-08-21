@@ -51,7 +51,6 @@ namespace Client
             Data.Player[index].Exp = 0;
             Data.Player[index].Level = 0;
             Data.Player[index].Map = 0;
-            Data.Player[index].MapGetTimer = 0;
             Data.Player[index].Moving = 0;
             Data.Player[index].Pk = false;
             Data.Player[index].Points = 0;

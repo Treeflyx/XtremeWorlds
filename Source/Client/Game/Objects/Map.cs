@@ -121,7 +121,7 @@ namespace Client
             if (Data.MyMap.Tile[x, y].Layer == null)
                 return;
 
-            if (Data.Autotile[x, y].Layer == null)
+            if (Data.Autotile?[x, y].Layer == null)
                 return;
 
             try
@@ -986,8 +986,8 @@ namespace Client
             {
                 Data.MyMapItem[i].Num = buffer.ReadInt32();
                 Data.MyMapItem[i].Value = buffer.ReadInt32();
-                Data.MyMapItem[i].X = (byte) buffer.ReadInt32();
-                Data.MyMapItem[i].Y = (byte) buffer.ReadInt32();
+                Data.MyMapItem[i].X = buffer.ReadInt32();
+                Data.MyMapItem[i].Y = buffer.ReadInt32();
             }
 
             int vitalCount = Enum.GetValues(typeof(Vital)).Length;
@@ -1048,6 +1048,35 @@ namespace Client
             GameState.CanMoveNow = true;
         }
 
+        public static void Packet_MapItemData(ReadOnlyMemory<byte> data)
+        {
+            int i;
+            var buffer = new PacketReader(data);
+
+            i = buffer.ReadByte();
+            ref var withBlock = ref Data.MyMapItem[i];
+            withBlock.Num = buffer.ReadInt32();
+            withBlock.Value = buffer.ReadInt32();
+            withBlock.X = buffer.ReadInt32();
+            withBlock.Y = buffer.ReadInt32();
+
+        }
+
+        public static void Packet_MapItemsData(ReadOnlyMemory<byte> data)
+        {
+            var buffer = new PacketReader(data);
+
+            for (int i = 0; i < Constant.MaxMapItems; i++)
+            {
+                ref var withBlock = ref Data.MyMapItem[i];
+                withBlock.Num = buffer.ReadInt32();
+                withBlock.Value = buffer.ReadInt32();
+                withBlock.X = buffer.ReadInt32();
+                withBlock.Y = buffer.ReadInt32();
+            }
+        
+        }
+
         public static void Packet_MapNpcData(ReadOnlyMemory<byte> data)
         {
             int i;
@@ -1057,8 +1086,8 @@ namespace Client
             {
                 ref var withBlock = ref Data.MyMapNpc[i];
                 withBlock.Num = buffer.ReadInt32();
-                withBlock.X = (byte) buffer.ReadInt32();
-                withBlock.Y = (byte) buffer.ReadInt32();
+                withBlock.X = buffer.ReadInt32();
+                withBlock.Y = buffer.ReadInt32();
                 withBlock.Dir = buffer.ReadByte();
             }
         }

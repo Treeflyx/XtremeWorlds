@@ -1541,8 +1541,8 @@ namespace Client
 
         public static void DrawMapItem(int itemNum)
         {
-            Rectangle srcrec;
-            Rectangle destrec;
+            Rectangle srcRec;
+            Rectangle destRec;
             int picNum;
             int x;
             int y;
@@ -1565,16 +1565,16 @@ namespace Client
             if (Math.Floor((double) withBlock.Y / 32) < GameState.TileView.Top | Math.Floor((double) withBlock.Y / 32) > GameState.TileView.Bottom)
                 return;
 
-            srcrec = new Rectangle(0, 0, GameState.SizeX, GameState.SizeY);
-            destrec = new Rectangle(GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X * GameState.SizeX),
-                GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y * GameState.SizeY), GameState.SizeX, GameState.SizeY);
+            srcRec = new Rectangle(0, 0, GameState.SizeX, GameState.SizeY);
+            destRec = new Rectangle(GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X),
+                GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y), GameState.SizeX, GameState.SizeY);
 
             x = GameLogic.ConvertMapX(Data.MyMapItem[itemNum].X);
             y = GameLogic.ConvertMapY(Data.MyMapItem[itemNum].Y);
 
             string argPath = Path.Combine(DataPath.Items, picNum.ToString());
-            RenderTexture(ref argPath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height, srcrec.Width,
-                srcrec.Height);
+            RenderTexture(ref argPath, x, y, srcRec.X, srcRec.Y, srcRec.Width, srcRec.Height, srcRec.Width,
+                srcRec.Height);
         }
 
         public static void DrawCharacterSprite(int sprite, int x2, int y2, Rectangle sRect)
@@ -1594,8 +1594,8 @@ namespace Client
 
         public static void DrawBlood(int index)
         {
-            Rectangle srcrec;
-            Rectangle destrec;
+            Rectangle srcRec;
+            Rectangle destRec;
             int x;
             int y;
 
@@ -1613,12 +1613,12 @@ namespace Client
                 x = GameLogic.ConvertMapX(Data.Blood[index].X);
                 y = GameLogic.ConvertMapY(Data.Blood[index].Y);
 
-                srcrec = new Rectangle((withBlock.Sprite - 1) * GameState.SizeX, 0, GameState.SizeX, GameState.SizeY);
-                destrec = new Rectangle(GameLogic.ConvertMapX(withBlock.X),
+                srcRec = new Rectangle((withBlock.Sprite - 1) * GameState.SizeX, 0, GameState.SizeX, GameState.SizeY);
+                destRec = new Rectangle(GameLogic.ConvertMapX(withBlock.X),
                     GameLogic.ConvertMapY(withBlock.Y), GameState.SizeX, GameState.SizeY);
 
                 string argPath = Path.Combine(DataPath.Misc, "Blood");
-                RenderTexture(ref argPath, x, y, srcrec.X, srcrec.Y, srcrec.Width, srcrec.Height);
+                RenderTexture(ref argPath, x, y, srcRec.X, srcRec.Y, srcRec.Width, srcRec.Height);
             }
         }
 

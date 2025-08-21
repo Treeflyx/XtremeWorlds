@@ -814,13 +814,6 @@ namespace Client
 
         public static void CheckMapGetItem()
         {
-            if (General.GetTickCount() <= Data.Player[GameState.MyIndex].MapGetTimer + 250)
-            {
-                return;
-            }
-            
-            Data.Player[GameState.MyIndex].MapGetTimer = General.GetTickCount();
-            
             var packetWriter = new PacketWriter(4);
             
             packetWriter.WriteEnum(Packets.ClientPackets.CMapGetItem);

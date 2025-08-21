@@ -41,6 +41,8 @@ public sealed class GamePacketParser : PacketParser<Packets.ServerPackets>
         Bind(Packets.ServerPackets.SNpcAttack, Packet_NpcAttack);
         Bind(Packets.ServerPackets.SCheckForMap, Map.Packet_CheckMap);
         Bind(Packets.ServerPackets.SMapData, Map.MapData);
+        Bind(Packets.ServerPackets.SMapItemData, Map.Packet_MapItemData);
+        Bind(Packets.ServerPackets.SMapItemsData, Map.Packet_MapItemsData);
         Bind(Packets.ServerPackets.SMapNpcData, Map.Packet_MapNpcData);
         Bind(Packets.ServerPackets.SMapNpcUpdate, Map.Packet_MapNpcUpdate);
         Bind(Packets.ServerPackets.SGlobalMsg, Packet_GlobalMsg);

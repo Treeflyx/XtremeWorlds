@@ -18,7 +18,7 @@ public static class Type
         public int[] LoopCount;
         public int[] LoopTime;
     }
-
+    
     public struct Rect
     {
         public double Top;
@@ -250,7 +250,6 @@ public static class Type
         public bool IsMoving;
         public byte Attacking;
         public int AttackTimer;
-        public int MapGetTimer;
         public byte Steps;
         public int Emote;
         public int EmoteTimer;

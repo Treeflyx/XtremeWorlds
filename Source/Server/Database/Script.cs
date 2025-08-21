@@ -31,6 +31,9 @@ using Type = Core.Globals.Type;
 
 public class Script
 {
+    // Add a per-player pickup lock
+    private static bool[] _isPickingUp = new bool[Constant.MaxPlayers];
+
     public void Loop()
     {
 
@@ -109,28 +112,42 @@ public class Script
 
     public void MapGetItem(int index, int mapNum, int mapSlot, int invSlot)
     {
-        // Set item in players inventor
-        int itemNum = (int)Data.MapItem[mapNum, mapSlot].Num;
+        // Prevent double pickup: if already picking up, ignore
+        if (_isPickingUp[index])
+            return;
 
-        SetPlayerInv(index, invSlot, (int)Data.MapItem[mapNum, mapSlot].Num);
+        _isPickingUp[index] = true;
+        
+        // Set item in player's inventory
+        int itemNum = Data.MapItem[mapNum, mapSlot].Num;
+        SetPlayerInv(index, invSlot, itemNum);
 
         string msg;
+        var item = Data.Item[itemNum];
+        int mapValue = Data.MapItem[mapNum, mapSlot].Value;
 
-        if (Data.Item[GetPlayerInv(index, invSlot)].Type == (byte)ItemCategory.Currency | Data.Item[GetPlayerInv(index, invSlot)].Stackable == 1)
+        if (item.Type == (byte)ItemCategory.Currency || item.Stackable == 1)
         {
-            SetPlayerInvValue(index, invSlot, GetPlayerInvValue(index, invSlot) + Data.MapItem[mapNum, mapSlot].Value);
-            msg = Data.MapItem[mapNum, mapSlot].Value + " " + Data.Item[GetPlayerInv(index, invSlot)].Name;
+            // For stackable/currency, add the value from the map item (should be 1 for most drops)
+            SetPlayerInvValue(index, invSlot, GetPlayerInvValue(index, invSlot) + mapValue);
+            msg = mapValue + " " + item.Name;
         }
         else
         {
+            // For non-stackable, always set to 1 regardless of map item value
             SetPlayerInvValue(index, invSlot, 1);
-            msg = Data.Item[GetPlayerInv(index, invSlot)].Name;
+            msg = item.Name;
         }
 
         // Erase item from the map
-        Server.Item.SpawnItemSlot(mapSlot, -1, 0, GetPlayerMap(index), Data.MapItem[mapNum, mapSlot].X, Data.MapItem[mapNum, mapSlot].Y);
+        Data.MapItem[mapNum, mapSlot].Num = -1;
+        Data.MapItem[mapNum, mapSlot].Value = 0;
+        Server.Item.SendMapItemToAll(mapNum, mapSlot);
         NetworkSend.SendInventoryUpdate(index, invSlot);
         NetworkSend.SendActionMsg(GetPlayerMap(index), msg, (int)ColorName.White, (byte)ActionMessageType.Static, GetPlayerX(index) * 32, GetPlayerY(index) * 32);
+
+        // Unlock pickup for this player
+        _isPickingUp[index] = false;
     }
 
     public void UnEquipItem(int index, int itemNum, int eqSlot)
@@ -854,12 +871,13 @@ public class Script
                     {
                         item.PlayerName = "";
                         item.PlayerTimer = 0;
-                        Server.Item.SendMapItemsToAll(mapNum);
+                        Server.Item.SendMapItemToAll(mapNum, i);
                     }
+
                     if (item.CanDespawn && item.DespawnTimer < now)
                     {
                         Database.ClearMapItem(i, mapNum);
-                        Server.Item.SendMapItemsToAll(mapNum);
+                        Server.Item.SendMapItemToAll(mapNum, i);
                     }
                 }
             }

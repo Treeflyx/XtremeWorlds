@@ -1131,7 +1131,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var loopTo11 = Core.Globals.Constant.MaxMapItems;
         for (var i = 0; i < loopTo11; i++)
         {
-            Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(session.Id), Data.MapItem[GetPlayerMap(session.Id), i].X, Data.MapItem[GetPlayerMap(session.Id), i].Y);
             Database.ClearMapItem(i, GetPlayerMap(session.Id));
         }
 
@@ -1193,7 +1192,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var loopTo = Core.Globals.Constant.MaxMapItems;
         for (i = 0; i < loopTo; i++)
         {
-            Item.SpawnItemSlot(i, -1, 0, GetPlayerMap(session.Id), Data.MapItem[GetPlayerMap(session.Id), i].X, Data.MapItem[GetPlayerMap(session.Id), i].Y);
             Database.ClearMapItem(i, GetPlayerMap(session.Id));
         }
 

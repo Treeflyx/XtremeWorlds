@@ -668,12 +668,7 @@ public static class Player
                 continue;
             }
 
-            if (!CanPlayerPickupItem(playerId, mapItemNum))
-            {
-                continue;
-            }
-
-            if (Data.MapItem[mapNum, mapItemNum].X != GetPlayerX(playerId) || Data.MapItem[mapNum, mapItemNum].Y != GetPlayerY(playerId))
+            if (Math.Floor((double)Data.MapItem[mapNum, mapItemNum].X / 32) != GetPlayerX(playerId) || Math.Floor((double)Data.MapItem[mapNum, mapItemNum].Y / 32) != GetPlayerY(playerId))
             {
                 continue;
             }
@@ -682,6 +677,11 @@ public static class Player
             if (slot == -1)
             {
                 NetworkSend.PlayerMsg(playerId, "Your inventory is full.", (int) ColorName.BrightRed);
+                break;
+            }
+
+            if (!CanPlayerPickupItem(playerId, mapItemNum))
+            {
                 break;
             }
 

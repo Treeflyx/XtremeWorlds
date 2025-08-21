@@ -55,11 +55,25 @@ public static class Item
         Data.Item[itemNum].Stackable = 1;
     }
 
-    public static void SendMapItemsToAll(int mapNum)
+    public static void SendMapItemToAll(int mapNum, int mapSlot)
     {
         var packet = new PacketWriter();
 
         packet.WriteEnum(ServerPackets.SMapItemData);
+        packet.WriteByte((byte)mapSlot);
+        packet.WriteInt32(Data.MapItem[mapNum, mapSlot].Num);
+        packet.WriteInt32(Data.MapItem[mapNum, mapSlot].Value);
+        packet.WriteInt32(Data.MapItem[mapNum, mapSlot].X);
+        packet.WriteInt32(Data.MapItem[mapNum, mapSlot].Y);
+
+        NetworkConfig.SendDataToMap(mapNum, packet.GetBytes());
+    }
+
+    public static void SendMapItemsToAll(int mapNum)
+    {
+        var packet = new PacketWriter();
+
+        packet.WriteEnum(ServerPackets.SMapItemsData);
 
         for (var i = 0; i < Core.Globals.Constant.MaxMapItems; i++)
         {
@@ -91,7 +105,7 @@ public static class Item
     public static void SpawnItemSlot(int mapItemSlot, int itemNum, int itemVal, int mapNum, int x, int y)
     {
         if (mapItemSlot < 0 || mapItemSlot > Core.Globals.Constant.MaxMapItems || itemNum < 0 || itemNum > Core.Globals.Constant.MaxItems || mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps)
-        {
+        {          
             return;
         }
 
