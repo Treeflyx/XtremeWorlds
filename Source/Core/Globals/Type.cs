@@ -89,6 +89,12 @@ public static class Type
         public byte Bound;
     }
 
+     public struct PlayerEq
+    {
+        public int Num;
+        public byte Bound;
+    }
+
     public struct PlayerSkill
     {
         public int Num;
@@ -235,7 +241,7 @@ public static class Type
         public int[] Vital;
         public byte[] Stat;
         public byte Points;
-        public int[] Equipment;
+        public PlayerEq[] Equipment;
         public PlayerInv[] Inv;
         public PlayerSkill[] Skill;
         public int Map;

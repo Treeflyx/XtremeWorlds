@@ -140,11 +140,6 @@ public static class WinInventory
         }
 
         var winInventory = Gui.GetWindowByName("winInventory");
-        if (winInventory is null)
-        {
-            return;
-        }
-
         var slot = General.IsInv(winInventory.X, winInventory.Y);
         if (slot >= 0)
         {
@@ -203,7 +198,7 @@ public static class WinInventory
                         continue;
                     }
 
-                    if (Data.Item[GetPlayerInv(GameState.MyIndex, Data.TradeYourOffer[i].Num)].Type != (byte) ItemCategory.Currency)
+                    if (Data.Item[GetPlayerInv(GameState.MyIndex, Data.TradeYourOffer[i].Num)].Type != (byte)ItemCategory.Currency)
                     {
                         return;
                     }
@@ -214,7 +209,7 @@ public static class WinInventory
                     }
                 }
 
-                if (Data.Item[GetPlayerInv(GameState.MyIndex, slot)].Type == (byte) ItemCategory.Currency)
+                if (Data.Item[GetPlayerInv(GameState.MyIndex, slot)].Type == (byte)ItemCategory.Currency)
                 {
                     GameLogic.Dialogue(
                         "Select Amount",
@@ -230,9 +225,9 @@ public static class WinInventory
 
                 return;
             }
-        }
 
-        Sender.SendUseItem(slot);
+            Sender.SendUseItem(slot);
+        }
 
         OnMouseMove();
     }

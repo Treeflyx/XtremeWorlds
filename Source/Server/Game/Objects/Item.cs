@@ -270,7 +270,7 @@ public static class Item
         }
 
         Data.Item[itemNum].Animation = packetReader.ReadInt32();
-        Data.Item[itemNum].BindType = (byte) packetReader.ReadInt32();
+        Data.Item[itemNum].BindType = packetReader.ReadByte();
         Data.Item[itemNum].JobReq = packetReader.ReadInt32();
         Data.Item[itemNum].Data1 = packetReader.ReadInt32();
         Data.Item[itemNum].Data2 = packetReader.ReadInt32();
@@ -392,7 +392,7 @@ public static class Item
         }
 
         packet.WriteInt32(Data.Item[itemNum].Animation);
-        packet.WriteInt32(Data.Item[itemNum].BindType);
+        packet.WriteByte(Data.Item[itemNum].BindType);
         packet.WriteInt32(Data.Item[itemNum].JobReq);
         packet.WriteInt32(Data.Item[itemNum].Data1);
         packet.WriteInt32(Data.Item[itemNum].Data2);

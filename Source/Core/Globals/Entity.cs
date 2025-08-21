@@ -51,7 +51,7 @@ public class Entity
     public int[]? Vital { get; set; }
     public byte[] Stat { get; set; }
     public byte Points { get; set; }
-    public int[] Equipment { get; set; }
+    public PlayerEq[] Equipment { get; set; }
     public object[] Inv { get; set; }
     public object[] PlayerSkill { get; set; }
     public int Map { get; set; }
@@ -208,7 +208,7 @@ public class Entity
             Vital = entity.Vital != null ? (int[]) entity.Vital.Clone() : [],
             Stat = entity.Stat != null ? (byte[]) entity.Stat.Clone() : [],
             Points = entity.Points,
-            Equipment = entity.Equipment != null ? (int[]) entity.Equipment.Clone() : [],
+            Equipment = entity.Equipment != null ? (PlayerEq[]) entity.Equipment.Clone() : [],
             Inv = entity.Inv != null ? entity.Inv.Cast<PlayerInv>().ToArray() : [],
             Skill = entity.PlayerSkill != null ? entity.PlayerSkill.Cast<PlayerSkill>().ToArray() : [],
             Map = entity.Map,

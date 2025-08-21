@@ -44,9 +44,9 @@ namespace Client
             Data.Player[index].Dir = 0;
             Data.Player[index].Access = (byte) AccessLevel.Player;
 
-            Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
+            Data.Player[index].Equipment = new Type.PlayerEq[Enum.GetValues(typeof(Equipment)).Length];
             for (int y = 0; y < Data.Player[index].Equipment.Length; y++)
-                Data.Player[index].Equipment[y] = -1;
+                Data.Player[index].Equipment[y] = new Type.PlayerEq();
 
             Data.Player[index].Exp = 0;
             Data.Player[index].Level = 0;
@@ -818,7 +818,7 @@ namespace Client
                     }
                     case (int) Direction.Right:
                     {
-                        Data.Player[index].X -= 1;
+                        Data.Player[index].X += 1;
                         break;
                     }
                     case (int) Direction.UpRight:

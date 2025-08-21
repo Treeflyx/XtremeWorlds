@@ -803,7 +803,7 @@ public static class Sender
         }
 
         packetWriter.WriteInt32(Data.Item[itemNum].Animation);
-        packetWriter.WriteInt32(Data.Item[itemNum].BindType);
+        packetWriter.WriteByte(Data.Item[itemNum].BindType);
         packetWriter.WriteInt32(Data.Item[itemNum].JobReq);
         packetWriter.WriteInt32(Data.Item[itemNum].Data1);
         packetWriter.WriteInt32(Data.Item[itemNum].Data2);

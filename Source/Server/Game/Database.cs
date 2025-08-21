@@ -1877,9 +1877,9 @@ namespace Server
             Data.Player[index].Dir = 0;
             Data.Player[index].Access = (byte)AccessLevel.Player;
 
-            Data.Player[index].Equipment = new int[Enum.GetValues(typeof(Equipment)).Length];
+            Data.Player[index].Equipment = new PlayerEq[Enum.GetValues(typeof(Equipment)).Length];
             for (int i = 0, loopTo = Enum.GetValues(typeof(Equipment)).Length; i < loopTo; i++)
-                Data.Player[index].Equipment[i] = -1;
+                Data.Player[index].Equipment[i] = new PlayerEq();
 
             Data.Player[index].Inv = new PlayerInv[Core.Globals.Constant.MaxInv];
             for (int i = 0, loopTo1 = Core.Globals.Constant.MaxInv; i < loopTo1; i++)
@@ -1942,7 +1942,7 @@ namespace Server
             }
 
             for (int i = 0, loopTo9 = Enum.GetValues(typeof(Equipment)).Length; i < loopTo9; i++)
-                Data.Player[index].Equipment[i] = -1;
+                Data.Player[index].Equipment[i] = new PlayerEq();
         }
 
         public static bool LoadCharacter(int index, int charNum)

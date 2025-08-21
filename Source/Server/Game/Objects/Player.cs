@@ -853,6 +853,12 @@ public static class Player
             return;
         }
 
+        if (Data.Player[playerId].Inv[invNum].Bound > 0)
+        {
+            NetworkSend.PlayerMsg(playerId, "You can't drop soulbound items!", (int) ColorName.BrightRed);
+            return;
+        }
+
         var itemNum = GetPlayerInv(playerId, invNum);
         if (itemNum is < 0 or >= Core.Globals.Constant.MaxItems)
         {
@@ -1111,7 +1117,7 @@ public static class Player
     public static void UnequipItem(int playerId, int eqSlot)
     {
         var eqCount = Enum.GetNames<Equipment>().Length;
-        if (eqSlot < 1 || eqSlot > eqCount)
+        if (eqSlot < 0 || eqSlot > eqCount)
         {
             return;
         }

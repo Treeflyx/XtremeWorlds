@@ -126,6 +126,11 @@ public class Script
         var item = Data.Item[itemNum];
         int mapValue = Data.MapItem[mapNum, mapSlot].Value;
 
+        if (item.BindType == 1)
+        {
+            Data.Player[index].Inv[invSlot].Bound = 1;
+        }
+
         if (item.Type == (byte)ItemCategory.Currency || item.Stackable == 1)
         {
             // For stackable/currency, add the value from the map item (should be 1 for most drops)
@@ -156,8 +161,9 @@ public class Script
 
         itemNum = GetPlayerEquipment(index, (Equipment)eqSlot);
 
-        m = FindOpenInvSlot(index, (int)Data.Player[index].Equipment[eqSlot]);
-        SetPlayerInv(index, m, Data.Player[index].Equipment[eqSlot]);
+        m = FindOpenInvSlot(index, (int)Data.Player[index].Equipment[eqSlot].Num);
+        SetPlayerInv(index, m, Data.Player[index].Equipment[eqSlot].Num);
+        Data.Player[index].Inv[m].Bound = Data.Player[index].Equipment[eqSlot].Bound;
         SetPlayerInvValue(index, m, 0);
 
         NetworkSend.PlayerMsg(index, "You unequip " + GameLogic.CheckGrammar(Data.Item[GetPlayerEquipment(index, (Equipment)eqSlot)].Name), (int)ColorName.Yellow);
@@ -186,132 +192,37 @@ public class Script
         switch (Data.Item[itemNum].Type)
         {
             case (byte)ItemCategory.Equipment:
+            {
+                // All equipment types use the same logic, just with different slots
+                Equipment eqType = (Equipment)Data.Item[itemNum].SubType;
+                if (Data.Item[itemNum].BindType == 2)
                 {
-                    switch (Data.Item[itemNum].SubType)
-                    {
-                        case (byte)Equipment.Weapon:
-                            {
-
-                                if (GetPlayerEquipment(index, Equipment.Weapon) >= 0)
-                                {
-                                    tempItem = GetPlayerEquipment(index, Equipment.Weapon);
-                                }
-
-                                SetPlayerEquipment(index, itemNum, Equipment.Weapon);
-
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
-                                TakeInv(index, itemNum, 1);
-
-                                if (tempItem >= 0) // give back the stored item
-                                {
-                                    m = FindOpenInvSlot(index, tempItem);
-                                    SetPlayerInv(index, m, tempItem);
-                                    SetPlayerInvValue(index, m, 0);
-                                }
-
-                                NetworkSend.SendWornEquipment(index);
-                                NetworkSend.SendMapEquipment(index);
-                                NetworkSend.SendInventory(index);
-                                NetworkSend.SendInventoryUpdate(index, invNum);
-                                NetworkSend.SendStats(index);
-
-                                // send vitals
-                                NetworkSend.SendVitals(index);
-                                break;
-                            }
-
-                        case (byte)Equipment.Armor:
-                            {
-                                if (GetPlayerEquipment(index, Equipment.Armor) >= 0)
-                                {
-                                    tempItem = GetPlayerEquipment(index, Equipment.Armor);
-                                }
-
-                                SetPlayerEquipment(index, itemNum, Equipment.Armor);
-
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
-                                TakeInv(index, itemNum, 1);
-
-                                if (tempItem >= 0) // Return their old equipment to their inventory.
-                                {
-                                    m = FindOpenInvSlot(index, tempItem);
-                                    SetPlayerInv(index, m, tempItem);
-                                    SetPlayerInvValue(index, m, 0);
-                                }
-
-                                NetworkSend.SendWornEquipment(index);
-                                NetworkSend.SendMapEquipment(index);
-
-                                NetworkSend.SendInventory(index);
-                                NetworkSend.SendStats(index);
-
-                                // send vitals
-                                NetworkSend.SendVitals(index);
-                                break;
-                            }
-
-                        case (byte)Equipment.Helmet:
-                            {
-                                if (GetPlayerEquipment(index, Equipment.Helmet) >= 0)
-                                {
-                                    tempItem = GetPlayerEquipment(index, Equipment.Helmet);
-                                }
-
-                                SetPlayerEquipment(index, itemNum, Equipment.Helmet);
-
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
-                                TakeInv(index, itemNum, 1);
-
-                                if (tempItem >= 0) // give back the stored item
-                                {
-                                    m = FindOpenInvSlot(index, tempItem);
-                                    SetPlayerInv(index, m,  tempItem);
-                                    SetPlayerInvValue(index, m, 0);
-                                }
-
-                                NetworkSend.SendWornEquipment(index);
-                                NetworkSend.SendMapEquipment(index);
-                                NetworkSend.SendInventory(index);
-                                NetworkSend.SendStats(index);
-
-                                // send vitals
-                                NetworkSend.SendVitals(index);
-                                break;
-                            }
-
-                        case (byte)Equipment.Shield:
-                            {
-                                if (GetPlayerEquipment(index, Equipment.Shield) >= 0)
-                                {
-                                    tempItem = GetPlayerEquipment(index, Equipment.Shield);
-                                }
-
-                                SetPlayerEquipment(index, itemNum, Equipment.Shield);
-
-                                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
-                                TakeInv(index, itemNum, 1);
-
-                                if (tempItem >= 0) // give back the stored item
-                                {
-                                    m = FindOpenInvSlot(index, tempItem);
-                                    SetPlayerInv(index, m, tempItem);
-                                    SetPlayerInvValue(index, m, 0);
-                                }
-
-                                NetworkSend.SendWornEquipment(index);
-                                NetworkSend.SendMapEquipment(index);
-                                NetworkSend.SendInventory(index);
-                                NetworkSend.SendStats(index);
-
-                                // send vitals
-                                NetworkSend.SendVitals(index);
-                                break;
-                            }
-
-                    }
-
-                    break;
+                    Data.Player[index].Inv[invNum].Bound = 2;
                 }
+                
+                if (GetPlayerEquipment(index, eqType) >= 0)
+                {
+                    tempItem = GetPlayerEquipment(index, eqType);
+                }
+                SetPlayerEquipment(index, itemNum, eqType);
+                Data.Player[index].Equipment[(byte)eqType].Bound = Data.Player[index].Inv[invNum].Bound;
+                NetworkSend.PlayerMsg(index, "You equip " + GameLogic.CheckGrammar(Data.Item[itemNum].Name), (int)ColorName.BrightGreen);
+                TakeInv(index, itemNum, 1);
+                if (tempItem >= 0)
+                {
+                    m = FindOpenInvSlot(index, tempItem);
+                    SetPlayerInv(index, m, tempItem);
+                    SetPlayerInvValue(index, m, 0);
+                }
+                NetworkSend.SendWornEquipment(index);
+                NetworkSend.SendMapEquipment(index);
+                NetworkSend.SendInventory(index);
+                NetworkSend.SendInventoryUpdate(index, invNum);
+                NetworkSend.SendStats(index);
+                // send vitals
+                NetworkSend.SendVitals(index);
+                break;
+            }
 
             case (byte)ItemCategory.Consumable:
                 {

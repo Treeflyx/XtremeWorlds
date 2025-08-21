@@ -61,7 +61,7 @@ public static class Command
 
     public static int GetPlayerEquipment(int index, Equipment equipmentSlot)
     {
-        return Data.Player[index].Equipment[(int) equipmentSlot];
+        return Data.Player[index].Equipment[(int) equipmentSlot].Num;
     }
 
     public static int GetPlayerSkill(int index, int skillSlot)
@@ -106,9 +106,9 @@ public static class Command
 
         for (var i = 0; i < EquipmentCount; i++)
         {
-            if (Data.Player[index].Equipment[i] >= 0 && Data.Item[Data.Player[index].Equipment[i]].AddStat[(int) stat] > 0)
+            if (Data.Player[index].Equipment[i].Num >= 0 && Data.Item[Data.Player[index].Equipment[i].Num].AddStat[(int) stat] > 0)
             {
-                statValue += Data.Item[Data.Player[index].Equipment[i]].AddStat[(int) stat];
+                statValue += Data.Item[Data.Player[index].Equipment[i].Num].AddStat[(int) stat];
             }
         }
 
@@ -329,7 +329,7 @@ public static class Command
 
     public static void SetPlayerEquipment(int index, int itemNum, Equipment equipmentSlot)
     {
-        Data.Player[index].Equipment[(int) equipmentSlot] = itemNum;
+        Data.Player[index].Equipment[(int) equipmentSlot].Num = itemNum;
     }
 
     public static string IsEditorLocked(int index, EditorType id)

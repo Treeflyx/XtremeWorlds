@@ -69,7 +69,7 @@ namespace Client
                 Data.Item[n].AddStat[i] = (byte)buffer.ReadInt32();
 
             Data.Item[n].Animation = buffer.ReadInt32();
-            Data.Item[n].BindType = (byte)buffer.ReadInt32();
+            Data.Item[n].BindType = buffer.ReadByte();
             Data.Item[n].JobReq = buffer.ReadInt32();
             Data.Item[n].Data1 = buffer.ReadInt32();
             Data.Item[n].Data2 = buffer.ReadInt32();

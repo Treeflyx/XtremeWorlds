@@ -289,6 +289,7 @@ namespace Client
         // Character consts
         public const int EqTop = 315;
         public const int EqLeft = 10;
+        public const int EqOffsetY = 8;
         public const int EqOffsetX = 8;
         public const int EqColumns = 4;
 

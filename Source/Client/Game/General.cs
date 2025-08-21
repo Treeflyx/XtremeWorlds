@@ -283,7 +283,7 @@ namespace Client
 
                 Type.Rect rec;
 
-                rec.Top = startY + GameState.EqTop + GameState.SizeY * (i / GameState.EqColumns);
+                rec.Top = startY + GameState.EqTop + (GameState.EqOffsetY + GameState.SizeY) * (i / GameState.EqColumns);
                 rec.Bottom = rec.Top + GameState.SizeY;
                 rec.Left = startX + GameState.EqLeft + (GameState.EqOffsetX + GameState.SizeX) * (i % GameState.EqColumns);
                 rec.Right = rec.Left + GameState.SizeX;
@@ -295,7 +295,7 @@ namespace Client
                 }
             }
 
-            return 0;
+            return -1;
         }
 
         public static int IsInv(long startX, long startY)
@@ -308,13 +308,13 @@ namespace Client
                 }
 
                 Type.Rect rec;
-                
-                rec.Top = startY + GameState.InvTop + (GameState.InvOffsetY) * (i / GameState.InvColumns);
-                rec.Bottom = rec.Top;
-                rec.Left = startX + GameState.InvLeft + (GameState.InvOffsetX) * (i % GameState.InvColumns);
-                rec.Right = rec.Left;
 
-                if (GameState.CurMouseX >= rec.Left && GameState.CurMouseX <= rec.Right && 
+                rec.Top = startY + GameState.InvTop + (GameState.InvOffsetY + GameState.SizeY) * (i / GameState.InvColumns);
+                rec.Bottom = rec.Top + GameState.SizeY;
+                rec.Left = startX + GameState.InvLeft + (GameState.InvOffsetX + GameState.SizeX) * (i % GameState.InvColumns);
+                rec.Right = rec.Left + GameState.SizeX;
+
+                if (GameState.CurMouseX >= rec.Left && GameState.CurMouseX <= rec.Right &&
                     GameState.CurMouseY >= rec.Top && GameState.CurMouseY <= rec.Bottom)
                 {
                     return i;
@@ -339,13 +339,11 @@ namespace Client
                     tempRec.Left = startX + GameState.SkillLeft + (GameState.SkillOffsetX + GameState.SizeX) * (i % GameState.SkillColumns);
                     tempRec.Right = tempRec.Left + GameState.SizeX;
 
-                    if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
+                    if (GameState.CurMouseX >= tempRec.Left && GameState.CurMouseX <= tempRec.Right &&
+                        GameState.CurMouseY >= tempRec.Top && GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                        {
-                            isSkill = i;
-                            return isSkill;
-                        }
+                        isSkill = i;
+                        return isSkill;
                     }
                 }
             }
@@ -367,13 +365,11 @@ namespace Client
                     tempRec.Left = startX + GameState.BankLeft + (GameState.BankOffsetX + GameState.SizeX) * (i % GameState.BankColumns);
                     tempRec.Right = tempRec.Left + GameState.SizeX;
 
-                    if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
+                    if (GameState.CurMouseX >= tempRec.Left && GameState.CurMouseX <= tempRec.Right &&
+                        GameState.CurMouseY >= tempRec.Top && GameState.CurMouseY <= tempRec.Bottom)
                     {
-                        if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                        {
-                            isBank = i;
-                            return isBank;
-                        }
+                        isBank = i;
+                        return isBank;
                     }
                 }
             }
@@ -394,13 +390,11 @@ namespace Client
                 tempRec.Left = startX + GameState.ShopLeft + (GameState.ShopOffsetX + GameState.SizeX) * (i % GameState.ShopColumns);
                 tempRec.Right = tempRec.Left + GameState.SizeX;
 
-                if (GameState.CurMouseX >= tempRec.Left & GameState.CurMouseX <= tempRec.Right)
+                if (GameState.CurMouseX >= tempRec.Left && GameState.CurMouseX <= tempRec.Right &&
+                    GameState.CurMouseY >= tempRec.Top && GameState.CurMouseY <= tempRec.Bottom)
                 {
-                    if (GameState.CurMouseY >= tempRec.Top & GameState.CurMouseY <= tempRec.Bottom)
-                    {
-                        isShop = i;
-                        return isShop;
-                    }
+                    isShop = i;
+                    return isShop;
                 }
             }
 

@@ -1502,12 +1502,11 @@ namespace Client
             // show
             if (GetPlayerInv(GameState.MyIndex, invNum) >= 0)
             {
-                // if (Data.Item[GetPlayerInv(GameState.MyIndex, invNum)].BindType > 0 & Data.Player[GameState.MyIndex].Inv[invNum].Bound > 0) { }
-                ShowItemDesc(x, y, GetPlayerInv(GameState.MyIndex, invNum));
+                ShowItemDesc(x, y, GetPlayerInv(GameState.MyIndex, invNum), invNum);
             }
         }
 
-        public static void ShowItemDesc(int x, int y, int itemNum)
+        public static void ShowItemDesc(int x, int y, int itemNum, int invNum = -1, int eqNum = -1)
         {
             var color = default(Microsoft.Xna.Framework.Color);
             string theName;
@@ -1544,14 +1543,28 @@ namespace Client
             // set variables
             {
                 var withBlock = Gui.GetWindowByName("winDescription");
-                if (withBlock is null) return;
-                // name
-                // If Not soulBound Then
-                theName = Data.Item[(int)itemNum].Name;
-                // Else
-                // theName = "(SB) " & Item(itemNum).Name)
-                // End If
-                if (Gui.TryGetControl("winDescription", "lblName", out var lblName)) lblName!.Text = theName;
+                if (invNum >= 0)
+                {
+                    if (Data.Player[GameState.MyIndex].Inv[invNum].Bound > 0)
+                        theName = "(SB) " + Data.Item[(int)itemNum].Name;
+                    else
+                        theName = Data.Item[(int)itemNum].Name;
+
+
+                    if (Gui.TryGetControl("winDescription", "lblName", out var lblName)) lblName!.Text = theName;
+                }
+
+                if (eqNum >= 0)
+                {
+                    if (Data.Player[GameState.MyIndex].Equipment[eqNum].Bound > 0)
+                        theName = "(SB) " + Data.Item[(int)itemNum].Name;
+                    else
+                        theName = Data.Item[(int)itemNum].Name;
+
+
+                    if (Gui.TryGetControl("winDescription", "lblName", out var lblName)) lblName!.Text = theName;
+                }
+
                 switch (Data.Item[(int)itemNum].Rarity)
                 {
                     case 0: // white
@@ -1962,13 +1975,13 @@ namespace Client
             if (eqNum < 0L || eqNum >= equipmentCount)
                 return;
 
-            if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum] < 0 || Data.Player[GameState.MyIndex].Equipment[(int)eqNum] > Constant.MaxItems)
+            if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num < 0 || Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num > Constant.MaxItems)
                 return;
 
             // show
-            if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum] != 0)
+            if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num != 0)
             {
-                ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum]);
+                ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num, -1);
             }
         }
 
