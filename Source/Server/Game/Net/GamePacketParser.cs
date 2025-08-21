@@ -1965,7 +1965,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var oldslot = buffer.ReadInt32();
         var newslot = buffer.ReadInt32();
 
-        Server.Player.PlayerSwitchbankSlots(session.Id, oldslot, newslot);
+        Server.Player.PlayerSwitchBankSlots(session.Id, oldslot, newslot);
     }
 
     public static void Packet_DepositItem(GameSession session, ReadOnlyMemory<byte> bytes)

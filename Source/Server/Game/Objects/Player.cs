@@ -1224,8 +1224,11 @@ public static class Player
         }
 
         var itemNum = GetPlayerInv(playerId, invSlot);
+        var bound = Data.Player[playerId].Inv[invSlot].Bound;
 
-        if (Data.Item[GetPlayerInv(playerId, invSlot)].Type == (byte) ItemCategory.Currency ||
+        Data.Bank[playerId].Item[bankSlot].Bound = bound;
+
+        if (Data.Item[GetPlayerInv(playerId, invSlot)].Type == (byte)ItemCategory.Currency ||
             Data.Item[GetPlayerInv(playerId, invSlot)].Stackable == 1)
         {
             if (GetPlayerBank(playerId, bankSlot) == GetPlayerInv(playerId, invSlot))
@@ -1323,13 +1326,14 @@ public static class Player
         }
 
         var invSlot = FindOpenInvSlot(playerId, GetPlayerBank(playerId, bankSlot));
+        var bound =  Data.Bank[playerId].Item[bankSlot].Bound;
 
         if (invSlot >= 0)
         {
-            if (Data.Item[GetPlayerBank(playerId, bankSlot)].Type == (byte) ItemCategory.Currency ||
+            if (Data.Item[GetPlayerBank(playerId, bankSlot)].Type == (byte)ItemCategory.Currency ||
                 Data.Item[GetPlayerBank(playerId, bankSlot)].Stackable == 1)
             {
-                GiveInv(playerId, GetPlayerBank(playerId, bankSlot), amount);
+                GiveInv(playerId, GetPlayerBank(playerId, bankSlot), amount, bound);
                 SetPlayerBankValue(playerId, bankSlot, GetPlayerBankValue(playerId, bankSlot) - amount);
 
                 if (GetPlayerBankValue(playerId, bankSlot) < 0)
@@ -1358,7 +1362,7 @@ public static class Player
         NetworkSend.SendBank(playerId);
     }
 
-    public static void PlayerSwitchbankSlots(int playerId, int oldSlot, int newSlot)
+    public static void PlayerSwitchBankSlots(int playerId, int oldSlot, int newSlot)
     {
         if (oldSlot == -1 | newSlot == -1)
         {
@@ -1369,12 +1373,16 @@ public static class Player
         var oldValue = GetPlayerBankValue(playerId, oldSlot);
         var newNum = GetPlayerBank(playerId, newSlot);
         var newValue = GetPlayerBankValue(playerId, newSlot);
+        var oldBound = Data.Bank[playerId].Item[oldSlot].Bound;
+        var newBound = Data.Bank[playerId].Item[newSlot].Bound;
 
         SetPlayerBank(playerId, newSlot, oldNum);
         SetPlayerBankValue(playerId, newSlot, oldValue);
+        Data.Bank[playerId].Item[newSlot].Bound = oldBound;
 
         SetPlayerBank(playerId, oldSlot, newNum);
         SetPlayerBankValue(playerId, oldSlot, newValue);
+        Data.Bank[playerId].Item[oldSlot].Bound = newBound;
 
         NetworkSend.SendBank(playerId);
     }
