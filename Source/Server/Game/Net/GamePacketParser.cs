@@ -2024,7 +2024,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         var name = buffer.ReadString();
 
-
         // Check for a player
         var tradeTarget = GameLogic.FindPlayer(name);
 
@@ -2053,7 +2052,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var buffer = new PacketReader(bytes);
 
         var status = (byte) buffer.ReadInt32();
-
 
         var tradeTarget = Data.TempPlayer[session.Id].TradeRequest;
 
@@ -2084,7 +2082,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
             // clear out their trade offers
             Data.TempPlayer[tradeTarget].InTrade = session.Id;
-            ;
+
             Array.Resize(ref Data.TempPlayer[session.Id].TradeOffer, Core.Globals.Constant.MaxInv);
             Array.Resize(ref Data.TempPlayer[tradeTarget].TradeOffer, Core.Globals.Constant.MaxInv);
 
@@ -2241,7 +2239,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var invslot = buffer.ReadInt32();
         var amount = buffer.ReadInt32();
 
-
         if (invslot < 0 | invslot > Core.Globals.Constant.MaxInv)
             return;
 
@@ -2253,8 +2250,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         // make sure they have the amount they offer
         if (amount < 0 | amount > GetPlayerInvValue(session.Id, invslot))
             return;
+            
+        if (Data.Player[session.Id].Inv[invslot].Bound > 0)
+        {
+            NetworkSend.PlayerMsg(session.Id, "You can't trade soulbound items.", (int)ColorName.BrightRed);
+            return;
+        }
 
-        if (Data.Item[itemnum].Type == (byte) ItemCategory.Currency | Data.Item[itemnum].Stackable == 1)
+        if (Data.Item[itemnum].Type == (byte)ItemCategory.Currency | Data.Item[itemnum].Stackable == 1)
         {
             // check if already offering same currency item
             var loopTo = Core.Globals.Constant.MaxInv;
@@ -2273,15 +2276,15 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
                     // cancel any trade agreement
                     Data.TempPlayer[session.Id].AcceptTrade = false;
-                    Data.TempPlayer[(int) Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
+                    Data.TempPlayer[(int)Data.TempPlayer[session.Id].InTrade].AcceptTrade = false;
 
                     NetworkSend.SendTradeStatus(session.Id, 0);
-                    NetworkSend.SendTradeStatus((int) Data.TempPlayer[session.Id].InTrade, 1);
+                    NetworkSend.SendTradeStatus((int)Data.TempPlayer[session.Id].InTrade, 1);
 
                     NetworkSend.SendTradeUpdate(session.Id, 0);
                     NetworkSend.SendTradeUpdate(session.Id, 1);
-                    NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 0);
-                    NetworkSend.SendTradeUpdate((int) Data.TempPlayer[session.Id].InTrade, 1);
+                    NetworkSend.SendTradeUpdate((int)Data.TempPlayer[session.Id].InTrade, 0);
+                    NetworkSend.SendTradeUpdate((int)Data.TempPlayer[session.Id].InTrade, 1);
                     return;
                 }
             }
@@ -2294,7 +2297,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             {
                 if (Data.TempPlayer[session.Id].TradeOffer[i].Num == invslot)
                 {
-                    NetworkSend.PlayerMsg(session.Id, "You've already offered this item.", (int) ColorName.BrightRed);
+                    NetworkSend.PlayerMsg(session.Id, "You've already offered this item.", (int)ColorName.BrightRed);
                     return;
                 }
             }

@@ -158,7 +158,6 @@ namespace Client
             packetWriter.WriteInt32(answer);
 
             Network.Send(packetWriter);
-
         }
 
         public static void TradeItem(int invslot, int amount)
