@@ -823,6 +823,7 @@ public static class Player
 
         SetPlayerInv(playerId, slot, itemNum);
         SetPlayerInvValue(playerId, slot, GetPlayerInvValue(playerId, slot) + itemVal);
+        Data.Player[playerId].Inv[slot].Bound = bound;
 
         if (sendUpdate)
         {
@@ -1335,6 +1336,7 @@ public static class Player
                 {
                     SetPlayerBank(playerId, bankSlot, 0);
                     SetPlayerBankValue(playerId, bankSlot, 0);
+                    Data.Bank[playerId].Item[bankSlot].Bound = 0;
                 }
             }
             else if (GetPlayerBank(playerId, bankSlot) == GetPlayerInv(playerId, invSlot))

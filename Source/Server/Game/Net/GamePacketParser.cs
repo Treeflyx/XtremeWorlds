@@ -389,7 +389,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                 SetPlayerAccess(session.Id, (int) AccessLevel.Owner);
 
             Log.Add("Character " + name + " added to " + GetAccountLogin(session.Id) + "'s account.", Constant.PlayerLog);
-            global::Server.Player.HandleUseChar(session);
+            Server.Player.HandleUseChar(session);
         }
     }
 
@@ -579,7 +579,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         var invNum = buffer.ReadInt32();
 
-        global::Server.Player.UseItem(session.Id, invNum);
+        Server.Player.UseItem(session.Id, invNum);
     }
 
     public static void Packet_Attack(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -604,9 +604,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             {
                 if (Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo > 0)
                 {
-                    if (Convert.ToBoolean(global::Server.Player.HasItem(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
+                    if (Convert.ToBoolean(Server.Player.HasItem(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo)))
                     {
-                        global::Server.Player.TakeInv(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo, 1);
+                        Server.Player.TakeInv(session.Id, Data.Item[GetPlayerEquipment(session.Id, Equipment.Weapon)].Ammo, 1);
                         Projectile.PlayerFireProjectile(session.Id);
                         return;
                     }
@@ -758,7 +758,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (n >= 0)
             {
-                global::Server.Player.PlayerWarp(session.Id, GetPlayerMap(n), GetPlayerX(n), GetPlayerY(n), (byte) Direction.Down);
+                Server.Player.PlayerWarp(session.Id, GetPlayerMap(n), GetPlayerX(n), GetPlayerY(n), (byte) Direction.Down);
                 NetworkSend.PlayerMsg(n, GetPlayerName(session.Id) + " has warped to you.", (int) ColorName.Yellow);
                 NetworkSend.PlayerMsg(session.Id, "You have been warped to " + GetPlayerName(n) + ".", (int) ColorName.Yellow);
                 Log.Add(GetPlayerName(session.Id) + " has warped to " + GetPlayerName(n) + ", map #" + GetPlayerMap(n) + ".", Constant.AdminLog);
@@ -790,7 +790,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (n >= 0)
             {
-                global::Server.Player.PlayerWarp(n, GetPlayerMap(session.Id), GetPlayerX(session.Id), GetPlayerY(session.Id), (byte) Direction.Down);
+                Server.Player.PlayerWarp(n, GetPlayerMap(session.Id), GetPlayerX(session.Id), GetPlayerY(session.Id), (byte) Direction.Down);
                 NetworkSend.PlayerMsg(n, "You have been summoned by " + GetPlayerName(session.Id) + ".", (int) ColorName.Yellow);
                 NetworkSend.PlayerMsg(session.Id, GetPlayerName(n) + " has been summoned.", (int) ColorName.Yellow);
                 Log.Add(GetPlayerName(session.Id) + " has warped " + GetPlayerName(n) + " to self, map #" + GetPlayerMap(session.Id) + ".", Constant.AdminLog);
@@ -822,7 +822,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         if (n < 0 | n > Core.Globals.Constant.MaxMaps)
             return;
 
-        global::Server.Player.PlayerWarp(session.Id, n, GetPlayerX(session.Id), GetPlayerY(session.Id), (byte) Direction.Down);
+        Server.Player.PlayerWarp(session.Id, n, GetPlayerX(session.Id), GetPlayerY(session.Id), (byte) Direction.Down);
         NetworkSend.PlayerMsg(session.Id, "You have been warped to map #" + n, (int) ColorName.Yellow);
         Log.Add(GetPlayerName(session.Id) + " warped to map #" + n + ".", Constant.AdminLog);
     }
@@ -866,7 +866,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var dir = buffer.ReadInt32();
 
 
-        global::Server.Player.PlayerMove(session.Id, dir, 1, true);
+        Server.Player.PlayerMove(session.Id, dir, 1, true);
     }
 
     public static void Packet_MapData(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -1143,7 +1143,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (NetworkConfig.IsPlaying(i) & GetPlayerMap(i) == mapNum)
             {
-                global::Server.Player.PlayerWarp(i, mapNum, GetPlayerX(i), GetPlayerY(i), (byte) Direction.Down);
+                Server.Player.PlayerWarp(i, mapNum, GetPlayerX(i), GetPlayerY(i), (byte) Direction.Down);
                 NetworkSend.SendMapData(i, mapNum, true);
             }
         }
@@ -1724,7 +1724,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         double newSlot = buffer.ReadInt32();
 
 
-        global::Server.Player.PlayerSwitchInvSlots(session.Id, (int) oldSlot, (int) newSlot);
+        Server.Player.PlayerSwitchInvSlots(session.Id, (int) oldSlot, (int) newSlot);
     }
 
     public static void Packet_SwapSkillSlots(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -1739,7 +1739,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         double newSlot = buffer.ReadInt32();
 
 
-        global::Server.Player.PlayerSwitchSkillSlots(session.Id, (int) oldSlot, (int) newSlot);
+        Server.Player.PlayerSwitchSkillSlots(session.Id, (int) oldSlot, (int) newSlot);
     }
 
     public static void Packet_CheckPing(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -1896,7 +1896,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             return;
 
         // check has the cost item
-        var itemAmount = global::Server.Player.HasItem(session.Id, withBlock.CostItem);
+        var itemAmount = Server.Player.HasItem(session.Id, withBlock.CostItem);
         if (itemAmount == 0 | itemAmount < withBlock.CostValue)
         {
             NetworkSend.PlayerMsg(session.Id, "You do not have enough to buy this item.", (int) ColorName.BrightRed);
@@ -1906,8 +1906,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // it's fine, let's go ahead
         for (int i = 0, loopTo = withBlock.CostValue; i < loopTo; i++)
-            global::Server.Player.TakeInv(session.Id, withBlock.CostItem, withBlock.CostValue);
-        global::Server.Player.GiveInv(session.Id, withBlock.Item, withBlock.ItemValue);
+            :Server.Player.TakeInv(session.Id, withBlock.CostItem, withBlock.CostValue);
+        :Server.Player.GiveInv(session.Id, withBlock.Item, withBlock.ItemValue);
 
         // send confirmation message & reset their shop action
         NetworkSend.PlayerMsg(session.Id, "Trade successful.", (int) ColorName.BrightGreen);
@@ -1950,8 +1950,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         }
 
         // take item and give gold
-        global::Server.Player.TakeInv(session.Id, (int) itemNum, 1);
-        global::Server.Player.GiveInv(session.Id, 0, price);
+        Server.Player.TakeInv(session.Id, (int) itemNum, 1);
+        Server.Player.GiveInv(session.Id, 0, price);
 
         // send confirmation message & reset their shop action
         NetworkSend.PlayerMsg(session.Id, "Sold the " + Data.Item[(int) itemNum].Name + " for " + price + " " + Data.Item[(int) itemNum].Name + "!", (int) ColorName.BrightGreen);
@@ -1965,7 +1965,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var oldslot = buffer.ReadInt32();
         var newslot = buffer.ReadInt32();
 
-        global::Server.Player.PlayerSwitchbankSlots(session.Id, oldslot, newslot);
+        Server.Player.PlayerSwitchbankSlots(session.Id, oldslot, newslot);
     }
 
     public static void Packet_DepositItem(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -1975,7 +1975,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var invslot = buffer.ReadInt32();
         var amount = buffer.ReadInt32();
 
-        global::Server.Player.GiveBank(session.Id, invslot, amount);
+        Server.Player.GiveBank(session.Id, invslot, amount);
     }
 
     public static void Packet_WithdrawItem(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -1985,7 +1985,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         var bankSlot = buffer.ReadByte();
         var amount = buffer.ReadInt32();
 
-        global::Server.Player.TakeBank(session.Id, bankSlot, amount);
+        Server.Player.TakeBank(session.Id, bankSlot, amount);
     }
 
     public static void Packet_CloseBank(GameSession session, ReadOnlyMemory<byte> bytes)
@@ -2147,7 +2147,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     tmpTradeItem[i].Num = itemNum;
                     tmpTradeItem[i].Value = Data.TempPlayer[session.Id].TradeOffer[i].Value;
                     // take item
-                    global::Server.Player.TakeInvSlot(session.Id, (int) Data.TempPlayer[session.Id].TradeOffer[i].Num, tmpTradeItem[i].Value);
+                    Server.Player.TakeInvSlot(session.Id, (int) Data.TempPlayer[session.Id].TradeOffer[i].Num, tmpTradeItem[i].Value);
                 }
             }
 
@@ -2161,7 +2161,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
                     tmpTradeItem2[i].Num = itemNum;
                     tmpTradeItem2[i].Value = Data.TempPlayer[tradeTarget].TradeOffer[i].Value;
                     // take item
-                    global::Server.Player.TakeInvSlot(tradeTarget, (int) Data.TempPlayer[tradeTarget].TradeOffer[i].Num, tmpTradeItem2[i].Value);
+                    Server.Player.TakeInvSlot(tradeTarget, (int) Data.TempPlayer[tradeTarget].TradeOffer[i].Num, tmpTradeItem2[i].Value);
                 }
             }
         }
@@ -2174,14 +2174,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             if (tmpTradeItem2[i].Num >= 0)
             {
                 // give away!
-                global::Server.Player.GiveInv(session.Id, (int) tmpTradeItem2[i].Num, tmpTradeItem2[i].Value, false);
+                Server.Player.GiveInv(session.Id, (int) tmpTradeItem2[i].Num, tmpTradeItem2[i].Value, false);
             }
 
             // target
             if (tmpTradeItem[i].Num >= 0)
             {
                 // give away!
-                global::Server.Player.GiveInv(tradeTarget, (int) tmpTradeItem[i].Num, tmpTradeItem[i].Value, false);
+                Server.Player.GiveInv(tradeTarget, (int) tmpTradeItem[i].Num, tmpTradeItem[i].Value, false);
             }
         }
 
@@ -2443,7 +2443,7 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (Data.Player[session.Id].Hotbar[slot].SlotType == (byte) DraggablePartType.Item)
             {
-                global::Server.Player.UseItem(session.Id, global::Server.Player.FindItemSlot(session.Id, (int) Data.Player[session.Id].Hotbar[slot].Slot));
+                Server.Player.UseItem(session.Id, Server.Player.FindItemSlot(session.Id, (int) Data.Player[session.Id].Hotbar[slot].Slot));
             }
         }
 
