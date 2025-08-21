@@ -1981,7 +1981,7 @@ namespace Client
             // show
             if (Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num != 0)
             {
-                ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num, -1);
+                ShowItemDesc(x, y, Data.Player[GameState.MyIndex].Equipment[(int)eqNum].Num, -1, (byte)eqNum);
             }
         }
 
