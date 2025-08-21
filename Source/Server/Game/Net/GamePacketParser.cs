@@ -1906,8 +1906,8 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         // it's fine, let's go ahead
         for (int i = 0, loopTo = withBlock.CostValue; i < loopTo; i++)
-            :Server.Player.TakeInv(session.Id, withBlock.CostItem, withBlock.CostValue);
-        :Server.Player.GiveInv(session.Id, withBlock.Item, withBlock.ItemValue);
+            Server.Player.TakeInv(session.Id, withBlock.CostItem, withBlock.CostValue);
+        Server.Player.GiveInv(session.Id, withBlock.Item, withBlock.ItemValue);
 
         // send confirmation message & reset their shop action
         NetworkSend.PlayerMsg(session.Id, "Trade successful.", (int) ColorName.BrightGreen);
