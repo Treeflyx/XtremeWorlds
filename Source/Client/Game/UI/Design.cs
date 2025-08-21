@@ -37,6 +37,7 @@ public enum Design
     BlackOval,
 
     // Textboxes
+    TextBox,
     TextBlack,
     TextWhite,
     TextBlackSquare,

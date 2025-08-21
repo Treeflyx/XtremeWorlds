@@ -18,6 +18,6 @@ public sealed class PictureBox : Control
 
         var path = Path.Combine(Texture[(int) State], image.Value.ToString());
 
-        GameClient.RenderTexture(ref path, X + x, Y + y, 0, 0, Width, Height, Width, Height, (byte) Alpha);
+        GameClient.RenderTexture(ref path, X + x, Y + y, 0, 0, Width, Height, Width, Height, 255 / Alpha);
     }
 }

@@ -114,8 +114,8 @@ public static class DesignRenderer
                 RenderTextWhite(left, top, width, height, alpha);
                 break;
 
-            case Design.TextBlackSquare:
-                RenderTextBlackSquare(left, top, width, height, alpha);
+            case Design.TextBox:
+                RenderTextBox(left, top, width, height, alpha);
                 break;
 
             case Design.WindowDescription:
@@ -166,7 +166,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 100, 100,
             width - borderSize * 2, height - borderSize * 2,
             width - borderSize * 2, height - borderSize * 2,
-            (byte) alpha);
+            (byte)alpha);
     }
 
     private static void RenderWoodSmall(int left, int top, int width, int height, int alpha)
@@ -181,7 +181,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 100, 100,
             width - borderSize * 2, height - borderSize * 2,
             width - borderSize * 2, height - borderSize * 2,
-            (byte) alpha);
+            (byte)alpha);
     }
 
     private static void RenderWoodEmpty(int left, int top, int width, int height, int alpha)
@@ -203,7 +203,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderGreenHover(int left, int top, int width, int height, int alpha)
@@ -218,7 +218,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderGreenClick(int left, int top, int width, int height, int alpha)
@@ -233,7 +233,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderRed(int left, int top, int width, int height, int alpha)
@@ -248,7 +248,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderRedHover(int left, int top, int width, int height, int alpha)
@@ -263,7 +263,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderRedClick(int left, int top, int width, int height, int alpha)
@@ -278,7 +278,7 @@ public static class DesignRenderer
             left + borderSize, top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderBlue(int left, int top, int width, int height, int alpha)
@@ -294,7 +294,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderBlueHover(int left, int top, int width, int height, int alpha)
@@ -310,7 +310,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderBlueClick(int left, int top, int width, int height, int alpha)
@@ -326,7 +326,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderOrange(int left, int top, int width, int height, int alpha)
@@ -342,7 +342,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderOrangeHover(int left, int top, int width, int height, int alpha)
@@ -353,7 +353,7 @@ public static class DesignRenderer
 
         var path = Path.Combine(DataPath.Gradients, Textures.OrangeHover);
 
-        GameClient.RenderTexture(ref path, left + borderSize, top + borderSize, 0, 0, width - borderSize * 2, height - borderSize * 2, 128, 128, (byte) alpha);
+        GameClient.RenderTexture(ref path, left + borderSize, top + borderSize, 0, 0, width - borderSize * 2, height - borderSize * 2, 128, 128, (byte)alpha);
     }
 
     private static void RenderOrangeClick(int left, int top, int width, int height, int alpha)
@@ -369,7 +369,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderGrey(int left, int top, int width, int height, int alpha)
@@ -385,7 +385,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderParchment(int left, int top, int width, int height, int alpha)
@@ -443,7 +443,7 @@ public static class DesignRenderer
             top + borderSize, 0, 0,
             width - borderSize * 2,
             height - borderSize * 2,
-            128, 128, (byte) alpha);
+            128, 128, (byte)alpha);
     }
 
     private static void RenderWindowWithShadow(int left, int top, int width, int height, int alpha)
@@ -471,36 +471,42 @@ public static class DesignRenderer
 
         RenderSquare(18, left, top, width, height, borderSize, alpha);
     }
-    
+
     private static void RenderSquare(int sprite, int x, int y, int width, int height, int borderSize, int alpha = 255)
     {
         var path = Path.Combine(DataPath.Designs, sprite.ToString());
-        
+
         // Draw center
-        GameClient.RenderTexture(ref path, x + borderSize, y + borderSize, borderSize + 1, borderSize + 1, width - borderSize * 2, height - borderSize * 2, alpha: (byte) alpha);
+        GameClient.RenderTexture(ref path, x + borderSize, y + borderSize, borderSize + 1, borderSize + 1, width - borderSize * 2, height - borderSize * 2, alpha: (byte)alpha);
 
         // Draw top side
-        GameClient.RenderTexture(ref path, x + borderSize, y, borderSize, 0, width - borderSize * 2, borderSize, 1, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x + borderSize, y, borderSize, 0, width - borderSize * 2, borderSize, 1, borderSize, (byte)alpha);
 
         // Draw left side
-        GameClient.RenderTexture(ref path, x, y + borderSize, 0, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte) alpha);
+        GameClient.RenderTexture(ref path, x, y + borderSize, 0, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte)alpha);
 
         // Draw right side
-        GameClient.RenderTexture(ref path, x + width - borderSize, y + borderSize, borderSize + 3, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte) alpha);
+        GameClient.RenderTexture(ref path, x + width - borderSize, y + borderSize, borderSize + 3, borderSize, borderSize, height - borderSize * 2, borderSize, alpha: (byte)alpha);
 
         // Draw bottom side
-        GameClient.RenderTexture(ref path, x + borderSize, y + height - borderSize, borderSize, borderSize + 3, width - borderSize * 2, borderSize, 1, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x + borderSize, y + height - borderSize, borderSize, borderSize + 3, width - borderSize * 2, borderSize, 1, borderSize, (byte)alpha);
 
         // Draw top left corner
-        GameClient.RenderTexture(ref path, x, y, 0, 0, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x, y, 0, 0, borderSize, borderSize, borderSize, borderSize, (byte)alpha);
 
         // Draw top right corner
-        GameClient.RenderTexture(ref path, x + width - borderSize, y, borderSize + 3, 0, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x + width - borderSize, y, borderSize + 3, 0, borderSize, borderSize, borderSize, borderSize, (byte)alpha);
 
         // Draw bottom left corner
-        GameClient.RenderTexture(ref path, x, y + height - borderSize, 0, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x, y + height - borderSize, 0, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte)alpha);
 
         // Draw bottom right corner
-        GameClient.RenderTexture(ref path, x + width - borderSize, y + height - borderSize, borderSize + 3, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte) alpha);
+        GameClient.RenderTexture(ref path, x + width - borderSize, y + height - borderSize, borderSize + 3, borderSize + 3, borderSize, borderSize, borderSize, borderSize, (byte)alpha);
+    }
+    
+    private static void RenderTextBox(int left, int top, int width, int height, int alpha)
+    {
+        const int borderSize = 4;
+        RenderSquare(20, left, top, width, height, borderSize, alpha);
     }
 }

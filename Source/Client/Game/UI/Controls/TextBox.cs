@@ -6,11 +6,8 @@ public sealed class TextBox : Control
     
     public override void Render(int x, int y)
     {
-        var design = GetActiveDesign();
-        if (design != Design.None)
-        {
-            DesignRenderer.Render(design, X + x, Y + y, Width, Height, Alpha);
-        }
+        // Always use the new TextBox design (20.png) for all textboxes
+        DesignRenderer.Render(Design.TextBox, X + x, Y + y, Width, Height, Alpha);
 
         var image = GetActiveImage();
         if (image is not null)
