@@ -805,7 +805,7 @@ public static class Player
         return false;
     }
 
-    public static bool GiveInv(int playerId, int itemNum, int itemVal, bool sendUpdate = true)
+    public static bool GiveInv(int playerId, int itemNum, int itemVal, byte bound = 0, bool sendUpdate = true)
     {
         if (!NetworkConfig.IsPlaying(playerId) || itemNum < 0 || itemNum > Core.Globals.Constant.MaxItems)
         {

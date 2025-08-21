@@ -2174,14 +2174,14 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             if (tmpTradeItem2[i].Num >= 0)
             {
                 // give away!
-                Server.Player.GiveInv(session.Id, (int) tmpTradeItem2[i].Num, tmpTradeItem2[i].Value, false);
+                Server.Player.GiveInv(session.Id, (int) tmpTradeItem2[i].Num, tmpTradeItem2[i].Value, 0, false);
             }
 
             // target
             if (tmpTradeItem[i].Num >= 0)
             {
                 // give away!
-                Server.Player.GiveInv(tradeTarget, (int) tmpTradeItem[i].Num, tmpTradeItem[i].Value, false);
+                Server.Player.GiveInv(tradeTarget, (int) tmpTradeItem[i].Num, tmpTradeItem[i].Value, 0, false);
             }
         }
 

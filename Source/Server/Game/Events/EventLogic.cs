@@ -1829,7 +1829,7 @@ namespace Server
 
                                                     break;
                                                 case 1: // Give
-                                                    Player.GiveInv(i, command.Data1, command.Data3, true);
+                                                    Player.GiveInv(i, command.Data1, command.Data3, 0, true);
                                                     break;
                                                 case 2: // Take
                                                 {
