@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window Name="winCharacter" Caption="Character" Size="174, 356" Position="0,0" Font="Georgia" Icon="62" Design="WindowEmpty" StartPosition="CenterScreen">
-    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
-
     <!-- Parchment and decorative boxes to match original -->
     <PictureBox Name="picParchment" Position="6, 26" Size="162, 287" Design="Parchment"/>
     <!-- header white boxes -->
@@ -73,4 +71,6 @@
 
     <!-- Points value -->
     <Label Name="lblPoints" Text="0" Position="57, 288" Size="100, 15" Font="Arial" Align="Right"/>
+    
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
 </Window>

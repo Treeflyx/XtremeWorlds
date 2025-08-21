@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Window Name="winShop" Caption="Shop" Size="278, 293" Position="0, 0" Font="Georgia" Icon="17" Design="WindowEmpty" StartPosition="CenterScreen">
-	<Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
-
-	<!-- Background parchment area that WinShop draws into -->
+	<!-- Close button -->	<!-- Background parchment area that WinShop draws into -->
 	<PictureBox Name="picParchment" Position="4, 23" Size="270, 236" Design="Parchment"/>
 
 	<!-- Labels for item name and cost -->
@@ -22,4 +20,6 @@
 
 	<!-- Gold label (top-right) -->
 	<Label Name="lblGold" Text="0g" Position="200, 10" Size="70, 15" Font="Arial" Align="Right"/>
+
+	<Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
 </Window>
