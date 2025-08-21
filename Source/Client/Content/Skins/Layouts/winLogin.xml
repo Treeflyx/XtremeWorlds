@@ -39,6 +39,6 @@
             DesignHover="GreenHover"
             DesignMouseDown="GreenClick"/>
 
-    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ButtonHover="9" IconMouseDown="10" ImageHover="9" ImageMouseDown="10"/>
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
 
 </Window>

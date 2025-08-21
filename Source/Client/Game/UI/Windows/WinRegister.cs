@@ -54,16 +54,14 @@ public static class WinRegister
     public static void ClearPasswords()
     {
         var winRegister = Gui.GetWindowByName("winRegister");
-        if (winRegister is not null)
-        {
-            winRegister.GetChild("txtPassword").Text = "";
-            winRegister.GetChild("txtRetypePassword").Text = "";
-        }
+
+        winRegister.GetChild("txtPassword").Text = "";
+        winRegister.GetChild("txtRetypePassword").Text = "";
+    
 
         var winLogin = Gui.GetWindowByName("winLogin");
-        if (winLogin is not null)
-        {
-            winLogin.GetChild("txtPassword").Text = "";
-        }
+
+        winLogin.GetChild("txtPassword").Text = "";
+        
     }
 }

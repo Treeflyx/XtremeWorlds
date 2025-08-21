@@ -243,12 +243,11 @@ namespace Client
 
         public static void DestroyGame()
         {
-            // Signal game to stop; let threads unwind gracefully
             GameState.InGame = false;
             GameState.InMenu = false;
             try { Sound.FreeBass(); } catch { }
             try { Network.Stop(); } catch { }
-            // Let the hosting application decide process exit
+            Environment.Exit(0);
         }
 
         // Get the shifted version of a digit key (for symbols)

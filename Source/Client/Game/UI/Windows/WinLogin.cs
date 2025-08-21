@@ -56,10 +56,6 @@ public static class WinLogin
     public static void OnSaveUserClicked()
     {
         var winLogin = Gui.GetWindowByName("winLogin");
-        if (winLogin is null)
-        {
-            return;
-        }
         
         var checkBoxSaveUsername = winLogin.GetChild("chkSaveUsername");
         if (checkBoxSaveUsername.Value == 0)

@@ -2,7 +2,7 @@
 <Window Name="winTrade" Caption="Trading with [Name]" Size="412, 386" Position="0, 0"
         Font="Georgia" Icon="112" Design="WindowEmpty" StartPosition="CenterScreen">
 
-    <Button Name="btnClose" Position="-19, 5" Size="36, 36" Image="8" ImageHover="9" ImageMouseDown="10"/>
+    <Button Name="btnClose" Position="-19, 5" Size="16, 16" Image="8" ImageHover="9" ImageMouseDown="10"/>
 
     <PictureBox Name="picParchment" Position="10, 312" Size="392, 66" Design="Parchment"/>
 
