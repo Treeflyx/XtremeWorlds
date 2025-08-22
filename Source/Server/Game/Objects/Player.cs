@@ -1026,6 +1026,8 @@ public static class Player
         var oldValue = GetPlayerInvValue(playerId, oldSlot);
         var newNum = GetPlayerInv(playerId, newSlot);
         var newValue = GetPlayerInvValue(playerId, newSlot);
+        var oldBound = Data.Player[playerId].Inv[oldSlot].Bound;
+        var newBound = Data.Player[playerId].Inv[newSlot].Bound;
 
         if (newNum >= 0)
         {
@@ -1035,6 +1037,12 @@ public static class Player
                 SetPlayerInvValue(playerId, newSlot, oldValue + newValue);
                 SetPlayerInv(playerId, oldSlot, 0);
                 SetPlayerInvValue(playerId, oldSlot, 0);
+                Data.Player[playerId].Inv[oldSlot].Bound = 0;
+
+                if (oldBound > newBound)
+                {
+                    Data.Player[playerId].Inv[newSlot].Bound = oldBound;
+                }
             }
             else
             {
@@ -1042,6 +1050,8 @@ public static class Player
                 SetPlayerInvValue(playerId, newSlot, oldValue);
                 SetPlayerInv(playerId, oldSlot, newNum);
                 SetPlayerInvValue(playerId, oldSlot, newValue);
+                Data.Player[playerId].Inv[oldSlot].Bound = newBound;
+                Data.Player[playerId].Inv[newSlot].Bound = 0;
             }
         }
         else
@@ -1050,6 +1060,8 @@ public static class Player
             SetPlayerInvValue(playerId, newSlot, oldValue);
             SetPlayerInv(playerId, oldSlot, newNum);
             SetPlayerInvValue(playerId, oldSlot, newValue);
+            Data.Player[playerId].Inv[oldSlot].Bound = oldBound;
+            Data.Player[playerId].Inv[newSlot].Bound = newBound;
         }
 
         NetworkSend.SendInventory(playerId);
