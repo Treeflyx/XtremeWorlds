@@ -776,10 +776,9 @@ public class Gui
                     {
                         bool isComboMenuHit = false;
                         if (control is ComboBox comboBox)
-                        {
-                            // Improved combo menu styling: smaller height, padding, border
-                            int itemHeight = 12; // More compact item height
-                            int menuPadding = 4;
+                        {                          
+                            int itemHeight = 10;
+                            int menuPadding = 5;
                             int menuX = curWindow.X + comboBox.X - menuPadding;
                             int menuY = curWindow.Y + comboBox.Y + comboBox.Height;
                             int menuWidth = comboBox.Width + menuPadding * 2;
@@ -850,8 +849,8 @@ public class Gui
                         }
                         case ComboBox comboBox:
                         {
-                            int itemHeight = 12;
-                            int menuPadding = 4;
+                            int itemHeight = 10;
+                            int menuPadding = 5;
                             bool menuIsOpen = WinComboMenu.IsOpen(curWindow, curControl); // You may need to implement this check if not present
                             if (entState == ControlState.MouseDown && GameClient.IsMouseButtonDown(MouseButton.Left))
                             {

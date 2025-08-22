@@ -554,7 +554,7 @@ public static class TextRenderer
 
     public static void DrawMapName()
     {
-        RenderText(Data.MyMap.Name, (int) Math.Round(GameState.ResolutionWidth / 2d - GetTextWidth(Data.MyMap.Name)), 10, GameState.DrawMapNameColor, Color.Black);
+        RenderText(Data.MyMap.Name, (int)Math.Round(GameState.ResolutionWidth / 2d - GetTextWidth(Data.MyMap.Name)), 10, GameState.DrawMapNameColor, Color.Black);
     }
 
     public static void DrawPlayerName(int index)

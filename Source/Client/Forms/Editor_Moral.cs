@@ -53,13 +53,11 @@ namespace Client
             // Subscribe Load first
             Load += (s, e) => Editor_Moral_Load();
 
-            // Populate color combo (basic placeholder colors; actual content can be expanded)
+            // Populate color combo with ColorType names
             cmbColor.Items.Clear();
-            cmbColor.Items.Add("White");
-            cmbColor.Items.Add("Red");
-            cmbColor.Items.Add("Green");
-            cmbColor.Items.Add("Blue");
-            cmbColor.SelectedIndex = 0;                                                                                                                                                                                                                                                 
+            foreach (var name in Enum.GetNames(typeof(ColorName)))
+                cmbColor.Items.Add(name);
+            cmbColor.SelectedIndex = 0;
 
             // Events
             lstIndex.SelectedIndexChanged += (s, e) =>
@@ -81,7 +79,7 @@ namespace Client
             chkPlayerBlock.CheckedChanged += (s, e) => chkPlayerBlock_CheckedChanged();
             chkNpcBlock.CheckedChanged += (s, e) => chkNpcBlock_CheckedChanged();
             btnSave.Click += (s, e) => BtnSave_Click();
-                                                                                        btnDelete.Click += (s, e) => BtnDelete_Click();
+            btnDelete.Click += (s, e) => BtnDelete_Click();
             btnCancel.Click += (s, e) => BtnCancel_Click();
             btnCopy.Click += (s, e) => CopyOrPasteMoral();
 
