@@ -501,8 +501,7 @@ namespace Client
             var withBlock = Editor_Job.Instance;
             withBlock.txtName!.Text = Data.Job[GameState.EditorIndex].Name;
             withBlock.txtDescription!.Text = Data.Job[GameState.EditorIndex].Desc;
-
-            if (Data.Job[GameState.EditorIndex].MaleSprite == 0)
+  if (Data.Job[GameState.EditorIndex].MaleSprite == 0)
                 Data.Job[GameState.EditorIndex].MaleSprite = 1;
             withBlock.nudMaleSprite!.Value = Data.Job[GameState.EditorIndex].MaleSprite;
             if (Data.Job[GameState.EditorIndex].FemaleSprite == 0)

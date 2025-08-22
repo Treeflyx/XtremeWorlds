@@ -67,8 +67,10 @@ namespace Client
             LstIndex_Click();
         };
 
-        txtName = new TextBox { Width = 200 }; txtName.TextChanged += (s, e) => UpdateName();
-        txtDesc = new TextArea { Size = new Size(200, 120) }; txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
+        txtName = new TextBox { Width = 200 };
+        txtName.TextChanged += TxtName_TextChanged;
+        txtDesc = new TextArea { Size = new Size(200, 120) };
+        txtDesc.TextChanged += (s, e) => Data.Job[GameState.EditorIndex].Desc = txtDesc.Text;
 
         // Stats
         numStr = Stat(); numStr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Strength, numStr);
@@ -77,22 +79,29 @@ namespace Client
         numInt = Stat(); numInt.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Intelligence, numInt);
         numVit = Stat(); numVit.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Vitality, numVit);
         numSpr = Stat(); numSpr.ValueChanged += (s, e) => SetStat(Core.Globals.Stat.Spirit, numSpr);
-        numBaseExp = new NumericStepper { MinValue = 0, MaxValue = 5_000_000, Increment = 10 }; numBaseExp.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].BaseExp = (int)numBaseExp.Value;
+        numBaseExp = new NumericStepper { MinValue = 0, MaxValue = 5_000_000, Increment = 10 };
+        numBaseExp.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].BaseExp = (int)numBaseExp.Value;
 
         // Start position
-        numStartMap = new NumericStepper { MinValue = 0, MaxValue = int.MaxValue }; numStartMap.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartMap = (int)numStartMap.Value;
-        numStartX = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartX.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartX = (byte)numStartX.Value;
-        numStartY = new NumericStepper { MinValue = 0, MaxValue = 255 }; numStartY.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartY = (byte)numStartY.Value;
+        numStartMap = new NumericStepper { MinValue = 0, MaxValue = int.MaxValue };
+        numStartMap.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartMap = (int)numStartMap.Value;
+        numStartX = new NumericStepper { MinValue = 0, MaxValue = 255 };
+        numStartX.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartX = (byte)numStartX.Value;
+        numStartY = new NumericStepper { MinValue = 0, MaxValue = 255 };
+        numStartY.ValueChanged += (s, e) => Data.Job[GameState.EditorIndex].StartY = (byte)numStartY.Value;
 
         // Sprites
-        numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
-        numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters }; numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
+        numMaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters };
+        numMaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].MaleSprite = (int)numMaleSprite.Value; LoadSprites(); };
+        numFemaleSprite = new NumericStepper { MinValue = 0, MaxValue = GameState.NumCharacters };
+        numFemaleSprite.ValueChanged += (s, e) => { Data.Job[GameState.EditorIndex].FemaleSprite = (int)numFemaleSprite.Value; LoadSprites(); };
 
         // Items
         lstStartItems = new ListBox { Height = 140, Width = 200 };
         cmbItems = new ComboBox { Width = 180 };
         numItemAmount = new NumericStepper { MinValue = 1, MaxValue = 999, Value = 1 };
-        btnSetItem = new Button { Text = "Set Slot" }; btnSetItem.Click += (s, e) => SetStartItem();
+        btnSetItem = new Button { Text = "Set Slot" };
+        btnSetItem.Click += (s, e) => SetStartItem();
 
         // Actions
         btnSave = new Button { Text = "Save" }; btnSave.Click += (s, e) => { Editors.JobEditorOK(); Close(); };
@@ -210,23 +219,18 @@ namespace Client
         LoadSprites();
     }
 
-    void UpdateName()
+    private void TxtName_TextChanged(object? sender, EventArgs e)
     {
-        var job = Data.Job[GameState.EditorIndex];
-        job.Name = Strings.Trim(txtName!.Text);
-        if (lstIndex!.SelectedIndex >= 0)
+        int tmpindex = lstIndex!.SelectedIndex;
+        Data.Job[GameState.EditorIndex].Name = Strings.Trim(txtName!.Text);
+        _suppressIndexChanged = true;
+        try
         {
-            // Replace item by removing and inserting new ListItem
-            int i = lstIndex.SelectedIndex;
-            _suppressIndexChanged = true;
-            try
-            {
-                lstIndex.Items.RemoveAt(i);
-                lstIndex.Items.Insert(i, new ListItem { Text = (GameState.EditorIndex + 1) + ": " + job.Name });
-                lstIndex.SelectedIndex = i;
-            }
-            finally { _suppressIndexChanged = false; }
+            lstIndex.Items.RemoveAt(GameState.EditorIndex);
+            lstIndex.Items.Insert(GameState.EditorIndex, new ListItem { Text = $"{GameState.EditorIndex + 1}: {Data.Job[GameState.EditorIndex].Name}" });
+            lstIndex.SelectedIndex = tmpindex;
         }
+        finally { _suppressIndexChanged = false; }
     }
 
     void CopyOrPasteJob()
