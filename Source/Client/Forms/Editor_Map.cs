@@ -2274,8 +2274,6 @@ namespace Client
             Gui.ShowWindow("winBars", resetPosition: false);
             WinChat.Hide();
 
-            Editor_Event.CloseIfOpen();
-
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
         }
@@ -2292,9 +2290,7 @@ namespace Client
             Gui.ShowWindow("winMenu", resetPosition: false);
             Gui.ShowWindow("winBars", resetPosition: false);
             WinChat.Hide();
-
-            Editor_Event.CloseIfOpen();
-
+            
             GameState.TileHistoryHighIndex = 0;
             GameState.TileHistoryIndex = 0;
         }

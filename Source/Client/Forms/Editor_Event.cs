@@ -16,27 +16,6 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Event? _instance;
         public static Editor_Event Instance => _instance ??= new Editor_Event();
-        // Expose a safe closer for external callers to avoid double-dispose
-        public static void CloseIfOpen()
-        {
-            var inst = _instance;
-            if (inst == null) return;
-            try
-            {
-                // Prefer Close to allow Eto to unbind cleanly, then dispose
-                inst.Close();
-                inst.Dispose();
-            }
-            catch (ObjectDisposedException)
-            {
-                // already disposed; ignore
-            }
-            finally
-            {
-                _instance = null;
-            }
-        }
-
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 

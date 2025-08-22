@@ -2489,8 +2489,6 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
 
         Data.TempPlayer[session.Id].Editor = EditorType.Job;
 
-        NetworkSend.SendJobs(session);
-
         NetworkSend.SendJobEditor(session.Id);
     }
 
