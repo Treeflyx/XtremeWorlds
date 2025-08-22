@@ -1359,13 +1359,13 @@ public static class Player
             {
                 if (GetPlayerBankValue(playerId, bankSlot) > 1)
                 {
-                    GiveInv(playerId, GetPlayerBank(playerId, bankSlot), 0);
+                    GiveInv(playerId, GetPlayerBank(playerId, bankSlot), bound);
                     SetPlayerBankValue(playerId, bankSlot, GetPlayerBankValue(playerId, bankSlot) - 1);
                 }
             }
             else
             {
-                GiveInv(playerId, GetPlayerBank(playerId, bankSlot), 0);
+                GiveInv(playerId, GetPlayerBank(playerId, bankSlot), bound);
                 SetPlayerBank(playerId, bankSlot, -1);
                 SetPlayerBankValue(playerId, bankSlot, 0);
             }
