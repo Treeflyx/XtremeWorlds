@@ -1051,7 +1051,7 @@ public static class Player
                 SetPlayerInv(playerId, oldSlot, newNum);
                 SetPlayerInvValue(playerId, oldSlot, newValue);
                 Data.Player[playerId].Inv[oldSlot].Bound = newBound;
-                Data.Player[playerId].Inv[newSlot].Bound = 0;
+                Data.Player[playerId].Inv[newSlot].Bound = oldBound;
             }
         }
         else
@@ -1060,8 +1060,8 @@ public static class Player
             SetPlayerInvValue(playerId, newSlot, oldValue);
             SetPlayerInv(playerId, oldSlot, newNum);
             SetPlayerInvValue(playerId, oldSlot, newValue);
-            Data.Player[playerId].Inv[oldSlot].Bound = oldBound;
-            Data.Player[playerId].Inv[newSlot].Bound = newBound;
+            Data.Player[playerId].Inv[oldSlot].Bound = newBound;
+            Data.Player[playerId].Inv[newSlot].Bound = oldBound;
         }
 
         NetworkSend.SendInventory(playerId);
