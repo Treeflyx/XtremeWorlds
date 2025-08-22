@@ -253,7 +253,7 @@ namespace Client
 
         GroupBox Group(string text, Eto.Forms.Control content) => new GroupBox { Text = text, Content = content };
 
-    void InitData()
+        void InitData()
         {
             _suppressIndexChanged = true;
             try
