@@ -89,7 +89,6 @@ namespace Client
         public NumericStepper nudMapTintData1 = new NumericStepper();
         public NumericStepper nudMapTintData2 = new NumericStepper();
         public NumericStepper nudMapTintData3 = new NumericStepper();
-        // Additional missing controls referenced in logic or Event.cs
         public NumericStepper nudWaitAmount = new NumericStepper();
         public ComboBox cmbSetAccess = new ComboBox();
         public Panel fraOpenShop = new Panel();

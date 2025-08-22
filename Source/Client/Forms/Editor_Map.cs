@@ -1818,10 +1818,15 @@ namespace Client
 
         public static void MapEditorMouseDown(int x, int y, bool movedMouse = true)
         {
+
             int i;
             bool isModified = false;
 
+            // Bounds check for both CurX/CurY and x/y
             if (GameState.CurX < 0 || GameState.CurY < 0 || GameState.CurX >= Data.MyMap.MaxX || GameState.CurY >= Data.MyMap.MaxY)
+                return;
+                
+            if (x < 0 || y < 0 || x >= Data.MyMap.MaxX || y >= Data.MyMap.MaxY)
                 return;
 
             if (!GameLogic.IsInBounds())
@@ -2092,7 +2097,7 @@ namespace Client
                         }
                     }
                 }
-                else if (GameState.MapEditorTab == (int)MapEditorTab.Directions)
+               else if (GameState.MapEditorTab == (int)MapEditorTab.Directions)
                 {
                     // Convert adjusted coordinates to game world coordinates
                     x = (int)Math.Round(GameState.TileView.Left + Math.Floor((GameState.CurMouseX + GameState.Camera.Left) % GameState.SizeX));

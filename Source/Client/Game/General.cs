@@ -34,6 +34,7 @@ namespace Client
 
         public static void LoadGame()
         {
+            InitializeDirArrows();
             LocalesManager.Initialize();
             CheckAnimations();
             CheckCharacters();
@@ -55,6 +56,19 @@ namespace Client
             UIScript.Load();
             Gui.Init();
             GameState.Ping = -1;
+        }
+
+        public static void InitializeDirArrows()
+        {
+            // Set values for directional blocking arrows
+            GameState.DirArrowX[0] = 12; // up
+            GameState.DirArrowY[0] = 0;
+            GameState.DirArrowX[1] = 12; // down
+            GameState.DirArrowY[1] = 23;
+            GameState.DirArrowX[2] = 0; // left
+            GameState.DirArrowY[2] = 12;
+            GameState.DirArrowX[3] = 23; // right
+            GameState.DirArrowY[3] = 12;
         }
 
         public static void CheckAnimations()

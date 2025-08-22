@@ -211,6 +211,7 @@ namespace Client
             PixelTexture.SetData([Color.White]);
 
             LoadFonts();
+
             // Kick off heavy startup work on a background thread to avoid freezing the main thread
             GameState.IsLoading = true;
             _ = Task.Run(() =>
@@ -1336,7 +1337,7 @@ namespace Client
             RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
-        public static void DrawDirections(int x, int y)
+     public static void DrawDirections(int x, int y)
         {
             Rectangle rec;
             int i;
