@@ -1337,7 +1337,7 @@ namespace Client
             RenderTexture(ref argPath, x, y, rec.X, rec.Y, rec.Width, rec.Height);
         }
 
-     public static void DrawDirections(int x, int y)
+        public static void DrawDirections(int x, int y)
         {
             Rectangle rec;
             int i;
