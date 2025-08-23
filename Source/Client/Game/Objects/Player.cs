@@ -220,51 +220,43 @@ namespace Client
 
         public static bool CanMove()
         {
-            bool canMove = default;
+            bool canMove = false;
             int d;
 
-            canMove = true;
             if (GetPlayerX(GameState.MyIndex) < 0 || GetPlayerX(GameState.MyIndex) >= Data.MyMap.MaxX || GetPlayerY(GameState.MyIndex) < 0 || GetPlayerY(GameState.MyIndex) >= Data.MyMap.MaxY)
             {
-                canMove = false;
                 return canMove;
             }
 
             if (Event.HoldPlayer)
             {
-                canMove = false;
                 return canMove;
             }
 
             if (GameState.GettingMap)
             {
-                canMove = false;
                 return canMove;
             }
 
             // Make sure they haven't just casted a skill
             if (GameState.SkillBuffer >= 0)
             {
-                canMove = false;
                 return canMove;
             }
 
             // make sure they're not stunned
             if (GameState.StunDuration > 0)
             {
-                canMove = false;
                 return canMove;
             }
 
             if (Event.InEvent)
             {
-                canMove = false;
                 return canMove;
             }
 
             if (!GameState.InSmallChat)
             {
-                canMove = false;
                 return canMove;
             }
 
@@ -464,7 +456,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.Up))
                     {
-                        canMove = false;
                         if (d != (int) Direction.Up)
                         {
                             Sender.SendPlayerDir();
@@ -476,7 +467,6 @@ namespace Client
                 else if (Data.MyMap.Up > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -488,7 +478,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.Down))
                     {
-                        canMove = false;
                         if (d != (int) Direction.Down)
                         {
                             Sender.SendPlayerDir();
@@ -500,7 +489,6 @@ namespace Client
                 else if (Data.MyMap.Down > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -512,7 +500,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.Left))
                     {
-                        canMove = false;
                         if (d != (int) Direction.Left)
                         {
                             Sender.SendPlayerDir();
@@ -524,7 +511,6 @@ namespace Client
                 else if (Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -536,7 +522,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.Right))
                     {
-                        canMove = false;
                         if (d != (int) Direction.Right)
                         {
                             Sender.SendPlayerDir();
@@ -548,7 +533,6 @@ namespace Client
                 else if (Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -561,7 +545,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.UpRight))
                     {
-                        canMove = false;
                         if (d != (int) Direction.UpRight)
                         {
                             Sender.SendPlayerDir();
@@ -573,7 +556,6 @@ namespace Client
                 else if (Data.MyMap.Up > 0 & Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -584,7 +566,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.UpLeft))
                     {
-                        canMove = false;
                         if (d != (int) Direction.UpLeft)
                         {
                             Sender.SendPlayerDir();
@@ -596,7 +577,6 @@ namespace Client
                 else if (Data.MyMap.Up > 0 & Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -607,7 +587,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.DownRight))
                     {
-                        canMove = false;
                         if (d != (int) Direction.DownRight)
                         {
                             Sender.SendPlayerDir();
@@ -619,7 +598,6 @@ namespace Client
                 else if (Data.MyMap.Down > 0 & Data.MyMap.Right > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
@@ -630,7 +608,6 @@ namespace Client
                 {
                     if (CheckPlayerDir((byte) Direction.DownLeft))
                     {
-                        canMove = false;
                         if (d != (int) Direction.DownLeft)
                         {
                             Sender.SendPlayerDir();
@@ -642,11 +619,11 @@ namespace Client
                 else if (Data.MyMap.Down > 0 & Data.MyMap.Left > 0)
                 {
                     Map.SendPlayerRequestNewMap();
-                    canMove = false;
                     return canMove;
                 }
             }
 
+            canMove = true;
             return canMove;
         }
 
@@ -800,55 +777,37 @@ namespace Client
                 // Update player offsets based on direction
                 switch (GetPlayerDir(index))
                 {
-                    case (int) Direction.Up:
-                    {
+                    case (int)Direction.Up:
                         Data.Player[index].Y -= 1;
-
                         break;
-                    }
-                    case (int) Direction.Down:
-                    {
+                    case (int)Direction.Down:
                         Data.Player[index].Y += 1;
                         break;
-                    }
-                    case (int) Direction.Left:
-                    {
+                    case (int)Direction.Left:
                         Data.Player[index].X -= 1;
                         break;
-                    }
-                    case (int) Direction.Right:
-                    {
+                    case (int)Direction.Right:
                         Data.Player[index].X += 1;
                         break;
-                    }
-                    case (int) Direction.UpRight:
-                    {
+                    case (int)Direction.UpRight:
+                        Data.Player[index].X += 1;
+                        Data.Player[index].Y -= 1;
+                        break;
+                    case (int)Direction.UpLeft:
                         Data.Player[index].X -= 1;
                         Data.Player[index].Y -= 1;
                         break;
-                    }
-                    case (int) Direction.UpLeft:
-                    {
-                        Data.Player[index].X -= 1;
-                        Data.Player[index].Y -= 1;
+                    case (int)Direction.DownRight:
+                        Data.Player[index].X += 1;
+                        Data.Player[index].Y += 1;
                         break;
-                    }
-                    case (int) Direction.DownRight:
-                    {
+                    case (int)Direction.DownLeft:
                         Data.Player[index].X -= 1;
-                        Data.Player[index].Y -= 1;
+                        Data.Player[index].Y += 1;
                         break;
-                    }
-                    case (int) Direction.DownLeft:
-                    {
-                        Data.Player[index].X -= 1;
-                        Data.Player[index].Y -= 1;
-                        break;
-                    }
                 }
             }
         }
-
 
         public static void CheckAttack(bool mouse = false)
         {

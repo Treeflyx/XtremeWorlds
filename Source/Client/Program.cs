@@ -424,7 +424,10 @@ namespace Client
             GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDevice.Clear(Color.Black);
 
-            if (GameState.IsLoading)
+            // After drawing to RenderTarget, reset to back buffer
+            GraphicsDevice.SetRenderTarget(null);
+
+            if (GameState.IsLoading || GameState.GettingMap)
             {
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 var loadingText = "Loading...";
@@ -444,62 +447,62 @@ namespace Client
                 SpriteBatch.End();
             }
 
-            // --- Render GUI to guiRenderTarget (not zoomed) ---
-            if (_guiRenderTarget == null || _guiRenderTarget.Width != nativeWidth || _guiRenderTarget.Height != nativeHeight)
+            if (!GameState.GettingMap)
             {
-                _guiRenderTarget?.Dispose();
-                _guiRenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-            }
+                // --- Render GUI to guiRenderTarget (not zoomed) ---
+                if (_guiRenderTarget == null || _guiRenderTarget.Width != nativeWidth || _guiRenderTarget.Height != nativeHeight)
+                {
+                    _guiRenderTarget?.Dispose();
+                    _guiRenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+                }
 
-            // Update GUI mouse position before drawing GUI (ensures correct UI hover/click)
-            // This uses only GUI scale, not game zoom, so GUI input is always correct regardless of zoom
-            var mousePosGui = GetMousePosition("gui");
-            if (mousePosGui.Item1 >= 0 && mousePosGui.Item2 >= 0)
-            {
+                // Update GUI mouse position before drawing GUI (ensures correct UI hover/click)
+                // This uses only GUI scale, not game zoom, so GUI input is always correct regardless of zoom
+                var mousePosGui = GetMousePosition("gui");
                 GameState.CurMouseXGui = mousePosGui.Item1;
                 GameState.CurMouseYGui = mousePosGui.Item2;
-            }
-            else
-            {
-                GameState.CurMouseXGui = -1;
-                GameState.CurMouseYGui = -1;
-            }
 
-            GraphicsDevice.SetRenderTarget(_guiRenderTarget);
-            GraphicsDevice.Clear(Color.Transparent);
-            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
-            if (GameState.InMenu)
-                Gui.DrawMenuBackground();
-            Gui.Render();
-            TextRenderer.DrawMapName();
-            SpriteBatch.End();
+                GraphicsDevice.SetRenderTarget(_guiRenderTarget);
+                GraphicsDevice.Clear(Color.Transparent);
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+                if (GameState.InMenu)
+                    Gui.DrawMenuBackground();
+                Gui.Render();
+                TextRenderer.DrawMapName();
+                SpriteBatch.End();
 
-            // --- Composite to back buffer ---
-            GraphicsDevice.SetRenderTarget(null);
+                // After drawing to _guiRenderTarget, reset to back buffer
+                GraphicsDevice.SetRenderTarget(null);
 
-            int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-            int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-            float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
-            float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
-            int drawWidth = (int)(nativeWidth * zoom);
-            int drawHeight = (int)(nativeHeight * zoom);
+                int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
+                int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+                float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
+                float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
+                int drawWidth = (int)(nativeWidth * zoom);
+                int drawHeight = (int)(nativeHeight * zoom);
 
-            // Calculate the center point for zoom (target/player)
-            float targetX, targetY;
-            if (GameState.MyTarget >= 0)
-            {
-                if (GameState.MyTargetType == (int)TargetType.Player)
+                // Calculate the center point for zoom (target/player)
+                float targetX, targetY;
+                if (GameState.MyTarget >= 0)
                 {
-                    targetX = GetPlayerRawX(GameState.MyTarget);
-                    targetY = GetPlayerRawY(GameState.MyTarget);
-                }
-                else if (GameState.MyTargetType == (int)TargetType.Npc)
-                {
-                    int npcIndex = GameState.MyTarget;
-                    if (npcIndex >= 0 && npcIndex < Data.MyMapNpc.Length && Data.MyMapNpc[npcIndex].Num >= 0)
+                    if (GameState.MyTargetType == (int)TargetType.Player)
                     {
-                        targetX = Data.MyMapNpc[npcIndex].X;
-                        targetY = Data.MyMapNpc[npcIndex].Y;
+                        targetX = GetPlayerRawX(GameState.MyTarget);
+                        targetY = GetPlayerRawY(GameState.MyTarget);
+                    }
+                    else if (GameState.MyTargetType == (int)TargetType.Npc)
+                    {
+                        int npcIndex = GameState.MyTarget;
+                        if (npcIndex >= 0 && npcIndex < Data.MyMapNpc.Length && Data.MyMapNpc[npcIndex].Num >= 0)
+                        {
+                            targetX = Data.MyMapNpc[npcIndex].X;
+                            targetY = Data.MyMapNpc[npcIndex].Y;
+                        }
+                        else
+                        {
+                            targetX = GetPlayerRawX(GameState.MyIndex);
+                            targetY = GetPlayerRawY(GameState.MyIndex);
+                        }
                     }
                     else
                     {
@@ -512,43 +515,40 @@ namespace Client
                     targetX = GetPlayerRawX(GameState.MyIndex);
                     targetY = GetPlayerRawY(GameState.MyIndex);
                 }
-            }
-            else
-            {
-                targetX = GetPlayerRawX(GameState.MyIndex);
-                targetY = GetPlayerRawY(GameState.MyIndex);
-            }
 
-            // Convert world target position to render target coordinates
-            float camLeft = (float)GameState.Camera.Left;
-            float camTop = (float)GameState.Camera.Top;
-            float targetScreenX = targetX - camLeft;
-            float targetScreenY = targetY - camTop;
+                // Convert world target position to render target coordinates
+                float camLeft = (float)GameState.Camera.Left;
+                float camTop = (float)GameState.Camera.Top;
+                float targetScreenX = targetX - camLeft;
+                float targetScreenY = targetY - camTop;
 
-            // The point we want to keep centered during zoom
-            float centerX = targetScreenX;
-            float centerY = targetScreenY;
+                // The point we want to keep centered during zoom
+                float centerX = targetScreenX;
+                float centerY = targetScreenY;
 
-            // Calculate offset so that zoom is centered on the target/player
-            int offsetX = (int)(backBufferWidth / 2 - centerX * zoom);
-            int offsetY = (int)(backBufferHeight / 2 - centerY * zoom);
-            Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
+                // Calculate offset so that zoom is centered on the target/player
+                int offsetX = (int)(backBufferWidth / 2 - centerX * zoom);
+                int offsetY = (int)(backBufferHeight / 2 - centerY * zoom);
+                Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
 
-            using (var targetBatch = new SpriteBatch(GraphicsDevice))
-            {
-                targetBatch.Begin(samplerState: SamplerState.PointClamp);
-                // Draw the zoomed game/menu
-                targetBatch.Draw(RenderTarget, destRect, Color.White);
+                using (var targetBatch = new SpriteBatch(GraphicsDevice))
+                {
+                    targetBatch.Begin(samplerState: SamplerState.PointClamp);
+                    // Draw the zoomed game/menu
+                    if (RenderTarget != null)
+                        targetBatch.Draw(RenderTarget, destRect, Color.White);
 
-                // Draw the GUI, scaled by SettingsManager.Instance.GuiScale
-                float guiScale = SettingsManager.Instance.GuiScale;
-                int guiWidth = (int)(nativeWidth * guiScale);
-                int guiHeight = (int)(nativeHeight * guiScale);
-                int guiOffsetX = (backBufferWidth - guiWidth) / 2;
-                int guiOffsetY = (backBufferHeight - guiHeight) / 2;
-                Rectangle guiDestRect = new Rectangle(guiOffsetX, guiOffsetY, guiWidth, guiHeight);
-                targetBatch.Draw(_guiRenderTarget, guiDestRect, Color.White);
-                targetBatch.End();
+                    // Draw the GUI, scaled by SettingsManager.Instance.GuiScale
+                    float guiScale = SettingsManager.Instance.GuiScale;
+                    int guiWidth = (int)(nativeWidth * guiScale);
+                    int guiHeight = (int)(nativeHeight * guiScale);
+                    int guiOffsetX = (backBufferWidth - guiWidth) / 2;
+                    int guiOffsetY = (backBufferHeight - guiHeight) / 2;
+                    Rectangle guiDestRect = new Rectangle(guiOffsetX, guiOffsetY, guiWidth, guiHeight);
+                    if (_guiRenderTarget != null)
+                        targetBatch.Draw(_guiRenderTarget, guiDestRect, Color.White);
+                    targetBatch.End();
+                }
             }
 
             base.Draw(gameTime);

@@ -2005,6 +2005,7 @@ namespace Client
         public static void LogoutGame()
         {
             GameState.InMenu = true;
+            GameState.GettingMap = false;
             GameState.InGame = false;
             Gui.HideWindows();
             Gui.ShowWindow("winLogin");
