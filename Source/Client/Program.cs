@@ -418,11 +418,10 @@ namespace Client
                 RenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             }
 
-            // Draw all game/menu content to the render target
+            // --- Render game/menu to gameRenderTarget (zoomed) ---
             GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDevice.Clear(Color.Black);
 
-            // Use identity matrix for SpriteBatch, let zoom be handled in the blit
             if (GameState.IsLoading)
             {
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
@@ -442,19 +441,27 @@ namespace Client
                 Render_Game();
                 SpriteBatch.End();
             }
-            else
-            {
-                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
-                Render_Menu();
-                SpriteBatch.End();
-            }
 
+            // --- Render GUI to guiRenderTarget (not zoomed) ---
+            if (_guiRenderTarget == null || _guiRenderTarget.Width != nativeWidth || _guiRenderTarget.Height != nativeHeight)
+            {
+                _guiRenderTarget?.Dispose();
+                _guiRenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            }
+            GraphicsDevice.SetRenderTarget(_guiRenderTarget);
+            GraphicsDevice.Clear(Color.Transparent);
+            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
+            if (GameState.InMenu)
+                Gui.DrawMenuBackground();
+            Gui.Render();
+            TextRenderer.DrawMapName();
+            SpriteBatch.End();
+
+            // --- Composite to back buffer ---
             GraphicsDevice.SetRenderTarget(null);
 
-            // Render the target to the back buffer, scaling by camera zoom
             int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
             int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-            // Prevent zooming out smaller than native resolution (zoom < 1.0)
             float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
             float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
             int drawWidth = (int)(nativeWidth * zoom);
@@ -462,15 +469,29 @@ namespace Client
             int offsetX = (backBufferWidth - drawWidth) / 2;
             int offsetY = (backBufferHeight - drawHeight) / 2;
             Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
+
             using (var targetBatch = new SpriteBatch(GraphicsDevice))
             {
                 targetBatch.Begin(samplerState: SamplerState.PointClamp);
+                // Draw the zoomed game/menu
                 targetBatch.Draw(RenderTarget, destRect, Color.White);
+
+                // Draw the GUI, scaled by SettingsManager.Instance.GuiScale
+                float guiScale = SettingsManager.Instance.GuiScale;
+                int guiWidth = (int)(nativeWidth * guiScale);
+                int guiHeight = (int)(nativeHeight * guiScale);
+                int guiOffsetX = (backBufferWidth - guiWidth) / 2;
+                int guiOffsetY = (backBufferHeight - guiHeight) / 2;
+                Rectangle guiDestRect = new Rectangle(guiOffsetX, guiOffsetY, guiWidth, guiHeight);
+                targetBatch.Draw(_guiRenderTarget, guiDestRect, Color.White);
                 targetBatch.End();
             }
 
             base.Draw(gameTime);
         }
+
+        // GUI render target for overlaying GUI at native resolution
+        private static RenderTarget2D _guiRenderTarget;
 
         protected override void Update(GameTime gameTime)
         {
@@ -481,6 +502,7 @@ namespace Client
                 base.Update(gameTime);
                 return;
             }
+
             // Ignore input if the window is minimized or inactive
             if ((!IsActive || Window.ClientBounds.Width == 0) | Window.ClientBounds.Height == 0)
             {
@@ -2841,7 +2863,7 @@ namespace Client
                     var loopTo9 = GameState.CurrentEvents;
                     for (i = 0; i < loopTo9; i++)
                     {
-                        if (Data.MapEvents[i].Visible == true)
+                        if (Data.MapEvents?[i].Visible == true)
                         {
                             if (Data.MapEvents[i].ShowName == 1)
                             {
@@ -2898,12 +2920,10 @@ namespace Client
                 TextRenderer.RenderText(map, (int) Math.Round(GameState.DrawLocX), (int) Math.Round(GameState.DrawLocY + 135f),
                     Color.Yellow, Color.Black);
             }
-
-            TextRenderer.DrawMapName();
-
+            
             if (GameState.MyEditorType == EditorType.Map)
             {
-                if (GameState.MapEditorTab == (int) MapEditorTab.Events)
+                if (GameState.MapEditorTab == (int)MapEditorTab.Events)
                 {
                     DrawEvents();
                 }
@@ -2911,17 +2931,8 @@ namespace Client
 
             DrawBars();
             Map.DrawMapFade();
-            Gui.Render();
             string argPath = Path.Combine(DataPath.Misc, "Cursor");
             RenderTexture(ref argPath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
-        }
-
-        public static void Render_Menu()
-        {
-            Gui.DrawMenuBackground();
-            Gui.Render();
-
-            //RenderTexture(ref argPath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
         }
 
         public static void UpdateMapAttributes()

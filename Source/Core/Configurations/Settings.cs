@@ -24,7 +24,7 @@ public class SettingsManager
     public string MusicExt { get; set; } = ".mid";
     public string SoundExt { get; set; } = ".ogg";
     public byte Resolution { get; set; } = 1;
-    public double Scale { get; set; } = 1.0;
+    public float GuiScale { get; set; } = 1.0f;
     public bool Vsync { get; set; } = true;
     public bool Fullscreen { get; set; }
     public byte CameraWidth { get; set; } = 32;

@@ -2433,11 +2433,11 @@ namespace Client
 
             return true;
         }
+        
         public static void UpdateCamera()
         {
             float targetCameraX;
             float targetCameraY;
-
 
             // Use native resolution for camera logic (no zoom division)
             int nativeWidth = GameState.ResolutionWidth;
@@ -2452,14 +2452,20 @@ namespace Client
             long mapHeight = Data.MyMap.MaxY * GameState.SizeY;
 
             // If the map is smaller than the viewport, center the map
-            if (mapWidth <= nativeWidth) {
+            if (mapWidth <= nativeWidth)
+            {
                 targetCameraX = -(nativeWidth - mapWidth) / 2f;
-            } else {
+            }
+            else
+            {
                 targetCameraX = Math.Max(0, Math.Min(targetCameraX, mapWidth - nativeWidth));
             }
-            if (mapHeight <= nativeHeight) {
+            if (mapHeight <= nativeHeight)
+            {
                 targetCameraY = -(nativeHeight - mapHeight) / 2f;
-            } else {
+            }
+            else
+            {
                 targetCameraY = Math.Max(0, Math.Min(targetCameraY, mapHeight - nativeHeight));
             }
 
