@@ -890,7 +890,7 @@ namespace Client
             for (int i = 0; i <= GameState.ChatBubbleindex; i++)
             {
                 ref var withBlock = ref Data.ChatBubble[i];
-                withBlock.Target = 0;
+                withBlock.Target = -1;
                 withBlock.TargetType = 0;
                 withBlock.Msg = "";
                 withBlock.Color = 0;

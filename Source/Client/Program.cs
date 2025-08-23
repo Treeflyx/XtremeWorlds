@@ -885,7 +885,7 @@ namespace Client
                     }
 
                     // Clear locally first per requirement
-                    GameState.MyTarget = 0;
+                    GameState.MyTarget = -1;
                     GameState.MyTargetType = 0;
 
                     // Notify server to toggle/clear the same tile
@@ -2804,6 +2804,8 @@ namespace Client
                 return;
 
             GameLogic.UpdateCamera();
+            // Auto-cancel target if player is off the current camera viewport (native world rect)
+            CancelTargetIfOffCamera();
 
             if (GameState.NumPanoramas > 0 & Data.MyMap.Panorama > 0)
             {
@@ -3139,6 +3141,105 @@ namespace Client
 
             DrawBars();
             Map.DrawMapFade();
+        }
+
+    // Cancels the current target when the TARGET's center moves outside the camera viewport in world space.
+        private static void CancelTargetIfOffCamera()
+        {
+            // Only handle Player and NPC targets
+            if (GameState.MyTargetType == (int)TargetType.None)
+                return;
+
+            int t = GameState.MyTarget;
+            if (t < 0)
+                return;
+
+            // Compute the actually visible world rect, factoring in zoom.
+            // Camera rectangle is in world pixels for the full render target size.
+            // When zoomed in (>1), the visible world area is smaller by 1/zoom.
+            int camLeftBase = (int)Math.Floor(GameState.Camera.Left);
+            int camTopBase = (int)Math.Floor(GameState.Camera.Top);
+            int camWidthBase = GameState.ResolutionWidth;
+            int camHeightBase = GameState.ResolutionHeight;
+
+            float zoom = GameState.CameraZoom <= 0 ? 1.0f : GameState.CameraZoom;
+            int visWidth = (int)Math.Round(camWidthBase / zoom);
+            int visHeight = (int)Math.Round(camHeightBase / zoom);
+
+            // Center the visible rect around the camera center
+            int camCenterX = camLeftBase + camWidthBase / 2;
+            int camCenterY = camTopBase + camHeightBase / 2;
+            int camLeft = camCenterX - visWidth / 2;
+            int camTop = camCenterY - visHeight / 2;
+            int camRight = camLeft + visWidth;
+            int camBottom = camTop + visHeight;
+
+            // Helper to test if a point is inside the visible camera rect (inclusive edge treated as out)
+            bool IsOutside(int cx, int cy)
+            {
+                return cx <= camLeft || cx >= camRight || cy <= camTop || cy >= camBottom;
+            }
+
+            bool shouldClear = false;
+            int tileX = -1;
+            int tileY = -1;
+
+            if (GameState.MyTargetType == (int)TargetType.Player)
+            {
+                if (!IsPlaying(t) || GetPlayerMap(t) != GetPlayerMap(GameState.MyIndex))
+                {
+                    shouldClear = true;
+                }
+                else
+                {
+                    // Use the TARGET player's center relative to camera
+                    int tx = GetPlayerRawX(t) + GameState.SizeX / 2;
+                    int ty = GetPlayerRawY(t) + GameState.SizeY / 2;
+                    if (IsOutside(tx, ty))
+                    {
+                        shouldClear = true;
+                        tileX = GetPlayerX(t);
+                        tileY = GetPlayerY(t);
+                    }
+                }
+            }
+            else if (GameState.MyTargetType == (int)TargetType.Npc)
+            {
+                int n = t;
+                if (n < 0 || n >= Data.MyMapNpc.Length || Data.MyMapNpc[n].Num < 0)
+                {
+                    shouldClear = true;
+                }
+                else
+                {
+                    int tx = Data.MyMapNpc[n].X + GameState.SizeX / 2;
+                    int ty = Data.MyMapNpc[n].Y + GameState.SizeY / 2;
+                    if (IsOutside(tx, ty))
+                    {
+                        shouldClear = true;
+                        tileX = (int)Math.Floor(Data.MyMapNpc[n].X / 32d);
+                        tileY = (int)Math.Floor(Data.MyMapNpc[n].Y / 32d);
+                    }
+                }
+            }
+            else
+            {
+                // Unsupported target types: ignore
+                return;
+            }
+
+            if (!shouldClear)
+                return;
+
+            // Clear locally first
+            GameState.MyTarget = -1;
+            GameState.MyTargetType = 0;
+
+            // Notify server if we have the tile
+            if (tileX >= 0 && tileY >= 0)
+            {
+                Sender.PlayerSearch(tileX, tileY, 0);
+            }
         }
 
         public static void UpdateMapAttributes()

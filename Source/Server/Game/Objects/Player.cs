@@ -64,7 +64,7 @@ public static class Player
 
         Data.TempPlayer[playerId].EventProcessingCount = 0;
         Data.TempPlayer[playerId].EventMap.CurrentEvents = 0; // Clear events
-        Data.TempPlayer[playerId].Target = 0;
+        Data.TempPlayer[playerId].Target = -1;
         Data.TempPlayer[playerId].TargetType = 0;
 
         NetworkSend.SendTarget(playerId, 0, 0);

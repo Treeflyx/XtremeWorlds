@@ -672,7 +672,7 @@ public class Script
                                 else
                                 {
                                     entity.TargetType = 0;
-                                    entity.Target = 0;
+                                    entity.Target = -1;
                                 }
                             }
 
@@ -733,7 +733,7 @@ public class Script
                         }
                         else
                         {
-                            entity.Target = 0;
+                            entity.Target = -1;
                             entity.TargetType = 0;
                         }                        
                     }
