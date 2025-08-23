@@ -1006,7 +1006,6 @@ public class Gui
         }
 
         var y = GameState.CurMouseY - window.Y;
-        bool didSelect = false;
         for (var i = 0; i < window.List.Count; i++)
         {
             if (y >= 16 * i && y < 16 * (i + 1))
@@ -1019,7 +1018,6 @@ public class Gui
                     else
                         window.ParentControl.Value = i;
                 }
-                didSelect = true;
                 break;
             }
         }

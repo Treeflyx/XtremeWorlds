@@ -754,7 +754,7 @@ namespace Client
             var loopTo = GameState.CurrentEvents;
             for (i = 0; i < loopTo; i++)
             {
-                if (Data.MapEvents[i].Visible == true)
+                if (Data.MapEvents?[i].Visible == true)
                 {
                     if (Data.MapEvents[i].X == x & Data.MapEvents[i].Y == y)
                     {
@@ -915,10 +915,10 @@ namespace Client
                 {
                     for (int i = 0, loopTo = GameState.CurrentEvents; i < loopTo; i++)
                     {
-                        if (Data.MapEvents.Length < GameState.CurrentEvents)
+                        if (Data.MapEvents?.Length < GameState.CurrentEvents)
                             break;
 
-                        if (Data.MapEvents[i].Visible == true)
+                        if (Data.MapEvents?[i].Visible == true)
                         {
                             // Check for 32 pixels around the map event
                             int eventX = Data.MapEvents[i].X;

@@ -1636,9 +1636,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
             {
                 if (!string.IsNullOrEmpty(Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name))
                 {
-                    if ((int) Data.MapItem[GetPlayerMap(session.Id), i].X == x)
+                    if (Math.Floor((double)Data.MapItem[GetPlayerMap(session.Id), i].X / 32) == x)
                     {
-                        if ((int) Data.MapItem[GetPlayerMap(session.Id), i].Y == y)
+                        if (Math.Floor((double)Data.MapItem[GetPlayerMap(session.Id), i].Y / 32) == y)
                         {
                             NetworkSend.PlayerMsg(session.Id, "You see " + Data.MapItem[GetPlayerMap(session.Id), i].Value + " " + Data.Item[(int) Data.MapItem[GetPlayerMap(session.Id), i].Num].Name + ".", (int) ColorName.BrightGreen);
                             return;
@@ -1654,9 +1654,9 @@ public sealed class GamePacketParser : PacketParser<GamePacketId.FromClient, Gam
         {
             if (Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Num >= 0)
             {
-                if (Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].X == x)
+                if (Math.Floor((double)Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].X / 32) == x)
                 {
-                    if (Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Y == y)
+                    if (Math.Floor((double)Data.MapNpc[GetPlayerMap(session.Id)].Npc[i].Y / 32) == y)
                     {
                         // Change target
                         if (Data.TempPlayer[session.Id].TargetType == 0)

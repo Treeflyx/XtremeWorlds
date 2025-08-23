@@ -18,8 +18,8 @@ namespace Client
 {
     public class GameClient : Microsoft.Xna.Framework.Game
     {
-        public static GraphicsDeviceManager Graphics;
-        public static SpriteBatch SpriteBatch;
+        public static GraphicsDeviceManager? Graphics;
+        public static SpriteBatch? SpriteBatch;
 
         public static readonly ConcurrentDictionary<string, Texture2D> TextureCache = new();
         public static readonly ConcurrentDictionary<string, GfxInfo> GfxInfoCache = new();
@@ -66,9 +66,9 @@ namespace Client
 
         private TimeSpan _elapsedTime = TimeSpan.Zero;
 
-        public static RenderTarget2D RenderTarget;
-        public static Texture2D TransparentTexture;
-        public static Texture2D PixelTexture;
+        public static RenderTarget2D? RenderTarget;
+        public static Texture2D? TransparentTexture;
+        public static Texture2D? PixelTexture;
 
         // Add a timer to prevent spam
         private static DateTime _lastInputTime = DateTime.MinValue;
@@ -152,10 +152,10 @@ namespace Client
             // Keep window visible; we'll load heavy content asynchronously.
 
             // Create the RenderTarget2D with the same size as the screen
-            RenderTarget = new RenderTarget2D(Graphics.GraphicsDevice,
-                Graphics.GraphicsDevice.PresentationParameters.BackBufferWidth,
-                Graphics.GraphicsDevice.PresentationParameters.BackBufferHeight, false,
-                Graphics.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            RenderTarget = new RenderTarget2D(Graphics?.GraphicsDevice,
+                Graphics?.GraphicsDevice.PresentationParameters.BackBufferWidth ?? 0,
+                Graphics?.GraphicsDevice.PresentationParameters.BackBufferHeight ?? 0, false,
+                Graphics?.GraphicsDevice.PresentationParameters.BackBufferFormat ?? SurfaceFormat.Color, DepthFormat.Depth24);
 
             // Apply changes to GraphicsDeviceManager
             try
@@ -240,7 +240,7 @@ namespace Client
                 if (File.Exists(cursorPath))
                 {
                     using var fs = new FileStream(cursorPath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    using var tempTex = Texture2D.FromStream(Graphics.GraphicsDevice, fs);
+                    using var tempTex = Texture2D.FromStream(Graphics?.GraphicsDevice, fs);
                     Mouse.SetCursor(MouseCursor.FromTexture2D(tempTex, 0, 0));
                 }
                 else
@@ -346,11 +346,11 @@ namespace Client
             var (targetWidth, targetHeight) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
             var targetAspect = (float) targetWidth / targetHeight;
 
-            var destRect = GetAspectRatio(dX, dY, Graphics.PreferredBackBufferWidth, Graphics.PreferredBackBufferHeight, dW, dH, targetAspect);
+            var destRect = GetAspectRatio(dX, dY, Graphics?.PreferredBackBufferWidth ?? 0, Graphics?.PreferredBackBufferHeight ?? 0, dW, dH, targetAspect);
             var srcRect = new Rectangle(sX, sY, sW, sH);
             var color = new Color(red, green, blue, (byte) 255) * alpha;
 
-            SpriteBatch.Draw(texture, destRect, srcRect, color);
+            SpriteBatch?.Draw(texture, destRect, srcRect, color);
         }
 
         public static Texture2D GetTexture(string path)
@@ -395,7 +395,7 @@ namespace Client
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading texture from {path}: {ex.Message}");
-                return null;
+                return new Texture2D(Graphics?.GraphicsDevice, 1, 1);
             }
         }
 
@@ -420,15 +420,13 @@ namespace Client
                 RenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             }
 
-            // --- Render game/menu to gameRenderTarget (zoomed) ---
+            // --- Render game/menu to RenderTarget (zoomed) ---
             GraphicsDevice.SetRenderTarget(RenderTarget);
             GraphicsDevice.Clear(Color.Black);
 
-            // After drawing to RenderTarget, reset to back buffer
-            GraphicsDevice.SetRenderTarget(null);
-
             if (GameState.IsLoading || GameState.GettingMap)
             {
+                // Draw loading screen onto the RenderTarget
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 var loadingText = "Loading...";
                 if (TextRenderer.Fonts.TryGetValue(Font.Georgia, out var font))
@@ -442,10 +440,14 @@ namespace Client
             }
             else if (GameState.InGame == true)
             {
+                // Draw the actual game onto the RenderTarget
                 SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 Render_Game();
                 SpriteBatch.End();
             }
+
+            // After drawing to RenderTarget, reset to back buffer for composition
+            GraphicsDevice.SetRenderTarget(null);
 
             if (!GameState.GettingMap)
             {
@@ -480,63 +482,31 @@ namespace Client
                 float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
                 int drawWidth = (int)(nativeWidth * zoom);
                 int drawHeight = (int)(nativeHeight * zoom);
-
-                // Calculate the center point for zoom (target/player)
-                float targetX, targetY;
-                if (GameState.MyTarget >= 0)
-                {
-                    if (GameState.MyTargetType == (int)TargetType.Player)
-                    {
-                        targetX = GetPlayerRawX(GameState.MyTarget);
-                        targetY = GetPlayerRawY(GameState.MyTarget);
-                    }
-                    else if (GameState.MyTargetType == (int)TargetType.Npc)
-                    {
-                        int npcIndex = GameState.MyTarget;
-                        if (npcIndex >= 0 && npcIndex < Data.MyMapNpc.Length && Data.MyMapNpc[npcIndex].Num >= 0)
-                        {
-                            targetX = Data.MyMapNpc[npcIndex].X;
-                            targetY = Data.MyMapNpc[npcIndex].Y;
-                        }
-                        else
-                        {
-                            targetX = GetPlayerRawX(GameState.MyIndex);
-                            targetY = GetPlayerRawY(GameState.MyIndex);
-                        }
-                    }
-                    else
-                    {
-                        targetX = GetPlayerRawX(GameState.MyIndex);
-                        targetY = GetPlayerRawY(GameState.MyIndex);
-                    }
-                }
-                else
-                {
-                    targetX = GetPlayerRawX(GameState.MyIndex);
-                    targetY = GetPlayerRawY(GameState.MyIndex);
-                }
-
-                // Convert world target position to render target coordinates
-                float camLeft = (float)GameState.Camera.Left;
-                float camTop = (float)GameState.Camera.Top;
-                float targetScreenX = targetX - camLeft;
-                float targetScreenY = targetY - camTop;
-
-                // The point we want to keep centered during zoom
-                float centerX = targetScreenX;
-                float centerY = targetScreenY;
-
-                // Calculate offset so that zoom is centered on the target/player
-                int offsetX = (int)(backBufferWidth / 2 - centerX * zoom);
-                int offsetY = (int)(backBufferHeight / 2 - centerY * zoom);
+                // Precompute fallback centered destination for non-game states
+                int offsetX = (backBufferWidth - drawWidth) / 2;
+                int offsetY = (backBufferHeight - drawHeight) / 2;
                 Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
 
                 using (var targetBatch = new SpriteBatch(GraphicsDevice))
                 {
                     targetBatch.Begin(samplerState: SamplerState.PointClamp);
-                    // Draw the zoomed game/menu
+                    // Draw the zoomed game/menu.
+                    // If in-game, pivot scaling around the player's current native position to keep them centered during zoom.
                     if (RenderTarget != null)
-                        targetBatch.Draw(RenderTarget, destRect, Color.White);
+                    {
+                        if (GameState.InGame == true)
+                        {
+                            Vector2 centerScreen = new Vector2(backBufferWidth / 2f, backBufferHeight / 2f);
+                            // Compute pivot native position (target if any, else player)
+                            Vector2 pivotNative = GetZoomPivotNative();
+                            targetBatch.Draw(RenderTarget, centerScreen, null, Color.White, 0f, pivotNative, zoom, SpriteEffects.None, 0f);
+                        }
+                        else
+                        {
+                            // Fallback to centered rectangle draw
+                            targetBatch.Draw(RenderTarget, destRect, Color.White);
+                        }
+                    }
 
                     // Draw the GUI, scaled by SettingsManager.Instance.GuiScale
                     float guiScale = SettingsManager.Instance.GuiScale;
@@ -555,7 +525,7 @@ namespace Client
         }
 
         // GUI render target for overlaying GUI at native resolution
-        private static RenderTarget2D _guiRenderTarget;
+        private static RenderTarget2D? _guiRenderTarget;
 
         protected override void Update(GameTime gameTime)
         {
@@ -689,15 +659,39 @@ namespace Client
             {
                 float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
                 float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
-                int drawWidth = (int)(nativeWidth * zoom);
-                int drawHeight = (int)(nativeHeight * zoom);
-                int offsetX = (backBufferWidth - drawWidth) / 2;
-                int offsetY = (backBufferHeight - drawHeight) / 2;
-                if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
-                    return new Tuple<int, int>(-1, -1);
-                int gameX = (int)((mouseX - offsetX) / zoom);
-                int gameY = (int)((mouseY - offsetY) / zoom);
-                return new Tuple<int, int>(gameX, gameY);
+
+                // When in-game we draw with player-centered pivot. Invert that transform here.
+                if (GameState.InGame == true)
+                {
+                    Vector2 centerScreen = new Vector2(backBufferWidth / 2f, backBufferHeight / 2f);
+                    Vector2 pivotNative = GetZoomPivotNative();
+
+                    // Effective top-left of the scaled native surface on screen
+                    float offsetXf = centerScreen.X - pivotNative.X * zoom;
+                    float offsetYf = centerScreen.Y - pivotNative.Y * zoom;
+                    int drawWidth = (int)(nativeWidth * zoom);
+                    int drawHeight = (int)(nativeHeight * zoom);
+
+                    if (mouseX < offsetXf || mouseY < offsetYf || mouseX >= offsetXf + drawWidth || mouseY >= offsetYf + drawHeight)
+                        return new Tuple<int, int>(-1, -1);
+
+                    int gameX = (int)((mouseX - offsetXf) / zoom);
+                    int gameY = (int)((mouseY - offsetYf) / zoom);
+                    return new Tuple<int, int>(gameX, gameY);
+                }
+                else
+                {
+                    // Fallback to centered composition when not in game state
+                    int drawWidth = (int)(nativeWidth * zoom);
+                    int drawHeight = (int)(nativeHeight * zoom);
+                    int offsetX = (backBufferWidth - drawWidth) / 2;
+                    int offsetY = (backBufferHeight - drawHeight) / 2;
+                    if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
+                        return new Tuple<int, int>(-1, -1);
+                    int gameX = (int)((mouseX - offsetX) / zoom);
+                    int gameY = (int)((mouseY - offsetY) / zoom);
+                    return new Tuple<int, int>(gameX, gameY);
+                }
             }
             else // gui
             {
@@ -714,6 +708,43 @@ namespace Client
                 int guiY = (int)((mouseY - guiOffsetY) / guiScale);
                 return new Tuple<int, int>(guiX, guiY);
             }
+        }
+
+        // Compute the native-space pivot for zooming: target center if valid, else player center
+        private static Vector2 GetZoomPivotNative()
+        {
+            int worldX = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX / 2;
+            int worldY = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY / 2;
+
+            if (GameState.MyTarget >= 0)
+            {
+                if (GameState.MyTargetType == (int)TargetType.Player)
+                {
+                    int t = GameState.MyTarget;
+                    if (IsPlaying(t))
+                    {
+                        // Same map check
+                        if (Data.Player[t].Map == Data.Player[GameState.MyIndex].Map)
+                        {
+                            worldX = GetPlayerRawX(t) + GameState.SizeX / 2;
+                            worldY = GetPlayerRawY(t) + GameState.SizeY / 2;
+                        }
+                    }
+                }
+                else if (GameState.MyTargetType == (int)TargetType.Npc)
+                {
+                    int n = GameState.MyTarget;
+                    if (n >= 0 && n < Data.MyMapNpc.Length && Data.MyMapNpc[n].Num >= 0)
+                    {
+                        worldX = Data.MyMapNpc[n].X + GameState.SizeX / 2;
+                        worldY = Data.MyMapNpc[n].Y + GameState.SizeY / 2;
+                    }
+                }
+            }
+
+            int px = GameLogic.ConvertMapX(worldX);
+            int py = GameLogic.ConvertMapY(worldY);
+            return new Vector2(px, py);
         }
 
         public static bool IsMouseButtonDown(MouseButton button)
@@ -1154,6 +1185,31 @@ namespace Client
             HandleScrollWheel();
         }
 
+        // Ensure GUI event handlers receive GUI-scaled coordinates
+        private static void HandleGuiEvent(ControlState state)
+        {
+            // Save legacy game-context values
+            int prevMouseX = GameState.CurMouseX;
+            int prevMouseY = GameState.CurMouseY;
+            int prevCurX = GameState.CurX;
+            int prevCurY = GameState.CurY;
+
+            // Swap to GUI-space values
+            GameState.CurMouseX = GameState.CurMouseXGui;
+            GameState.CurMouseY = GameState.CurMouseYGui;
+            GameState.CurX = GameState.CurXGui;
+            GameState.CurY = GameState.CurYGui;
+
+            // Dispatch the GUI event
+            Gui.HandleInterfaceEvents(state);
+
+            // Restore game legacy values
+            GameState.CurMouseX = prevMouseX;
+            GameState.CurMouseY = prevMouseY;
+            GameState.CurX = prevCurX;
+            GameState.CurY = prevCurY;
+        }
+
         private static void HandleScrollWheel()
         {
             // Handle scroll wheel (assuming delta calculation happens elsewhere)
@@ -1212,7 +1268,7 @@ namespace Client
 
                 if (scrollValue != 0)
                 {
-                    Gui.HandleInterfaceEvents(ControlState.MouseScroll);
+                    HandleGuiEvent(ControlState.MouseScroll);
                 }
             }
         }
@@ -1224,15 +1280,15 @@ namespace Client
             // Handle MouseMove event when the mouse moves
             if (CurrentMouseState.X != PreviousMouseState.X || CurrentMouseState.Y != PreviousMouseState.Y)
             {
-                Gui.HandleInterfaceEvents(ControlState.MouseMove);
+                HandleGuiEvent(ControlState.MouseMove);
             }
 
             // Check for MouseDown event (button pressed)
-            if (IsMouseButtonDown(MouseButton.Left))
+        if (IsMouseButtonDown(MouseButton.Left))
             {
                 if ((DateTime.Now - _lastMouseClickTime).TotalMilliseconds >= MouseClickCooldown)
                 {
-                    Gui.HandleInterfaceEvents(ControlState.MouseDown);
+            HandleGuiEvent(ControlState.MouseDown);
                     _lastMouseClickTime = DateTime.Now; // Update last mouse click time
                     GameState.LastLeftClickTime = currentTime; // Track time for double-click detection
                     GameState.ClickCount++;
@@ -1240,7 +1296,7 @@ namespace Client
 
                 if (GameState.ClickCount >= 2)
                 {
-                    Gui.HandleInterfaceEvents(ControlState.DoubleClick);
+            HandleGuiEvent(ControlState.DoubleClick);
                 }
             }
 
@@ -1254,7 +1310,7 @@ namespace Client
             // Check for MouseUp event (button released)
             if (IsMouseButtonUp(MouseButton.Left))
             {
-                Gui.HandleInterfaceEvents(ControlState.MouseUp);
+                HandleGuiEvent(ControlState.MouseUp);
             }
 
             for (int i = 1; i < Gui.Windows.Count; i++)
@@ -2813,7 +2869,7 @@ namespace Client
                             var loopTo4 = Information.UBound(Data.MapEvents);
                             for (i = 0; i <= loopTo4; i++)
                             {
-                                if (Data.MapEvents[i].Position == 1)
+                                if (Data.MapEvents?[i].Position == 1)
                                 {
                                     if (Math.Floor((decimal) Data.MapEvents[i].Y / 32) == y)
                                     {

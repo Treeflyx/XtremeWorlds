@@ -2482,22 +2482,44 @@ namespace Client
                 targetY = GetPlayerRawY(GameState.MyIndex);
             }
 
-            // Center camera on target/player, but clamp so viewport never shows outside map
-            float cameraX = targetX - (nativeWidth / 2f);
-            float cameraY = targetY - (nativeHeight / 2f);
+            // Desired camera top-left so target/player is centered
+            float desiredX = targetX - (nativeWidth / 2f);
+            float desiredY = targetY - (nativeHeight / 2f);
 
-            // Clamp to map bounds
-            cameraX = Math.Max(0, Math.Min(cameraX, mapWidth - nativeWidth));
-            cameraY = Math.Max(0, Math.Min(cameraY, mapHeight - nativeHeight));
-
-            // If the map is smaller than the viewport, center the map
+            // Clamp desired to map bounds, with centering for small maps
             if (mapWidth <= nativeWidth)
-                cameraX = -(nativeWidth - mapWidth) / 2f;
-            if (mapHeight <= nativeHeight)
-                cameraY = -(nativeHeight - mapHeight) / 2f;
+                desiredX = -(nativeWidth - mapWidth) / 2f;
+            else
+                desiredX = Math.Max(0, Math.Min(desiredX, mapWidth - nativeWidth));
 
-            GameState.Camera.Left = (long)Math.Round(cameraX);
-            GameState.Camera.Top = (long)Math.Round(cameraY);
+            if (mapHeight <= nativeHeight)
+                desiredY = -(nativeHeight - mapHeight) / 2f;
+            else
+                desiredY = Math.Max(0, Math.Min(desiredY, mapHeight - nativeHeight));
+
+            // Smoothly move current camera toward desired unless we're loading/warping
+            // Initialize on first use or snap on big jumps/getting map
+            bool needSnap = GameState.GettingMap
+                             || double.IsNaN(GameState.CurrentCameraX)
+                             || double.IsNaN(GameState.CurrentCameraY)
+                             || (Math.Abs(GameState.CurrentCameraX - desiredX) > nativeWidth)
+                             || (Math.Abs(GameState.CurrentCameraY - desiredY) > nativeHeight);
+
+            if (needSnap)
+            {
+                GameState.CurrentCameraX = desiredX;
+                GameState.CurrentCameraY = desiredY;
+            }
+            else
+            {
+                // Simple exponential smoothing toward the target
+                const float smooth = 0.12f; // 0..1, higher = snappier
+                GameState.CurrentCameraX += (desiredX - GameState.CurrentCameraX) * smooth;
+                GameState.CurrentCameraY += (desiredY - GameState.CurrentCameraY) * smooth;
+            }
+
+            GameState.Camera.Left = (long)Math.Round(GameState.CurrentCameraX);
+            GameState.Camera.Top = (long)Math.Round(GameState.CurrentCameraY);
 
             long StartX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1) / 32);
             long StartY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1) / 32);

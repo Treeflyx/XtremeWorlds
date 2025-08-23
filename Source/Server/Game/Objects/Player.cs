@@ -604,7 +604,7 @@ public static class Player
             return Data.Map[mapNum].Tile[x, y].Type == TileType.Blocked ||
                    Data.Map[mapNum].Tile[x, y].Type2 == TileType.Blocked;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
