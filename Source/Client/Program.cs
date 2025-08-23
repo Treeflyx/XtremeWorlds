@@ -806,10 +806,17 @@ namespace Client
             int mouseYGame = mousePosGame.Item2;
             GameState.CurMouseXGame = mouseXGame;
             GameState.CurMouseYGame = mouseYGame;
-            GameState.CurXGame = (int)Math.Round(GameState.TileView.Left +
-                Math.Floor((mouseXGame + GameState.Camera.Left) / GameState.SizeX));
-            GameState.CurYGame = (int)Math.Round(GameState.TileView.Top +
-                Math.Floor((mouseYGame + GameState.Camera.Top) / GameState.SizeY));
+            if (mouseXGame >= 0 && mouseYGame >= 0)
+            {
+                // Absolute world tile under the mouse: floor((cameraOffsetPx + mousePx) / tileSize)
+                GameState.CurXGame = (int)Math.Floor((GameState.Camera.Left + mouseXGame) / (double)GameState.SizeX);
+                GameState.CurYGame = (int)Math.Floor((GameState.Camera.Top + mouseYGame) / (double)GameState.SizeY);
+            }
+            else
+            {
+                GameState.CurXGame = -1;
+                GameState.CurYGame = -1;
+            }
 
             // GUI context
             var mousePosGui = GetMousePosition("gui");
@@ -817,10 +824,17 @@ namespace Client
             int mouseYGui = mousePosGui.Item2;
             GameState.CurMouseXGui = mouseXGui;
             GameState.CurMouseYGui = mouseYGui;
-            GameState.CurXGui = (int)Math.Round(GameState.TileView.Left +
-                Math.Floor((mouseXGui + GameState.Camera.Left) / GameState.SizeX));
-            GameState.CurYGui = (int)Math.Round(GameState.TileView.Top +
-                Math.Floor((mouseYGui + GameState.Camera.Top) / GameState.SizeY));
+            if (mouseXGui >= 0 && mouseYGui >= 0)
+            {
+                // GUI maps to native space; still convert to absolute world tile using camera offsets
+                GameState.CurXGui = (int)Math.Floor((GameState.Camera.Left + mouseXGui) / (double)GameState.SizeX);
+                GameState.CurYGui = (int)Math.Floor((GameState.Camera.Top + mouseYGui) / (double)GameState.SizeY);
+            }
+            else
+            {
+                GameState.CurXGui = -1;
+                GameState.CurYGui = -1;
+            }
 
             // For compatibility, set legacy variables to GAME context by default (for targeting, etc)
             GameState.CurX = GameState.CurXGame;
@@ -970,7 +984,7 @@ namespace Client
                 }
             }
 
-            if (CurrentKeyboardState.IsKeyDown(Keys.Space))
+            if (CurrentKeyboardState.IsKeyDown(Keys.Space) || (IsMouseButtonDown(MouseButton.Left) && GameState.CurX == GetPlayerX(GameState.MyIndex) && GameState.CurY == GetPlayerY(GameState.MyIndex)))
             {
                 GameLogic.CheckMapGetItem();
             }
@@ -1326,7 +1340,7 @@ namespace Client
             {
                 if ((DateTime.Now - _lastMouseClickTime).TotalMilliseconds >= MouseClickCooldown)
                 {
-            HandleGuiEvent(ControlState.MouseDown);
+                    HandleGuiEvent(ControlState.MouseDown);
                     _lastMouseClickTime = DateTime.Now; // Update last mouse click time
                     GameState.LastLeftClickTime = currentTime; // Track time for double-click detection
                     GameState.ClickCount++;

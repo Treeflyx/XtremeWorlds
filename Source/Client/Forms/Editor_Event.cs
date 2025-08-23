@@ -16,6 +16,63 @@ namespace Client
         // Singleton access for legacy usage
         private static Editor_Event? _instance;
         public static Editor_Event Instance => _instance ??= new Editor_Event();
+        // Safe state mirror for game thread checks
+        private static volatile bool _isVisible;
+        public static bool IsVisibleCached => _isVisible;
+        public static void ShowOnUiThread()
+        {
+            var app = Application.Instance;
+            if (app == null)
+                return;
+            app.AsyncInvoke(() =>
+            {
+                var win = Instance;
+                if (!win.Visible)
+                    win.Show();
+                _isVisible = true;
+            });
+        }
+        public static void HideOnUiThread()
+        {
+            var app = Application.Instance;
+            if (app == null)
+                return;
+            app.AsyncInvoke(() =>
+            {
+                try
+                {
+                    if (_instance != null && _instance.Visible)
+                    {
+                        _instance.Visible = false;
+                        _isVisible = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    try { System.Console.WriteLine($"[EventEditor] Hide error: {ex}"); } catch { }
+                }
+            });
+        }
+
+        // Call this from the UI thread (e.g., inside the UITimer handler)
+        public static void EnsureShownOnUi()
+        {
+            var app = Application.Instance;
+            if (app == null)
+                return;
+            try
+            {
+                var win = Instance;
+                if (!win.Visible)
+                    win.Show();
+                try { win.Focus(); } catch { }
+                _isVisible = win.Visible;
+            }
+            catch (Exception ex)
+            {
+                try { System.Console.WriteLine($"[EventEditor] Show error: {ex}"); } catch { }
+            }
+        }
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 
@@ -241,6 +298,9 @@ namespace Client
             _instance = this;
             Title = "Event Editor";
             ClientSize = new Size(1100, 750);
+            // Keep cached visibility updated when toggled on UI thread
+            Shown += (s, e) => _isVisible = true;
+            Closed += (s, e) => _isVisible = false;
             InitializeComponent();
         }
 
@@ -365,135 +425,131 @@ namespace Client
 
     private void Editor_Events_Load(object? sender, EventArgs e)
         {
-            int i;
-
-            Event.CurPageNum = 0;
-
-            cmbSwitch.Items.Clear();
-            for (i = 0; i < Constant.MaxSwitches; i++)
-                cmbSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
-            cmbSwitch.SelectedIndex = 0;
-            cmbVariable.Items.Clear();
-
-            for (i = 0; i < Constant.MaxVariables; i++)
-                cmbVariable.Items.Add(i + 1 + ". " + Event.Variables[i]);
-            cmbVariable.SelectedIndex = 0;
-            cmbChangeItemIndex.Items.Clear();
-            for (i = 0; i < Constant.MaxItems; i++)
-                cmbChangeItemIndex.Items.Add(Data.Item[i].Name);
-            cmbChangeItemIndex.SelectedIndex = 0;
-            nudChangeLevel.MinValue = 1;
-            nudChangeLevel.MaxValue = Constant.MaxLevel;
-            nudChangeLevel.Value = 1;
-            cmbChangeSkills.Items.Clear();
-
-            for (i = 0; i < Constant.MaxSkills; i++)
-                cmbChangeSkills.Items.Add(Data.Skill[i].Name);
-            cmbChangeSkills.SelectedIndex = 0;
-            cmbChangeJob.Items.Clear();
-
-            for (i = 0; i < Constant.MaxJobs; i++)
-                cmbChangeJob.Items.Add(Strings.Trim(Data.Job[i].Name));
-            cmbChangeJob.SelectedIndex = 0;
-            nudChangeSprite.MaxValue = GameState.NumCharacters;
-            cmbPlayAnim.Items.Clear();
-
-            for (i = 0; i < Constant.MaxAnimations; i++)
-                cmbPlayAnim.Items.Add(i + 1 + ". " + Data.Animation[i].Name);
-            cmbPlayAnim.SelectedIndex = 0;
-
-            cmbPlayBGM.Items.Clear();
-
-            General.CacheMusic();
-            var loopTo = Information.UBound(Sound.MusicCache);
-            for (i = 0; i < loopTo; i++)
-                cmbPlayBGM.Items.Add(Sound.MusicCache[i]);
-            cmbPlayBGM.SelectedIndex = 0;
-            cmbPlaySound.Items.Clear();
-
-            General.CacheSound();
-            var loopTo1 = Information.UBound(Sound.SoundCache);
-            for (i = 0; i < loopTo1; i++)
-                cmbPlaySound.Items.Add(Sound.SoundCache[i]);
-            cmbPlaySound.SelectedIndex = 0;
-            cmbOpenShop.Items.Clear();
-
-            for (i = 0; i < Constant.MaxVariables; i++)
-                cmbOpenShop.Items.Add(i + 1 + ". " + Data.Shop[i].Name);
-            cmbOpenShop.SelectedIndex = 0;
-            cmbSpawnNpc.Items.Clear();
-
-            for (i = 0; i < Constant.MaxMapNpcs; i++)
+            try
             {
-                if (Data.MyMap.Npc[i] > 0)
+                int i;
+
+                Event.CurPageNum = 0;
+
+                cmbSwitch.Items.Clear();
+                for (i = 0; i < Constant.MaxSwitches; i++)
+                    cmbSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
+                cmbSwitch.SelectedIndex = 0;
+                cmbVariable.Items.Clear();
+
+                for (i = 0; i < Constant.MaxVariables; i++)
+                    cmbVariable.Items.Add(i + 1 + ". " + Event.Variables[i]);
+                cmbVariable.SelectedIndex = 0;
+                cmbChangeItemIndex.Items.Clear();
+                for (i = 0; i < Constant.MaxItems; i++)
+                    cmbChangeItemIndex.Items.Add(Data.Item[i].Name);
+                cmbChangeItemIndex.SelectedIndex = 0;
+                nudChangeLevel.MinValue = 1;
+                nudChangeLevel.MaxValue = Constant.MaxLevel;
+                nudChangeLevel.Value = 1;
+                cmbChangeSkills.Items.Clear();
+
+                for (i = 0; i < Constant.MaxSkills; i++)
+                    cmbChangeSkills.Items.Add(Data.Skill[i].Name);
+                cmbChangeSkills.SelectedIndex = 0;
+                cmbChangeJob.Items.Clear();
+
+                for (i = 0; i < Constant.MaxJobs; i++)
+                    cmbChangeJob.Items.Add(Strings.Trim(Data.Job[i].Name));
+                cmbChangeJob.SelectedIndex = 0;
+                nudChangeSprite.MaxValue = GameState.NumCharacters;
+                cmbPlayAnim.Items.Clear();
+
+                for (i = 0; i < Constant.MaxAnimations; i++)
+                    cmbPlayAnim.Items.Add(i + 1 + ". " + Data.Animation[i].Name);
+                cmbPlayAnim.SelectedIndex = 0;
+
+                cmbPlayBGM.Items.Clear();
+
+                General.CacheMusic();
+                var loopTo = Information.UBound(Sound.MusicCache);
+                for (i = 0; i < loopTo; i++)
+                    cmbPlayBGM.Items.Add(Sound.MusicCache[i]);
+                cmbPlayBGM.SelectedIndex = 0;
+                cmbPlaySound.Items.Clear();
+
+                General.CacheSound();
+                var loopTo1 = Information.UBound(Sound.SoundCache);
+                for (i = 0; i < loopTo1; i++)
+                    cmbPlaySound.Items.Add(Sound.SoundCache[i]);
+                cmbPlaySound.SelectedIndex = 0;
+                cmbOpenShop.Items.Clear();
+
+                for (i = 0; i < Constant.MaxVariables; i++)
+                    cmbOpenShop.Items.Add(i + 1 + ". " + Data.Shop[i].Name);
+                cmbOpenShop.SelectedIndex = 0;
+                cmbSpawnNpc.Items.Clear();
+
+                for (i = 0; i < Constant.MaxMapNpcs; i++)
                 {
-                    cmbSpawnNpc.Items.Add(i + 1 + ". " + Data.Npc[Data.MyMap.Npc[i]].Name);
+                    if (Data.MyMap.Npc[i] > 0)
+                    {
+                        cmbSpawnNpc.Items.Add(i + 1 + ". " + Data.Npc[Data.MyMap.Npc[i]].Name);
+                    }
+                    else
+                    {
+                        cmbSpawnNpc.Items.Add(i + ". ");
+                    }
                 }
-                else
-                {
-                    cmbSpawnNpc.Items.Add(i + ". ");
-                }
+
+                cmbSpawnNpc.SelectedIndex = 0;
+                nudFogData0.MaxValue = GameState.NumFogs;
+                nudWPMap.MaxValue = Constant.MaxVariables;
+
+                cmbEvent.Items.Add("This Event");
+                cmbEvent.SelectedIndex = 0;
+
+                // set the tabs
+                tabPages.Pages.Clear();
+
+                var loopTo2 = Event.TmpEvent.PageCount;
+                for (i = 0; i < loopTo2; i++)
+                    tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
+
+                // items
+                cmbHasItem.Items.Clear();
+                for (i = 0; i < Constant.MaxItems; i++)
+                    cmbHasItem.Items.Add(i + 1 + ": " + Data.Item[i].Name);
+
+                // variables
+                cmbPlayerVar.Items.Clear();
+                for (i = 0; i < Constant.MaxVariables; i++)
+                    cmbPlayerVar.Items.Add(i + 1 + ". " + Event.Variables[i]);
+                // switches
+                cmbPlayerSwitch.Items.Clear();
+                for (i = 0; i < Constant.MaxSwitches; i++)
+                    cmbPlayerSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
+                cmbSelfSwitch.SelectedIndex = 0;
+
+                // enable delete button
+                btnDeletePage.Enabled = Event.TmpEvent.PageCount > 1;
+                btnPastePage.Enabled = false;
+
+                nudShowPicture.MaxValue = GameState.NumPictures;
+                cmbPicLoc.SelectedIndex = 0;
+                fraDialogue.Visible = false;
+
+                if (tabPages.SelectedIndex == 0 && tabPages.Pages.Count > 1)
+                    tabPages.SelectedIndex = 1;
+
+                // Load page 1 to start off with
+                Event.CurPageNum = 0;
+                if (string.IsNullOrEmpty(Event.TmpEvent.Name))
+                    Event.TmpEvent.Name = string.Empty;
+                txtName.Text = Event.TmpEvent.Name;
+
+                Event.EventEditorLoadPage(Event.CurPageNum);
+                DrawGraphic();
             }
-
-            cmbSpawnNpc.SelectedIndex = 0;
-            nudFogData0.MaxValue = GameState.NumFogs;
-            nudWPMap.MaxValue = Constant.MaxVariables;
-
-            // Layout sizing handled by Eto containers
-
-            cmbEvent.Items.Add("This Event");
-            cmbEvent.SelectedIndex = 0;
-
-            // set the tabs
-            tabPages.Pages.Clear();
-
-            var loopTo2 = Event.TmpEvent.PageCount;
-            for (i = 0; i < loopTo2; i++)
-                tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
-
-            // items
-            cmbHasItem.Items.Clear();
-            for (i = 0; i < Constant.MaxItems; i++)
-                cmbHasItem.Items.Add(i + 1 + ": " + Data.Item[i].Name);
-
-            // variables
-            cmbPlayerVar.Items.Clear();
-            for (i = 0; i < Constant.MaxVariables; i++)
-                cmbPlayerVar.Items.Add(i + 1 + ". " + Event.Variables[i]);
-            // switches
-            cmbPlayerSwitch.Items.Clear();
-            for (i = 0; i < Constant.MaxSwitches; i++)
-                cmbPlayerSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
-            cmbSelfSwitch.SelectedIndex = 0;
-
-            // enable delete button
-            if (Event.TmpEvent.PageCount > 1)
+            catch (Exception ex)
             {
-                btnDeletePage.Enabled = true;
+                try { System.Console.WriteLine($"[EventEditor] Load error: {ex}"); } catch { }
             }
-            else
-            {
-                btnDeletePage.Enabled = false;
-            }
-            btnPastePage.Enabled = false;
-
-            nudShowPicture.MaxValue = GameState.NumPictures;
-
-            cmbPicLoc.SelectedIndex = 0;
-
-            fraDialogue.Visible = false;
-
-            if (tabPages.SelectedIndex == 0 && tabPages.Pages.Count > 1)
-                tabPages.SelectedIndex = 1;
-
-            // Load page 1 to start off with
-            Event.CurPageNum = 0;
-            if (string.IsNullOrEmpty(Event.TmpEvent.Name))
-                Event.TmpEvent.Name = "";
-            txtName.Text = Event.TmpEvent.Name;
-
-            Event.EventEditorLoadPage(Event.CurPageNum);
-            DrawGraphic();
         }
 
     private void Editor_Event_Resize(object? sender, EventArgs e) { }

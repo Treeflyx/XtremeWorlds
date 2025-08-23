@@ -243,6 +243,8 @@ namespace Client
             EditorEvent = EventNum;
             TmpEvent = Data.MyMap.Event[EventNum];
             GameState.InitEventEditor = true;
+            // Also request an immediate UI-thread show to avoid race with shutdown
+            try { Eto.Forms.Application.Instance?.AsyncInvoke(() => Client.Editor_Event.EnsureShownOnUi()); } catch { }
             if (TmpEvent.Pages[0].CommandListCount == 0)
             {
                 Array.Resize(ref TmpEvent.Pages[0].CommandList, 1);

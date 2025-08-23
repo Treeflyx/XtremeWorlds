@@ -2123,7 +2123,8 @@ namespace Client
                 }
                 else if (GameState.MapEditorTab == (int)MapEditorTab.Events)
                 {
-                    if (Editor_Event.Instance == null || Editor_Event.Instance.Visible == false)
+                    // Avoid cross-thread UI access: rely on cached visibility flag updated on UI thread
+                    if (!Editor_Event.IsVisibleCached)
                     {
                         if (Event.EventCopy)
                         {

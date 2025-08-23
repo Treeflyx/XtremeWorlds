@@ -38,6 +38,12 @@ public static class Program
         };
     _rootForm.Shown += (s, e) => ((Form)s!).Visible = false;
 
+        // Pre-warm editor windows on the UI thread so they can be shown instantly
+        app.AsyncInvoke(() =>
+        {
+            try { var _ = Editor_Event.Instance; } catch { }
+        });
+
         app.Run(_rootForm);
     }
 
@@ -71,7 +77,8 @@ public static class Program
         // Event Editor
         if (GameState.InitEventEditor)
         {
-            new Editor_Event().Show();
+            // Run directly on UI timer tick to avoid thread jumps racing shutdown
+            Editor_Event.EnsureShownOnUi();
             GameState.InitEventEditor = false;
         }
 
