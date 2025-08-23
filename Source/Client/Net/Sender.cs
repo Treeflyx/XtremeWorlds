@@ -269,7 +269,7 @@ public static class Sender
         var packetWriter = new PacketWriter();
 
         packetWriter.WriteEnum(Packets.ClientPackets.CRequestNpc);
-        packetWriter.WriteDouble(npcNum);
+        packetWriter.WriteInt32(npcNum);
 
         Network.Send(packetWriter);
     }
