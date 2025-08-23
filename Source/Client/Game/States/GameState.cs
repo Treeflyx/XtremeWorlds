@@ -8,12 +8,13 @@ using Type = Core.Globals.Type;
 
 namespace Client
 {
-
     public class GameState
     {
         public GameState()
         {
         }
+
+        public static float CameraZoom = 1.0f;
 
         public static int ResolutionHeight;
         public static int ResolutionWidth;

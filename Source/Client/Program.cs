@@ -62,6 +62,7 @@ namespace Client
 
         // Track the previous scroll value to compute delta
         private static readonly object ScrollLock = new();
+        private static int _prevScrollWheelValue = 0;
 
         private TimeSpan _elapsedTime = TimeSpan.Zero;
 
@@ -122,7 +123,7 @@ namespace Client
             withBlock.SynchronizeWithVerticalRetrace = SettingsManager.Instance.Vsync;
             IsFixedTimeStep = false;
             withBlock.PreferHalfPixelOffset = true;
-            withBlock.PreferMultiSampling = true;
+            withBlock.PreferMultiSampling = false;
 
             // Add handler for PreparingDeviceSettings
             Graphics.PreparingDeviceSettings += (sender, args) =>
@@ -402,35 +403,71 @@ namespace Client
         {
             Graphics.GraphicsDevice.Clear(Color.Black);
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
-            
-            // Lightweight loading screen while heavy startup is running
+            // Store viewport size for camera logic
+            var viewport = GraphicsDevice.Viewport;
+
+            // Always render at the configured native resolution to a RenderTarget
+            int nativeWidth = GameState.ResolutionWidth;
+            int nativeHeight = GameState.ResolutionHeight;
+
+            // Only recreate if needed
+            if (RenderTarget == null || RenderTarget.Width != nativeWidth || RenderTarget.Height != nativeHeight)
+            {
+                if (RenderTarget != null)
+                    RenderTarget.Dispose();
+                RenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+            }
+
+            // Draw all game/menu content to the render target
+            GraphicsDevice.SetRenderTarget(RenderTarget);
+            GraphicsDevice.Clear(Color.Black);
+
+            // Use identity matrix for SpriteBatch, let zoom be handled in the blit
             if (GameState.IsLoading)
             {
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 var loadingText = "Loading...";
                 if (TextRenderer.Fonts.TryGetValue(Font.Georgia, out var font))
                 {
                     var size = font.MeasureString(loadingText);
-                    var x = (Graphics.PreferredBackBufferWidth - size.X) / 2f;
-                    var y = (Graphics.PreferredBackBufferHeight - size.Y) / 2f;
+                    var x = (nativeWidth - size.X) / 2f;
+                    var y = (nativeHeight - size.Y) / 2f;
                     SpriteBatch.DrawString(font, loadingText, new Vector2(x, y), Color.White);
                 }
-
                 SpriteBatch.End();
-                base.Draw(gameTime);
-                return;
             }
-
-            if (GameState.InGame == true)
+            else if (GameState.InGame == true)
             {
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 Render_Game();
+                SpriteBatch.End();
             }
             else
             {
+                SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
                 Render_Menu();
+                SpriteBatch.End();
             }
 
-            SpriteBatch.End();
+            GraphicsDevice.SetRenderTarget(null);
+
+            // Render the target to the back buffer, scaling by camera zoom
+            int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
+            // Prevent zooming out smaller than native resolution (zoom < 1.0)
+            float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
+            float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
+            int drawWidth = (int)(nativeWidth * zoom);
+            int drawHeight = (int)(nativeHeight * zoom);
+            int offsetX = (backBufferWidth - drawWidth) / 2;
+            int offsetY = (backBufferHeight - drawHeight) / 2;
+            Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
+            using (var targetBatch = new SpriteBatch(GraphicsDevice))
+            {
+                targetBatch.Begin(samplerState: SamplerState.PointClamp);
+                targetBatch.Draw(RenderTarget, destRect, Color.White);
+                targetBatch.End();
+            }
 
             base.Draw(gameTime);
         }
@@ -470,6 +507,20 @@ namespace Client
                 {
                     Editor_Map.MapEditorRedo();
                 }
+            }
+
+            // Camera zoom with mouse wheel (range 0.5 to 4.0)
+            int currentWheel = Mouse.GetState().ScrollWheelValue;
+            if (currentWheel != _prevScrollWheelValue)
+            {
+                int delta = currentWheel - _prevScrollWheelValue;
+                if (delta != 0)
+                {
+                    float zoomDelta = delta > 0 ? 0.1f : -0.1f;
+                    GameState.CameraZoom += zoomDelta;
+                    GameState.CameraZoom = Math.Clamp(GameState.CameraZoom, 0.5f, 2.0f);
+                }
+                _prevScrollWheelValue = currentWheel;
             }
 
             if (IsKeyStateActive(Keys.F12))
@@ -541,8 +592,30 @@ namespace Client
 
         public static Tuple<int, int> GetMousePosition()
         {
-            // Return the current mouse position as a Tuple
-            return new Tuple<int, int>(CurrentMouseState.X, CurrentMouseState.Y);
+            // Adjust mouse position to account for render target scaling and offset
+            int backBufferWidth = Graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
+            int backBufferHeight = Graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
+            int nativeWidth = GameState.ResolutionWidth;
+            int nativeHeight = GameState.ResolutionHeight;
+            float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
+            float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
+            int drawWidth = (int)(nativeWidth * zoom);
+            int drawHeight = (int)(nativeHeight * zoom);
+            int offsetX = (backBufferWidth - drawWidth) / 2;
+            int offsetY = (backBufferHeight - drawHeight) / 2;
+
+            // Mouse position in window
+            int mouseX = CurrentMouseState.X;
+            int mouseY = CurrentMouseState.Y;
+
+            // Check if mouse is inside the drawn game area
+            if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
+                return new Tuple<int, int>(-1, -1); // Outside game area
+
+            // Convert to game (render target) coordinates
+            int gameX = (int)((mouseX - offsetX) / zoom);
+            int gameY = (int)((mouseY - offsetY) / zoom);
+            return new Tuple<int, int>(gameX, gameY);
         }
 
         public static bool IsMouseButtonDown(MouseButton button)
@@ -785,7 +858,7 @@ namespace Client
             return (DateTime.Now - _lastInputTime).TotalMilliseconds >= InputCooldown;
         }
 
-        private static bool IsSeartchCooldownElapsed()
+        private static bool IsSearchCooldownElapsed()
         {
             return (DateTime.Now - _lastSearchTime).TotalMilliseconds >= InputCooldown;
         }
@@ -931,12 +1004,12 @@ namespace Client
         }
 
         // Convert a key to a character (if possible)
-    private static char ConvertKeyToChar(Keys key, bool shiftPressed)
+        private static char? ConvertKeyToChar(Keys key, bool shiftPressed)
         {
             // Handle alphabetic keys
             if (key >= Keys.A && key <= Keys.Z)
             {
-        char baseChar = (char)('A' + ((int)key - (int)Keys.A));
+                char baseChar = (char)('A' + ((int)key - (int)Keys.A));
                 return shiftPressed ? baseChar : char.ToLower(baseChar);
             }
 
@@ -958,7 +1031,7 @@ namespace Client
             }
 
             // Ignore unsupported keys (e.g., function keys, control keys)
-            return default;
+            return null;
         }
 
         private static void HandleMouseInputs()
@@ -1086,7 +1159,7 @@ namespace Client
                     Editor_Map.MapEditorMouseDown(GameState.CurX, GameState.CurY, false);
                 }
 
-                if (IsSeartchCooldownElapsed())
+                if (IsSearchCooldownElapsed())
                 {
                     if (IsMouseButtonDown(MouseButton.Left))
                     {
