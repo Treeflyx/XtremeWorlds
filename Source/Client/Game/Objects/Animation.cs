@@ -127,8 +127,21 @@ namespace Client
             var layer = default(int);
             string sound;
 
+            // Defensive: check AnimInstance array and index
+            if (AnimInstance == null || index < 0 || index >= AnimInstance.Length)
+                return;
+
             // if doesn't exist then exit sub
-            if (AnimInstance[index].Animation < 0 || AnimInstance[index].Animation > Constant.MaxAnimations)
+
+            int animIdx = AnimInstance[index].Animation;
+            if (animIdx < 0 || animIdx >= Data.Animation.Length)
+                return;
+
+            // Defensive: check Sprite array bounds
+            if (Data.Animation[animIdx].Sprite == null || layer < 0 || layer >= Data.Animation[animIdx].Sprite.Length)
+                return;
+
+            if (animIdx > Constant.MaxAnimations)
                 return;
 
             StreamAnimation(AnimInstance[index].Animation);

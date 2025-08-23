@@ -54,7 +54,7 @@ public static class Player
 
     public static void PlayerWarp(int playerId, int mapNum, int x, int y, int dir)
     {
-        if (!NetworkConfig.IsPlaying(playerId) || mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps)
+        if (!NetworkConfig.IsPlaying(playerId) || mapNum <= 0 || mapNum >= Core.Globals.Constant.MaxMaps || Data.TempPlayer[playerId].GettingMap == true || mapNum < 0 || mapNum >= Core.Globals.Constant.MaxMaps)
         {
             return;
         }
@@ -82,7 +82,7 @@ public static class Player
                 General.Logger.LogError(ex, "[Script] Error in {MethodName}", "LeaveMap");
             }
 
-            SendLeaveMap(playerId, oldMapNum);
+            SendLeaveMap(playerId, oldMapNum);   
         }
 
         SetPlayerMap(playerId, mapNum);
