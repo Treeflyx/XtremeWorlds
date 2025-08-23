@@ -401,6 +401,12 @@ namespace Client
 
         protected override void Draw(GameTime gameTime)
         {
+
+            // Update game mouse position before any rendering (ensures correct selection/hover for game objects)
+            var mousePos = GetMousePosition("game");
+            GameState.CurMouseX = mousePos.Item1;
+            GameState.CurMouseY = mousePos.Item2;
+
             Graphics.GraphicsDevice.Clear(Color.Black);
 
             // Store viewport size for camera logic
@@ -612,30 +618,42 @@ namespace Client
             return default;
         }
 
-        public static Tuple<int, int> GetMousePosition()
+        public static Tuple<int, int> GetMousePosition(string mode = "gui")
         {
-            // Adjust mouse position for GUI scale (not game zoom)
             int backBufferWidth = Graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             int backBufferHeight = Graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
             int nativeWidth = GameState.ResolutionWidth;
             int nativeHeight = GameState.ResolutionHeight;
-            float guiScale = SettingsManager.Instance.GuiScale;
-            int guiWidth = (int)(nativeWidth * guiScale);
-            int guiHeight = (int)(nativeHeight * guiScale);
-            int guiOffsetX = (backBufferWidth - guiWidth) / 2;
-            int guiOffsetY = (backBufferHeight - guiHeight) / 2;
-
             int mouseX = CurrentMouseState.X;
             int mouseY = CurrentMouseState.Y;
 
-            // Check if mouse is inside the drawn GUI area
-            if (mouseX < guiOffsetX || mouseY < guiOffsetY || mouseX >= guiOffsetX + guiWidth || mouseY >= guiOffsetY + guiHeight)
-                return new Tuple<int, int>(-1, -1); // Outside GUI area
-
-            // Convert to GUI (render target) coordinates
-            int guiX = (int)((mouseX - guiOffsetX) / guiScale);
-            int guiY = (int)((mouseY - guiOffsetY) / guiScale);
-            return new Tuple<int, int>(guiX, guiY);
+            if (mode == "game")
+            {
+                float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
+                float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
+                int drawWidth = (int)(nativeWidth * zoom);
+                int drawHeight = (int)(nativeHeight * zoom);
+                int offsetX = (backBufferWidth - drawWidth) / 2;
+                int offsetY = (backBufferHeight - drawHeight) / 2;
+                if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
+                    return new Tuple<int, int>(-1, -1);
+                int gameX = (int)((mouseX - offsetX) / zoom);
+                int gameY = (int)((mouseY - offsetY) / zoom);
+                return new Tuple<int, int>(gameX, gameY);
+            }
+            else // gui
+            {
+                float guiScale = SettingsManager.Instance.GuiScale;
+                int guiWidth = (int)(nativeWidth * guiScale);
+                int guiHeight = (int)(nativeHeight * guiScale);
+                int guiOffsetX = (backBufferWidth - guiWidth) / 2;
+                int guiOffsetY = (backBufferHeight - guiHeight) / 2;
+                if (mouseX < guiOffsetX || mouseY < guiOffsetY || mouseX >= guiOffsetX + guiWidth || mouseY >= guiOffsetY + guiHeight)
+                    return new Tuple<int, int>(-1, -1);
+                int guiX = (int)((mouseX - guiOffsetX) / guiScale);
+                int guiY = (int)((mouseY - guiOffsetY) / guiScale);
+                return new Tuple<int, int>(guiX, guiY);
+            }
         }
 
         public static bool IsMouseButtonDown(MouseButton button)
@@ -689,7 +707,7 @@ namespace Client
         public static void ProcessInputs()
         {
             // Get the mouse position from the cache
-            var mousePos = GetMousePosition();
+            var mousePos = GetMousePosition("game");
             int mouseX = mousePos.Item1;
             int mouseY = mousePos.Item2;
 
@@ -1223,14 +1241,18 @@ namespace Client
         private static void HandleRightClickMenu()
         {
             // Loop through all players and display the right-click menu for the matching one
+
+            // Use game-space mouse coordinates for correct selection with camera zoom
+            var mousePos = GetMousePosition("game");
+            int mouseX = mousePos.Item1;
+            int mouseY = mousePos.Item2;
             for (int i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i) && GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                 {
                     if (GetPlayerX(i) == GameState.CurX && GetPlayerY(i) == GameState.CurY)
                     {
-                        // Use current mouse state for the X and Y positions
-                        GameLogic.ShowPlayerMenu(i, CurrentMouseState.X, CurrentMouseState.Y);
+                        GameLogic.ShowPlayerMenu(i, mouseX, mouseY);
                     }
                 }
             }
@@ -2929,8 +2951,7 @@ namespace Client
 
             DrawBars();
             Map.DrawMapFade();
-            string argPath = Path.Combine(DataPath.Misc, "Cursor");
-            RenderTexture(ref argPath, GameState.CurMouseX, GameState.CurMouseY, 0, 0, 16, 16, 32, 32);
+            // Cursor is drawn only once in GUI, not in game render
         }
 
         public static void UpdateMapAttributes()
