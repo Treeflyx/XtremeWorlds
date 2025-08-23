@@ -1124,10 +1124,16 @@ namespace Client
                             GameState.CurLayer -= 1;
                         }
                     }
-
-                    else if (GameState.CurTileset > 0)
+                    else if (GameState.CurTileset > 1)
                     {
                         GameState.CurTileset -= 1;
+                        // Sync the slider if the editor is open
+                        if (Editor_Map.Instance != null)
+                        {
+                            Eto.Forms.Application.Instance.AsyncInvoke(() =>
+                                Editor_Map.Instance.sldTileSet.Value = GameState.CurTileset
+                            );
+                        }
                     }
                 }
             }
@@ -1139,7 +1145,7 @@ namespace Client
                 {
                     if (CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
-                        if (GameState.CurLayer < Enum.GetValues(typeof(MapLayer)).Length)
+                        if (GameState.CurLayer < Enum.GetValues(typeof(MapLayer)).Length - 1)
                         {
                             GameState.CurLayer += 1;
                         }
@@ -1147,6 +1153,13 @@ namespace Client
                     else if (GameState.CurTileset < GameState.NumTileSets)
                     {
                         GameState.CurTileset += 1;
+                        // Sync the slider if the editor is open
+                        if (Editor_Map.Instance != null)
+                        {
+                            Eto.Forms.Application.Instance.AsyncInvoke(() =>
+                                Editor_Map.Instance.sldTileSet.Value = GameState.CurTileset
+                            );
+                        }
                     }
                 }
 
