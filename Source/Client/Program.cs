@@ -1883,7 +1883,7 @@ namespace Client
                             (int) left, (int) top, (int) width, (int) height, (int) width, (int) height);
 
                         // draw the bar proper
-                        top = height * 0L; // SP bar
+                        top = height * 1L; // SP bar
                         left = 0L;
                         string argPath5 = Path.Combine(DataPath.Misc, "Bars");
                         RenderTexture(ref argPath5, GameLogic.ConvertMapX((int) tmpX), GameLogic.ConvertMapY((int) tmpY),
