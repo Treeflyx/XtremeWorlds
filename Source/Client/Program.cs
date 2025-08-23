@@ -401,12 +401,6 @@ namespace Client
 
         protected override void Draw(GameTime gameTime)
         {
-
-            // Update game mouse position before any rendering (ensures correct selection/hover for game objects)
-            var mousePos = GetMousePosition("game");
-            GameState.CurMouseX = mousePos.Item1;
-            GameState.CurMouseY = mousePos.Item2;
-
             Graphics.GraphicsDevice.Clear(Color.Black);
 
             // Store viewport size for camera logic
