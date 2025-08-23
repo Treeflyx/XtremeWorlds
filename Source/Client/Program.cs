@@ -483,8 +483,55 @@ namespace Client
             float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
             int drawWidth = (int)(nativeWidth * zoom);
             int drawHeight = (int)(nativeHeight * zoom);
-            int offsetX = (backBufferWidth - drawWidth) / 2;
-            int offsetY = (backBufferHeight - drawHeight) / 2;
+
+            // Calculate the center point for zoom (target/player)
+            float targetX, targetY;
+            if (GameState.MyTarget >= 0)
+            {
+                if (GameState.MyTargetType == (int)TargetType.Player)
+                {
+                    targetX = GetPlayerRawX(GameState.MyTarget);
+                    targetY = GetPlayerRawY(GameState.MyTarget);
+                }
+                else if (GameState.MyTargetType == (int)TargetType.Npc)
+                {
+                    int npcIndex = GameState.MyTarget;
+                    if (npcIndex >= 0 && npcIndex < Data.MyMapNpc.Length && Data.MyMapNpc[npcIndex].Num >= 0)
+                    {
+                        targetX = Data.MyMapNpc[npcIndex].X;
+                        targetY = Data.MyMapNpc[npcIndex].Y;
+                    }
+                    else
+                    {
+                        targetX = GetPlayerRawX(GameState.MyIndex);
+                        targetY = GetPlayerRawY(GameState.MyIndex);
+                    }
+                }
+                else
+                {
+                    targetX = GetPlayerRawX(GameState.MyIndex);
+                    targetY = GetPlayerRawY(GameState.MyIndex);
+                }
+            }
+            else
+            {
+                targetX = GetPlayerRawX(GameState.MyIndex);
+                targetY = GetPlayerRawY(GameState.MyIndex);
+            }
+
+            // Convert world target position to render target coordinates
+            float camLeft = (float)GameState.Camera.Left;
+            float camTop = (float)GameState.Camera.Top;
+            float targetScreenX = targetX - camLeft;
+            float targetScreenY = targetY - camTop;
+
+            // The point we want to keep centered during zoom
+            float centerX = targetScreenX;
+            float centerY = targetScreenY;
+
+            // Calculate offset so that zoom is centered on the target/player
+            int offsetX = (int)(backBufferWidth / 2 - centerX * zoom);
+            int offsetY = (int)(backBufferHeight / 2 - centerY * zoom);
             Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
 
             using (var targetBatch = new SpriteBatch(GraphicsDevice))

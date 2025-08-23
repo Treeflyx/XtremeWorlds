@@ -2436,41 +2436,67 @@ namespace Client
         
         public static void UpdateCamera()
         {
-            float targetCameraX;
-            float targetCameraY;
 
-            // Use native resolution for camera logic (no zoom division)
             int nativeWidth = GameState.ResolutionWidth;
             int nativeHeight = GameState.ResolutionHeight;
 
-            // Center camera on player, but account for screen center
-            targetCameraX = GetPlayerRawX(GameState.MyIndex) - (nativeWidth / 2);
-            targetCameraY = GetPlayerRawY(GameState.MyIndex) - (nativeHeight / 2);
+            // Find the center of the map
+            float mapWidth = Data.MyMap.MaxX * GameState.SizeX;
+            float mapHeight = Data.MyMap.MaxY * GameState.SizeY;
+            float mapCenterX = mapWidth / 2f;
+            float mapCenterY = mapHeight / 2f;
 
-            // Clamp or center the camera position to the map edges (using native width/height)
-            long mapWidth = Data.MyMap.MaxX * GameState.SizeX;
-            long mapHeight = Data.MyMap.MaxY * GameState.SizeY;
+            // Get the target (or player) position
+            float targetX, targetY;
+            if (GameState.MyTarget >= 0)
+            {
+                if (GameState.MyTargetType == (int)TargetType.Player)
+                {
+                    targetX = GetPlayerRawX(GameState.MyTarget);
+                    targetY = GetPlayerRawY(GameState.MyTarget);
+                }
+                else if (GameState.MyTargetType == (int)TargetType.Npc)
+                {
+                    int npcIndex = GameState.MyTarget;
+                    if (npcIndex >= 0 && npcIndex < Data.MyMapNpc.Length && Data.MyMapNpc[npcIndex].Num >= 0)
+                    {
+                        targetX = Data.MyMapNpc[npcIndex].X;
+                        targetY = Data.MyMapNpc[npcIndex].Y;
+                    }
+                    else
+                    {
+                        targetX = GetPlayerRawX(GameState.MyIndex);
+                        targetY = GetPlayerRawY(GameState.MyIndex);
+                    }
+                }
+                else
+                {
+                    targetX = GetPlayerRawX(GameState.MyIndex);
+                    targetY = GetPlayerRawY(GameState.MyIndex);
+                }
+            }
+            else
+            {
+                targetX = GetPlayerRawX(GameState.MyIndex);
+                targetY = GetPlayerRawY(GameState.MyIndex);
+            }
+
+            // Center camera on target/player, but clamp so viewport never shows outside map
+            float cameraX = targetX - (nativeWidth / 2f);
+            float cameraY = targetY - (nativeHeight / 2f);
+
+            // Clamp to map bounds
+            cameraX = Math.Max(0, Math.Min(cameraX, mapWidth - nativeWidth));
+            cameraY = Math.Max(0, Math.Min(cameraY, mapHeight - nativeHeight));
 
             // If the map is smaller than the viewport, center the map
             if (mapWidth <= nativeWidth)
-            {
-                targetCameraX = -(nativeWidth - mapWidth) / 2f;
-            }
-            else
-            {
-                targetCameraX = Math.Max(0, Math.Min(targetCameraX, mapWidth - nativeWidth));
-            }
+                cameraX = -(nativeWidth - mapWidth) / 2f;
             if (mapHeight <= nativeHeight)
-            {
-                targetCameraY = -(nativeHeight - mapHeight) / 2f;
-            }
-            else
-            {
-                targetCameraY = Math.Max(0, Math.Min(targetCameraY, mapHeight - nativeHeight));
-            }
+                cameraY = -(nativeHeight - mapHeight) / 2f;
 
-            GameState.Camera.Left = (long)Math.Round(targetCameraX);
-            GameState.Camera.Top = (long)Math.Round(targetCameraY);
+            GameState.Camera.Left = (long)Math.Round(cameraX);
+            GameState.Camera.Top = (long)Math.Round(cameraY);
 
             long StartX = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Left), Data.MyMap.MaxX - 1) / 32);
             long StartY = Math.Max(0, Math.Min((long)Math.Floor(GameState.Camera.Top), Data.MyMap.MaxY - 1) / 32);
