@@ -614,30 +614,28 @@ namespace Client
 
         public static Tuple<int, int> GetMousePosition()
         {
-            // Adjust mouse position to account for render target scaling and offset
+            // Adjust mouse position for GUI scale (not game zoom)
             int backBufferWidth = Graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
             int backBufferHeight = Graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
             int nativeWidth = GameState.ResolutionWidth;
             int nativeHeight = GameState.ResolutionHeight;
-            float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
-            float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
-            int drawWidth = (int)(nativeWidth * zoom);
-            int drawHeight = (int)(nativeHeight * zoom);
-            int offsetX = (backBufferWidth - drawWidth) / 2;
-            int offsetY = (backBufferHeight - drawHeight) / 2;
+            float guiScale = SettingsManager.Instance.GuiScale;
+            int guiWidth = (int)(nativeWidth * guiScale);
+            int guiHeight = (int)(nativeHeight * guiScale);
+            int guiOffsetX = (backBufferWidth - guiWidth) / 2;
+            int guiOffsetY = (backBufferHeight - guiHeight) / 2;
 
-            // Mouse position in window
             int mouseX = CurrentMouseState.X;
             int mouseY = CurrentMouseState.Y;
 
-            // Check if mouse is inside the drawn game area
-            if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
-                return new Tuple<int, int>(-1, -1); // Outside game area
+            // Check if mouse is inside the drawn GUI area
+            if (mouseX < guiOffsetX || mouseY < guiOffsetY || mouseX >= guiOffsetX + guiWidth || mouseY >= guiOffsetY + guiHeight)
+                return new Tuple<int, int>(-1, -1); // Outside GUI area
 
-            // Convert to game (render target) coordinates
-            int gameX = (int)((mouseX - offsetX) / zoom);
-            int gameY = (int)((mouseY - offsetY) / zoom);
-            return new Tuple<int, int>(gameX, gameY);
+            // Convert to GUI (render target) coordinates
+            int guiX = (int)((mouseX - guiOffsetX) / guiScale);
+            int guiY = (int)((mouseY - guiOffsetY) / guiScale);
+            return new Tuple<int, int>(guiX, guiY);
         }
 
         public static bool IsMouseButtonDown(MouseButton button)
