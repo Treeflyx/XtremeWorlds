@@ -553,7 +553,7 @@ namespace Client
             if (currentWheel != _prevScrollWheelValue)
             {
                 int delta = currentWheel - _prevScrollWheelValue;
-                if (delta != 0)
+                if (delta != 0 && GameState.MyEditorType != EditorType.Map)
                 {
                     float zoomDelta = delta > 0 ? 0.1f : -0.1f;
                     GameState.CameraZoom += zoomDelta;

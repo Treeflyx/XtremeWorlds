@@ -99,6 +99,7 @@ public static class Program
             GameState.MyEditorType = EditorType.Map;
             GameState.EditorIndex = 0;
             new Editor_Map().Show();
+            GameState.CameraZoom = 1.0f;
             GameState.InitMapEditor = false;
         }
 
