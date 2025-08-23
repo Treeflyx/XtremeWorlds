@@ -403,8 +403,10 @@ namespace Client
         {
             Graphics.GraphicsDevice.Clear(Color.Black);
 
-            // Store viewport size for camera logic
-            var viewport = GraphicsDevice.Viewport;
+            // Update GUI mouse position before drawing GUI (ensures correct UI hover/click)
+            var mousePosGame = GetMousePosition("game");
+            GameState.CurMouseXGame = mousePosGame.Item1;
+            GameState.CurMouseYGame = mousePosGame.Item2;
 
             // Always render at the configured native resolution to a RenderTarget
             int nativeWidth = GameState.ResolutionWidth;
@@ -448,6 +450,21 @@ namespace Client
                 _guiRenderTarget?.Dispose();
                 _guiRenderTarget = new RenderTarget2D(GraphicsDevice, nativeWidth, nativeHeight, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
             }
+
+            // Update GUI mouse position before drawing GUI (ensures correct UI hover/click)
+            // This uses only GUI scale, not game zoom, so GUI input is always correct regardless of zoom
+            var mousePosGui = GetMousePosition("gui");
+            if (mousePosGui.Item1 >= 0 && mousePosGui.Item2 >= 0)
+            {
+                GameState.CurMouseXGui = mousePosGui.Item1;
+                GameState.CurMouseYGui = mousePosGui.Item2;
+            }
+            else
+            {
+                GameState.CurMouseXGui = -1;
+                GameState.CurMouseYGui = -1;
+            }
+
             GraphicsDevice.SetRenderTarget(_guiRenderTarget);
             GraphicsDevice.Clear(Color.Transparent);
             SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied);
@@ -637,11 +654,13 @@ namespace Client
             }
             else // gui
             {
+                // Use the actual GUI destination rectangle as drawn to the window, ignoring game zoom/camera
                 float guiScale = SettingsManager.Instance.GuiScale;
                 int guiWidth = (int)(nativeWidth * guiScale);
                 int guiHeight = (int)(nativeHeight * guiScale);
                 int guiOffsetX = (backBufferWidth - guiWidth) / 2;
                 int guiOffsetY = (backBufferHeight - guiHeight) / 2;
+                // This matches the guiDestRect in Draw()
                 if (mouseX < guiOffsetX || mouseY < guiOffsetY || mouseX >= guiOffsetX + guiWidth || mouseY >= guiOffsetY + guiHeight)
                     return new Tuple<int, int>(-1, -1);
                 int guiX = (int)((mouseX - guiOffsetX) / guiScale);
@@ -701,19 +720,35 @@ namespace Client
         public static void ProcessInputs()
         {
             // Get the mouse position from the cache
-            var mousePos = GetMousePosition("game");
-            int mouseX = mousePos.Item1;
-            int mouseY = mousePos.Item2;
 
-            // Convert adjusted coordinates to game world coordinates
-            GameState.CurX = (int) Math.Round(GameState.TileView.Left +
-                                              Math.Floor((mouseX + GameState.Camera.Left) / GameState.SizeX));
-            GameState.CurY = (int) Math.Round(GameState.TileView.Top +
-                                              Math.Floor((mouseY + GameState.Camera.Top) / GameState.SizeY));
+            // --- Update both game and GUI mouse/world positions globally ---
+            // Game context
+            var mousePosGame = GetMousePosition("game");
+            int mouseXGame = mousePosGame.Item1;
+            int mouseYGame = mousePosGame.Item2;
+            GameState.CurMouseXGame = mouseXGame;
+            GameState.CurMouseYGame = mouseYGame;
+            GameState.CurXGame = (int)Math.Round(GameState.TileView.Left +
+                Math.Floor((mouseXGame + GameState.Camera.Left) / GameState.SizeX));
+            GameState.CurYGame = (int)Math.Round(GameState.TileView.Top +
+                Math.Floor((mouseYGame + GameState.Camera.Top) / GameState.SizeY));
 
-            // Store raw mouse coordinates for interface interactions
-            GameState.CurMouseX = mouseX;
-            GameState.CurMouseY = mouseY;
+            // GUI context
+            var mousePosGui = GetMousePosition("gui");
+            int mouseXGui = mousePosGui.Item1;
+            int mouseYGui = mousePosGui.Item2;
+            GameState.CurMouseXGui = mouseXGui;
+            GameState.CurMouseYGui = mouseYGui;
+            GameState.CurXGui = (int)Math.Round(GameState.TileView.Left +
+                Math.Floor((mouseXGui + GameState.Camera.Left) / GameState.SizeX));
+            GameState.CurYGui = (int)Math.Round(GameState.TileView.Top +
+                Math.Floor((mouseYGui + GameState.Camera.Top) / GameState.SizeY));
+
+            // For compatibility, set legacy variables to GAME context by default (for targeting, etc)
+            GameState.CurX = GameState.CurXGame;
+            GameState.CurY = GameState.CurYGame;
+            GameState.CurMouseX = GameState.CurMouseXGame;
+            GameState.CurMouseY = GameState.CurMouseYGame;
 
             // Check for action keys
             GameState.VbKeyControl = CurrentKeyboardState.IsKeyDown(Keys.LeftControl);
@@ -1164,15 +1199,15 @@ namespace Client
 
             for (int i = 1; i < Gui.Windows.Count; i++)
             {
-                // Check if active control is hovered
+                // Check if active control is hovered (GUI context)
                 if (Gui.Windows[i].Controls != null)
                 {
                     for (int j = 0; j < Gui.Windows[i].Controls.Count; j++)
                     {
-                        if (GameState.CurMouseX >= Gui.Windows[i].X &&
-                            GameState.CurMouseX <= Gui.Windows[i].Width + Gui.Windows[i].X &&
-                            GameState.CurMouseY >= Gui.Windows[i].Y &&
-                            GameState.CurMouseY <= Gui.Windows[i].Height + Gui.Windows[i].Y)
+                        if (GameState.CurMouseXGui >= Gui.Windows[i].X &&
+                            GameState.CurMouseXGui <= Gui.Windows[i].Width + Gui.Windows[i].X &&
+                            GameState.CurMouseYGui >= Gui.Windows[i].Y &&
+                            GameState.CurMouseYGui <= Gui.Windows[i].Height + Gui.Windows[i].Y)
                         {
                             if (Gui.Windows[i].Controls[j].State != ControlState.Normal)
                             {
@@ -1188,7 +1223,7 @@ namespace Client
             {
                 if (GameState.MyEditorType == EditorType.Map)
                 {
-                    Editor_Map.MapEditorMouseDown(GameState.CurX, GameState.CurY, false);
+                    Editor_Map.MapEditorMouseDown(GameState.CurXGame, GameState.CurYGame, false);
                 }
 
                 if (IsSearchCooldownElapsed())
@@ -1196,7 +1231,7 @@ namespace Client
                     if (IsMouseButtonDown(MouseButton.Left))
                     {
                         Player.CheckAttack(true);
-                        Sender.PlayerSearch(GameState.CurX, GameState.CurY, 0);
+                        Sender.PlayerSearch(GameState.CurXGame, GameState.CurYGame, 0);
                         _lastSearchTime = DateTime.Now;
                     }
                 }
@@ -1220,7 +1255,7 @@ namespace Client
                         // Admin warp if Shift is held and the player has moderator access
                         if (GetPlayerAccess(GameState.MyIndex) >= (int) AccessLevel.Moderator)
                         {
-                            Sender.AdminWarp(GameState.CurX, GameState.CurY);
+                            Sender.AdminWarp(GameState.CurXGame, GameState.CurYGame);
                         }
                     }
                     else
@@ -1234,25 +1269,30 @@ namespace Client
 
         private static void HandleRightClickMenu()
         {
-            // Loop through all players and display the right-click menu for the matching one
+            // Use game-space mouse position for world interactions (target/admin warp/player search)
+            var mousePosGame = GetMousePosition("game");
+            int mouseXGame = mousePosGame.Item1;
+            int mouseYGame = mousePosGame.Item2;
 
-            // Use game-space mouse coordinates for correct selection with camera zoom
-            var mousePos = GetMousePosition("game");
-            int mouseX = mousePos.Item1;
-            int mouseY = mousePos.Item2;
+            // Use gui-space mouse position for UI
+            var mousePosGui = GetMousePosition("gui");
+            int mouseXGui = mousePosGui.Item1;
+            int mouseYGui = mousePosGui.Item2;
+
             for (int i = 0; i < Constant.MaxPlayers; i++)
             {
                 if (IsPlaying(i) && GetPlayerMap(i) == GetPlayerMap(GameState.MyIndex))
                 {
-                    if (GetPlayerX(i) == GameState.CurX && GetPlayerY(i) == GameState.CurY)
+                    if (GetPlayerX(i) == GameState.CurXGame && GetPlayerY(i) == GameState.CurYGame)
                     {
-                        GameLogic.ShowPlayerMenu(i, mouseX, mouseY);
+                        // Show player menu at GUI mouse position (for UI popups)
+                        GameLogic.ShowPlayerMenu(i, mouseXGui, mouseYGui);
                     }
                 }
             }
 
-            // Perform player search at the current cursor position
-            Sender.PlayerSearch(GameState.CurX, GameState.CurY, 1);
+            // Perform player search at the current cursor position (game-space)
+            Sender.PlayerSearch(GameState.CurXGame, GameState.CurYGame, 1);
         }
 
 
@@ -1898,7 +1938,7 @@ namespace Client
             SpriteBatch.Begin();
 
             // Define rectangle parameters.
-            var position = new Vector2(GameLogic.ConvertMapX(GameState.CurX), GameLogic.ConvertMapY(GameState.CurY));
+            var position = new Vector2(GameLogic.ConvertMapX(GameState.CurXGame), GameLogic.ConvertMapY(GameState.CurYGame));
             var size = new Vector2(GameState.SizeX, GameState.SizeX);
             var fillColor = Color.Transparent; // No fill
             var outlineColor = Color.Cyan; // Cyan outline
@@ -2764,7 +2804,7 @@ namespace Client
                                 if (Data.Player[i].Sprite == 0)
                                     continue;
 
-                                if (GameState.CurX == Data.Player[i].X & GameState.CurY == Data.Player[i].Y)
+                                if (GameState.CurXGame == Data.Player[i].X & GameState.CurYGame == Data.Player[i].Y)
                                 {
                                     if (GameState.MyTargetType == (int) TargetType.Player & GameState.MyTarget == i)
                                     {
@@ -2923,7 +2963,7 @@ namespace Client
             // draw cursor, player X and Y locations
             if (GameState.BLoc)
             {
-                string cur = "Cur X: " + GameState.CurX + " Y: " + GameState.CurY;
+                string cur = "Cur X: " + GameState.CurXGame + " Y: " + GameState.CurYGame;
                 string loc = "loc X: " + GetPlayerX(GameState.MyIndex) + " Y: " + GetPlayerY(GameState.MyIndex);
                 string map = " (Map #" + GetPlayerMap(GameState.MyIndex) + ")";
 
@@ -2945,7 +2985,6 @@ namespace Client
 
             DrawBars();
             Map.DrawMapFade();
-            // Cursor is drawn only once in GUI, not in game render
         }
 
         public static void UpdateMapAttributes()

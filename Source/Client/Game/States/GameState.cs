@@ -166,11 +166,23 @@ namespace Client
         // FPS and Time-based movement vars
         public static int ElapsedTime;
 
-        // Mouse cursor tile location
+        // Mouse cursor tile location (legacy, for compatibility)
         public static int CurX;
         public static int CurY;
         public static int CurMouseX;
         public static int CurMouseY;
+
+        // --- Global mouse/world positions for both game and GUI contexts ---
+        // Game (world) context
+        public static int CurXGame;
+        public static int CurYGame;
+        public static int CurMouseXGame;
+        public static int CurMouseYGame;
+        // GUI context
+        public static int CurXGui;
+        public static int CurYGui;
+        public static int CurMouseXGui;
+        public static int CurMouseYGui;
         public static bool Info;
 
         // Game editors
