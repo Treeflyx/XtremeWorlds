@@ -3143,7 +3143,7 @@ namespace Client
             Map.DrawMapFade();
         }
 
-    // Cancels the current target when the TARGET's center moves outside the camera viewport in world space.
+    // Cancels the current target if the distance between PLAYER and TARGET exceeds the visible camera view.
         private static void CancelTargetIfOffCamera()
         {
             // Only handle Player and NPC targets
@@ -3174,11 +3174,9 @@ namespace Client
             int camRight = camLeft + visWidth;
             int camBottom = camTop + visHeight;
 
-            // Helper to test if a point is inside the visible camera rect (inclusive edge treated as out)
-            bool IsOutside(int cx, int cy)
-            {
-                return cx <= camLeft || cx >= camRight || cy <= camTop || cy >= camBottom;
-            }
+            // Compute max allowed deltas based on visible size
+            int maxDx = visWidth / 2;
+            int maxDy = visHeight / 2;
 
             bool shouldClear = false;
             int tileX = -1;
@@ -3192,10 +3190,12 @@ namespace Client
                 }
                 else
                 {
-                    // Use the TARGET player's center relative to camera
+                    // Compare distance between player and target against the view half-size (zoom-aware)
+                    int px = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX / 2;
+                    int py = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY / 2;
                     int tx = GetPlayerRawX(t) + GameState.SizeX / 2;
                     int ty = GetPlayerRawY(t) + GameState.SizeY / 2;
-                    if (IsOutside(tx, ty))
+                    if (Math.Abs(tx - px) >= maxDx || Math.Abs(ty - py) >= maxDy)
                     {
                         shouldClear = true;
                         tileX = GetPlayerX(t);
@@ -3212,9 +3212,11 @@ namespace Client
                 }
                 else
                 {
+                    int px = GetPlayerRawX(GameState.MyIndex) + GameState.SizeX / 2;
+                    int py = GetPlayerRawY(GameState.MyIndex) + GameState.SizeY / 2;
                     int tx = Data.MyMapNpc[n].X + GameState.SizeX / 2;
                     int ty = Data.MyMapNpc[n].Y + GameState.SizeY / 2;
-                    if (IsOutside(tx, ty))
+                    if (Math.Abs(tx - px) >= maxDx || Math.Abs(ty - py) >= maxDy)
                     {
                         shouldClear = true;
                         tileX = (int)Math.Floor(Data.MyMapNpc[n].X / 32d);

@@ -2453,8 +2453,17 @@ namespace Client
             {
                 if (GameState.MyTargetType == (int)TargetType.Player)
                 {
-                    targetX = GetPlayerRawX(GameState.MyTarget);
-                    targetY = GetPlayerRawY(GameState.MyTarget);
+                    int t = GameState.MyTarget;
+                    if (IsPlaying(t) && Data.Player[t].Map == Data.Player[GameState.MyIndex].Map)
+                    {
+                        targetX = GetPlayerRawX(t);
+                        targetY = GetPlayerRawY(t);
+                    }
+                    else
+                    {
+                        targetX = GetPlayerRawX(GameState.MyIndex);
+                        targetY = GetPlayerRawY(GameState.MyIndex);
+                    }
                 }
                 else if (GameState.MyTargetType == (int)TargetType.Npc)
                 {
