@@ -450,8 +450,8 @@ public static class Sender
         var packetWriter = new PacketWriter(16);
 
         packetWriter.WriteEnum(Packets.ClientPackets.CSearch);
-        packetWriter.WriteInt32(GameState.CurX);
-        packetWriter.WriteInt32(GameState.CurY);
+        packetWriter.WriteInt32(curX);
+        packetWriter.WriteInt32(curY);
         packetWriter.WriteInt32(rClick);
 
         Network.Send(packetWriter);

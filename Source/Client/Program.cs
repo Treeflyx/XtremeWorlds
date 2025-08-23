@@ -860,6 +860,44 @@ namespace Client
             // Handle Escape key to toggle menus
             if (IsKeyStateActive(Keys.Escape))
             {
+                // First: clear target with server if one is selected
+                int prevTarget = GameState.MyTarget;
+                int prevTargetType = GameState.MyTargetType;
+                if (prevTarget >= 0 && prevTargetType >= 0)
+                {
+                    int? clearTileX = null;
+                    int? clearTileY = null;
+                    if (prevTargetType == (int)TargetType.Player)
+                    {
+                        if (IsPlaying(prevTarget) && GetPlayerMap(prevTarget) == GetPlayerMap(GameState.MyIndex))
+                        {
+                            clearTileX = GetPlayerX(prevTarget);
+                            clearTileY = GetPlayerY(prevTarget);
+                        }
+                    }
+                    else if (prevTargetType == (int)TargetType.Npc)
+                    {
+                        if (prevTarget >= 0 && prevTarget < Data.MyMapNpc.Length && Data.MyMapNpc[prevTarget].Num >= 0)
+                        {
+                            clearTileX = (int)Math.Floor(Data.MyMapNpc[prevTarget].X / 32d);
+                            clearTileY = (int)Math.Floor(Data.MyMapNpc[prevTarget].Y / 32d);
+                        }
+                    }
+
+                    // Clear locally first per requirement
+                    GameState.MyTarget = 0;
+                    GameState.MyTargetType = 0;
+
+                    // Notify server to toggle/clear the same tile
+                    if (clearTileX.HasValue && clearTileY.HasValue)
+                    {
+                        Sender.PlayerSearch(clearTileX.Value, clearTileY.Value, 0);
+                    }
+
+                    // If we just cleared a target, stop here (don’t open/close menus this press)
+                    return;
+                }
+
                 if (GameState.InMenu == true)
                     return;
 
