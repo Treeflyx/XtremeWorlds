@@ -1933,7 +1933,7 @@ namespace Client
             }
         }
 
-        internal void DrawEyeDropper()
+        public void DrawEyeDropper()
         {
             SpriteBatch.Begin();
 

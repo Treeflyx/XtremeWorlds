@@ -882,12 +882,12 @@ namespace Client
                     new SeparatorToolItem(),
                     new ButtonToolItem{ Text = "Fill", Command = new Command((_,__) => TsbFill_Click(this, EventArgs.Empty))},
                     new ButtonToolItem{ Text = "Clear", Command = new Command((_,__) => TsbClear_Click(this, EventArgs.Empty))},
-                    new ButtonToolItem{ Text = "Dropper", Command = new Command((_,__) => TsbEyeDropper_Click(this, EventArgs.Empty))},
+                    new ButtonToolItem{ Text = "Eye Dropper", Command = new Command((_,__) => TsbEyeDropper_Click(this, EventArgs.Empty))},
                     new ButtonToolItem{ Text = "Copy", Command = new Command((_,__) => tsbCopyMap_Click(this, EventArgs.Empty))},
                     new ButtonToolItem{ Text = "Delete"},
                     new ButtonToolItem{ Text = "Undo"},
                     new ButtonToolItem{ Text = "Redo"},
-                    new ButtonToolItem{ Text = "Shot"},
+                    new ButtonToolItem{ Text = "Screenshot"},
                     new ButtonToolItem{ Text = "Tileset"}
                 }
             };
