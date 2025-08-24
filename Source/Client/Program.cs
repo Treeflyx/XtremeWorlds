@@ -113,7 +113,6 @@ namespace Client
 
             Graphics = new GraphicsDeviceManager(this);
 
-
             // Set basic properties for GraphicsDeviceManager
             ref var withBlock = ref Graphics;
             withBlock.GraphicsProfile = GraphicsProfile.Reach;
@@ -124,6 +123,10 @@ namespace Client
             IsFixedTimeStep = false;
             withBlock.PreferHalfPixelOffset = true;
             withBlock.PreferMultiSampling = false;
+
+            // Allow resizing and keep backbuffer in sync with window size when windowed
+            Window.AllowUserResizing = true;
+            Window.ClientSizeChanged += OnClientSizeChanged;
 
             // Add handler for PreparingDeviceSettings
             Graphics.PreparingDeviceSettings += (sender, args) =>
@@ -146,11 +149,42 @@ namespace Client
             };
         }
 
+        // Debounce GUI rebuilds on resize
+        private DateTime _lastGuiReinit = DateTime.MinValue;
+        private void ReinitGuiForResize()
+        {
+            var now = DateTime.UtcNow;
+            if ((now - _lastGuiReinit).TotalMilliseconds < 150)
+                return;
+            _lastGuiReinit = now;
+            try { UIScript.Load(); } catch { }
+            try { Gui.Init(); } catch { }
+        }
+
+        private void OnClientSizeChanged(object? sender, EventArgs e)
+        {
+            // In windowed mode, track the window client size as the backbuffer size
+            if (Graphics is null || Graphics.IsFullScreen)
+                return;
+
+            var bounds = Window.ClientBounds;
+
+            if (bounds.Width <= 0 || bounds.Height <= 0)
+                return;
+
+            if (Graphics.PreferredBackBufferWidth != bounds.Width || Graphics.PreferredBackBufferHeight != bounds.Height)
+            {
+                Graphics.PreferredBackBufferWidth = bounds.Width;
+                Graphics.PreferredBackBufferHeight = bounds.Height;
+                try { Graphics.ApplyChanges(); } catch { }
+                ReinitGuiForResize();
+            }
+        }
+
         protected override void Initialize()
         {
             Window.Title = SettingsManager.Instance.GameName;
-            // Keep window visible; we'll load heavy content asynchronously.
-
+            
             // Create the RenderTarget2D with the same size as the screen
             RenderTarget = new RenderTarget2D(Graphics?.GraphicsDevice,
                 Graphics?.GraphicsDevice.PresentationParameters.BackBufferWidth ?? 0,
@@ -343,10 +377,10 @@ namespace Client
                 return;
             }
 
-            var (targetWidth, targetHeight) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
-            var targetAspect = (float) targetWidth / targetHeight;
-
-            var destRect = GetAspectRatio(dX, dY, Graphics?.PreferredBackBufferWidth ?? 0, Graphics?.PreferredBackBufferHeight ?? 0, dW, dH, targetAspect);
+            // Draw directly in native render-target coordinates. Global composition handles scaling
+            // to the backbuffer with pillarbox/letterbox as needed. Avoid using backbuffer sizes here
+            // to prevent double-scaling during window resizes.
+            var destRect = new Rectangle(dX, dY, dW, dH);
             var srcRect = new Rectangle(sX, sY, sW, sH);
             var color = new Color(red, green, blue, (byte) 255) * alpha;
 
@@ -408,9 +442,35 @@ namespace Client
             GameState.CurMouseXGame = mousePosGame.Item1;
             GameState.CurMouseYGame = mousePosGame.Item2;
 
-            // Always render at the configured native resolution to a RenderTarget
-            int nativeWidth = GameState.ResolutionWidth;
-            int nativeHeight = GameState.ResolutionHeight;
+            // Choose native resolution: window/backbuffer in windowed; selected resolution in fullscreen
+            var ppNow = GraphicsDevice.PresentationParameters;
+            int bbWNow = ppNow.BackBufferWidth;
+            int bbHNow = ppNow.BackBufferHeight;
+            bool isFullscreenNow = Graphics?.IsFullScreen ?? false;
+            int nativeWidth, nativeHeight;
+            if (isFullscreenNow)
+            {
+                var sel = General.GetResolutionSize(SettingsManager.Instance.Resolution);
+                // Clamp to 16:9 aspect to avoid ultrawide stretching for now
+                int w = sel.Item1;
+                int h = sel.Item2;
+                float aspect = 16f / 9f;
+                // Recompute height from width to enforce 16:9
+                h = (int)Math.Round(w / aspect);
+                nativeWidth = Math.Max(1, w);
+                nativeHeight = Math.Max(1, h);
+            }
+            else
+            {
+                // In windowed mode, keep native at selected resolution and SCALE to fit window
+                var sel = General.GetResolutionSize(SettingsManager.Instance.Resolution);
+                nativeWidth = Math.Max(1, sel.Item1);
+                nativeHeight = Math.Max(1, sel.Item2);
+            }
+            // Update effective native size and trigger GUI rebuild if changed
+            bool guiSizeChanged = GameState.ResolutionWidth != nativeWidth || GameState.ResolutionHeight != nativeHeight;
+            GameState.ResolutionWidth = nativeWidth;
+            GameState.ResolutionHeight = nativeHeight;
 
             // Only recreate if needed
             if (RenderTarget == null || RenderTarget.Width != nativeWidth || RenderTarget.Height != nativeHeight)
@@ -478,45 +538,51 @@ namespace Client
 
                 int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
                 int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-                float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
-                float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
-                int drawWidth = (int)(nativeWidth * zoom);
-                int drawHeight = (int)(nativeHeight * zoom);
-                // Precompute fallback centered destination for non-game states
-                int offsetX = (backBufferWidth - drawWidth) / 2;
-                int offsetY = (backBufferHeight - drawHeight) / 2;
-                Rectangle destRect = new Rectangle(offsetX, offsetY, drawWidth, drawHeight);
+                // In fullscreen, force pillarbox (black bars left/right) at 16:9; in windowed, fill 1:1.
+                Rectangle destRect;
+                bool isFullscreenNow2 = Graphics?.IsFullScreen ?? false;
+                if (isFullscreenNow2)
+                {
+                    // Force 16:9 pillarbox regardless of screen aspect
+                    float targetAspect = 16f / 9f;
+                    int height = backBufferHeight;
+                    int width = (int)(height * targetAspect);
+                    int x = (backBufferWidth - width) / 2;
+                    destRect = new Rectangle(x, 0, width, height);
+                }
+                else
+                {
+                    // Windowed: scale to fit window with letterbox/pillarbox as needed based on selected (native) aspect
+                    float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
+                    float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
+                    if (screenAspect > targetAspect)
+                    {
+                        // Pillarbox: full height
+                        int height = backBufferHeight;
+                        int width = (int)(height * targetAspect);
+                        int x = (backBufferWidth - width) / 2;
+                        destRect = new Rectangle(x, 0, width, height);
+                    }
+                    else
+                    {
+                        // Letterbox: full width
+                        int width = backBufferWidth;
+                        int height = (int)(width / targetAspect);
+                        int y = (backBufferHeight - height) / 2;
+                        destRect = new Rectangle(0, y, width, height);
+                    }
+                }
 
                 using (var targetBatch = new SpriteBatch(GraphicsDevice))
                 {
                     targetBatch.Begin(samplerState: SamplerState.PointClamp);
-                    // Draw the zoomed game/menu.
-                    // If in-game, pivot scaling around the player's current native position to keep them centered during zoom.
+                    // Draw the game/menu to the backbuffer (letterboxed in fullscreen, 1:1 in windowed)
                     if (RenderTarget != null)
-                    {
-                        if (GameState.InGame == true)
-                        {
-                            Vector2 centerScreen = new Vector2(backBufferWidth / 2f, backBufferHeight / 2f);
-                            // Compute pivot native position (target if any, else player)
-                            Vector2 pivotNative = GetZoomPivotNative();
-                            targetBatch.Draw(RenderTarget, centerScreen, null, Color.White, 0f, pivotNative, zoom, SpriteEffects.None, 0f);
-                        }
-                        else
-                        {
-                            // Fallback to centered rectangle draw
-                            targetBatch.Draw(RenderTarget, destRect, Color.White);
-                        }
-                    }
+                        targetBatch.Draw(RenderTarget, destRect, Color.White);
 
-                    // Draw the GUI, scaled by SettingsManager.Instance.GuiScale
-                    float guiScale = SettingsManager.Instance.GuiScale;
-                    int guiWidth = (int)(nativeWidth * guiScale);
-                    int guiHeight = (int)(nativeHeight * guiScale);
-                    int guiOffsetX = (backBufferWidth - guiWidth) / 2;
-                    int guiOffsetY = (backBufferHeight - guiHeight) / 2;
-                    Rectangle guiDestRect = new Rectangle(guiOffsetX, guiOffsetY, guiWidth, guiHeight);
+                    // Draw GUI to match the same destination rectangle
                     if (_guiRenderTarget != null)
-                        targetBatch.Draw(_guiRenderTarget, guiDestRect, Color.White);
+                        targetBatch.Draw(_guiRenderTarget, destRect, Color.White);
                     targetBatch.End();
                 }
             }
@@ -648,66 +714,67 @@ namespace Client
 
         public static Tuple<int, int> GetMousePosition(string mode = "gui")
         {
-            int backBufferWidth = Graphics.GraphicsDevice.PresentationParameters.BackBufferWidth;
-            int backBufferHeight = Graphics.GraphicsDevice.PresentationParameters.BackBufferHeight;
-            int nativeWidth = GameState.ResolutionWidth;
-            int nativeHeight = GameState.ResolutionHeight;
             int mouseX = CurrentMouseState.X;
             int mouseY = CurrentMouseState.Y;
 
-            if (mode == "game")
+            bool isFullscreenNow = Graphics?.IsFullScreen ?? false;
+            int backBufferWidth = Graphics?.GraphicsDevice.PresentationParameters.BackBufferWidth ?? 0;
+            int backBufferHeight = Graphics?.GraphicsDevice.PresentationParameters.BackBufferHeight ?? 0;
+            if (!isFullscreenNow)
             {
-                float minZoom = Math.Max(1.0f, Math.Min((float)backBufferWidth / nativeWidth, (float)backBufferHeight / nativeHeight));
-                float zoom = Math.Clamp(GameState.CameraZoom, minZoom, 2.0f);
-
-                // When in-game we draw with player-centered pivot. Invert that transform here.
-                if (GameState.InGame == true)
+                // Windowed: scale to fit; invert based on selected/native aspect
+                int nW = GameState.ResolutionWidth;
+                int nH = GameState.ResolutionHeight;
+                if (nW <= 0 || nH <= 0 || backBufferWidth <= 0 || backBufferHeight <= 0)
+                    return new Tuple<int, int>(mouseX, mouseY);
+                float wTargetAspect = (float)nW / nH;
+                float wScreenAspect = (float)backBufferWidth / backBufferHeight;
+                int wViewX, wViewY, wViewW, wViewH;
+                if (wScreenAspect > wTargetAspect)
                 {
-                    Vector2 centerScreen = new Vector2(backBufferWidth / 2f, backBufferHeight / 2f);
-                    Vector2 pivotNative = GetZoomPivotNative();
-
-                    // Effective top-left of the scaled native surface on screen
-                    float offsetXf = centerScreen.X - pivotNative.X * zoom;
-                    float offsetYf = centerScreen.Y - pivotNative.Y * zoom;
-                    int drawWidth = (int)(nativeWidth * zoom);
-                    int drawHeight = (int)(nativeHeight * zoom);
-
-                    if (mouseX < offsetXf || mouseY < offsetYf || mouseX >= offsetXf + drawWidth || mouseY >= offsetYf + drawHeight)
-                        return new Tuple<int, int>(-1, -1);
-
-                    int gameX = (int)((mouseX - offsetXf) / zoom);
-                    int gameY = (int)((mouseY - offsetYf) / zoom);
-                    return new Tuple<int, int>(gameX, gameY);
+                    wViewH = backBufferHeight;
+                    wViewW = (int)(wViewH * wTargetAspect);
+                    wViewX = (backBufferWidth - wViewW) / 2;
+                    wViewY = 0;
                 }
                 else
                 {
-                    // Fallback to centered composition when not in game state
-                    int drawWidth = (int)(nativeWidth * zoom);
-                    int drawHeight = (int)(nativeHeight * zoom);
-                    int offsetX = (backBufferWidth - drawWidth) / 2;
-                    int offsetY = (backBufferHeight - drawHeight) / 2;
-                    if (mouseX < offsetX || mouseY < offsetY || mouseX >= offsetX + drawWidth || mouseY >= offsetY + drawHeight)
-                        return new Tuple<int, int>(-1, -1);
-                    int gameX = (int)((mouseX - offsetX) / zoom);
-                    int gameY = (int)((mouseY - offsetY) / zoom);
-                    return new Tuple<int, int>(gameX, gameY);
+                    wViewW = backBufferWidth;
+                    wViewH = (int)(wViewW / wTargetAspect);
+                    wViewX = 0;
+                    wViewY = (backBufferHeight - wViewH) / 2;
                 }
-            }
-            else // gui
-            {
-                // Use the actual GUI destination rectangle as drawn to the window, ignoring game zoom/camera
-                float guiScale = SettingsManager.Instance.GuiScale;
-                int guiWidth = (int)(nativeWidth * guiScale);
-                int guiHeight = (int)(nativeHeight * guiScale);
-                int guiOffsetX = (backBufferWidth - guiWidth) / 2;
-                int guiOffsetY = (backBufferHeight - guiHeight) / 2;
-                // This matches the guiDestRect in Draw()
-                if (mouseX < guiOffsetX || mouseY < guiOffsetY || mouseX >= guiOffsetX + guiWidth || mouseY >= guiOffsetY + guiHeight)
+                if (mouseX < wViewX || mouseY < wViewY || mouseX >= wViewX + wViewW || mouseY >= wViewY + wViewH)
                     return new Tuple<int, int>(-1, -1);
-                int guiX = (int)((mouseX - guiOffsetX) / guiScale);
-                int guiY = (int)((mouseY - guiOffsetY) / guiScale);
-                return new Tuple<int, int>(guiX, guiY);
+                float wSx = (float)(mouseX - wViewX) / wViewW;
+                float wSy = (float)(mouseY - wViewY) / wViewH;
+                int wMappedX = (int)(wSx * nW);
+                int wMappedY = (int)(wSy * nH);
+                return new Tuple<int, int>(wMappedX, wMappedY);
             }
+
+            // Fullscreen: apply pillarbox mapping using 16:9 target aspect
+            // Fullscreen mapping uses forced 16:9 pillarbox
+            var (tW, tH) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
+            if (tW <= 0 || tH <= 0 || backBufferWidth <= 0 || backBufferHeight <= 0)
+                return new Tuple<int, int>(mouseX, mouseY);
+
+            // Force 16:9 pillarbox: view spans full height
+            float targetAspect = 16f / 9f;
+            int viewH = backBufferHeight;
+            int viewW = (int)(viewH * targetAspect);
+            int viewX = (backBufferWidth - viewW) / 2;
+            int viewY = 0;
+
+            if (mouseX < viewX || mouseY < viewY || mouseX >= viewX + viewW || mouseY >= viewY + viewH)
+                return new Tuple<int, int>(-1, -1);
+
+            // Map to target resolution space
+            float sx = (float)(mouseX - viewX) / viewW;
+            float sy = (float)(mouseY - viewY) / viewH;
+            int mappedX = (int)(sx * tW);
+            int mappedY = (int)(sy * tH);
+            return new Tuple<int, int>(mappedX, mappedY);
         }
 
         // Compute the native-space pivot for zooming: target center if valid, else player center
