@@ -291,66 +291,6 @@ namespace Client
             return System.Drawing.Color.FromArgb(xnaColor.A, xnaColor.R, xnaColor.G, xnaColor.B);
         }
 
-        public static Rectangle GetAspectRatio(int x, int y, int screenWidth, int screenHeight, int texWidth, int texHeight, float targetAspect)
-        {
-            float newAspect = (float) screenWidth / screenHeight;
-
-            int width, height;
-
-            // Scale texture to match the target aspect ratio
-            if (newAspect > targetAspect)
-            {
-                // Texture is wider than target: scale to fit width, adjust height
-                width = texWidth;
-                height = (int) (width / targetAspect);
-            }
-            else
-            {
-                // Texture is taller than target: scale to fit height, adjust width
-                height = texHeight;
-                width = texWidth;
-            }
-
-            // Calculate scaling factors
-            float scaleX = (float) width / texWidth;
-            float scaleY = (float) height / texHeight;
-
-            // Adjust dimensions to fit within screen boundaries
-            if (width > screenWidth)
-            {
-                width = screenWidth;
-                height = (int) (width / targetAspect);
-                scaleX = (float) width / texWidth;
-                scaleY = (float) height / texHeight;
-            }
-
-            if (height > screenHeight)
-            {
-                height = screenHeight;
-                width = (int) (height * targetAspect);
-                scaleX = (float) width / texWidth;
-                scaleY = (float) height / texHeight;
-            }
-
-            int destX = 0;
-            int destY = 0;
-
-            if (newAspect != targetAspect)
-            {
-                // Calculate position offset based on size difference
-                destX = x + (int) ((screenWidth - width) / 2 * scaleX);
-                destY = y + (int) ((screenHeight - height) / 2 * scaleY);
-            }
-            else
-            {
-                // Center the texture in the screen
-                destX = x;
-                destY = y;
-            }
-
-            return new Rectangle(destX, destY, width, height);
-        }
-
         public static void RenderTexture(ref string path, int dX, int dY, int sX, int sY, int dW, int dH, int sW = 1,
             int sH = 1, float alpha = 1.0f, byte red = 255, byte green = 255, byte blue = 255)
         {
@@ -449,10 +389,10 @@ namespace Client
             }
             else
             {
-                // In windowed mode, keep native at selected resolution and SCALE to fit window
-                var sel = General.GetResolutionSize(SettingsManager.Instance.Resolution);
-                nativeWidth = Math.Max(1, sel.Item1);
-                nativeHeight = Math.Max(1, sel.Item2);
+                // Windowed: use the current backbuffer/window size as native
+                // This restores previous camera behavior (more view with larger window)
+                nativeWidth = Math.Max(1, bbWNow);
+                nativeHeight = Math.Max(1, bbHNow);
             }
             // Update effective native size and trigger GUI rebuild if changed
             bool guiSizeChanged = GameState.ResolutionWidth != nativeWidth || GameState.ResolutionHeight != nativeHeight;
@@ -539,7 +479,7 @@ namespace Client
                 }
                 else
                 {
-                    // Windowed: scale to fit window with letterbox/pillarbox as needed based on selected (native) aspect
+                    // Windowed: scale to fit window with letterbox/pillarbox based on native aspect (often equals window, so no bars)
                     float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
                     float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
                     if (screenAspect > targetAspect)
@@ -569,40 +509,40 @@ namespace Client
 
                     // Draw GUI to match the same destination rectangle
                     if (_guiRenderTarget != null)
-                        targetBatch.Draw(_guiRenderTarget, destRect, Color.White);
-                    targetBatch.End();
-                }
-            }
-
-            base.Draw(gameTime);
-        }
-
-        // GUI render target for overlaying GUI at native resolution
-        private static RenderTarget2D? _guiRenderTarget;
-
-        protected override void Update(GameTime gameTime)
-        {
-            // During background loading, keep updates minimal and skip input/UI logic
-            if (GameState.IsLoading)
-            {
-                ResetInputStates();
-                base.Update(gameTime);
-                return;
-            }
-
-            // Ignore input if the window is minimized or inactive
-            if ((!IsActive || Window.ClientBounds.Width == 0) | Window.ClientBounds.Height == 0)
-            {
-                ResetInputStates();
-                base.Update(gameTime);
-                return;
-            }
-
-            lock (InputLock)
-            {
-                UpdateMouseCache();
-                UpdateKeyCache();
-                ProcessInputs();
+                        // In fullscreen, force pillarbox (black bars left/right) at 16:9; in windowed, fill 1:1.
+                        Rectangle destRect;
+                        bool isFullscreenNow2 = Graphics?.IsFullScreen ?? false;
+                        if (isFullscreenNow2)
+                        {
+                            // Force 16:9 pillarbox regardless of screen aspect
+                            float targetAspect = 16f / 9f;
+                            int height = backBufferHeight;
+                            int width = (int)(height * targetAspect);
+                            int x = (backBufferWidth - width) / 2;
+                            destRect = new Rectangle(x, 0, width, height);
+                        }
+                        else
+                        {
+                            // Windowed: scale to fit window with letterbox/pillarbox based on native aspect (often equals window, so no bars)
+                            float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
+                            float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
+                            if (screenAspect > targetAspect)
+                            {
+                                // Pillarbox: full height
+                                int height = backBufferHeight;
+                                int width = (int)(height * targetAspect);
+                                int x = (backBufferWidth - width) / 2;
+                                destRect = new Rectangle(x, 0, width, height);
+                            }
+                            else
+                            {
+                                // Letterbox: full width
+                                int width = backBufferWidth;
+                                int height = (int)(width / targetAspect);
+                                int y = (backBufferHeight - height) / 2;
+                                destRect = new Rectangle(0, y, width, height);
+                            }
+                        }
             }
 
             if (GameState.MyEditorType == EditorType.Map)
@@ -710,6 +650,7 @@ namespace Client
             if (!isFullscreenNow)
             {
                 // Windowed: scale to fit; invert based on selected/native aspect
+                // In windowed mode native matches backbuffer now
                 int nW = GameState.ResolutionWidth;
                 int nH = GameState.ResolutionHeight;
                 if (nW <= 0 || nH <= 0 || backBufferWidth <= 0 || backBufferHeight <= 0)
