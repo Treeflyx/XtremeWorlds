@@ -69,6 +69,10 @@ namespace Client
         public static RenderTarget2D? RenderTarget;
         public static Texture2D? TransparentTexture;
         public static Texture2D? PixelTexture;
+    private static RenderTarget2D? _guiRenderTarget; // GUI layer RT (never zoomed)
+    // Smoothed camera pivot (native coords) used for composition-time zoom
+    private static Vector2 _zoomPivotSmoothed = Vector2.Zero;
+    private static bool _zoomPivotInitialized = false;
 
         // Add a timer to prevent spam
         private static DateTime _lastInputTime = DateTime.MinValue;
@@ -202,6 +206,10 @@ namespace Client
 
         static void LoadFonts()
         {
+            // Attempt to load all fonts; if some fail, map them to a default so callers using
+            // TextRenderer.Fonts[font] don't crash with KeyNotFoundException.
+            SpriteFont? defaultFont = null;
+
             // Get all defined font enum values except None (assumed to be 0)
             var fontValues = Enum.GetValues(typeof(Font));
             for (int i = 1; i < fontValues.Length; i++)
@@ -214,11 +222,36 @@ namespace Client
 
                 try
                 {
-                    TextRenderer.Fonts[f] = LoadFont(DataPath.Fonts, f);
+                    var loaded = LoadFont(DataPath.Fonts, f);
+                    TextRenderer.Fonts[f] = loaded;
+                    // Prefer Georgia as the default if available; otherwise use the first loaded font.
+                    if (defaultFont == null || f == Font.Georgia)
+                    {
+                        defaultFont = loaded;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Failed to load font {f}: {ex.Message}");
+                }
+            }
+
+            // Ensure we have at least one font to fall back to
+            if (defaultFont == null && TextRenderer.Fonts.Count > 0)
+            {
+                defaultFont = TextRenderer.Fonts.Values.First();
+            }
+
+            // Seed any missing enum entries to the default font to avoid runtime crashes.
+            if (defaultFont != null)
+            {
+                for (int i = 1; i < fontValues.Length; i++)
+                {
+                    var val = fontValues.GetValue(i);
+                    if (val is Font f && !TextRenderer.Fonts.ContainsKey(f))
+                    {
+                        TextRenderer.Fonts[f] = defaultFont;
+                    }
                 }
             }
         }
@@ -465,51 +498,24 @@ namespace Client
 
                 int backBufferWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
                 int backBufferHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-                // In fullscreen, force pillarbox (black bars left/right) at 16:9; in windowed, fill 1:1.
-                Rectangle destRect;
                 bool isFullscreenNow2 = Graphics?.IsFullScreen ?? false;
-                if (isFullscreenNow2)
-                {
-                    // Force 16:9 pillarbox regardless of screen aspect
-                    float targetAspect = 16f / 9f;
-                    int height = backBufferHeight;
-                    int width = (int)(height * targetAspect);
-                    int x = (backBufferWidth - width) / 2;
-                    destRect = new Rectangle(x, 0, width, height);
-                }
-                else
-                {
-                    // Windowed: scale to fit window with letterbox/pillarbox as needed based on selected (native) aspect
-                    float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
-                    float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
-                    if (screenAspect > targetAspect)
-                    {
-                        // Pillarbox: full height
-                        int height = backBufferHeight;
-                        int width = (int)(height * targetAspect);
-                        int x = (backBufferWidth - width) / 2;
-                        destRect = new Rectangle(x, 0, width, height);
-                    }
-                    else
-                    {
-                        // Letterbox: full width
-                        int width = backBufferWidth;
-                        int height = (int)(width / targetAspect);
-                        int y = (backBufferHeight - height) / 2;
-                        destRect = new Rectangle(0, y, width, height);
-                    }
-                }
+                var viewportRect = ComputeViewportRect(backBufferWidth, backBufferHeight, nativeWidth, nativeHeight, isFullscreenNow2);
+
+                // Update smoothed pivot and compute destination rects (world uses zoomedRect, GUI uses viewportRect)
+                UpdateSmoothedPivot(nativeWidth, nativeHeight);
+                float zoomNow = GameState.CameraZoom <= 0 ? 1.0f : GameState.CameraZoom;
+                var zoomedRect = ComputeZoomedDestRect(viewportRect, nativeWidth, nativeHeight, zoomNow);
 
                 using (var targetBatch = new SpriteBatch(GraphicsDevice))
                 {
                     targetBatch.Begin(samplerState: SamplerState.PointClamp);
-                    // Draw the game/menu to the backbuffer (letterboxed in fullscreen, 1:1 in windowed)
+                    // Draw the game/menu with zoom
                     if (RenderTarget != null)
-                        targetBatch.Draw(RenderTarget, destRect, Color.White);
+                        targetBatch.Draw(RenderTarget, zoomedRect, Color.White);
 
-                    // Draw GUI to match the same destination rectangle
+                    // Draw GUI un-zoomed to the viewport
                     if (_guiRenderTarget != null)
-                        targetBatch.Draw(_guiRenderTarget, destRect, Color.White);
+                        targetBatch.Draw(_guiRenderTarget, viewportRect, Color.White);
                     targetBatch.End();
                 }
             }
@@ -517,8 +523,84 @@ namespace Client
             base.Draw(gameTime);
         }
 
-        // GUI render target for overlaying GUI at native resolution
-        private static RenderTarget2D? _guiRenderTarget;
+        // Compute the base destination rectangle that preserves aspect ratio (pillarbox/letterbox)
+        private static Rectangle ComputeViewportRect(int backBufferWidth, int backBufferHeight, int nativeWidth, int nativeHeight, bool isFullscreen)
+        {
+            if (backBufferWidth <= 0 || backBufferHeight <= 0 || nativeWidth <= 0 || nativeHeight <= 0)
+                return new Rectangle(0, 0, Math.Max(1, backBufferWidth), Math.Max(1, backBufferHeight));
+
+            if (isFullscreen)
+            {
+                float targetAspect = 16f / 9f; // enforced in fullscreen
+                int height = backBufferHeight;
+                int width = (int)(height * targetAspect);
+                int x = (backBufferWidth - width) / 2;
+                return new Rectangle(x, 0, width, height);
+            }
+            else
+            {
+                float targetAspect = (float)nativeWidth / nativeHeight;
+                float screenAspect = (float)backBufferWidth / backBufferHeight;
+                if (screenAspect > targetAspect)
+                {
+                    // Pillarbox: full height
+                    int height = backBufferHeight;
+                    int width = (int)(height * targetAspect);
+                    int x = (backBufferWidth - width) / 2;
+                    return new Rectangle(x, 0, width, height);
+                }
+                else
+                {
+                    // Letterbox: full width
+                    int width = backBufferWidth;
+                    int height = (int)(width / targetAspect);
+                    int y = (backBufferHeight - height) / 2;
+                    return new Rectangle(0, y, width, height);
+                }
+            }
+        }
+
+        // Compute a zoomed destination rectangle around the player/target pivot (native space)
+        private static Rectangle ComputeZoomedDestRect(Rectangle viewportRect, int nativeWidth, int nativeHeight, float zoom)
+        {
+            if (zoom <= 0) zoom = 1.0f;
+
+            // Use smoothed pivot (initialized lazily)
+            var pivotNative = _zoomPivotInitialized ? _zoomPivotSmoothed : GetZoomPivotNative();
+
+            // Screen position where the pivot should remain (unzoomed mapping)
+            float sx = viewportRect.X + (pivotNative.X / nativeWidth) * viewportRect.Width;
+            float sy = viewportRect.Y + (pivotNative.Y / nativeHeight) * viewportRect.Height;
+
+            // Size scales with zoom
+            int dw = (int)Math.Round(viewportRect.Width * zoom);
+            int dh = (int)Math.Round(viewportRect.Height * zoom);
+
+            // Position so that pivot maps to the same screen position
+            int dx = (int)Math.Round(sx - (pivotNative.X / nativeWidth) * dw);
+            int dy = (int)Math.Round(sy - (pivotNative.Y / nativeHeight) * dh);
+
+            return new Rectangle(dx, dy, dw, dh);
+        }
+
+        // Smooth the pivot toward current player/target native position
+        private static void UpdateSmoothedPivot(int nativeWidth, int nativeHeight)
+        {
+            var desired = GetZoomPivotNative();
+            if (!_zoomPivotInitialized || float.IsNaN(_zoomPivotSmoothed.X) || float.IsNaN(_zoomPivotSmoothed.Y))
+            {
+                _zoomPivotSmoothed = desired;
+                _zoomPivotInitialized = true;
+                return;
+            }
+            // Lerp factor: tune 0..1. Closer to 1 is snappier. Use frame-rate independent smoothing.
+            // Assuming ~60 FPS here; we can do a fixed small factor.
+            const float alpha = 0.15f; // gentle smoothing
+            _zoomPivotSmoothed = Vector2.Lerp(_zoomPivotSmoothed, desired, alpha);
+            // Clamp within native bounds (defensive)
+            _zoomPivotSmoothed.X = Math.Clamp(_zoomPivotSmoothed.X, 0, nativeWidth);
+            _zoomPivotSmoothed.Y = Math.Clamp(_zoomPivotSmoothed.Y, 0, nativeHeight);
+        }
 
         protected override void Update(GameTime gameTime)
         {
@@ -558,7 +640,7 @@ namespace Client
                 }
             }
 
-            // Camera zoom with mouse wheel (range 0.5 to 4.0)
+        // Camera zoom with mouse wheel (range 0.5 to 4.0)
             int currentWheel = Mouse.GetState().ScrollWheelValue;
             if (currentWheel != _prevScrollWheelValue)
             {
@@ -568,6 +650,7 @@ namespace Client
                     float zoomDelta = delta > 0 ? 0.1f : -0.1f;
                     GameState.CameraZoom += zoomDelta;
                     GameState.CameraZoom = Math.Clamp(GameState.CameraZoom, 0.5f, 2.0f);
+            // No snap; smoothing handles motion
                 }
                 _prevScrollWheelValue = currentWheel;
             }
@@ -644,64 +727,51 @@ namespace Client
             int mouseX = CurrentMouseState.X;
             int mouseY = CurrentMouseState.Y;
 
-            bool isFullscreenNow = Graphics?.IsFullScreen ?? false;
-            int backBufferWidth = Graphics?.GraphicsDevice.PresentationParameters.BackBufferWidth ?? 0;
-            int backBufferHeight = Graphics?.GraphicsDevice.PresentationParameters.BackBufferHeight ?? 0;
-            if (!isFullscreenNow)
-            {
-                // Windowed: scale to fit; invert based on selected/native aspect
-                int nW = GameState.ResolutionWidth;
-                int nH = GameState.ResolutionHeight;
-                if (nW <= 0 || nH <= 0 || backBufferWidth <= 0 || backBufferHeight <= 0)
-                    return new Tuple<int, int>(mouseX, mouseY);
-                float wTargetAspect = (float)nW / nH;
-                float wScreenAspect = (float)backBufferWidth / backBufferHeight;
-                int wViewX, wViewY, wViewW, wViewH;
-                if (wScreenAspect > wTargetAspect)
-                {
-                    wViewH = backBufferHeight;
-                    wViewW = (int)(wViewH * wTargetAspect);
-                    wViewX = (backBufferWidth - wViewW) / 2;
-                    wViewY = 0;
-                }
-                else
-                {
-                    wViewW = backBufferWidth;
-                    wViewH = (int)(wViewW / wTargetAspect);
-                    wViewX = 0;
-                    wViewY = (backBufferHeight - wViewH) / 2;
-                }
-                if (mouseX < wViewX || mouseY < wViewY || mouseX >= wViewX + wViewW || mouseY >= wViewY + wViewH)
-                    return new Tuple<int, int>(-1, -1);
-                float wSx = (float)(mouseX - wViewX) / wViewW;
-                float wSy = (float)(mouseY - wViewY) / wViewH;
-                int wMappedX = (int)(wSx * nW);
-                int wMappedY = (int)(wSy * nH);
-                return new Tuple<int, int>(wMappedX, wMappedY);
-            }
-
-            // Fullscreen: apply pillarbox mapping using 16:9 target aspect
-            // Fullscreen mapping uses forced 16:9 pillarbox
-            var (tW, tH) = General.GetResolutionSize(SettingsManager.Instance.Resolution);
-            if (tW <= 0 || tH <= 0 || backBufferWidth <= 0 || backBufferHeight <= 0)
+            int nW = GameState.ResolutionWidth;
+            int nH = GameState.ResolutionHeight;
+            int bbW = Graphics?.GraphicsDevice.PresentationParameters.BackBufferWidth ?? 0;
+            int bbH = Graphics?.GraphicsDevice.PresentationParameters.BackBufferHeight ?? 0;
+            bool isFs = Graphics?.IsFullScreen ?? false;
+            if (nW <= 0 || nH <= 0 || bbW <= 0 || bbH <= 0)
                 return new Tuple<int, int>(mouseX, mouseY);
 
-            // Force 16:9 pillarbox: view spans full height
-            float targetAspect = 16f / 9f;
-            int viewH = backBufferHeight;
-            int viewW = (int)(viewH * targetAspect);
-            int viewX = (backBufferWidth - viewW) / 2;
-            int viewY = 0;
-
-            if (mouseX < viewX || mouseY < viewY || mouseX >= viewX + viewW || mouseY >= viewY + viewH)
+            // Compute base viewport rect same as Draw
+            var viewport = ComputeViewportRect(bbW, bbH, nW, nH, isFs);
+            if (mouseX < viewport.X || mouseY < viewport.Y || mouseX >= viewport.Right || mouseY >= viewport.Bottom)
                 return new Tuple<int, int>(-1, -1);
 
-            // Map to target resolution space
-            float sx = (float)(mouseX - viewX) / viewW;
-            float sy = (float)(mouseY - viewY) / viewH;
-            int mappedX = (int)(sx * tW);
-            int mappedY = (int)(sy * tH);
-            return new Tuple<int, int>(mappedX, mappedY);
+            if (string.Equals(mode, "game", StringComparison.OrdinalIgnoreCase))
+            {
+                // Inverse zoom around the same pivot used in Draw()
+                float zoom = GameState.CameraZoom <= 0 ? 1.0f : GameState.CameraZoom;
+                // Ensure pivot is initialized/smoothed
+                UpdateSmoothedPivot(nW, nH);
+                Vector2 pivotNative = _zoomPivotInitialized ? _zoomPivotSmoothed : GetZoomPivotNative();
+                // pivot screen position in unzoomed viewport space
+                var pivotScreen = new Vector2(
+                    viewport.X + (pivotNative.X / nW) * viewport.Width,
+                    viewport.Y + (pivotNative.Y / nH) * viewport.Height
+                );
+                // unscale screen point back to unzoomed screen around pivot
+                var unzoomedScreen = new Vector2(
+                    (mouseX - pivotScreen.X) / zoom + pivotScreen.X,
+                    (mouseY - pivotScreen.Y) / zoom + pivotScreen.Y
+                );
+                float sx = (unzoomedScreen.X - viewport.X) / viewport.Width;
+                float sy = (unzoomedScreen.Y - viewport.Y) / viewport.Height;
+                int mx = (int)(sx * nW);
+                int my = (int)(sy * nH);
+                return new Tuple<int, int>(mx, my);
+            }
+            else
+            {
+                // GUI: ignore zoom, just map viewport to native
+                float sx = (float)(mouseX - viewport.X) / viewport.Width;
+                float sy = (float)(mouseY - viewport.Y) / viewport.Height;
+                int mx = (int)(sx * nW);
+                int my = (int)(sy * nH);
+                return new Tuple<int, int>(mx, my);
+            }
         }
 
         // Compute the native-space pivot for zooming: target center if valid, else player center

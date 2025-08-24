@@ -49,14 +49,26 @@ public static class TextRenderer
     // Get the width of the text with optional scaling
     public static int GetTextWidth(string text, Font font = Font.Georgia, float textSize = 1.0f)
     {
+        // Try the requested font, then fall back to Georgia, then any available font.
         if (!Fonts.TryGetValue(font, out var spriteFont))
         {
-            throw new ArgumentException("Font not found.");
+            if (!Fonts.TryGetValue(Font.Georgia, out spriteFont))
+            {
+                if (Fonts.Count > 0)
+                {
+                    spriteFont = Fonts.Values.First();
+                }
+                else
+                {
+                    // No fonts loaded at all; return an estimated width to avoid crashing.
+                    return (int)Math.Round((text?.Length ?? 0) * 8f * textSize);
+                }
+            }
         }
 
-        var sanitizedText = SanitizeText(text, spriteFont);
+        var sanitizedText = SanitizeText(text ?? string.Empty, spriteFont);
         var textDimensions = spriteFont.MeasureString(sanitizedText);
-        return (int) Math.Round(textDimensions.X * textSize);
+        return (int)Math.Round(textDimensions.X * textSize);
     }
 
     // Get the height of the text with optional scaling
@@ -178,10 +190,27 @@ public static class TextRenderer
 
     public static void RenderText(string text, int x, int y, Color frontColor, Color backColor, Font font = Font.Georgia)
     {
-        if (text == null) return;
-        var sanitizedText = new string(text.Where(c => Fonts[font].Characters.Contains(c)).ToArray());
-        GameClient.SpriteBatch.DrawString(Fonts[font], sanitizedText, new Vector2(x + 1, y + 1), backColor, 0.0f, Vector2.Zero, 12f / 16.0f, SpriteEffects.None, 0.0f);
-        GameClient.SpriteBatch.DrawString(Fonts[font], sanitizedText, new Vector2(x, y), frontColor, 0.0f, Vector2.Zero, 12f / 16.0f, SpriteEffects.None, 0.0f);
+        if (string.IsNullOrEmpty(text)) return;
+
+        // Try to get a sprite font (requested -> Georgia -> any). If none, skip drawing gracefully.
+        if (!Fonts.TryGetValue(font, out var spriteFont))
+        {
+            if (!Fonts.TryGetValue(Font.Georgia, out spriteFont))
+            {
+                if (Fonts.Count > 0)
+                {
+                    spriteFont = Fonts.Values.First();
+                }
+                else
+                {
+                    return; // No fonts available; nothing to render, but don't crash.
+                }
+            }
+        }
+
+        var sanitizedText = SanitizeText(text, spriteFont);
+        GameClient.SpriteBatch.DrawString(spriteFont, sanitizedText, new Vector2(x + 1, y + 1), backColor, 0.0f, Vector2.Zero, 12f / 16.0f, SpriteEffects.None, 0.0f);
+        GameClient.SpriteBatch.DrawString(spriteFont, sanitizedText, new Vector2(x, y), frontColor, 0.0f, Vector2.Zero, 12f / 16.0f, SpriteEffects.None, 0.0f);
     }
 
     public static void DrawMapAttributes()
