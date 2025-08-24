@@ -19,41 +19,6 @@ namespace Client
         // Safe state mirror for game thread checks
         private static volatile bool _isVisible;
         public static bool IsVisibleCached => _isVisible;
-        public static void ShowOnUiThread()
-        {
-            var app = Application.Instance;
-            if (app == null)
-                return;
-            app.AsyncInvoke(() =>
-            {
-                var win = Instance;
-                if (!win.Visible)
-                    win.Show();
-                _isVisible = true;
-            });
-        }
-        public static void HideOnUiThread()
-        {
-            var app = Application.Instance;
-            if (app == null)
-                return;
-            app.AsyncInvoke(() =>
-            {
-                try
-                {
-                    if (_instance != null && _instance.Visible)
-                    {
-                        _instance.Visible = false;
-                        _isVisible = false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    try { System.Console.WriteLine($"[EventEditor] Hide error: {ex}"); } catch { }
-                }
-            });
-        }
-
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 
@@ -123,7 +88,6 @@ namespace Client
         public Panel fraLabeling = new Panel();
         public TextBox txtRename = new TextBox();
         public Label lblEditing = new Label();
-     // Core top-level controls (declare only what existing logic references)
         public ComboBox cmbCondition_PlayerVarIndex = new ComboBox();
         public ComboBox cmbCondition_PlayerVarCompare = new ComboBox();
         public ComboBox cmbPlayerSwitchSet = new ComboBox();
@@ -278,7 +242,7 @@ namespace Client
         {
             _instance = this;
             Title = "Event Editor";
-            ClientSize = new Size(1100, 750);
+            ClientSize = new Size(1400, 750);
             // Keep cached visibility updated when toggled on UI thread
             Shown += (s, e) => _isVisible = true;
             Closed += (s, e) => _isVisible = false;
@@ -289,52 +253,173 @@ namespace Client
         {
             // Ensure Load is subscribed first
             Load += Editor_Events_Load; // hook existing load logic
-            // Basic left command tree + right content placeholder
-            var left = new StackLayout
+            // LEFT: RPG Maker-like page details and conditions
+            var conditions = new GroupBox
+            {
+                Text = "Conditions",
+                Content = new TableLayout
+                {
+                    Spacing = new Size(4,2),
+                    Rows =
+                    {
+                        new TableRow(new Label{ Text = "Self Switch"}, cmbSelfSwitch, new Label{ Text = "Compare"}, cmbSelfSwitchCompare),
+                        new TableRow(new Label{ Text = "Player Switch"}, cmbPlayerSwitch, new Label{ Text = "Compare"}, cmbPlayerSwitchCompare),
+                        new TableRow(new Label{ Text = "Player Variable"}, cmbPlayerVar, new Label{ Text = "Compare"}, cmbPlayervarCompare, nudPlayerVariable),
+                        new TableRow(new Label{ Text = "Has Item"}, cmbHasItem, new Label{ Text = "Amount"}, nudCondition_HasItem)
+                    }
+                }
+            };
+
+            var pageSettings = new GroupBox
+            {
+                Text = "Page Settings",
+                Content = new TableLayout
+                {
+                    Spacing = new Size(4,2),
+                    Rows =
+                    {
+                        new TableRow(new Label{ Text = "Trigger"}, cmbTrigger, new Label{ Text = "Positioning"}, cmbPositioning),
+                        new TableRow(new Label{ Text = "Move Type"}, cmbMoveType, new Label{ Text = "Move Speed"}, cmbMoveSpeed),
+                        new TableRow(new Label{ Text = "Move Freq"}, cmbMoveFreq, new Label{ Text = "Move Wait"}, cmbMoveWait),
+                        new TableRow(new Label{ Text = "Graphic"}, cmbGraphic, new Label{ Text = "Index"}, nudGraphic),
+                        new TableRow(new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 8, Items = { chkWalkAnim, chkWalkThrough, chkDirFix, chkShowName }}, null)
+                    }
+                }
+            };
+
+        // Button to open switches/variables manager
+        var btnOpenLabeling = new Button { Text = "Switches && Variables…" };
+        btnOpenLabeling.Click += BtnLabeling_Click;
+
+            var leftPane = new StackLayout
             {
                 Orientation = Orientation.Vertical,
-                Width = 250,
-                Spacing = 4,
+                Width = 560,
+                Spacing = 6,
                 Items =
                 {
-                    new Label{ Text = "Commands"},
+                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Name"}, txtName, chkGlobal } },
+                    tabPages,
+                    conditions,
+            pageSettings,
+            btnOpenLabeling
+                }
+            };
+            var leftPadded = new Panel { Padding = new Eto.Drawing.Padding(12,8,8,8), Content = leftPane };
+
+            // RIGHT: command palette and command list + editors
+            // Build the Variable/Switch management panel UI
+            pnlVariableSwitches.Visible = false;
+            fraLabeling.Visible = true;
+            FraRenaming.Visible = false;
+
+            // Rename view
+            var btnRenameOk = new Button { Text = "OK" };
+            btnRenameOk.Click += BtnRename_Ok_Click;
+            var btnRenameCancel = new Button { Text = "Cancel" };
+            btnRenameCancel.Click += BtnRename_Cancel_Click;
+
+            FraRenaming.Content = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 6,
+                Items =
+                {
+                    new Label{ Text = "Rename" },
+                    lblEditing,
+                    txtRename,
+                    new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnRenameOk, btnRenameCancel } }
+                }
+            };
+
+            // Labeling view
+            lstSwitches.Size = new Size(220, 300);
+            lstVariables.Size = new Size(220, 300);
+            lstSwitches.MouseDoubleClick += LstSwitches_DoubleClick;
+            lstVariables.MouseDoubleClick += LstVariables_DoubleClick;
+
+            var btnRenameSwitch = new Button { Text = "Rename Switch…" };
+            btnRenameSwitch.Click += BtnRenameSwitch_Click;
+            var btnRenameVariable = new Button { Text = "Rename Variable…" };
+            btnRenameVariable.Click += BtnRenameVariable_Click;
+            var btnLabelOk = new Button { Text = "OK" };
+            btnLabelOk.Click += BtnLabel_Ok_Click;
+            var btnLabelCancel = new Button { Text = "Cancel" };
+            btnLabelCancel.Click += BtnLabel_Cancel_Click;
+
+            fraLabeling.Content = new TableLayout
+            {
+                Spacing = new Size(8,6),
+                Rows =
+                {
+                    new TableRow(
+                        new TableCell(new StackLayout { Orientation = Orientation.Vertical, Spacing = 4, Items = { new Label{ Text = "Switches" }, lstSwitches, btnRenameSwitch } }, true),
+                        new TableCell(new StackLayout { Orientation = Orientation.Vertical, Spacing = 4, Items = { new Label{ Text = "Variables" }, lstVariables, btnRenameVariable } }, true)
+                    ),
+                    new TableRow(new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnLabelOk, btnLabelCancel } })
+                }
+            };
+
+            pnlVariableSwitches.Content = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 6,
+                Items = { new Label{ Text = "Switches & Variables" }, fraLabeling, FraRenaming }
+            };
+
+            // Enforce widths for command palette and command list
+            tvCommands.Width = 500;
+            lstCommands.Width = 500;
+
+            // Bottom OK/Cancel bar (aligned right)
+            var spacer = new Panel();
+            var bottomButtons = new TableLayout
+            {
+                Spacing = new Size(6,6),
+                Rows =
+                {
+                    new TableRow(new TableCell(spacer, true), new TableCell(btnOK), new TableCell(btnCancel))
+                }
+            };
+            // Wire OK/Cancel handlers
+            btnOK.Click += BtnOK_Click;
+            btnCancel.Click += BtnCancel_Click;
+
+            var rightPane = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 6,
+                Items =
+                {
+                    new Label{ Text = "Command Palette"},
                     new StackLayoutItem(tvCommands, true),
-                    new Label{ Text = "Commands List"},
+                    new Label{ Text = "Event Commands"},
                     new StackLayoutItem(lstCommands, true),
                     new StackLayout
                     {
                         Orientation = Orientation.Horizontal,
                         Spacing = 4,
                         Items = { btnAddCommand, btnEditCommand, btnDeleteComand, btnClearCommand }
-                    }
+                    },
+                    // Editors/panels appear below when activated
+                    pnlVariableSwitches,
+                    fraDialogue,
+                    fraGraphic,
+                    fraMoveRoute,
+                    fraShowText, fraShowChoices, fraAddText, fraShowChatBubble,
+                    bottomButtons
                 }
             };
-
-            var right = new Scrollable
-            {
-                Content = new StackLayout
-                {
-                    Orientation = Orientation.Vertical,
-                    Spacing = 6,
-                    Items =
-                    {
-                        new StackLayout { Orientation = Orientation.Horizontal, Spacing = 4, Items = { new Label{ Text = "Name"}, txtName, chkGlobal } },
-                        tabPages,
-                        fraDialogue, // placeholder panels added so logic can toggle visibility
-                        fraGraphic,
-                        fraMoveRoute,
-                        fraShowText, fraShowChoices, fraAddText, fraShowChatBubble
-                    }
-                }
-            };
+            var right = new Scrollable { Content = rightPane, ExpandContentWidth = true, Padding = new Eto.Drawing.Padding(12,8,8,8) };
 
             Content = new Splitter
             {
                 Orientation = Orientation.Horizontal,
-                Panel1 = left,
+                Panel1 = new Scrollable { Content = leftPadded, ExpandContentWidth = true },
                 Panel2 = right,
-                Position = 260
+                Position = 700
             };
+
         }
 
         #region Form
@@ -410,7 +495,8 @@ namespace Client
             {
                 int i;
 
-                Event.CurPageNum = 0;
+                // Add a bit of inner margin so content isn't flush with window edges
+                Padding = new Eto.Drawing.Padding(8);
 
                 cmbSwitch.Items.Clear();
                 for (i = 0; i < Constant.MaxSwitches; i++)
@@ -517,7 +603,6 @@ namespace Client
 
                 if (tabPages.SelectedIndex == 0 && tabPages.Pages.Count > 1)
                     tabPages.SelectedIndex = 1;
-
                 // Load page 1 to start off with
                 Event.CurPageNum = 0;
                 if (string.IsNullOrEmpty(Event.TmpEvent.Name))
@@ -533,19 +618,18 @@ namespace Client
             }
         }
 
-    private void Editor_Event_Resize(object? sender, EventArgs e) { }
-    private void Editor_Event_Activated(object? sender, EventArgs e) { }
+        private void Editor_Event_Resize(object? sender, EventArgs e) { }
+        private void Editor_Event_Activated(object? sender, EventArgs e) { }
 
-    public void DrawGraphic() { /* TODO: Reimplement drawing using Eto.Drawing */ }
+        public void DrawGraphic() { /* TODO: Reimplement drawing using Eto.Drawing */ }
 
-    // WinForms FormClosing removed; handled by Eto partial if needed
-
-        private void BtnOK_Click(object sender, EventArgs e)
+        private void BtnOK_Click(object? sender, EventArgs e)
         {
             if (fraGraphic.Visible == false)
             {
                 Event.EventEditorOK();
                 Event.TmpEvent = default;
+        try { Close(); } catch { Dispose(); }
             }
             else
             {
@@ -567,7 +651,7 @@ namespace Client
             }
         }
 
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object? sender, EventArgs e)
         {
             if (fraGraphic.Visible == false)
             {
@@ -1871,7 +1955,7 @@ namespace Client
         #region Variables/Switches
 
         // 'Renaming Variables/Switches
-        private void BtnLabeling_Click(object sender, EventArgs e)
+    private void BtnLabeling_Click(object? sender, EventArgs e)
         {
             // Show variable/switch management panel (Eto: rely on layout, no BringToFront/absolute positioning)
             pnlVariableSwitches.Visible = true;
@@ -1886,7 +1970,7 @@ namespace Client
 
         }
 
-        private void BtnRename_Ok_Click(object sender, EventArgs e)
+    private void BtnRename_Ok_Click(object? sender, EventArgs e)
         {
             FraRenaming.Visible = false;
             fraLabeling.Visible = true;
@@ -1922,18 +2006,11 @@ namespace Client
                         break;
                     }
             }
-            lstSwitches.Items.Clear();
-            for (int i = 0; i < Constant.MaxSwitches; i++)
-                lstSwitches.Items.Add((i + 1).ToString() + ". " + Strings.Trim(Event.Switches[i]));
-            lstSwitches.SelectedIndex = 0;
-            lstVariables.Items.Clear();
-
-            for (int i = 0; i < Constant.MaxVariables; i++)
-                lstVariables.Items.Add((i + 1).ToString() + ". " + Strings.Trim(Event.Variables[i]));
-            lstVariables.SelectedIndex = 0;
+            // Refresh all places where switch/variable names appear
+            RefreshSwitchAndVariableUI();
         }
 
-        private void BtnRename_Cancel_Click(object sender, EventArgs e)
+    private void BtnRename_Cancel_Click(object? sender, EventArgs e)
         {
             FraRenaming.Visible = false;
             fraLabeling.Visible = true;
@@ -1952,72 +2029,122 @@ namespace Client
             lstVariables.SelectedIndex = 0;
         }
 
-        private void TxtRename_TextChanged(object sender, EventArgs e)
+    private void TxtRename_TextChanged(object? sender, EventArgs e)
         {
             Event.TmpEvent.Name = Strings.Trim(txtName.Text);
         }
 
-        private void LstVariables_DoubleClick(object sender, EventArgs e)
+    private void LstVariables_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.MaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
-                lblEditing.Text = "Editing Variable: " + lstVariables.SelectedIndex.ToString();
+                lblEditing.Text = "Editing Variable: " + (lstVariables.SelectedIndex + 1).ToString();
                 txtRename.Text = Event.Variables[lstVariables.SelectedIndex];
                 Event.RenameType = 1;
                 Event.RenameIndex = lstVariables.SelectedIndex;
             }
         }
 
-        private void LstSwitches_DoubleClick(object sender, EventArgs e)
+    private void LstSwitches_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MaxSwitches)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
-                lblEditing.Text = "Editing Switch: " + lstSwitches.SelectedIndex.ToString();
+                lblEditing.Text = "Editing Switch: " + (lstSwitches.SelectedIndex + 1).ToString();
                 txtRename.Text = Event.Switches[lstSwitches.SelectedIndex];
                 Event.RenameType = 2;
                 Event.RenameIndex = lstSwitches.SelectedIndex;
             }
         }
 
-        private void BtnRenameVariable_Click(object sender, EventArgs e)
+    private void BtnRenameVariable_Click(object? sender, EventArgs e)
         {
+            if (lstVariables.SelectedIndex < 0 && lstVariables.Items.Count > 0)
+                lstVariables.SelectedIndex = 0;
             if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.MaxVariables)
             {
                 FraRenaming.Visible = true;
                 fraLabeling.Visible = false;
-                lblEditing.Text = "Editing Variable: " + lstVariables.SelectedIndex.ToString();
+                lblEditing.Text = "Editing Variable: " + (lstVariables.SelectedIndex + 1).ToString();
                 txtRename.Text = Event.Variables[lstVariables.SelectedIndex];
                 Event.RenameType = 1;
                 Event.RenameIndex = lstVariables.SelectedIndex;
             }
         }
 
-        private void BtnRenameSwitch_Click(object sender, EventArgs e)
+    private void BtnRenameSwitch_Click(object? sender, EventArgs e)
         {
+            if (lstSwitches.SelectedIndex < 0 && lstSwitches.Items.Count > 0)
+                lstSwitches.SelectedIndex = 0;
             if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MaxSwitches)
             {
                 FraRenaming.Visible = true;
-                lblEditing.Text = "Editing Switch: " + lstSwitches.SelectedIndex.ToString();
+                fraLabeling.Visible = false;
+                lblEditing.Text = "Editing Switch: " + (lstSwitches.SelectedIndex + 1).ToString();
                 txtRename.Text = Event.Switches[lstSwitches.SelectedIndex];
                 Event.RenameType = 2;
                 Event.RenameIndex = lstSwitches.SelectedIndex;
             }
         }
 
-        private void BtnLabel_Ok_Click(object sender, EventArgs e)
+    private void BtnLabel_Ok_Click(object? sender, EventArgs e)
         {
             pnlVariableSwitches.Visible = false;
             Event.SendSwitchesAndVariables();
+            // Ensure UI reflects latest names after save
+            RefreshSwitchAndVariableUI();
         }
 
-        private void BtnLabel_Cancel_Click(object sender, EventArgs e)
+    private void BtnLabel_Cancel_Click(object? sender, EventArgs e)
         {
             pnlVariableSwitches.Visible = false;
             Event.RequestSwitchesAndVariables();
+        }
+
+        // Refresh UI elements that display switch/variable names
+        private void RefreshSwitchAndVariableUI()
+        {
+            // Lists
+            var prevSwitchListIdx = lstSwitches.SelectedIndex;
+            var prevVarListIdx = lstVariables.SelectedIndex;
+
+            lstSwitches.Items.Clear();
+            for (int i = 0; i < Constant.MaxSwitches; i++)
+                lstSwitches.Items.Add((i + 1) + ". " + Strings.Trim(Event.Switches[i]));
+            if (lstSwitches.Items.Count > 0)
+                lstSwitches.SelectedIndex = (prevSwitchListIdx >= 0 && prevSwitchListIdx < lstSwitches.Items.Count) ? prevSwitchListIdx : 0;
+
+            lstVariables.Items.Clear();
+            for (int i = 0; i < Constant.MaxVariables; i++)
+                lstVariables.Items.Add((i + 1) + ". " + Strings.Trim(Event.Variables[i]));
+            if (lstVariables.Items.Count > 0)
+                lstVariables.SelectedIndex = (prevVarListIdx >= 0 && prevVarListIdx < lstVariables.Items.Count) ? prevVarListIdx : 0;
+
+            // Helper local function to refresh a combo with 1-based indexed names
+            void RefreshCombo(ComboBox combo, string[] names)
+            {
+                int prev = combo.SelectedIndex;
+                combo.Items.Clear();
+                for (int i = 0; i < names.Length; i++)
+                    combo.Items.Add((i + 1) + ". " + Strings.Trim(names[i]));
+                if (combo.Items.Count > 0)
+                    combo.SelectedIndex = (prev >= 0 && prev < combo.Items.Count) ? prev : 0;
+            }
+
+            // Variables combos
+            RefreshCombo(cmbVariable, Event.Variables);
+            RefreshCombo(cmbPlayerVar, Event.Variables);
+            // Conditions variable index combo
+            RefreshCombo(cmbCondition_PlayerVarIndex, Event.Variables);
+
+            // Switch combos
+            RefreshCombo(cmbSwitch, Event.Switches);
+            RefreshCombo(cmbPlayerSwitch, Event.Switches);
+            // Conditions switch combo
+            RefreshCombo(cmbCondition_PlayerSwitch, Event.Switches);
         }
 
         // MoveRoute Commands
@@ -2112,9 +2239,13 @@ namespace Client
             Index = Index + 1;
             if (Index > 0 & Index <= Event.TempMoveRouteCount)
             {
+                if (Event.TempMoveRoute == null)
+                {
+                    return;
+                }
                 var loopTo = Event.TempMoveRouteCount;
                 for (i = Index + 1; i < loopTo; i++)
-                    Event.TempMoveRoute[i - 1] = Event.TempMoveRoute[i];
+                    Event.TempMoveRoute![i - 1] = Event.TempMoveRoute[i];
                 Event.TempMoveRouteCount = Event.TempMoveRouteCount - 1;
                 if (Event.TempMoveRouteCount == 0)
                 {
@@ -2138,7 +2269,9 @@ namespace Client
             var loopTo = Event.TempMoveRouteCount;
             for (i = 0; i < loopTo; i++)
             {
-                switch (Event.TempMoveRoute[i].Index)
+                if (Event.TempMoveRoute == null)
+                    return;
+                switch (Event.TempMoveRoute![i].Index)
                 {
                     case 1:
                         {
@@ -2403,7 +2536,7 @@ namespace Client
             else
             {
                 Event.TmpEvent.Pages[Event.CurPageNum].MoveRouteCount = Event.TempMoveRouteCount;
-                Event.TmpEvent.Pages[Event.CurPageNum].MoveRoute = Event.TempMoveRoute;
+                Event.TmpEvent.Pages[Event.CurPageNum].MoveRoute = Event.TempMoveRoute!;
                 Event.TempMoveRouteCount = 0;
                 Event.TempMoveRoute = new Type.MoveRoute[1];
                 fraMoveRoute.Visible = false;
