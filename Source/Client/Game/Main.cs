@@ -24,7 +24,7 @@ public static class Program
         // Start Eto application & periodic UI updater
         // Explicitly specify Eto platform for Linux (Gtk) to avoid auto-detect failure
         // NOTE: Ensure package Eto.Platform.Gtk is referenced in the project (added centrally in Directory.Packages.props)
-    var app = new Application(Eto.Platform.Detect);
+        var app = new Application(Eto.Platform.Detect);
         _uiTimer = new UITimer { Interval = 0.05 }; // 50ms (~20fps) for editor UI refresh logic
         _uiTimer.Elapsed += UiTimerOnElapsed;
         _uiTimer.Start();
@@ -36,7 +36,7 @@ public static class Program
             ShowInTaskbar = false,
             ClientSize = new Size(1, 1),
         };
-    _rootForm.Shown += (s, e) => ((Form)s!).Visible = false;
+        _rootForm.Shown += (s, e) => ((Form)s!).Visible = false;
 
         // Pre-warm editor windows on the UI thread so they can be shown instantly
         app.AsyncInvoke(() =>
@@ -74,14 +74,6 @@ public static class Program
 
     private static void UpdateEditors()
     {
-        // Event Editor
-        if (GameState.InitEventEditor)
-        {
-            // Run directly on UI timer tick to avoid thread jumps racing shutdown
-            Editor_Event.EnsureShownOnUi();
-            GameState.InitEventEditor = false;
-        }
-
         if (GameState.InitAdminForm)
         {
             new Admin().Show();
@@ -108,6 +100,12 @@ public static class Program
             new Editor_Map().Show();
             GameState.CameraZoom = 1.0f;
             GameState.InitMapEditor = false;
+        }
+
+        if (GameState.InitEventEditor)
+        {
+            new Editor_Event().Show();
+            GameState.InitEventEditor = false;
         }
 
         if (GameState.InitAnimationEditor)

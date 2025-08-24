@@ -54,25 +54,6 @@ namespace Client
             });
         }
 
-        // Call this from the UI thread (e.g., inside the UITimer handler)
-        public static void EnsureShownOnUi()
-        {
-            var app = Application.Instance;
-            if (app == null)
-                return;
-            try
-            {
-                var win = Instance;
-                if (!win.Visible)
-                    win.Show();
-                try { win.Focus(); } catch { }
-                _isVisible = win.Visible;
-            }
-            catch (Exception ex)
-            {
-                try { System.Console.WriteLine($"[EventEditor] Show error: {ex}"); } catch { }
-            }
-        }
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
 

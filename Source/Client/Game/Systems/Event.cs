@@ -192,7 +192,10 @@ namespace Client
                     {
                         // already an event - edit it
                         if (!cancelLoad)
-                            EventEditorInit(i);
+                        {
+                            GameState.InitEventEditor = true;
+                            GameState.EventNum = i;
+                        }
                         return;
                     }
                 }
@@ -221,7 +224,10 @@ namespace Client
             Array.Resize(ref Data.MyMap.Event[count - 1].Pages, pageCount);
             // load the editor
             if (!cancelLoad)
-                EventEditorInit(count - 1);
+            {
+                GameState.InitEventEditor = true;
+                GameState.EventNum = count - 1;
+            }
         }
 
         public static void ClearEvent(int eventNum)
@@ -238,13 +244,12 @@ namespace Client
             withBlock.Y = 0;
         }
 
-        public static void EventEditorInit(int EventNum)
+        public static void EventEditorInit()
         {
+            int EventNum = GameState.EventNum;
             EditorEvent = EventNum;
             TmpEvent = Data.MyMap.Event[EventNum];
             GameState.InitEventEditor = true;
-            // Also request an immediate UI-thread show to avoid race with shutdown
-            try { Eto.Forms.Application.Instance?.AsyncInvoke(() => Client.Editor_Event.EnsureShownOnUi()); } catch { }
             if (TmpEvent.Pages[0].CommandListCount == 0)
             {
                 Array.Resize(ref TmpEvent.Pages[0].CommandList, 1);
