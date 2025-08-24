@@ -257,11 +257,13 @@ public class Crystalshire
         ToggleCheckbox("chkSound");
         ToggleCheckbox("chkAutotile");
         ToggleCheckbox("chkFullscreen");
+        ToggleCheckbox("chkVsync");
 
-    // Ensure cmbRes is visible
-    window.GetChild("cmbRes").Visible = true;
+        // Ensure options controls are visible (some skins may hide by default)
+        window.GetChild("cmbRes").Visible = true;
+        window.GetChild("chkVsync").Visible = true;
 
-    Client.GameLogic.SetOptionsScreen();
+        Client.GameLogic.SetOptionsScreen();
     }
 
     public void UpdateWindow_Combobox()

@@ -1955,7 +1955,7 @@ namespace Client
         #region Variables/Switches
 
         // 'Renaming Variables/Switches
-    private void BtnLabeling_Click(object? sender, EventArgs e)
+        private void BtnLabeling_Click(object? sender, EventArgs e)
         {
             // Show variable/switch management panel (Eto: rely on layout, no BringToFront/absolute positioning)
             pnlVariableSwitches.Visible = true;

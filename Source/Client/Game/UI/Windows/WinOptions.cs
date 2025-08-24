@@ -17,8 +17,9 @@ public static class WinOptions
 
         var checkBoxMusic = winOptions.GetChild("chkMusic");
         var checkBoxSound = winOptions.GetChild("chkSound");
-        var checkBoxAutoTile = winOptions.GetChild("chkAutotile");
-        var checkBoxFullscreen = winOptions.GetChild("chkFullscreen");
+    var checkBoxAutoTile = winOptions.GetChild("chkAutotile");
+    var checkBoxFullscreen = winOptions.GetChild("chkFullscreen");
+    var checkBoxVsync = winOptions.GetChild("chkVsync");
         var comboBoxResolution = winOptions.GetChild("cmbRes");
 
         // Music
@@ -86,6 +87,14 @@ public static class WinOptions
         {
             SettingsManager.Instance.Fullscreen = enabled;
 
+            restartRequired = true;
+        }
+
+        // VSync
+        enabled = checkBoxVsync.Value != 0;
+        if (SettingsManager.Instance.Vsync != enabled)
+        {
+            SettingsManager.Instance.Vsync = enabled;
             restartRequired = true;
         }
 

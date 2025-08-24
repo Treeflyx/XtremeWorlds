@@ -2038,6 +2038,7 @@ namespace Client
                 withBlock.Controls[Gui.GetControlIndex("winOptions", "chkSound")].Value = SettingsManager.Instance.Sound ? 1 : 0;
                 withBlock.Controls[Gui.GetControlIndex("winOptions", "chkAutotile")].Value = SettingsManager.Instance.Autotile ? 1 : 0;
                 withBlock.Controls[Gui.GetControlIndex("winOptions", "chkFullscreen")].Value = SettingsManager.Instance.Fullscreen ? 1 : 0;
+                withBlock.Controls[Gui.GetControlIndex("winOptions", "chkVsync")].Value = SettingsManager.Instance.Vsync ? 1 : 0;
                 withBlock.Controls[Gui.GetControlIndex("winOptions", "cmbRes")].Value = SettingsManager.Instance.Resolution;
             }
         }
