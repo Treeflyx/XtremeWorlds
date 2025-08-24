@@ -149,18 +149,6 @@ namespace Client
             };
         }
 
-        // Debounce GUI rebuilds on resize
-        private DateTime _lastGuiReinit = DateTime.MinValue;
-        private void ReinitGuiForResize()
-        {
-            var now = DateTime.UtcNow;
-            if ((now - _lastGuiReinit).TotalMilliseconds < 150)
-                return;
-            _lastGuiReinit = now;
-            try { UIScript.Load(); } catch { }
-            try { Gui.Init(); } catch { }
-        }
-
         private void OnClientSizeChanged(object? sender, EventArgs e)
         {
             // In windowed mode, track the window client size as the backbuffer size
@@ -177,7 +165,6 @@ namespace Client
                 Graphics.PreferredBackBufferWidth = bounds.Width;
                 Graphics.PreferredBackBufferHeight = bounds.Height;
                 try { Graphics.ApplyChanges(); } catch { }
-                ReinitGuiForResize();
             }
         }
 
