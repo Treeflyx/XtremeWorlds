@@ -135,7 +135,6 @@ namespace Client
                 {
                     // Name fixed width like other editor; wrap in non-scaling TableCell
                     new TableRow(new TableCell(new Label{Text="Name"}), new TableCell(txtName, scaleWidth: false), null, null),
-                    new TableRow(new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview, null),
                     // Move SubType up next to Description for quicker access
                     new TableRow(new Label{Text="Description"}, txtDescription, new Label{Text="SubType"}, cmbSubType),
                     new TableRow(new Label{Text="Icon"}, numIcon, iconPreview, null, null),
@@ -152,12 +151,13 @@ namespace Client
                 {
                     new TableRow(new Label{Text="Damage"}, numDamage, new Label{Text="Speed"}, numSpeed),
                     new TableRow(new Label{Text="Tool"}, cmbTool, chkKnockBack, new Label{Text="KB Tiles"}, cmbKnockBackTiles),
+                    new TableRow(new Label{Text="Paperdoll"}, numPaperdoll, paperdollPreview, null),
                     new TableRow(new Label{Text="Add STR"}, numStrAdd, new Label{Text="Add VIT"}, numVitAdd),
                     new TableRow(new Label{Text="Add LCK"}, numLuckAdd, new Label{Text="Add INT"}, numIntAdd),
                     new TableRow(new Label{Text="Add SPR"}, numSprAdd, null, null)
                 }
             });
-
+            
             fraVitals = Group("Consumable", new Eto.Forms.TableLayout
             {
                 Rows = { new TableRow(new Label{Text="Vital Mod"}, numVitalMod) }
