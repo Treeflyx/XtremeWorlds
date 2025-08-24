@@ -21,6 +21,8 @@ namespace Client
         public static bool IsVisibleCached => _isVisible;
         private int tmpGraphicIndex;
         private byte tmpGraphicType;
+    // Guard to avoid feedback loops when syncing Graphic/Index controls
+    private bool _syncingGraphic;
 
         public ComboBox cmbSwitch = new ComboBox();
         public ComboBox cmbVariable = new ComboBox();
@@ -124,6 +126,8 @@ namespace Client
         public ComboBox cmbSelfSwitch = new ComboBox();
         public Button btnDeletePage = new Button { Text = "Delete Page" };
         public Button btnPastePage = new Button { Text = "Paste Page" };
+        public Button btnNewPage = new Button { Text = "New Page" };
+        public Button btnCopyPage = new Button { Text = "Copy Page" };
         public NumericStepper nudShowPicture = new NumericStepper();
         public ComboBox cmbPicLoc = new ComboBox();
         public TextBox txtName = new TextBox { Width = 200 };
@@ -132,6 +136,19 @@ namespace Client
         public Panel fraGraphic = new Panel();
         public ComboBox cmbGraphic = new ComboBox();
         public NumericStepper nudGraphic = new NumericStepper();
+    // Removed: Set Graphic button is no longer used; selection occurs directly
+        // Host panel for the full editor content inside the selected tab
+        private Panel editorHost = new Panel();
+        // Keep a reference to the main splitter so we can enforce sizes and adjust position
+        private Splitter? mainSplit;
+        // Host for active command frames, shown above the command list
+        private Panel frameHost = new Panel();
+        private StackLayout frameDeck = new StackLayout { Orientation = Orientation.Vertical, Spacing = 6 };
+        // Pages toolbar (New/Copy/Paste/Delete) lives inside the active tab so the tab fills the entire editor
+        private StackLayout pagesBar = new StackLayout();
+        // Single container that wraps pagesBar + editorHost and is moved between selected tabs
+        private Panel tabContentHost = new Panel();
+        private TabPage? hostedTab;
 
         // Additional controls referenced in logic (declare as needed)
         public ListBox lstCommands = new ListBox();
@@ -210,7 +227,7 @@ namespace Client
 
         // Additional references used later
         public ComboBox cmbVariableDataType = new ComboBox();
-        public ComboBox cmbPlayervarCompare = new ComboBox();
+        public ComboBox cmbPlayerVarCompare = new ComboBox();
         public NumericStepper nudPlayerVariable = new NumericStepper();
         public CheckBox chkPlayerVar = new CheckBox { Text = "Player Var" };
         public CheckBox chkPlayerSwitch = new CheckBox { Text = "Player Switch" };
@@ -254,18 +271,107 @@ namespace Client
             // Ensure Load is subscribed first
             Load += Editor_Events_Load; // hook existing load logic
             // LEFT: RPG Maker-like page details and conditions
+            // Give key condition controls reasonable widths so they are visible
+            cmbPlayerVar.Width = 220;
+            cmbPlayerVarCompare.Width = 100;
+            nudPlayerVariable.Width = 100;
+            cmbPlayerSwitch.Width = 220;
+            cmbPlayerSwitchCompare.Width = 100;
+            cmbHasItem.Width = 220;
+            nudCondition_HasItem.Width = 100;
+            cmbSelfSwitch.Width = 80;
+            cmbSelfSwitchCompare.Width = 100;
             var conditions = new GroupBox
             {
-                Text = "Conditions",
                 Content = new TableLayout
                 {
-                    Spacing = new Size(4,2),
+                    Spacing = new Size(6, 4),
                     Rows =
                     {
-                        new TableRow(new Label{ Text = "Self Switch"}, cmbSelfSwitch, new Label{ Text = "Compare"}, cmbSelfSwitchCompare),
-                        new TableRow(new Label{ Text = "Player Switch"}, cmbPlayerSwitch, new Label{ Text = "Compare"}, cmbPlayerSwitchCompare),
-                        new TableRow(new Label{ Text = "Player Variable"}, cmbPlayerVar, new Label{ Text = "Compare"}, cmbPlayervarCompare, nudPlayerVariable),
-                        new TableRow(new Label{ Text = "Has Item"}, cmbHasItem, new Label{ Text = "Amount"}, nudCondition_HasItem)
+                        // Player Variable (two rows so Compare/Value aren't clipped)
+                        new TableRow(
+                            chkPlayerVar,
+                            new Label{ Text = "Variable:"},
+                            new TableCell(cmbPlayerVar, true)
+                        ),
+                        new TableRow(
+                            null,
+                            new Label{ Text = "Compare"},
+                            cmbPlayerVarCompare,
+                            new Label{ Text = "Value"},
+                            nudPlayerVariable
+                        ),
+
+                        // Player Switch (two rows)
+                        new TableRow(
+                            chkPlayerSwitch,
+                            new Label{ Text = "Switch:"},
+                            new TableCell(cmbPlayerSwitch, true)
+                        ),
+                        new TableRow(
+                            null,
+                            new Label{ Text = "Compare"},
+                            cmbPlayerSwitchCompare
+                        ),
+
+                        // Has Item (two rows)
+                        new TableRow(
+                            chkHasItem,
+                            new Label{ Text = "Item:"},
+                            new TableCell(cmbHasItem, true)
+                        ),
+                        new TableRow(
+                            null,
+                            new Label{ Text = "Amount"},
+                            nudCondition_HasItem
+                        ),
+
+                        // Self Switch (two rows)
+                        new TableRow(
+                            chkSelfSwitch,
+                            new Label{ Text = "Self:"},
+                            cmbSelfSwitch
+                        ),
+                        new TableRow(
+                            null,
+                            new Label{ Text = "Compare"},
+                            cmbSelfSwitchCompare
+                        )
+                    }
+                }
+            };
+
+            // enlarge preview to increase overall group height
+            picGraphic.Size = new Size(96, 96);
+
+            var pageSettingsLeft = new TableLayout
+            {
+                Spacing = new Size(4, 2),
+                Rows =
+                {
+                    new TableRow(new Label{ Text = "Trigger"}, cmbTrigger, new Label{ Text = "Positioning"}, cmbPositioning),
+                    new TableRow(new Label{ Text = "Move Type"}, cmbMoveType, new Label{ Text = "Move Speed"}, cmbMoveSpeed),
+                    new TableRow(new Label{ Text = "Move Freq"}, cmbMoveFreq, new Label{ Text = "Move Wait"}, cmbMoveWait),
+                    // Graphic selector
+                    new TableRow(new Label{ Text = "Graphic"}, cmbGraphic, new Label{ Text = "Index"}, nudGraphic)
+                }
+            };
+            // Right-side column: preview, action buttons, and checkboxes stacked to utilize height
+            var previewPanel = new StackLayout
+            {
+                Orientation = Orientation.Vertical,
+                Spacing = 8,
+                Items =
+                {
+                    new Label{ Text = "Preview" },
+                    picGraphic,
+                    new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 6, Items = { btnMoveRoute } },
+                    new StackLayout{ Orientation = Orientation.Vertical, Spacing = 6, Items =
+                        {
+                            new Label{ Text = "Options" },
+                            new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { chkWalkAnim, chkWalkThrough } },
+                            new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 10, Items = { chkDirFix, chkShowName } }
+                        }
                     }
                 }
             };
@@ -275,40 +381,112 @@ namespace Client
                 Text = "Page Settings",
                 Content = new TableLayout
                 {
-                    Spacing = new Size(4,2),
+                    Spacing = new Size(6, 6),
                     Rows =
                     {
-                        new TableRow(new Label{ Text = "Trigger"}, cmbTrigger, new Label{ Text = "Positioning"}, cmbPositioning),
-                        new TableRow(new Label{ Text = "Move Type"}, cmbMoveType, new Label{ Text = "Move Speed"}, cmbMoveSpeed),
-                        new TableRow(new Label{ Text = "Move Freq"}, cmbMoveFreq, new Label{ Text = "Move Wait"}, cmbMoveWait),
-                        new TableRow(new Label{ Text = "Graphic"}, cmbGraphic, new Label{ Text = "Index"}, nudGraphic),
-                        new TableRow(new StackLayout{ Orientation = Orientation.Horizontal, Spacing = 8, Items = { chkWalkAnim, chkWalkThrough, chkDirFix, chkShowName }}, null)
+                        new TableRow(new TableCell(pageSettingsLeft, true)),
+                        new TableRow(new TableCell(previewPanel, true))
                     }
                 }
             };
 
-        // Button to open switches/variables manager
-        var btnOpenLabeling = new Button { Text = "Switches && Variables…" };
-        btnOpenLabeling.Click += BtnLabeling_Click;
+            // Build Set Graphic frame UI (used by both Page Settings and Move Route -> Set Graphic)
+            if (fraGraphic.Content == null)
+            {
+                // full-sheet preview; make it scrollable in case of large assets
+                var graphicScroll = new Scrollable
+                {
+                    Content = picGraphicSel,
+                    ExpandContentWidth = false,
+                    ExpandContentHeight = false,
+                    Size = new Size(360, 300)
+                };
+                var graphicTip = new Label { Text = "Tip: Use the Graphic and Index in Page Settings, then click a frame on the sheet to select (characters are 4x4 frames)." };
 
-            var leftPane = new StackLayout
+                fraGraphic.Content = new StackLayout
+                {
+                    Orientation = Orientation.Vertical,
+                    Spacing = 6,
+                    Items =
+                    {
+                        new Label{ Text = "Set Graphic", Font = SystemFonts.Bold(12) },
+                        graphicTip,
+                        graphicScroll
+                    }
+                };
+            }
+
+            // Button to open switches/variables manager
+            var btnOpenLabeling = new Button { Text = "Switches && Variables…" };
+            btnOpenLabeling.Click += BtnLabeling_Click;
+
+            // Page controls row
+            pagesBar = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 6,
+                Items =
+                {
+                    new Label{ Text = "Pages" },
+                    btnNewPage,
+                    btnCopyPage,
+                    btnPastePage,
+                    btnDeletePage
+                }
+            };
+
+        var leftPane = new StackLayout
             {
                 Orientation = Orientation.Vertical,
-                Width = 560,
                 Spacing = 6,
                 Items =
                 {
                     new StackLayout { Orientation = Orientation.Horizontal, Spacing = 6, Items = { new Label{ Text = "Name"}, txtName, chkGlobal } },
-                    tabPages,
                     conditions,
-            pageSettings,
-            btnOpenLabeling
+                    pageSettings,
+                    btnOpenLabeling
                 }
             };
+            // React when user switches tabs (pages)
+            tabPages.SelectedIndexChanged += TabPages_Click;
+            // Wire condition toggles
+            chkPlayerVar.CheckedChanged += ChkPlayerVar_CheckedChanged;
+            chkPlayerSwitch.CheckedChanged += ChkPlayerSwitch_CheckedChanged;
+            chkHasItem.CheckedChanged += ChkHasItem_CheckedChanged;
+            chkSelfSwitch.CheckedChanged += ChkSelfSwitch_CheckedChanged;
+            // Wire condition editors
+            cmbPlayerVar.SelectedIndexChanged += CmbPlayerVar_SelectedIndexChanged;
+            cmbPlayerVarCompare.SelectedIndexChanged += CmbPlayervarCompare_SelectedIndexChanged;
+            nudPlayerVariable.ValueChanged += NudPlayerVariable_ValueChanged;
+            cmbPlayerSwitch.SelectedIndexChanged += CmbPlayerSwitch_SelectedIndexChanged;
+            cmbPlayerSwitchCompare.SelectedIndexChanged += CmbPlayerSwitchCompare_SelectedIndexChanged;
+            cmbHasItem.SelectedIndexChanged += CmbHasItem_SelectedIndexChanged;
+            cmbSelfSwitch.SelectedIndexChanged += CmbSelfSwitch_SelectedIndexChanged;
+            cmbSelfSwitchCompare.SelectedIndexChanged += CmbSelfSwitchCompare_SelectedIndexChanged;
+            // Wire page buttons
+            btnNewPage.Click += BtnNewPage_Click;
+            btnCopyPage.Click += BtnCopyPage_Click;
+            btnPastePage.Click += BtnPastePage_Click;
+            btnDeletePage.Click += BtnDeletePage_Click;
+            // Wire page settings controls
+            cmbTrigger.SelectedIndexChanged += CmbTrigger_SelectedIndexChanged;
+            cmbPositioning.SelectedIndexChanged += CmbPositioning_SelectedIndexChanged;
+            cmbMoveType.SelectedIndexChanged += CmbMoveType_SelectedIndexChanged;
+            cmbMoveSpeed.SelectedIndexChanged += CmbMoveSpeed_SelectedIndexChanged;
+            cmbMoveFreq.SelectedIndexChanged += CmbMoveFreq_SelectedIndexChanged;
+            chkWalkAnim.CheckedChanged += ChkWalkAnim_CheckedChanged;
+            chkWalkThrough.CheckedChanged += ChkWalkThrough_CheckedChanged;
+            chkDirFix.CheckedChanged += ChkDirFix_CheckedChanged;
+            chkShowName.CheckedChanged += ChkShowName_CheckedChanged;
+            btnMoveRoute.Click += BtnMoveRoute_Click;
+            // removed Set Graphic button hookup
+            picGraphicSel.MouseDown += PicGraphicSel_MouseDown;
+            // Ensure the tab control has some vertical space via layout (StackLayoutItem true above)
             var leftPadded = new Panel { Padding = new Eto.Drawing.Padding(12,8,8,8), Content = leftPane };
 
             // RIGHT: command palette and command list + editors
             // Build the Variable/Switch management panel UI
+            // Hide variables/switches panel until opened via the button
             pnlVariableSwitches.Visible = false;
             fraLabeling.Visible = true;
             FraRenaming.Visible = false;
@@ -333,8 +511,8 @@ namespace Client
             };
 
             // Labeling view
-            lstSwitches.Size = new Size(220, 300);
-            lstVariables.Size = new Size(220, 300);
+            lstSwitches.Size = new Size(220, 240);
+            lstVariables.Size = new Size(220, 240);
             lstSwitches.MouseDoubleClick += LstSwitches_DoubleClick;
             lstVariables.MouseDoubleClick += LstVariables_DoubleClick;
 
@@ -364,12 +542,13 @@ namespace Client
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 6,
-                Items = { new Label{ Text = "Switches & Variables" }, fraLabeling, FraRenaming }
+                Items = { fraLabeling, FraRenaming }
             };
 
-            // Enforce widths for command palette and command list
-            tvCommands.Width = 500;
-            lstCommands.Width = 500;
+            // Build the command palette tree (categories + leaf commands)
+            BuildCommandPalette();
+            // Remove fixed widths to allow full horizontal expansion
+            try { tvCommands.Width = -1; lstCommands.Width = -1; } catch { }
 
             // Bottom OK/Cancel bar (aligned right)
             var spacer = new Panel();
@@ -385,41 +564,243 @@ namespace Client
             btnOK.Click += BtnOK_Click;
             btnCancel.Click += BtnCancel_Click;
 
-            var rightPane = new StackLayout
+            // Build command area (palette + list) and host beside the variables/switches panel
+            var commandButtons = new StackLayout
+            {
+                Orientation = Orientation.Horizontal,
+                Spacing = 4,
+                Items = { btnAddCommand, btnEditCommand, btnDeleteComand, btnClearCommand }
+            };
+
+            // Use a TableLayout so the grids expand horizontally and vertically
+            var commandArea = new TableLayout
+            {
+                Spacing = new Size(6,6),
+                Rows =
+                {
+                    new TableRow(new Label{ Text = "Command Palette" }),
+                    new TableRow(new TableCell(tvCommands, true)),
+                    new TableRow(new Label{ Text = "Event Commands" }),
+                    new TableRow(new TableCell(lstCommands, true)),
+                    new TableRow(commandButtons)
+                }
+            };
+            fraCommands.Content = commandArea;
+            fraCommands.Visible = true;
+
+        var rightPane = new StackLayout
             {
                 Orientation = Orientation.Vertical,
                 Spacing = 6,
                 Items =
                 {
-                    new Label{ Text = "Command Palette"},
-                    new StackLayoutItem(tvCommands, true),
-                    new Label{ Text = "Event Commands"},
-                    new StackLayoutItem(lstCommands, true),
-                    new StackLayout
-                    {
-                        Orientation = Orientation.Horizontal,
-                        Spacing = 4,
-                        Items = { btnAddCommand, btnEditCommand, btnDeleteComand, btnClearCommand }
-                    },
-                    // Editors/panels appear below when activated
-                    pnlVariableSwitches,
+            // Frames show on top; commands hide via fraCommands.Visible toggles in existing logic
                     fraDialogue,
                     fraGraphic,
                     fraMoveRoute,
-                    fraShowText, fraShowChoices, fraAddText, fraShowChatBubble,
+                    fraShowText,
+                    fraShowChoices,
+                    fraAddText,
+                    fraShowChatBubble,
+            fraPlayerVariable,
+            fraPlayerSwitch,
+            fraSetSelfSwitch,
+            fraConditionalBranch,
+            fraCreateLabel,
+            fraGoToLabel,
+            fraChangeItems,
+            fraChangeLevel,
+            fraChangeSkills,
+            fraChangeJob,
+            fraChangeSprite,
+            fraChangeGender,
+            fraChangePK,
+            fraGiveExp,
+            fraPlayerWarp,
+            fraMoveRouteWait,
+            fraSpawnNpc,
+            fraPlayAnimation,
+            fraSetFog,
+            fraSetWeather,
+            fraMapTint,
+            fraPlayBGM,
+            fraPlaySound,
+            fraSetWait,
+            fraSetAccess,
+            fraShowPic,
+            fraOpenShop,
+            // Switches/Variables manager lives on the right
+            pnlVariableSwitches,
+                    fraCommands, // command area appears when no frame is active
                     bottomButtons
                 }
             };
-            var right = new Scrollable { Content = rightPane, ExpandContentWidth = true, Padding = new Eto.Drawing.Padding(12,8,8,8) };
+            // Wire up command list and buttons
+            lstCommands.SelectedIndexChanged += LstCommands_SelectedIndexChanged;
+            btnAddCommand.Click += BtnAddCommand_Click;
+            btnEditCommand.Click += BtnEditCommand_Click;
+            btnDeleteComand.Click += BtnDeleteComand_Click;
+            btnClearCommand.Click += BtnClearCommand_Click;
+            // Optional: respond to palette selection if needed
+            tvCommands.SelectionChanged += TvCommands_AfterSelect;
+            var right = new Scrollable { Content = rightPane, ExpandContentWidth = true, ExpandContentHeight = true, Padding = new Eto.Drawing.Padding(12,8,8,8) };
+            HideAllFrames();
 
-            Content = new Splitter
+            // Build the full editor content into editorHost, which will be placed inside the selected tab
+            mainSplit = new Splitter
             {
                 Orientation = Orientation.Horizontal,
                 Panel1 = new Scrollable { Content = leftPadded, ExpandContentWidth = true },
                 Panel2 = right,
-                Position = 700
+                // Make the left pane wider by default (min 800px, ~45% of window)
+                Position = Math.Max(800, (int)(ClientSize.Width * 0.45))
+            };
+                // Prevent either pane from collapsing to 0 so left page details are always visible
+            try
+            {
+                    // Keep a generous minimum so controls don't clip
+                    mainSplit.Panel1MinimumSize = 800;
+                mainSplit.Panel2MinimumSize = 420;
+                    // Prefer keeping left width fixed while resizing
+                    try { mainSplit.FixedPanel = Eto.Forms.SplitterFixedPanel.Panel1; } catch { }
+            }
+            catch { }
+            editorHost.Content = mainSplit;
+
+            // Wrap the full editor with the pages toolbar into a reusable host we can move between tabs
+            // Use TableLayout so the Splitter fills all remaining space
+            tabContentHost.Content = new TableLayout
+            {
+                Spacing = new Size(0,0),
+                Padding = new Eto.Drawing.Padding(0),
+                Rows =
+                {
+                    new TableRow(pagesBar),
+                    new TableRow(new TableCell(editorHost, true))
+                }
             };
 
+            // Top-level: only the TabControl so the tab page fills the entire editor
+            Content = tabPages;
+            // Ensure there's at least one visible page before Load runs, so the form isn't blank
+            if (tabPages.Pages.Count == 0)
+            {
+                tabPages.Pages.Add(new TabPage { Text = "1" });
+                tabPages.SelectedIndex = 0;
+            }
+            // Mount editor content into the selected page now; Load() will rebuild pages later
+            AttachEditorHostToSelectedTab();
+
+            // Re-balance the splitter when the window shows/resizes to keep the left pane visible
+        Shown += (s, e) =>
+            {
+                try
+                {
+                    if (mainSplit != null)
+                        mainSplit.Position = Math.Max(800, (int)(ClientSize.Width * 0.45));
+            // Sync initial Move Route button state
+            SyncMoveRouteButton();
+                }
+                catch { }
+            };
+            SizeChanged += (s, e) =>
+            {
+                try
+                {
+                    if (mainSplit != null)
+                        mainSplit.Position = Math.Max(800, Math.Min(ClientSize.Width - 420, mainSplit.Position));
+                }
+                catch { }
+            };
+
+        }
+
+    // No extra helpers needed; visibility is controlled by existing code paths that toggle
+    // specific frame panels and fraCommands. Frames are placed before fraCommands to appear on top.
+
+        // Build command palette with categories and leaves
+        private void BuildCommandPalette()
+        {
+            tvCommands.Columns.Clear();
+            tvCommands.Columns.Add(new GridColumn
+            {
+                HeaderText = "Command",
+                DataCell = new TextBoxCell(0),
+                Expand = true
+            });
+
+            var root = new TreeGridItemCollection();
+
+            TreeGridItem Cat(string name, params string[] children)
+            {
+                var item = new TreeGridItem { Values = new object[] { name } };
+                foreach (var c in children)
+                    item.Children.Add(new TreeGridItem { Values = new object[] { c } });
+                return item;
+            }
+
+            root.Add(Cat("Messages",
+                "Show Text",
+                "Show Choices",
+                "Add Chatbox Text",
+                "Show ChatBubble"));
+            root.Add(Cat("Flow",
+                "Set Player Variable",
+                "Set Player Switch",
+                "Set Self Switch",
+                "Conditional Branch",
+                "Stop Event Processing",
+                "Label",
+                "GoTo Label"));
+            root.Add(Cat("Player",
+                "Change Items",
+                "Restore HP",
+                "Restore MP",
+                "Restore SP",
+                "Level Up",
+                "Change Level",
+                "Change Skills",
+                "Change Job",
+                "Change Sprite",
+                "Change Gender",
+                "Change PK",
+                "Give Experience"));
+            root.Add(Cat("Movement",
+                "Warp Player",
+                "Set Move Route",
+                "Wait for Route Completion",
+                "Force Spawn Npc",
+                "Hold Player",
+                "Release Player"));
+            root.Add(Cat("Animation",
+                "Play Animation"));
+            root.Add(Cat("Map",
+                "Set Fog",
+                "Set Weather",
+                "Set Map Tinting"));
+            root.Add(Cat("Audio",
+                "Play BGM",
+                "Stop BGM",
+                "Play Sound",
+                "Stop Sounds"));
+            root.Add(Cat("Utility",
+                "Wait...",
+                "Set Access",
+                "Open Bank",
+                "Open Shop",
+                "Fade In",
+                "Fade Out",
+                "Flash White",
+                "Show Picture",
+                "Hide Picture"));
+
+            tvCommands.DataStore = root;
+            // Expand top-level categories
+            foreach (var obj in root)
+            {
+                if (obj is TreeGridItem tgi)
+                    tgi.Expanded = true;
+            }
         }
 
         #region Form
@@ -489,11 +870,18 @@ namespace Client
             cmbCondition_Time.Enabled = false;
         }
 
-    private void Editor_Events_Load(object? sender, EventArgs e)
+        private void Editor_Events_Load(object? sender, EventArgs e)
         {
             try
             {
                 int i;
+
+                // Safety: ensure TmpEvent has at least one page so the tab area isn't empty
+                if (Event.TmpEvent.PageCount <= 0 || Event.TmpEvent.Pages == null || Event.TmpEvent.Pages.Length == 0)
+                {
+                    Event.TmpEvent.PageCount = 1;
+                    Array.Resize(ref Event.TmpEvent.Pages, 1);
+                }
 
                 // Add a bit of inner margin so content isn't flush with window edges
                 Padding = new Eto.Drawing.Padding(8);
@@ -571,6 +959,50 @@ namespace Client
                 cmbEvent.Items.Add("This Event");
                 cmbEvent.SelectedIndex = 0;
 
+                // Populate Page Settings option combos
+                cmbTrigger.Items.Clear();
+                cmbTrigger.Items.Add("Action Button");
+                cmbTrigger.Items.Add("Player Touch");
+                cmbTrigger.Items.Add("Parallel");
+
+                cmbPositioning.Items.Clear();
+                cmbPositioning.Items.Add("Below Player");
+                cmbPositioning.Items.Add("Same as Player");
+                cmbPositioning.Items.Add("Above Player");
+
+                cmbMoveType.Items.Clear();
+                cmbMoveType.Items.Add("Fixed");
+                cmbMoveType.Items.Add("Random");
+                cmbMoveType.Items.Add("Route");
+
+                cmbMoveSpeed.Items.Clear();
+                cmbMoveSpeed.Items.Add("8x Slower");
+                cmbMoveSpeed.Items.Add("4x Slower");
+                cmbMoveSpeed.Items.Add("2x Slower");
+                cmbMoveSpeed.Items.Add("Normal");
+                cmbMoveSpeed.Items.Add("2x Faster");
+                cmbMoveSpeed.Items.Add("4x Faster");
+
+                cmbMoveFreq.Items.Clear();
+                cmbMoveFreq.Items.Add("Lowest");
+                cmbMoveFreq.Items.Add("Lower");
+                cmbMoveFreq.Items.Add("Normal");
+                cmbMoveFreq.Items.Add("Higher");
+                cmbMoveFreq.Items.Add("Highest");
+
+                // Move Wait is typically filled contextually; provide a default entry
+                cmbMoveWait.Items.Clear();
+                cmbMoveWait.Items.Add("This Event");
+                cmbMoveWait.SelectedIndex = 0;
+
+                // Graphic type choices
+                cmbGraphic.Items.Clear();
+                cmbGraphic.Items.Add("None");
+                cmbGraphic.Items.Add("Character");
+                cmbGraphic.Items.Add("Tileset");
+                cmbGraphic.SelectedIndexChanged += CmbGraphic_SelectedIndexChanged;
+                nudGraphic.ValueChanged += nudGraphic_ValueChanged;
+
                 // set the tabs
                 tabPages.Pages.Clear();
 
@@ -587,11 +1019,32 @@ namespace Client
                 cmbPlayerVar.Items.Clear();
                 for (i = 0; i < Constant.MaxVariables; i++)
                     cmbPlayerVar.Items.Add(i + 1 + ". " + Event.Variables[i]);
+                // player var compare options
+                cmbPlayerVarCompare.Items.Clear();
+                cmbPlayerVarCompare.Items.Add("=");
+                cmbPlayerVarCompare.Items.Add(">");
+                cmbPlayerVarCompare.Items.Add("<");
+                cmbPlayerVarCompare.Items.Add("!=");
+                cmbPlayerVarCompare.Items.Add(">=");
+                cmbPlayerVarCompare.Items.Add("<=");
                 // switches
                 cmbPlayerSwitch.Items.Clear();
                 for (i = 0; i < Constant.MaxSwitches; i++)
                     cmbPlayerSwitch.Items.Add(i + 1 + ". " + Event.Switches[i]);
+                // player switch compare options
+                cmbPlayerSwitchCompare.Items.Clear();
+                cmbPlayerSwitchCompare.Items.Add("On");
+                cmbPlayerSwitchCompare.Items.Add("Off");
+                // self switch list A-D and compare ON/OFF
+                cmbSelfSwitch.Items.Clear();
+                cmbSelfSwitch.Items.Add("A");
+                cmbSelfSwitch.Items.Add("B");
+                cmbSelfSwitch.Items.Add("C");
+                cmbSelfSwitch.Items.Add("D");
                 cmbSelfSwitch.SelectedIndex = 0;
+                cmbSelfSwitchCompare.Items.Clear();
+                cmbSelfSwitchCompare.Items.Add("On");
+                cmbSelfSwitchCompare.Items.Add("Off");
 
                 // enable delete button
                 btnDeletePage.Enabled = Event.TmpEvent.PageCount > 1;
@@ -601,8 +1054,13 @@ namespace Client
                 cmbPicLoc.SelectedIndex = 0;
                 fraDialogue.Visible = false;
 
-                if (tabPages.SelectedIndex == 0 && tabPages.Pages.Count > 1)
-                    tabPages.SelectedIndex = 1;
+                if (tabPages.SelectedIndex < 0 && tabPages.Pages.Count > 0)
+                {
+                    tabPages.SelectedIndex = 0;
+                    Event.CurPageNum = 0;
+                    Event.EventEditorLoadPage(Event.CurPageNum);
+                    try { DrawGraphic(); } catch { }
+                }
                 // Load page 1 to start off with
                 Event.CurPageNum = 0;
                 if (string.IsNullOrEmpty(Event.TmpEvent.Name))
@@ -610,7 +1068,10 @@ namespace Client
                 txtName.Text = Event.TmpEvent.Name;
 
                 Event.EventEditorLoadPage(Event.CurPageNum);
-                DrawGraphic();
+                AttachEditorHostToSelectedTab();
+                // Ensure type/index and preview are synced on initial load
+                RefreshGraphicControlsFromPage();
+                HideAllFrames();
             }
             catch (Exception ex)
             {
@@ -621,7 +1082,84 @@ namespace Client
         private void Editor_Event_Resize(object? sender, EventArgs e) { }
         private void Editor_Event_Activated(object? sender, EventArgs e) { }
 
-        public void DrawGraphic() { /* TODO: Reimplement drawing using Eto.Drawing */ }
+        public void DrawGraphic()
+        {
+            try
+            {
+                // Clear first
+                picGraphic.Image = null;
+
+                // Validate page and selection
+                if (Event.TmpEvent.Pages == null || Event.CurPageNum < 0 || Event.CurPageNum >= Event.TmpEvent.Pages.Length)
+                    return;
+
+                var gfxType = cmbGraphic.SelectedIndex; // 0=None, 1=Character, 2=Tileset
+                var gfxIndex = (int)System.Math.Round(nudGraphic.Value);
+                if (gfxType <= 0 || gfxIndex <= 0)
+                    return;
+
+                string basePath = gfxType == 1 ? DataPath.Characters : DataPath.Tilesets;
+                string path = System.IO.Path.Combine(basePath, gfxIndex.ToString()) + GameState.GfxExt;
+
+                if (!System.IO.File.Exists(path))
+                    return;
+
+                var src = new Eto.Drawing.Bitmap(path);
+
+                // For character sheets, show the selected 1/4 x 1/4 frame; otherwise show the full image
+                if (gfxType == 1 && src.Width > 0 && src.Height > 0)
+                {
+                    int frameW = System.Math.Max(1, src.Width / 4);
+                    int frameH = System.Math.Max(1, src.Height / 4);
+                    int fx = Event.GraphicSelX; if (fx < 0) fx = 0; else if (fx > 3) fx = 3;
+                    int fy = Event.GraphicSelY; if (fy < 0) fy = 0; else if (fy > 3) fy = 3;
+
+                    var cropped = new Eto.Drawing.Bitmap(frameW, frameH, Eto.Drawing.PixelFormat.Format32bppRgba);
+                    using (var g = new Eto.Drawing.Graphics(cropped))
+                    {
+                        var srcRect = new Eto.Drawing.Rectangle(fx * frameW, fy * frameH, frameW, frameH);
+                        g.DrawImage(src, new Eto.Drawing.Rectangle(0, 0, frameW, frameH), srcRect);
+                    }
+                    picGraphic.Image = cropped;
+                }
+                else
+                {
+                    // Tileset or unsupported type: show full image
+                    picGraphic.Image = src;
+                }
+            }
+            catch
+            {
+                picGraphic.Image = null;
+            }
+        }
+
+        // Renders the full spritesheet/tileset into the selection view used by the Set Graphic frame
+        private void DrawGraphicSelectionPreview()
+        {
+            try
+            {
+                picGraphicSel.Image = null;
+
+                var gfxType = cmbGraphic.SelectedIndex; // 0=None, 1=Character, 2=Tileset
+                var gfxIndex = (int)Math.Round(nudGraphic.Value);
+                if (gfxType <= 0 || gfxIndex <= 0)
+                    return;
+
+                string basePath = gfxType == 1 ? DataPath.Characters : DataPath.Tilesets;
+                string path = Path.Combine(basePath, gfxIndex.ToString()) + GameState.GfxExt;
+                if (!File.Exists(path))
+                    return;
+
+                var src = new Bitmap(path);
+                picGraphicSel.Image = src;
+                try { picGraphicSel.Size = new Size(src.Width, src.Height); } catch { }
+            }
+            catch
+            {
+                picGraphicSel.Image = null;
+            }
+        }
 
         private void BtnOK_Click(object? sender, EventArgs e)
         {
@@ -629,7 +1167,7 @@ namespace Client
             {
                 Event.EventEditorOK();
                 Event.TmpEvent = default;
-        try { Close(); } catch { Dispose(); }
+                try { Close(); } catch { Dispose(); }
             }
             else
             {
@@ -669,9 +1207,22 @@ namespace Client
 
         private void TvCommands_AfterSelect(object? sender, EventArgs e)
         {
-            // TODO: Implement Eto TreeView selection mapping
+            // Map selected command text from the palette and open the right editor frame or add direct commands
             var x = 0;
-            var selectedText = string.Empty;
+            string selectedText = string.Empty;
+            try
+            {
+                var item = tvCommands.SelectedItem as TreeGridItem;
+                if (item == null) return;
+                // Ignore category nodes (have children); only respond to leaf items
+                // Treat items with any children as categories; leaves are executable
+                if (item.Children != null && item.Children.Count > 0) return;
+                // Use Values array to get first column text
+                var vals = item.Values;
+                if (vals != null && vals.Length > 0)
+                    selectedText = vals[0]?.ToString() ?? string.Empty;
+            }
+            catch { selectedText = string.Empty; }
             switch (selectedText)
             {
                 // Messages
@@ -1206,6 +1757,11 @@ namespace Client
         {
             Event.CurPageNum = tabPages.SelectedIndex;
             Event.EventEditorLoadPage(Event.CurPageNum);
+            // Refresh the graphic controls/preview for the newly selected page
+            RefreshGraphicControlsFromPage();
+            AttachEditorHostToSelectedTab();
+            HideAllFrames();
+            SyncMoveRouteButton();
         }
 
     private void BtnNewPage_Click(object? sender, EventArgs e)
@@ -1233,6 +1789,13 @@ namespace Client
             for (i = 0; i < loopTo; i++)
                 tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
             btnDeletePage.Enabled = true;
+            // Select and load the newly created page
+            tabPages.SelectedIndex = Math.Max(0, Event.TmpEvent.PageCount - 1);
+            Event.CurPageNum = tabPages.SelectedIndex;
+            Event.EventEditorLoadPage(Event.CurPageNum);
+            RefreshGraphicControlsFromPage();
+            AttachEditorHostToSelectedTab();
+            SyncMoveRouteButton();
         }
 
     private void BtnCopyPage_Click(object? sender, EventArgs e)
@@ -1245,6 +1808,9 @@ namespace Client
         {
             Event.TmpEvent.Pages[Event.CurPageNum] = Event.CopyEventPage;
             Event.EventEditorLoadPage(Event.CurPageNum);
+            RefreshGraphicControlsFromPage();
+            AttachEditorHostToSelectedTab();
+            SyncMoveRouteButton();
         }
 
     private void BtnDeletePage_Click(object? sender, EventArgs e)
@@ -1268,19 +1834,17 @@ namespace Client
                 tabPages.Pages.Add(new TabPage { Text = Conversion.Str(i + 1) });
 
             // set the tab back
-            if (Event.CurPageNum < Event.TmpEvent.PageCount)
-            {
-                // maintain selected index
-            }
-            else
-            {
-                // maintain selected index
-            }
+            tabPages.SelectedIndex = Math.Min(Event.CurPageNum, Math.Max(0, Event.TmpEvent.PageCount - 1));
+            Event.CurPageNum = tabPages.SelectedIndex;
+            Event.EventEditorLoadPage(Event.CurPageNum);
+            RefreshGraphicControlsFromPage();
             // make sure we disable
             if (Event.TmpEvent.PageCount == 1)
             {
                 btnDeletePage.Enabled = false;
             }
+            AttachEditorHostToSelectedTab();
+            SyncMoveRouteButton();
 
         }
 
@@ -1299,44 +1863,44 @@ namespace Client
 
         #region Conditions
 
-        private void ChkPlayerVar_CheckedChanged(object sender, EventArgs e)
+        private void ChkPlayerVar_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkPlayerVar.Checked == true)
             {
                 cmbPlayerVar.Enabled = true;
                 nudPlayerVariable.Enabled = true;
-                cmbPlayervarCompare.Enabled = true;
+                cmbPlayerVarCompare.Enabled = true;
                 Event.TmpEvent.Pages[Event.CurPageNum].ChkVariable = 1;
             }
             else
             {
                 cmbPlayerVar.Enabled = false;
                 nudPlayerVariable.Enabled = false;
-                cmbPlayervarCompare.Enabled = false;
+                cmbPlayerVarCompare.Enabled = false;
                 Event.TmpEvent.Pages[Event.CurPageNum].ChkVariable = 0;
             }
         }
 
-        private void CmbPlayerVar_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbPlayerVar_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbPlayerVar.SelectedIndex == -1)
                 return;
             Event.TmpEvent.Pages[Event.CurPageNum].VariableIndex = cmbPlayerVar.SelectedIndex;
         }
 
-        private void CmbPlayervarCompare_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbPlayervarCompare_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (cmbPlayervarCompare.SelectedIndex == -1)
+            if (cmbPlayerVarCompare.SelectedIndex == -1)
                 return;
-            Event.TmpEvent.Pages[Event.CurPageNum].VariableCompare = cmbPlayervarCompare.SelectedIndex;
+            Event.TmpEvent.Pages[Event.CurPageNum].VariableCompare = cmbPlayerVarCompare.SelectedIndex;
         }
 
-        private void NudPlayerVariable_ValueChanged(object sender, EventArgs e)
+        private void NudPlayerVariable_ValueChanged(object? sender, EventArgs e)
         {
             Event.TmpEvent.Pages[Event.CurPageNum].VariableCondition = (int)Math.Round(nudPlayerVariable.Value);
         }
 
-        private void ChkPlayerSwitch_CheckedChanged(object sender, EventArgs e)
+        private void ChkPlayerSwitch_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkPlayerSwitch.Checked == true)
             {
@@ -1352,21 +1916,21 @@ namespace Client
             }
         }
 
-        private void CmbPlayerSwitch_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbPlayerSwitch_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbPlayerSwitch.SelectedIndex == -1)
                 return;
             Event.TmpEvent.Pages[Event.CurPageNum].SwitchIndex = cmbPlayerSwitch.SelectedIndex;
         }
 
-        private void CmbPlayerSwitchCompare_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbPlayerSwitchCompare_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbPlayerSwitchCompare.SelectedIndex == -1)
                 return;
             Event.TmpEvent.Pages[Event.CurPageNum].SwitchCompare = cmbPlayerSwitchCompare.SelectedIndex;
         }
 
-        private void ChkHasItem_CheckedChanged(object sender, EventArgs e)
+        private void ChkHasItem_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkHasItem.Checked == true)
             {
@@ -1381,7 +1945,7 @@ namespace Client
 
         }
 
-        private void CmbHasItem_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbHasItem_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbHasItem.SelectedIndex == -1)
                 return;
@@ -1389,7 +1953,7 @@ namespace Client
             Event.TmpEvent.Pages[Event.CurPageNum].HasItemAmount = (int)Math.Round(nudCondition_HasItem.Value);
         }
 
-        private void ChkSelfSwitch_CheckedChanged(object sender, EventArgs e)
+        private void ChkSelfSwitch_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkSelfSwitch.Checked == true)
             {
@@ -1405,7 +1969,7 @@ namespace Client
             }
         }
 
-        private void CmbSelfSwitch_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbSelfSwitch_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbSelfSwitch.SelectedIndex == -1)
                 return;
@@ -1416,7 +1980,7 @@ namespace Client
             Event.TmpEvent.Pages[Event.CurPageNum].SelfSwitchIndex = cmbSelfSwitch.SelectedIndex;
         }
 
-        private void CmbSelfSwitchCompare_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbSelfSwitchCompare_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbSelfSwitchCompare.SelectedIndex == -1)
                 return;
@@ -1427,19 +1991,22 @@ namespace Client
 
         #region Graphic
 
-        private void PicGraphic_Click(object sender, EventArgs e)
+    private void PicGraphic_Click(object? sender, EventArgs e)
         {
             // BringToFront removed for Eto; ensure visible
             tmpGraphicIndex = Event.TmpEvent.Pages[Event.CurPageNum].Graphic;
             tmpGraphicType = Event.TmpEvent.Pages[Event.CurPageNum].GraphicType;
             fraGraphic.Visible = true;
             Event.GraphicSelType = 0;
+            // Render selection sheet so user can click a frame
+            DrawGraphicSelectionPreview();
         }
 
-        private void CmbGraphic_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbGraphic_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbGraphic.SelectedIndex == -1)
                 return;
+            if (_syncingGraphic) return;
 
             Event.TmpEvent.Pages[Event.CurPageNum].GraphicType = (byte)cmbGraphic.SelectedIndex;
             // set the max on the scrollbar
@@ -1479,7 +2046,7 @@ namespace Client
             DrawGraphic();
         }
 
-        private void PicGraphicSel_MouseDown(object sender, MouseEventArgs e)
+    private void PicGraphicSel_MouseDown(object? sender, MouseEventArgs e)
         {
             int X;
             int Y;
@@ -1524,33 +2091,87 @@ namespace Client
                 }
             }
             DrawGraphic();
+            // Also refresh the full-sheet display (not strictly needed for single-frame highlighting)
+            // but ensures any size changes are applied
+            DrawGraphicSelectionPreview();
         }
 
-        private void nudGraphic_ValueChanged(object sender, EventArgs e)
+        private void nudGraphic_ValueChanged(object? sender, EventArgs e)
         {
-            DrawGraphic();
+                if (!_syncingGraphic)
+                {
+                    // Persist to page only when this is a user-driven change
+                    Event.TmpEvent.Pages[Event.CurPageNum].Graphic = (int)Math.Round(nudGraphic.Value);
+                }
+                DrawGraphic();
+                DrawGraphicSelectionPreview();
         }
 
         #endregion
 
         #region Movement
 
-        private void CmbMoveType_SelectedIndexChanged(object sender, EventArgs e)
+        private void CmbMoveType_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbMoveType.SelectedIndex == -1)
                 return;
             Event.TmpEvent.Pages[Event.CurPageNum].MoveType = (byte)cmbMoveType.SelectedIndex;
-            if (cmbMoveType.SelectedIndex == 2)
-            {
-                btnMoveRoute.Enabled = true;
-            }
-            else
-            {
-                btnMoveRoute.Enabled = false;
-            }
+            SyncMoveRouteButton();
         }
 
-        private void BtnMoveRoute_Click(object sender, EventArgs e)
+        // Helper: keep Move Route button in sync with current Move Type
+        private void SyncMoveRouteButton()
+        {
+            try { btnMoveRoute.Enabled = (cmbMoveType.SelectedIndex == 2); } catch { }
+        }
+
+        // Ensure cmbGraphic/nudGraphic reflect the current page and preview is updated
+        private void RefreshGraphicControlsFromPage()
+        {
+            try
+            {
+                if (Event.TmpEvent.Pages == null || Event.CurPageNum < 0 || Event.CurPageNum >= Event.TmpEvent.Pages.Length)
+                    return;
+                var page = Event.TmpEvent.Pages[Event.CurPageNum];
+
+                _syncingGraphic = true;
+                try
+                {
+                    // Set type first to update ranges via SelectedIndexChanged handler
+                    cmbGraphic.SelectedIndex = page.GraphicType;
+                    // Ensure max matches the type before value assignment (defensive)
+                    switch (page.GraphicType)
+                    {
+                        case 1: // Character
+                            nudGraphic.MaxValue = GameState.NumCharacters;
+                            break;
+                        case 2: // Tileset
+                            nudGraphic.MaxValue = GameState.NumTileSets;
+                            break;
+                        default:
+                            break;
+                    }
+                    // Clamp and set value
+                    var min = (int)Math.Round(nudGraphic.MinValue);
+                    var max = (int)Math.Round(nudGraphic.MaxValue);
+                    var val = page.Graphic;
+                    if (max > 0)
+                        val = Math.Max(min, Math.Min(max, val));
+                    nudGraphic.Value = val;
+                }
+                finally
+                {
+                    _syncingGraphic = false;
+                }
+
+                // Update both previews after sync
+                DrawGraphic();
+                DrawGraphicSelectionPreview();
+            }
+            catch { }
+        }
+
+        private void BtnMoveRoute_Click(object? sender, EventArgs e)
         {
             // BringToFront removed for Eto
             lstMoveRoute.Items.Clear();
@@ -1787,14 +2408,14 @@ namespace Client
 
         }
 
-        private void CmbMoveSpeed_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbMoveSpeed_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbMoveSpeed.SelectedIndex == -1)
                 return;
             Event.TmpEvent.Pages[Event.CurPageNum].MoveSpeed = (byte)cmbMoveSpeed.SelectedIndex;
         }
 
-        private void CmbMoveFreq_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbMoveFreq_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (cmbMoveFreq.SelectedIndex == -1)
                 return;
@@ -1805,7 +2426,7 @@ namespace Client
 
         #region Positioning
 
-        private void CmbPositioning_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbPositioning_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (Event.TmpEvent.Pages == null)
                 return;
@@ -1820,7 +2441,7 @@ namespace Client
 
         #region Trigger
 
-        private void CmbTrigger_SelectedIndexChanged(object sender, EventArgs e)
+    private void CmbTrigger_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (Event.TmpEvent.Pages == null)
                 return;
@@ -1854,14 +2475,19 @@ namespace Client
 
             for (int i = 0, loopTo = Event.TmpEvent.PageCount; i < loopTo; i++)
                 tabPages.Pages.Add(new TabPage { Text = (i + 1).ToString() });
+            // Always select the first page when globalizing and load it
+            tabPages.SelectedIndex = 0;
+            Event.CurPageNum = 0;
             Event.EventEditorLoadPage(Event.CurPageNum);
+            RefreshGraphicControlsFromPage();
+            SyncMoveRouteButton();
         }
 
         #endregion
 
         #region Options
 
-        private void ChkWalkAnim_CheckedChanged(object sender, EventArgs e)
+    private void ChkWalkAnim_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkWalkAnim.Checked == true)
             {
@@ -1874,7 +2500,7 @@ namespace Client
 
         }
 
-        private void ChkDirFix_CheckedChanged(object sender, EventArgs e)
+    private void ChkDirFix_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkDirFix.Checked == true)
             {
@@ -1887,7 +2513,7 @@ namespace Client
 
         }
 
-        private void ChkWalkThrough_CheckedChanged(object sender, EventArgs e)
+    private void ChkWalkThrough_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkWalkThrough.Checked == true)
             {
@@ -1900,7 +2526,7 @@ namespace Client
 
         }
 
-        private void ChkShowName_CheckedChanged(object sender, EventArgs e)
+    private void ChkShowName_CheckedChanged(object? sender, EventArgs e)
         {
             if (chkShowName.Checked == true)
             {
@@ -1917,32 +2543,85 @@ namespace Client
 
         #region Commands
 
-        private void LstCommands_SelectedIndexChanged(object sender, EventArgs e)
+        private void LstCommands_SelectedIndexChanged(object? sender, EventArgs e)
         {
             Event.CurCommand = lstCommands.SelectedIndex;
         }
 
-        private void BtnAddCommand_Click(object sender, EventArgs e)
+        private void BtnAddCommand_Click(object? sender, EventArgs e)
         {
-            if (lstCommands.SelectedIndex > -1)
+            // Trigger the currently selected palette action; if none selected, focus palette
+            Event.IsEdit = false;
+            if (tvCommands.SelectedItem == null)
             {
-                Event.IsEdit = false;
-                // tabPages.SelectedTab = TabPage
-                fraCommands.Visible = true;
+                // If nothing is selected, auto-select the first available command leaf
+                try
+                {
+                    if (tvCommands.DataStore is TreeGridItemCollection root && root.Count > 0)
+                    {
+                        TreeGridItem? FindFirstLeaf(TreeGridItem node)
+                        {
+                            if (node.Children == null || node.Children.Count == 0)
+                                return node;
+                            var child = node.Children[0] as TreeGridItem;
+                            return child != null ? FindFirstLeaf(child) : null;
+                        }
+                        var firstCat = root[0] as TreeGridItem;
+                        var leaf = firstCat != null ? FindFirstLeaf(firstCat) : null;
+                        if (leaf != null)
+                        {
+                            tvCommands.SelectedItem = leaf; // SelectionChanged will execute
+                            return;
+                        }
+                    }
+                }
+                catch { }
+                tvCommands.Focus();
+                return;
             }
-        }
 
-        private void BtnEditCommand_Click(object sender, EventArgs e)
+            // If a category is selected, select the first leaf under it
+            bool changedSelection = false;
+            if (tvCommands.SelectedItem is TreeGridItem sel)
+            {
+                TreeGridItem? FindFirstLeaf(TreeGridItem node)
+                {
+                    if (node.Children == null || node.Children.Count == 0)
+                        return node;
+                    // descend to first child recursively
+                    var child = node.Children[0] as TreeGridItem;
+                    return child != null ? FindFirstLeaf(child) : null;
+                }
+
+                if (sel.Children != null && sel.Children.Count > 0)
+                {
+                    var leaf = FindFirstLeaf(sel);
+                    if (leaf != null && !ReferenceEquals(leaf, sel))
+                    {
+                        tvCommands.SelectedItem = leaf;
+                        changedSelection = true; // SelectionChanged will trigger handler
+                    }
+                }
+            }
+
+            if (!changedSelection)
+            {
+                // If we didn't change selection (already a leaf), execute now
+                TvCommands_AfterSelect(tvCommands, EventArgs.Empty);
+            }                        
+        }                                                               
+
+        private void BtnEditCommand_Click(object? sender, EventArgs e)
         {
             Event.EditEventCommand();
         }
 
-        private void BtnDeleteComand_Click(object sender, EventArgs e)
+        private void BtnDeleteComand_Click(object? sender, EventArgs e)
         {
             Event.DeleteEventCommand();
         }
 
-        private void BtnClearCommand_Click(object sender, EventArgs e)
+        private void BtnClearCommand_Click(object? sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to clear all event commands?", "Clear Event Commands?", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
@@ -1970,7 +2649,7 @@ namespace Client
 
         }
 
-    private void BtnRename_Ok_Click(object? sender, EventArgs e)
+        private void BtnRename_Ok_Click(object? sender, EventArgs e)
         {
             FraRenaming.Visible = false;
             fraLabeling.Visible = true;
@@ -2010,7 +2689,7 @@ namespace Client
             RefreshSwitchAndVariableUI();
         }
 
-    private void BtnRename_Cancel_Click(object? sender, EventArgs e)
+        private void BtnRename_Cancel_Click(object? sender, EventArgs e)
         {
             FraRenaming.Visible = false;
             fraLabeling.Visible = true;
@@ -2029,12 +2708,12 @@ namespace Client
             lstVariables.SelectedIndex = 0;
         }
 
-    private void TxtRename_TextChanged(object? sender, EventArgs e)
+        private void TxtRename_TextChanged(object? sender, EventArgs e)
         {
             Event.TmpEvent.Name = Strings.Trim(txtName.Text);
         }
 
-    private void LstVariables_DoubleClick(object? sender, MouseEventArgs e)
+        private void LstVariables_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (lstVariables.SelectedIndex > -1 & lstVariables.SelectedIndex < Constant.MaxVariables)
             {
@@ -2047,7 +2726,7 @@ namespace Client
             }
         }
 
-    private void LstSwitches_DoubleClick(object? sender, MouseEventArgs e)
+        private void LstSwitches_DoubleClick(object? sender, MouseEventArgs e)
         {
             if (lstSwitches.SelectedIndex > -1 & lstSwitches.SelectedIndex < Constant.MaxSwitches)
             {
@@ -2060,7 +2739,7 @@ namespace Client
             }
         }
 
-    private void BtnRenameVariable_Click(object? sender, EventArgs e)
+        private void BtnRenameVariable_Click(object? sender, EventArgs e)
         {
             if (lstVariables.SelectedIndex < 0 && lstVariables.Items.Count > 0)
                 lstVariables.SelectedIndex = 0;
@@ -2075,7 +2754,7 @@ namespace Client
             }
         }
 
-    private void BtnRenameSwitch_Click(object? sender, EventArgs e)
+        private void BtnRenameSwitch_Click(object? sender, EventArgs e)
         {
             if (lstSwitches.SelectedIndex < 0 && lstSwitches.Items.Count > 0)
                 lstSwitches.SelectedIndex = 0;
@@ -2092,7 +2771,6 @@ namespace Client
 
     private void BtnLabel_Ok_Click(object? sender, EventArgs e)
         {
-            pnlVariableSwitches.Visible = false;
             Event.SendSwitchesAndVariables();
             // Ensure UI reflects latest names after save
             RefreshSwitchAndVariableUI();
@@ -2100,7 +2778,6 @@ namespace Client
 
     private void BtnLabel_Cancel_Click(object? sender, EventArgs e)
         {
-            pnlVariableSwitches.Visible = false;
             Event.RequestSwitchesAndVariables();
         }
 
@@ -2160,8 +2837,10 @@ namespace Client
                 // Set Graphic
                 case 43:
                     {
-                        // fraGraphic.Visible already controls z-order in Eto layouts
+                        // Show the Set Graphic frame and mark that selection applies to a route command
                         Event.GraphicSelType = 1;
+                        fraGraphic.Visible = true;
+                        DrawGraphicSelectionPreview();
                         break;
                     }
 
@@ -2918,8 +3597,10 @@ namespace Client
             if (!optCondition4.Checked)
                 return;
 
+            ClearConditionFrame();
             cmbCondition_LearntSkill.Enabled = true;
         }
+
 
         private void OptCondition5_CheckedChanged(object sender, EventArgs e)
         {
@@ -3740,5 +4421,70 @@ namespace Client
 
         #endregion
         #endregion
+
+        // Ensure the full editor (left+right panes) is mounted into the active tab so tabs span the whole editor
+        private void AttachEditorHostToSelectedTab()
+        {
+            try
+            {
+                // Detach from previously hosted tab if any
+                if (hostedTab != null && ReferenceEquals(hostedTab.Content, tabContentHost))
+                {
+                    hostedTab.Content = null;
+                    hostedTab = null;
+                }
+                // Attach reusable host to current selected page
+                if (tabPages.SelectedPage is TabPage sel)
+                {
+                    sel.Content = tabContentHost;
+                    hostedTab = sel;
+                    // ensure layout refresh
+                    sel.Invalidate(true);
+                }
+            }
+            catch { }
+        }
+
+        // Hide all frames and show the commands area
+        private void HideAllFrames()
+        {
+            // Set visibility off for all known frames so the command area is shown
+            fraDialogue.Visible = false;
+            fraGraphic.Visible = false;
+            fraMoveRoute.Visible = false;
+            fraShowText.Visible = false;
+            fraShowChoices.Visible = false;
+            fraAddText.Visible = false;
+            fraShowChatBubble.Visible = false;
+            fraPlayerVariable.Visible = false;
+            fraPlayerSwitch.Visible = false;
+            fraSetSelfSwitch.Visible = false;
+            fraConditionalBranch.Visible = false;
+            fraCreateLabel.Visible = false;
+            fraGoToLabel.Visible = false;
+            fraChangeItems.Visible = false;
+            fraChangeLevel.Visible = false;
+            fraChangeSkills.Visible = false;
+            fraChangeJob.Visible = false;
+            fraChangeSprite.Visible = false;
+            fraChangeGender.Visible = false;
+            fraChangePK.Visible = false;
+            fraGiveExp.Visible = false;
+            fraPlayerWarp.Visible = false;
+            fraMoveRouteWait.Visible = false;
+            fraSpawnNpc.Visible = false;
+            fraPlayAnimation.Visible = false;
+            fraSetFog.Visible = false;
+            fraSetWeather.Visible = false;
+            fraMapTint.Visible = false;
+            fraPlayBGM.Visible = false;
+            fraPlaySound.Visible = false;
+            fraSetWait.Visible = false;
+            fraSetAccess.Visible = false;
+            fraShowPic.Visible = false;
+            fraOpenShop.Visible = false;
+            // Show commands
+            fraCommands.Visible = true;
+        }
     }
 }

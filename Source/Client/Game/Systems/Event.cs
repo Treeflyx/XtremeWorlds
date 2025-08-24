@@ -292,8 +292,9 @@ namespace Client
             Editor_Event.Instance.cmbPlayerVar.SelectedIndex = withBlock.VariableIndex;
             Editor_Event.Instance.cmbPlayerSwitch.SelectedIndex = withBlock.SwitchIndex;
             Editor_Event.Instance.cmbSelfSwitchCompare.SelectedIndex = withBlock.SelfSwitchCompare;
+            Editor_Event.Instance.cmbSelfSwitch.SelectedIndex = withBlock.SelfSwitchIndex;
             Editor_Event.Instance.cmbPlayerSwitchCompare.SelectedIndex = withBlock.SwitchCompare;
-            Editor_Event.Instance.cmbPlayervarCompare.SelectedIndex = withBlock.VariableCompare;
+            Editor_Event.Instance.cmbPlayerVarCompare.SelectedIndex = withBlock.VariableCompare;
             Editor_Event.Instance.chkGlobal.Checked = Conversions.ToBoolean(TmpEvent.Globals);
             Editor_Event.Instance.cmbTrigger.SelectedIndex = withBlock.Trigger;
             Editor_Event.Instance.chkDirFix.Checked = Conversions.ToBoolean(withBlock.DirFix);
@@ -333,13 +334,13 @@ namespace Client
             {
                 Editor_Event.Instance.cmbPlayerVar.Enabled = false;
                 Editor_Event.Instance.nudPlayerVariable.Enabled = false;
-                Editor_Event.Instance.cmbPlayervarCompare.Enabled = false;
+                Editor_Event.Instance.cmbPlayerVarCompare.Enabled = false;
             }
             else
             {
                 Editor_Event.Instance.cmbPlayerVar.Enabled = true;
                 Editor_Event.Instance.nudPlayerVariable.Enabled = true;
-                Editor_Event.Instance.cmbPlayervarCompare.Enabled = true;
+                Editor_Event.Instance.cmbPlayerVarCompare.Enabled = true;
             }
 
             if (Editor_Event.Instance.cmbMoveType.SelectedIndex == 2)
@@ -352,7 +353,15 @@ namespace Client
             }
 
             Editor_Event.Instance.cmbPositioning.SelectedIndex = int.Parse(withBlock.Position.ToString());
-            EventListCommands();
+            // Refresh the UI list on the UI thread
+            try
+            {
+                Eto.Forms.Application.Instance?.Invoke(() => EventListCommands());
+            }
+            catch
+            {
+                EventListCommands();
+            }
         }
 
         public static void EventEditorOK()
@@ -367,15 +376,35 @@ namespace Client
 
         public static void EventListCommands()
         {
+            if (TmpEvent.Pages == null)
+                return;
+
+            // Marshal the entire list build onto the UI thread to avoid cross-thread access
+            if (Eto.Forms.Application.Instance != null)
+            {
+                try
+                {
+                    Eto.Forms.Application.Instance.Invoke(EventListCommandsCore);
+                    return;
+                }
+                catch
+                {
+                    // fall through to direct call if Invoke fails
+                }
+            }
+
+            EventListCommandsCore();
+        }
+
+        // Core implementation that assumes it's running on the UI thread
+        private static void EventListCommandsCore()
+        {
             int i;
             int curlist;
             int X;
             string indent = "";
             int[] listleftoff;
             int[] conditionalstage;
-
-            if (TmpEvent.Pages == null)
-                return;
 
             Editor_Event.Instance.lstCommands.Items.Clear();
 
