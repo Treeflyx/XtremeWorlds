@@ -511,11 +511,24 @@ namespace Client
                     if (_guiRenderTarget != null)
                         // In fullscreen, force pillarbox (black bars left/right) at 16:9; in windowed, fill 1:1.
                         Rectangle destRect;
-                        bool isFullscreenNow2 = Graphics?.IsFullScreen ?? false;
-                        if (isFullscreenNow2)
+                    bool isFullscreenNow2 = Graphics?.IsFullScreen ?? false;
+                    if (isFullscreenNow2)
+                    {
+                        // Force 16:9 pillarbox regardless of screen aspect
+                        float targetAspect = 16f / 9f;
+                        int height = backBufferHeight;
+                        int width = (int)(height * targetAspect);
+                        int x = (backBufferWidth - width) / 2;
+                        destRect = new Rectangle(x, 0, width, height);
+                    }
+                    else
+                    {
+                        // Windowed: scale to fit window with letterbox/pillarbox based on native aspect (often equals window, so no bars)
+                        float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
+                        float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
+                        if (screenAspect > targetAspect)
                         {
-                            // Force 16:9 pillarbox regardless of screen aspect
-                            float targetAspect = 16f / 9f;
+                            // Pillarbox: full height
                             int height = backBufferHeight;
                             int width = (int)(height * targetAspect);
                             int x = (backBufferWidth - width) / 2;
@@ -523,26 +536,14 @@ namespace Client
                         }
                         else
                         {
-                            // Windowed: scale to fit window with letterbox/pillarbox based on native aspect (often equals window, so no bars)
-                            float targetAspect = nativeHeight == 0 ? 16f / 9f : (float)nativeWidth / nativeHeight;
-                            float screenAspect = backBufferHeight == 0 ? targetAspect : (float)backBufferWidth / backBufferHeight;
-                            if (screenAspect > targetAspect)
-                            {
-                                // Pillarbox: full height
-                                int height = backBufferHeight;
-                                int width = (int)(height * targetAspect);
-                                int x = (backBufferWidth - width) / 2;
-                                destRect = new Rectangle(x, 0, width, height);
-                            }
-                            else
-                            {
-                                // Letterbox: full width
-                                int width = backBufferWidth;
-                                int height = (int)(width / targetAspect);
-                                int y = (backBufferHeight - height) / 2;
-                                destRect = new Rectangle(0, y, width, height);
-                            }
+                            // Letterbox: full width
+                            int width = backBufferWidth;
+                            int height = (int)(width / targetAspect);
+                            int y = (backBufferHeight - height) / 2;
+                            destRect = new Rectangle(0, y, width, height);
                         }
+                    }
+                }
             }
 
             if (GameState.MyEditorType == EditorType.Map)
