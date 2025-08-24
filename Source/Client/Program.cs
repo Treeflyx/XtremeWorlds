@@ -2025,7 +2025,7 @@ namespace Client
             {
                 npcNum = (long) Data.MyMapNpc[(int) i].Num;
                 // exists?
-                if (npcNum >= 0L && npcNum <= Constant.MaxNpcs)
+                if (npcNum >= 0L && npcNum < Constant.MaxNpcs)
                 {
                     // alive?
                     if (Data.MyMapNpc[(int) i].Vital[(int) Vital.Health] > 0 &
